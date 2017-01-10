@@ -85,6 +85,11 @@ class Auther(object):
         self._log.info('Authed user %s', username)
         return {'answer': 'accepted'}
 
+    @jsonrpc.jsonrpc
+    def allow_unknown_firmware(self):
+        self._log.info('Allowing unsigned firmware')
+        return 'allow'
+
 
 if __name__ == '__main__':
     init_logging()
