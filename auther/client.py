@@ -38,10 +38,8 @@ class Auther(object):
         self._server = None
         self._loop = asyncio.get_event_loop()
 
-        def pf():
-            return jsonrpc.JsonRpc(self._open_cb, self._close_cb)
-        conn = self._loop.create_unix_connection(pf, LISTEN_PATH)
-        self._loop.create_task(conn)
+        self._reconnect_fut = None
+        self._loop.create_task(self.reconnector())
 
         self._log.info('Auther initialized')
 
@@ -60,6 +58,10 @@ class Auther(object):
         """
         self._server = None
         self._log.warning('Lost kaiten connection')
+        if self._reconnect_fut and not self._reconnect_fut.done():
+            self._reconnect_fut.set_result(None)
+        else:
+            self._log.warning('Reconnect logic has failed')
 
     def request(self, method, params, callback=None):
         # Invokable from any thread
@@ -79,6 +81,27 @@ class Auther(object):
     def stop(self):
         # Invokable from any thread
         self._loop.call_soon_threadsafe(self._loop.stop)
+
+    @asyncio.coroutine
+    def reconnector(self):
+        def pf():
+            return jsonrpc.JsonRpc(self._open_cb, self._close_cb)
+        fail_count = 0
+        while True:
+            self._reconnect_fut = asyncio.Future(loop=self._loop)
+            conn = self._loop.create_unix_connection(pf, LISTEN_PATH)
+            try:
+                yield from conn
+            except Exception as e:
+                fail_count += 1
+                # Just log powers of 2
+                if not fail_count & (fail_count - 1):
+                    self._log.error('Connection fail #%d: %s: %s',
+                                    fail_count, type(e).__name__, e)
+                yield from asyncio.sleep(1)
+                continue
+            fail_count = 0
+            yield from self._reconnect_fut
 
     @jsonrpc.jsonrpc
     def authorize_user(self, username):
