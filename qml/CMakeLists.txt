@@ -12,5 +12,5 @@ foreach(src_elem IN LISTS src_elems)
 endforeach()
 
 install(
-    FILES "${sources}"
+    FILES ${sources}
     DESTINATION ${ROOT_INSTALL_DIR}/usr/share/morepork_ui)
