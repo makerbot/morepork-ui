@@ -2,4 +2,4 @@
 /_build*/
 
 # Stuff that Qt Creator creates
-/morepork-ui.pro*
+/morepork-ui.pro.user
