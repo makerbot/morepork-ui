@@ -1,1 +1,5 @@
+# Stuff that the morepork build system creates
 /_build*/
+
+# Stuff that Qt Creator creates
+/morepork-ui.pro*
