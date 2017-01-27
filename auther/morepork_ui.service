@@ -1,0 +1,12 @@
+[Unit]
+Description=Auto auther
+Wants=kaiten.service
+After=kaiten.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/morepork_ui
+StandardOutput=null
+
+[Install]
+WantedBy=multi-user.target

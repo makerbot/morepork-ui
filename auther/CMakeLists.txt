@@ -21,3 +21,4 @@ function(install_enabled_service service)
 endfunction()
 
 install_enabled_service(auther.service)
+install_enabled_service(morepork_ui.service)
