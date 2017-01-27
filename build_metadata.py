@@ -13,7 +13,7 @@ else:
             stable_required=True),
         artifactory_utils.ArtifactSelector(
             project="morepork-build-root",
-            revision="develop",
+            revision="morepork",
             version="*",
             debug=False,
             stable_required=True),
