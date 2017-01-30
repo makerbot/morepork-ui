@@ -3,6 +3,10 @@
 # can parse your changes.
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/base_model.cpp \
+    src/bot_model.cpp
 
 HEADERS += \
+    src/base_model.h \
+    src/bot_model.h
