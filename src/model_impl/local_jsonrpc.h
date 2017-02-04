@@ -7,6 +7,9 @@
 
 #include <QObject>
 #include <QLocalSocket>
+#include <QFileSystemWatcher>
+#include <QFileInfo>
+#include <QDir>
 #include <jsonrpc/jsonrpc.h>
 
 /// Connect to a local unix domain socket and attach a jsonrpc
@@ -18,10 +21,7 @@ class LocalJsonRpc : public QObject {
     LocalJsonRpc(const char * socket_path);
 
     /// The jsonrpc object that will (eventually) be connected to the socket
-    /// Calling invoke on this object will raise an exception if connected()
-    /// has not yet been fired or if the socket has been disconnected, which
-    /// may occur before we fire our disconnected event.
-    // TODO: Fix this terrible race condition.
+    /// Invokations while we are not connected are silently dropped.
     JsonRpc jsonrpc;
 
   signals:
@@ -30,17 +30,33 @@ class LocalJsonRpc : public QObject {
     void connected();
 
     /// This event is fired whenever the socket controlled by this class
-    /// disconnects from its defined endpovoid.
+    /// disconnects from its defined endpoint.
     void disconnected();
 
-    // This event is fired whenever the socket connect loop exceeds its
-    // retry count when attempting to connect.
+    // This event is fired when too much time has passed since initialization
+    // without having connected to the socket.  Connection may still occur.
+    // This is explicitly only for the initial connection attempt.
     void timeout();
 
   private:
-    QLocalSocket m_socket;
+    void checkConnect();
+    void initialTimeout();
+    void sockConnected();
+    void readyRead();
+    void sockDisconnected();
+    void stateChanged(QLocalSocket::LocalSocketState);
+    void directoryChanged(const QString &);
+
+    QFileInfo m_socketPath;
+    QDir m_watchPath;
+    QScopedPointer<QFileSystemWatcher, QScopedPointerDeleteLater> m_watcher;
+    QScopedPointer<QLocalSocket, QScopedPointerDeleteLater> m_socket;
+
     class Output;
     std::shared_ptr<Output> m_output;
+    class DummyOutput;
+    std::shared_ptr<DummyOutput> m_dummyOutput;
+    bool m_doTimeout;
 };
 
 #endif  // _SRC_LOCAL_JSONRPC_H

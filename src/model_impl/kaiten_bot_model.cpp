@@ -13,7 +13,7 @@ class KaitenBotModel : public BotModel {
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
-    LocalJsonRpc m_conn;
+    QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
 
     class SystemNotification : public JsonRpcNotification {
       public:
@@ -39,14 +39,14 @@ class KaitenBotModel : public BotModel {
 };
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
-        m_conn(socketpath),
+        m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
         m_netNot(new NetStateNotification(this)) {
     m_net.reset(new KaitenNetModel());
 
-    m_conn.jsonrpc.addMethod("system_notification", m_sysNot);
-    m_conn.jsonrpc.addMethod("state_notification", m_sysNot);
-    m_conn.jsonrpc.addMethod("network_state_change", m_netNot);
+    m_conn->jsonrpc.addMethod("system_notification", m_sysNot);
+    m_conn->jsonrpc.addMethod("state_notification", m_sysNot);
+    m_conn->jsonrpc.addMethod("network_state_change", m_netNot);
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
