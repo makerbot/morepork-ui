@@ -93,7 +93,7 @@ Rectangle {
         width: 800
         height: 184
         color: "#ffffff"
-        text: bot.ipAddr
+        text: bot.net.ipAddr
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.Fit
         horizontalAlignment: Text.AlignHCenter

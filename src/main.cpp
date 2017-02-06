@@ -9,8 +9,9 @@
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
+#include "model/bot_model.h"
 #define MOREPORK_UI_QML_MAIN QUrl("qrc:/main.qml")
-#define MOREPORK_BOT_MODEL new BotModel()
+#define MOREPORK_BOT_MODEL makeBotModel()
 #else
 #include "model_impl/kaiten_bot_model.h"
 #define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/main.qml"

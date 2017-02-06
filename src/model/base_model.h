@@ -27,6 +27,16 @@
     inline void NAME ## Reset() { NAME ## Set(DEFAULT); } \
   private:
 
+// A sub model is just a constant property that is itself a pointer to a model
+#define SUBMODEL(TYPE, NAME) \
+  private: \
+    Q_PROPERTY(TYPE* NAME READ NAME CONSTANT) \
+  protected: \
+    QScopedPointer<TYPE> m_ ## NAME; \
+  public: \
+    inline TYPE * NAME() { return m_ ## NAME.data(); } \
+  private:
+
 // Base class for all models -- all models should use this base class
 // and call reset() in their constructor.
 class BaseModel : public QObject {

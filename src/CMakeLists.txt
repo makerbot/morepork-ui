@@ -21,6 +21,7 @@ execute_process(
 
 # Model impl sources aren't built for Qt creator so they just live here
 set(MODEL_IMPL_SOURCES
+    model_impl/kaiten_net_model.cpp
     model_impl/kaiten_bot_model.cpp
     model_impl/local_jsonrpc.cpp)
 

@@ -1,7 +1,7 @@
 // Copyright 2017 Makerbot Industries
 
-#include "bot_model.h"
+#include "net_model.h"
 
-BotModel::BotModel() {
+NetModel::NetModel() {
     reset();
 }

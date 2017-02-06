@@ -4,13 +4,15 @@
 
 #include <memory>
 
-#include <mbcoreutils/jsoncpp_wrappers.h>
+#include "impl_util.h"
+#include "kaiten_net_model.h"
 #include "local_jsonrpc.h"
 
 class KaitenBotModel : public BotModel {
   public:
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
+    void netUpdate(const Json::Value & info);
     LocalJsonRpc m_conn;
 
     class SystemNotification : public JsonRpcNotification {
@@ -23,31 +25,37 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<SystemNotification> m_sysNot;
-};
 
-// Helper macros to update model properties based on json values.
-// If the json value is of the right type we update otherwise we
-// reset to default.
-#define UPDATE_STRING_PROP(PROP, JSON_VAL) \
-    do { \
-        auto v = (JSON_VAL); \
-        if (v.isString()) { \
-            PROP ## Set(v.asString().c_str()); \
-        } else { \
-            PROP ## Reset(); \
-        } \
-    } while (0)
+    class NetStateNotification : public JsonRpcNotification {
+      public:
+        NetStateNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->netUpdate(MakerBot::SafeJson::get_obj(params, "state"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<NetStateNotification> m_netNot;
+};
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(socketpath),
-        m_sysNot(new SystemNotification(this)) {
+        m_sysNot(new SystemNotification(this)),
+        m_netNot(new NetStateNotification(this)) {
+    m_net.reset(new KaitenNetModel());
+
     m_conn.jsonrpc.addMethod("system_notification", m_sysNot);
     m_conn.jsonrpc.addMethod("state_notification", m_sysNot);
+    m_conn.jsonrpc.addMethod("network_state_change", m_netNot);
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
-    UPDATE_STRING_PROP(ipAddr, info["ip"]);
+    dynamic_cast<KaitenNetModel*>(m_net.data())->sysInfoUpdate(info);
     UPDATE_STRING_PROP(name, info["machine_name"]);
+}
+
+void KaitenBotModel::netUpdate(const Json::Value &state) {
+    dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
 }
 
 BotModel * makeKaitenBotModel(const char * socketpath) {
