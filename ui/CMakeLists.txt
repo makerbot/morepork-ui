@@ -1,9 +1,9 @@
 # Parse in the list of all qml files to install from qml.qrc
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS qml.qrc)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ui.qrc)
 
 # For now we just hackily parse this with CMake but we should probably
 # use a python script to parse it if we need anything more complicated.
-file(STRINGS qml.qrc src_elems REGEX "^ *<file>")
+file(STRINGS ui.qrc src_elems REGEX "^ *<file>")
 set(sources)
 foreach(src_elem IN LISTS src_elems)
     string(STRIP "${src_elem}" src_elem_strip)

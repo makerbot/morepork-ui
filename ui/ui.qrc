@@ -1,6 +1,6 @@
 <RCC>
-    <qresource prefix="/">
-        <file>main.qml</file>
+    <qresource prefix="/ui">
+        <file>MoreporkUI.qml</file>
         <file>TestLayout.ui.qml</file>
     </qresource>
 </RCC>
