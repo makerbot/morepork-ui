@@ -23,8 +23,8 @@ int main(int argc, char ** argv)
     QGuiApplication qapp(argc, argv);
     QQmlApplicationEngine engine;
 
-    std::unique_ptr<BotModel> bot(MOREPORK_BOT_MODEL);
-    engine.rootContext()->setContextProperty("bot", bot.get());
+    QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
+    engine.rootContext()->setContextProperty("bot", bot.data());
 
     engine.load(MOREPORK_UI_QML_MAIN);
 

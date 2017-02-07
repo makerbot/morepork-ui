@@ -32,7 +32,7 @@
   private: \
     Q_PROPERTY(TYPE* NAME READ NAME CONSTANT) \
   protected: \
-    QScopedPointer<TYPE> m_ ## NAME; \
+    QScopedPointer<TYPE, QScopedPointerDeleteLater> m_ ## NAME; \
   public: \
     inline TYPE * NAME() { return m_ ## NAME.data(); } \
   private:

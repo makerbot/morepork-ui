@@ -13,7 +13,11 @@ class KaitenBotModel : public BotModel {
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
+
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
+    void connected();
+    void disconnected();
+    void timeout();
 
     class SystemNotification : public JsonRpcNotification {
       public:
@@ -26,6 +30,17 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<SystemNotification> m_sysNot;
 
+    class SysInfoCallback : public JsonRpcCallback {
+      public:
+        SysInfoCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->sysInfoUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<SysInfoCallback> m_sysInfoCb;
+
     class NetStateNotification : public JsonRpcNotification {
       public:
         NetStateNotification(KaitenBotModel * bot) : m_bot(bot) {}
@@ -36,6 +51,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<NetStateNotification> m_netNot;
+
+    class NetStateCallback : public JsonRpcCallback {
+      public:
+        NetStateCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->netUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<NetStateCallback> m_netStateCb;
 };
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
@@ -44,9 +70,14 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_netNot(new NetStateNotification(this)) {
     m_net.reset(new KaitenNetModel());
 
-    m_conn->jsonrpc.addMethod("system_notification", m_sysNot);
-    m_conn->jsonrpc.addMethod("state_notification", m_sysNot);
-    m_conn->jsonrpc.addMethod("network_state_change", m_netNot);
+    auto conn = m_conn.data();
+    conn->jsonrpc.addMethod("system_notification", m_sysNot);
+    conn->jsonrpc.addMethod("state_notification", m_sysNot);
+    conn->jsonrpc.addMethod("network_state_change", m_netNot);
+
+    connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
+    connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
+    connect(conn, &LocalJsonRpc::timeout, this, &KaitenBotModel::timeout);
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
@@ -56,6 +87,23 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
+}
+
+void KaitenBotModel::connected() {
+    // TODO: Kaiten codegen?
+    m_conn->jsonrpc.invoke(
+        "get_system_information", Json::Value(), m_sysInfoCb);
+    m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
+    // TODO: Wait for callbacks before setting state to connected
+    stateSet(ConnectionState::Connected);
+}
+
+void KaitenBotModel::disconnected() {
+    stateSet(ConnectionState::Disconnected);
+}
+
+void KaitenBotModel::timeout() {
+    stateSet(ConnectionState::TimedOut);
 }
 
 BotModel * makeKaitenBotModel(const char * socketpath) {

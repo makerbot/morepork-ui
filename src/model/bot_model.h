@@ -11,9 +11,19 @@
 // The top level API for our bot model.  We don't allow direct instantiation
 // because this doesn't initialize submodels.
 class BotModel : public BaseModel {
+  public:
+    enum ConnectionState {
+        Connecting,
+        Connected,
+        Disconnected,
+        TimedOut
+    };
+    Q_ENUM(ConnectionState)
+  private:
     Q_OBJECT
-    SUBMODEL(NetModel, net);
+    SUBMODEL(NetModel, net)
     MODEL_PROP(QString, name, "Unknown")
+    MODEL_PROP(ConnectionState, state, Connecting)
   protected:
     BotModel();
 };
