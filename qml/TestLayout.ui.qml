@@ -88,17 +88,61 @@ Rectangle {
 
     Text {
         id: ip_address
-        x: 0
-        y: 296
-        width: 800
-        height: 184
+        x: 400
+        y: 400
+        width: 400
+        height: 83
         color: "#ffffff"
         text: bot.net.ipAddr
+        font.pointSize: 48
         verticalAlignment: Text.AlignVCenter
         fontSizeMode: Text.Fit
         horizontalAlignment: Text.AlignHCenter
         font.family: "Tahoma"
-        font.pixelSize: 64
     }
 
+    Text {
+        id: name
+        x: 0
+        y: 300
+        width: 800
+        height: 94
+        color: "#ffffff"
+        text: bot.name
+        font.pointSize: 64
+        font.family: "Tahoma"
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        fontSizeMode: Text.Fit
+    }
+
+    Text {
+        id: state
+        x: 0
+        y: 397
+        width: 50
+        height: 83
+        color: "#ffffff"
+        text: bot.state
+        font.family: "Tahoma"
+        font.pointSize: 48
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        fontSizeMode: Text.Fit
+    }
+
+    Text {
+        id: gateway
+        x: 50
+        y: 397
+        width: 350
+        height: 83
+        color: "#ffffff"
+        text: bot.net.gateway
+        font.family: "Tahoma"
+        font.pointSize: 48
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        fontSizeMode: Text.Fit
+    }
 }
