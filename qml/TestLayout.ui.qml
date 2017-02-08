@@ -5,12 +5,12 @@ Rectangle {
     color: "#000000"
     Flickable {
         id: flickable
-        x: 340
+        x: 0
         y: 0
-        width: 460
+        width: 800
         height: 300
         contentHeight: 300
-        contentWidth: 900
+        contentWidth: 1800
         flickableDirection: Flickable.HorizontalFlick
 
         Rectangle {
@@ -48,53 +48,72 @@ Rectangle {
             height: 200
             color: "#d5ff00"
         }
-    }
-
-    Flickable {
-        id: flickable1
-        x: 0
-        y: 0
-        width: 300
-        height: 480
-        contentHeight: 900
-        contentWidth: 300
-        flickableDirection: Flickable.VerticalFlick
 
         Rectangle {
             id: rectangle4
-            x: 16
-            y: 14
+            x: 909
+            y: 28
             width: 200
             height: 200
-            color: "#ffffff"
+            color: "#ff0000"
         }
 
         Rectangle {
             id: rectangle5
-            x: 82
-            y: 237
+            x: 1133
+            y: 80
             width: 200
             height: 200
-            color: "#a4a4a4"
+            color: "#2d965c"
         }
 
         Rectangle {
             id: rectangle6
-            x: 16
-            y: 461
+            x: 1351
+            y: 28
             width: 200
             height: 200
-            color: "#727272"
+            color: "#223bbe"
         }
 
         Rectangle {
             id: rectangle7
-            x: 82
-            y: 682
+            x: 1567
+            y: 80
             width: 200
             height: 200
-            color: "#404040"
+            color: "#d5ff00"
         }
+    }
+
+    Text {
+        id: ip_address
+        x: 400
+        y: 400
+        width: 400
+        height: 83
+        color: "#ffffff"
+        text: bot.net.ipAddr
+        font.pointSize: 48
+        verticalAlignment: Text.AlignVCenter
+        fontSizeMode: Text.Fit
+        horizontalAlignment: Text.AlignHCenter
+        font.family: "Tahoma"
+    }
+
+    Text {
+        id: name
+        x: 0
+        y: 300
+        width: 800
+        height: 94
+        color: "#ffffff"
+        text: bot.name
+        font.pointSize: 64
+        font.family: "Tahoma"
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        fontSizeMode: Text.Fit
     }
 
 }

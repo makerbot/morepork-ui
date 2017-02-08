@@ -14,7 +14,21 @@ else:
         artifactory_utils.ArtifactSelector(
             project="morepork-build-root",
             revision="morepork",
-            version="*",
+            debug=False,
+            stable_required=True),
+        artifactory_utils.ArtifactSelector(
+            project="morepork-mbcoreutils",
+            revision="develop",
+            debug=False,
+            stable_required=True),
+        artifactory_utils.ArtifactSelector(
+            project="morepork-json-cpp",
+            revision="develop",
+            debug=False,
+            stable_required=True),
+        artifactory_utils.ArtifactSelector(
+            project="morepork-jsonrpc",
+            revision="develop",
             debug=False,
             stable_required=True),
     ]
