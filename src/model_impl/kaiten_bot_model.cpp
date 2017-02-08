@@ -67,7 +67,9 @@ class KaitenBotModel : public BotModel {
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
-        m_netNot(new NetStateNotification(this)) {
+        m_sysInfoCb(new SysInfoCallback(this)),
+        m_netNot(new NetStateNotification(this)),
+        m_netStateCb(new NetStateCallback(this)) {
     m_net.reset(new KaitenNetModel());
 
     auto conn = m_conn.data();

@@ -116,33 +116,4 @@ Rectangle {
         fontSizeMode: Text.Fit
     }
 
-    Text {
-        id: state
-        x: 0
-        y: 397
-        width: 50
-        height: 83
-        color: "#ffffff"
-        text: bot.state
-        font.family: "Tahoma"
-        font.pointSize: 48
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        fontSizeMode: Text.Fit
-    }
-
-    Text {
-        id: gateway
-        x: 50
-        y: 397
-        width: 350
-        height: 83
-        color: "#ffffff"
-        text: bot.net.gateway
-        font.family: "Tahoma"
-        font.pointSize: 48
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        fontSizeMode: Text.Fit
-    }
 }

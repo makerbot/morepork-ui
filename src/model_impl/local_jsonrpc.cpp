@@ -49,7 +49,11 @@ LocalJsonRpc::LocalJsonRpc(const char * socket_path) :
             this, &LocalJsonRpc::directoryChanged);
 
     QTimer::singleShot(30000, this, &LocalJsonRpc::initialTimeout);
-    checkConnect();
+
+    // We defer this call until we exit out to the event loop so that
+    // whatever instantiated us can connect to our signals before we
+    // fire them.  See -- this is why we need to use properties!
+    QTimer::singleShot(0, this, &LocalJsonRpc::checkConnect);
 }
 
 /// If the socket exists and we are in an unconnected state, start the
