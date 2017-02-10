@@ -6,9 +6,6 @@ Window {
     width: 800
     height: 480
 
-    /* Should only show up for desktop UI testing */
-    title: qsTr("The morepork UI")
-
     TestLayout {
         anchors.fill: parent
     }

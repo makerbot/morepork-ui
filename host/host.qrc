@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/host">
+        <file>host_main.qml</file>
+        <file>Model.ui.qml</file>
+    </qresource>
+</RCC>

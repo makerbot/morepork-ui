@@ -5,7 +5,7 @@ CONFIG += c++11
 
 include(src/src.pri)
 
-RESOURCES += qml/qml.qrc
+RESOURCES += ui/ui.qrc host/host.qrc
 
 # Disable all APIs deprecated before Qt 6.0.0
 # TODO: Add this to CMake
