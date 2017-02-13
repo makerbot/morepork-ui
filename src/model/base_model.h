@@ -4,6 +4,7 @@
 #define _SRC_BASE_MODEL_H
 
 #include <QObject>
+#include <QVariant>
 
 // A Model Property is a Qt property that should only be modified from within
 // the bot model and which notifies on change.  Should be declared in a private
@@ -41,6 +42,10 @@
 // and call reset() in their constructor.
 class BaseModel : public QObject {
     Q_OBJECT
+    /// Placeholder property to deal with QML's inability to access
+    /// dynamic object properties.
+    Q_PROPERTY(QVariant metaInfo MEMBER m_metaInfo);
+    QVariant m_metaInfo;
   protected:
     /// Reset all properties to their default value
     void reset();

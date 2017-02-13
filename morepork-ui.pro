@@ -7,6 +7,9 @@ include(src/src.pri)
 
 RESOURCES += ui/ui.qrc host/host.qrc
 
+# Stuff we only build for qt creator builds
+include(host/host.pri)
+
 # Disable all APIs deprecated before Qt 6.0.0
 # TODO: Add this to CMake
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000

@@ -1,6 +1,7 @@
 // Copyright 2017 MakerBot Industries
 
 #include <memory>
+#include <iostream>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -9,9 +10,9 @@
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
-#include "model/bot_model.h"
+#include "../host/host_model.h"
 #define MOREPORK_UI_QML_MAIN QUrl("qrc:/host/host_main.qml")
-#define MOREPORK_BOT_MODEL makeBotModel()
+#define MOREPORK_BOT_MODEL makeHostBotModel()
 #else
 #include "model_impl/kaiten_bot_model.h"
 #define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/MoreporkUI.qml"
