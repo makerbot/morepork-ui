@@ -7,12 +7,9 @@ import QtQuick.Controls 2.0
 // and doesn't really worry about running off the bottom end of the
 // window.
 //
-// Properties that are not strings or numbers aren't really supported.
-// Enums are supported as ints, so you don't get to view the enum names
-// and you can set invalid enum values just fine.
-//
 // You have to pass in a BaseModel instance (like bot or bot.net) as
-// bot_model, which must have metaInfo set by host_model
+// bot_model, which must have metaInfo set by host_model.cpp.  New
+// types of model properties need support both here and there.
 ListView {
     id: propsView
     x: 8
@@ -24,21 +21,41 @@ ListView {
         x: 5
         height: 40
         Row {
-            id: row1
             spacing: 10
             Text {
                 text: modelData.prop
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
             }
-            TextField {
-                id: propField
-                placeholderText: bot_model[modelData.prop]
-                onEditingFinished: {
-                    var val, type = typeof(bot_model[modelData.prop]);
-                    if (type == "number") val = Number(propField.text);
-                    else val = propField.text;
-                    bot_model[modelData.prop] = val;
+            Loader {
+                active: modelData.chooser == "text"
+                sourceComponent: Component {
+                    TextField {
+                        placeholderText: bot_model[modelData.prop]
+                        property var text_fn : eval(modelData.text_fn)
+                        onEditingFinished: {
+                            bot_model[modelData.prop] = text_fn(text);
+                        }
+                    }
+                }
+            }
+            Loader {
+                active: modelData.chooser == "combo"
+                sourceComponent: Component {
+                    ComboBox {
+                        model: modelData.combo
+                        currentIndex: bot_model[modelData.prop]
+                        onActivated: bot_model[modelData.prop] = currentIndex
+                    }
+                }
+            }
+            Loader {
+                active: modelData.chooser == "check"
+                sourceComponent: Component {
+                    CheckBox {
+                        checked: bot_model[modelData.prop]
+                        onClicked: bot_model[modelData.prop] = checked
+                    }
                 }
             }
         }
