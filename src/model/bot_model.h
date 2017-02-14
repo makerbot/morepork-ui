@@ -7,6 +7,7 @@
 
 #include "base_model.h"
 #include "net_model.h"
+#include "process_model.h"
 
 // The top level API for our bot model.  We don't allow direct instantiation
 // because this doesn't initialize submodels.
@@ -22,6 +23,7 @@ class BotModel : public BaseModel {
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
+    SUBMODEL(ProcessModel, process)
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
   protected:

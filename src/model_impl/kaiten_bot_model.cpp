@@ -6,6 +6,7 @@
 
 #include "impl_util.h"
 #include "kaiten_net_model.h"
+#include "kaiten_process_model.h"
 #include "local_jsonrpc.h"
 
 class KaitenBotModel : public BotModel {
@@ -71,6 +72,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_netNot(new NetStateNotification(this)),
         m_netStateCb(new NetStateCallback(this)) {
     m_net.reset(new KaitenNetModel());
+    m_process.reset(new KaitenProcessModel());
 
     auto conn = m_conn.data();
     conn->jsonrpc.addMethod("system_notification", m_sysNot);
@@ -84,6 +86,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->sysInfoUpdate(info);
+    dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
+        info["curent_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
 }
 

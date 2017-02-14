@@ -6,9 +6,11 @@ SOURCES += \
     src/main.cpp \
     src/model/base_model.cpp \
     src/model/net_model.cpp \
+    src/model/process_model.cpp \
     src/model/bot_model.cpp
 
 HEADERS += \
     src/model/base_model.h \
     src/model/net_model.h \
+    src/model/process_model.h \
     src/model/bot_model.h

@@ -10,6 +10,7 @@ Rectangle {
         width: parent.width
         TabButton { text: "/" }
         TabButton { text: "/net" }
+        TabButton { text: "/process" }
     }
 
     SwipeView {
@@ -18,6 +19,7 @@ Rectangle {
         currentIndex: bar.currentIndex
         Item { PropsView { bot_model: bot } }
         Item { PropsView { bot_model: bot.net } }
+        Item { PropsView { bot_model: bot.process } }
     }
 
 }
