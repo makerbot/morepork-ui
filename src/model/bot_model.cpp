@@ -10,6 +10,7 @@ class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
         m_net.reset(new NetModel());
+        m_process.reset(new ProcessModel());
     }
 };
 
