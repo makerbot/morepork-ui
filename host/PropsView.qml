@@ -11,7 +11,6 @@ import QtQuick.Controls 2.0
 // bot_model, which must have metaInfo set by host_model.cpp.  New
 // types of model properties need support both here and there.
 ListView {
-    id: propsView
     x: 8
     width: 424
     height: 700
@@ -20,10 +19,11 @@ ListView {
     delegate: Item {
         x: 5
         height: 40
+        property var prop : modelData.prop
         Row {
             spacing: 10
             Text {
-                text: modelData.prop
+                text: prop
                 anchors.verticalCenter: parent.verticalCenter
                 font.bold: true
             }
@@ -31,11 +31,9 @@ ListView {
                 active: modelData.chooser == "text"
                 sourceComponent: Component {
                     TextField {
-                        placeholderText: bot_model[modelData.prop]
+                        placeholderText: bot_model[prop]
                         property var text_fn : eval(modelData.text_fn)
-                        onEditingFinished: {
-                            bot_model[modelData.prop] = text_fn(text);
-                        }
+                        onEditingFinished: bot_model[prop] = text_fn(text)
                     }
                 }
             }
@@ -44,8 +42,8 @@ ListView {
                 sourceComponent: Component {
                     ComboBox {
                         model: modelData.combo
-                        currentIndex: bot_model[modelData.prop]
-                        onActivated: bot_model[modelData.prop] = currentIndex
+                        currentIndex: bot_model[prop]
+                        onActivated: bot_model[prop] = currentIndex
                     }
                 }
             }
@@ -53,8 +51,8 @@ ListView {
                 active: modelData.chooser == "check"
                 sourceComponent: Component {
                     CheckBox {
-                        checked: bot_model[modelData.prop]
-                        onClicked: bot_model[modelData.prop] = checked
+                        checked: bot_model[prop]
+                        onClicked: bot_model[prop] = checked
                     }
                 }
             }

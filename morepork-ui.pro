@@ -5,7 +5,7 @@ CONFIG += c++11
 
 include(src/src.pri)
 
-RESOURCES += ui/ui.qrc host/host.qrc
+RESOURCES += ui/ui.qrc
 
 # Stuff we only build for qt creator builds
 include(host/host.pri)

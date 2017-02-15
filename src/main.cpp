@@ -1,7 +1,6 @@
 // Copyright 2017 MakerBot Industries
 
 #include <memory>
-#include <iostream>
 
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
