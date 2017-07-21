@@ -91,7 +91,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
         info["curent_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
     // TODO(chris): This bit is a mess...
-    const Json::Value & version_dict = info["version"];
+    const Json::Value & version_dict = info["firmware_version"];
     const Json::Value & version_major = version_dict["major"];
     const Json::Value & version_minor = version_dict["minor"];
     const Json::Value & version_bugfix = version_dict["bugfix"];
