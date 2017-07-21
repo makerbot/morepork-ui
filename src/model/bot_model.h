@@ -25,6 +25,7 @@ class BotModel : public BaseModel {
     SUBMODEL(NetModel, net)
     SUBMODEL(ProcessModel, process)
     MODEL_PROP(QString, name, "Unknown")
+    MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
   protected:
     BotModel();

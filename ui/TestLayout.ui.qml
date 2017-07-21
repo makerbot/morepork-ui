@@ -116,4 +116,19 @@ Rectangle {
         fontSizeMode: Text.Fit
     }
 
+    Text {
+        id: version
+        x: 114
+        y: 400
+        width: 285
+        height: 83
+        color: "#ffffff"
+        text: bot.version
+        font.pointSize: 48
+        fontSizeMode: Text.Fit
+        font.family: "Tahoma"
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+    }
+
 }

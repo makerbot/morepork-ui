@@ -3,6 +3,7 @@
 #include "kaiten_bot_model.h"
 
 #include <memory>
+#include <sstream>
 
 #include "impl_util.h"
 #include "kaiten_net_model.h"
@@ -89,6 +90,23 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
         info["curent_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
+    // TODO(chris): This bit is a mess...
+    const Json::Value & version_dict = info["version"];
+    const Json::Value & version_major = version_dict["major"];
+    const Json::Value & version_minor = version_dict["minor"];
+    const Json::Value & version_bugfix = version_dict["bugfix"];
+    const Json::Value & version_build = version_dict["build"];
+    if (version_major.isInt() && version_minor.isInt() &&
+            version_bugfix.isInt() && version_build.isInt()) {
+        std::stringstream version;
+        version << version_major.asInt() << "."
+                << version_minor.asInt() << "."
+                << version_bugfix.asInt() << "."
+                << version_build.asInt();
+        versionSet(version);
+    } else {
+        versionReset();
+    }
 }
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
