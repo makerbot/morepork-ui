@@ -103,7 +103,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 << version_minor.asInt() << "."
                 << version_bugfix.asInt() << "."
                 << version_build.asInt();
-        versionSet(version);
+        versionSet(version.str().c_str());
     } else {
         versionReset();
     }
