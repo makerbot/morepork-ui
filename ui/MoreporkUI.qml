@@ -7,7 +7,7 @@ Window {
     height: 480
 
     TestLayout {
-        rotation: 360
+        objectName: "testLayout"
         anchors.fill: parent
     }
 }
