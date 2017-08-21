@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <QDebug>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -28,5 +29,17 @@ int main(int argc, char ** argv)
 
     engine.load(MOREPORK_UI_QML_MAIN);
 
+    // So, basically, our UI is upside down when the one
+    // is compared on the bot, to that of test in qtcreator.
+    // So, that correction is done here
+    #ifndef MOREPORK_UI_QT_CREATOR_BUILD
+        QObject *rootObject = engine.rootObjects().first();
+        QObject *qmlObject = rootObject->findChild<QObject*>("testLayout");
+        if (qmlObject) {
+            qmlObject->setProperty("rotation", 180);
+        } else {
+            qCritical() << "Cannot find testLayout";
+        }
+    #endif
     return qapp.exec();
 }
