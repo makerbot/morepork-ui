@@ -6,7 +6,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QCommandLineParser>
 
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
@@ -23,20 +22,6 @@
 int main(int argc, char ** argv)
 {
     QGuiApplication qapp(argc, argv);
-
-    // Parse arguments
-    QCommandLineParser parser;
-    parser.setApplicationDescription("Test helper");
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addPositionalArgument("Test",
-      QCoreApplication::translate("main", "Running test build"));
-    QCommandLineOption test_option(QStringList() << "t"
-      << "test_build", QCoreApplication::translate("main",
-      "Build is test type"));
-    parser.addOption(test_option);
-    parser.process(qapp);
-
     QQmlApplicationEngine engine;
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
@@ -46,18 +31,15 @@ int main(int argc, char ** argv)
 
     // So, basically, our UI is upside down when the one
     // is compared on the bot, to that of test in qtcreator.
-    // We have two builds, makerbot-ui-test will render
-    // right side up on qtcreater, and
-    // makerbot-ui will build right side up on the bot
-    bool is_test_build = parser.isSet(test_option);
-    QObject *rootObject = engine.rootObjects().first();
-    QObject *qmlObject = rootObject->findChild<QObject*>("testLayout");
-    if (qmlObject) {
-        if (!is_test_build) {
+    // So, that correction is done here
+    #ifndef MOREPORK_UI_QT_CREATOR_BUILD
+        QObject *rootObject = engine.rootObjects().first();
+        QObject *qmlObject = rootObject->findChild<QObject*>("testLayout");
+        if (qmlObject) {
             qmlObject->setProperty("rotation", 180);
+        } else {
+            qCritical() << "Cannot find testLayout";
         }
-    } else {
-        qCritical() << "Cannot find testLayout";
-    }
+    #endif
     return qapp.exec();
 }
