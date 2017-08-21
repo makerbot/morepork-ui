@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include <QDebug>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
