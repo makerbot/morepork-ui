@@ -13,6 +13,7 @@
 #include <libarchiveqt.h>
 
 class Artifacts : public QObject {
+Q_OBJECT
 private:
     const QStringList REQUIRED_ARTIFACTS = QStringList{
             "MBCoreUtils",
@@ -31,13 +32,14 @@ private:
         kBuildQuery,
         kBuildVersions,
         kDownloadUri,
-        kDownload
+        kDownload,
+        kDone
     };
     struct ArtifactsListInfo {
         DownloadStep step_;
         QString curr_url_;
     };
-
+    size_t finished_count;
     QNetworkAccessManager* m_network_manager_;
     QMap<QString, ArtifactsListInfo> m_artifacts_list_;
 
@@ -48,6 +50,9 @@ private:
     QString GetProperFilename(const QUrl &url);
     bool SaveFile(const QString &filename, QIODevice *data);
     bool Unzip(QString save_file_name, QString name);
+    void SetDone(QString name);
+    bool IsAllDone();
+    size_t GetTotalArtifacts();
 
     void ProcessInitialList(QJsonObject json_object);
     void ProcessBranchQuery(QJsonObject json_object, QString name);
@@ -61,8 +66,14 @@ public:
     const static QString UNZIPPED_LOC;
 
     Artifacts();
-    void GetList();
     void PullArtifacts();
+
+public slots:
+    void GetList();
+
+signals:
+    void AllDone();
+
 }; // class Artifacts
 
 #endif // ARTIFACTS_H

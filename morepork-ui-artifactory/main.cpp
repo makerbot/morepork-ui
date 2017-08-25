@@ -1,5 +1,11 @@
 #include <QCoreApplication>
+#include <QTimer>
+
 #include "artifacts.h"
+
+void exit() {
+    qInfo() << "Finished!";
+}
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +18,10 @@ int main(int argc, char *argv[])
         QDir().mkdir(Artifacts::UNZIPPED_LOC);
     }
     Artifacts artifactory;
-    artifactory.GetList();
+
+    QObject::connect(&artifactory, SIGNAL(AllDone()), &a, SLOT(quit()));
+    // This will run the task from the application event loop.
+    QTimer::singleShot(0, &artifactory, SLOT(GetList()));
+
     return a.exec();
 }

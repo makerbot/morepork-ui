@@ -5,6 +5,7 @@ const QString Artifacts::UNZIPPED_LOC = "../artifacts/";
 
 Artifacts::Artifacts(){
     qDebug() << "Initialized artifactory";
+    finished_count = 0;
     m_network_manager_ = new QNetworkAccessManager(this);
 }
 
@@ -102,6 +103,7 @@ void Artifacts::ProcessBranchQuery(QJsonObject json_object, QString name) {
         MakeRequest(name);
     } else {
         qInfo() << name << " does not have seeking branch to pull down from.";
+        SetDone(name);
     }
 }
 
@@ -127,6 +129,7 @@ void Artifacts::ProcessBuildQuery(QJsonObject json_object, QString name) {
         MakeRequest(name);
     } else {
         qInfo() << name << " does not have seeking build to pull down from.";
+        SetDone(name);
     }
 }
 
@@ -157,6 +160,7 @@ void Artifacts::ProcessBuildVersionQuery(
         MakeRequest(name);
     } else {
         qInfo() << name << " does not have seeking build to pull down from.";
+        SetDone(name);
     }
 }
 
@@ -169,6 +173,7 @@ void Artifacts::ProcessDownloadUriQuery(
         MakeRequest(name);
     } else {
         qWarning() << name << " does not have downloadUri Key in given build";
+        SetDone(name);
     }
 }
 
@@ -181,6 +186,14 @@ void Artifacts::ProcessDownloadQuery(QNetworkReply* reply, QString name) {
         if (Unzip(save_file_name, name)) {
             qInfo() << "Unzipped successfully to " << UNZIPPED_LOC << name;
         }
+        SetDone(name);
+    }
+    if (IsAllDone()) {
+        qInfo() << "All complete!!!";
+        Artifacts::AllDone();
+    } else {
+        qInfo() << GetTotalArtifacts() << finished_count << " are two numbers";
+        PrintArtifactsList();
     }
 }
 
@@ -228,4 +241,20 @@ bool Artifacts::Unzip(QString zipped_file_name, QString name) {
     arc->setDestination(unzip_loc);
     arc->extract();
     return true;
+}
+
+void Artifacts::SetDone(QString name) {
+    ArtifactsListInfo artifacts_info = {kDone, ""};
+    m_artifacts_list_.insert(name, artifacts_info);
+    finished_count++;
+    qInfo() << "Done with " << name;
+
+}
+
+bool Artifacts::IsAllDone() {
+    return ((GetTotalArtifacts() - finished_count) <= 0);
+}
+
+size_t Artifacts::GetTotalArtifacts() {
+    return m_artifacts_list_.size() - 1; // 1 being the initial placeholder
 }

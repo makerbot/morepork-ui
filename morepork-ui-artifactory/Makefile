@@ -51,9 +51,10 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		artifacts.cpp 
+		artifacts.cpp moc_artifacts.cpp
 OBJECTS       = main.o \
-		artifacts.o
+		artifacts.o \
+		moc_artifacts.o
 DIST          = /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/spec_pre.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/qdevice.pri \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/device_config.prf \
@@ -212,6 +213,7 @@ DIST          = /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/spec_pre.
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/qt_config.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/mac/sdk.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/toolchain.prf \
@@ -412,6 +414,7 @@ Makefile: morepork-ui-artifactory.pro /Users/sujit.poudel/Qt/5.9.1/clang_64/mksp
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/qt_config.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/macx-clang/qmake.conf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/exclusive_builds.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/mac/sdk.prf \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/toolchain.prf \
@@ -598,6 +601,7 @@ Makefile: morepork-ui-artifactory.pro /Users/sujit.poudel/Qt/5.9.1/clang_64/mksp
 /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/qt_config.prf:
 /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/macx-clang/qmake.conf:
 /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/exclusive_builds.prf:
 /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/mac/sdk.prf:
 /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/toolchain.prf:
@@ -651,6 +655,7 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) $(TARGET) 
+	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -672,8 +677,192 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/data/dummy.cpp
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -pipe -stdlib=libc++ -g -std=gnu++11 $(EXPORT_ARCH_ARGS) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk -mmacosx-version-min=10.10 -Wall -W -dM -E -o moc_predefs.h /Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_artifacts.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_artifacts.cpp
+moc_artifacts.cpp: /Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QDebug \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdebug.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QJsonDocument \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qjsondocument.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QJsonObject \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qjsonobject.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QJsonArray \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qjsonarray.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QStringList \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstringlist.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QVersionNumber \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qversionnumber.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QDir \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdir.h \
+		libarchiveqt/lib/libarchiveqt.h \
+		libarchiveqt/lib/libarchive/include/archive.h \
+		libarchiveqt/lib/libarchive/include/archive_entry.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QtCore \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qglobal.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstractanimation.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstracteventdispatcher.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstractitemmodel.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstractnativeeventfilter.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstractproxymodel.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstractstate.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qabstracttransition.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qalgorithms.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qanimationgroup.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qarraydata.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qarraydataops.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qarraydatapointer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qatomic.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qbasictimer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qbitarray.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qbuffer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qbytearray.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qbytearraylist.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qbytearraymatcher.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcache.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qchar.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcollator.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcommandlineoption.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcommandlineparser.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcompilerdetection.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcontainerfwd.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcontiguouscache.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcoreevent.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcryptographichash.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdatastream.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdatetime.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdeadlinetimer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdiriterator.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qeasingcurve.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qelapsedtimer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qendian.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qeventloop.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qeventtransition.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qexception.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfactoryinterface.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfile.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfiledevice.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfileinfo.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfileselector.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfilesystemwatcher.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfinalstate.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qflags.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfuture.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfutureinterface.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfuturesynchronizer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qfuturewatcher.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qgenericatomic.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qglobalstatic.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qhash.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qhashfunctions.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qhistorystate.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qidentityproxymodel.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qiodevice.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qisenum.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qitemselectionmodel.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qiterator.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qjsonvalue.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlibrary.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlibraryinfo.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qline.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlinkedlist.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlist.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlocale.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qlockfile.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qloggingcategory.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmap.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmargins.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmath.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmessageauthenticationcode.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmetaobject.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmetatype.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmimedata.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmimedatabase.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmimetype.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qmutex.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qnamespace.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qnumeric.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qobject.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qobjectcleanuphandler.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qobjectdefs.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qoperatingsystemversion.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qpair.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qparallelanimationgroup.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qpauseanimation.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qplugin.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qpluginloader.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qpoint.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qpointer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qprocess.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qprocessordetection.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qpropertyanimation.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qqueue.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qreadwritelock.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qrect.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qrefcount.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qregexp.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qregularexpression.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qresource.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qresultstore.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qrunnable.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsavefile.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qscopedpointer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qscopedvaluerollback.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsemaphore.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsequentialanimationgroup.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qset.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsettings.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qshareddata.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsharedmemory.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsharedpointer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsignalmapper.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsignaltransition.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsize.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsocketnotifier.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsortfilterproxymodel.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstack.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstandardpaths.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstate.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstatemachine.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstorageinfo.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstring.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstringbuilder.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstringlistmodel.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qstringmatcher.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsysinfo.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsystemdetection.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qsystemsemaphore.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtemporarydir.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtemporaryfile.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtextboundaryfinder.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtextcodec.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtextstream.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qthread.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qthreadpool.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qthreadstorage.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimeline.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimer.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimezone.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtypeinfo.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtypetraits.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qurl.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qurlquery.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/quuid.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qvariant.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qvariantanimation.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qvarlengtharray.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qvector.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qversiontagging.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qwaitcondition.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qwineventnotifier.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtcoreversion.h \
+		artifacts.h \
+		moc_predefs.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/bin/moc
+	/Users/sujit.poudel/Qt/5.9.1/clang_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/Users/sujit.poudel/Qt/5.9.1/clang_64/mkspecs/macx-clang -I/Users/sujit.poudel/Projects/Toolchain-Release/Toolchain/morepork-ui/morepork-ui-artifactory -I/Users/sujit.poudel/Projects/Toolchain-Release/Toolchain/morepork-ui/morepork-ui-artifactory/libarchiveqt/lib/libarchive/include -I/Users/sujit.poudel/Projects/Toolchain-Release/Toolchain/morepork-ui/morepork-ui-artifactory/libarchiveqt/lib/liblzma/include -I/Users/sujit.poudel/Projects/Toolchain-Release/Toolchain/morepork-ui/morepork-ui-artifactory/libarchiveqt/lib -I/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtNetwork.framework/Headers -I/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1 -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/include -F/Users/sujit.poudel/Qt/5.9.1/clang_64/lib artifacts.h -o moc_artifacts.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
 compiler_rez_source_make_all:
@@ -684,12 +873,14 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
 main.o: main.cpp /Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QCoreApplication \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qcoreapplication.h \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QTimer \
+		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		artifacts.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/QDebug \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qdebug.h \
@@ -851,7 +1042,6 @@ main.o: main.cpp /Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Head
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qthreadpool.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qthreadstorage.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimeline.h \
-		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimer.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtimezone.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtranslator.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtypeinfo.h \
@@ -1050,6 +1240,9 @@ artifacts.o: artifacts.cpp artifacts.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qxmlstream.h \
 		/Users/sujit.poudel/Qt/5.9.1/clang_64/lib/QtCore.framework/Headers/qtcoreversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o artifacts.o artifacts.cpp
+
+moc_artifacts.o: moc_artifacts.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_artifacts.o moc_artifacts.cpp
 
 ####### Install
 
