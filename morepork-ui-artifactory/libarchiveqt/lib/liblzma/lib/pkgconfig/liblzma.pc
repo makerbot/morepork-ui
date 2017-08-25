@@ -1,0 +1,19 @@
+#
+# Author: Lasse Collin
+#
+# This file has been put into the public domain.
+# You can do whatever you want with this file.
+#
+
+prefix=/Users/sujit.poudel/Downloads/xz-5.2.3/install_dir
+exec_prefix=/Users/sujit.poudel/Downloads/xz-5.2.3/install_dir
+libdir=/Users/sujit.poudel/Downloads/xz-5.2.3/install_dir/lib
+includedir=/Users/sujit.poudel/Downloads/xz-5.2.3/install_dir/include
+
+Name: liblzma
+Description: General purpose data compression library
+URL: http://tukaani.org/xz/
+Version: 5.2.3
+Cflags: -I${includedir}
+Libs: -L${libdir} -llzma
+Libs.private: -D_THREAD_SAFE -pthread 
