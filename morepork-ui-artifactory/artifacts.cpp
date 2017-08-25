@@ -191,9 +191,6 @@ void Artifacts::ProcessDownloadQuery(QNetworkReply* reply, QString name) {
     if (IsAllDone()) {
         qInfo() << "All complete!!!";
         Artifacts::AllDone();
-    } else {
-        qInfo() << GetTotalArtifacts() << finished_count << " are two numbers";
-        PrintArtifactsList();
     }
 }
 
