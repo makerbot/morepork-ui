@@ -3,3 +3,6 @@
 * Required artifacts can be added or removed in artifacts.h file in REQUIRED_ARTIFACTS field.
 
 * To run: Just import project to QT Creator, build and run. It will create artifacts folder inside morepork-ui (Unzipped artifacts), as well as morepork-ui-artifactory (zipped artifacts)
+
+* Everything inside libarchiveqt is library imported (https://github.com/marcusbritanicus/libarchive-qt) to be able to unzip. 
+* It depends upon libarchive (https://www.libarchive.org/) and lzma library (https://tukaani.org/xz/).
