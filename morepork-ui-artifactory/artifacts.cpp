@@ -1,7 +1,7 @@
 #include "artifacts.h"
 
 const QString Artifacts::ZIP_LOC      = "./artifacts/";
-const QString Artifacts::UNZIPPED_LOC = "../morepork-ui/artifacts/";
+const QString Artifacts::UNZIPPED_LOC = "../artifacts/";
 
 Artifacts::Artifacts(){
     qDebug() << "Initialized artifactory";

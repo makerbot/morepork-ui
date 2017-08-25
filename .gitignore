@@ -1,7 +1,11 @@
 # Stuff that the morepork build system creates
 /_build*/
 /artifacts
+.*
 *.o
+!.gitignore
+/morepork-ui-artifactory/artifacts
 
 # Stuff that Qt Creator creates
-/morepork-ui.pro.user
+morepork-ui.pro.*
+*.pro.*

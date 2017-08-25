@@ -8,10 +8,6 @@ int main(int argc, char *argv[])
         QDir().mkdir(Artifacts::ZIP_LOC);
     }
     qDebug() << "Curr dir: " << QDir::currentPath();
-    if (!QDir("../morepork-ui").exists()) {
-        qWarning() << "makerbot-ui repo is missing";
-        return 0;
-    }
     if (!QDir(Artifacts::UNZIPPED_LOC).exists()) {
         QDir().mkdir(Artifacts::UNZIPPED_LOC);
     }
