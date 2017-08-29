@@ -3,7 +3,7 @@
 *.o
 !.gitignore
 /morepork-ui-artifactory/artifacts
-/morepork-ui-artifactory
+morepork-ui-artifactory
 *.1
 *.dylib
 *.a
@@ -12,3 +12,4 @@ xz
 bsdcat
 bsdcpio
 bsdtar
+bin/
