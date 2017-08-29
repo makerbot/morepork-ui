@@ -1,0 +1,5 @@
+/artifacts
+.*
+*.o
+!.gitignore
+/morepork-ui-artifactory/artifacts
