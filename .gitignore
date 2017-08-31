@@ -3,4 +3,4 @@
 /artifacts/
 
 # Stuff that Qt Creator creates
-*.pro.*
+/morepork-ui.pro.user
