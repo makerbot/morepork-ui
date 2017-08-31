@@ -4,5 +4,6 @@
 
 * To run: Just import project to QT Creator, build and run. It will create artifacts folder inside morepork-ui (Unzipped artifacts), as well as morepork-ui-artifactory (zipped artifacts)
 
-* Everything inside libarchiveqt is library imported (https://github.com/marcusbritanicus/libarchive-qt) to be able to unzip. 
-* It depends upon libarchive (https://www.libarchive.org/) and lzma library (https://tukaani.org/xz/).
+* The zipped artifacts are inside morepork-ui/morepork-ui-artifactory/artifacts folder and unzipped to morepork-ui/artifacts/ folder
+
+* Windows build is not supported at the moment due to lack to tar command

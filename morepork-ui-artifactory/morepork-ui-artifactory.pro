@@ -8,6 +8,12 @@ TARGET = morepork-ui-artifactory
 CONFIG += console
 CONFIG -= app_bundle
 
+DESTDIR = build
+OBJECTS_DIR = $$DESTDIR/_obj
+MOC_DIR = $$DESTDIR/_moc
+RCC_DIR = $$DESTDIR/_qrc
+UI_DIR = $$DESTDIR/_u
+
 TEMPLATE = app
 
 SOURCES += main.cpp \
