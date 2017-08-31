@@ -8,23 +8,6 @@ TARGET = morepork-ui-artifactory
 CONFIG += console
 CONFIG -= app_bundle
 
-LIBS += -L$$PWD/libarchiveqt/lib/libarchive/lib -larchive
-LIBS += -L$$PWD/libarchiveqt/lib/liblzma/lib -llzma
-
-INCLUDEPATH += $$PWD/libarchiveqt/lib/libarchive/include
-DEPENDPATH += $$PWD/libarchiveqt/lib/libarchive/include
-
-INCLUDEPATH += $$PWD/libarchiveqt/lib/liblzma/include
-DEPENDPATH += $$PWD/libarchiveqt/lib/liblzma/include
-
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/libarchiveqt/lib/release/ -larchiveqt5
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/libarchiveqt/lib/debug/ -larchiveqt5
-else:unix: LIBS += -L$$OUT_PWD/libarchiveqt/lib/ -larchiveqt5
-
-INCLUDEPATH += $$PWD/libarchiveqt/lib
-DEPENDPATH += $$PWD/libarchiveqt/lib
-
-
 TEMPLATE = app
 
 SOURCES += main.cpp \

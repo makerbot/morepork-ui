@@ -10,7 +10,7 @@
 #include <QStringList>
 #include <QVersionNumber>
 #include <QDir>
-#include <libarchiveqt.h>
+#include <QProcess>
 
 class Artifacts : public QObject {
 Q_OBJECT

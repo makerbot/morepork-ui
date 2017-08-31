@@ -233,10 +233,26 @@ bool Artifacts::Unzip(QString zipped_file_name, QString name) {
     if (!QDir(unzip_loc).exists()) {
         QDir().mkdir(unzip_loc);
     }
-    // Read archive code
-    LibArchive *arc = new LibArchive(zipped_file_name);
-    arc->setDestination(unzip_loc);
-    arc->extract();
+    qDebug() << "Unzipping " + zipped_file_name + " now";
+    QProcess decompressor;
+    QString cmd = "tar -zxf " + zipped_file_name +
+                  " --directory " + unzip_loc;
+    decompressor.setProcessChannelMode(QProcess::MergedChannels);
+    decompressor.start(cmd);
+    decompressor.waitForFinished();
+    // Continue reading the data until EOF reached
+    if (decompressor.error()) return false;
+    QByteArray output_data;
+    output_data.append(decompressor.readAllStandardOutput());
+    qDebug() << output_data.data();
+
+    qDebug("Error: ");
+    QByteArray error_data;
+    error_data.append(decompressor.readAllStandardError());
+    qDebug() << error_data.data();
+    qDebug("Done!");
+
+    decompressor.close();
     return true;
 }
 
