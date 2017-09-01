@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     if (!QDir(Artifacts::ZIP_LOC).exists()) {
         QDir().mkdir(Artifacts::ZIP_LOC);
     }
-    qDebug() << "Curr dir: " << QDir::currentPath();
+    qDebug() << "Curr dir from macro: " << PROJECT_SOURCE_DIR;
     if (!QDir(Artifacts::UNZIPPED_LOC).exists()) {
         QDir().mkdir(Artifacts::UNZIPPED_LOC);
     }

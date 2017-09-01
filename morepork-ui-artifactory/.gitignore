@@ -4,3 +4,4 @@
 morepork-ui-artifactory
 morepork-ui-artifactory.pro.*
 /build
+/artifacts

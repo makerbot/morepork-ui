@@ -15,6 +15,7 @@
 class Artifacts : public QObject {
 Q_OBJECT
 private:
+    const static QString PROJECT_DIR;
     const QStringList REQUIRED_ARTIFACTS = QStringList{
             "MBCoreUtils",
             "Birdwing-Acceleration-Shared",

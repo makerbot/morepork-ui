@@ -4,3 +4,6 @@
 
 # Stuff that Qt Creator creates
 /morepork-ui.pro.user
+
+# Shadow build stuffs
+/build-morepork-ui-artifactory*/

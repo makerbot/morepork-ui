@@ -1,7 +1,7 @@
 #include "artifacts.h"
-
-const QString Artifacts::ZIP_LOC      = "./artifacts/";
-const QString Artifacts::UNZIPPED_LOC = "../../artifacts/";
+const QString Artifacts::PROJECT_DIR = PROJECT_SOURCE_DIR;
+const QString Artifacts::ZIP_LOC      = PROJECT_DIR + "/artifacts/";
+const QString Artifacts::UNZIPPED_LOC = PROJECT_DIR + "/../artifacts/";
 
 Artifacts::Artifacts(){
     qDebug() << "Initialized artifactory";
