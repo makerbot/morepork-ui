@@ -1,0 +1,9 @@
+* Pulls down the required artifacts from http://maven.soft.makerbot.net/artifactory/
+
+* Required artifacts can be added or removed in artifacts.h file in REQUIRED_ARTIFACTS field.
+
+* To run: Just import project to QT Creator, build and run. It will create artifacts folder inside morepork-ui (Unzipped artifacts), as well as morepork-ui-artifactory (zipped artifacts)
+
+* The zipped artifacts are inside morepork-ui/morepork-ui-artifactory/artifacts folder and unzipped to morepork-ui/artifacts/ folder
+
+* Windows build is not supported at the moment due to lack to tar command
