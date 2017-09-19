@@ -9,12 +9,15 @@
 #include "kaiten_net_model.h"
 #include "kaiten_process_model.h"
 #include "local_jsonrpc.h"
+#include "error_utils.h"
+
 
 class KaitenBotModel : public BotModel {
   public:
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
+    void cancelPrint();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -65,6 +68,17 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<NetStateCallback> m_netStateCb;
 };
+
+void KaitenBotModel::cancelPrint(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("cancel", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),

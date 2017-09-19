@@ -1,8 +1,11 @@
 import QtQuick 2.5
 
 Rectangle {
+    property alias mouseArea_cancelPrint: mouseArea_cancelPrint
+
     width: 800
     color: "#000000"
+
     Flickable {
         id: flickable
         x: 0
@@ -20,6 +23,11 @@ Rectangle {
             width: 200
             height: 200
             color: "#ff0000"
+
+            MouseArea {
+                id: mouseArea_cancelPrint
+                anchors.fill: parent
+            }
         }
 
         Rectangle {
