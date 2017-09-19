@@ -27,6 +27,18 @@ Rectangle {
             MouseArea {
                 id: mouseArea_cancelPrint
                 anchors.fill: parent
+
+                Text {
+                    id: text1
+                    x: 79
+                    y: 85
+                    text: qsTr("Cancel\nAnnuler\nCancelar")
+                    horizontalAlignment: Text.AlignHCenter
+                    font.family: "Arial"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: 30
+                }
             }
         }
 
@@ -138,5 +150,4 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
-
 }
