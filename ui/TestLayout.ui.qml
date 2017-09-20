@@ -34,7 +34,7 @@ Rectangle {
                     y: 85
                     text: qsTr("Cancel\nAnnuler\nCancelar")
                     horizontalAlignment: Text.AlignHCenter
-                    font.family: "Arial"
+                    font.family: "Tahoma"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                     font.pixelSize: 30
