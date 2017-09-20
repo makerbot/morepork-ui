@@ -10,9 +10,9 @@ Window {
         objectName: "testLayout"
         anchors.fill: parent
 
-        mouseArea_cancelPrint.onClicked: {
+        mouseArea_cancel.onClicked: {
             //console.log("Button Pressed.")
-            bot.cancelPrint()
+            bot.cancel()
         }
     }
 }

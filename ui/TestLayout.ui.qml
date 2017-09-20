@@ -1,7 +1,7 @@
 import QtQuick 2.5
 
 Rectangle {
-    property alias mouseArea_cancelPrint: mouseArea_cancelPrint
+    property alias mouseArea_cancel: mouseArea_cancel
 
     width: 800
     color: "#000000"
@@ -25,7 +25,7 @@ Rectangle {
             color: "#ff0000"
 
             MouseArea {
-                id: mouseArea_cancelPrint
+                id: mouseArea_cancel
                 anchors.fill: parent
 
                 Text {

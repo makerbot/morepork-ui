@@ -21,7 +21,7 @@ class BotModel : public BaseModel {
         TimedOut
     };
     Q_ENUM(ConnectionState)
-    Q_INVOKABLE virtual void cancelPrint();
+    Q_INVOKABLE virtual void cancel();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
