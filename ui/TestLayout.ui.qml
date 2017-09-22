@@ -1,7 +1,7 @@
 import QtQuick 2.5
 
 Rectangle {
-    property alias mouseArea_cancel: mouseArea_cancel
+    property alias qtQuickButton_cancel: qtQuickButton_cancel
 
     width: 800
     color: "#000000"
@@ -24,9 +24,10 @@ Rectangle {
             height: 200
             color: "#ff0000"
 
-            MouseArea {
-                id: mouseArea_cancel
+            QtQuickButton {
+                id: qtQuickButton_cancel
                 anchors.fill: parent
+                color: "#ff0000"
 
                 Text {
                     id: text1

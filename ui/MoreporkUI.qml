@@ -10,7 +10,7 @@ Window {
         objectName: "testLayout"
         anchors.fill: parent
 
-        mouseArea_cancel.onClicked: {
+        qtQuickButton_cancel.onClicked: {
             //console.log("Button Pressed.")
             bot.cancel()
         }
