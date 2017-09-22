@@ -6,7 +6,6 @@ Item {
     height: 30
     property alias buttonText: innerText.text
     property color color: "white"
-    property color hoverColor: "#aaaaaa"
     property color pressColor: "slategray"
     property int fontSize: 10
     property int borderWidth: 1
@@ -28,7 +27,7 @@ Item {
         id: rectangleButton
         anchors.fill: parent
         radius: button.borderRadius
-        color: button.enabled ? button.color : "grey"
+        color: button.color
         border.width: button.borderWidth
         border.color: "black"
 
@@ -42,13 +41,6 @@ Item {
     //change the color of the button in differen button states
     states: [
         State {
-            name: "Hovering"
-            PropertyChanges {
-                target: rectangleButton
-                color: button.hoverColor
-            }
-        },
-        State {
             name: "Pressed"
             PropertyChanges {
                 target: rectangleButton
@@ -59,13 +51,6 @@ Item {
 
     //define transmission for the states
     transitions: [
-        Transition {
-            from: ""
-            to: "Hovering"
-            ColorAnimation {
-                duration: 200
-            }
-        },
         Transition {
             from: "*"
             to: "Pressed"
@@ -79,12 +64,6 @@ Item {
     MouseArea {
         hoverEnabled: true
         anchors.fill: button
-        onEntered: {
-            button.state = 'Hovering'
-        }
-        onExited: {
-            button.state = ''
-        }
         onClicked: {
             button.clicked()
         }
@@ -92,10 +71,7 @@ Item {
             button.state = "Pressed"
         }
         onReleased: {
-            if (containsMouse)
-                button.state = "Hovering"
-            else
-                button.state = ""
+            button.state = ""
         }
     }
 }
