@@ -22,11 +22,11 @@
 int main(int argc, char ** argv)
 {
     QGuiApplication qapp(argc, argv);
-    QQmlApplicationEngine engine;
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
-    engine.rootContext()->setContextProperty("bot", bot.data());
 
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("bot", bot.data());
     engine.load(MOREPORK_UI_QML_MAIN);
 
     // So, basically, our UI is upside down when the one
@@ -41,5 +41,6 @@ int main(int argc, char ** argv)
             qCritical() << "Cannot find testLayout";
         }
     #endif
+
     return qapp.exec();
 }
