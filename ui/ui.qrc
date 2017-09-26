@@ -1,7 +1,25 @@
 <RCC>
     <qresource prefix="/ui">
         <file>MoreporkUI.qml</file>
-        <file>TestLayout.ui.qml</file>
-        <file>QtQuickButton.qml</file>
+        <file>main.qml</file>
+        <file>MainMenu.qml</file>
+        <file>MainMenuForm.ui.qml</file>
+        <file>MainMenuIcon.qml</file>
+        <file>MainMenuIconForm.ui.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>InfoPage.qml</file>
+        <file>InfoPageForm.ui.qml</file>
+        <file>TopDrawer.qml</file>
+    </qresource>
+    <qresource prefix="/img">
+        <file alias="top_fade.png">images/top_fade.png</file>
+    </qresource>
+    <qresource prefix="/img/icon">
+        <file alias="print_icon.png">images/main_menu_icons_75pix/print_icon.png</file>
+        <file alias="extruder_icon.png">images/main_menu_icons_75pix/extruder_icon.png</file>
+        <file alias="settings_icon.png">images/main_menu_icons_75pix/settings_icon.png</file>
+        <file alias="info_icon.png">images/main_menu_icons_75pix/info_icon.png</file>
+        <file alias="material_icon.png">images/main_menu_icons_75pix/material_icon.png</file>
+        <file alias="preheat_icon.png">images/main_menu_icons_75pix/preheat_icon.png</file>
     </qresource>
 </RCC>

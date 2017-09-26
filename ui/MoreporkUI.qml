@@ -1,18 +1,31 @@
-import QtQuick 2.5
-import QtQuick.Window 2.2
+import QtQuick 2.7
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.3
 
-Window {
+ApplicationWindow {
+    id: window
     visible: true
     width: 800
     height: 480
 
-    TestLayout {
-        objectName: "testLayout"
+    TopDrawer {
+        id: drawer
+        width: window.width
+        height: window.height
+    }
+
+    StackLayout {
+        id: stackLayout
         anchors.fill: parent
 
-        qtQuickButton_cancel.onClicked: {
-            //console.log("Button Pressed.")
-            bot.cancel()
+        MainMenu {
+            objectName: "testLayout"
+            anchors.fill: parent
+
+            //        qtQuickButton_cancel.onClicked: {
+            //            //console.log("Button Pressed.")
+            //            bot.cancel()
+            //        }
         }
     }
 }
