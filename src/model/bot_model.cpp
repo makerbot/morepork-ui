@@ -1,9 +1,14 @@
 // Copyright 2017 Makerbot Industries
 
 #include "bot_model.h"
+#include "../error_utils.h"
 
 BotModel::BotModel() {
     reset();
+}
+
+void BotModel::cancel() {
+    qDebug() << FL_STRM << "called";
 }
 
 class DummyBotModel : public BotModel {

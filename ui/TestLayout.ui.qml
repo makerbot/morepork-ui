@@ -1,8 +1,11 @@
 import QtQuick 2.5
 
 Rectangle {
+    property alias qtQuickButton_cancel: qtQuickButton_cancel
+
     width: 800
     color: "#000000"
+
     Flickable {
         id: flickable
         x: 0
@@ -20,6 +23,24 @@ Rectangle {
             width: 200
             height: 200
             color: "#ff0000"
+
+            QtQuickButton {
+                id: qtQuickButton_cancel
+                anchors.fill: parent
+                color: "#ff0000"
+
+                Text {
+                    id: text1
+                    x: 79
+                    y: 85
+                    text: qsTr("Cancel\nAnnuler\nCancelar")
+                    horizontalAlignment: Text.AlignHCenter
+                    font.family: "Tahoma"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: 30
+                }
+            }
         }
 
         Rectangle {
@@ -130,5 +151,4 @@ Rectangle {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
-
 }

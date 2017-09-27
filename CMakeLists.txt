@@ -6,6 +6,7 @@ find_package(MBCMakeTools REQUIRED)
 
 add_subdirectory(auther)
 if(${CMAKE_CROSSCOMPILING})
+    add_definitions(-DQT_NO_DEBUG_OUTPUT)
     add_subdirectory(src)
     add_subdirectory(ui)
 endif()

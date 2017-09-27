@@ -9,5 +9,10 @@ Window {
     TestLayout {
         objectName: "testLayout"
         anchors.fill: parent
+
+        qtQuickButton_cancel.onClicked: {
+            //console.log("Button Pressed.")
+            bot.cancel()
+        }
     }
 }

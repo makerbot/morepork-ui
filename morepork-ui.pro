@@ -21,3 +21,8 @@ DEFINES += MOREPORK_UI_QT_CREATOR_BUILD
 # Note that if you find youself needing to add things here to get
 # something to work in qt creator, you are probably also going to
 # need to edit the CMakeLists...
+
+# Comment the line below to enable qDebug() console output
+# when building in Release mode.
+DEFINES += QT_NO_DEBUG_OUTPUT
+

@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QVariant>
 
+
 // A Model Property is a Qt property that should only be modified from within
 // the bot model and which notifies on change.  Should be declared in a private
 // section to avoid silently privatizing whatever follows it.
@@ -28,6 +29,7 @@
     inline void NAME ## Reset() { NAME ## Set(DEFAULT); } \
   private:
 
+
 // A sub model is just a constant property that is itself a pointer to a model
 #define SUBMODEL(TYPE, NAME) \
   private: \
@@ -38,13 +40,14 @@
     inline TYPE * NAME() { return m_ ## NAME.data(); } \
   private:
 
+
 // Base class for all models -- all models should use this base class
 // and call reset() in their constructor.
 class BaseModel : public QObject {
     Q_OBJECT
     /// Placeholder property to deal with QML's inability to access
     /// dynamic object properties.
-    Q_PROPERTY(QVariant metaInfo MEMBER m_metaInfo);
+    Q_PROPERTY(QVariant metaInfo MEMBER m_metaInfo)
     QVariant m_metaInfo;
   protected:
     /// Reset all properties to their default value
