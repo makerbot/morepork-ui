@@ -10,8 +10,8 @@ ApplicationWindow {
 
     TopDrawer {
         id: drawer
-        width: window.width
-        height: window.height
+        //width: window.width
+        //height: window.height
     }
 
     StackLayout {
@@ -26,6 +26,13 @@ ApplicationWindow {
             //            //console.log("Button Pressed.")
             //            bot.cancel()
             //        }
+
+
+        }
+
+        InfoPage{
+            width: parent.width
+            height: parent.height
         }
     }
 }

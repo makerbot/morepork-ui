@@ -6,50 +6,60 @@ Drawer {
     id: drawer
     edge: Qt.TopEdge
     opacity: 0.8
-    
+
     Rectangle {
         id: rectangle
         color: "#000000"
-        z: 0
-        anchors.fill: parent
+        visible: true
+        width: parent.width
+        height: parent.height
     }
     
     ListView {
         id: listView
+        boundsBehavior: Flickable.StopAtBounds
         anchors.fill: parent
+
         model: ListModel {
             ListElement {
                 name: "Pause Print"
+                lastItem: false
             }
 
             ListElement {
                 name: "Cancel Print"
+                lastItem: true
             }
         }
-        delegate: Item {
-            width: 800
-            height: 100
-            Row {
-                id: row1
-                spacing: 10
-                Rectangle {
-                    width: 800
-                    height: 100
-                    color: "#000000"
-                    border.color: "grey"
-                    border.width: 2
 
-                    Text {
-                        z: 100
-                        text: name
-                        font.bold: true
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.pixelSize: 40
-                        color: "#ffffff"
-                    }
+        delegate: Item {
+            //property bool lastItem: false
+            width: parent.width
+            height: lastItem ? 100 : 101
+            MouseArea {
+                id: mouseArea
+                width: parent.width
+                height: 100
+
+                Text {
+                    z: 100
+                    text: name
+                    font.bold: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 40
+                    color: "#ffffff"
                 }
+            }
+            Rectangle {
+                color: "#a0a0a0"
+                width: parent.width
+                height: (lastItem == true) ? 0 : 1
+                anchors.top: mouseArea.bottom
             }
         }
     }
+
+    width: parent.width
+    height: ((listView.count-1)*101)+100
 }

@@ -2,6 +2,8 @@
     <qresource prefix="/ui">
         <file>MoreporkUI.qml</file>
         <file>main.qml</file>
+        <file>MenuTemplate.qml</file>
+        <file>MenuTemplateForm.ui.qml</file>
         <file>MainMenu.qml</file>
         <file>MainMenuForm.ui.qml</file>
         <file>MainMenuIcon.qml</file>
@@ -13,6 +15,7 @@
     </qresource>
     <qresource prefix="/img">
         <file alias="top_fade.png">images/top_fade.png</file>
+        <file alias="arrow_19pix.png">images/arrow_19pix.png</file>
     </qresource>
     <qresource prefix="/img/icon">
         <file alias="print_icon.png">images/main_menu_icons_75pix/print_icon.png</file>

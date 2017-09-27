@@ -2,42 +2,39 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-Item {
-    width: 800
-    height: 480
+MenuTemplateForm {
     //property alias info_firmwareVersion: info_firmwareVersion
 
     ListView {
         id: listView
+        anchors.topMargin: 10
+        anchors.leftMargin: 10
         anchors.fill: parent
+
         delegate: Item {
             x: 5
-            width: 80
+            width: parent.width
             height: 40
-            Row {
-                id: row1
-                spacing: 10
 
-                RowLayout{
-                    Text {
-                        text: text_name
-                        font.bold: true
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: "#ffffff"
-                        font.pixelSize: 20
-                    }
+            RowLayout {
+                Text {
+                    text: text_name
+                    font.bold: true
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: "#ffffff"
+                    font.pixelSize: 20
+                }
 
-                    Text {
-                        text: text_data
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: "#ffffff"
-                        font.pixelSize: 20
-                    }
+                Text {
+                    text: text_data
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: "#ffffff"
+                    font.pixelSize: 20
                 }
             }
         }
-        model: ListModel {
 
+        model: ListModel {
             ListElement {
                 //id: info_firmwareVersion
                 text_name: "Firmware Version"
@@ -53,7 +50,7 @@ Item {
             ListElement {
                 //id: info_ipAddress
                 text_name: "IP Address"
-                text_data: bot.net.ipAddr
+                text_data: "null"
             }
 
             ListElement {
@@ -86,12 +83,5 @@ Item {
                 text_data: "null"
             }
         }
-    }
-
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        z: -1
-        anchors.fill: parent
     }
 }
