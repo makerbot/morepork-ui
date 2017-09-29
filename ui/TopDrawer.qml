@@ -6,60 +6,73 @@ Drawer {
     id: drawer
     edge: Qt.TopEdge
     opacity: 0.8
+    width: parent.width
+    height: column.height
+    property alias button_cancelPrint: button_cancelPrint
+    property alias button_pausePrint: button_pausePrint
 
     Rectangle {
         id: rectangle
         color: "#000000"
         visible: true
         width: parent.width
-        height: parent.height
+        height: column.height
     }
-    
-    ListView {
-        id: listView
-        boundsBehavior: Flickable.StopAtBounds
+
+    Flickable {
+        id: flickable
         anchors.fill: parent
 
-        model: ListModel {
-            ListElement {
-                name: "Pause Print"
-                lastItem: false
-            }
+        Column {
+            id: column
+            spacing: 1
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.left: parent.left
 
-            ListElement {
-                name: "Cancel Print"
-                lastItem: true
-            }
-        }
-
-        delegate: Item {
-            //property bool lastItem: false
-            width: parent.width
-            height: lastItem ? 100 : 101
-            MouseArea {
-                id: mouseArea
-                width: parent.width
+            Button {
+                id: button_pausePrint
                 height: 100
-
-                Text {
-                    z: 100
-                    text: name
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 40
-                    color: "#ffffff"
+                text: qsTr("Pause Print")
+                font.pointSize: 20
+                background: Rectangle {
+                    color: "#000000"
                 }
+                contentItem: Text {
+                    text: button_pausePrint.text
+                    font: button_pausePrint.font
+                    color: "#a0a0a0"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.leftMargin: 0
             }
-            Rectangle {
-                color: "#a0a0a0"
-                width: parent.width
-                height: (lastItem == true) ? 0 : 1
-                anchors.top: mouseArea.bottom
+
+            Button {
+                id: button_cancelPrint
+                height: 100
+                text: qsTr("Cancel Print")
+                font.pointSize: 20
+                background: Rectangle {
+                    color: "#000000"
+                }
+                contentItem: Text {
+                    text: button_cancelPrint.text
+                    font: button_cancelPrint.font
+                    color: "#a0a0a0"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                }
+                anchors.leftMargin: 0
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.right: parent.right
             }
         }
     }
-
-    width: parent.width
-    height: ((listView.count-1)*101)+100
 }

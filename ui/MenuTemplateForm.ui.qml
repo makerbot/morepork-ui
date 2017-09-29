@@ -6,6 +6,8 @@ Item {
     id: item_mainMenu
     width: 800
     height: 480
+    property alias backButton: backButton
+    property alias mouseArea_back: mouseArea_back
 
     Rectangle {
         id: rectangle
@@ -34,7 +36,7 @@ Item {
         z: 2
         height: 19
         color: "#a0a0a0"
-        text: "PRINTIN TARATINO"
+        text: bot.name // "PRINTIN TARATINO"
         verticalAlignment: Text.AlignTop
         anchors.horizontalCenterOffset: 0
         horizontalAlignment: Text.AlignHCenter
@@ -43,7 +45,7 @@ Item {
     }
 
     Item {
-        id: item1
+        id: backButton
         width: 150
         height: 40
         anchors.left: parent.left
@@ -53,14 +55,15 @@ Item {
         z: 2
 
         MouseArea {
-            id: mouseArea
+            id: mouseArea_back
             anchors.fill: parent
         }
 
         Image {
-            id: image
+            id: image_backArrow
             y: 11
             height: 25
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -69,11 +72,12 @@ Item {
         }
 
         Text {
-            id: text1
+            id: text_back
             y: 9
             color: "#a0a0a0"
             text: qsTr("BACK")
-            anchors.left: image.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: image_backArrow.right
             anchors.leftMargin: 5
             font.pixelSize: 20
         }

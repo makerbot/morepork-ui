@@ -7,32 +7,55 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
+    objectName: "testLayout"
 
     TopDrawer {
         id: drawer
-        //width: window.width
-        //height: window.height
+
+        button_cancelPrint.onClicked: {
+            console.log("button_cancelPrint.onClicked")
+            bot.cancel()
+        }
+
+        button_pausePrint.onClicked: {
+            console.log("button_pausePrint.onClicked")
+            //bot.pausePrint()
+        }
     }
 
-    StackLayout {
-        id: stackLayout
+    SwipeView {
+        id: swipeView
         anchors.fill: parent
+        interactive: false
 
-        MainMenu {
-            objectName: "testLayout"
-            anchors.fill: parent
+        Item {
+            MainMenu {
+                id: mainMenu
+                anchors.fill: parent
 
-            //        qtQuickButton_cancel.onClicked: {
-            //            //console.log("Button Pressed.")
-            //            bot.cancel()
-            //        }
-
-
+                mainMenuIcon_info.mouseArea.onClicked: {
+                    console.log("mainMenuIcon_info.mouseArea.onClicked")
+                    swipeView.setCurrentIndex(1)
+                }
+            }
         }
 
-        InfoPage{
-            width: parent.width
-            height: parent.height
+        Item {
+            InfoPage {
+                id: infoPage
+                width: parent.width
+                height: parent.height
+
+                mouseArea_back.onClicked: {
+                    console.log("mouseArea_back.onClicked")
+                    swipeView.setCurrentIndex(0)
+                }
+            }
         }
     }
+
+//    Loader{
+//        id: ld;
+//        anchors.fill: parent;
+//    }
 }

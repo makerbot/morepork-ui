@@ -3,84 +3,69 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 MenuTemplateForm {
-    //property alias info_firmwareVersion: info_firmwareVersion
-
-    ListView {
-        id: listView
-        anchors.topMargin: 10
-        anchors.leftMargin: 10
+    Flickable {
+        id: flickable
+        interactive: true
+        flickableDirection: Flickable.VerticalFlick
+        anchors.topMargin: 75
+        anchors.leftMargin: 15
         anchors.fill: parent
+        contentHeight: column.height
 
-        delegate: Item {
-            x: 5
-            width: parent.width
-            height: 40
+        Column {
+            id: column
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.top: parent.top
+            spacing: 1
 
-            RowLayout {
-                Text {
-                    text: text_name
-                    font.bold: true
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: "#ffffff"
-                    font.pixelSize: 20
-                }
-
-                Text {
-                    text: text_data
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: "#ffffff"
-                    font.pixelSize: 20
-                }
+            InfoItemForm {
+                id: info_firmwareVersion
+                width: parent.width
+                text_label.text: "Firmware Version"
+                text_data.text: bot.version
             }
-        }
-
-        model: ListModel {
-            ListElement {
-                //id: info_firmwareVersion
-                text_name: "Firmware Version"
-                text_data: "null"
+            InfoItem {
+                id: info_connectionType
+                width: parent.width
+                text_label.text: "Connection Type"
+                text_data.text: "null"
             }
-
-            ListElement {
-                //id: info_connectionType
-                text_name: "Connection Type"
-                text_data: "null"
+            InfoItem {
+                id: info_ipAddress
+                width: parent.width
+                text_label.text: "IP Address"
+                text_data.text: bot.net.ipAddr
             }
-
-            ListElement {
-                //id: info_ipAddress
-                text_name: "IP Address"
-                text_data: "null"
+            InfoItem {
+                id: info_subnet
+                width: parent.width
+                text_label.text: "Subnet"
+                text_data.text: bot.net.netmask
             }
-
-            ListElement {
-                //id: info_subnet
-                text_name: "Subnet"
-                text_data: "null"
+            InfoItem {
+                id: info_gateway
+                width: parent.width
+                text_label.text: "Gateway"
+                text_data.text: bot.net.gateway
             }
-
-            ListElement {
-                //id: info_gateway
-                text_name: "Gateway"
-                text_data: "null"
+            InfoItem {
+                id: info_dns
+                width: parent.width
+                text_label.text: "DNS"
+                text_data.text: "null"
             }
-
-            ListElement {
-                //id: info_dns
-                text_name: "DNS"
-                text_data: "null"
+            InfoItem {
+                id: info_wifiNetwork
+                width: parent.width
+                text_label.text: "WiFi Network"
+                text_data.text: "null"
             }
-
-            ListElement {
-                //id: info_wifiNetwork
-                text_name: "WiFi Network"
-                text_data: "null"
-            }
-
-            ListElement {
-                //id: info_macAddress
-                text_name: "MAC Address"
-                text_data: "null"
+            InfoItem {
+                id: info_macAddress
+                width: parent.width
+                text_label.text: "MAC Address"
+                text_data.text: "null"
             }
         }
     }

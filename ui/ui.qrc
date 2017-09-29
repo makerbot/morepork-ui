@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/ui">
         <file>MoreporkUI.qml</file>
-        <file>main.qml</file>
         <file>MenuTemplate.qml</file>
         <file>MenuTemplateForm.ui.qml</file>
         <file>MainMenu.qml</file>
@@ -12,6 +11,8 @@
         <file>InfoPage.qml</file>
         <file>InfoPageForm.ui.qml</file>
         <file>TopDrawer.qml</file>
+        <file>InfoItem.qml</file>
+        <file>InfoItemForm.ui.qml</file>
     </qresource>
     <qresource prefix="/img">
         <file alias="top_fade.png">images/top_fade.png</file>
