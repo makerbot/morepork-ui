@@ -34,9 +34,9 @@ int main(int argc, char ** argv)
     // So, that correction is done here
     #ifndef MOREPORK_UI_QT_CREATOR_BUILD
         QObject *rootObject = engine.rootObjects().first();
-        QObject *qmlObject = rootObject->findChild<QObject*>("testLayout");
+        QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
         if (qmlObject) {
-            qmlObject->setProperty("rotation", 180);
+            qmlObject->setProperty("morepork_main_qml", 180);
         } else {
             qCritical() << "Cannot find testLayout";
         }

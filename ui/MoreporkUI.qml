@@ -7,7 +7,8 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
-    objectName: "testLayout"
+    property alias drawer: drawer
+    objectName: "morepork_main_qml"
 
     TopDrawer {
         id: drawer
