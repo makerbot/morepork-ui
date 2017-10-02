@@ -6,10 +6,11 @@ Item {
     id: item_mainMenu
     width: 800
     height: 480
+    property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
+    property alias text_printerName: text_printerName
     property alias image_drawerArrow: image_drawerArrow
-    property alias backButton: backButton
-    property alias mouseArea_topDrawer: mouseArea_topDrawer
     property alias mouseArea_back: mouseArea_back
+    property alias backButton: backButton
 
     Rectangle {
         id: rectangle
@@ -29,21 +30,6 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 0
         source: "qrc:/img/top_fade.png"
-    }
-
-    Text {
-        id: text_printerName
-        x: 325
-        y: 10
-        z: 2
-        height: 19
-        color: "#a0a0a0"
-        text: bot.name // "PRINTIN TARATINO"
-        verticalAlignment: Text.AlignTop
-        anchors.horizontalCenterOffset: 0
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: 20
     }
 
     Item {
@@ -85,26 +71,43 @@ Item {
         }
     }
 
-    Image {
-        id: image_drawerArrow
-        height: 25
-        anchors.left: text_printerName.right
-        anchors.leftMargin: 10
-        rotation: -90
+    Item {
+        id: item_printerName
+        height: 40
         z: 1
-        anchors.verticalCenterOffset: 0
-        source: "qrc:/img/arrow_19pix.png"
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        anchors.verticalCenter: text_printerName.verticalCenter
-        fillMode: Image.PreserveAspectFit
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.left: parent.left
 
-        MouseArea {
-            id: mouseArea_topDrawer
-            width: 40
-            height: 60
+        Text {
+            id: text_printerName
+            color: "#a0a0a0"
+            text: bot.name
             anchors.horizontalCenter: parent.horizontalCenter
-            z: 2
             anchors.verticalCenter: parent.verticalCenter
+            font.pixelSize: 20
+        }
+
+        Image {
+            id: image_drawerArrow
+            y: 227
+            height: 25
+            anchors.left: text_printerName.right
+            anchors.leftMargin: 10
+            anchors.verticalCenter: text_printerName.verticalCenter
+            rotation: -90
+            z: 1
+            source: "qrc:/img/arrow_19pix.png"
+            fillMode: Image.PreserveAspectFit
+
+            MouseArea {
+                id: mouseArea_topDrawerDown
+                width: 40
+                height: 60
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                z: 2
+            }
         }
     }
 }

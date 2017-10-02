@@ -22,6 +22,10 @@ ApplicationWindow {
             bot.pausePrint()
             drawer.close()
         }
+
+        mouseArea_topDrawerUp.onClicked: {
+            drawer.close()
+        }
     }
 
     SwipeView {
@@ -34,7 +38,7 @@ ApplicationWindow {
                 id: mainMenu
                 anchors.fill: parent
 
-                mouseArea_topDrawer.onClicked: {
+                mouseArea_topDrawerDown.onClicked: {
                     drawer.open()
                 }
 

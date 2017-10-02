@@ -8,6 +8,7 @@ Drawer {
     opacity: 0.8
     width: parent.width
     height: column.height
+    property alias mouseArea_topDrawerUp: mouseArea_topDrawerUp
     property alias button_cancelPrint: button_cancelPrint
     property alias button_pausePrint: button_pausePrint
 
@@ -30,6 +31,66 @@ Drawer {
             anchors.right: parent.right
             anchors.left: parent.left
 
+//            Rectangle {
+//                id: rectangle1
+//                height: 40
+//                color: "#000000"
+//                anchors.right: parent.right
+//                anchors.rightMargin: 0
+//                anchors.left: parent.left
+//                anchors.leftMargin: 0
+
+//                Text {
+//                    id: text_printerName
+//                    color: "#a0a0a0"
+//                    text: bot.name
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    font.pixelSize: 20
+//                }
+//            }
+
+            Rectangle {
+                id: rectangle1
+                height: 40
+                color: "#000000"
+                anchors.right: parent.right
+                anchors.rightMargin: 0
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+
+                Text {
+                    id: text_printerName
+                    color: "#a0a0a0"
+                    text: bot.name
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: 20
+                }
+
+                Image {
+                    id: image_drawerArrow
+                    y: 227
+                    height: 25
+                    anchors.left: text_printerName.right
+                    anchors.leftMargin: 10
+                    anchors.verticalCenter: text_printerName.verticalCenter
+                    rotation: 90
+                    z: 1
+                    source: "qrc:/img/arrow_19pix.png"
+                    fillMode: Image.PreserveAspectFit
+
+                    MouseArea {
+                        id: mouseArea_topDrawerUp
+                        width: 40
+                        height: 60
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        z: 2
+                    }
+                }
+            }
+
             Button {
                 id: button_pausePrint
                 height: 100
@@ -47,9 +108,7 @@ Drawer {
                     elide: Text.ElideRight
                 }
                 anchors.right: parent.right
-                anchors.rightMargin: 0
                 anchors.left: parent.left
-                anchors.leftMargin: 0
             }
 
             Button {
@@ -68,11 +127,10 @@ Drawer {
                     verticalAlignment: Text.AlignVCenter
                     elide: Text.ElideRight
                 }
-                anchors.leftMargin: 0
-                anchors.rightMargin: 0
                 anchors.left: parent.left
                 anchors.right: parent.right
             }
+
         }
     }
 }
