@@ -31,25 +31,6 @@ Drawer {
             anchors.right: parent.right
             anchors.left: parent.left
 
-//            Rectangle {
-//                id: rectangle1
-//                height: 40
-//                color: "#000000"
-//                anchors.right: parent.right
-//                anchors.rightMargin: 0
-//                anchors.left: parent.left
-//                anchors.leftMargin: 0
-
-//                Text {
-//                    id: text_printerName
-//                    color: "#a0a0a0"
-//                    text: bot.name
-//                    anchors.horizontalCenter: parent.horizontalCenter
-//                    anchors.verticalCenter: parent.verticalCenter
-//                    font.pixelSize: 20
-//                }
-//            }
-
             Rectangle {
                 id: rectangle1
                 height: 40
