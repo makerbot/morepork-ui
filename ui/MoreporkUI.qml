@@ -19,7 +19,7 @@ ApplicationWindow {
 
         button_pausePrint.onClicked: {
             console.log("button_pausePrint.onClicked")
-            //bot.pausePrint()
+            bot.pausePrint()
         }
     }
 

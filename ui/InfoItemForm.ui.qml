@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: infoItem
-    //width: 800
     height: 40
     property alias text_data: text_data
     property alias text_label: text_label

@@ -22,49 +22,49 @@ MenuTemplateForm {
             InfoItemForm {
                 id: info_firmwareVersion
                 width: parent.width
-                text_label.text: "Firmware Version"
+                text_label.text: qsTr("Firmware Version")
                 text_data.text: bot.version
             }
             InfoItem {
                 id: info_connectionType
                 width: parent.width
-                text_label.text: "Connection Type"
+                text_label.text: qsTr("Connection Type")
                 text_data.text: "null"
             }
             InfoItem {
                 id: info_ipAddress
                 width: parent.width
-                text_label.text: "IP Address"
+                text_label.text: qsTr("IP Address")
                 text_data.text: bot.net.ipAddr
             }
             InfoItem {
                 id: info_subnet
                 width: parent.width
-                text_label.text: "Subnet"
+                text_label.text: qsTr("Netmask")
                 text_data.text: bot.net.netmask
             }
             InfoItem {
                 id: info_gateway
                 width: parent.width
-                text_label.text: "Gateway"
+                text_label.text: qsTr("Gateway")
                 text_data.text: bot.net.gateway
             }
             InfoItem {
                 id: info_dns
                 width: parent.width
-                text_label.text: "DNS"
+                text_label.text: qsTr("DNS")
                 text_data.text: "null"
             }
             InfoItem {
                 id: info_wifiNetwork
                 width: parent.width
-                text_label.text: "WiFi Network"
+                text_label.text: qsTr("WiFi Network")
                 text_data.text: "null"
             }
             InfoItem {
                 id: info_macAddress
                 width: parent.width
-                text_label.text: "MAC Address"
+                text_label.text: qsTr("MAC Address")
                 text_data.text: "null"
             }
         }
