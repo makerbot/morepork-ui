@@ -6,7 +6,9 @@ Item {
     id: item_mainMenu
     width: 800
     height: 480
+    property alias image_drawerArrow: image_drawerArrow
     property alias backButton: backButton
+    property alias mouseArea_topDrawer: mouseArea_topDrawer
     property alias mouseArea_back: mouseArea_back
 
     Rectangle {
@@ -80,6 +82,29 @@ Item {
             anchors.left: image_backArrow.right
             anchors.leftMargin: 5
             font.pixelSize: 20
+        }
+    }
+
+    Image {
+        id: image_drawerArrow
+        height: 25
+        anchors.left: text_printerName.right
+        anchors.leftMargin: 10
+        rotation: -90
+        z: 1
+        anchors.verticalCenterOffset: 0
+        source: "qrc:/img/arrow_19pix.png"
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        anchors.verticalCenter: text_printerName.verticalCenter
+        fillMode: Image.PreserveAspectFit
+
+        MouseArea {
+            id: mouseArea_topDrawer
+            width: 40
+            height: 60
+            anchors.horizontalCenter: parent.horizontalCenter
+            z: 2
+            anchors.verticalCenter: parent.verticalCenter
         }
     }
 }

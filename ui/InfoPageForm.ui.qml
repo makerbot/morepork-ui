@@ -3,6 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 MenuTemplateForm {
+    image_drawerArrow.visible: false
+
     Flickable {
         id: flickable
         interactive: true

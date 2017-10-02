@@ -14,13 +14,13 @@ ApplicationWindow {
         id: drawer
 
         button_cancelPrint.onClicked: {
-            console.log("button_cancelPrint.onClicked")
             bot.cancel()
+            drawer.close()
         }
 
         button_pausePrint.onClicked: {
-            console.log("button_pausePrint.onClicked")
             bot.pausePrint()
+            drawer.close()
         }
     }
 
@@ -34,8 +34,11 @@ ApplicationWindow {
                 id: mainMenu
                 anchors.fill: parent
 
+                mouseArea_topDrawer.onClicked: {
+                    drawer.open()
+                }
+
                 mainMenuIcon_info.mouseArea.onClicked: {
-                    console.log("mainMenuIcon_info.mouseArea.onClicked")
                     swipeView.setCurrentIndex(1)
                 }
             }
@@ -48,7 +51,6 @@ ApplicationWindow {
                 height: parent.height
 
                 mouseArea_back.onClicked: {
-                    console.log("mouseArea_back.onClicked")
                     swipeView.setCurrentIndex(0)
                 }
             }
