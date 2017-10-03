@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 MenuTemplateForm {
     backButton.visible: false
+    image_drawerArrow.visible: false
     property alias mainMenuIcon_info: mainMenuIcon_info
     property alias mainMenuIcon_preheat: mainMenuIcon_preheat
     property alias mainMenuIcon_material: mainMenuIcon_material

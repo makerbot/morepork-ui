@@ -21,7 +21,6 @@ ApplicationWindow {
                 anchors.fill: parent
 
                 function swipeToItem(itemToDisplayDefaultIndex){
-                    console.log(itemToDisplayDefaultIndex, " ", swipeView.currentItem.defaultIndex)
                     var i
                     for(i = 1; i < swipeView.count; i++){
                         if(swipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
@@ -39,8 +38,28 @@ ApplicationWindow {
 
                 }
 
-                mainMenuIcon_info.mouseArea.onClicked: {
+                mainMenuIcon_extruder.mouseArea.onClicked: {
                     swipeToItem(2)
+
+                }
+
+                mainMenuIcon_settings.mouseArea.onClicked: {
+                    swipeToItem(3)
+
+                }
+
+                mainMenuIcon_info.mouseArea.onClicked: {
+                    swipeToItem(4)
+                }
+
+                mainMenuIcon_material.mouseArea.onClicked: {
+                    swipeToItem(5)
+
+                }
+
+                mainMenuIcon_preheat.mouseArea.onClicked: {
+                    swipeToItem(6)
+
                 }
             }
         }
@@ -60,8 +79,60 @@ ApplicationWindow {
 
         Item {
             property int defaultIndex: 2
+            ExtruderPage {
+                id: extruderPage
+                width: parent.width
+                height: parent.height
+
+                mouseArea_back.onClicked: {
+                    swipeView.setCurrentIndex(0)
+                }
+            }
+        }
+
+        Item {
+            property int defaultIndex: 3
+            SettingsPage {
+                id: settingsPage
+                width: parent.width
+                height: parent.height
+
+                mouseArea_back.onClicked: {
+                    swipeView.setCurrentIndex(0)
+                }
+            }
+        }
+
+        Item {
+            property int defaultIndex: 4
             InfoPage {
                 id: infoPage
+                width: parent.width
+                height: parent.height
+
+                mouseArea_back.onClicked: {
+                    swipeView.setCurrentIndex(0)
+                }
+            }
+        }
+
+        Item {
+            property int defaultIndex: 5
+            MaterialPage {
+                id: materialPage
+                width: parent.width
+                height: parent.height
+
+                mouseArea_back.onClicked: {
+                    swipeView.setCurrentIndex(0)
+                }
+            }
+        }
+
+        Item {
+            property int defaultIndex: 6
+            PreheatPage {
+                id: preheatPage
                 width: parent.width
                 height: parent.height
 

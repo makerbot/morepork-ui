@@ -1,20 +1,28 @@
 <RCC>
     <qresource prefix="/ui">
         <file>MoreporkUI.qml</file>
+        <file>qtquickcontrols2.conf</file>
         <file>MenuTemplate.qml</file>
         <file>MenuTemplateForm.ui.qml</file>
         <file>MainMenu.qml</file>
         <file>MainMenuForm.ui.qml</file>
         <file>MainMenuIcon.qml</file>
         <file>MainMenuIconForm.ui.qml</file>
-        <file>qtquickcontrols2.conf</file>
-        <file>InfoPage.qml</file>
-        <file>InfoPageForm.ui.qml</file>
-        <file>PrintDrawer.qml</file>
-        <file>InfoItem.qml</file>
-        <file>InfoItemForm.ui.qml</file>
         <file>PrintPage.qml</file>
         <file>PrintPageForm.ui.qml</file>
+        <file>PrintDrawer.qml</file>
+        <file>ExtruderPage.qml</file>
+        <file>ExtruderPageForm.ui.qml</file>
+        <file>SettingsPage.qml</file>
+        <file>SettingsPageForm.ui.qml</file>
+        <file>InfoPage.qml</file>
+        <file>InfoPageForm.ui.qml</file>
+        <file>InfoItem.qml</file>
+        <file>InfoItemForm.ui.qml</file>
+        <file>MaterialPage.qml</file>
+        <file>MaterialPageForm.ui.qml</file>
+        <file>PreheatPage.qml</file>
+        <file>PreheatPageForm.ui.qml</file>
     </qresource>
     <qresource prefix="/img">
         <file alias="top_fade.png">images/top_fade.png</file>

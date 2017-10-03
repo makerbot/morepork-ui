@@ -1,9 +1,6 @@
 import QtQuick 2.4
 
 PrintPageForm {
-    width: parent.width
-    height: parent.height
-
     mouseArea_topDrawerDown.onClicked: {
         printDrawer.open()
     }
