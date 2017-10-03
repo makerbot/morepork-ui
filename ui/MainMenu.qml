@@ -2,6 +2,6 @@ import QtQuick 2.7
 
 MainMenuForm {
     mainMenuIcon_print.mouseArea.onClicked: {
-        console.log("Button Pressed");
+        //console.log("Button Pressed");
     }
 }
