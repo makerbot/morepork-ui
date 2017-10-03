@@ -3,11 +3,11 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 Drawer {
-    id: drawer
     edge: Qt.TopEdge
-    opacity: 0.8
+    opacity: 0.75
     width: parent.width
     height: column.height
+    dim: false
     property alias mouseArea_topDrawerUp: mouseArea_topDrawerUp
     property alias button_cancelPrint: button_cancelPrint
     property alias button_pausePrint: button_pausePrint

@@ -3,12 +3,10 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 Item {
-    id: item_mainMenu
     width: 800
     height: 480
-    property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
-    property alias text_printerName: text_printerName
     property alias image_drawerArrow: image_drawerArrow
+    property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
     property alias mouseArea_back: mouseArea_back
     property alias backButton: backButton
 
@@ -78,6 +76,7 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.left: parent.left
+        property alias text_printerName: text_printerName
 
         Text {
             id: text_printerName

@@ -7,26 +7,7 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
-    property alias drawer: drawer
     objectName: "morepork_main_qml"
-
-    TopDrawer {
-        id: drawer
-
-        button_cancelPrint.onClicked: {
-            bot.cancel()
-            drawer.close()
-        }
-
-        button_pausePrint.onClicked: {
-            bot.pausePrint()
-            drawer.close()
-        }
-
-        mouseArea_topDrawerUp.onClicked: {
-            drawer.close()
-        }
-    }
 
     SwipeView {
         id: swipeView
@@ -38,12 +19,24 @@ ApplicationWindow {
                 id: mainMenu
                 anchors.fill: parent
 
-                mouseArea_topDrawerDown.onClicked: {
-                    drawer.open()
+                mainMenuIcon_print.mouseArea.onClicked: {
+                    swipeView.setCurrentIndex(1)
                 }
 
                 mainMenuIcon_info.mouseArea.onClicked: {
-                    swipeView.setCurrentIndex(1)
+                    swipeView.setCurrentIndex(2)
+                }
+            }
+        }
+
+        Item {
+            PrintPage {
+                id: printPage
+                width: parent.width
+                height: parent.height
+
+                mouseArea_back.onClicked: {
+                    swipeView.setCurrentIndex(0)
                 }
             }
         }

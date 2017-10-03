@@ -10,9 +10,11 @@
         <file>qtquickcontrols2.conf</file>
         <file>InfoPage.qml</file>
         <file>InfoPageForm.ui.qml</file>
-        <file>TopDrawer.qml</file>
+        <file>PrintDrawer.qml</file>
         <file>InfoItem.qml</file>
         <file>InfoItemForm.ui.qml</file>
+        <file>PrintPage.qml</file>
+        <file>PrintPageForm.ui.qml</file>
     </qresource>
     <qresource prefix="/img">
         <file alias="top_fade.png">images/top_fade.png</file>
