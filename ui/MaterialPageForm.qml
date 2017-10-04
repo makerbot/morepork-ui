@@ -10,7 +10,7 @@ MenuTemplateForm {
     Video {
         id: filamentVideo
         z: 3
-        loops: 1000
+        loops: MediaPlayer.Infinite
         anchors.right: parent.right
         anchors.rightMargin: (800-((800/480)*440))/2
         anchors.left: parent.left
