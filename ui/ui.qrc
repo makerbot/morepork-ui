@@ -3,30 +3,34 @@
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>MenuTemplate.qml</file>
-        <file>MenuTemplateForm.ui.qml</file>
+        <file>MenuTemplateForm.qml</file>
         <file>MainMenu.qml</file>
-        <file>MainMenuForm.ui.qml</file>
+        <file>MainMenuForm.qml</file>
         <file>MainMenuIcon.qml</file>
-        <file>MainMenuIconForm.ui.qml</file>
+        <file>MainMenuIconForm.qml</file>
         <file>PrintPage.qml</file>
-        <file>PrintPageForm.ui.qml</file>
+        <file>PrintPageForm.qml</file>
         <file>PrintDrawer.qml</file>
+        <file>PrintingDrawer.qml</file>
         <file>ExtruderPage.qml</file>
-        <file>ExtruderPageForm.ui.qml</file>
+        <file>ExtruderPageForm.qml</file>
         <file>SettingsPage.qml</file>
-        <file>SettingsPageForm.ui.qml</file>
+        <file>SettingsPageForm.qml</file>
         <file>InfoPage.qml</file>
-        <file>InfoPageForm.ui.qml</file>
+        <file>InfoPageForm.qml</file>
         <file>InfoItem.qml</file>
-        <file>InfoItemForm.ui.qml</file>
+        <file>InfoItemForm.qml</file>
         <file>MaterialPage.qml</file>
-        <file>MaterialPageForm.ui.qml</file>
+        <file>MaterialPageForm.qml</file>
         <file>PreheatPage.qml</file>
-        <file>PreheatPageForm.ui.qml</file>
+        <file>PreheatPageForm.qml</file>
     </qresource>
     <qresource prefix="/img">
         <file alias="top_fade.png">images/top_fade.png</file>
         <file alias="arrow_19pix.png">images/arrow_19pix.png</file>
+    </qresource>
+    <qresource prefix="/vid">
+        <file alias="filament_installation.m4v">images/filament_installation_rf23.m4v</file>
     </qresource>
     <qresource prefix="/img/icon">
         <file alias="print_icon.png">images/main_menu_icons_75pix/print_icon.png</file>

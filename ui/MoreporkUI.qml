@@ -7,6 +7,7 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
+    property alias materialPage: materialPage
     objectName: "morepork_main_qml"
 
     SwipeView {
@@ -54,6 +55,7 @@ ApplicationWindow {
 
                 mainMenuIcon_material.mouseArea.onClicked: {
                     swipeToItem(5)
+                    materialPage.filamentVideo.play()
 
                 }
 
@@ -125,6 +127,7 @@ ApplicationWindow {
 
                 mouseArea_back.onClicked: {
                     swipeView.setCurrentIndex(0)
+                    filamentVideo.stop()
                 }
             }
         }

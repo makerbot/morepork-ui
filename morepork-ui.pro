@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick
+QT += qml quick multimedia multimediawidgets
 CONFIG += c++11
 
 include(src/src.pri)
