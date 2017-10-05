@@ -24,20 +24,14 @@
         <file>MaterialPageForm.qml</file>
         <file>PreheatPage.qml</file>
         <file>PreheatPageForm.qml</file>
-    </qresource>
-    <qresource prefix="/img">
         <file alias="top_fade.png">images/top_fade.png</file>
         <file alias="arrow_19pix.png">images/arrow_19pix.png</file>
-    </qresource>
-    <qresource prefix="/vid">
-        <file alias="filament_installation.m4v">images/filament_installation_rf23.m4v</file>
-    </qresource>
-    <qresource prefix="/img/icon">
-        <file alias="print_icon.png">images/main_menu_icons_75pix/print_icon.png</file>
-        <file alias="extruder_icon.png">images/main_menu_icons_75pix/extruder_icon.png</file>
-        <file alias="settings_icon.png">images/main_menu_icons_75pix/settings_icon.png</file>
-        <file alias="info_icon.png">images/main_menu_icons_75pix/info_icon.png</file>
-        <file alias="material_icon.png">images/main_menu_icons_75pix/material_icon.png</file>
-        <file alias="preheat_icon.png">images/main_menu_icons_75pix/preheat_icon.png</file>
+        <file alias="print_icon.png">images/print_icon.png</file>
+        <file alias="extruder_icon.png">images/extruder_icon.png</file>
+        <file alias="settings_icon.png">images/settings_icon.png</file>
+        <file alias="info_icon.png">images/info_icon.png</file>
+        <file alias="material_icon.png">images/material_icon.png</file>
+        <file alias="preheat_icon.png">images/preheat_icon.png</file>
+        <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
     </qresource>
 </RCC>

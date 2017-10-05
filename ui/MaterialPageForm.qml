@@ -19,7 +19,7 @@ MenuTemplateForm {
         anchors.topMargin: 40
         anchors.bottom: parent.bottom
         autoLoad: true
-        autoPlay: true
-        source: "qrc:/vid/filament_installation.m4v"
+        autoPlay: false
+        source: "/vid/filament_installation.m4v"
     }
 }

@@ -44,9 +44,10 @@ Drawer {
                     id: text_printerName
                     color: "#a0a0a0"
                     text: bot.name
+                    font.family: "Ubuntu"
+                    font.pixelSize: 30
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 20
                 }
 
                 Image {
@@ -76,13 +77,13 @@ Drawer {
                 id: button_pausePrint
                 height: 100
                 text: qsTr("Pause Print")
-                font.pointSize: 20
                 background: Rectangle {
                     color: "#000000"
                 }
                 contentItem: Text {
                     text: button_pausePrint.text
-                    font: button_pausePrint.font
+                    font.family: "Ubuntu"
+                    font.pixelSize: 30
                     color: "#a0a0a0"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -96,13 +97,13 @@ Drawer {
                 id: button_cancelPrint
                 height: 100
                 text: qsTr("Cancel Print")
-                font.pointSize: 20
                 background: Rectangle {
                     color: "#000000"
                 }
                 contentItem: Text {
                     text: button_cancelPrint.text
-                    font: button_cancelPrint.font
+                    font.family: "Ubuntu"
+                    font.pixelSize: 30
                     color: "#a0a0a0"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter

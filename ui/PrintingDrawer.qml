@@ -3,7 +3,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 Drawer {
-    edge: Qt.TopEdge
+    objectName: "printingDrawer"
+    edge: swipeView.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
     opacity: 0.75
     width: parent.width
     height: column.height
@@ -23,6 +24,7 @@ Drawer {
     Flickable {
         id: flickable
         anchors.fill: parent
+        rotation: swipeView.rotation
 
         Column {
             id: column
@@ -44,9 +46,10 @@ Drawer {
                     id: text_printerName
                     color: "#a0a0a0"
                     text: bot.name
+                    font.family: "Ubuntu"
+                    font.pixelSize: 30
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    font.pixelSize: 20
                 }
 
                 Image {
@@ -58,7 +61,7 @@ Drawer {
                     anchors.verticalCenter: text_printerName.verticalCenter
                     rotation: 90
                     z: 1
-                    source: "qrc:/img/arrow_19pix.png"
+                    source: "arrow_19pix.png"
                     fillMode: Image.PreserveAspectFit
 
                     MouseArea {
@@ -76,13 +79,13 @@ Drawer {
                 id: button_pausePrint
                 height: 100
                 text: qsTr("Pause Print")
-                font.pointSize: 20
                 background: Rectangle {
                     color: "#000000"
                 }
                 contentItem: Text {
                     text: button_pausePrint.text
-                    font: button_pausePrint.font
+                    font.family: "Ubuntu"
+                    font.pointSize: 30
                     color: "#a0a0a0"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -96,13 +99,13 @@ Drawer {
                 id: button_cancelPrint
                 height: 100
                 text: qsTr("Cancel Print")
-                font.pointSize: 20
                 background: Rectangle {
                     color: "#000000"
                 }
                 contentItem: Text {
                     text: button_cancelPrint.text
-                    font: button_cancelPrint.font
+                    font.family: "Ubuntu"
+                    font.pointSize: 30
                     color: "#a0a0a0"
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter

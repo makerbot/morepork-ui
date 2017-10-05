@@ -27,7 +27,7 @@ Item {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 0
-        source: "qrc:/img/top_fade.png"
+        source: "top_fade.png"
     }
 
     Item {
@@ -47,25 +47,24 @@ Item {
 
         Image {
             id: image_backArrow
-            y: 11
             height: 25
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
-            source: "qrc:/img/arrow_19pix.png"
+            source: "arrow_19pix.png"
         }
 
         Text {
             id: text_back
-            y: 9
             color: "#a0a0a0"
             text: qsTr("BACK")
+            font.family: "Ubuntu"
+            font.pixelSize: 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: image_backArrow.right
             anchors.leftMargin: 5
-            font.pixelSize: 20
         }
     }
 
@@ -82,9 +81,10 @@ Item {
             id: text_printerName
             color: "#a0a0a0"
             text: bot.name
+            font.family: "Ubuntu"
+            font.pixelSize: 30
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 20
         }
 
         Image {
@@ -96,7 +96,7 @@ Item {
             anchors.verticalCenter: text_printerName.verticalCenter
             rotation: -90
             z: 1
-            source: "qrc:/img/arrow_19pix.png"
+            source: "arrow_19pix.png"
             fillMode: Image.PreserveAspectFit
 
             MouseArea {

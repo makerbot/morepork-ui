@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: infoItem
-    height: 40
+    height: 45
     property alias text_data: text_data
     property alias text_label: text_label
 
@@ -13,19 +13,22 @@ Item {
         Text {
             id: text_label
             text: "Info Label"
+            font.family: "Ubuntu"
             font.bold: true
+            font.pixelSize: 30
             anchors.verticalCenter: parent.verticalCenter
             color: "#ffffff"
-            font.pixelSize: 20
+
         }
 
         Text {
             id: text_data
             text: "nulll"
+            font.family: "Ubuntu"
+            font.pixelSize: 30
             verticalAlignment: Text.AlignTop
             anchors.verticalCenter: parent.verticalCenter
             color: "#ffffff"
-            font.pixelSize: 20
         }
     }
 }

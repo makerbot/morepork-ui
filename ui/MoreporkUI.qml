@@ -7,13 +7,14 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
-    property alias materialPage: materialPage
-    objectName: "morepork_main_qml"
 
     SwipeView {
         id: swipeView
         anchors.fill: parent
         interactive: false
+        objectName: "morepork_main_qml"
+        property alias materialPage: materialPage
+        rotation: 180
 
         Item {
             property int defaultIndex: 0
