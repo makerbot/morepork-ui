@@ -20,6 +20,6 @@ MenuTemplateForm {
         anchors.bottom: parent.bottom
         autoLoad: true
         autoPlay: false
-        source: "/vid/filament_installation.m4v"
+        source: swipeView.rotation == 180 ? "" : "filament_installation.m4v"
     }
 }
