@@ -60,7 +60,7 @@ MenuTemplateForm {
             InfoItem {
                 id: info_wifiNetwork
                 width: parent.width
-                text_label.text: qsTr("WiFi Network ")
+                text_label.text: qsTr("WiFi Name ")
                 text_data.text: bot.net.interface === "wifi" ? "null" : "n/a"
             }
             InfoItem {
@@ -72,7 +72,7 @@ MenuTemplateForm {
             InfoItem {
                 id: info_wlanMacAddress
                 width: parent.width
-                text_label.text: qsTr("WLAN MAC Address ")
+                text_label.text: qsTr("WiFi MAC Address ")
                 text_data.text: bot.net.wlanMacAddr
             }
         }
