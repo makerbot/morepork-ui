@@ -48,7 +48,8 @@ Item {
         Image {
             id: image_backArrow
             height: 25
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -1
+            anchors.verticalCenter: text_back.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -60,8 +61,10 @@ Item {
             id: text_back
             color: "#a0a0a0"
             text: qsTr("BACK")
+            verticalAlignment: Text.AlignVCenter
             font.family: "Antenna"
-            font.bold: true
+            font.letterSpacing: 3
+            font.weight: Font.Light
             font.pixelSize: 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: image_backArrow.right
@@ -82,8 +85,10 @@ Item {
             id: text_printerName
             color: "#a0a0a0"
             text: bot.name
+            verticalAlignment: Text.AlignVCenter
             font.family: "Antenna"
-            font.bold: true
+            font.letterSpacing: 3
+            font.weight: Font.Light
             font.pixelSize: 30
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter

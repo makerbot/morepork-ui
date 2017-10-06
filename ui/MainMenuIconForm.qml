@@ -32,13 +32,14 @@ Item {
         color: "#a0a0a0"
         text: qsTr("Icon Name")
         font.family: "Antenna"
-        font.bold: true
+        font.letterSpacing: 3
+        font.weight: Font.Light
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: image.bottom
         anchors.topMargin: 10
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 20
+        font.pixelSize: 22
     }
 
     MouseArea {
