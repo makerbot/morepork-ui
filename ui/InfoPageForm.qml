@@ -61,13 +61,19 @@ MenuTemplateForm {
                 id: info_wifiNetwork
                 width: parent.width
                 text_label.text: qsTr("WiFi Network")
-                text_data.text: "null"
+                text_data.text: bot.net.interface === "wifi" ? "null" : "n/a"
             }
             InfoItem {
-                id: info_macAddress
+                id: info_ethMacAddress
                 width: parent.width
-                text_label.text: qsTr("MAC Address")
-                text_data.text: "null"
+                text_label.text: qsTr("Ethernet MAC Address")
+                text_data.text: bot.net.ethMacAddr
+            }
+            InfoItem {
+                id: info_wlanMacAddress
+                width: parent.width
+                text_label.text: qsTr("WLAN MAC Address")
+                text_data.text: bot.net.wlanMacAddr
             }
         }
     }
