@@ -13,7 +13,7 @@ Item {
         Text {
             id: text_label
             text: "Info Label"
-            font.family: "Ubuntu"
+            font.family: "Antenna"
             font.bold: true
             font.pixelSize: 30
             anchors.verticalCenter: parent.verticalCenter
@@ -24,7 +24,7 @@ Item {
         Text {
             id: text_data
             text: "nulll"
-            font.family: "Ubuntu"
+            font.family: "Antenna"
             font.pixelSize: 30
             verticalAlignment: Text.AlignTop
             anchors.verticalCenter: parent.verticalCenter

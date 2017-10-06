@@ -10,6 +10,9 @@
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
+#include <QDirIterator>
+#include <QFileInfo>
+#include <QFontDatabase>
 #include "../host/host_model.h"
 #define MOREPORK_UI_QML_MAIN QUrl("qrc:/host/host_main.qml")
 #define MOREPORK_BOT_MODEL makeHostBotModel()
@@ -22,6 +25,17 @@
 int main(int argc, char ** argv)
 {
     QGuiApplication qapp(argc, argv);
+
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+    QDirIterator it(MOREPORK_ROOT_DIR "/fonts");
+    while(it.hasNext())
+    {
+        if(QFileInfo(it.next()).suffix() == "otf")
+        {
+            QFontDatabase::addApplicationFont(it.next());
+        }
+    }
+#endif
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
 

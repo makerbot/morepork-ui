@@ -31,7 +31,8 @@ Item {
         x: 52
         color: "#a0a0a0"
         text: qsTr("Icon Name")
-        font.family: "Ubuntu"
+        font.family: "Antenna"
+        font.bold: true
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: image.bottom
         anchors.topMargin: 10

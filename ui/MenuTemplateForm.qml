@@ -60,7 +60,8 @@ Item {
             id: text_back
             color: "#a0a0a0"
             text: qsTr("BACK")
-            font.family: "Ubuntu"
+            font.family: "Antenna"
+            font.bold: true
             font.pixelSize: 30
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: image_backArrow.right
@@ -81,7 +82,8 @@ Item {
             id: text_printerName
             color: "#a0a0a0"
             text: bot.name
-            font.family: "Ubuntu"
+            font.family: "Antenna"
+            font.bold: true
             font.pixelSize: 30
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter

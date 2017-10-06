@@ -46,7 +46,8 @@ Drawer {
                     id: text_printerName
                     color: "#a0a0a0"
                     text: bot.name
-                    font.family: "Ubuntu"
+                    font.family: "Antenna"
+                    font.bold: true
                     font.pixelSize: 30
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
@@ -84,7 +85,8 @@ Drawer {
                 }
                 contentItem: Text {
                     text: button_pausePrint.text
-                    font.family: "Ubuntu"
+                    font.family: "Antenna"
+                    font.bold: true
                     font.pointSize: 30
                     color: "#a0a0a0"
                     horizontalAlignment: Text.AlignHCenter
@@ -104,7 +106,8 @@ Drawer {
                 }
                 contentItem: Text {
                     text: button_cancelPrint.text
-                    font.family: "Ubuntu"
+                    font.family: "Antenna"
+                    font.bold: true
                     font.pointSize: 30
                     color: "#a0a0a0"
                     horizontalAlignment: Text.AlignHCenter
