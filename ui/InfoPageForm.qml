@@ -31,7 +31,7 @@ MenuTemplateForm {
                 id: info_connectionType
                 width: parent.width
                 text_label.text: qsTr("Connection Type")
-                text_data.text: "null"
+                text_data.text: bot.net.interface
             }
             InfoItem {
                 id: info_ipAddress
