@@ -10,6 +10,9 @@
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
+#include <QDirIterator>
+#include <QFileInfo>
+#include <QFontDatabase>
 #include "../host/host_model.h"
 #define MOREPORK_UI_QML_MAIN QUrl("qrc:/host/host_main.qml")
 #define MOREPORK_BOT_MODEL makeHostBotModel()
@@ -22,24 +25,39 @@
 int main(int argc, char ** argv)
 {
     QGuiApplication qapp(argc, argv);
-    QQmlApplicationEngine engine;
+
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+    QDirIterator it(MOREPORK_ROOT_DIR "/fonts");
+    while(it.hasNext())
+    {
+        if(QFileInfo(it.next()).suffix() == "otf")
+        {
+            QFontDatabase::addApplicationFont(it.next());
+        }
+    }
+#endif
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
-    engine.rootContext()->setContextProperty("bot", bot.data());
 
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("bot", bot.data());
     engine.load(MOREPORK_UI_QML_MAIN);
 
     // So, basically, our UI is upside down when the one
     // is compared on the bot, to that of test in qtcreator.
     // So, that correction is done here
-    #ifndef MOREPORK_UI_QT_CREATOR_BUILD
+    // There is an update lag for the robot when performing
+    // rotations from c++. Better to have the UI flipped for
+    // the robot by default from qml.
+    #ifdef MOREPORK_UI_QT_CREATOR_BUILD
         QObject *rootObject = engine.rootObjects().first();
-        QObject *qmlObject = rootObject->findChild<QObject*>("testLayout");
+        QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
         if (qmlObject) {
-            qmlObject->setProperty("rotation", 180);
+            qmlObject->setProperty("rotation", 0);
         } else {
-            qCritical() << "Cannot find testLayout";
+            qCritical() << "Cannot find morepork_main_qml";
         }
     #endif
+
     return qapp.exec();
 }

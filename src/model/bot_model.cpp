@@ -11,6 +11,10 @@ void BotModel::cancel() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::pausePrint() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

@@ -6,6 +6,7 @@ find_package(JsonRpc REQUIRED)
 # so this just magically works.
 find_package(Qt5Gui REQUIRED)
 find_package(Qt5Qml REQUIRED)
+find_package(Qt5Multimedia REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
 
@@ -27,7 +28,7 @@ set(MODEL_IMPL_SOURCES
     model_impl/local_jsonrpc.cpp)
 
 add_executable(morepork_ui ${SOURCES} ${MODEL_IMPL_SOURCES})
-target_link_libraries(morepork_ui Qt5::Gui Qt5::Qml JsonRpc::jsonrpc)
+target_link_libraries(morepork_ui Qt5::Gui Qt5::Qml JsonRpc::jsonrpc Qt5::Multimedia)
 
 # The qt5 cmake configs point to a copy of the qt5 libraries that live
 # in staging, but all of the libraries that qt5 depends on still only

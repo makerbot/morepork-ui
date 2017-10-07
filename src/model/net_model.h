@@ -12,6 +12,9 @@ class NetModel : public BaseModel {
     MODEL_PROP(QString, ipAddr, "Unknown")
     MODEL_PROP(QString, netmask, "Unknown")
     MODEL_PROP(QString, gateway, "Unknown")
+    MODEL_PROP(QString, interface, "Unknown")
+    MODEL_PROP(QString, ethMacAddr, "Unknown")
+    MODEL_PROP(QString, wlanMacAddr, "Unknown")
     MODEL_PROP(QStringList, dns, {})
   public:
     NetModel();

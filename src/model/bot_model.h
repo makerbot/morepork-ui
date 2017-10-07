@@ -22,6 +22,7 @@ class BotModel : public BaseModel {
     };
     Q_ENUM(ConnectionState)
     Q_INVOKABLE virtual void cancel();
+    Q_INVOKABLE virtual void pausePrint();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
