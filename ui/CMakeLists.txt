@@ -12,8 +12,9 @@ foreach(src_elem IN LISTS src_elems)
     message(STATUS "${src}")
 endforeach()
 
-install(
-    FILES ${sources}
-    DESTINATION ${ROOT_INSTALL_DIR}/usr/share/morepork_ui)
+set(RESOURCE_INSTALL_DIR "${ROOT_INSTALL_DIR}/usr/share/morepork_ui")
 
-install(DIRECTORY ${MoreporkUI_SOURCE_DIR}/fonts DESTINATION ${ROOT_INSTALL_DIR}/usr/lib)
+install(FILES ${sources} DESTINATION ${RESOURCE_INSTALL_DIR})
+
+install(DIRECTORY ${MoreporkUI_SOURCE_DIR}/fonts DESTINATION
+        ${ROOT_INSTALL_DIR}/usr/lib)

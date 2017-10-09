@@ -27,7 +27,7 @@ Item {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 0
-        source: "top_fade.png"
+        source: "qrc:/img/top_fade.png"
     }
 
     Item {
@@ -54,7 +54,7 @@ Item {
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
-            source: "arrow_19pix.png"
+            source: "qrc:/img/arrow_19pix.png"
         }
 
         Text {
@@ -103,7 +103,7 @@ Item {
             anchors.verticalCenter: text_printerName.verticalCenter
             rotation: -90
             z: 1
-            source: "arrow_19pix.png"
+            source: "qrc:/img/arrow_19pix.png"
             fillMode: Image.PreserveAspectFit
 
             MouseArea {
