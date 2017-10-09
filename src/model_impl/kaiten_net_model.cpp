@@ -6,8 +6,6 @@
 
 #include "../get_mac_addr_qt.h"
 
-#include <iostream>
-
 void KaitenNetModel::sysInfoUpdate(const Json::Value &info) {
     UPDATE_STRING_PROP(ipAddr, info["ip"]);
 }
