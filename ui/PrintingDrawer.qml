@@ -64,7 +64,7 @@ Drawer {
                     anchors.verticalCenter: text_printerName.verticalCenter
                     rotation: 90
                     z: 1
-                    source: "arrow_19pix.png"
+                    source: "qrc:/img/arrow_19pix.png"
                     fillMode: Image.PreserveAspectFit
 
                     MouseArea {

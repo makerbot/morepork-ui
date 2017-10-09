@@ -27,7 +27,8 @@ set(MODEL_IMPL_SOURCES
     model_impl/kaiten_bot_model.cpp
     model_impl/local_jsonrpc.cpp)
 
-add_executable(morepork_ui ${SOURCES} ${MODEL_IMPL_SOURCES})
+qt5_add_resources(MOREPROK_UI_RESOURCES "${MoreporkUI_SOURCE_DIR}/ui/media.qrc")
+add_executable(morepork_ui ${SOURCES} ${MODEL_IMPL_SOURCES} ${MOREPROK_UI_RESOURCES})
 target_link_libraries(morepork_ui Qt5::Gui Qt5::Qml JsonRpc::jsonrpc Qt5::Multimedia)
 
 # The qt5 cmake configs point to a copy of the qt5 libraries that live
