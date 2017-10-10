@@ -10,12 +10,16 @@ MenuTemplateForm {
 
     Flickable {
         id: flickable
-        y: 70
+        anchors.top: topFadeIn.bottom
+        anchors.topMargin: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.left: parent.left
+        anchors.leftMargin: 15
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
         interactive: true
         flickableDirection: Flickable.VerticalFlick
-        anchors.topMargin: 75
-        anchors.leftMargin: 15
-        anchors.fill: parent
         contentHeight: column.height
 
         Column {
