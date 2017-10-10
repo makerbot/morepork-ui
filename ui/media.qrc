@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/img">
-        <file alias="top_fade.png">images/top_fade.png</file>
         <file alias="arrow_19pix.png">images/arrow_19pix.png</file>
         <file alias="print_icon.png">images/print_icon.png</file>
         <file alias="extruder_icon.png">images/extruder_icon.png</file>

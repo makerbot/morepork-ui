@@ -1,10 +1,12 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 Item {
     width: 800
     height: 480
+    property alias topFadeIn: topFadeIn
     property alias image_drawerArrow: image_drawerArrow
     property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
     property alias mouseArea_back: mouseArea_back
@@ -17,9 +19,10 @@ Item {
         anchors.fill: parent
     }
 
-    Image {
-        id: image_topFadeIn
-        height: 100
+    LinearGradient {
+        id: topFadeIn
+        height: 60
+        cached: true
         z: 1
         anchors.right: parent.right
         anchors.rightMargin: 0
@@ -27,7 +30,16 @@ Item {
         anchors.leftMargin: 0
         anchors.top: parent.top
         anchors.topMargin: 0
-        source: "qrc:/img/top_fade.png"
+        gradient: Gradient {
+          GradientStop {
+            position: 0.6
+            color: "#FF000000"
+          }
+          GradientStop {
+            position: 1.0
+            color: "#00000000"
+          }
+        }
     }
 
     Item {
