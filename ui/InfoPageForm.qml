@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-//import QtGraphicalEffects 1.0
+import QtGraphicalEffects 1.0
 
 MenuTemplateForm {
     id: menuTemplateForm
@@ -81,34 +81,26 @@ MenuTemplateForm {
 
                         }
 
-//                        Item {
-//                            anchors.fill: dns_text_label
-//                            anchors.leftMargin: -15
-
-//                            LinearGradient {
-//                                cached: true
-//                                anchors.fill: parent
-//                                start: Qt.point(parent.width, 0)
-//                                end: Qt.point(0, 0)
-//                                gradient: Gradient {
-//                                  GradientStop {
-//                                    position: 0.0
-//                                    color: "#00000000"
-//                                  }
-//                                  GradientStop {
-//                                    position: 0.25
-//                                    color: "#FF000000"
-//                                  }
-//                                }
-//                            }
-//                        }
-
-                        Rectangle {
-                            id: rectangle
-                            anchors.leftMargin: -15
+                        Item {
                             anchors.fill: dns_text_label
-                            color: "#000000"
-                            z: 1
+                            anchors.leftMargin: -flickable.anchors.leftMargin
+
+                            LinearGradient {
+                                cached: true
+                                anchors.fill: parent
+                                start: Qt.point(parent.width, 0)
+                                end: Qt.point(0, 0)
+                                gradient: Gradient {
+                                  GradientStop {
+                                    position: 0.0
+                                    color: "#00000000"
+                                  }
+                                  GradientStop {
+                                    position: 0.25
+                                    color: "#FF000000"
+                                  }
+                                }
+                            }
                         }
                     }
 
