@@ -9,6 +9,7 @@ Drawer {
     width: parent.width
     height: column.height
     dim: false
+    interactive: false
     property alias mouseArea_topDrawerUp: mouseArea_topDrawerUp
     property alias button_cancelPrint: button_cancelPrint
     property alias button_pausePrint: button_pausePrint
