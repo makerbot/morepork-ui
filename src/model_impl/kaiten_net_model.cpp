@@ -23,4 +23,5 @@ void KaitenNetModel::netUpdate(const Json::Value &state) {
     getMacAddress(eth_mac_addr, wlan_mac_addr);
     ethMacAddrSet(eth_mac_addr.toUtf8().constData());
     wlanMacAddrSet(wlan_mac_addr.toUtf8().constData());
+    UPDATE_STRING_ARRAY_PROP(dns, state["dns"])
 }

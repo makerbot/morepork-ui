@@ -1,12 +1,16 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.0
 
 MenuTemplateForm {
+    id: menuTemplateForm
+    property alias flickable: flickable
     image_drawerArrow.visible: false
 
     Flickable {
         id: flickable
+        y: 70
         interactive: true
         flickableDirection: Flickable.VerticalFlick
         anchors.topMargin: 75
@@ -51,11 +55,78 @@ MenuTemplateForm {
                 text_label.text: qsTr("Gateway  ")
                 text_data.text: bot.net.gateway
             }
-            InfoItem {
-                id: info_dns
+            Item { //TODO: make this a QML Form
+                id: infoListItem
+                height: 45
                 width: parent.width
-                text_label.text: qsTr("DNS  ")
-                text_data.text: "null"
+                property alias dns_text_label: dns_text_label
+
+                RowLayout {
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Item{
+                        z: 1
+                        height: parent.height
+                        width: dns_text_label.width
+
+                        Text {
+                            id: dns_text_label
+                            text: qsTr("DNS  ")
+                            z: 2
+                            font.family: "Antenna"
+                            font.letterSpacing: 3
+                            font.pixelSize: 28
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: "#ffffff"
+
+                        }
+
+                        Item {
+                            anchors.fill: dns_text_label
+                            anchors.leftMargin: -flickable.anchors.leftMargin
+
+                            LinearGradient {
+                                cached: true
+                                anchors.fill: parent
+                                start: Qt.point(parent.width, 0)
+                                end: Qt.point(0, 0)
+                                gradient: Gradient {
+                                  GradientStop {
+                                    position: 0.0
+                                    color: "#00000000"
+                                  }
+                                  GradientStop {
+                                    position: 0.25
+                                    color: "#FF000000"
+                                  }
+                                }
+                            }
+                        }
+                    }
+
+                    ListView {
+                        width: 650 //TODO: Dynamically set this
+                        height: infoListItem.height
+                        boundsBehavior: Flickable.DragOverBounds
+                        spacing: 15
+                        orientation: ListView.Horizontal
+                        flickableDirection: Flickable.HorizontalFlick
+                        z: 0
+
+                        model: bot.net.dns
+                        delegate: Text {
+                            text: modelData
+                            font.family: "Antenna"
+                            font.letterSpacing: 3
+                            font.weight: Font.Light
+                            font.pixelSize: 26
+                            verticalAlignment: Text.AlignTop
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: "#ffffff"
+                        }
+                    }
+
+                }
             }
             InfoItem {
                 id: info_wifiNetwork

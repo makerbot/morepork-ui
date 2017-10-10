@@ -21,5 +21,26 @@
         } \
     } while (0)
 
+
+#define UPDATE_STRING_ARRAY_PROP(PROP, JSON_VAL) \
+    { \
+        QStringList qt_dns_list; \
+        if(JSON_VAL.isArray()){ \
+            const Json::Value dns_list = JSON_VAL; \
+            for(Json::Value::const_iterator it = dns_list.begin() ; it != dns_list.end(); ++it) { \
+                /* '*it' has the type 'const Json::Value' */ \
+                if((*it).isString()) { \
+                    qt_dns_list.push_back((*it).asString().c_str()); \
+                } \
+            } \
+        } \
+        if(qt_dns_list.size() > 0) { \
+            PROP ## Set(qt_dns_list); \
+        } \
+        else { \
+            PROP ## Reset(); \
+        } \
+    }
+
 #endif  // _SRC_IMPL_UTIL_H
 
