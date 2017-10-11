@@ -37,7 +37,7 @@ ApplicationWindow {
 
                 mainMenuIcon_print.mouseArea.onClicked: {
                     swipeToItem(1)
-
+                    printPage.printingDrawer.interactive = true
                 }
 
                 mainMenuIcon_extruder.mouseArea.onClicked: {
@@ -62,7 +62,6 @@ ApplicationWindow {
 
                 mainMenuIcon_preheat.mouseArea.onClicked: {
                     swipeToItem(6)
-
                 }
             }
         }
@@ -76,6 +75,7 @@ ApplicationWindow {
 
                 mouseArea_back.onClicked: {
                     swipeView.setCurrentIndex(0)
+                    printPage.printingDrawer.interactive = false
                 }
             }
         }
