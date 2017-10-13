@@ -20,7 +20,7 @@ MenuTemplateForm {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
-        text_iconDesc.text: qsTr("PRINT")
+        text_iconDesc.text: qsTr("PRINT") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -29,7 +29,7 @@ MenuTemplateForm {
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"
-        text_iconDesc.text: qsTr("EXTRUDER")
+        text_iconDesc.text: qsTr("EXTRUDER") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -40,7 +40,7 @@ MenuTemplateForm {
         anchors.bottom: mainMenuIcon_extruder.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/settings_icon.png"
-        text_iconDesc.text: qsTr("SETTINGS")
+        text_iconDesc.text: qsTr("SETTINGS") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -50,7 +50,7 @@ MenuTemplateForm {
         anchors.bottom: mainMenuIcon_material.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/info_icon.png"
-        text_iconDesc.text: qsTr("INFO")
+        text_iconDesc.text: qsTr("INFO") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -59,7 +59,7 @@ MenuTemplateForm {
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
-        text_iconDesc.text: qsTr("MATERIAL")
+        text_iconDesc.text: qsTr("MATERIAL") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -69,6 +69,6 @@ MenuTemplateForm {
         anchors.bottom: mainMenuIcon_material.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/preheat_icon.png"
-        text_iconDesc.text: qsTr("PREHEAT")
+        text_iconDesc.text: qsTr("PREHEAT") + cpUiTr.emptyStr
     }
 }

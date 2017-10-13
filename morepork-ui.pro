@@ -1,12 +1,12 @@
 TEMPLATE = app
 
-QT += qml quick multimedia multimediawidgets
+QT += core quick multimedia
 CONFIG += c++11
 
 include(src/src.pri)
 
-RESOURCES += src/qml/qml.qrc
-RESOURCES += src/qml/media.qrc
+RESOURCES = src/qml/qml.qrc \
+            src/qml/media.qrc
 
 # Stuff we only build for qt creator builds
 include(host/host.pri)
@@ -28,4 +28,3 @@ DEFINES += MOREPORK_UI_QT_CREATOR_BUILD
 DEFINES += QT_NO_DEBUG_OUTPUT
 
 DEFINES += MOREPORK_ROOT_DIR=\\\"$$_PRO_FILE_PWD_\\\"
-
