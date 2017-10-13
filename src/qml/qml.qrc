@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/ui">
+    <qresource prefix="/qml">
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>MenuTemplate.qml</file>

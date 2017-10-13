@@ -22,10 +22,10 @@ class UiTranslator : public QObject {
         Q_INVOKABLE void selectLanguage(QString trans_file_suffix){
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
             // desktop linux path (.qm files are placed in the executables directory)
-            QString kFilePath(".");
+            QString kFilePath(MOREPORK_ROOT_DIR"/src/translations/");
 #else
             // embedded linux path
-            QString kFilePath("/usr/share/morepork_ui/");
+            QString kFilePath("/usr/share/morepork_ui/translations");
 #endif
             // .qm files are generated from .ts files during compilation
             // load the .qm file by referenceing it without the .qm extension
