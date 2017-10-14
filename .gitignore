@@ -7,3 +7,5 @@
 
 # Shadow build stuffs
 /build-morepork-ui-artifactory*/
+
+*.qm
