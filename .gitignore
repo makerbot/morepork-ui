@@ -9,3 +9,5 @@
 /build-morepork-ui-artifactory*/
 
 *.qm
+
+/PkgConfigPath.cmake
