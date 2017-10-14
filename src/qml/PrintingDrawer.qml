@@ -84,7 +84,7 @@ Drawer {
                 height: 100
                 text: qsTr("Pause Print")
                 background: Rectangle {
-                    color: "#000000"
+                    color: button_pausePrint.down ? "#0a0a0a" : "#000000"
                 }
                 contentItem: Text {
                     text: button_pausePrint.text
@@ -106,7 +106,7 @@ Drawer {
                 height: 100
                 text: qsTr("Cancel Print")
                 background: Rectangle {
-                    color: "#000000"
+                    color: button_cancelPrint.down ? "#0a0a0a" : "#000000"
                 }
                 contentItem: Text {
                     text: button_cancelPrint.text
