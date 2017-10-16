@@ -5,10 +5,17 @@ import QtQuick.Layouts 1.3
 MenuTemplateForm {
     id: settingsPageForm
     image_drawerArrow.visible: false
+    property int pageLevel: 1
+
+    mouseArea_back.onClicked: {
+        if(settingsPageForm.pageLevel === 2) {
+            swipeView.setCurrentIndex(0)
+        }
+        settingsPageForm.pageLevel = 1
+    }
 
     SwipeView {
         id: swipeView
-        //anchors.fill: parent
         anchors.top: topFadeIn.bottom
         anchors.topMargin: 0
         anchors.bottom: parent.bottom
@@ -27,6 +34,7 @@ MenuTemplateForm {
                         swipeView.moveItem(i, 1)
                     }
                     swipeView.setCurrentIndex(1)
+                    settingsPageForm.pageLevel = 2
                     break
                 }
             }
@@ -50,7 +58,7 @@ MenuTemplateForm {
 
                     MoreporkButton {
                         id: buttonChangeLanguage
-                        buttonText.text: qsTr("Change Language")
+                        buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
                         onClicked: swipeView.swipeToItem(1)
                     }
                 }
@@ -59,6 +67,8 @@ MenuTemplateForm {
 
         Item {
             property int defaultIndex: 1
+            property alias settingsPageForm: settingsPageForm
+
             Flickable {
                 id: flickableLanguages
                 flickableDirection: Flickable.VerticalFlick

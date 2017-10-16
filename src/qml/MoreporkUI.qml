@@ -98,7 +98,9 @@ ApplicationWindow {
                 height: parent.height
 
                 mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
+                    if(settingsPage.pageLevel === 1) {
+                        swipeView.setCurrentIndex(0)
+                    }
                 }
             }
         }

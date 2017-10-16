@@ -31,7 +31,7 @@ int main(int argc, char ** argv) {
     QDirIterator it(MOREPORK_ROOT_DIR "/fonts");
     while(it.hasNext())
         if(QFileInfo(it.next()).suffix() == "otf")
-            QFontDatabase::addApplicationFont(it);
+            QFontDatabase::addApplicationFont(it.fileInfo().absoluteFilePath());
 #endif
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
