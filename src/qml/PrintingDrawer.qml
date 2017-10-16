@@ -81,14 +81,14 @@ Drawer {
 
             MoreporkButton {
                 id: button_pausePrint
-                buttonText.text: qsTr("Pause Print")
+                buttonText.text: qsTr("Pause Print") + cpUiTr.emptyStr
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
             }
 
             MoreporkButton {
                 id: button_cancelPrint
-                buttonText.text: qsTr("Cancel Print")
+                buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
             }
