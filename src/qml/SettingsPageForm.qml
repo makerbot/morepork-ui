@@ -27,102 +27,33 @@ MenuTemplateForm {
             anchors.top: parent.top
             spacing: 0
 
-            Button {
+            MoreporkButton {
                 id: buttonEnglish
-                height: 100
-                text: qsTr("Pause Print")
-                spacing: 0
-                background: Rectangle {
-                    color: buttonEnglish.down ? "#0a0a0a" : "#050505"
-                }
-                contentItem: Text {
-                    text: qsTr("English")
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pointSize: 30
-                    color: "#a0a0a0"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
+                buttonText.text: qsTr("English")
                 onClicked: cpUiTr.selectLanguage("en")
             }
 
             Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
 
-            Button {
+            MoreporkButton {
                 id: buttonSpanish
-                height: 100
-                text: qsTr("Pause Print")
-                background: Rectangle {
-                    color: buttonSpanish.down ? "#0a0a0a" : "#050505"
-                }
-                contentItem: Text {
-                    text: qsTr("Espanol")
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pointSize: 30
-                    color: "#a0a0a0"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
+                buttonText.text: qsTr("Espanol")
                 onClicked: cpUiTr.selectLanguage("es")
             }
 
             Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
 
-            Button {
+            MoreporkButton {
                 id: buttonFrench
-                height: 100
-                text: qsTr("Pause Print")
-                background: Rectangle {
-                    color: buttonFrench.down ? "#0a0a0a" : "#050505"
-                }
-                contentItem: Text {
-                    text: qsTr("Francais")
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pointSize: 30
-                    color: "#a0a0a0"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
+                buttonText.text: qsTr("Francais")
                 onClicked: cpUiTr.selectLanguage("fr")
             }
 
             Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
 
-            Button {
+            MoreporkButton {
                 id: buttonItalian
-                height: 100
-                text: qsTr("Pause Print")
-                background: Rectangle {
-                    color: buttonItalian.down ? "#0a0a0a" : "#050505"
-                }
-                contentItem: Text {
-                    text: qsTr("Italiano")
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pointSize: 30
-                    color: "#a0a0a0"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
+                buttonText.text: qsTr("Italiano")
                 onClicked: cpUiTr.selectLanguage("it")
             }
         }
