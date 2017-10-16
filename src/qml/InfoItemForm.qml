@@ -9,6 +9,7 @@ Item {
     property alias text_label: text_label
 
     RowLayout {
+        spacing: 25
         anchors.verticalCenter: parent.verticalCenter
         Text {
             id: text_label

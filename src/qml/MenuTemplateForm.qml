@@ -72,7 +72,7 @@ Item {
         Text {
             id: text_back
             color: "#a0a0a0"
-            text: qsTr("BACK")
+            text: qsTr("BACK") + cpUiTr.emptyStr
             verticalAlignment: Text.AlignVCenter
             font.family: "Antenna"
             font.letterSpacing: 3

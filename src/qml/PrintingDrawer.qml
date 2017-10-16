@@ -79,48 +79,18 @@ Drawer {
                 }
             }
 
-            Button {
+            MoreporkButton {
                 id: button_pausePrint
-                height: 100
-                text: qsTr("Pause Print")
-                background: Rectangle {
-                    color: "#000000"
-                }
-                contentItem: Text {
-                    text: button_pausePrint.text
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pointSize: 30
-                    color: "#a0a0a0"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-                anchors.right: parent.right
-                anchors.left: parent.left
+                buttonText.text: qsTr("Pause Print") + cpUiTr.emptyStr
+                buttonColor: "#000000"
+                buttonPressColor: "#0a0a0a"
             }
 
-            Button {
+            MoreporkButton {
                 id: button_cancelPrint
-                height: 100
-                text: qsTr("Cancel Print")
-                background: Rectangle {
-                    color: "#000000"
-                }
-                contentItem: Text {
-                    text: button_cancelPrint.text
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pointSize: 30
-                    color: "#a0a0a0"
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    elide: Text.ElideRight
-                }
-                anchors.left: parent.left
-                anchors.right: parent.right
+                buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
+                buttonColor: "#000000"
+                buttonPressColor: "#0a0a0a"
             }
 
         }

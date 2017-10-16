@@ -15,6 +15,3 @@ endforeach()
 set(RESOURCE_INSTALL_DIR "${ROOT_INSTALL_DIR}/usr/share/morepork_ui")
 
 install(FILES ${sources} DESTINATION ${RESOURCE_INSTALL_DIR})
-
-install(DIRECTORY ${MoreporkUI_SOURCE_DIR}/fonts DESTINATION
-        ${ROOT_INSTALL_DIR}/usr/lib)

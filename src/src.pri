@@ -13,4 +13,6 @@ HEADERS += \
     src/model/base_model.h \
     src/model/net_model.h \
     src/model/process_model.h \
-    src/model/bot_model.h
+    src/model/bot_model.h \
+    src/ui_translator.h
+

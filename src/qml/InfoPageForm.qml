@@ -32,31 +32,31 @@ MenuTemplateForm {
             InfoItemForm {
                 id: info_firmwareVersion
                 width: parent.width
-                text_label.text: qsTr("Firmware Version  ")
+                text_label.text: qsTr("Firmware Version") + cpUiTr.emptyStr
                 text_data.text: bot.version
             }
             InfoItem {
                 id: info_connectionType
                 width: parent.width
-                text_label.text: qsTr("Connection Type  ")
+                text_label.text: qsTr("Connection Type") + cpUiTr.emptyStr
                 text_data.text: bot.net.interface
             }
             InfoItem {
                 id: info_ipAddress
                 width: parent.width
-                text_label.text: qsTr("IP Address  ")
+                text_label.text: qsTr("IP Address") + cpUiTr.emptyStr
                 text_data.text: bot.net.ipAddr
             }
             InfoItem {
                 id: info_subnet
                 width: parent.width
-                text_label.text: qsTr("Netmask  ")
+                text_label.text: qsTr("Netmask") + cpUiTr.emptyStr
                 text_data.text: bot.net.netmask
             }
             InfoItem {
                 id: info_gateway
                 width: parent.width
-                text_label.text: qsTr("Gateway  ")
+                text_label.text: qsTr("Gateway") + cpUiTr.emptyStr
                 text_data.text: bot.net.gateway
             }
             Item { //TODO: make this a QML Form
@@ -66,6 +66,7 @@ MenuTemplateForm {
                 property alias dns_text_label: dns_text_label
 
                 RowLayout {
+                    spacing: 25
                     anchors.verticalCenter: parent.verticalCenter
 
                     Item{
@@ -75,7 +76,7 @@ MenuTemplateForm {
 
                         Text {
                             id: dns_text_label
-                            text: qsTr("DNS  ")
+                            text: qsTr("DNS") + cpUiTr.emptyStr
                             z: 2
                             font.family: "Antenna"
                             font.letterSpacing: 3
@@ -135,19 +136,19 @@ MenuTemplateForm {
             InfoItem {
                 id: info_wifiNetwork
                 width: parent.width
-                text_label.text: qsTr("WiFi Name  ")
+                text_label.text: qsTr("WiFi Name") + cpUiTr.emptyStr
                 text_data.text: bot.net.interface === "wifi" ? "null" : "n/a"
             }
             InfoItem {
                 id: info_ethMacAddress
                 width: parent.width
-                text_label.text: qsTr("Ethernet MAC Address  ")
+                text_label.text: qsTr("Ethernet MAC Address") + cpUiTr.emptyStr
                 text_data.text: bot.net.ethMacAddr
             }
             InfoItem {
                 id: info_wlanMacAddress
                 width: parent.width
-                text_label.text: qsTr("WiFi MAC Address  ")
+                text_label.text: qsTr("WiFi MAC Address") + cpUiTr.emptyStr
                 text_data.text: bot.net.wlanMacAddr
             }
         }

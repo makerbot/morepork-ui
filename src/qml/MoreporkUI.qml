@@ -42,12 +42,10 @@ ApplicationWindow {
 
                 mainMenuIcon_extruder.mouseArea.onClicked: {
                     swipeToItem(2)
-
                 }
 
                 mainMenuIcon_settings.mouseArea.onClicked: {
                     swipeToItem(3)
-
                 }
 
                 mainMenuIcon_info.mouseArea.onClicked: {
@@ -57,7 +55,6 @@ ApplicationWindow {
                 mainMenuIcon_material.mouseArea.onClicked: {
                     swipeToItem(5)
                     materialPage.filamentVideo.play()
-
                 }
 
                 mainMenuIcon_preheat.mouseArea.onClicked: {
@@ -101,7 +98,9 @@ ApplicationWindow {
                 height: parent.height
 
                 mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
+                    if(settingsPage.pageLevel === 1) {
+                        swipeView.setCurrentIndex(0)
+                    }
                 }
             }
         }
