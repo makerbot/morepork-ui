@@ -6,10 +6,9 @@ MenuTemplateForm {
     id: settingsPageForm
     image_drawerArrow.visible: false
 
-    Flickable {
-        id: flickable
-        flickableDirection: Flickable.VerticalFlick
-        interactive: true
+    SwipeView {
+        id: swipeView
+        //anchors.fill: parent
         anchors.top: topFadeIn.bottom
         anchors.topMargin: 0
         anchors.bottom: parent.bottom
@@ -18,43 +17,104 @@ MenuTemplateForm {
         anchors.rightMargin: 0
         anchors.left: parent.left
         anchors.leftMargin: 0
-        contentHeight: column.height
+        interactive: false
 
-        Column {
-            id: column
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.top: parent.top
-            spacing: 0
-
-            MoreporkButton {
-                id: buttonEnglish
-                buttonText.text: qsTr("English")
-                onClicked: cpUiTr.selectLanguage("en")
+        function swipeToItem(itemToDisplayDefaultIndex){
+            var i
+            for(i = 1; i < swipeView.count; i++){
+                if(swipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
+                    if(i !== 1){
+                        swipeView.moveItem(i, 1)
+                    }
+                    swipeView.setCurrentIndex(1)
+                    break
+                }
             }
+        }
 
-            Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+        Item {
+            property int defaultIndex: 0
+            Flickable {
+                id: flickableSettings
+                flickableDirection: Flickable.VerticalFlick
+                interactive: true
+                anchors.fill: parent
+                contentHeight: columnSettings.height
 
-            MoreporkButton {
-                id: buttonSpanish
-                buttonText.text: qsTr("Espanol")
-                onClicked: cpUiTr.selectLanguage("es")
+                Column {
+                    id: columnSettings
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    spacing: 0
+
+                    MoreporkButton {
+                        id: buttonChangeLanguage
+                        buttonText.text: qsTr("Change Language")
+                        onClicked: swipeView.swipeToItem(1)
+                    }
+                }
             }
+        }
 
-            Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+        Item {
+            property int defaultIndex: 1
+            Flickable {
+                id: flickableLanguages
+                flickableDirection: Flickable.VerticalFlick
+                interactive: true
+                anchors.fill: parent
+                contentHeight: columnLanguages.height
 
-            MoreporkButton {
-                id: buttonFrench
-                buttonText.text: qsTr("Francais")
-                onClicked: cpUiTr.selectLanguage("fr")
-            }
+                Column {
+                    id: columnLanguages
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    spacing: 0
 
-            Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    MoreporkButton {
+                        id: buttonEnglish
+                        buttonText.text: qsTr("English")
+                        onClicked: {
+                            cpUiTr.selectLanguage("en")
+                            swipeView.setCurrentIndex(0)
+                        }
+                    }
 
-            MoreporkButton {
-                id: buttonItalian
-                buttonText.text: qsTr("Italiano")
-                onClicked: cpUiTr.selectLanguage("it")
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonSpanish
+                        buttonText.text: qsTr("Espanol")
+                        onClicked: {
+                            cpUiTr.selectLanguage("es")
+                            swipeView.setCurrentIndex(0)
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonFrench
+                        buttonText.text: qsTr("Francais")
+                        onClicked: {
+                            cpUiTr.selectLanguage("fr")
+                            swipeView.setCurrentIndex(0)
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonItalian
+                        buttonText.text: qsTr("Italiano")
+                        onClicked: {
+                            cpUiTr.selectLanguage("it")
+                            swipeView.setCurrentIndex(0)
+                        }
+                    }
+                }
             }
         }
     }
