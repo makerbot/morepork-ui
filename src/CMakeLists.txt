@@ -2,12 +2,6 @@ find_package(MBCoreUtils REQUIRED)
 find_package(JsonCpp REQUIRED)
 find_package(JsonRpc REQUIRED)
 
-# If you have a custom Qt location, set variables like Qt5LinguistTools_DIR
-# in a PkgConfigPath.cmake file in the root morepork-ui directory
-if(EXISTS "${MoreporkUI_SOURCE_DIR}/PkgConfigPath.cmake")
-    include("${MoreporkUI_SOURCE_DIR}/PkgConfigPath.cmake")
-endif()
-
 set(CMAKE_AUTOMOC ON)
 
 # Build root installs the qt5 cmake configs to staging
