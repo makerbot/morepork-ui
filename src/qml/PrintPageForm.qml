@@ -11,4 +11,8 @@ MenuTemplateForm {
     PrintingDrawer {
         id: printingDrawer
     }
+
+    PrintIconForm{
+
+    }
 }
