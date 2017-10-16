@@ -8,9 +8,11 @@ Button {
     anchors.right: parent.right
     anchors.left: parent.left
     property alias buttonText: buttonText
+    property color buttonColor: "#050505"
+    property color buttonPressColor: "#0a0a0a"
 
     background: Rectangle {
-        color: moreporkButton.down ? "#0a0a0a" : "#050505"
+        color: moreporkButton.down ? buttonPressColor : buttonColor
     }
 
     contentItem: Text {
@@ -25,6 +27,4 @@ Button {
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
-
-
 }
