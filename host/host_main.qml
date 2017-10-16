@@ -1,7 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Window 2.2
 
-import "../ui" as Ui
+import "../qml" as Ui
 
 QtObject {
     property var modelWindow: Window {
