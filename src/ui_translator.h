@@ -25,7 +25,7 @@ class UiTranslator : public QObject {
             QString kFilePath(MOREPORK_ROOT_DIR"/src/translations/");
 #else
             // embedded linux path
-            QString kFilePath("/usr/share/morepork_ui/translations");
+            QString kFilePath("/usr/share/morepork_ui/translations/");
 #endif
             // .qm files are generated from .ts files during compilation
             // load the .qm file by referenceing it without the .qm extension
