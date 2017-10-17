@@ -3,8 +3,6 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 Item {
-    //backButton.visible: false
-    //image_drawerArrow.visible: false
     property alias mainMenuIcon_info: mainMenuIcon_info
     property alias mainMenuIcon_preheat: mainMenuIcon_preheat
     property alias mainMenuIcon_material: mainMenuIcon_material
@@ -25,7 +23,7 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_extruder
-        y: parent.height*0.15
+        y: parent.height*0.10
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"

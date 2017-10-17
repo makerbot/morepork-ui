@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Drawer {
     objectName: "printingDrawer"
-    edge: swipeView.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
+    edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
     opacity: 0.75
     width: parent.width
     height: column.height
@@ -25,7 +25,7 @@ Drawer {
     Flickable {
         id: flickable
         anchors.fill: parent
-        rotation: swipeView.rotation
+        rotation: rootItem.rotation
 
         Column {
             id: column

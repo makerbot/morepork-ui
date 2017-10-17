@@ -10,8 +10,6 @@ Item {
     height: topFadeIn.height
     property alias topFadeIn: topFadeIn
     property alias image_drawerArrow: image_drawerArrow
-    //property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
-    //property alias mouseArea_back: mouseArea_back
     property alias backButton: backButton
     signal backClicked()
     signal drawerDownClicked()

@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: settingsPageForm
-    //image_drawerArrow.visible: false
     property int pageLevel: 1
     property alias buttonChangeLanguage: buttonChangeLanguage
     property alias settingsSwipeView: settingsSwipeView
