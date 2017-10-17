@@ -66,6 +66,7 @@ MenuTemplateForm {
                 property alias dns_text_label: dns_text_label
 
                 RowLayout {
+                    id: rowLayoutDns
                     spacing: 25
                     anchors.verticalCenter: parent.verticalCenter
 
@@ -89,6 +90,7 @@ MenuTemplateForm {
                         Item {
                             anchors.fill: dns_text_label
                             anchors.leftMargin: -flickable.anchors.leftMargin
+                            anchors.rightMargin: -rowLayoutDns.spacing
 
                             LinearGradient {
                                 cached: true
