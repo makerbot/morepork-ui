@@ -3,21 +3,14 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
-MenuTemplateForm {
+Item {
     id: menuTemplateForm
     property alias flickable: flickable
-    image_drawerArrow.visible: false
 
     Flickable {
         id: flickable
-        anchors.top: topFadeIn.bottom
-        anchors.topMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
+        anchors.fill: parent
         anchors.leftMargin: 15
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
         interactive: true
         flickableDirection: Flickable.VerticalFlick
         contentHeight: column.height

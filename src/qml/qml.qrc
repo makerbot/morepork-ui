@@ -3,8 +3,8 @@
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>MoreporkButton.qml</file>
-        <file>MenuTemplate.qml</file>
-        <file>MenuTemplateForm.qml</file>
+        <file>TopBar.qml</file>
+        <file>TopBarForm.qml</file>
         <file>MainMenu.qml</file>
         <file>MainMenuForm.qml</file>
         <file>MainMenuIcon.qml</file>

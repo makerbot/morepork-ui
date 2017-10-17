@@ -4,20 +4,17 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
-    width: 800
-    height: 480
+    // You will always want to reference pages off barHeight or
+    // topFadeIn.height depending on what you are doing.
+    property int barHeight: 40
+    height: topFadeIn.height
     property alias topFadeIn: topFadeIn
     property alias image_drawerArrow: image_drawerArrow
-    property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
-    property alias mouseArea_back: mouseArea_back
+    //property alias mouseArea_topDrawerDown: mouseArea_topDrawerDown
+    //property alias mouseArea_back: mouseArea_back
     property alias backButton: backButton
-
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        z: -1
-        anchors.fill: parent
-    }
+    signal backClicked()
+    signal drawerDownClicked()
 
     LinearGradient {
         id: topFadeIn
@@ -45,7 +42,7 @@ Item {
     Item {
         id: backButton
         width: 150
-        height: 40
+        height: barHeight
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.top: parent.top
@@ -55,6 +52,7 @@ Item {
         MouseArea {
             id: mouseArea_back
             anchors.fill: parent
+            onClicked: backClicked()
         }
 
         Image {
@@ -86,7 +84,7 @@ Item {
 
     Item {
         id: item_printerName
-        height: 40
+        height: barHeight
         z: 1
         anchors.top: parent.top
         anchors.right: parent.right
@@ -125,6 +123,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 z: 2
+                onClicked: drawerDownClicked()
             }
         }
     }

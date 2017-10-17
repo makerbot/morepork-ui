@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-MenuTemplateForm {
+Item {
     property alias printingDrawer: printingDrawer
     property alias mouseArea_topDrawerUp: printingDrawer.mouseArea_topDrawerUp
     property alias button_cancelPrint: printingDrawer.button_cancelPrint

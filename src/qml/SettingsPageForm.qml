@@ -2,39 +2,27 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-MenuTemplateForm {
+Item {
     id: settingsPageForm
-    image_drawerArrow.visible: false
+    //image_drawerArrow.visible: false
     property int pageLevel: 1
-
-    mouseArea_back.onClicked: {
-        if(settingsPageForm.pageLevel === 2) {
-            swipeView.setCurrentIndex(0)
-        }
-        settingsPageForm.pageLevel = 1
-    }
+    property alias buttonChangeLanguage: buttonChangeLanguage
+    property alias settingsSwipeView: settingsSwipeView
+    signal languageButtonClicked()
 
     SwipeView {
-        id: swipeView
-        anchors.top: topFadeIn.bottom
-        anchors.topMargin: 0
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
+        id: settingsSwipeView
+        anchors.fill: parent
         interactive: false
 
         function swipeToItem(itemToDisplayDefaultIndex){
             var i
-            for(i = 1; i < swipeView.count; i++){
-                if(swipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
+            for(i = 1; i < settingsSwipeView.count; i++){
+                if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
                     if(i !== 1){
-                        swipeView.moveItem(i, 1)
+                        settingsSwipeView.moveItem(i, 1)
                     }
-                    swipeView.setCurrentIndex(1)
-                    settingsPageForm.pageLevel = 2
+                    settingsSwipeView.setCurrentIndex(1)
                     break
                 }
             }
@@ -59,7 +47,7 @@ MenuTemplateForm {
                     MoreporkButton {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
-                        onClicked: swipeView.swipeToItem(1)
+                        onClicked: settingsSwipeView.swipeToItem(1)
                     }
                 }
             }
@@ -88,7 +76,7 @@ MenuTemplateForm {
                         buttonText.text: qsTr("English")
                         onClicked: {
                             cpUiTr.selectLanguage("en")
-                            swipeView.setCurrentIndex(0)
+                            languageButtonClicked()
                         }
                     }
 
@@ -99,7 +87,7 @@ MenuTemplateForm {
                         buttonText.text: qsTr("Espanol")
                         onClicked: {
                             cpUiTr.selectLanguage("es")
-                            swipeView.setCurrentIndex(0)
+                            languageButtonClicked()
                         }
                     }
 
@@ -110,7 +98,7 @@ MenuTemplateForm {
                         buttonText.text: qsTr("Francais")
                         onClicked: {
                             cpUiTr.selectLanguage("fr")
-                            swipeView.setCurrentIndex(0)
+                            languageButtonClicked()
                         }
                     }
 
@@ -121,7 +109,7 @@ MenuTemplateForm {
                         buttonText.text: qsTr("Italiano")
                         onClicked: {
                             cpUiTr.selectLanguage("it")
-                            swipeView.setCurrentIndex(0)
+                            languageButtonClicked()
                         }
                     }
                 }

@@ -3,21 +3,51 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
 ApplicationWindow {
-    id: window
+    id: rootAppWindow
     visible: true
     width: 800
     height: 480
+    property alias topBar: topBar
+
+    Rectangle {
+        id: rectangle
+        color: "#000000"
+        z: -1
+        anchors.fill: parent
+    }
+
+    TopBarForm{
+        id: topBar
+        width: parent.width
+        backButton.visible: false
+        image_drawerArrow.visible: false
+        z: 1
+
+//        Component.onCompleted: {
+//            topBar.onBackClicked.connect(sayHello)
+//        }
+    }
+
+    function mainMenuBack(){
+        topBar.backButton.visible = false
+        topBar.image_drawerArrow.visible = false
+        swipeView.setCurrentIndex(0)
+        printPage.printingDrawer.interactive = false
+        topBar.onBackClicked.disconnect(mainMenuBack)
+    }
 
     SwipeView {
         id: swipeView
-        anchors.fill: parent
-        interactive: false
         objectName: "morepork_main_qml"
-        property alias materialPage: materialPage
+        anchors.fill: parent
+        anchors.topMargin: topBar.barHeight
+        interactive: false
         rotation: 180
+        property alias materialPage: materialPage
 
         Item {
             property int defaultIndex: 0
+
             MainMenu {
                 id: mainMenu
                 anchors.fill: parent
@@ -30,6 +60,8 @@ ApplicationWindow {
                                 swipeView.moveItem(i, 1)
                             }
                             swipeView.setCurrentIndex(1)
+                            topBar.backButton.visible = true
+                            topBar.onBackClicked.connect(mainMenuBack)
                             break
                         }
                     }
@@ -38,6 +70,7 @@ ApplicationWindow {
                 mainMenuIcon_print.mouseArea.onClicked: {
                     swipeToItem(1)
                     printPage.printingDrawer.interactive = true
+                    topBar.image_drawerArrow.visible = true
                 }
 
                 mainMenuIcon_extruder.mouseArea.onClicked: {
@@ -65,15 +98,11 @@ ApplicationWindow {
 
         Item {
             property int defaultIndex: 1
+            property alias topBar: topBar
+
             PrintPage {
                 id: printPage
-                width: parent.width
-                height: parent.height
-
-                mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
-                    printPage.printingDrawer.interactive = false
-                }
+                anchors.fill: parent
             }
         }
 
@@ -81,12 +110,7 @@ ApplicationWindow {
             property int defaultIndex: 2
             ExtruderPage {
                 id: extruderPage
-                width: parent.width
-                height: parent.height
-
-                mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
-                }
+                anchors.fill: parent
             }
         }
 
@@ -94,13 +118,22 @@ ApplicationWindow {
             property int defaultIndex: 3
             SettingsPage {
                 id: settingsPage
-                width: parent.width
-                height: parent.height
+                anchors.fill: parent
+                anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
+                property alias topBar: topBar
+                onLanguageButtonClicked: {
+                    settingsPage.settingsSwipeView.setCurrentIndex(0)
+                    topBar.onBackClicked.connect(mainMenuBack)
+                }
 
-                mouseArea_back.onClicked: {
-                    if(settingsPage.pageLevel === 1) {
-                        swipeView.setCurrentIndex(0)
-                    }
+                // When buttonChangeLanguage is clicked, disconnect the back button from
+                buttonChangeLanguage.onClicked: {
+                    topBar.onBackClicked.disconnect(mainMenuBack)
+                    topBar.onBackClicked.connect(moveBackToSettings)
+                }
+
+                function moveBackToSettings(){
+                    settingsPage.settingsSwipeView.setCurrentIndex(0)
                 }
             }
         }
@@ -109,12 +142,8 @@ ApplicationWindow {
             property int defaultIndex: 4
             InfoPage {
                 id: infoPage
-                width: parent.width
-                height: parent.height
-
-                mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
-                }
+                anchors.fill: parent
+                anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
             }
         }
 
@@ -122,13 +151,7 @@ ApplicationWindow {
             property int defaultIndex: 5
             MaterialPage {
                 id: materialPage
-                width: parent.width
-                height: parent.height
-
-                mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
-                    filamentVideo.stop()
-                }
+                anchors.fill: parent
             }
         }
 
@@ -136,12 +159,7 @@ ApplicationWindow {
             property int defaultIndex: 6
             PreheatPage {
                 id: preheatPage
-                width: parent.width
-                height: parent.height
-
-                mouseArea_back.onClicked: {
-                    swipeView.setCurrentIndex(0)
-                }
+                anchors.fill: parent
             }
         }
     }
