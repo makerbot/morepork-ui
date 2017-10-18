@@ -8,6 +8,9 @@ ApplicationWindow {
     width: 800
     height: 480
 
+    property int print_percentage: bot.process.printPercentage
+    property int current_state : bot.process.stateType
+
     SwipeView {
         id: swipeView
         anchors.fill: parent

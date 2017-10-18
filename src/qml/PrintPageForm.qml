@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 MenuTemplateForm {
+    id: menuTemplateForm
     property alias printingDrawer: printingDrawer
     property alias mouseArea_topDrawerUp: printingDrawer.mouseArea_topDrawerUp
     property alias button_cancelPrint: printingDrawer.button_cancelPrint
@@ -13,6 +14,12 @@ MenuTemplateForm {
     }
 
     PrintIconForm{
+        x: 8
+        y: 40
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 8
+
 
     }
 }
