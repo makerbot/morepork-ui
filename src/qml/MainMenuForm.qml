@@ -69,11 +69,4 @@ Item {
         image.source: "qrc:/img/preheat_icon.png"
         textIconDesc.text: qsTr("PREHEAT") + cpUiTr.emptyStr
     }
-
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        border.color: "#ffffff"
-        anchors.fill: parent
-    }
 }
