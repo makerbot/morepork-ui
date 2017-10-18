@@ -64,7 +64,7 @@ Item {
                         context.beginPath();
                         context.fillStyle = "#3183AF";
                         context.moveTo(centreX, centreY);
-                        context.arc(centreX, centreY, parent.width / 2,  (Math.PI*0), (Math.PI*(2.0*parent.percent/100)), false);
+                        context.arc(centreX, centreY, parent.width / 2, 0, (Math.PI*(2.0*parent.percent/100)), false);
                         context.lineTo(centreX, centreY);
                         context.fill();
                     }
@@ -100,7 +100,7 @@ Item {
                     from: 360000;
                     to: 0;
                     duration: 10000000
-                    running: bot.process.stateType == 1 ? true : false
+                    running: (bot.process.stateType == 1)
                 }
         }
 
@@ -117,7 +117,7 @@ Item {
                     from: 0;
                     to: 360000;
                     duration: 10000000
-                    running: (bot.process.stateType == 1 || 3) ? true : false
+                    running: (bot.process.stateType == 1 || 3)
                 }
         }
 
