@@ -8,9 +8,9 @@ Drawer {
     width: parent.width
     height: column.height
     dim: false
-    property alias mouseArea_topDrawerUp: mouseArea_topDrawerUp
-    property alias button_cancelPrint: button_cancelPrint
-    property alias button_pausePrint: button_pausePrint
+    property alias mouseAreaTopDrawerUp: mouseAreaTopDrawerUp
+    property alias buttonCancelPrint: buttonCancelPrint
+    property alias buttonPausePrint: buttonPausePrint
 
     Rectangle {
         id: rectangle
@@ -41,7 +41,7 @@ Drawer {
                 anchors.leftMargin: 0
 
                 Text {
-                    id: text_printerName
+                    id: textPrinterName
                     color: "#a0a0a0"
                     text: bot.name
                     verticalAlignment: Text.AlignVCenter
@@ -54,19 +54,19 @@ Drawer {
                 }
 
                 Image {
-                    id: image_drawerArrow
+                    id: imageDrawerArrow
                     y: 227
                     height: 25
-                    anchors.left: text_printerName.right
+                    anchors.left: textPrinterName.right
                     anchors.leftMargin: 10
-                    anchors.verticalCenter: text_printerName.verticalCenter
+                    anchors.verticalCenter: textPrinterName.verticalCenter
                     rotation: 90
                     z: 1
                     source: "qrc:/img/arrow_19pix.png"
                     fillMode: Image.PreserveAspectFit
 
                     MouseArea {
-                        id: mouseArea_topDrawerUp
+                        id: mouseAreaTopDrawerUp
                         width: 40
                         height: 60
                         anchors.verticalCenter: parent.verticalCenter
@@ -77,14 +77,14 @@ Drawer {
             }
 
             Button {
-                id: button_pausePrint
+                id: buttonPausePrint
                 height: 100
                 text: qsTr("Pause Print")
                 background: Rectangle {
                     color: "#000000"
                 }
                 contentItem: Text {
-                    text: button_pausePrint.text
+                    text: buttonPausePrint.text
                     font.family: "Antenna"
                     font.letterSpacing: 3
                     font.weight: Font.Light
@@ -99,14 +99,14 @@ Drawer {
             }
 
             Button {
-                id: button_cancelPrint
+                id: buttonCancelPrint
                 height: 100
                 text: qsTr("Cancel Print")
                 background: Rectangle {
                     color: "#000000"
                 }
                 contentItem: Text {
-                    text: button_cancelPrint.text
+                    text: buttonCancelPrint.text
                     font.family: "Antenna"
                     font.bold: true
                     font.pixelSize: 30
