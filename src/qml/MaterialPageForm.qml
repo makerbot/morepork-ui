@@ -3,9 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtMultimedia 5.8
 
-MenuTemplateForm {
+Item {
     property alias filamentVideo: filamentVideo
-    image_drawerArrow.visible: false
 
     Video {
         id: filamentVideo
@@ -20,6 +19,6 @@ MenuTemplateForm {
         anchors.bottom: parent.bottom
         autoLoad: true
         autoPlay: false
-        source: swipeView.rotation == 180 ? "" : "qrc:/vid/filament_installation.m4v"
+        source: mainSwipeView.rotation == 180 ? "" : "qrc:/vid/filament_installation.m4v"
     }
 }

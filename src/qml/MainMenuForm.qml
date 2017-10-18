@@ -2,9 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
-MenuTemplateForm {
-    backButton.visible: false
-    image_drawerArrow.visible: false
+Item {
     property alias mainMenuIcon_info: mainMenuIcon_info
     property alias mainMenuIcon_preheat: mainMenuIcon_preheat
     property alias mainMenuIcon_material: mainMenuIcon_material
@@ -20,16 +18,16 @@ MenuTemplateForm {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
-        text_iconDesc.text: qsTr("PRINT") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("PRINT") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
         id: mainMenuIcon_extruder
-        y: 80
+        y: parent.height*0.10
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"
-        text_iconDesc.text: qsTr("EXTRUDER") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("EXTRUDER") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -40,7 +38,7 @@ MenuTemplateForm {
         anchors.bottom: mainMenuIcon_extruder.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/settings_icon.png"
-        text_iconDesc.text: qsTr("SETTINGS") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("SETTINGS") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -50,16 +48,16 @@ MenuTemplateForm {
         anchors.bottom: mainMenuIcon_material.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/info_icon.png"
-        text_iconDesc.text: qsTr("INFO") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("INFO") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
         id: mainMenuIcon_material
-        y: 250
+        y: parent.height*0.50
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
-        text_iconDesc.text: qsTr("MATERIAL") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("MATERIAL") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -69,6 +67,6 @@ MenuTemplateForm {
         anchors.bottom: mainMenuIcon_material.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/preheat_icon.png"
-        text_iconDesc.text: qsTr("PREHEAT") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("PREHEAT") + cpUiTr.emptyStr
     }
 }

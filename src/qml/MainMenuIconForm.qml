@@ -8,7 +8,7 @@ Item {
     height: 150
     property alias mouseArea: mouseArea
     property alias image: image
-    property alias text_iconDesc: text_iconDesc
+    property alias textIconDesc: textIconDesc
 
     Image {
         id: image
@@ -27,7 +27,7 @@ Item {
     }
 
     Text {
-        id: text_iconDesc
+        id: textIconDesc
         x: 52
         color: "#a0a0a0"
         text: qsTr("Icon Name")

@@ -25,6 +25,6 @@ DEFINES += MOREPORK_UI_QT_CREATOR_BUILD
 
 # Comment the line below to enable qDebug() console output
 # when building in Release mode.
-#DEFINES += QT_NO_DEBUG_OUTPUT
+DEFINES += QT_NO_DEBUG_OUTPUT
 
 DEFINES += MOREPORK_ROOT_DIR=\\\"$$_PRO_FILE_PWD_\\\"
