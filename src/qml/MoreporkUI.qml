@@ -13,7 +13,7 @@ ApplicationWindow {
     //TODO: break this into more functions (per component)
     function mainMenuBack(){
         topBar.backButton.visible = false
-        topBar.image_drawerArrow.visible = false
+        topBar.imageDrawerArrow.visible = false
         mainSwipeView.setCurrentIndex(0)
 
         topBar.backClicked.disconnect(mainMenuBack)
@@ -42,7 +42,7 @@ ApplicationWindow {
             z: 1
             width: parent.width
             backButton.visible: false
-            image_drawerArrow.visible: false
+            imageDrawerArrow.visible: false
         }
 
         SwipeView {
@@ -58,7 +58,6 @@ ApplicationWindow {
                 MainMenu {
                     id: mainMenu
                     anchors.fill: parent
-                    anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
 
                     function swipeToItem(itemToDisplayDefaultIndex){
                         var i
@@ -78,7 +77,7 @@ ApplicationWindow {
                     mainMenuIcon_print.mouseArea.onClicked: {
                         swipeToItem(1)
                         printPage.printingDrawer.interactive = true
-                        topBar.image_drawerArrow.visible = true
+                        topBar.imageDrawerArrow.visible = true
                         topBar.drawerDownClicked.connect(printPage.printingDrawer.open)
                     }
 

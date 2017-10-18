@@ -9,7 +9,7 @@ Item {
     property int barHeight: 40
     height: topFadeIn.height
     property alias topFadeIn: topFadeIn
-    property alias image_drawerArrow: image_drawerArrow
+    property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     signal backClicked()
     signal drawerDownClicked()
@@ -54,7 +54,7 @@ Item {
         }
 
         Image {
-            id: image_backArrow
+            id: imageBackArrow
             height: 25
             anchors.verticalCenterOffset: -1
             anchors.verticalCenter: text_back.verticalCenter
@@ -75,22 +75,22 @@ Item {
             font.weight: Font.Light
             font.pixelSize: 30
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: image_backArrow.right
+            anchors.left: imageBackArrow.right
             anchors.leftMargin: 5
         }
     }
 
     Item {
-        id: item_printerName
+        id: itemPrinterName
         height: barHeight
         z: 1
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.left: parent.left
-        property alias text_printerName: text_printerName
+        property alias text_printerName: textPrinterName
 
         Text {
-            id: text_printerName
+            id: textPrinterName
             color: "#a0a0a0"
             text: bot.name
             verticalAlignment: Text.AlignVCenter
@@ -103,19 +103,19 @@ Item {
         }
 
         Image {
-            id: image_drawerArrow
+            id: imageDrawerArrow
             y: 227
             height: 25
-            anchors.left: text_printerName.right
+            anchors.left: textPrinterName.right
             anchors.leftMargin: 10
-            anchors.verticalCenter: text_printerName.verticalCenter
+            anchors.verticalCenter: textPrinterName.verticalCenter
             rotation: -90
             z: 1
             source: "qrc:/img/arrow_19pix.png"
             fillMode: Image.PreserveAspectFit
 
             MouseArea {
-                id: mouseArea_topDrawerDown
+                id: mouseAreaTopDrawerDown
                 width: 40
                 height: 60
                 anchors.verticalCenter: parent.verticalCenter

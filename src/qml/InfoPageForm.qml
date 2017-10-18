@@ -25,38 +25,38 @@ Item {
             InfoItemForm {
                 id: info_firmwareVersion
                 width: parent.width
-                text_label.text: qsTr("Firmware Version") + cpUiTr.emptyStr
-                text_data.text: bot.version
+                textLabel.text: qsTr("Firmware Version") + cpUiTr.emptyStr
+                textData.text: bot.version
             }
             InfoItem {
                 id: info_connectionType
                 width: parent.width
-                text_label.text: qsTr("Connection Type") + cpUiTr.emptyStr
-                text_data.text: bot.net.interface
+                textLabel.text: qsTr("Connection Type") + cpUiTr.emptyStr
+                textData.text: bot.net.interface
             }
             InfoItem {
                 id: info_ipAddress
                 width: parent.width
-                text_label.text: qsTr("IP Address") + cpUiTr.emptyStr
-                text_data.text: bot.net.ipAddr
+                textLabel.text: qsTr("IP Address") + cpUiTr.emptyStr
+                textData.text: bot.net.ipAddr
             }
             InfoItem {
                 id: info_subnet
                 width: parent.width
-                text_label.text: qsTr("Netmask") + cpUiTr.emptyStr
-                text_data.text: bot.net.netmask
+                textLabel.text: qsTr("Netmask") + cpUiTr.emptyStr
+                textData.text: bot.net.netmask
             }
             InfoItem {
                 id: info_gateway
                 width: parent.width
-                text_label.text: qsTr("Gateway") + cpUiTr.emptyStr
-                text_data.text: bot.net.gateway
+                textLabel.text: qsTr("Gateway") + cpUiTr.emptyStr
+                textData.text: bot.net.gateway
             }
             Item { //TODO: make this a QML Form
                 id: infoListItem
                 height: 45
                 width: parent.width
-                property alias dns_text_label: dns_text_label
+                property alias dnsTextLabel: dnsTextLabel
 
                 RowLayout {
                     id: rowLayoutDns
@@ -66,10 +66,10 @@ Item {
                     Item{
                         z: 1
                         height: parent.height
-                        width: dns_text_label.width
+                        width: dnsTextLabel.width
 
                         Text {
-                            id: dns_text_label
+                            id: dnsTextLabel
                             text: qsTr("DNS") + cpUiTr.emptyStr
                             z: 2
                             font.family: "Antenna"
@@ -81,7 +81,7 @@ Item {
                         }
 
                         Item {
-                            anchors.fill: dns_text_label
+                            anchors.fill: dnsTextLabel
                             anchors.leftMargin: -flickable.anchors.leftMargin
                             anchors.rightMargin: -rowLayoutDns.spacing
 
@@ -131,20 +131,20 @@ Item {
             InfoItem {
                 id: info_wifiNetwork
                 width: parent.width
-                text_label.text: qsTr("WiFi Name") + cpUiTr.emptyStr
-                text_data.text: bot.net.interface === "wifi" ? "null" : "n/a"
+                textLabel.text: qsTr("WiFi Name") + cpUiTr.emptyStr
+                textData.text: bot.net.interface === "wifi" ? "null" : "n/a"
             }
             InfoItem {
                 id: info_ethMacAddress
                 width: parent.width
-                text_label.text: qsTr("Ethernet MAC Address") + cpUiTr.emptyStr
-                text_data.text: bot.net.ethMacAddr
+                textLabel.text: qsTr("Ethernet MAC Address") + cpUiTr.emptyStr
+                textData.text: bot.net.ethMacAddr
             }
             InfoItem {
                 id: info_wlanMacAddress
                 width: parent.width
-                text_label.text: qsTr("WiFi MAC Address") + cpUiTr.emptyStr
-                text_data.text: bot.net.wlanMacAddr
+                textLabel.text: qsTr("WiFi MAC Address") + cpUiTr.emptyStr
+                textData.text: bot.net.wlanMacAddr
             }
         }
     }

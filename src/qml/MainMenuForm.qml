@@ -18,7 +18,7 @@ Item {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
-        text_iconDesc.text: qsTr("PRINT") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("PRINT") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -27,7 +27,7 @@ Item {
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"
-        text_iconDesc.text: qsTr("EXTRUDER") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("EXTRUDER") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -38,7 +38,7 @@ Item {
         anchors.bottom: mainMenuIcon_extruder.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/settings_icon.png"
-        text_iconDesc.text: qsTr("SETTINGS") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("SETTINGS") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -48,7 +48,7 @@ Item {
         anchors.bottom: mainMenuIcon_material.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/info_icon.png"
-        text_iconDesc.text: qsTr("INFO") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("INFO") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -57,7 +57,7 @@ Item {
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
-        text_iconDesc.text: qsTr("MATERIAL") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("MATERIAL") + cpUiTr.emptyStr
     }
 
     MainMenuIcon {
@@ -67,6 +67,13 @@ Item {
         anchors.bottom: mainMenuIcon_material.bottom
         anchors.bottomMargin: 0
         image.source: "qrc:/img/preheat_icon.png"
-        text_iconDesc.text: qsTr("PREHEAT") + cpUiTr.emptyStr
+        textIconDesc.text: qsTr("PREHEAT") + cpUiTr.emptyStr
+    }
+
+    Rectangle {
+        id: rectangle
+        color: "#000000"
+        border.color: "#ffffff"
+        anchors.fill: parent
     }
 }

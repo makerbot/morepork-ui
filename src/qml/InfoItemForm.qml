@@ -5,14 +5,14 @@ import QtQuick.Layouts 1.3
 Item {
     id: infoItem
     height: 45
-    property alias text_data: text_data
-    property alias text_label: text_label
+    property alias textData: textData
+    property alias textLabel: textLabel
 
     RowLayout {
         spacing: 25
         anchors.verticalCenter: parent.verticalCenter
         Text {
-            id: text_label
+            id: textLabel
             text: "Info Label"
             font.family: "Antenna"
             font.letterSpacing: 3
@@ -23,7 +23,7 @@ Item {
         }
 
         Text {
-            id: text_data
+            id: textData
             text: "null"
             font.family: "Antenna"
             font.letterSpacing: 3

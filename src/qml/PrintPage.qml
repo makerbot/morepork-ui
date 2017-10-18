@@ -1,16 +1,16 @@
 import QtQuick 2.4
 
 PrintPageForm {
-    printingDrawer.mouseArea_topDrawerUp.onClicked: {
+    printingDrawer.mouseAreaTopDrawerUp.onClicked: {
         printingDrawer.close()
     }
 
-    printingDrawer.button_cancelPrint.onClicked: {
+    printingDrawer.buttonCancelPrint.onClicked: {
         bot.cancel()
         printingDrawer.close()
     }
 
-    printingDrawer.button_pausePrint.onClicked: {
+    printingDrawer.buttonPausePrint.onClicked: {
         bot.pausePrint()
         printingDrawer.close()
     }
