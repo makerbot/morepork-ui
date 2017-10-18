@@ -11,4 +11,12 @@ Item {
     PrintingDrawer {
         id: printingDrawer
     }
+
+    PrintIconForm{
+        x: 8
+        y: 40
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 8
+    }
 }

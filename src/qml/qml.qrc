@@ -25,5 +25,7 @@
         <file>MaterialPageForm.qml</file>
         <file>PreheatPage.qml</file>
         <file>PreheatPageForm.qml</file>
+        <file>PrintIcon.qml</file>
+        <file>PrintIconForm.qml</file>
     </qresource>
 </RCC>

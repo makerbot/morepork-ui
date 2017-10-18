@@ -16,11 +16,21 @@ class ProcessModel : public BaseModel {
         Unload,
         Other
     };
+    enum ProcessStateType {
+        Default,
+        Loading,
+        Printing,
+        Paused,
+        PrintComplete
+    };
     Q_ENUM(ProcessType)
+    Q_ENUM(ProcessStateType)
   private:
     Q_OBJECT
     MODEL_PROP(bool, active, false)
     MODEL_PROP(ProcessType, type, None)
+    MODEL_PROP(ProcessStateType, stateType, Loading)
+    MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(QString, typeStr, "Unknown")
     MODEL_PROP(QString, stepStr, "Unknown")
   public:
