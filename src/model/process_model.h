@@ -29,7 +29,7 @@ class ProcessModel : public BaseModel {
     Q_OBJECT
     MODEL_PROP(bool, active, false)
     MODEL_PROP(ProcessType, type, None)
-    MODEL_PROP(ProcessStateType, stateType, Default)
+    MODEL_PROP(ProcessStateType, stateType, Loading)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(QString, typeStr, "Unknown")
     MODEL_PROP(QString, stepStr, "Unknown")

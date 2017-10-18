@@ -47,7 +47,7 @@ Item {
                 visible: false
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                property int percent: print_percentage
+                property int percent: bot.process.printPercentage
 
                 onPercentChanged: canvas.requestPaint()
                 Canvas {
@@ -64,7 +64,7 @@ Item {
                         context.beginPath();
                         context.fillStyle = "#3183AF";
                         context.moveTo(centreX, centreY);
-                        context.arc(centreX, centreY, parent.width / 2,  (Math.PI*0), (Math.PI*(2.0*print_percentage/100)), false);
+                        context.arc(centreX, centreY, parent.width / 2,  (Math.PI*0), (Math.PI*(2.0*parent.percent/100)), false);
                         context.lineTo(centreX, centreY);
                         context.fill();
                     }
@@ -97,11 +97,10 @@ Item {
 
             RotationAnimator {
                     target: status_image;
-                    alwaysRunToEnd: true
                     from: 360000;
                     to: 0;
                     duration: 10000000
-                    running: current_state == 1 ? true : false
+                    running: bot.process.stateType == 1 ? true : false
                 }
         }
 
@@ -115,11 +114,10 @@ Item {
 
             RotationAnimator {
                     target: loading_or_paused_image;
-                    alwaysRunToEnd: true
                     from: 0;
                     to: 360000;
                     duration: 10000000
-                    running: (current_state == 1 || 3) ? true : false
+                    running: (bot.process.stateType == 1 || 3) ? true : false
                 }
         }
 
@@ -130,7 +128,7 @@ Item {
             x: 152
             y: 156
             color: "#ffffff"
-            text: print_percentage
+            text: bot.process.printPercentage
             anchors.verticalCenterOffset: 4
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
@@ -190,7 +188,7 @@ Item {
     }
     states: [
         State {
-            name: "printing_state"; when: current_state == 2
+            name: "printing_state"; when: bot.process.stateType == 2
 
             PropertyChanges {
                 target: status_image
@@ -238,7 +236,7 @@ Item {
             }
         },
         State {
-            name: "paused_state"; when: current_state == 3
+            name: "paused_state"; when: bot.process.stateType == 3
 
             PropertyChanges {
                 target: status_image
@@ -286,7 +284,7 @@ Item {
 
         },
         State {
-            name: "print_complete_state"; when: current_state == 4
+            name: "print_complete_state"; when: bot.process.stateType == 4
 
             PropertyChanges {
                 target: loading_or_paused_image
@@ -301,6 +299,7 @@ Item {
                 target: status_image
                 width: 79
                 height: 59
+                rotation: 0
                 source: "qrc:/img/check_mark.png"
                 visible: true
             }
