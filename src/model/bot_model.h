@@ -20,7 +20,17 @@ class BotModel : public BaseModel {
         Disconnected,
         TimedOut
     };
+    enum FilamentColor{
+        Unknown,
+        Red,
+        Green,
+        Blue,
+        Yellow,
+        Orange,
+        Violet
+    };
     Q_ENUM(ConnectionState)
+    Q_ENUM(FilamentColor)
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pausePrint();
   private:
@@ -30,6 +40,10 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
+    MODEL_PROP(FilamentColor, filament1Color, Unknown)
+    MODEL_PROP(FilamentColor, filament2Color, Unknown)
+    MODEL_PROP(int, filament1Percent, 0)
+    MODEL_PROP(int, filament2Percent, 0)
   protected:
     BotModel();
 };
