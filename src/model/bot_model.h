@@ -33,6 +33,8 @@ class BotModel : public BaseModel {
     Q_ENUM(FilamentColor)
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pausePrint();
+    Q_INVOKABLE virtual void print(QString file_name);
+    Q_INVOKABLE virtual void updateInternalStorageFileList();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
@@ -44,6 +46,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(FilamentColor, filament2Color, Unknown)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
+    MODEL_PROP(QStringList, internalStorageFileList, {"Unknown"})
   protected:
     BotModel();
 };
