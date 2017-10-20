@@ -6,8 +6,8 @@ Item {
 
     Image {
         id: unknown_filament1_image
-        width: 40
-        height: 40
+        width: 30
+        height: 30
         anchors.horizontalCenterOffset: -40
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -17,8 +17,8 @@ Item {
 
     Image {
         id: unknown_filament2_image
-        width: 40
-        height: 40
+        width: 30
+        height: 30
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/img/unknown_filament.png"
