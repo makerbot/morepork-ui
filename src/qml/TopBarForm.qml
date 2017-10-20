@@ -16,6 +16,28 @@ Item {
     signal backClicked()
     signal drawerDownClicked()
 
+    Item {
+        id: itemNotificationIcons
+        x: 510
+        y: 0
+        width: 130
+        height: 40
+        z: 2
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+
+        NotificationIconsForm
+        {
+            id: notificationIcons
+            x: 0
+            y: 0
+            width: 130
+            height: 40
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+    }
+
     LinearGradient {
         id: topFadeIn
         height: 60
@@ -35,27 +57,6 @@ Item {
             GradientStop {
                 position: 1.0
                 color: "#00000000"
-            }
-        }
-
-        Item {
-            id: itemNotificationIcons
-            x: 510
-            y: 0
-            width: 130
-            height: 40
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-
-            NotificationIconsForm
-            {
-                id: notificationIcons
-                x: 0
-                y: 0
-                width: 130
-                height: 40
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }
@@ -149,5 +150,6 @@ Item {
             }
         }
     }
+
 
 }
