@@ -23,6 +23,8 @@ class BotModel : public BaseModel {
     Q_ENUM(ConnectionState)
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pausePrint();
+    Q_INVOKABLE virtual void print(QString file_name);
+    Q_INVOKABLE virtual void updateInternalStorageFileList();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
@@ -30,6 +32,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
+    MODEL_PROP(QStringList, internalStorageFileList, {"Unknown"})
   protected:
     BotModel();
 };

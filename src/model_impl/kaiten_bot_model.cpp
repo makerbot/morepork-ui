@@ -19,6 +19,7 @@ class KaitenBotModel : public BotModel {
     void netUpdate(const Json::Value & info);
     void cancel();
     void pausePrint();
+    void print(QString file_name);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -86,6 +87,17 @@ void KaitenBotModel::pausePrint(){
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         conn->jsonrpc.invoke("pause", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::print(QString file_name){
+    try{
+        qDebug() << FL_STRM << "file_name: " << file_name;
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("print", Json::Value(file_name.toStdString()), std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

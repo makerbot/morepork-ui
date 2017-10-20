@@ -12,11 +12,16 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     auto name(proc["name"]);
     if (name.isString()) {
         auto nameStr(name.asString());
-        if (nameStr == "PrintProcess") typeSet(Print);
-        else if (nameStr == "LoadFilamentProcess") typeSet(Load);
-        else if (nameStr == "UnloadFilamentProcess") typeSet(Unload);
-        else typeSet(Other);
-    } else {
+        if (nameStr == "PrintProcess")
+            typeSet(Print);
+        else if (nameStr == "LoadFilamentProcess")
+            typeSet(Load);
+        else if (nameStr == "UnloadFilamentProcess")
+            typeSet(Unload);
+        else
+            typeSet(Other);
+    }
+    else {
         typeSet(Other);
     }
     UPDATE_STRING_PROP(typeStr, name);

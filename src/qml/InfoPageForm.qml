@@ -125,7 +125,6 @@ Item {
                             color: "#ffffff"
                         }
                     }
-
                 }
             }
             InfoItem {
