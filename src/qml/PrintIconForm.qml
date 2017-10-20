@@ -173,7 +173,6 @@ Item {
 
             Image {
                 id: action_image
-                source: "qrc:/qtquickplugin/images/template_image.png"
             }
 
             MouseArea {
