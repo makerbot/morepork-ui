@@ -80,7 +80,7 @@ Item {
 
                     MoreporkButton {
                         id: goToPrintIcon
-                        buttonText.text: qsTr("Go to Print Icon")
+                        buttonText.text: qsTr("Print Icon Demo")
                         onClicked: {
                             printSwipeView.swipeToItem(3)
                             setBackButtonSwipe(printSwipeView, 0)

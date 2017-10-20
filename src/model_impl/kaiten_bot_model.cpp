@@ -97,7 +97,11 @@ void KaitenBotModel::print(QString file_name){
     try{
         qDebug() << FL_STRM << "file_name: " << file_name;
         auto conn = m_conn.data();
-        conn->jsonrpc.invoke("print", Json::Value(file_name.toStdString()), std::weak_ptr<JsonRpcCallback>());
+        Json::Value json_params(Json::objectValue);                                      
+        json_params["filepath"] = Json::Value(std::string("/home/things/") + file_name.toStdString());
+        json_params["ensure_build_plate_clear"] = Json::Value(false);
+        json_params["transfer_wait"] = Json::Value(false);
+        conn->jsonrpc.invoke("print", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
