@@ -8,18 +8,12 @@ ApplicationWindow {
     width: 800
     height: 480
     property alias topBar: topBar
-    property alias rootItem: rootItem
+    property var backButtonSwiper: mainSwipeView
+    property int backButtonSwiperIndex: 0
 
-    //TODO: break this into more functions (per component)
-    function mainMenuBack(){
-        topBar.backButton.visible = false
-        topBar.imageDrawerArrow.visible = false
-        mainSwipeView.setCurrentIndex(0)
-
-        topBar.backClicked.disconnect(mainMenuBack)
-
-        printPage.printingDrawer.interactive = false
-        topBar.drawerDownClicked.disconnect(printPage.printingDrawer.open)
+    function setBackButtonSwipe(backButtonSwiper_, backButtonSwiperIndex_){
+        backButtonSwiper = backButtonSwiper_
+        backButtonSwiperIndex = backButtonSwiperIndex_
     }
 
     Item{
@@ -27,7 +21,6 @@ ApplicationWindow {
         rotation: 180
         anchors.fill: parent
         objectName: "morepork_main_qml"
-        property alias topBar: topBar
         z: 0
 
         Rectangle {
@@ -43,6 +36,10 @@ ApplicationWindow {
             width: parent.width
             backButton.visible: false
             imageDrawerArrow.visible: false
+
+            onBackClicked: {
+                backButtonSwiper.swipeToItem(backButtonSwiperIndex)
+            }
         }
 
         SwipeView {
@@ -52,6 +49,28 @@ ApplicationWindow {
             interactive: false
             property alias materialPage: materialPage
 
+            function swipeToItem(itemToDisplayDefaultIndex){
+                if(itemToDisplayDefaultIndex === 0){
+                    mainSwipeView.setCurrentIndex(0)
+                    topBar.backButton.visible = false
+                    topBar.imageDrawerArrow.visible = false
+                    printPage.printingDrawer.interactive = false
+                }
+                else {
+                    var i
+                    for(i = 1; i < mainSwipeView.count; i++){
+                        if(mainSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
+                            if(i !== 1){
+                                mainSwipeView.moveItem(i, 1)
+                            }
+                            mainSwipeView.setCurrentIndex(1)
+                            topBar.backButton.visible = true
+                            break
+                        }
+                    }
+                }
+            }
+
             Item {
                 property int defaultIndex: 0
 
@@ -59,47 +78,32 @@ ApplicationWindow {
                     id: mainMenu
                     anchors.fill: parent
 
-                    function swipeToItem(itemToDisplayDefaultIndex){
-                        var i
-                        for(i = 1; i < mainSwipeView.count; i++){
-                            if(mainSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
-                                if(i !== 1){
-                                    mainSwipeView.moveItem(i, 1)
-                                }
-                                mainSwipeView.setCurrentIndex(1)
-                                topBar.backButton.visible = true
-                                topBar.backClicked.connect(mainMenuBack)
-                                break
-                            }
-                        }
-                    }
-
                     mainMenuIcon_print.mouseArea.onClicked: {
-                        swipeToItem(1)
+                        mainSwipeView.swipeToItem(1)
                         printPage.printingDrawer.interactive = true
                         topBar.imageDrawerArrow.visible = true
                         topBar.drawerDownClicked.connect(printPage.printingDrawer.open)
                     }
 
                     mainMenuIcon_extruder.mouseArea.onClicked: {
-                        swipeToItem(2)
+                        mainSwipeView.swipeToItem(2)
                     }
 
                     mainMenuIcon_settings.mouseArea.onClicked: {
-                        swipeToItem(3)
+                        mainSwipeView.swipeToItem(3)
                     }
 
                     mainMenuIcon_info.mouseArea.onClicked: {
-                        swipeToItem(4)
+                        mainSwipeView.swipeToItem(4)
                     }
 
                     mainMenuIcon_material.mouseArea.onClicked: {
-                        swipeToItem(5)
+                        mainSwipeView.swipeToItem(5)
                         materialPage.filamentVideo.play()
                     }
 
                     mainMenuIcon_preheat.mouseArea.onClicked: {
-                        swipeToItem(6)
+                        mainSwipeView.swipeToItem(6)
                     }
                 }
             }
@@ -128,21 +132,6 @@ ApplicationWindow {
                     id: settingsPage
                     anchors.fill: parent
                     anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
-
-                    // When buttonChangeLanguage is clicked, disconnect the back button from
-                    Component.onCompleted: {
-                        settingsPage.languageButtonClicked.connect(moveBackToSettings)
-                    }
-
-                    buttonChangeLanguage.onClicked: {
-                        topBar.backClicked.disconnect(mainMenuBack)
-                        topBar.backClicked.connect(moveBackToSettings)
-                    }
-
-                    function moveBackToSettings(){
-                        settingsPage.settingsSwipeView.setCurrentIndex(0)
-                        topBar.backClicked.connect(mainMenuBack)
-                    }
                 }
             }
 
