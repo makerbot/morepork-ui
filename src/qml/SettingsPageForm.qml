@@ -5,9 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
     id: settingsPageForm
     property int pageLevel: 1
-    property alias buttonChangeLanguage: buttonChangeLanguage
     property alias settingsSwipeView: settingsSwipeView
-    signal languageButtonClicked()
 
     SwipeView {
         id: settingsSwipeView
@@ -15,14 +13,20 @@ Item {
         interactive: false
 
         function swipeToItem(itemToDisplayDefaultIndex){
-            var i
-            for(i = 1; i < settingsSwipeView.count; i++){
-                if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
-                    if(i !== 1){
-                        settingsSwipeView.moveItem(i, 1)
+            if(itemToDisplayDefaultIndex === 0){
+                settingsSwipeView.setCurrentIndex(0)
+                setBackButtonSwipe(mainSwipeView, 0)
+            }
+            else {
+                var i
+                for(i = 1; i < settingsSwipeView.count; i++){
+                    if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
+                        if(i !== 1){
+                            settingsSwipeView.moveItem(i, 1)
+                        }
+                        settingsSwipeView.setCurrentIndex(1)
+                        break
                     }
-                    settingsSwipeView.setCurrentIndex(1)
-                    break
                 }
             }
         }
@@ -46,7 +50,10 @@ Item {
                     MoreporkButton {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
-                        onClicked: settingsSwipeView.swipeToItem(1)
+                        onClicked: {
+                            setBackButtonSwipe(settingsSwipeView, 0)
+                            settingsSwipeView.swipeToItem(1)
+                       }
                     }
                 }
             }
@@ -54,7 +61,6 @@ Item {
 
         Item {
             property int defaultIndex: 1
-            property alias settingsPageForm: settingsPageForm
 
             Flickable {
                 id: flickableLanguages
@@ -75,7 +81,6 @@ Item {
                         buttonText.text: qsTr("English")
                         onClicked: {
                             cpUiTr.selectLanguage("en")
-                            languageButtonClicked()
                         }
                     }
 
@@ -86,7 +91,6 @@ Item {
                         buttonText.text: qsTr("Espanol")
                         onClicked: {
                             cpUiTr.selectLanguage("es")
-                            languageButtonClicked()
                         }
                     }
 
@@ -97,7 +101,6 @@ Item {
                         buttonText.text: qsTr("Francais")
                         onClicked: {
                             cpUiTr.selectLanguage("fr")
-                            languageButtonClicked()
                         }
                     }
 
@@ -108,7 +111,6 @@ Item {
                         buttonText.text: qsTr("Italiano")
                         onClicked: {
                             cpUiTr.selectLanguage("it")
-                            languageButtonClicked()
                         }
                     }
                 }
