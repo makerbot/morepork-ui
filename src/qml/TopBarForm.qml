@@ -18,8 +18,6 @@ Item {
 
     Item {
         id: itemNotificationIcons
-        x: 510
-        y: 0
         width: 130
         height: 40
         z: 2
@@ -29,12 +27,7 @@ Item {
         NotificationIconsForm
         {
             id: notificationIcons
-            x: 0
-            y: 0
-            width: 130
-            height: 40
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
         }
     }
 
