@@ -3,10 +3,12 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
+    property string fileName: "emptry_str"
     property alias printingDrawer: printingDrawer
     property alias mouseAreaTopDrawerUp: printingDrawer.mouseAreaTopDrawerUp
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
+    property alias printDeleteSwipeView: printDeleteSwipeView
 
     PrintingDrawer {
         id: printingDrawer
@@ -30,7 +32,7 @@ Item {
                             printSwipeView.moveItem(i, 1)
                         }
                         printSwipeView.setCurrentIndex(1)
-                        if(itemToDisplayDefaultIndex > 0 && itemToDisplayDefaultIndex < 4) {
+                        if(itemToDisplayDefaultIndex > 0 && itemToDisplayDefaultIndex < 5) {
                             setBackButtonSwipe(printSwipeView, 0)
                         }
                         break
@@ -41,6 +43,7 @@ Item {
 
         Item {
             property int defaultIndex: 0
+
             Flickable {
                 id: flickableStorageOpt
                 flickableDirection: Flickable.VerticalFlick
@@ -82,7 +85,7 @@ Item {
                         id: goToPrintIcon
                         buttonText.text: qsTr("Print Icon Demo")
                         onClicked: {
-                            printSwipeView.swipeToItem(3)
+                            printSwipeView.swipeToItem(4)
                             setBackButtonSwipe(printSwipeView, 0)
                         }
                     }
@@ -92,6 +95,7 @@ Item {
 
         Item {
             property int defaultIndex: 1
+
             Flickable {
                 id: flickableUsbStorage
                 flickableDirection: Flickable.VerticalFlick
@@ -129,14 +133,116 @@ Item {
                 delegate: MoreporkButton {
                     buttonText.text: modelData
                     onClicked: {
-                        bot.print(buttonText.text)
+                        if(buttonText.text !== "No Internal Files Found") {
+                            fileName = buttonText.text
+                            printSwipeView.swipeToItem(3)
+                            setBackButtonSwipe(printSwipeView, 2)
+                        }
                     }
                 }
             }
         }
 
-        Item{
+        Item {
             property int defaultIndex: 3
+
+            Flickable {
+                id: flickableFileOpt
+                flickableDirection: Flickable.VerticalFlick
+                interactive: true
+                anchors.fill: parent
+                contentHeight: columnStorageOpt.height
+
+                Column {
+                    id: columnFilePrintOpt
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    spacing: 0
+
+                    MoreporkButton {
+                        id: buttonFilePrint
+                        buttonText.text: qsTr("Print") + cpUiTr.emptyStr
+                        onClicked: {
+                            bot.print(fileName)
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonFileInfo
+                        buttonText.text: qsTr("Info") + cpUiTr.emptyStr
+                        onClicked: {
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+
+                    SwipeView {
+                        id: printDeleteSwipeView
+                        height: buttonFileInfo.height
+                        anchors.right: parent.right
+                        anchors.left: parent.left
+                        interactive: false
+
+                        Item {
+                            MoreporkButton {
+                                id: buttonFileDelete
+                                buttonText.text: qsTr("Delete") + cpUiTr.emptyStr
+                                onClicked: {
+                                    printDeleteSwipeView.setCurrentIndex(1)
+                                }
+                            }
+                        }
+
+                        Item{
+                            Row{
+                                MoreporkButton {
+                                    id: buttonConfirmDelete
+                                    anchors.left: {}
+                                    anchors.right: {}
+                                    width: printDeleteSwipeView.width/3
+                                    buttonText.text: qsTr("For Real?") + cpUiTr.emptyStr
+                                    buttonText.color: "#f0f0f0"
+                                    enabled: false
+                                }
+
+                                MoreporkButton {
+                                    id: buttonDeleteYes
+                                    anchors.left: {}
+                                    anchors.right: {}
+                                    width: printDeleteSwipeView.width/3
+                                    buttonText.text: qsTr("Yes") + cpUiTr.emptyStr
+                                    onClicked: {
+                                        bot.updateInternalStorageFileList()
+                                        printSwipeView.swipeToItem(2)
+                                        setBackButtonSwipe(printSwipeView, 0)
+                                        printDeleteSwipeView.setCurrentIndex(0)
+                                    }
+                                }
+
+                                MoreporkButton {
+                                    id: buttonDeleteNo
+                                    anchors.left: {}
+                                    anchors.right: {}
+                                    width: printDeleteSwipeView.width/3
+                                    buttonText.text: qsTr("No") + cpUiTr.emptyStr
+                                    onClicked: {
+                                        printDeleteSwipeView.setCurrentIndex(0)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            property int defaultIndex: 4
+
             PrintIcon{
                 x: 8
                 y: 40

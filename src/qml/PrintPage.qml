@@ -14,4 +14,12 @@ PrintPageForm {
         bot.pausePrint()
         printingDrawer.close()
     }
+
+    Component.onCompleted: {
+       topBar.backClicked.connect(backClicked_)
+    }
+
+    function backClicked_() {
+        printDeleteSwipeView.setCurrentIndex(0)
+    }
 }
