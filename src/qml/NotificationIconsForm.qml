@@ -1,12 +1,12 @@
 import QtQuick 2.4
 
 Item {
-    width: 130
+    width: 120
     height: 40
 
     Row {
         id: rowLayout
-        spacing: 20
+        spacing: 15
         anchors.fill: parent
 
         Item {
