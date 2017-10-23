@@ -32,7 +32,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
-    MODEL_PROP(QStringList, internalStorageFileList, {"Unknown"})
+    MODEL_PROP(QStringList, internalStorageFileList, {"No Internal Files Found"})
   protected:
     BotModel();
 };
