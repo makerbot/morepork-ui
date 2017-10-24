@@ -216,6 +216,7 @@ Item {
                                     width: printDeleteSwipeView.width/3
                                     buttonText.text: qsTr("Yes") + cpUiTr.emptyStr
                                     onClicked: {
+                                        bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
                                         printSwipeView.swipeToItem(2)
                                         setBackButtonSwipe(printSwipeView, 0)
