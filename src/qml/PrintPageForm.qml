@@ -118,12 +118,14 @@ Item {
             }
         }
 
+        // TODO: transitioning to and from this listview is a jump instead of slide transition
+        // Clicking on an item in the list jump transitions to flickableFileOpt
+        // Clicking the back button while on flickableFileOpt is also a jump transition
         Item {
             property int defaultIndex: 2
 
             ListView {
-                width: parent.width
-                height: parent.height
+                anchors.fill: parent
                 boundsBehavior: Flickable.DragOverBounds
                 spacing: 1
                 orientation: ListView.Vertical
