@@ -6,6 +6,7 @@ Item {
     id: settingsPageForm
     property int pageLevel: 1
     property alias settingsSwipeView: settingsSwipeView
+    property alias defaultItem: itemSettings
 
     SwipeView {
         id: settingsSwipeView
@@ -15,7 +16,7 @@ Item {
         function swipeToItem(itemToDisplayDefaultIndex){
             if(itemToDisplayDefaultIndex === 0){
                 settingsSwipeView.setCurrentIndex(0)
-                setBackButtonSwipe(mainSwipeView, 0)
+                setCurrentItem(settingsSwipeView.itemAt(0))
             }
             else {
                 var i
@@ -24,6 +25,7 @@ Item {
                         if(i !== 1){
                             settingsSwipeView.moveItem(i, 1)
                         }
+                        setCurrentItem(settingsSwipeView.itemAt(1))
                         settingsSwipeView.setCurrentIndex(1)
                         break
                     }
@@ -32,7 +34,12 @@ Item {
         }
 
         Item {
+            id: itemSettings
             property int defaultIndex: 0
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: mainSwipeView
+            property int backSwipeIndex: 0
+
             Flickable {
                 id: flickableSettings
                 flickableDirection: Flickable.VerticalFlick
@@ -51,7 +58,6 @@ Item {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
                         onClicked: {
-                            setBackButtonSwipe(settingsSwipeView, 0)
                             settingsSwipeView.swipeToItem(1)
                        }
                     }
@@ -61,6 +67,9 @@ Item {
 
         Item {
             property int defaultIndex: 1
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
 
             Flickable {
                 id: flickableLanguages

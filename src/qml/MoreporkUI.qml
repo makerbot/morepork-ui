@@ -8,12 +8,10 @@ ApplicationWindow {
     width: 800
     height: 480
     property alias topBar: topBar
-    property var backButtonSwiper: mainSwipeView
-    property int backButtonSwiperIndex: 0
+    property var currentItem: mainMenu
 
-    function setBackButtonSwipe(backButtonSwiper_, backButtonSwiperIndex_){
-        backButtonSwiper = backButtonSwiper_
-        backButtonSwiperIndex = backButtonSwiperIndex_
+    function setCurrentItem(currentItem_) {
+        currentItem = currentItem_
     }
 
     Item{
@@ -38,7 +36,7 @@ ApplicationWindow {
             imageDrawerArrow.visible: false
 
             onBackClicked: {
-                backButtonSwiper.swipeToItem(backButtonSwiperIndex)
+                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
             }
         }
 
@@ -63,6 +61,7 @@ ApplicationWindow {
                             if(i !== 1){
                                 mainSwipeView.moveItem(i, 1)
                             }
+                            setCurrentItem(mainSwipeView.itemAt(1).defaultItem)
                             mainSwipeView.setCurrentIndex(1)
                             topBar.backButton.visible = true
                             break
@@ -110,8 +109,7 @@ ApplicationWindow {
 
             Item {
                 property int defaultIndex: 1
-                property alias topBar: topBar
-
+                property alias defaultItem: printPage.defaultItem
                 PrintPage {
                     id: printPage
                     anchors.fill: parent
@@ -120,6 +118,7 @@ ApplicationWindow {
 
             Item {
                 property int defaultIndex: 2
+                property alias defaultItem: extruderPage.defaultItem
                 ExtruderPage {
                     id: extruderPage
                     anchors.fill: parent
@@ -128,6 +127,7 @@ ApplicationWindow {
 
             Item {
                 property int defaultIndex: 3
+                property alias defaultItem: settingsPage.defaultItem
                 SettingsPage {
                     id: settingsPage
                     anchors.fill: parent
@@ -137,6 +137,7 @@ ApplicationWindow {
 
             Item {
                 property int defaultIndex: 4
+                property alias defaultItem: infoPage.defaultItem
                 InfoPage {
                     id: infoPage
                     anchors.fill: parent
@@ -146,6 +147,7 @@ ApplicationWindow {
 
             Item {
                 property int defaultIndex: 5
+                property alias defaultItem: materialPage.defaultItem
                 MaterialPage {
                     id: materialPage
                     anchors.fill: parent
@@ -154,6 +156,7 @@ ApplicationWindow {
 
             Item {
                 property int defaultIndex: 6
+                property alias defaultItem: preheatPage.defaultItem
                 PreheatPage {
                     id: preheatPage
                     anchors.fill: parent

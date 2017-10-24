@@ -9,6 +9,7 @@ Item {
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias printDeleteSwipeView: printDeleteSwipeView
+    property alias defaultItem: itemPrintStorageOpt
 
     PrintingDrawer {
         id: printingDrawer
@@ -22,7 +23,7 @@ Item {
         function swipeToItem(itemToDisplayDefaultIndex){
             if(itemToDisplayDefaultIndex === 0){
                 printSwipeView.setCurrentIndex(0)
-                setBackButtonSwipe(mainSwipeView, 0)
+                setCurrentItem(printSwipeView.itemAt(0))
             }
             else {
                 var i
@@ -31,10 +32,8 @@ Item {
                         if(i !== 1){
                             printSwipeView.moveItem(i, 1)
                         }
+                        setCurrentItem(printSwipeView.itemAt(1))
                         printSwipeView.setCurrentIndex(1)
-                        if(itemToDisplayDefaultIndex > 0 && itemToDisplayDefaultIndex < 5) {
-                            setBackButtonSwipe(printSwipeView, 0)
-                        }
                         break
                     }
                 }
@@ -42,7 +41,11 @@ Item {
         }
 
         Item {
+            id: itemPrintStorageOpt
             property int defaultIndex: 0
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: mainSwipeView
+            property int backSwipeIndex: 0
 
             Flickable {
                 id: flickableStorageOpt
@@ -63,7 +66,6 @@ Item {
                         buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
                         onClicked: {
                             printSwipeView.swipeToItem(1)
-                            setBackButtonSwipe(printSwipeView, 0)
                         }
                     }
 
@@ -75,7 +77,6 @@ Item {
                         onClicked: {
                             bot.updateInternalStorageFileList()
                             printSwipeView.swipeToItem(2)
-                            setBackButtonSwipe(printSwipeView, 0)
                         }
                     }
 
@@ -86,7 +87,6 @@ Item {
                         buttonText.text: qsTr("Print Icon Demo")
                         onClicked: {
                             printSwipeView.swipeToItem(4)
-                            setBackButtonSwipe(printSwipeView, 0)
                         }
                     }
                 }
@@ -94,7 +94,11 @@ Item {
         }
 
         Item {
+            id: itemPrintUsbStorage
             property int defaultIndex: 1
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 0
 
             Flickable {
                 id: flickableUsbStorage
@@ -122,7 +126,11 @@ Item {
         // Clicking on an item in the list jump transitions to flickableFileOpt
         // Clicking the back button while on flickableFileOpt is also a jump transition
         Item {
+            id: itemPrintInternalStorage
             property int defaultIndex: 2
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 0
 
             ListView {
                 anchors.fill: parent
@@ -138,7 +146,6 @@ Item {
                         if(buttonText.text !== "No Internal Files Found") {
                             fileName = buttonText.text
                             printSwipeView.swipeToItem(3)
-                            setBackButtonSwipe(printSwipeView, 2)
                         }
                     }
                 }
@@ -146,7 +153,11 @@ Item {
         }
 
         Item {
+            id: itemPrintFileOpt
             property int defaultIndex: 3
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 2 // or 1 (both can use this Item theoretically)
 
             Flickable {
                 id: flickableFileOpt
@@ -221,7 +232,6 @@ Item {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
                                         printSwipeView.swipeToItem(2)
-                                        setBackButtonSwipe(printSwipeView, 0)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
                                 }
@@ -244,7 +254,11 @@ Item {
         }
 
         Item {
+            id: itemPrintIconDemo
             property int defaultIndex: 4
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 0
 
             PrintIcon{
                 x: 8
