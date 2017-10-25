@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
-    id: menuTemplateForm
     property alias flickable: flickable
+    property alias defaultItem: flickable
 
     Flickable {
         id: flickable
@@ -14,6 +14,8 @@ Item {
         interactive: true
         flickableDirection: Flickable.VerticalFlick
         contentHeight: column.height
+        property var backSwiper: mainSwipeView
+        property int backSwipeIndex: 0
 
         Column {
             id: column

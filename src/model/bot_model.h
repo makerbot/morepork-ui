@@ -25,6 +25,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pausePrint();
     Q_INVOKABLE virtual void print(QString file_name);
     Q_INVOKABLE virtual void updateInternalStorageFileList();
+    Q_INVOKABLE virtual void deletePrintFile(QString file_name);
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
