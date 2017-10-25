@@ -67,7 +67,7 @@ Item {
                         id: buttonUsbStorage
                         buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
                         onClicked: {
-                            printSwipeView.swipeToItem(1, true)
+                            printSwipeView.swipeForward(1)
                         }
                     }
 
@@ -78,7 +78,7 @@ Item {
                         buttonText.text: qsTr("Internal Storage") + cpUiTr.emptyStr
                         onClicked: {
                             bot.updateInternalStorageFileList()
-                            printSwipeView.swipeToItem(2, true)
+                            printSwipeView.swipeForward(2)
                         }
                     }
 
@@ -88,7 +88,7 @@ Item {
                         id: goToPrintIcon
                         buttonText.text: qsTr("Print Icon Demo")
                         onClicked: {
-                            printSwipeView.swipeToItem(4, true)
+                            printSwipeView.swipeForward(4)
                         }
                     }
                 }
@@ -144,7 +144,7 @@ Item {
                     onClicked: {
                         if(buttonText.text !== "No Internal Files Found") {
                             fileName = buttonText.text
-                            printSwipeView.swipeToItem(3, true)
+                            printSwipeView.swipeForward(3)
                         }
                     }
                 }
@@ -230,7 +230,7 @@ Item {
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
-                                        printSwipeView.swipeToItem(2, true)
+                                        printSwipeView.swipeForward(2)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
                                 }

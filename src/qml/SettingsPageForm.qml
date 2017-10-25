@@ -13,6 +13,14 @@ Item {
         anchors.fill: parent
         interactive: false
 
+        function swipeForward(itemToDisplayDefaultIndex){
+            swipeToItem(itemToDisplayDefaultIndex, true)
+        }
+
+        function swipeBackward(itemToDisplayDefaultIndex){
+            swipeToItem(itemToDisplayDefaultIndex, false)
+        }
+
         function swipeToItem(itemToDisplayDefaultIndex, moveforward) {
             var nextIndex = moveforward ? settingsSwipeView.currentIndex+1 : settingsSwipeView.currentIndex-1
             var i
@@ -52,7 +60,7 @@ Item {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
                         onClicked: {
-                            settingsSwipeView.swipeToItem(1, true)
+                            settingsSwipeView.swipeForward(1)
                        }
                     }
                 }
