@@ -9,7 +9,7 @@ Button {
     anchors.left: parent.left
     property alias buttonText: buttonText
     property color buttonColor: "#050505"
-    property color buttonPressColor: "#0a0a0a"
+    property color buttonPressColor: "#0f0f0f"
 
     background: Rectangle {
         color: moreporkButton.down ? buttonPressColor : buttonColor
