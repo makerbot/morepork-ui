@@ -259,12 +259,59 @@ Item {
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
 
-            PrintIcon{
-                x: 8
-                y: 40
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: 8
+            SwipeView {
+                id: printingSwipeView
+                currentIndex: 0
+                anchors.fill: parent
+
+                Item {
+                    id: page0
+                    PrintIcon{
+                        x: 8
+                        y: 40
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: 8
+                    }
+                }
+
+                Item {
+                    id: page1
+                }
+
+                Item {
+                    id: page2
+                }
+
+                Item {
+                    id: page3
+                }
+            }
+
+            PageIndicator {
+                id: indicator
+
+                count: printingSwipeView.count
+                currentIndex: printingSwipeView.currentIndex
+
+                anchors.bottom: printingSwipeView.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                delegate: Rectangle{
+                    implicitWidth: 8
+                    implicitHeight: 8
+
+                    radius: width / 2
+                    color: "#f0f0f0"
+
+                    opacity: index === indicator.currentIndex ? 1.00 : (pressed ? 0.75 : 0.50)
+
+                    Behavior on opacity {
+                        OpacityAnimator {
+                            duration: 100
+                        }
+                    }
+                }
             }
         }
     }
