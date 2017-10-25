@@ -20,22 +20,24 @@ Item {
         anchors.fill: parent
         interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex){
-            if(itemToDisplayDefaultIndex === 0){
-                printSwipeView.setCurrentIndex(0)
-                setCurrentItem(printSwipeView.itemAt(0))
-            }
-            else {
-                var i
-                for(i = 1; i < printSwipeView.count; i++){
-                    if(printSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
-                        if(i !== 1){
-                            printSwipeView.moveItem(i, 1)
-                        }
-                        setCurrentItem(printSwipeView.itemAt(1))
-                        printSwipeView.setCurrentIndex(1)
-                        break
-                    }
+        function swipeForward(itemToDisplayDefaultIndex){
+            swipeToItem(itemToDisplayDefaultIndex, true)
+        }
+
+        function swipeBackward(itemToDisplayDefaultIndex){
+            swipeToItem(itemToDisplayDefaultIndex, false)
+        }
+
+        function swipeToItem(itemToDisplayDefaultIndex, moveforward) {
+            var nextIndex = moveforward ? printSwipeView.currentIndex+1 : printSwipeView.currentIndex-1
+            var i
+            for(i = 0; i < printSwipeView.count; ++i) {
+                if(printSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
+                    if(i !== 1)
+                        printSwipeView.moveItem(i, nextIndex)
+                    setCurrentItem(printSwipeView.itemAt(nextIndex))
+                    printSwipeView.setCurrentIndex(nextIndex)
+                    break
                 }
             }
         }
@@ -65,7 +67,7 @@ Item {
                         id: buttonUsbStorage
                         buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
                         onClicked: {
-                            printSwipeView.swipeToItem(1)
+                            printSwipeView.swipeToItem(1, true)
                         }
                     }
 
@@ -76,7 +78,7 @@ Item {
                         buttonText.text: qsTr("Internal Storage") + cpUiTr.emptyStr
                         onClicked: {
                             bot.updateInternalStorageFileList()
-                            printSwipeView.swipeToItem(2)
+                            printSwipeView.swipeToItem(2, true)
                         }
                     }
 
@@ -86,7 +88,7 @@ Item {
                         id: goToPrintIcon
                         buttonText.text: qsTr("Print Icon Demo")
                         onClicked: {
-                            printSwipeView.swipeToItem(4)
+                            printSwipeView.swipeToItem(4, true)
                         }
                     }
                 }
@@ -122,9 +124,6 @@ Item {
             }
         }
 
-        // TODO: transitioning to and from this listview is a jump instead of slide transition
-        // Clicking on an item in the list jump transitions to flickableFileOpt
-        // Clicking the back button while on flickableFileOpt is also a jump transition
         Item {
             id: itemPrintInternalStorage
             property int defaultIndex: 2
@@ -145,7 +144,7 @@ Item {
                     onClicked: {
                         if(buttonText.text !== "No Internal Files Found") {
                             fileName = buttonText.text
-                            printSwipeView.swipeToItem(3)
+                            printSwipeView.swipeToItem(3, true)
                         }
                     }
                 }
@@ -231,7 +230,7 @@ Item {
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
-                                        printSwipeView.swipeToItem(2)
+                                        printSwipeView.swipeToItem(2, true)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
                                 }

@@ -13,22 +13,16 @@ Item {
         anchors.fill: parent
         interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex){
-            if(itemToDisplayDefaultIndex === 0){
-                settingsSwipeView.setCurrentIndex(0)
-                setCurrentItem(settingsSwipeView.itemAt(0))
-            }
-            else {
-                var i
-                for(i = 1; i < settingsSwipeView.count; i++){
-                    if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
-                        if(i !== 1){
-                            settingsSwipeView.moveItem(i, 1)
-                        }
-                        setCurrentItem(settingsSwipeView.itemAt(1))
-                        settingsSwipeView.setCurrentIndex(1)
-                        break
-                    }
+        function swipeToItem(itemToDisplayDefaultIndex, moveforward) {
+            var nextIndex = moveforward ? settingsSwipeView.currentIndex+1 : settingsSwipeView.currentIndex-1
+            var i
+            for(i = 0; i < settingsSwipeView.count; ++i) {
+                if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
+                    if(i !== 1)
+                        settingsSwipeView.moveItem(i, nextIndex)
+                    setCurrentItem(settingsSwipeView.itemAt(nextIndex))
+                    settingsSwipeView.setCurrentIndex(nextIndex)
+                    break
                 }
             }
         }
@@ -58,7 +52,7 @@ Item {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
                         onClicked: {
-                            settingsSwipeView.swipeToItem(1)
+                            settingsSwipeView.swipeToItem(1, true)
                        }
                     }
                 }

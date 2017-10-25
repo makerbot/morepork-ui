@@ -36,7 +36,7 @@ ApplicationWindow {
             imageDrawerArrow.visible: false
 
             onBackClicked: {
-                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex, false)
             }
         }
 
@@ -47,8 +47,8 @@ ApplicationWindow {
             interactive: false
             property alias materialPage: materialPage
 
-            function swipeToItem(itemToDisplayDefaultIndex){
-                if(itemToDisplayDefaultIndex === 0){
+            function swipeToItem(itemToDisplayDefaultIndex) {
+                if(itemToDisplayDefaultIndex === 0) {
                     mainSwipeView.setCurrentIndex(0)
                     topBar.backButton.visible = false
                     topBar.imageDrawerArrow.visible = false
@@ -56,11 +56,10 @@ ApplicationWindow {
                 }
                 else {
                     var i
-                    for(i = 1; i < mainSwipeView.count; i++){
-                        if(mainSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex){
-                            if(i !== 1){
+                    for(i = 1; i < mainSwipeView.count; i++) {
+                        if(mainSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
+                            if(i !== 1)
                                 mainSwipeView.moveItem(i, 1)
-                            }
                             setCurrentItem(mainSwipeView.itemAt(1).defaultItem)
                             mainSwipeView.setCurrentIndex(1)
                             topBar.backButton.visible = true
