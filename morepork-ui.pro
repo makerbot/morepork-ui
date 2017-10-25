@@ -8,13 +8,6 @@ include(src/src.pri)
 RESOURCES = src/qml/qml.qrc \
             src/qml/media.qrc
 
-# Make sure to run morepork_ts_qm_update.sh
-# This updates the .ts files used both on the bot and by QtCreator.
-# It also generates .qm files used by QtCreator.
-TRANSLATIONS = src/translations/morepork_es.ts \
-               src/translations/morepork_fr.ts \
-               src/translations/morepork_it.ts
-
 # Stuff we only build for qt creator builds
 include(host/host.pri)
 
