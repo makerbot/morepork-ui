@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
+    id: item1
     // You will always want to reference pages off barHeight or
     // topFadeIn.height depending on what you are doing.
     property int barHeight: 40
@@ -11,8 +12,24 @@ Item {
     property alias topFadeIn: topFadeIn
     property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
+    property alias notificationIcons: notificationIcons
     signal backClicked()
     signal drawerDownClicked()
+
+    Item {
+        id: itemNotificationIcons
+        width: 130
+        height: 40
+        z: 2
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+
+        NotificationIconsForm
+        {
+            id: notificationIcons
+            anchors.fill: parent
+        }
+    }
 
     LinearGradient {
         id: topFadeIn
@@ -26,14 +43,14 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 0
         gradient: Gradient {
-          GradientStop {
-            position: 0.6
-            color: "#FF000000"
-          }
-          GradientStop {
-            position: 1.0
-            color: "#00000000"
-          }
+            GradientStop {
+                position: 0.6
+                color: "#FF000000"
+            }
+            GradientStop {
+                position: 1.0
+                color: "#00000000"
+            }
         }
     }
 
@@ -67,6 +84,7 @@ Item {
 
         Text {
             id: text_back
+            width: 200
             color: "#a0a0a0"
             text: qsTr("BACK") + cpUiTr.emptyStr
             verticalAlignment: Text.AlignVCenter
@@ -125,4 +143,6 @@ Item {
             }
         }
     }
+
+
 }
