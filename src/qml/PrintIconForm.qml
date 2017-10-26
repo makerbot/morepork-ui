@@ -8,7 +8,7 @@ Item {
     property alias status_image: status_image
     property alias loading_or_paused_image: loading_or_paused_image
     property alias canvas: canvas
-    property alias progress_circle: progress_circle
+    property bool actionButton: true
 
     Rectangle {
         id: base_circle
@@ -177,7 +177,7 @@ Item {
 
             PropertyChanges {
                 target: action_circle
-                visible: true
+                visible: actionButton
             }
 
             PropertyChanges {
@@ -210,7 +210,7 @@ Item {
 
             PropertyChanges {
                 target: action_circle
-                visible: true
+                visible: actionButton
             }
 
             PropertyChanges {

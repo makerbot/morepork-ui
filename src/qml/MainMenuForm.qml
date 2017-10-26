@@ -9,7 +9,6 @@ Item {
     property alias mainMenuIcon_print: mainMenuIcon_print
     property alias mainMenuIcon_extruder: mainMenuIcon_extruder
     property alias mainMenuIcon_settings: mainMenuIcon_settings
-
     MainMenuIcon {
         id: mainMenuIcon_print
         z: 2
@@ -18,7 +17,16 @@ Item {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
+        image.visible: false
         textIconDesc.text: "PRINT"
+
+        PrintIcon{
+            anchors.verticalCenterOffset: -10
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            scale: 0.4
+            actionButton: false
+        }
     }
 
     MainMenuIcon {
