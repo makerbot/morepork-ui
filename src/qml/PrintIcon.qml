@@ -8,12 +8,11 @@ PrintIconForm
         switch(bot.process.stateType)
         {
             case 2:
-                //Printing
+                //In Printing State
                 bot.pausePrint()
                 break;
             case 3:
-                //Paused
-
+                //In Paused State
                 break;
             default:
                 break;
