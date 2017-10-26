@@ -89,7 +89,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonEnglish
-                        buttonText.text: qsTr("English")
+                        buttonText.text: "English"
                         onClicked: {
                             cpUiTr.selectLanguage("en")
                         }
@@ -99,7 +99,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonSpanish
-                        buttonText.text: qsTr("Espanol")
+                        buttonText.text: "Espanol"
                         onClicked: {
                             cpUiTr.selectLanguage("es")
                         }
@@ -109,7 +109,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonFrench
-                        buttonText.text: qsTr("Francais")
+                        buttonText.text: "Francais"
                         onClicked: {
                             cpUiTr.selectLanguage("fr")
                         }
@@ -119,7 +119,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonItalian
-                        buttonText.text: qsTr("Italiano")
+                        buttonText.text: "Italiano"
                         onClicked: {
                             cpUiTr.selectLanguage("it")
                         }
