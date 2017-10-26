@@ -30,7 +30,7 @@ Item {
         id: textIconDesc
         x: 52
         color: "#a0a0a0"
-        text: qsTr("Icon Name")
+        text: "Icon Name"
         font.family: "Antenna"
         font.letterSpacing: 3
         font.weight: Font.Light
