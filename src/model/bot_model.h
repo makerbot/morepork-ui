@@ -54,7 +54,6 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, extruderBTargetTemp, "235°C")
     MODEL_PROP(QString, chamberCurrentTemp, "40°C")
     MODEL_PROP(QString, chamberTargetTemp, "30°C")
-
   protected:
     BotModel();
 };
