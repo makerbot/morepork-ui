@@ -14,7 +14,11 @@
     	<file alias="paused_rings.png">images/paused_rings.png</file>
         <file alias="play.png">images/play.png</file>
         <file alias="pause.png">images/pause.png</file>
-
+	<file alias="wifi_connected.png">images/wifi_connected.png</file>
+    	<file alias="ethernet_connected.png">images/ethernet_connected.png</file>
+        <file alias="no_wifi.png">images/no_wifi.png</file>
+        <file alias="no_ethernet.png">images/no_ethernet.png</file>
+        <file alias="unknown_filament.png">images/unknown_filament.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

@@ -27,5 +27,9 @@
         <file>PreheatPageForm.qml</file>
         <file>PrintIcon.qml</file>
         <file>PrintIconForm.qml</file>
+        <file>NotificationIcons.qml</file>
+        <file>NotificationIconsForm.qml</file>
+        <file>FilamentIcon.qml</file>
+        <file>FilamentIconForm.qml</file>
     </qresource>
 </RCC>
