@@ -3,6 +3,7 @@ find_package(JsonCpp REQUIRED)
 find_package(JsonRpc REQUIRED)
 
 set(CMAKE_AUTOMOC ON)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # Build root installs the qt5 cmake configs to staging
 # so this just magically works.
@@ -30,7 +31,6 @@ set(MODEL_IMPL_SOURCES
 # lupdate qml/MoreporkUI.qml -ts morepork_de.ts morepork_it.ts etc
 file(GLOB TS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_SOURCES})
-
 qt5_add_resources(MOREPROK_UI_RESOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/qml/media.qrc")
 add_executable(morepork_ui

@@ -34,6 +34,13 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QStringList, internalStorageFileList, {"No Internal Files Found"})
+    MODEL_PROP(QString, extruderACurrentTemp, "110°C")
+    MODEL_PROP(QString, extruderATargetTemp, "225°C")
+    MODEL_PROP(QString, extruderBCurrentTemp, "120°C")
+    MODEL_PROP(QString, extruderBTargetTemp, "235°C")
+    MODEL_PROP(QString, chamberCurrentTemp, "40°C")
+    MODEL_PROP(QString, chamberTargetTemp, "30°C")
+
   protected:
     BotModel();
 };

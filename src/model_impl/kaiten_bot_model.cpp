@@ -130,8 +130,52 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->sysInfoUpdate(info);
     dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
-        info["curent_process"]);
+        info["current_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
+
+    if(!info.empty()){
+      // Try to update extruder and chamber GUI values
+      const Json::Value & kToolheads = info["toolheads"];
+      if(!kToolheads.empty() && kToolheads.isObject()){
+        const Json::Value & kExtruder = kToolheads["extruder"];
+        if(!kExtruder.empty() && kExtruder.isArray()){
+          const Json::Value & kExtruderA = kExtruder[0], // Right Extruder
+                            & kExtruderB = kExtruder[1]; // Left Extruder
+          if(!kExtruderA.empty() && kExtruderA.isObject()){
+          // Update GUI variables for extruder A temps
+            const Json::Value & kExtACurrTemp = kExtruderA["current_temperature"];
+            if(kExtACurrTemp.isInt())
+                extruderACurrentTempSet(QString::number(kExtACurrTemp.asInt()) + "°C");
+            const Json::Value & kExtATargTemp = kExtruderA["target_temperature"];
+            if(kExtATargTemp.isInt())
+                extruderATargetTempSet(QString::number(kExtATargTemp.asInt()) + "°C");
+          }
+          if(!kExtruderB.empty() && kExtruderB.isObject()){
+            // Update GUI variables for extruder B temps
+            const Json::Value & kExtBCurrTemp = kExtruderB["current_temperature"];
+            if(kExtBCurrTemp.isInt())
+                extruderBCurrentTempSet(QString::number(kExtBCurrTemp.asInt()) + "°C");
+            const Json::Value & kExtBTargTemp = kExtruderB["target_temperature"];
+            if(kExtBTargTemp.isInt())
+                extruderBTargetTempSet(QString::number(kExtBTargTemp.asInt()) + "°C");
+          }
+        }
+        const Json::Value & kChamber = kToolheads["chamber"];
+        if(!kChamber.empty() && kChamber.isArray()){
+          const Json::Value & kChamberA = kChamber[0];
+          if(!kChamberA.empty() && kChamberA.isObject()){
+            // Update GUI variables for chamber temps
+            const Json::Value & kChamberCurrTemp = kChamberA["current_temperature"];
+            if(kChamberCurrTemp.isInt())
+                chamberCurrentTempSet(QString::number(kChamberCurrTemp.asInt()) + "°C");
+            const Json::Value & kChamberTargTemp = kChamberA["target_temperature"];
+            if(kChamberTargTemp.isInt())
+                chamberTargetTempSet(QString::number(kChamberTargTemp.asInt()) + "°C");
+          }
+        }
+      }
+    }
+
     // TODO(chris): This bit is a mess...
     const Json::Value & version_dict = info["firmware_version"];
     const Json::Value & version_major = version_dict["major"];

@@ -3,13 +3,18 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    property string fileName: "emptry_str"
+    property string fileName: "unknown.makerbot"
     property alias printingDrawer: printingDrawer
     property alias mouseAreaTopDrawerUp: printingDrawer.mouseAreaTopDrawerUp
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias printDeleteSwipeView: printDeleteSwipeView
     property alias defaultItem: itemPrintStorageOpt
+    property alias buttonUsbStorage: buttonUsbStorage
+    property alias buttonInternalStorage: buttonInternalStorage
+    property alias buttonFilePrint: buttonFilePrint
+    property alias buttonFileInfo: buttonFileInfo
+    property alias buttonFileDelete: buttonFileDelete
 
     PrintingDrawer {
         id: printingDrawer
@@ -17,6 +22,7 @@ Item {
 
     SwipeView {
         id: printSwipeView
+        currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         interactive: false
 
@@ -65,7 +71,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonUsbStorage
-                        buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
+                        buttonText.text: "USB Storage"
                         onClicked: {
                             printSwipeView.swipeForward(1)
                         }
@@ -75,7 +81,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonInternalStorage
-                        buttonText.text: qsTr("Internal Storage") + cpUiTr.emptyStr
+                        buttonText.text: "Internal Storage"
                         onClicked: {
                             bot.updateInternalStorageFileList()
                             printSwipeView.swipeForward(2)
@@ -86,7 +92,7 @@ Item {
 
                     MoreporkButton {
                         id: goToPrintIcon
-                        buttonText.text: qsTr("Print Icon Demo")
+                        buttonText.text: "Print Icon Demo"
                         onClicked: {
                             printSwipeView.swipeForward(4)
                         }
@@ -174,7 +180,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonFilePrint
-                        buttonText.text: qsTr("Print") + cpUiTr.emptyStr
+                        buttonText.text: "Print"
                         onClicked: {
                             bot.print(fileName)
                         }
@@ -184,7 +190,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonFileInfo
-                        buttonText.text: qsTr("Info") + cpUiTr.emptyStr
+                        buttonText.text: "Info"
                         onClicked: {
                         }
                     }
@@ -202,7 +208,7 @@ Item {
                         Item {
                             MoreporkButton {
                                 id: buttonFileDelete
-                                buttonText.text: qsTr("Delete") + cpUiTr.emptyStr
+                                buttonText.text: "Delete"
                                 onClicked: {
                                     printDeleteSwipeView.setCurrentIndex(1)
                                 }
@@ -216,7 +222,7 @@ Item {
                                     anchors.left: {}
                                     anchors.right: {}
                                     width: printDeleteSwipeView.width/3
-                                    buttonText.text: qsTr("For Real?") + cpUiTr.emptyStr
+                                    buttonText.text: "For Real?"
                                     buttonText.color: "#f0f0f0"
                                     enabled: false
                                 }
@@ -226,7 +232,7 @@ Item {
                                     anchors.left: {}
                                     anchors.right: {}
                                     width: printDeleteSwipeView.width/3
-                                    buttonText.text: qsTr("Yes") + cpUiTr.emptyStr
+                                    buttonText.text: "Yes"
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
@@ -240,7 +246,7 @@ Item {
                                     anchors.left: {}
                                     anchors.right: {}
                                     width: printDeleteSwipeView.width/3
-                                    buttonText.text: qsTr("No") + cpUiTr.emptyStr
+                                    buttonText.text: "No"
                                     onClicked: {
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
@@ -261,7 +267,7 @@ Item {
 
             SwipeView {
                 id: printingSwipeView
-                currentIndex: 0
+                currentIndex: 0 // Should never be non zero
                 anchors.fill: parent
 
                 Item {
@@ -273,18 +279,190 @@ Item {
                         anchors.left: parent.left
                         anchors.leftMargin: 8
                     }
+
+                    Column {
+                        id: column0
+                        x: 373
+                        y: 180
+                        spacing: 10
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            id: textPrintState
+                            text: "PRINTING" //GETTING READY, PRINTING, PAUSED, PRINT COMPLETE
+                            font.family: "Antenna"
+                            font.letterSpacing: 3
+                            font.weight: Font.Normal
+                            font.pointSize: 25
+                            color: "#a0a0a0"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        Text {
+                            id: textFileName
+                            text: fileName
+                            font.family: "Antenna"
+                            font.letterSpacing: 3
+                            font.weight: Font.Light
+                            font.pointSize: 20
+                            color: "#a0a0a0"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        Column {
+                            id: column1
+                            spacing: 10
+
+                            Text {
+                                id: textTimeRemaining
+                                text: bot.process.timeRemaining
+                                font.family: "Antenna"
+                                font.letterSpacing: 3
+                                font.weight: Font.Light
+                                font.pointSize: 20
+                                color: "#a0a0a0"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                            }
+
+                            Text {
+                                id: text0
+                                text: "HEATING UP..."
+                                visible: false
+                                font.family: "Antenna"
+                                font.letterSpacing: 3
+                                font.weight: Font.Light
+                                font.pointSize: 20
+                                color: "#a0a0a0"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                            }
+
+                            Row {
+                                id: row0
+                                spacing: 15
+
+                                Text {
+                                    id: textExtACurrTemp
+                                    text: bot.extruderACurrentTemp
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
+                                Item { width: 1; height: parent.height; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                                Text {
+                                    id: textExtATargTemp
+                                    text: bot.extruderATargetTemp
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+                            }
+
+                            Row {
+                                id: row1
+                                spacing: 15
+
+                                Text {
+                                    id: textExtBCurrTemp
+                                    text: bot.extruderBCurrentTemp
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
+                                Item { width: 1; height: parent.height; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                                Text {
+                                    id: textExtBTargTemp
+                                    text: bot.extruderBTargetTemp
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+                            }
+
+                            Row {
+                                id: row2
+                                spacing: 15
+
+                                Text {
+                                    id: textChamberCurrTemp
+                                    text: bot.chamberCurrentTemp
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
+                                Item { width: 1; height: parent.height; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                                Text {
+                                    id: textChamberTargTemp
+                                    text: bot.chamberTargetTemp
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Item {
                     id: page1
-                }
 
-                Item {
-                    id: page2
-                }
-
-                Item {
-                    id: page3
+                    Text {
+                        id: blankPageText
+                        text: "BLANK PAGE"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: "Antenna"
+                        font.letterSpacing: 3
+                        font.weight: Font.Light
+                        font.pointSize: 40
+                        color: "#a0a0a0"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
                 }
             }
 

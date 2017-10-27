@@ -7,7 +7,8 @@ SOURCES += \
     src/model/base_model.cpp \
     src/model/net_model.cpp \
     src/model/process_model.cpp \
-    src/model/bot_model.cpp
+    src/model/bot_model.cpp \
+    src/gui_helpers.cpp
 
 HEADERS += \
     src/model/base_model.h \

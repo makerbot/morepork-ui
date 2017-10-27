@@ -33,6 +33,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(QString, typeStr, "Unknown")
     MODEL_PROP(QString, stepStr, "Unknown")
+    MODEL_PROP(QString, timeRemaining, "00:00:00")
   public:
     ProcessModel();
 };
