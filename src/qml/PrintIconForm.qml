@@ -1,8 +1,8 @@
 import QtQuick 2.4
 Item {
     id: item1
-    width: 400
-    height: 400
+    width: 250
+    height: 265
     property alias action_mouseArea: action_mouseArea
     property alias percentage_printing_text: percentage_printing_text
     property alias status_image: status_image
@@ -11,97 +11,78 @@ Item {
     property alias progress_circle: progress_circle
 
     Rectangle {
-        id: rectangle
-        width: 400
-        height: 400
-        color: "#000000"
+        id: base_circle
+        width: 250
+        height: 250
+        color: "#00000000"
+        radius: 125
+        anchors.top: parent.top
+        anchors.topMargin: 0
         visible: true
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
+        border.width: 3
+        border.color: "#484848"
 
         Rectangle {
-            id: base_circle
-            x: 75
-            y: 75
-            width: 250
-            height: 250
-            color: "#000000"
-            radius: 125
-            visible: true
+            id: progress_circle
+            width: 224
+            height: 224
+            color: "#00000000"
+            radius: 112
+            visible: false
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            border.width: 3
-            border.color: "#484848"
-
-            Rectangle {
-                id: progress_circle
-                x: 13
-                y: 13
-                width: 224
-                height: 224
-                color: "#00000000"
-                radius: 112
-                border.color: "#00000000"
-                border.width: 0
-                rotation: -90
-                visible: false
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                property int percent: bot.process.printPercentage
-
-                onPercentChanged: canvas.requestPaint()
-                Canvas {
-                    id: canvas
-                    anchors.fill: parent
-                    onPaint:
-                    {
-                        var context = getContext("2d");
-                        context.reset();
-
-                        var centreX = parent.width / 2;
-                        var centreY = parent.height / 2;
-
-                        context.beginPath();
-                        context.fillStyle = "#3183AF";
-                        context.moveTo(centreX, centreY);
-                        context.arc(centreX, centreY, parent.width / 2, 0, (Math.PI*(2.0*parent.percent/100)), false);
-                        context.lineTo(centreX, centreY);
-                        context.fill();
-                    }
+            property int percent: bot.process.printPercentage
+            property int printState: bot.process.stateType
+            property string progressColor:
+                switch(printState)
+                {
+                case 4:
+                    "#3183AF"
+                    break;
+                default:
+                    "#FFFFFF"
+                    break;
                 }
-            }
 
-            Rectangle {
-                id: inner_circle
-                x: 21
-                y: 21
-                width: 207
-                height: 207
-                color: "#000000"
-                radius: 104
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                visible: true
+            onPrintStateChanged: canvas.requestPaint()
+            onPercentChanged: canvas.requestPaint()
+            Canvas {
+                id: canvas
+                rotation : -90
+                anchors.fill: parent
+                onPaint:
+                {
+                    var context = getContext("2d");
+                    context.reset();
+
+                    var centreX = parent.width / 2;
+                    var centreY = parent.height / 2;
+
+                    context.beginPath();
+                    context.arc(centreX, centreY, (parent.width / 2) - 5, 0, (Math.PI*(2.0*parent.percent/100)), false);
+                    context.lineWidth = 10;
+                    context.strokeStyle = parent.progressColor;
+                    context.stroke()
+                }
             }
         }
 
         Image {
             id: status_image
-            x: 150
-            y: 150
             width: 68
             height: 68
-            source: "qrc:/img/loading_gears.png"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+            source: "qrc:/img/loading_gears.png"
 
             RotationAnimator {
-                    target: status_image;
-                    from: 360000;
-                    to: 0;
-                    duration: 10000000
-                    running: (bot.process.stateType == 1)
-                }
+                target: status_image;
+                from: 360000;
+                to: 0;
+                duration: 10000000
+                running: (bot.process.stateType == 1)
+            }
         }
 
         Image {
@@ -113,20 +94,16 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             RotationAnimator {
-                    target: loading_or_paused_image;
-                    from: 0;
-                    to: 360000;
-                    duration: 10000000
-                    running: (bot.process.stateType == 1 || 3)
-                }
+                target: loading_or_paused_image;
+                from: 0;
+                to: 360000;
+                duration: 10000000
+                running: (bot.process.stateType == 1 || 3)
+            }
         }
-
-
 
         Text {
             id: percentage_printing_text
-            x: 152
-            y: 156
             color: "#ffffff"
             text: bot.process.printPercentage
             anchors.verticalCenterOffset: 4
@@ -158,14 +135,12 @@ Item {
 
         Rectangle {
             id: action_circle
-            x: 175
-            y: 291
             width: 60
             height: 60
             color: "#000000"
             radius: 30
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 55
+            anchors.top: parent.top
+            anchors.topMargin: 201
             anchors.horizontalCenter: parent.horizontalCenter
             visible: false
             border.width: 3
@@ -173,18 +148,19 @@ Item {
 
             Image {
                 id: action_image
+                width: 45
+                height: 45
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             MouseArea {
                 id: action_mouseArea
-                width: 50
-                height: 50
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.fill: parent
             }
         }
-
     }
+
     states: [
         State {
             name: "printing_state"; when: bot.process.stateType == 2
@@ -201,8 +177,6 @@ Item {
 
             PropertyChanges {
                 target: action_circle
-                width: 61
-                height: 61
                 visible: true
             }
 
@@ -223,14 +197,6 @@ Item {
 
             PropertyChanges {
                 target: action_image
-                x: 8
-                y: 8
-                width: 45
-                height: 45
-                anchors.rightMargin: 8
-                anchors.bottomMargin: 8
-                anchors.topMargin: 8
-                anchors.leftMargin: 8
                 source: "qrc:/img/pause.png"
             }
         },
@@ -244,9 +210,6 @@ Item {
 
             PropertyChanges {
                 target: action_circle
-                width: 61
-                height: 61
-                radius: 30
                 visible: true
             }
 
@@ -262,17 +225,13 @@ Item {
 
             PropertyChanges {
                 target: loading_or_paused_image
-                width: 214
-                height: 214
+                width: 224
+                height: 224
                 source: "qrc:/img/paused_rings.png"
             }
 
             PropertyChanges {
                 target: action_image
-                x: 8
-                y: 8
-                width: 45
-                height: 45
                 source: "qrc:/img/play.png"
             }
 
