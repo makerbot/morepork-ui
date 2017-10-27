@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
-    id: item1
+    id: itemTopBarForm
+    property alias itemTopBarForm: itemTopBarForm
     // You will always want to reference pages off barHeight or
     // topFadeIn.height depending on what you are doing.
     property int barHeight: 40
@@ -66,7 +67,11 @@ Item {
 
         MouseArea {
             id: mouseArea_back
-            anchors.fill: parent
+            height: topFadeIn.height
+            anchors.leftMargin: -parent.anchors.leftMargin
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.left: parent.left
             onClicked: backClicked()
         }
 
@@ -91,7 +96,7 @@ Item {
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Light
-            font.pixelSize: 30
+            font.pixelSize: 22
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: imageBackArrow.right
             anchors.leftMargin: 5
@@ -115,7 +120,7 @@ Item {
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Light
-            font.pixelSize: 30
+            font.pixelSize: 22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
