@@ -28,14 +28,19 @@ class ProcessModel : public BaseModel {
   private:
     Q_OBJECT
     MODEL_PROP(bool, active, false)
+    // 'nameStr' holds the value of params["info"]["current_process"]["name"]
+    MODEL_PROP(QString, nameStr, "Unknown")
+    // 'stepStr' holds the value of params["info"]["current_process"]["step"]
+    MODEL_PROP(QString, stepStr, "Unknown")
+    // 'type' is based on the value of params["info"]["current_process"]["name"]
     MODEL_PROP(ProcessType, type, None)
+    // 'stateType' is based on the value of params["info"]["current_process"]["step"]
     MODEL_PROP(ProcessStateType, stateType, Loading)
     MODEL_PROP(int, printPercentage, 0)
-    MODEL_PROP(QString, typeStr, "Unknown")
-    MODEL_PROP(QString, stepStr, "Unknown")
     MODEL_PROP(QString, timeRemaining, "00:00:00")
   public:
     ProcessModel();
 };
 
 #endif  // _SRC_PROCESS_MODEL_H
+
