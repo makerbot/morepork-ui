@@ -2,8 +2,8 @@ import QtQuick 2.4
 
 Item {
     id: filament_item
-    width: 30
-    height: 30
+    width: 22
+    height: 22
     anchors.verticalCenter: parent.verticalCenter
 
     property int filamentColor
@@ -12,10 +12,10 @@ Item {
     Rectangle {
         id: filament_circle
         color: "#00000000"
-        radius: 15
+        radius: 11
         anchors.fill: parent
         border.color: "#ffffff"
-        border.width: 2
+        border.width: 1
         visible: true
 
         property int fillPercent: filamentPercent
@@ -55,11 +55,12 @@ Item {
             color: "#ffffff"
             text: "?"
             anchors.verticalCenterOffset: 2
+            anchors.horizontalCenterOffset: 1
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             font.family: "Antenna"
             font.weight: Font.Light
-            font.pixelSize: 22
+            font.pixelSize: 18
             visible: !filamentColor
         }
 
@@ -78,7 +79,7 @@ Item {
                 context.beginPath();
                 context.fillStyle = parent.fillColor
                 context.moveTo(centreX, centreY);
-                context.arc(centreX, centreY, (parent.width-4) / 2, 0, (Math.PI*(2.0*parent.fillPercent/100)), false);
+                context.arc(centreX, centreY, (parent.width-2) / 2, 0, (Math.PI*(2.0*parent.fillPercent/100)), false);
                 context.lineTo(centreX, centreY);
                 context.fill();
             }
