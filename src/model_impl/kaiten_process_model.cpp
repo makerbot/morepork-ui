@@ -53,6 +53,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(Printing);
     }
 
+    UPDATE_INT_PROP(printPercentage, proc["progress"]);
+
     activeSet(true);
 }
 
