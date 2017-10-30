@@ -9,22 +9,14 @@ Item {
     property int filamentColor
     property int filamentPercent
 
-    Image {
-        id: unknown_filament_image
-        anchors.fill: parent
-        source: "qrc:/img/unknown_filament.png"
-        visible: !filamentColor
-    }
-
     Rectangle {
         id: filament_circle
-        color: "#000000"
+        color: "#00000000"
         radius: 15
         anchors.fill: parent
-        rotation: -90
         border.color: "#ffffff"
         border.width: 2
-        visible: filamentColor
+        visible: true
 
         property int fillPercent: filamentPercent
         property string fillColor:
@@ -58,8 +50,22 @@ Item {
         onFillPercentChanged: canvas.requestPaint()
         onFillColorChanged: canvas.requestPaint()
 
+        Text {
+            id: unknown_filament_text
+            color: "#ffffff"
+            text: "?"
+            anchors.verticalCenterOffset: 2
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Antenna"
+            font.weight: Font.Light
+            font.pixelSize: 22
+            visible: !filamentColor
+        }
+
         Canvas {
             id: canvas
+            rotation: -90
             anchors.fill: parent
             onPaint:
             {
@@ -77,5 +83,6 @@ Item {
                 context.fill();
             }
         }
+
     }
 }
