@@ -136,13 +136,13 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     if(!info.empty()){
       // Try to update extruder and chamber GUI values
       const Json::Value & kToolheads = info["toolheads"];
-      if(!kToolheads.empty() && kToolheads.isObject()){
+      if(kToolheads.isObject()){
         const Json::Value & kExtruder = kToolheads["extruder"];
-        if(!kExtruder.empty() && kExtruder.isArray()){
+        if(kExtruder.isArray() && kExtruder.size() >= 2){
           const Json::Value & kExtruderA = kExtruder[0], // Right Extruder
                             & kExtruderB = kExtruder[1]; // Left Extruder
-          if(!kExtruderA.empty() && kExtruderA.isObject()){
-          // Update GUI variables for extruder A temps
+          if(kExtruderA.isObject()){
+            // Update GUI variables for extruder A temps
             const Json::Value & kExtACurrTemp = kExtruderA["current_temperature"];
             if(kExtACurrTemp.isInt())
                 extruderACurrentTempSet(QString::number(kExtACurrTemp.asInt()) + "°C");
@@ -150,7 +150,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             if(kExtATargTemp.isInt())
                 extruderATargetTempSet(QString::number(kExtATargTemp.asInt()) + "°C");
           }
-          if(!kExtruderB.empty() && kExtruderB.isObject()){
+          if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
             const Json::Value & kExtBCurrTemp = kExtruderB["current_temperature"];
             if(kExtBCurrTemp.isInt())
@@ -161,9 +161,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           }
         }
         const Json::Value & kChamber = kToolheads["chamber"];
-        if(!kChamber.empty() && kChamber.isArray()){
+        if(kChamber.isArray() && kChamber.size() > 0){
           const Json::Value & kChamberA = kChamber[0];
-          if(!kChamberA.empty() && kChamberA.isObject()){
+          if(kChamberA.isObject()){
             // Update GUI variables for chamber temps
             const Json::Value & kChamberCurrTemp = kChamberA["current_temperature"];
             if(kChamberCurrTemp.isInt())

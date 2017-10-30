@@ -17,7 +17,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
 
     const Json::Value &kName = proc["name"];
-    if (!kName.empty() && kName.isString()) {
+    if (kName.isString()) {
         const QString kNameStr = kName.asString();
         nameStrSet(kNameStr);
         if (kNameStr == "PrintProcess")
@@ -34,7 +34,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
 
     const Json::Value &kStep = proc["step"];
-    if (!kStep.empty() && kStep.isString()) {
+    if (kStep.isString()) {
         const QString kStepStr = kStep.asString();
         stepStrSet(kStepStr);
         if (kStepStr == "initializing" ||
