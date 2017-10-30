@@ -145,19 +145,19 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder A temps
             const Json::Value & kExtACurrTemp = kExtruderA["current_temperature"];
             if(kExtACurrTemp.isInt())
-                extruderACurrentTempSet(QString::number(kExtACurrTemp.asInt()) + "°C");
+                extruderACurrentTempSet(kExtACurrTemp.asInt());
             const Json::Value & kExtATargTemp = kExtruderA["target_temperature"];
             if(kExtATargTemp.isInt())
-                extruderATargetTempSet(QString::number(kExtATargTemp.asInt()) + "°C");
+                extruderATargetTempSet(kExtATargTemp.asInt());
           }
           if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
             const Json::Value & kExtBCurrTemp = kExtruderB["current_temperature"];
             if(kExtBCurrTemp.isInt())
-                extruderBCurrentTempSet(QString::number(kExtBCurrTemp.asInt()) + "°C");
+                extruderBCurrentTempSet(kExtBCurrTemp.asInt());
             const Json::Value & kExtBTargTemp = kExtruderB["target_temperature"];
             if(kExtBTargTemp.isInt())
-                extruderBTargetTempSet(QString::number(kExtBTargTemp.asInt()) + "°C");
+                extruderBTargetTempSet(kExtBTargTemp.asInt());
           }
         }
         const Json::Value & kChamber = kToolheads["chamber"];
@@ -167,10 +167,10 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for chamber temps
             const Json::Value & kChamberCurrTemp = kChamberA["current_temperature"];
             if(kChamberCurrTemp.isInt())
-                chamberCurrentTempSet(QString::number(kChamberCurrTemp.asInt()) + "°C");
+                chamberCurrentTempSet(kChamberCurrTemp.asInt());
             const Json::Value & kChamberTargTemp = kChamberA["target_temperature"];
             if(kChamberTargTemp.isInt())
-                chamberTargetTempSet(QString::number(kChamberTargTemp.asInt()) + "°C");
+                chamberTargetTempSet(kChamberTargTemp.asInt());
           }
         }
       }

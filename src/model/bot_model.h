@@ -48,12 +48,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
     MODEL_PROP(QStringList, internalStorageFileList, {"No Internal Files Found"})
-    MODEL_PROP(QString, extruderACurrentTemp, "n/a°C")
-    MODEL_PROP(QString, extruderATargetTemp, "n/a°C")
-    MODEL_PROP(QString, extruderBCurrentTemp, "n/a°C")
-    MODEL_PROP(QString, extruderBTargetTemp, "n/a°C")
-    MODEL_PROP(QString, chamberCurrentTemp, "n/a°C")
-    MODEL_PROP(QString, chamberTargetTemp, "n/a°C")
+    MODEL_PROP(int, extruderACurrentTemp, -999)
+    MODEL_PROP(int, extruderATargetTemp, -999)
+    MODEL_PROP(int, extruderBCurrentTemp, -999)
+    MODEL_PROP(int, extruderBTargetTemp, -999)
+    MODEL_PROP(int, chamberCurrentTemp, -999)
+    MODEL_PROP(int, chamberTargetTemp, -999)
   protected:
     BotModel();
 };

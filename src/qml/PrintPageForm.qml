@@ -177,7 +177,7 @@ Item {
 
                                 Text {
                                     id: textExtACurrTemp
-                                    text: bot.extruderACurrentTemp
+                                    text: bot.extruderACurrentTemp + "°C"
                                     font.family: "Antenna"
                                     font.letterSpacing: 3
                                     font.weight: Font.Light
@@ -192,7 +192,7 @@ Item {
 
                                 Text {
                                     id: textExtATargTemp
-                                    text: bot.extruderATargetTemp
+                                    text: bot.extruderATargetTemp + "°C"
                                     font.family: "Antenna"
                                     font.letterSpacing: 3
                                     font.weight: Font.Light
@@ -210,7 +210,7 @@ Item {
 
                                 Text {
                                     id: textExtBCurrTemp
-                                    text: bot.extruderBCurrentTemp
+                                    text: bot.extruderBCurrentTemp + "°C"
                                     font.family: "Antenna"
                                     font.letterSpacing: 3
                                     font.weight: Font.Light
@@ -225,7 +225,7 @@ Item {
 
                                 Text {
                                     id: textExtBTargTemp
-                                    text: bot.extruderBTargetTemp
+                                    text: bot.extruderBTargetTemp + "°C"
                                     font.family: "Antenna"
                                     font.letterSpacing: 3
                                     font.weight: Font.Light
@@ -243,7 +243,7 @@ Item {
 
                                 Text {
                                     id: textChamberCurrTemp
-                                    text: bot.chamberCurrentTemp
+                                    text: bot.chamberCurrentTemp + "°C"
                                     font.family: "Antenna"
                                     font.letterSpacing: 3
                                     font.weight: Font.Light
@@ -258,7 +258,7 @@ Item {
 
                                 Text {
                                     id: textChamberTargTemp
-                                    text: bot.chamberTargetTemp
+                                    text: bot.chamberTargetTemp + "°C"
                                     font.family: "Antenna"
                                     font.letterSpacing: 3
                                     font.weight: Font.Light
@@ -403,6 +403,7 @@ Item {
                         buttonText.text: "Print"
                         onClicked: {
                             bot.print(fileName)
+                            printSwipeView.swipeBackward(0)
                         }
                     }
 
