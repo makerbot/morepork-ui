@@ -21,10 +21,10 @@ Item {
         textIconDesc.text: "PRINT"
 
         PrintIcon{
-            anchors.verticalCenterOffset: -10
+            anchors.verticalCenterOffset: -25
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            scale: 0.4
+            scale: 75/250
             actionButton: false
             visible: !parent.imageVisible
         }

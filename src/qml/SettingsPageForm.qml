@@ -14,12 +14,11 @@ Item {
         interactive: false
 
         function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = printSwipeView.currentIndex
-            printSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
-            printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            printSwipeView.itemAt(prevIndex).visible = false
-            console.log(printSwipeView.currentItem.backSwiper + ", " + printSwipeView.currentItem.backSwipeIndex)
+            var prevIndex = settingsSwipeView.currentIndex
+            settingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
+            setCurrentItem(settingsSwipeView.itemAt(itemToDisplayDefaultIndex))
+            settingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
+            settingsSwipeView.itemAt(prevIndex).visible = false
         }
 
         // settingsSwipeView.index = 0
@@ -28,6 +27,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
+            visible: false
 
             Flickable {
                 id: flickableSettings
@@ -47,7 +47,7 @@ Item {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
                         onClicked: {
-                            settingsSwipeView.swipeForward(1)
+                            settingsSwipeView.swipeToItem(1)
                        }
                     }
                 }
@@ -59,6 +59,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            visible: false
 
             Flickable {
                 id: flickableLanguages
