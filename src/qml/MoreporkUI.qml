@@ -36,7 +36,7 @@ ApplicationWindow {
             imageDrawerArrow.visible: false
 
             onBackClicked: {
-                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex, false)
+                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
             }
         }
 
@@ -48,6 +48,8 @@ ApplicationWindow {
             property alias materialPage: materialPage
 
             function swipeToItem(itemToDisplayDefaultIndex) {
+                var prevIndex = mainSwipeView.currentIndex
+                mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
                 if(itemToDisplayDefaultIndex === 0) {
                     mainSwipeView.setCurrentIndex(0)
                     topBar.backButton.visible = false
@@ -55,23 +57,16 @@ ApplicationWindow {
                     printPage.printingDrawer.interactive = false
                 }
                 else {
-                    var i
-                    for(i = 1; i < mainSwipeView.count; i++) {
-                        if(mainSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
-                            if(i !== 1)
-                                mainSwipeView.moveItem(i, 1)
-                            setCurrentItem(mainSwipeView.itemAt(1).defaultItem)
-                            mainSwipeView.setCurrentIndex(1)
-                            topBar.backButton.visible = true
-                            break
-                        }
-                    }
+                    mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem.visible = true
+                    setCurrentItem(mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem)
+                    mainSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
+                    topBar.backButton.visible = true
                 }
+                mainSwipeView.itemAt(prevIndex).visible = false
             }
 
+            // mainSwipeView.index = 0
             Item {
-                property int defaultIndex: 0
-
                 MainMenu {
                     id: mainMenu
                     anchors.fill: parent
@@ -106,27 +101,32 @@ ApplicationWindow {
                 }
             }
 
+            // mainSwipeView.index = 1
             Item {
-                property int defaultIndex: 1
                 property alias defaultItem: printPage.defaultItem
+                visible: false
                 PrintPage {
                     id: printPage
                     anchors.fill: parent
                 }
             }
 
+            // mainSwipeView.index = 2
             Item {
                 property int defaultIndex: 2
                 property alias defaultItem: extruderPage.defaultItem
+                visible: false
                 ExtruderPage {
                     id: extruderPage
                     anchors.fill: parent
                 }
             }
 
+            // mainSwipeView.index = 3
             Item {
                 property int defaultIndex: 3
                 property alias defaultItem: settingsPage.defaultItem
+                visible: false
                 SettingsPage {
                     id: settingsPage
                     anchors.fill: parent
@@ -134,9 +134,11 @@ ApplicationWindow {
                 }
             }
 
+            // mainSwipeView.index = 4
             Item {
                 property int defaultIndex: 4
                 property alias defaultItem: infoPage.defaultItem
+                visible: false
                 InfoPage {
                     id: infoPage
                     anchors.fill: parent
@@ -144,18 +146,22 @@ ApplicationWindow {
                 }
             }
 
+            // mainSwipeView.index = 5
             Item {
                 property int defaultIndex: 5
                 property alias defaultItem: materialPage.defaultItem
+                visible: false
                 MaterialPage {
                     id: materialPage
                     anchors.fill: parent
                 }
             }
 
+            // mainSwipeView.index = 6
             Item {
                 property int defaultIndex: 6
                 property alias defaultItem: preheatPage.defaultItem
+                visible: false
                 PreheatPage {
                     id: preheatPage
                     anchors.fill: parent

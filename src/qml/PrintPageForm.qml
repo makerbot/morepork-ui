@@ -3,13 +3,18 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    property string fileName: "emptry_str"
+    property string fileName: "unknown.makerbot"
     property alias printingDrawer: printingDrawer
     property alias mouseAreaTopDrawerUp: printingDrawer.mouseAreaTopDrawerUp
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias printDeleteSwipeView: printDeleteSwipeView
     property alias defaultItem: itemPrintStorageOpt
+    property alias buttonUsbStorage: buttonUsbStorage
+    property alias buttonInternalStorage: buttonInternalStorage
+    property alias buttonFilePrint: buttonFilePrint
+    property alias buttonFileInfo: buttonFileInfo
+    property alias buttonFileDelete: buttonFileDelete
 
     PrintingDrawer {
         id: printingDrawer
@@ -17,37 +22,26 @@ Item {
 
     SwipeView {
         id: printSwipeView
+        currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         interactive: false
 
-        function swipeForward(itemToDisplayDefaultIndex){
-            swipeToItem(itemToDisplayDefaultIndex, true)
+        function swipeToItem(itemToDisplayDefaultIndex) {
+            var prevIndex = printSwipeView.currentIndex
+            printSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
+            setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
+            printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
+            printSwipeView.itemAt(prevIndex).visible = false
+            console.log(printSwipeView.currentItem.backSwiper + ", " + printSwipeView.currentItem.backSwipeIndex)
         }
 
-        function swipeBackward(itemToDisplayDefaultIndex){
-            swipeToItem(itemToDisplayDefaultIndex, false)
-        }
-
-        function swipeToItem(itemToDisplayDefaultIndex, moveforward) {
-            var nextIndex = moveforward ? printSwipeView.currentIndex+1 : printSwipeView.currentIndex-1
-            var i
-            for(i = 0; i < printSwipeView.count; ++i) {
-                if(printSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
-                    if(i !== 1)
-                        printSwipeView.moveItem(i, nextIndex)
-                    setCurrentItem(printSwipeView.itemAt(nextIndex))
-                    printSwipeView.setCurrentIndex(nextIndex)
-                    break
-                }
-            }
-        }
-
+        // printSwipeView.index = 0
         Item {
             id: itemPrintStorageOpt
-            property int defaultIndex: 0
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
+            visible: false
 
             Flickable {
                 id: flickableStorageOpt
@@ -55,6 +49,7 @@ Item {
                 interactive: true
                 anchors.fill: parent
                 contentHeight: columnStorageOpt.height
+                visible: (bot.process.type != 1)
 
                 Column {
                     id: columnStorageOpt
@@ -65,9 +60,9 @@ Item {
 
                     MoreporkButton {
                         id: buttonUsbStorage
-                        buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
+                        buttonText.text: "USB Storage"
                         onClicked: {
-                            printSwipeView.swipeForward(1)
+                            printSwipeView.swipeToItem(1)
                         }
                     }
 
@@ -75,32 +70,252 @@ Item {
 
                     MoreporkButton {
                         id: buttonInternalStorage
-                        buttonText.text: qsTr("Internal Storage") + cpUiTr.emptyStr
+                        buttonText.text: "Internal Storage"
                         onClicked: {
                             bot.updateInternalStorageFileList()
-                            printSwipeView.swipeForward(2)
+                            printSwipeView.swipeToItem(2)
                         }
                     }
+                }
+            }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+            SwipeView {
+                id: printingSwipeView
+                currentIndex: 0 // Should never be non zero
+                anchors.fill: parent
+                visible: (bot.process.type == 1)
 
-                    MoreporkButton {
-                        id: goToPrintIcon
-                        buttonText.text: qsTr("Print Icon Demo")
-                        onClicked: {
-                            printSwipeView.swipeForward(4)
+                Item {
+                    id: page0
+                    PrintIcon{
+                        x: 8
+                        y: 40
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: 8
+                    }
+
+                    Column {
+                        id: column0
+                        x: 373
+                        y: 180
+                        spacing: 10
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            id: textPrintState
+                            text: "PRINTING" //GETTING READY, PRINTING, PAUSED, PRINT COMPLETE
+                            font.family: "Antenna"
+                            font.letterSpacing: 3
+                            font.weight: Font.Normal
+                            font.pointSize: 25
+                            color: "#a0a0a0"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        Text {
+                            id: textFileName
+                            text: fileName
+                            font.family: "Antenna"
+                            font.letterSpacing: 3
+                            font.weight: Font.Light
+                            font.pointSize: 20
+                            color: "#a0a0a0"
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                        }
+
+                        Column {
+                            id: column1
+                            spacing: 10
+
+                            Text {
+                                id: textTimeRemaining
+                                text: bot.process.timeRemaining
+                                font.family: "Antenna"
+                                font.letterSpacing: 3
+                                font.weight: Font.Light
+                                font.pointSize: 20
+                                color: "#a0a0a0"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                            }
+
+                            Text {
+                                id: text0
+                                text: "HEATING UP..."
+                                visible: false
+                                font.family: "Antenna"
+                                font.letterSpacing: 3
+                                font.weight: Font.Light
+                                font.pointSize: 20
+                                color: "#a0a0a0"
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                            }
+
+                            Row {
+                                id: row0
+                                spacing: 15
+
+                                Text {
+                                    id: textExtACurrTemp
+                                    text: bot.extruderACurrentTemp + "°C"
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
+                                Item { width: 1; height: parent.height; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                                Text {
+                                    id: textExtATargTemp
+                                    text: bot.extruderATargetTemp + "°C"
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+                            }
+
+                            Row {
+                                id: row1
+                                spacing: 15
+
+                                Text {
+                                    id: textExtBCurrTemp
+                                    text: bot.extruderBCurrentTemp + "°C"
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
+                                Item { width: 1; height: parent.height; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                                Text {
+                                    id: textExtBTargTemp
+                                    text: bot.extruderBTargetTemp + "°C"
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+                            }
+
+                            Row {
+                                id: row2
+                                spacing: 15
+
+                                Text {
+                                    id: textChamberCurrTemp
+                                    text: bot.chamberCurrentTemp + "°C"
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+
+                                Item { width: 1; height: parent.height; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                                Text {
+                                    id: textChamberTargTemp
+                                    text: bot.chamberTargetTemp + "°C"
+                                    font.family: "Antenna"
+                                    font.letterSpacing: 3
+                                    font.weight: Font.Light
+                                    font.pointSize: 20
+                                    color: "#a0a0a0"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    elide: Text.ElideRight
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    id: page1
+
+                    Text {
+                        id: blankPageText
+                        text: "BLANK PAGE"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        font.family: "Antenna"
+                        font.letterSpacing: 3
+                        font.weight: Font.Light
+                        font.pointSize: 40
+                        color: "#a0a0a0"
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                    }
+                }
+            }
+
+            PageIndicator {
+                id: indicator
+                visible: (bot.process.type == 1)
+
+                count: printingSwipeView.count
+                currentIndex: printingSwipeView.currentIndex
+
+                anchors.bottom: printingSwipeView.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                delegate: Rectangle{
+                    implicitWidth: 8
+                    implicitHeight: 8
+
+                    radius: width / 2
+                    color: "#f0f0f0"
+
+                    opacity: index === indicator.currentIndex ? 1.00 : (pressed ? 0.75 : 0.50)
+
+                    Behavior on opacity {
+                        OpacityAnimator {
+                            duration: 100
                         }
                     }
                 }
             }
         }
 
+        // printSwipeView.index = 1
         Item {
             id: itemPrintUsbStorage
-            property int defaultIndex: 1
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
+            visible: false
 
             Flickable {
                 id: flickableUsbStorage
@@ -124,12 +339,13 @@ Item {
             }
         }
 
+        // printSwipeView.index = 2
         Item {
             id: itemPrintInternalStorage
-            property int defaultIndex: 2
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
+            visible: false
 
             ListView {
                 anchors.fill: parent
@@ -144,19 +360,20 @@ Item {
                     onClicked: {
                         if(buttonText.text !== "No Internal Files Found") {
                             fileName = buttonText.text
-                            printSwipeView.swipeForward(3)
+                            printSwipeView.swipeToItem(3)
                         }
                     }
                 }
             }
         }
 
+        // printSwipeView.index = 3
         Item {
             id: itemPrintFileOpt
-            property int defaultIndex: 3
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 2 // or 1 (both can use this Item theoretically)
+            property var backSwiper: bot.process.type == 1 ? mainSwipeView : printSwipeView
+            property int backSwipeIndex: bot.process.type == 1 ? 0 : 2 // or 1 (both can use this Item theoretically)
+            visible: false
 
             Flickable {
                 id: flickableFileOpt
@@ -174,9 +391,10 @@ Item {
 
                     MoreporkButton {
                         id: buttonFilePrint
-                        buttonText.text: qsTr("Print") + cpUiTr.emptyStr
+                        buttonText.text: "Print"
                         onClicked: {
                             bot.print(fileName)
+                            printSwipeView.swipeToItem(0)
                         }
                     }
 
@@ -184,7 +402,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonFileInfo
-                        buttonText.text: qsTr("Info") + cpUiTr.emptyStr
+                        buttonText.text: "Info"
                         onClicked: {
                         }
                     }
@@ -202,7 +420,7 @@ Item {
                         Item {
                             MoreporkButton {
                                 id: buttonFileDelete
-                                buttonText.text: qsTr("Delete") + cpUiTr.emptyStr
+                                buttonText.text: "Delete"
                                 onClicked: {
                                     printDeleteSwipeView.setCurrentIndex(1)
                                 }
@@ -216,7 +434,7 @@ Item {
                                     anchors.left: {}
                                     anchors.right: {}
                                     width: printDeleteSwipeView.width/3
-                                    buttonText.text: qsTr("For Real?") + cpUiTr.emptyStr
+                                    buttonText.text: "For Real?"
                                     buttonText.color: "#f0f0f0"
                                     enabled: false
                                 }
@@ -226,11 +444,11 @@ Item {
                                     anchors.left: {}
                                     anchors.right: {}
                                     width: printDeleteSwipeView.width/3
-                                    buttonText.text: qsTr("Yes") + cpUiTr.emptyStr
+                                    buttonText.text: "Yes"
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
-                                        printSwipeView.swipeForward(2)
+                                        printSwipeView.swipeToItem(2)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
                                 }
@@ -240,7 +458,7 @@ Item {
                                     anchors.left: {}
                                     anchors.right: {}
                                     width: printDeleteSwipeView.width/3
-                                    buttonText.text: qsTr("No") + cpUiTr.emptyStr
+                                    buttonText.text: "No"
                                     onClicked: {
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
@@ -249,22 +467,6 @@ Item {
                         }
                     }
                 }
-            }
-        }
-
-        Item {
-            id: itemPrintIconDemo
-            property int defaultIndex: 4
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 0
-
-            PrintIcon{
-                x: 8
-                y: 40
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: 8
             }
         }
     }

@@ -130,8 +130,40 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->sysInfoUpdate(info);
     dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
-        info["curent_process"]);
+        info["current_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
+
+    if(!info.empty()){
+      // Try to update extruder and chamber GUI values
+      const Json::Value & kToolheads = info["toolheads"];
+      if(kToolheads.isObject()){
+        const Json::Value & kExtruder = kToolheads["extruder"];
+        if(kExtruder.isArray() && kExtruder.size() >= 2){
+          const Json::Value & kExtruderA = kExtruder[0], // Right Extruder
+                            & kExtruderB = kExtruder[1]; // Left Extruder
+          if(kExtruderA.isObject()){
+            // Update GUI variables for extruder A temps
+            UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
+            UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
+          }
+          if(kExtruderB.isObject()){
+            // Update GUI variables for extruder B temps
+            UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
+            UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
+          }
+        }
+        const Json::Value & kChamber = kToolheads["chamber"];
+        if(kChamber.isArray() && kChamber.size() > 0){
+          const Json::Value & kChamberA = kChamber[0];
+          if(kChamberA.isObject()){
+            // Update GUI variables for chamber temps
+            UPDATE_INT_PROP(chamberCurrentTemp, kChamberA["current_temperature"])
+            UPDATE_INT_PROP(chamberTargetTemp, kChamberA["target_temperature"])
+          }
+        }
+      }
+    }
+
     // TODO(chris): This bit is a mess...
     const Json::Value & version_dict = info["firmware_version"];
     const Json::Value & version_major = version_dict["major"];

@@ -42,5 +42,14 @@
         } \
     }
 
+#define UPDATE_INT_PROP(PROP, JSON_VAL) \
+    { \
+        const Json::Value & json_val = JSON_VAL; \
+        if(json_val.isInt()) \
+            PROP ## Set(json_val.asInt()); \
+        else \
+            PROP ## Reset(); \
+    }
+
 #endif  // _SRC_IMPL_UTIL_H
 

@@ -14,8 +14,8 @@ Item {
     Image {
         id: image
         x: 38
-        width: 100
-        height: 100
+        width: 75
+        height: 75
         anchors.top: parent.top
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter

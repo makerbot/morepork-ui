@@ -32,7 +32,7 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_extruder
-        y: parent.height*0.10
+        y: parent.height*0.15
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"
@@ -62,7 +62,7 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_material
-        y: parent.height*0.50
+        y: parent.height*0.525
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
