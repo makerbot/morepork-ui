@@ -17,7 +17,7 @@ Item {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
-        image.visible: true
+        imageVisible: !(bot.process.type == 1)
         textIconDesc.text: "PRINT"
 
         PrintIcon{
@@ -26,7 +26,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             scale: 0.4
             actionButton: false
-            visible: !parent.image.visible
+            visible: !parent.imageVisible
         }
     }
 
