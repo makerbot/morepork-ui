@@ -19,11 +19,11 @@ Item {
 
     Item {
         id: itemNotificationIcons
-        width: 130
+        width: 100
         height: 40
         z: 2
         anchors.right: parent.right
-        anchors.rightMargin: 0
+        anchors.rightMargin: 3
 
         NotificationIconsForm
         {

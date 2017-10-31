@@ -2,29 +2,21 @@ import QtQuick 2.4
 
 Item {
     id: filament_item
-    width: 30
-    height: 30
+    width: 22
+    height: 22
     anchors.verticalCenter: parent.verticalCenter
 
     property int filamentColor
     property int filamentPercent
 
-    Image {
-        id: unknown_filament_image
-        anchors.fill: parent
-        source: "qrc:/img/unknown_filament.png"
-        visible: !filamentColor
-    }
-
     Rectangle {
         id: filament_circle
-        color: "#000000"
-        radius: 15
+        color: "#00000000"
+        radius: 11
         anchors.fill: parent
-        rotation: -90
         border.color: "#ffffff"
-        border.width: 2
-        visible: filamentColor
+        border.width: 1
+        visible: true
 
         property int fillPercent: filamentPercent
         property string fillColor:
@@ -58,8 +50,23 @@ Item {
         onFillPercentChanged: canvas.requestPaint()
         onFillColorChanged: canvas.requestPaint()
 
+        Text {
+            id: unknown_filament_text
+            color: "#ffffff"
+            text: "?"
+            anchors.verticalCenterOffset: 2
+            anchors.horizontalCenterOffset: 1
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.family: "Antenna"
+            font.weight: Font.Light
+            font.pixelSize: 18
+            visible: !filamentColor
+        }
+
         Canvas {
             id: canvas
+            rotation: -90
             anchors.fill: parent
             onPaint:
             {
@@ -72,10 +79,11 @@ Item {
                 context.beginPath();
                 context.fillStyle = parent.fillColor
                 context.moveTo(centreX, centreY);
-                context.arc(centreX, centreY, (parent.width-4) / 2, 0, (Math.PI*(2.0*parent.fillPercent/100)), false);
+                context.arc(centreX, centreY, (parent.width-2) / 2, 0, (Math.PI*(2.0*parent.fillPercent/100)), false);
                 context.lineTo(centreX, centreY);
                 context.fill();
             }
         }
+
     }
 }

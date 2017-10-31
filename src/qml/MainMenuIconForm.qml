@@ -9,6 +9,7 @@ Item {
     property alias mouseArea: mouseArea
     property alias image: image
     property alias textIconDesc: textIconDesc
+    property bool imageVisible: true
 
     Image {
         id: image
@@ -24,6 +25,7 @@ Item {
         Layout.fillWidth: false
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         source: "qrc:/qtquickplugin/images/template_image.png"
+        visible: imageVisible
     }
 
     Text {
