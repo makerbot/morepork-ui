@@ -32,7 +32,6 @@ Item {
             setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
             printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
             printSwipeView.itemAt(prevIndex).visible = false
-            console.log(printSwipeView.currentItem.backSwiper + ", " + printSwipeView.currentItem.backSwipeIndex)
         }
 
         // printSwipeView.index = 0
