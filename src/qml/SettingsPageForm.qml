@@ -13,31 +13,18 @@ Item {
         anchors.fill: parent
         interactive: false
 
-        function swipeForward(itemToDisplayDefaultIndex){
-            swipeToItem(itemToDisplayDefaultIndex, true)
+        function swipeToItem(itemToDisplayDefaultIndex) {
+            var prevIndex = printSwipeView.currentIndex
+            printSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
+            setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
+            printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
+            printSwipeView.itemAt(prevIndex).visible = false
+            console.log(printSwipeView.currentItem.backSwiper + ", " + printSwipeView.currentItem.backSwipeIndex)
         }
 
-        function swipeBackward(itemToDisplayDefaultIndex){
-            swipeToItem(itemToDisplayDefaultIndex, false)
-        }
-
-        function swipeToItem(itemToDisplayDefaultIndex, moveforward) {
-            var nextIndex = moveforward ? settingsSwipeView.currentIndex+1 : settingsSwipeView.currentIndex-1
-            var i
-            for(i = 0; i < settingsSwipeView.count; ++i) {
-                if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
-                    if(i !== nextIndex)
-                        settingsSwipeView.moveItem(i, nextIndex)
-                    setCurrentItem(settingsSwipeView.itemAt(nextIndex))
-                    settingsSwipeView.setCurrentIndex(nextIndex)
-                    break
-                }
-            }
-        }
-
+        // settingsSwipeView.index = 0
         Item {
             id: itemSettings
-            property int defaultIndex: 0
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
@@ -67,8 +54,8 @@ Item {
             }
         }
 
+        // settingsSwipeView.index = 1
         Item {
-            property int defaultIndex: 1
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
