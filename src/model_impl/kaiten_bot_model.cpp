@@ -143,21 +143,13 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                             & kExtruderB = kExtruder[1]; // Left Extruder
           if(kExtruderA.isObject()){
             // Update GUI variables for extruder A temps
-            const Json::Value & kExtACurrTemp = kExtruderA["current_temperature"];
-            if(kExtACurrTemp.isInt())
-                extruderACurrentTempSet(kExtACurrTemp.asInt());
-            const Json::Value & kExtATargTemp = kExtruderA["target_temperature"];
-            if(kExtATargTemp.isInt())
-                extruderATargetTempSet(kExtATargTemp.asInt());
+            UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
+            UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
           }
           if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
-            const Json::Value & kExtBCurrTemp = kExtruderB["current_temperature"];
-            if(kExtBCurrTemp.isInt())
-                extruderBCurrentTempSet(kExtBCurrTemp.asInt());
-            const Json::Value & kExtBTargTemp = kExtruderB["target_temperature"];
-            if(kExtBTargTemp.isInt())
-                extruderBTargetTempSet(kExtBTargTemp.asInt());
+            UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
+            UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
           }
         }
         const Json::Value & kChamber = kToolheads["chamber"];
@@ -165,12 +157,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           const Json::Value & kChamberA = kChamber[0];
           if(kChamberA.isObject()){
             // Update GUI variables for chamber temps
-            const Json::Value & kChamberCurrTemp = kChamberA["current_temperature"];
-            if(kChamberCurrTemp.isInt())
-                chamberCurrentTempSet(kChamberCurrTemp.asInt());
-            const Json::Value & kChamberTargTemp = kChamberA["target_temperature"];
-            if(kChamberTargTemp.isInt())
-                chamberTargetTempSet(kChamberTargTemp.asInt());
+            UPDATE_INT_PROP(chamberCurrentTemp, kChamberA["current_temperature"])
+            UPDATE_INT_PROP(chamberTargetTemp, kChamberA["target_temperature"])
           }
         }
       }
