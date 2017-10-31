@@ -37,6 +37,7 @@ ApplicationWindow {
 
             onBackClicked: {
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex, false)
+                currentItem.backSwiperTest.setCurrentIndex(0)
             }
         }
 

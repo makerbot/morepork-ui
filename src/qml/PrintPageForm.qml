@@ -39,7 +39,7 @@ Item {
             var i
             for(i = 0; i < printSwipeView.count; ++i) {
                 if(printSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
-                    if(i !== 1)
+                    if(i !== nextIndex)
                         printSwipeView.moveItem(i, nextIndex)
                     setCurrentItem(printSwipeView.itemAt(nextIndex))
                     printSwipeView.setCurrentIndex(nextIndex)
@@ -61,7 +61,7 @@ Item {
                 interactive: true
                 anchors.fill: parent
                 contentHeight: columnStorageOpt.height
-                visible: (bot.process.type != 1)
+                //visible: (bot.process.type != 1)
 
                 Column {
                     id: columnStorageOpt
@@ -86,6 +86,167 @@ Item {
                         onClicked: {
                             bot.updateInternalStorageFileList()
                             printSwipeView.swipeForward(2)
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            id: itemPrintUsbStorage
+            property int defaultIndex: 1
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 0
+
+            Flickable {
+                id: flickableUsbStorage
+                flickableDirection: Flickable.VerticalFlick
+                interactive: true
+                anchors.fill: parent
+                contentHeight: columnUsbStorage.height
+
+                Column {
+                    id: columnUsbStorage
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    spacing: 0
+
+                    MoreporkButton {
+                        id: buttonNotImplemented1
+                        buttonText.text: "Not Implemented"
+                    }
+                }
+            }
+        }
+
+        Item {
+            id: itemPrintInternalStorage
+            property int defaultIndex: 2
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 0
+
+            ListView {
+                anchors.fill: parent
+                boundsBehavior: Flickable.DragOverBounds
+                spacing: 1
+                orientation: ListView.Vertical
+                flickableDirection: Flickable.VerticalFlick
+
+                model: bot.internalStorageFileList
+                delegate: MoreporkButton {
+                    buttonText.text: modelData
+                    onClicked: {
+                        if(buttonText.text !== "No Internal Files Found") {
+                            fileName = buttonText.text
+                            printSwipeView.swipeForward(3)
+                        }
+                    }
+                }
+            }
+        }
+
+        Item {
+            id: itemPrintFileOpt
+            property int defaultIndex: 3
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: bot.process.type == 1 ? mainSwipeView : printSwipeView
+            property int backSwipeIndex: bot.process.type == 1 ? 0 : 2 // or 1 (both can use this Item theoretically)
+            property var backSwiperTest: printSwipeView
+            property int backSwipeIndexTest: 0 // or 1 (both can use this Item theoretically)
+
+            Flickable {
+                id: flickableFileOpt
+                flickableDirection: Flickable.VerticalFlick
+                interactive: true
+                anchors.fill: parent
+                contentHeight: columnStorageOpt.height
+                visible: (bot.process.type != 1)
+
+                Column {
+                    id: columnFilePrintOpt
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    spacing: 0
+
+                    MoreporkButton {
+                        id: buttonFilePrint
+                        buttonText.text: "Print"
+                        onClicked: {
+                            bot.print(fileName)
+                            //printSwipeView.swipeBackward(0)
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonFileInfo
+                        buttonText.text: "Info"
+                        onClicked: {
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+
+
+                    SwipeView {
+                        id: printDeleteSwipeView
+                        height: buttonFileInfo.height
+                        anchors.right: parent.right
+                        anchors.left: parent.left
+                        interactive: false
+
+                        Item {
+                            MoreporkButton {
+                                id: buttonFileDelete
+                                buttonText.text: "Delete"
+                                onClicked: {
+                                    printDeleteSwipeView.setCurrentIndex(1)
+                                }
+                            }
+                        }
+
+                        Item{
+                            Row{
+                                MoreporkButton {
+                                    id: buttonConfirmDelete
+                                    anchors.left: {}
+                                    anchors.right: {}
+                                    width: printDeleteSwipeView.width/3
+                                    buttonText.text: "For Real?"
+                                    buttonText.color: "#f0f0f0"
+                                    enabled: false
+                                }
+
+                                MoreporkButton {
+                                    id: buttonDeleteYes
+                                    anchors.left: {}
+                                    anchors.right: {}
+                                    width: printDeleteSwipeView.width/3
+                                    buttonText.text: "Yes"
+                                    onClicked: {
+                                        bot.deletePrintFile(fileName)
+                                        bot.updateInternalStorageFileList()
+                                        printSwipeView.swipeForward(2)
+                                        printDeleteSwipeView.setCurrentIndex(0)
+                                    }
+                                }
+
+                                MoreporkButton {
+                                    id: buttonDeleteNo
+                                    anchors.left: {}
+                                    anchors.right: {}
+                                    width: printDeleteSwipeView.width/3
+                                    buttonText.text: "No"
+                                    onClicked: {
+                                        printDeleteSwipeView.setCurrentIndex(0)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -315,164 +476,6 @@ Item {
                     Behavior on opacity {
                         OpacityAnimator {
                             duration: 100
-                        }
-                    }
-                }
-            }
-        }
-
-        Item {
-            id: itemPrintUsbStorage
-            property int defaultIndex: 1
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 0
-
-            Flickable {
-                id: flickableUsbStorage
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
-                contentHeight: columnUsbStorage.height
-
-                Column {
-                    id: columnUsbStorage
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 0
-
-                    MoreporkButton {
-                        id: buttonNotImplemented1
-                        buttonText.text: "Not Implemented"
-                    }
-                }
-            }
-        }
-
-        Item {
-            id: itemPrintInternalStorage
-            property int defaultIndex: 2
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 0
-
-            ListView {
-                anchors.fill: parent
-                boundsBehavior: Flickable.DragOverBounds
-                spacing: 1
-                orientation: ListView.Vertical
-                flickableDirection: Flickable.VerticalFlick
-
-                model: bot.internalStorageFileList
-                delegate: MoreporkButton {
-                    buttonText.text: modelData
-                    onClicked: {
-                        if(buttonText.text !== "No Internal Files Found") {
-                            fileName = buttonText.text
-                            printSwipeView.swipeForward(3)
-                        }
-                    }
-                }
-            }
-        }
-
-        Item {
-            id: itemPrintFileOpt
-            property int defaultIndex: 3
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 2 // or 1 (both can use this Item theoretically)
-
-            Flickable {
-                id: flickableFileOpt
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
-                contentHeight: columnStorageOpt.height
-
-                Column {
-                    id: columnFilePrintOpt
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 0
-
-                    MoreporkButton {
-                        id: buttonFilePrint
-                        buttonText.text: "Print"
-                        onClicked: {
-                            bot.print(fileName)
-                            printSwipeView.swipeBackward(0)
-                        }
-                    }
-
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
-
-                    MoreporkButton {
-                        id: buttonFileInfo
-                        buttonText.text: "Info"
-                        onClicked: {
-                        }
-                    }
-
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
-
-
-                    SwipeView {
-                        id: printDeleteSwipeView
-                        height: buttonFileInfo.height
-                        anchors.right: parent.right
-                        anchors.left: parent.left
-                        interactive: false
-
-                        Item {
-                            MoreporkButton {
-                                id: buttonFileDelete
-                                buttonText.text: "Delete"
-                                onClicked: {
-                                    printDeleteSwipeView.setCurrentIndex(1)
-                                }
-                            }
-                        }
-
-                        Item{
-                            Row{
-                                MoreporkButton {
-                                    id: buttonConfirmDelete
-                                    anchors.left: {}
-                                    anchors.right: {}
-                                    width: printDeleteSwipeView.width/3
-                                    buttonText.text: "For Real?"
-                                    buttonText.color: "#f0f0f0"
-                                    enabled: false
-                                }
-
-                                MoreporkButton {
-                                    id: buttonDeleteYes
-                                    anchors.left: {}
-                                    anchors.right: {}
-                                    width: printDeleteSwipeView.width/3
-                                    buttonText.text: "Yes"
-                                    onClicked: {
-                                        bot.deletePrintFile(fileName)
-                                        bot.updateInternalStorageFileList()
-                                        printSwipeView.swipeForward(2)
-                                        printDeleteSwipeView.setCurrentIndex(0)
-                                    }
-                                }
-
-                                MoreporkButton {
-                                    id: buttonDeleteNo
-                                    anchors.left: {}
-                                    anchors.right: {}
-                                    width: printDeleteSwipeView.width/3
-                                    buttonText.text: "No"
-                                    onClicked: {
-                                        printDeleteSwipeView.setCurrentIndex(0)
-                                    }
-                                }
-                            }
                         }
                     }
                 }

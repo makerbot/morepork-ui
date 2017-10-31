@@ -1,16 +1,17 @@
 // Copyright 2015 MakerBot Industries
 
 #include "gui_helpers.h"
+#include <cmath>
 
 namespace guihelpers {
 
 const QString durationString(unsigned int seconds, bool noSecondsIfZero) {
     QString ss;
     if (seconds >= 3600)
-        ss += QString::number(floor(seconds / 3600)) + QString("hr ");
+        ss += QString::number(std::floor(seconds / 3600)) + QString("hr ");
     seconds %= 3600;
     if (seconds >= 60)
-        ss += QString::number(floor(seconds / 60)) + QString("m ");
+        ss += QString::number(std::floor(seconds / 60)) + QString("m ");
     seconds %= 60;
     if (!(seconds == 0 && noSecondsIfZero))
         ss += QString::number(seconds) + QString("s");
@@ -63,12 +64,12 @@ const QString duration(unsigned int seconds, bool showSeconds) {
 const QString ago(unsigned int seconds) {
     QString ss;
     if (seconds >= 86400) {
-        ss += pluralize(floor(seconds / 86400), QString("day"));
+        ss += pluralize(std::floor(seconds / 86400), QString("day"));
     }
     else if (seconds >= 3600) {
-        ss += pluralize(floor(seconds / 3600), QString("hour"));
+        ss += pluralize(std::floor(seconds / 3600), QString("hour"));
     } else if (seconds >= 60) {
-        ss += pluralize(floor(seconds / 60), QString("min"));
+        ss += pluralize(std::floor(seconds / 60), QString("min"));
     } else {
         ss += pluralize(seconds, QString("sec"));
     }

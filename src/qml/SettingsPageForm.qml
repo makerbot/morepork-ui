@@ -26,7 +26,7 @@ Item {
             var i
             for(i = 0; i < settingsSwipeView.count; ++i) {
                 if(settingsSwipeView.itemAt(i).defaultIndex === itemToDisplayDefaultIndex) {
-                    if(i !== 1)
+                    if(i !== nextIndex)
                         settingsSwipeView.moveItem(i, nextIndex)
                     setCurrentItem(settingsSwipeView.itemAt(nextIndex))
                     settingsSwipeView.setCurrentIndex(nextIndex)
