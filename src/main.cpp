@@ -23,9 +23,15 @@
 #define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/MoreporkUI.qml"
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
 #endif
+#include "parsed_qml_enums.h"
+
 
 int main(int argc, char ** argv) {
     QGuiApplication qapp(argc, argv);
+
+    // This includes objects of classes defined in parsed_qml_enums.h
+    // so QML can use cpp defined enumerations with namespaces
+    QML_ENUM_OBJECTS
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
     QDirIterator it(MOREPORK_ROOT_DIR "/fonts");

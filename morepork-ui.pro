@@ -1,5 +1,7 @@
 TEMPLATE = app
 
+system(cd $$_PRO_FILE_PWD_/src; g++ -v -std=gnu++11 enum_parser.cpp -o enum_parser -lstdc++fs; ./enum_parser .)
+
 QT += core quick multimedia
 CONFIG += c++11
 
@@ -33,3 +35,4 @@ DEFINES += MOREPORK_UI_QT_CREATOR_BUILD
 DEFINES += QT_NO_DEBUG_OUTPUT
 
 DEFINES += MOREPORK_ROOT_DIR=\\\"$$_PRO_FILE_PWD_\\\"
+ bot.process.EnumMap.ProcessType.Print

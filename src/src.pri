@@ -15,5 +15,6 @@ HEADERS += \
     src/model/net_model.h \
     src/model/process_model.h \
     src/model/bot_model.h \
-    src/ui_translator.h
+    src/ui_translator.h \
+    src/parsed_qml_enums.h
 
