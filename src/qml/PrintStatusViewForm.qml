@@ -10,75 +10,85 @@ Item {
 //    property date timeRemaining: Date.fromLocaleTimeString(locale, bot.process.timeRemaining, "hh:mm:ss")
     property string printerName: bot.name
     property string fileName_
-    property string done_by_text: ""
+    property int daysLeft
+    property var startTime: new Date()
+    property var endTime: new Date()
 
     function getTimeLeftDateFormat()
     {
         var timeLeft_ = bot.process.timeRemaining
-        var timeLeft = timeLeft_.split(":", 2)
-        var hours = 0, minutes = 0
+        var timeLeft = timeLeft_.split(":", 3)
 //        while(timeLeft[0] > 23)
 //        {
 //            days++
 //            timeLeft[0] = timeLeft[0] - 24
 //        }
-        hours = timeLeft[0]
-        minutes = timeLeft[1]
+        var hours = timeLeft[0]
+        var minutes = timeLeft[1]
+        var seconds = timeLeft[2]
 
         timeLeft = new Date("", "", "", parseInt(hours, 10), parseInt(minutes, 10))
-
-//        var endTime = new Date()
-//        var endMS = endTime.getTime() + (hours * 60 * 60 * 1000) + (minutes * 60 * 1000)
-//        endTime.setTime(endMS)
-//        console.log(endTime.getDate())
-//        console.log(endTime.getHours())
-//        console.log(endTime.getMinutes())
+        getEndTime()
         return timeLeft
     }
 
-    function getEndTimeDateFormat()
+    function getEndTime()
     {
+        var timeLeft_ = bot.process.timeRemaining
+        var timeLeft = timeLeft_.split(":", 3)
+        var hours = timeLeft[0]
+        var minutes = timeLeft[1]
+        var seconds = timeLeft[2]
         var currentTime = new Date()
-        var days = getTimeLeftDateFormat().getDate()
-        var hours = getTimeLeftDateFormat().getHours()
-        var minutes = getTimeLeftDateFormat().getMinutes()
-        if(days == 31) days = 0
-        if((currentTime.getMinutes() + minutes) > 59)
-        {
-            hours++
-            minutes = minutes % 60
-        }
-        if((currentTime.getHours() + hours) > 23)
-        {
-            days++
-            hours = hours % 24
-        }
-        var endDay = currentTime.getDate() + parseInt(days, 10)
-        var endHour = currentTime.getHours() + parseInt(hours, 10)
-        endHour = endHour % 12
-        var endMinutes = currentTime.getMinutes() + parseInt(minutes, 10)
+        var endMS = currentTime.getTime() + hours*60*60*1000 + minutes*60*1000 + seconds*1000
+        endTime.setTime(endMS)
 
-        var endTime = new Date(currentTime.getFullYear(),
-                               currentTime.getMonth(),
-                               endDay,
-                               endHour,
-                               endMinutes)
-
-        var daysLeft = endTime.getDate() - currentTime.getDate()
-        if(daysLeft == 0)
-        {
-            done_by_text = "DONE TODAY BY"
-        }
-        else if(daysLeft == 1)
-        {
-            done_by_text = "DONE TOMMORROW BY"
-        }
-        else
-        {
-            done_by_text = "DONE IN " + daysLeft + " DAYS BY"
-        }
-        return endTime
+        daysLeft = endTime.getDate() - startTime.getDate()
     }
+
+//    function getEndTimeDateFormat()
+//    {
+//        var currentTime = new Date()
+//        var days = getTimeLeftDateFormat().getDate()
+//        var hours = getTimeLeftDateFormat().getHours()
+//        var minutes = getTimeLeftDateFormat().getMinutes()
+//        if(days == 31) days = 0
+//        if((currentTime.getMinutes() + minutes) > 59)
+//        {
+//            hours++
+//            minutes = minutes % 60
+//        }
+//        if((currentTime.getHours() + hours) > 23)
+//        {
+//            days++
+//            hours = hours % 24
+//        }
+//        var endDay = currentTime.getDate() + parseInt(days, 10)
+//        var endHour = currentTime.getHours() + parseInt(hours, 10)
+//        endHour = endHour % 12
+//        var endMinutes = currentTime.getMinutes() + parseInt(minutes, 10)
+
+//        var endTime = new Date(currentTime.getFullYear(),
+//                               currentTime.getMonth(),
+//                               endDay,
+//                               endHour,
+//                               endMinutes)
+
+//        var daysLeft = endTime.getDate() - currentTime.getDate()
+//        if(daysLeft == 0)
+//        {
+//            done_by_text = "DONE TODAY BY"
+//        }
+//        else if(daysLeft == 1)
+//        {
+//            done_by_text = "DONE TOMMORROW BY"
+//        }
+//        else
+//        {
+//            done_by_text = "DONE IN " + daysLeft + " DAYS BY"
+//        }
+//        return endTime
+//    }
 
     Rectangle {
         id: rectangle
@@ -563,7 +573,18 @@ Item {
                     color: "#cbcbcb"
                     text:
                     {
-                       done_by_text
+                        if(daysLeft == 0)
+                        {
+                            "DONE TODAY BY"
+                        }
+                        else if(daysLeft == 1)
+                        {
+                            "DONE TOMMORROW BY"
+                        }
+                        else
+                        {
+                            "DONE IN " + daysLeft + " DAYS BY"
+                        }
                     }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antenna"
@@ -575,7 +596,7 @@ Item {
                 Text {
                     id: end_time_text
                     color: "#ffffff"
-                    text: getEndTimeDateFormat().getHours() + ":" + getEndTimeDateFormat().getMinutes()
+                    text: endTime.getHours() + ":" + endTime.getMinutes()
                     font.pixelSize: 145
                     font.family: "Antenna"
                     font.weight: Font.Light
@@ -665,7 +686,18 @@ Item {
                     color: "#cbcbcb"
                     text:
                     {
-                        done_by_text
+                        if(daysLeft == 0)
+                        {
+                            "DONE TODAY BY"
+                        }
+                        else if(daysLeft == 1)
+                        {
+                            "DONE TOMMORROW BY"
+                        }
+                        else
+                        {
+                            "DONE IN " + daysLeft + " DAYS BY"
+                        }
                     }
                     font.pixelSize: 18
                     font.family: "Antenna"
@@ -675,7 +707,7 @@ Item {
                     Text {
                         id: end_time_text4
                         color: "#ffffff"
-                        text: getEndTimeDateFormat().getHours() + ":" + getEndTimeDateFormat().getMinutes()
+                        text: endTime.getHours() + ":" + endTime.getMinutes()
                         anchors.right: parent.right
                         anchors.rightMargin: -124
                         font.pixelSize: 18
