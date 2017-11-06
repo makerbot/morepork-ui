@@ -4,7 +4,6 @@ find_package(JsonRpc REQUIRED)
 
 # Build root installs the qt5 cmake configs to staging
 # so this just magically works.
-#set(CMAKE_AUTOMOC ON)
 find_package(Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
 find_package(Qt5LinguistTools)
 
