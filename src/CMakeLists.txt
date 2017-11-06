@@ -16,7 +16,7 @@ if(UNIX AND NOT APPLE)
         COMMAND g++
         ARGS -v -std=gnu++11 "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp"
             -o "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser"
-            -lboost_filesystem -lboost_system
+            -lboost_filesystem -lboost_system -lboost_regex
         COMMENT "Compiling enum parser"
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp)
 else()

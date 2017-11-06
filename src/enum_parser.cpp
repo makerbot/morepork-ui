@@ -1,9 +1,9 @@
 // Copyright 2017 Makerbot Industries
 
 #include <iostream>
-#include <regex>
 #include <fstream>
 #include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 
 namespace bfs = boost::filesystem;
 
@@ -52,24 +52,24 @@ int main(int argc, char *argv[]){
       std::string enum_tag("MOREPORK_QML_ENUM");
       std::string regex_patter_str = enum_tag +
           "[\r\n ]+enum[ a-zA-Z0-9]+\\{[\r\n a-zA-Z,]+\\};";
-      std::regex reg(regex_patter_str);
+      boost::regex reg(regex_patter_str);
 
-      std::smatch str_match_results;
+      boost::smatch str_match_results;
       std::vector<std::string> enum_match_vec;
-      while(std::regex_search(entire_file_str, str_match_results, reg)){
+      while(boost::regex_search(entire_file_str, str_match_results, reg)){
         enum_match_vec.push_back(str_match_results.str());
         entire_file_str = str_match_results.suffix();
       }
       //std::cout << "Found " << enum_match_vec.size() << " enumerations\n";
 
       regex_patter_str = "enum[ a-zA-Z0-9]+\\{";
-      reg = std::regex(regex_patter_str);
+      reg = boost::regex(regex_patter_str);
       std::string enum_tag_return = enum_tag + "\n";
       for(std::string &str : enum_match_vec){
         //std::cout << str << std::endl;
         FindReplaceSubstring(str, enum_tag_return);
         FindReplaceSubstring(str, enum_tag);
-        if(std::regex_search(str, str_match_results, reg)){
+        if(boost::regex_search(str, str_match_results, reg)){
           std::string match_str = str_match_results.str();
           FindReplaceSubstring(match_str, "enum");
           RemoveNonAlphaNumeric(match_str);

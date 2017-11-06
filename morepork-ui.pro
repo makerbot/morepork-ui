@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-system(cd $$_PRO_FILE_PWD_/src; g++ -v -std=gnu++11 enum_parser.cpp -o enum_parser -lboost_filesystem -lboost_system; ./enum_parser .)
+system(cd $$_PRO_FILE_PWD_/src; g++ -v -std=gnu++11 enum_parser.cpp -o enum_parser -lboost_filesystem -lboost_system -lboost_regex; ./enum_parser .)
 
 QT += core quick multimedia
 CONFIG += c++11
