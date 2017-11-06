@@ -1,7 +1,13 @@
-find_package(MBCoreUtils REQUIRED)
-find_package(JsonCpp REQUIRED)
-find_package(JsonRpc REQUIRED)
-find_package(Boost COMPONENTS filesystem system REQUIRED)
+if(${QT_CREATOR_BUILD})
+    add_definitions(-DMOREPORK_UI_QT_CREATOR_BUILD)
+    add_definitions(-DMOREPORK_ROOT_DIR="${MoreporkUI_SOURCE_DIR}")
+    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
+endif()
+
+if(NOT ${QT_CREATOR_BUILD})
+    find_package(JsonCpp REQUIRED)
+    find_package(JsonRpc REQUIRED)
+endif()
 
 # Build root installs the qt5 cmake configs to staging
 # so this just magically works.
@@ -9,29 +15,24 @@ find_package(Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
 find_package(Qt5LinguistTools)
 
 # Manually build the enum_parser.
-# TODO: make a CMakeLists.txt for this to have proper cross compiling
-if(UNIX AND NOT APPLE)
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
-        COMMAND g++
-        ARGS -v -std=gnu++11 "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp"
-            -o "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser"
-            -lboost_filesystem -lboost_system -lboost_regex
-        COMMENT "Compiling enum parser"
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp)
-else()
-    message(FATAL "execute_process() for enum_parser not setup for this OS")
-endif()
-
-# Parse src.pri to find the sources to compile
-# This only builds on linux so we can just assume python is on the path
-set_property(
-    DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS parse_pri.py src.pri)
-execute_process(COMMAND python "${CMAKE_CURRENT_SOURCE_DIR}/parse_pri.py"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src.pri" -d src -v SOURCES
-    OUTPUT_VARIABLE SOURCES OUTPUT_STRIP_TRAILING_WHITESPACE)
+include_directories(enum_parser)
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/build/enum_parser
+    COMMAND mkdir build && cd build && cmake .. && make
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
+    COMMENT "Compiling enum parser"
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/enum_parser.cpp)
 
 # Model impl sources aren't built for Qt creator so they just live here
+set(SOURCES
+    main.cpp
+    model/base_model.cpp
+    model/bot_model.cpp
+    model/net_model.cpp
+    model/process_model.cpp
+    gui_helpers.cpp)
+
+# These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
     model_impl/kaiten_net_model.cpp
     model_impl/kaiten_process_model.cpp
@@ -40,21 +41,27 @@ set(MODEL_IMPL_SOURCES
 
 # automoc cannot be reliably used when it relies
 # on a dynamic header (ie. enum_parser)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} model model_impl)
 set(MOREPORK_UI_HEADERS
     ui_translator.h
     model/base_model.h
     model/bot_model.h
     model/net_model.h
-    model/process_model.h
-    model_impl/local_jsonrpc.h)
+    model/process_model.h)
 
+if(NOT ${QT_CREATOR_BUILD})
+    list(APPEND SOURCES ${MODEL_IMPL_SOURCES})
+    list(APPEND MOREPORK_UI_HEADERS model_impl/local_jsonrpc.h)
+endif()
+
+# Call the enum parser if MOREPORK_UI_HEADERS or enum_parser executable changes
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h
-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/build/enum_parser
     ARGS ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Executing enum_parser to generate parsed_qml_enums.h"
-    DEPENDS ${MOREPORK_UI_HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser)
+    DEPENDS ${MOREPORK_UI_HEADERS}
+            ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/build/enum_parser)
 set_property(SOURCE main.cpp
     APPEND PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h)
@@ -66,35 +73,46 @@ qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC ${MOREPORK_UI_HEADERS} parsed_qml_enums.h)
 file(GLOB TS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_SOURCES})
 
-qt5_add_resources(MOREPROK_UI_RESOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/qml/media.qrc")
+qt5_add_resources(MOREPROK_UI_RESOURCES qml/media.qrc qml/qml.qrc)
+
+# Take care of host code
+if(${QT_CREATOR_BUILD})
+    include_directories(host)
+    qt5_add_resources(MOREPROK_HOST_UI_RESOURCES host/host.qrc)
+    list(APPEND MOREPROK_UI_RESOURCES ${MOREPROK_HOST_UI_RESOURCES})
+    list(APPEND SOURCES host/host_model.cpp)
+endif()
 
 add_executable(morepork_ui
     ${SOURCES}
-    ${MODEL_IMPL_SOURCES}
     ${MOREPROK_UI_RESOURCES}
     ${QM_FILES}
     ${MOREPORK_UI_HEADERS_MOC})
 target_link_libraries(morepork_ui
     Qt5::Core
     Qt5::Quick
-    Qt5::Multimedia
-    JsonRpc::jsonrpc)
+    Qt5::Multimedia)
+if(NOT ${QT_CREATOR_BUILD})
+    target_link_libraries(morepork_ui JsonRpc::jsonrpc)
+endif()
 
-# The qt5 cmake configs point to a copy of the qt5 libraries that live
-# in staging, but all of the libraries that qt5 depends on still only
-# live in rootfs.  Luckily there is an obscure linker option for this
-# exact problem.
-set_target_properties(morepork_ui PROPERTIES
-    LINK_FLAGS "-Wl,-rpath-link=${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
+if(NOT ${QT_CREATOR_BUILD})
+    # The qt5 cmake configs point to a copy of the qt5 libraries that live
+    # in staging, but all of the libraries that qt5 depends on still only
+    # live in rootfs.  Luckily there is an obscure linker option for this
+    # exact problem.
+    set_target_properties(morepork_ui PROPERTIES
+        LINK_FLAGS "-Wl,-rpath-link=${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
 
-install(TARGETS morepork_ui DESTINATION ${BIN_INSTALL_DIR})
+    install(TARGETS morepork_ui DESTINATION ${BIN_INSTALL_DIR})
 
-install(DIRECTORY "${MoreporkUI_SOURCE_DIR}/fonts" DESTINATION
-    "${ROOT_INSTALL_DIR}/usr/lib")
+    install(DIRECTORY "${MoreporkUI_SOURCE_DIR}/fonts" DESTINATION
+        "${ROOT_INSTALL_DIR}/usr/lib")
 
-install(FILES ${QM_FILES}
-    DESTINATION "${ROOT_INSTALL_DIR}/usr/share/morepork_ui/translations")
+    install(FILES ${QM_FILES}
+        DESTINATION "${ROOT_INSTALL_DIR}/usr/share/morepork_ui/translations")
+endif()
 
+# Read qml qrc file, parse out all qml file names, and install them
 add_subdirectory(qml)
 

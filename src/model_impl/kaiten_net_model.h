@@ -4,7 +4,7 @@
 #define _SRC_KAITEN_NET_MODEL_H
 
 #include <jsoncpp/json/value.h>
-#include "../model/net_model.h"
+#include "model/net_model.h"
 
 class KaitenNetModel : public NetModel {
   public:

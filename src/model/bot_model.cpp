@@ -3,7 +3,7 @@
 #include <QDirIterator>
 #include <QList>
 #include "bot_model.h"
-#include "../error_utils.h"
+#include "error_utils.h"
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path

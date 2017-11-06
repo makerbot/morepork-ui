@@ -4,7 +4,7 @@
 #define _SRC_KAITEN_PROCESS_MODEL_H
 
 #include <jsoncpp/json/value.h>
-#include "../model/process_model.h"
+#include "model/process_model.h"
 
 class KaitenProcessModel : public ProcessModel {
   public:

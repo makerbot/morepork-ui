@@ -9,7 +9,6 @@ foreach(src_elem IN LISTS src_elems)
     string(STRIP "${src_elem}" src_elem_strip)
     string(REGEX REPLACE "<[^>]*>" "" src "${src_elem_strip}")
     list(APPEND sources "${src}")
-    message(STATUS "${src}")
 endforeach()
 
 set(RESOURCE_INSTALL_DIR "${ROOT_INSTALL_DIR}/usr/share/morepork_ui")

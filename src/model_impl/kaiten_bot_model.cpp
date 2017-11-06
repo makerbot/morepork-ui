@@ -9,7 +9,7 @@
 #include "kaiten_net_model.h"
 #include "kaiten_process_model.h"
 #include "local_jsonrpc.h"
-#include "../error_utils.h"
+#include "error_utils.h"
 
 
 class KaitenBotModel : public BotModel {

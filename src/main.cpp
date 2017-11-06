@@ -15,7 +15,7 @@
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QFontDatabase>
-#include "../host/host_model.h"
+#include "host/host_model.h"
 #define MOREPORK_UI_QML_MAIN QUrl("qrc:/host/host_main.qml")
 #define MOREPORK_BOT_MODEL makeHostBotModel()
 #else
