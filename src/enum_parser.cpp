@@ -75,18 +75,19 @@ int main(int argc, char *argv[]){
           RemoveNonAlphaNumeric(match_str);
           std::string &enum_name = match_str;
           enum_name_vec.push_back(enum_name);
-          std::string enum_class =
-          std::string("class ") + enum_name + "Class : public QObject {\n" +
-          "  Q_OBJECT\n" +
-          "  public:\n" +
-          str + "\n" +
-          "    Q_ENUM(" + enum_name + ")\n" +
-          "    " + enum_name + "Class() {\n" +
-          "      qmlRegisterType<" + enum_name + "Class>(\"" + enum_name +
-                 "Enum\", 1, 0, \"" + enum_name + "\");\n" +
-          "    }\n" +
+          std::stringstream enum_class("class ", std::ios_base::app |
+                                                 std::ios_base::out);
+          enum_class << enum_name << "Class : public QObject {\n" <<
+          "  Q_OBJECT\n" <<
+          "  public:\n" <<
+          str << "\n" <<
+          "    Q_ENUM(" << enum_name << ")\n" <<
+          "    " << enum_name << "Class() {\n" <<
+          "      qmlRegisterType<" << enum_name << "Class>(\"" << enum_name <<
+                 "Enum\", 1, 0, \"" << enum_name << "\");\n" <<
+          "    }\n" <<
           "};\n\n";
-          parsed_enum_file << enum_class;
+          parsed_enum_file << enum_class.str();
         }
       }
     }
