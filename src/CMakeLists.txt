@@ -10,12 +10,14 @@ find_package(Qt5LinguistTools)
 
 # Manually build the enum_parser.
 # TODO: make a CMakeLists.txt for this to have proper cross compiling
-if(UNIX AND NOT APPLE)
-execute_process(COMMAND g++ -v -std=gnu++11
-    "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp" -o
-    "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser" -lstdc++fs)
-else()
-    message(FATAL "execute_process() for enum_parser not setup for this OS")
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser")
+    if(UNIX AND NOT APPLE)
+    execute_process(COMMAND g++ -v -std=gnu++11
+        "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp" -o
+        "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser" -lstdc++fs)
+    else()
+        message(FATAL "execute_process() for enum_parser not setup for this OS")
+    endif()
 endif()
 
 # Parse src.pri to find the sources to compile
