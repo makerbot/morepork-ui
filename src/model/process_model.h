@@ -4,10 +4,7 @@
 #define _SRC_PROCESS_MODEL_H
 
 #include <QObject>
-#include <QtQml>
 #include "base_model.h"
-
-typedef QMap<QString, QVariantMap> enumMap_t;
 
 class ProcessModel : public BaseModel {
   public:
@@ -33,8 +30,6 @@ class ProcessModel : public BaseModel {
   private:
     Q_OBJECT
 
-    void enumToQVariantMap();
-
     MODEL_PROP(bool, active, false)
     // 'nameStr' holds the value of params["info"]["current_process"]["name"]
     MODEL_PROP(QString, nameStr, "Unknown")
@@ -46,11 +41,8 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(ProcessStateType, stateType, Loading)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(QString, timeRemaining, "00:00:00")
-    MODEL_PROP(enumMap_t, enumMap, enumMap_t())
 
   public:
-    QMap<QString, QVariantMap> enum_map_;
-
     ProcessModel();
 };
 
