@@ -3,9 +3,9 @@
 #include <iostream>
 #include <regex>
 #include <fstream>
-#include <experimental/filesystem>
+#include <boost/filesystem.hpp>
 
-namespace efs = std::experimental::filesystem;
+namespace bfs = boost::filesystem;
 
 
 void FindReplaceSubstring(std::string &str, const std::string &kSearchStr,
@@ -38,13 +38,13 @@ int main(int argc, char *argv[]){
   parsed_enum_file << "#ifndef __PARSED_ENUM_FILE__\n#define __PARSED_ENUM_FILE__\n\n";
   parsed_enum_file << "#include <QObject>\n#include <QtQml>\n\n";
 
-  // "experimental" directory iterating code (below) is non mission critical.
-  // this file does not run on the bot.
-  efs::recursive_directory_iterator rec_dir_iter(file_dir);
+  bfs::recursive_directory_iterator rec_dir_iter(file_dir), rec_dir_iter_end;
   std::vector<std::string> enum_name_vec;
-  for(const efs::directory_entry &kDirEntry : rec_dir_iter){
-    if(kDirEntry.path().extension() == ".h"){
-      std::fstream in_file_stream(kDirEntry.path(), std::fstream::in);
+  for(; rec_dir_iter != rec_dir_iter_end; ++rec_dir_iter){
+    if(rec_dir_iter->path().extension() == ".h"){
+      //std::cout << rec_dir_iter->path() << std::endl;
+      std::fstream in_file_stream(rec_dir_iter->path().string(),
+                                  std::fstream::in);
       std::stringstream buffer;
       buffer << in_file_stream.rdbuf();
       std::string entire_file_str = buffer.str();

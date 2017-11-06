@@ -1,6 +1,7 @@
 find_package(MBCoreUtils REQUIRED)
 find_package(JsonCpp REQUIRED)
 find_package(JsonRpc REQUIRED)
+find_package(Boost COMPONENTS filesystem system REQUIRED)
 
 # Build root installs the qt5 cmake configs to staging
 # so this just magically works.
@@ -14,7 +15,8 @@ if(UNIX AND NOT APPLE)
         OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
         COMMAND g++
         ARGS -v -std=gnu++11 "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp"
-            -o "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser" -lstdc++fs
+            -o "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser"
+            -lboost_filesystem -lboost_system
         COMMENT "Compiling enum parser"
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp)
 else()
