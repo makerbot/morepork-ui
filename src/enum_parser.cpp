@@ -8,12 +8,12 @@
 namespace efs = std::experimental::filesystem;
 
 
-void FindReplaceSubstring(std::string &str, std::string search_str,
-                          std::string replace_str = std::string()){
+void FindReplaceSubstring(std::string &str, const std::string &kSearchStr,
+                          const std::string &kReplaceStr = std::string()){
   std::string::size_type index;
-  index = str.find(search_str);
+  index = str.find(kSearchStr);
   if(index != std::string::npos)
-    str.replace(index, search_str.size(), replace_str);
+    str.replace(index, kSearchStr.size(), kReplaceStr);
 }
 
 
@@ -42,9 +42,9 @@ int main(int argc, char *argv[]){
   // this file does not run on the bot.
   efs::recursive_directory_iterator rec_dir_iter(file_dir);
   std::vector<std::string> enum_name_vec;
-  for(const efs::directory_entry &dir_entry : rec_dir_iter){
-    if(dir_entry.path().extension() == ".h"){
-      std::fstream in_file_stream(dir_entry.path(), std::fstream::in);
+  for(const efs::directory_entry &kDirEntry : rec_dir_iter){
+    if(kDirEntry.path().extension() == ".h"){
+      std::fstream in_file_stream(kDirEntry.path(), std::fstream::in);
       std::stringstream buffer;
       buffer << in_file_stream.rdbuf();
       std::string entire_file_str = buffer.str();
