@@ -12,9 +12,13 @@ find_package(Qt5LinguistTools)
 # TODO: make a CMakeLists.txt for this to have proper cross compiling
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser")
     if(UNIX AND NOT APPLE)
-    execute_process(COMMAND g++ -v -std=gnu++11
-        "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp" -o
-        "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser" -lstdc++fs)
+        add_custom_command(
+            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
+            COMMAND g++
+            ARGS -v -std=gnu++11 "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp"
+                -o "${CMAKE_CURRENT_SOURCE_DIR}/enum_parser" -lstdc++fs
+            COMMENT "Compiling enum parser"
+            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser.cpp)
     else()
         message(FATAL "execute_process() for enum_parser not setup for this OS")
     endif()
@@ -51,7 +55,7 @@ add_custom_command(
     COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
     ARGS ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Executing enum_parser to generate parsed_qml_enums.h"
-    DEPENDS ${MOREPORK_UI_HEADERS})
+    DEPENDS ${MOREPORK_UI_HEADERS} ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser)
 set_property(SOURCE main.cpp
     APPEND PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h)
