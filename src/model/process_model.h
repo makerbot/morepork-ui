@@ -37,7 +37,7 @@ class ProcessModel : public BaseModel {
     // 'stateType' is based on the value of params["info"]["current_process"]["step"]
     MODEL_PROP(ProcessStateType, stateType, Loading)
     MODEL_PROP(int, printPercentage, 0)
-    MODEL_PROP(QString, timeRemaining, "00:00:00")
+    MODEL_PROP(int, timeRemaining, 0)
   public:
     ProcessModel();
 };

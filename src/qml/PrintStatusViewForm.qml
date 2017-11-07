@@ -7,88 +7,29 @@ Item {
     width: 800
     height: 440
 
-//    property date timeRemaining: Date.fromLocaleTimeString(locale, bot.process.timeRemaining, "hh:mm:ss")
-    property string printerName: bot.name
     property string fileName_
-    property int daysLeft
-    property var startTime: new Date()
-    property var endTime: new Date()
+    property string printerName: bot.name
+    property int timeLeftSeconds: bot.process.timeRemaining
+    property string doneByDayString: "DEFAULT_STRING"
+    property string doneByTimeString: "99:99"
+    property string timeLeftString: "99:99"
+    property string doneByMeridianString
 
-    function getTimeLeftDateFormat()
+    onTimeLeftSecondsChanged: updateTime()
+
+    function updateTime()
     {
-        var timeLeft_ = bot.process.timeRemaining
-        var timeLeft = timeLeft_.split(":", 3)
-//        while(timeLeft[0] > 23)
-//        {
-//            days++
-//            timeLeft[0] = timeLeft[0] - 24
-//        }
-        var hours = timeLeft[0]
-        var minutes = timeLeft[1]
-        var seconds = timeLeft[2]
-
-        timeLeft = new Date("", "", "", parseInt(hours, 10), parseInt(minutes, 10))
-        getEndTime()
-        return timeLeft
-    }
-
-    function getEndTime()
-    {
-        var timeLeft_ = bot.process.timeRemaining
-        var timeLeft = timeLeft_.split(":", 3)
-        var hours = timeLeft[0]
-        var minutes = timeLeft[1]
-        var seconds = timeLeft[2]
+        var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
         var currentTime = new Date()
-        var endMS = currentTime.getTime() + hours*60*60*1000 + minutes*60*1000 + seconds*1000
+        var endMS = currentTime.getTime() + timeLeftSeconds*1000
+        var endTime = new Date()
         endTime.setTime(endMS)
-
-        daysLeft = endTime.getDate() - startTime.getDate()
+        var daysLeft = endTime.getDate() - currentTime.getDate()
+        timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getMinutes() + "M"
+        doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" : daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
+        doneByTimeString = endTime.getHours() == 0 ? "12" + ":" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
+        doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
     }
-
-//    function getEndTimeDateFormat()
-//    {
-//        var currentTime = new Date()
-//        var days = getTimeLeftDateFormat().getDate()
-//        var hours = getTimeLeftDateFormat().getHours()
-//        var minutes = getTimeLeftDateFormat().getMinutes()
-//        if(days == 31) days = 0
-//        if((currentTime.getMinutes() + minutes) > 59)
-//        {
-//            hours++
-//            minutes = minutes % 60
-//        }
-//        if((currentTime.getHours() + hours) > 23)
-//        {
-//            days++
-//            hours = hours % 24
-//        }
-//        var endDay = currentTime.getDate() + parseInt(days, 10)
-//        var endHour = currentTime.getHours() + parseInt(hours, 10)
-//        endHour = endHour % 12
-//        var endMinutes = currentTime.getMinutes() + parseInt(minutes, 10)
-
-//        var endTime = new Date(currentTime.getFullYear(),
-//                               currentTime.getMonth(),
-//                               endDay,
-//                               endHour,
-//                               endMinutes)
-
-//        var daysLeft = endTime.getDate() - currentTime.getDate()
-//        if(daysLeft == 0)
-//        {
-//            done_by_text = "DONE TODAY BY"
-//        }
-//        else if(daysLeft == 1)
-//        {
-//            done_by_text = "DONE TOMMORROW BY"
-//        }
-//        else
-//        {
-//            done_by_text = "DONE IN " + daysLeft + " DAYS BY"
-//        }
-//        return endTime
-//    }
 
     Rectangle {
         id: rectangle
@@ -99,7 +40,7 @@ Item {
 
     SwipeView {
         id: printStatusSwipeView
-        currentIndex: 3 // Should never be non zero
+        currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         visible: true
 
@@ -201,14 +142,7 @@ Item {
                             color: "#ffffff"
                             text:
                             {
-                                if(getTimeLeftDateFormat().getDate() != 31)
-                                {
-                                    getTimeLeftDateFormat().getDate() + "D " + getTimeLeftDateFormat().getHours() + "HR " + getTimeLeftDateFormat().getMinutes() + "M"
-                                }
-                                else
-                                {
-                                    getTimeLeftDateFormat().getHours() + "HR " + getTimeLeftDateFormat().getMinutes() + "M"
-                                }
+                                timeLeftString
                             }
                             font.family: "Antenna"
                             font.weight: Font.Light
@@ -244,6 +178,37 @@ Item {
 
         Item {
             id: page1
+            Item {
+                id: modelItem
+                width: 212
+                height: 300
+                anchors.left: parent.left
+                anchors.leftMargin: 100
+                anchors.verticalCenter: parent.verticalCenter
+
+                Image {
+                    id: back_image
+                    anchors.fill: parent
+                    source: "qrc:/img/back_build_volume.png"
+                }
+
+                Image {
+                    id: model_image
+                    anchors.verticalCenterOffset: 50
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/img/model.png"
+                }
+
+                Image {
+                    id: front_image
+                    anchors.fill: parent
+                    source: "qrc:/img/front_build_volume.png"
+                }
+
+
+            }
+
             ColumnLayout {
                 id: columnLayout_page1
                 width: 400
@@ -395,6 +360,7 @@ Item {
                     }
                 }
             }
+
         }
 
         Item{
@@ -573,18 +539,7 @@ Item {
                     color: "#cbcbcb"
                     text:
                     {
-                        if(daysLeft == 0)
-                        {
-                            "DONE TODAY BY"
-                        }
-                        else if(daysLeft == 1)
-                        {
-                            "DONE TOMMORROW BY"
-                        }
-                        else
-                        {
-                            "DONE IN " + daysLeft + " DAYS BY"
-                        }
+                        doneByDayString
                     }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antenna"
@@ -596,7 +551,7 @@ Item {
                 Text {
                     id: end_time_text
                     color: "#ffffff"
-                    text: endTime.getHours() + ":" + endTime.getMinutes()
+                    text: doneByTimeString
                     font.pixelSize: 145
                     font.family: "Antenna"
                     font.weight: Font.Light
@@ -605,11 +560,11 @@ Item {
                     Text {
                         id: am_pm_text
                         color: "#ffffff"
-                        text: ""
+                        text: doneByMeridianString
                         anchors.right: parent.right
-                        anchors.rightMargin: -15
+                        anchors.rightMargin: -24
                         anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 30
+                        anchors.bottomMargin: 26
                         font.pixelSize: 15
                         font.family: "Antenna"
                         font.weight: Font.Light
@@ -643,12 +598,14 @@ Item {
 
         Item{
             id: page4
-
-            ColumnLayout {
-                id: columnLayout_page4
-                anchors.horizontalCenter: parent.horizontalCenter
+            Item {
+                id: baseItem
+                width: 750
+                height: 160
+                anchors.left: parent.left
+                anchors.leftMargin: 20
                 anchors.verticalCenter: parent.verticalCenter
-                spacing: 10
+
                 Text {
                     id: printerName_text4
                     color: "#ffffff"
@@ -657,63 +614,56 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Bold
                     font.letterSpacing: 0
-                }
-
-                Text {
-                    id: is_printing_label
-                    color: "#cbcbcb"
-                    text: "IS PRINTING"
-                    font.pixelSize: 18
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
 
                     Text {
-                        id: filename_text4
-                        color: "#ffffff"
-                        text: fileName_
-                        anchors.right: parent.right
-                        anchors.rightMargin: -136
-                        font.pixelSize: 18
+                        id: is_printing_label
+                        color: "#cbcbcb"
+                        text: "IS PRINTING"
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: -30
+                        font.pixelSize: 16
                         font.family: "Antenna"
-                        font.weight: Font.Bold
+                        font.weight: Font.Light
                         font.letterSpacing: 3
-                    }
-                }
 
-                Text {
-                    id: done_by_label1
-                    color: "#cbcbcb"
-                    text:
-                    {
-                        if(daysLeft == 0)
-                        {
-                            "DONE TODAY BY"
+                        Text {
+                            id: filename_text4
+                            color: "#ffffff"
+                            text: fileName_
+                            anchors.left: parent.left
+                            anchors.leftMargin: 145
+                            font.pixelSize: 16
+                            font.family: "Antenna"
+                            font.weight: Font.Bold
+                            font.letterSpacing: 3
                         }
-                        else if(daysLeft == 1)
-                        {
-                            "DONE TOMMORROW BY"
-                        }
-                        else
-                        {
-                            "DONE IN " + daysLeft + " DAYS BY"
-                        }
-                    }
-                    font.pixelSize: 18
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
 
-                    Text {
-                        id: end_time_text4
-                        color: "#ffffff"
-                        text: endTime.getHours() + ":" + endTime.getMinutes()
-                        anchors.right: parent.right
-                        anchors.rightMargin: -124
-                        font.pixelSize: 18
-                        font.family: "Antenna"
-                        font.weight: Font.Bold
-                        font.letterSpacing: 3
+                        Text {
+                            id: done_by_label1
+                            color: "#cbcbcb"
+                            text:
+                            {
+                                doneByDayString
+                            }
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: -30
+                            font.pixelSize: 16
+                            font.family: "Antenna"
+                            font.weight: Font.Light
+                            font.letterSpacing: 3
+
+                            Text {
+                                id: end_time_text4
+                                color: "#ffffff"
+                                text: doneByTimeString + doneByMeridianString
+                                anchors.right: parent.right
+                                anchors.rightMargin: -90
+                                font.pixelSize: 16
+                                font.family: "Antenna"
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                            }
+                        }
                     }
                 }
             }
