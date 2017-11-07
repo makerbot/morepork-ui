@@ -14,15 +14,6 @@ endif()
 find_package(Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
 find_package(Qt5LinguistTools)
 
-# Manually build the enum_parser.
-include_directories(enum_parser)
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/build/enum_parser
-    COMMAND mkdir build && cd build && cmake .. && make
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser
-    COMMENT "Compiling enum parser"
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/enum_parser.cpp)
-
 # Model impl sources aren't built for Qt creator so they just live here
 set(SOURCES
     main.cpp
@@ -54,14 +45,14 @@ if(NOT ${QT_CREATOR_BUILD})
     list(APPEND MOREPORK_UI_HEADERS model_impl/local_jsonrpc.h)
 endif()
 
-# Call the enum parser if MOREPORK_UI_HEADERS or enum_parser executable changes
+# Call the enum parser if MOREPORK_UI_HEADERS or enum_parser.cmake changes
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h
-    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/build/enum_parser
-    ARGS ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Executing enum_parser to generate parsed_qml_enums.h"
-    DEPENDS ${MOREPORK_UI_HEADERS}
-            ${CMAKE_CURRENT_SOURCE_DIR}/enum_parser/build/enum_parser)
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -DHEADER_FILE_LIST="${MOREPORK_UI_HEADERS}" -P enum_parser.cmake
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    COMMENT "Running enum_parser.cmake to generate parsed_qml_enums.h"
+    DEPENDS ${MOREPORK_UI_HEADERS} enum_parser.cmake)
 set_property(SOURCE main.cpp
     APPEND PROPERTY OBJECT_DEPENDS
     ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h)
