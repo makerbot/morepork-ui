@@ -27,7 +27,7 @@ Item {
         var daysLeft = endTime.getDate() - currentTime.getDate()
         timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getMinutes() + "M"
         doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" : daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
-        doneByTimeString = endTime.getHours() == 0 ? "12" + ":" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
+        doneByTimeString = endTime.getHours() == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() : "12" + ":" + endTime.getMinutes() : endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
         doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
     }
 
@@ -205,8 +205,6 @@ Item {
                     anchors.fill: parent
                     source: "qrc:/img/front_build_volume.png"
                 }
-
-
             }
 
             ColumnLayout {
