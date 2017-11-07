@@ -10,12 +10,13 @@ Item {
     property string fileName_
     property string printerName: bot.name
     property int timeLeftSeconds: bot.process.timeRemaining
+    property int timeLeftMinutes: timeLeftSeconds/60
     property string doneByDayString: "DEFAULT_STRING"
     property string doneByTimeString: "99:99"
     property string timeLeftString: "99:99"
     property string doneByMeridianString
 
-    onTimeLeftSecondsChanged: updateTime()
+    onTimeLeftMinutesChanged: updateTime()
 
     function updateTime()
     {
