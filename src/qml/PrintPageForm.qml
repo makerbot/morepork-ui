@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 
 Item {
     property string fileName: "unknown.makerbot"
@@ -48,7 +49,7 @@ Item {
                 interactive: true
                 anchors.fill: parent
                 contentHeight: columnStorageOpt.height
-                visible: (bot.process.type != 1)
+                visible: (bot.process.type != ProcessType.Print)
 
                 Column {
                     id: columnStorageOpt
@@ -79,7 +80,7 @@ Item {
             }
 
             PrintStatusViewForm{
-                visible: bot.process.type == 1
+                visible: bot.process.type == ProcessType.Print
                 fileName_: fileName
             }
         }
@@ -146,8 +147,8 @@ Item {
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: bot.process.type == 1 ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == 1 ? 0 : 2 // or 1 (both can use this Item theoretically)
+            property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2 // or 1 (both can use this Item theoretically)
             visible: false
 
             Flickable {
