@@ -31,5 +31,7 @@
         <file>NotificationIconsForm.qml</file>
         <file>FilamentIcon.qml</file>
         <file>FilamentIconForm.qml</file>
+        <file>PrintStatusView.qml</file>
+        <file>PrintStatusViewForm.qml</file>
     </qresource>
 </RCC>
