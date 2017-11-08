@@ -1,6 +1,7 @@
 # You cannot pass a semicolon separated list from from another cmake script
 # to another. The semicolons are always replaced by spaces.
 # separate_arguments() replaces the spaces with semicolons.
+message("PARSED_ENUM_FILE_NAME=${PARSED_ENUM_FILE_NAME}")
 separate_arguments(HEADER_FILE_LIST)
 set(QML_ENUMS "")
 foreach(HEADER_FILE ${HEADER_FILE_LIST})
@@ -16,7 +17,7 @@ foreach(HEADER_FILE ${HEADER_FILE_LIST})
         list(APPEND QML_ENUMS ${ENUM_MATCH})
     endforeach()
 endforeach()
-file(WRITE parsed_qml_enums.h "// Copyright 2017 Makerbot Industries\n\
+file(WRITE ${PARSED_ENUM_FILE_NAME} "// Copyright 2017 Makerbot Industries\n\
 // This file was automatically generated using the enum_parser executable\n\n\
 #ifndef __PARSED_ENUM_FILE__\n\
 #define __PARSED_ENUM_FILE__\n\n\
@@ -30,7 +31,7 @@ foreach(ENUM ${QML_ENUMS})
     list(APPEND QML_ENUM_NAMES ${ENUM_NAME})
     #message("<${ENUM}>")
     #message("<${ENUM_NAME}>")
-    file(APPEND parsed_qml_enums.h "class ${ENUM_NAME}Class : public QObject {\n\
+    file(APPEND ${PARSED_ENUM_FILE_NAME} "class ${ENUM_NAME}Class : public QObject {\n\
   Q_OBJECT\n\
   public:\n\
     ${ENUM};\n\
@@ -43,9 +44,9 @@ endforeach()
 list(LENGTH QML_ENUM_NAMES QML_ENUM_NAMES_LENGTH)
 list(GET QML_ENUM_NAMES QML_ENUM_NAMES_LENGTH-1 LAST_ENUM_NAME)
 list(REMOVE_AT QML_ENUM_NAMES QML_ENUM_NAMES_LENGTH-1)
-file(APPEND parsed_qml_enums.h "#define QML_ENUM_OBJECTS \\\n")
+file(APPEND ${PARSED_ENUM_FILE_NAME} "#define QML_ENUM_OBJECTS \\\n")
 foreach(ENUM_NAME ${QML_ENUM_NAMES})
-    file(APPEND parsed_qml_enums.h "${ENUM_NAME}Class ${ENUM_NAME}Obj; \\\n")
+    file(APPEND ${PARSED_ENUM_FILE_NAME} "${ENUM_NAME}Class ${ENUM_NAME}Obj; \\\n")
 endforeach()
-file(APPEND parsed_qml_enums.h "${LAST_ENUM_NAME}Class ${LAST_ENUM_NAME}Obj; \n\n#endif //__PARSED_ENUM_FILE__")
+file(APPEND ${PARSED_ENUM_FILE_NAME} "${LAST_ENUM_NAME}Class ${LAST_ENUM_NAME}Obj; \n\n#endif //__PARSED_ENUM_FILE__")
 

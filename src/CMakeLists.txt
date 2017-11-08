@@ -46,18 +46,23 @@ if(NOT ${QT_CREATOR_BUILD})
 endif()
 
 # Call the enum parser if MOREPORK_UI_HEADERS or enum_parser.cmake changes
+set(PARSED_ENUM_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/parsed_qml_enums.h")
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h
+    OUTPUT ${PARSED_ENUM_FILE_NAME}
     COMMAND ${CMAKE_COMMAND}
-    ARGS -DHEADER_FILE_LIST="${MOREPORK_UI_HEADERS}" -P enum_parser.cmake
+    ARGS -DPARSED_ENUM_FILE_NAME="${PARSED_ENUM_FILE_NAME}"
+         -DHEADER_FILE_LIST="${MOREPORK_UI_HEADERS}" -P enum_parser.cmake
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Running enum_parser.cmake to generate parsed_qml_enums.h"
     DEPENDS ${MOREPORK_UI_HEADERS} enum_parser.cmake)
 set_property(SOURCE main.cpp
     APPEND PROPERTY OBJECT_DEPENDS
-    ${CMAKE_CURRENT_SOURCE_DIR}/parsed_qml_enums.h)
+    ${PARSED_ENUM_FILE_NAME})
 
-qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC ${MOREPORK_UI_HEADERS} parsed_qml_enums.h)
+qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC
+    ${MOREPORK_UI_HEADERS}
+    ${PARSED_ENUM_FILE_NAME})
 
 # Run the following to generate .ts files:
 # lupdate qml/MoreporkUI.qml -ts morepork_de.ts morepork_it.ts etc
