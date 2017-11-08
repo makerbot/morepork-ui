@@ -1,6 +1,5 @@
 import QtQuick 2.5
 import QtQuick.Window 2.2
-
 import "../qml" as Ui
 
 QtObject {
@@ -23,3 +22,4 @@ QtObject {
         title: "The morepork UI"
     }
 }
+

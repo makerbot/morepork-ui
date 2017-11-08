@@ -1,4 +1,6 @@
 import QtQuick 2.4
+import ProcessStateTypeEnum 1.0
+
 Item {
     id: item1
     width: 250
@@ -60,7 +62,8 @@ Item {
                     var centreY = parent.height / 2;
 
                     context.beginPath();
-                    context.arc(centreX, centreY, (parent.width / 2) - 5, 0, (Math.PI*(2.0*parent.percent/100)), false);
+                    context.arc(centreX, centreY, (parent.width / 2) - 5, 0,
+                                (Math.PI*(2.0*parent.percent/100)), false);
                     context.lineWidth = 10;
                     context.strokeStyle = parent.progressColor;
                     context.stroke()
@@ -81,7 +84,7 @@ Item {
                 from: 360000;
                 to: 0;
                 duration: 10000000
-                running: (bot.process.stateType == 1)
+                running: (bot.process.stateType == ProcessStateType.Loading)
             }
         }
 
@@ -98,7 +101,8 @@ Item {
                 from: 0;
                 to: 360000;
                 duration: 10000000
-                running: (bot.process.stateType == 1 || 3)
+                running: (bot.process.stateType == ProcessStateType.Loading ||
+                          bot.process.stateType == ProcessStateType.Paused)
             }
         }
 
@@ -163,7 +167,8 @@ Item {
 
     states: [
         State {
-            name: "printing_state"; when: bot.process.stateType == 2
+            name: "printing_state"
+            when: bot.process.stateType == ProcessStateType.Printing
 
             PropertyChanges {
                 target: status_image
@@ -201,7 +206,8 @@ Item {
             }
         },
         State {
-            name: "paused_state"; when: bot.process.stateType == 3
+            name: "paused_state"
+            when: bot.process.stateType == ProcessStateType.Paused
 
             PropertyChanges {
                 target: status_image
@@ -242,7 +248,8 @@ Item {
 
         },
         State {
-            name: "print_complete_state"; when: bot.process.stateType == 4
+            name: "print_complete_state"
+            when: bot.process.stateType == ProcessStateType.PrintComplete
 
             PropertyChanges {
                 target: loading_or_paused_image

@@ -4,11 +4,11 @@
 #define _SRC_PROCESS_MODEL_H
 
 #include <QObject>
-
 #include "base_model.h"
 
 class ProcessModel : public BaseModel {
   public:
+    //MOREPORK_QML_ENUM
     enum ProcessType {
         None,
         Print,
@@ -16,6 +16,7 @@ class ProcessModel : public BaseModel {
         Unload,
         Other
     };
+    //MOREPORK_QML_ENUM
     enum ProcessStateType {
         Default,
         Loading,
@@ -25,8 +26,10 @@ class ProcessModel : public BaseModel {
     };
     Q_ENUM(ProcessType)
     Q_ENUM(ProcessStateType)
+
   private:
     Q_OBJECT
+
     MODEL_PROP(bool, active, false)
     // 'nameStr' holds the value of params["info"]["current_process"]["name"]
     MODEL_PROP(QString, nameStr, "Unknown")
@@ -38,6 +41,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(ProcessStateType, stateType, Loading)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
+
   public:
     ProcessModel();
 };
