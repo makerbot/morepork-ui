@@ -47,11 +47,13 @@ class BaseModel : public QObject {
     Q_OBJECT
     /// Placeholder property to deal with QML's inability to access
     /// dynamic object properties.
-    Q_PROPERTY(QVariant metaInfo MEMBER m_metaInfo)
+    Q_PROPERTY(QVariant metaInfo MEMBER m_metaInfo NOTIFY notifySignal)
     QVariant m_metaInfo;
   protected:
     /// Reset all properties to their default value
     void reset();
+  signals:
+    void notifySignal(); // Dummy signal to suppress missing NOTIFY warning
 };
 
 #endif  // _SRC_BASE_MODEL_H
