@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 
 Item {
     property alias mainMenuIcon_info: mainMenuIcon_info
@@ -17,7 +18,7 @@ Item {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
-        imageVisible: !(bot.process.type == 1)
+        imageVisible: !(bot.process.type == ProcessType.Print)
         textIconDesc.text: "PRINT"
 
         PrintIcon{
