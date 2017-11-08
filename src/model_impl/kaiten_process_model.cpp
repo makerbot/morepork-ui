@@ -10,12 +10,6 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         return;
     }
 
-    const Json::Value &kJsonTimeRemain = proc["time_remaining"];
-    if (kJsonTimeRemain.isInt()){
-        const QString kTimeRemainStr = guihelpers::duration(kJsonTimeRemain.asInt());
-        timeRemainingSet(kTimeRemainStr);
-    }
-
     const Json::Value &kName = proc["name"];
     if (kName.isString()) {
         const QString kNameStr = kName.asString().c_str();
@@ -54,6 +48,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
+    UPDATE_INT_PROP(timeRemaining, proc["time_remaining"]);
 
     activeSet(true);
 }
