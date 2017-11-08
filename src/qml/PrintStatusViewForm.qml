@@ -32,13 +32,6 @@ Item {
         doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
     }
 
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        visible: true
-        anchors.fill: parent
-    }
-
     SwipeView {
         id: printStatusSwipeView
         currentIndex: 0 // Should never be non zero
@@ -47,6 +40,11 @@ Item {
 
         Item {
             id: page0
+            width: 800
+            height: 420
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+
             PrintIcon{
                 anchors.verticalCenterOffset: 7
                 anchors.verticalCenter: parent.verticalCenter
@@ -179,6 +177,10 @@ Item {
 
         Item {
             id: page1
+            width: 800
+            height: 420
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
             Item {
                 id: modelItem
                 width: 212
@@ -364,6 +366,10 @@ Item {
 
         Item{
             id: page2
+            width: 800
+            height: 420
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
 
             Image {
                 id: sombrero_image
@@ -526,6 +532,10 @@ Item {
 
         Item{
             id: page3
+            width: 800
+            height: 420
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
 
             ColumnLayout {
                 id: columnLayout_page3
@@ -597,6 +607,11 @@ Item {
 
         Item{
             id: page4
+            width: 800
+            height: 420
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 20
+
             Item {
                 id: baseItem
                 width: 750
@@ -675,7 +690,7 @@ Item {
         count: printStatusSwipeView.count
         currentIndex: printStatusSwipeView.currentIndex
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: 12
         anchors.horizontalCenter: parent.horizontalCenter
 
         delegate: Rectangle{
