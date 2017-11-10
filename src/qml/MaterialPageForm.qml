@@ -4,14 +4,6 @@ import QtQuick.Layouts 1.3
 import QtMultimedia 5.8
 
 Item {
-    property alias filamentVideo: filamentVideo
-    property alias defaultItem: tempItem
-
-    Item {
-        id: tempItem
-        property var backSwiper: mainSwipeView
-        property int backSwipeIndex: 0
-    }
 
     Video {
         id: filamentVideo

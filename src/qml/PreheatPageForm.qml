@@ -3,11 +3,5 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    property alias defaultItem: tempItem
 
-    Item {
-        id: tempItem
-        property var backSwiper: mainSwipeView
-        property int backSwipeIndex: 0
-    }
 }

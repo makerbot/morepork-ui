@@ -10,12 +10,14 @@ Item {
     // topFadeIn.height depending on what you are doing.
     property int barHeight: 40
     height: topFadeIn.height
+    property alias mouseArea_back: mouseArea_back
     property alias topFadeIn: topFadeIn
     property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
-    signal backClicked()
+    signal backClicked(var activeElement)
     signal drawerDownClicked()
+
 
     Item {
         id: itemNotificationIcons
@@ -72,7 +74,7 @@ Item {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.left: parent.left
-            onClicked: backClicked()
+            onClicked: backClicked("hello")
         }
 
         Image {

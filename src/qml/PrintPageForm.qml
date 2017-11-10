@@ -10,7 +10,6 @@ Item {
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias printDeleteSwipeView: printDeleteSwipeView
-    property alias defaultItem: itemPrintStorageOpt
     property alias buttonUsbStorage: buttonUsbStorage
     property alias buttonInternalStorage: buttonInternalStorage
     property alias buttonFilePrint: buttonFilePrint
@@ -23,6 +22,7 @@ Item {
 
     SwipeView {
         id: printSwipeView
+        visible: true
         currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         interactive: false
@@ -39,9 +39,8 @@ Item {
         Item {
             id: itemPrintStorageOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: mainSwipeView
-            property int backSwipeIndex: 0
-            visible: false
+//            property var backSwiper: mainSwipeView
+//            property int backSwipeIndex: 0
 
             Flickable {
                 id: flickableStorageOpt
@@ -49,7 +48,6 @@ Item {
                 interactive: true
                 anchors.fill: parent
                 contentHeight: columnStorageOpt.height
-                visible: (bot.process.type != ProcessType.Print)
 
                 Column {
                     id: columnStorageOpt
@@ -77,11 +75,6 @@ Item {
                         }
                     }
                 }
-            }
-
-            PrintStatusViewForm{
-                visible: bot.process.type == ProcessType.Print
-                fileName_: fileName
             }
         }
 
@@ -147,8 +140,8 @@ Item {
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2 // or 1 (both can use this Item theoretically)
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: 2 // or 1 (both can use this Item theoretically)
             visible: false
 
             Flickable {
@@ -246,4 +239,36 @@ Item {
             }
         }
     }
+
+    Loader{
+        id:printStatusViewLoader
+        sourceComponent: printStatusView
+        active: false
+    }
+
+    Component{
+        id: printStatusView
+        PrintStatusViewForm{
+            id: printStatusViewForm
+//            visible: false
+            fileName_: fileName
+        }
+    }
+
+
+    states: [
+        State {
+            name: "State1"; when: bot.process.type == ProcessType.Print
+
+            PropertyChanges {
+                target: printStatusViewLoader
+                active: true
+            }
+
+            PropertyChanges {
+                target: printSwipeView
+                visible: false
+            }
+        }
+    ]
 }
