@@ -85,7 +85,7 @@ ApplicationWindow {
 
         Connections{
             target: mainLoader.item
-            ignoreUnknownSignals: false
+            ignoreUnknownSignals: true
             onOpenPrintPage: {mainLoader.source = "PrintPage.qml"}
             onOpenExtruderPage: {mainLoader.source = "ExtruderPage.qml"}
             onOpenSettingsPage: {mainLoader.source = "SettingsPage.qml"}
