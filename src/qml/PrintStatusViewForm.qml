@@ -71,6 +71,17 @@ Item {
                 }
 
                 Text {
+                    id: error_text0
+                    color: "#cbcbcb"
+                    text: "Error " + bot.process.errorCode
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 18
+                    // TODO: only make this visible when we failed
+                }
+
+                Text {
                     id: fileName_text0
                     color: "#cbcbcb"
                     text: fileName_
