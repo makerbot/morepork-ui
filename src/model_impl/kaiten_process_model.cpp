@@ -52,10 +52,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
 
     const Json::Value &error = proc["error"];
-    if (Error.isObject()) {
+    if (error.isObject()) {
         UPDATE_INT_PROP(errorCode, error["code"]);
     } else {
-        ErrorReset();
+        errorCodeReset();
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
