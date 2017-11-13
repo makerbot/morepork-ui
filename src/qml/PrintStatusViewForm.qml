@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import ProcessStateTypeEnum 1.0
 
 Item {
     id: item1
@@ -78,7 +79,7 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Light
                     font.pixelSize: 18
-                    // TODO: only make this visible when we failed
+                    visible: bot.process.stateType == ProcessStateType.Failed
                 }
 
                 Text {
