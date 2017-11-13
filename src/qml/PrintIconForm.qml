@@ -5,6 +5,7 @@ Item {
     id: item1
     width: 250
     height: 265
+    smooth: false
     property alias action_mouseArea: action_mouseArea
     property alias percentage_printing_text: percentage_printing_text
     property alias status_image: status_image
@@ -18,6 +19,8 @@ Item {
         height: 250
         color: "#00000000"
         radius: 125
+        antialiasing: true
+        smooth: true
         anchors.top: parent.top
         anchors.topMargin: 0
         visible: true
@@ -31,6 +34,8 @@ Item {
             height: 224
             color: "#00000000"
             radius: 112
+            antialiasing: false
+            smooth: false
             visible: false
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -51,6 +56,8 @@ Item {
             onPercentChanged: canvas.requestPaint()
             Canvas {
                 id: canvas
+                antialiasing: false
+                smooth: false
                 rotation : -90
                 anchors.fill: parent
                 onPaint:
@@ -75,6 +82,7 @@ Item {
             id: status_image
             width: 68
             height: 68
+            smooth: false
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             source: "qrc:/img/loading_gears.png"
@@ -92,6 +100,7 @@ Item {
             id: loading_or_paused_image
             width: 214
             height: 214
+            smooth: false
             source: "qrc:/img/loading_rings.png"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -110,6 +119,8 @@ Item {
             id: percentage_printing_text
             color: "#ffffff"
             text: bot.process.printPercentage
+            antialiasing: false
+            smooth: false
             anchors.verticalCenterOffset: 4
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
@@ -124,6 +135,8 @@ Item {
                 id: percentage_symbol_text
                 color: "#ffffff"
                 text: "%"
+                antialiasing: false
+                smooth: false
                 anchors.top: parent.top
                 anchors.topMargin: 2
                 visible: false
@@ -143,6 +156,8 @@ Item {
             height: 60
             color: "#000000"
             radius: 30
+            antialiasing: false
+            smooth: false
             anchors.top: parent.top
             anchors.topMargin: 201
             anchors.horizontalCenter: parent.horizontalCenter
@@ -154,12 +169,14 @@ Item {
                 id: action_image
                 width: 45
                 height: 45
+                smooth: false
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             MouseArea {
                 id: action_mouseArea
+                smooth: false
                 anchors.fill: parent
             }
         }

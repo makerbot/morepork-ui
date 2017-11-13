@@ -17,6 +17,7 @@ Drawer {
     Rectangle {
         id: rectangle
         color: "#000000"
+        smooth: false
         visible: true
         width: parent.width
         height: column.height
@@ -24,11 +25,13 @@ Drawer {
 
     Flickable {
         id: flickable
+        smooth: false
         anchors.fill: parent
         rotation: rootItem.rotation
 
         Column {
             id: column
+            smooth: false
             spacing: 1
             anchors.top: parent.top
             anchors.right: parent.right
@@ -38,6 +41,7 @@ Drawer {
                 id: rectangle1
                 height: 40
                 color: "#000000"
+                smooth: false
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.left: parent.left
@@ -47,6 +51,8 @@ Drawer {
                     id: textPrinterName
                     color: "#a0a0a0"
                     text: bot.name
+                    antialiasing: false
+                    smooth: false
                     verticalAlignment: Text.AlignVCenter
                     font.family: "Antenna"
                     font.letterSpacing: 3
@@ -60,6 +66,7 @@ Drawer {
                     id: imageDrawerArrow
                     y: 227
                     height: 25
+                    smooth: false
                     anchors.left: textPrinterName.right
                     anchors.leftMargin: 10
                     anchors.verticalCenter: textPrinterName.verticalCenter
@@ -72,6 +79,7 @@ Drawer {
                         id: mouseAreaTopDrawerUp
                         width: 40
                         height: 60
+                        smooth: false
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         z: 2

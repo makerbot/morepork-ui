@@ -10,8 +10,10 @@ Item {
     property alias mainMenuIcon_print: mainMenuIcon_print
     property alias mainMenuIcon_extruder: mainMenuIcon_extruder
     property alias mainMenuIcon_settings: mainMenuIcon_settings
+    smooth: false
     MainMenuIcon {
         id: mainMenuIcon_print
+        smooth: false
         z: 2
         anchors.bottom: mainMenuIcon_extruder.bottom
         anchors.bottomMargin: 0
@@ -22,6 +24,7 @@ Item {
         textIconDesc.text: "PRINT"
 
         PrintIcon{
+            smooth: false
             anchors.verticalCenterOffset: -25
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -34,6 +37,7 @@ Item {
     MainMenuIcon {
         id: mainMenuIcon_extruder
         y: parent.height*0.15
+        smooth: false
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"
@@ -42,6 +46,7 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_settings
+        smooth: false
         z: 2
         anchors.horizontalCenterOffset: 220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
@@ -53,6 +58,7 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_info
+        smooth: false
         z: 2
         anchors.horizontalCenter: mainMenuIcon_print.horizontalCenter
         anchors.bottom: mainMenuIcon_material.bottom
@@ -64,6 +70,7 @@ Item {
     MainMenuIcon {
         id: mainMenuIcon_material
         y: parent.height*0.525
+        smooth: false
         z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
@@ -72,6 +79,7 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_preheat
+        smooth: false
         z: 2
         anchors.horizontalCenter: mainMenuIcon_settings.horizontalCenter
         anchors.bottom: mainMenuIcon_material.bottom

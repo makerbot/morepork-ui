@@ -4,6 +4,7 @@ import QtQuick.Controls 2.2
 Button {
     id: moreporkButton
     height: 100
+    smooth: false
     spacing: 0
     anchors.right: parent.right
     anchors.left: parent.left

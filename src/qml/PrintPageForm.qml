@@ -16,6 +16,7 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
+    smooth: false
 
     PrintingDrawer {
         id: printingDrawer
@@ -23,6 +24,7 @@ Item {
 
     SwipeView {
         id: printSwipeView
+        smooth: false
         currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         interactive: false
@@ -41,10 +43,12 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
+            smooth: false
             visible: false
 
             Flickable {
                 id: flickableStorageOpt
+                smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
@@ -53,6 +57,7 @@ Item {
 
                 Column {
                     id: columnStorageOpt
+                    smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
                     anchors.top: parent.top
@@ -66,7 +71,7 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
                     MoreporkButton {
                         id: buttonInternalStorage
@@ -80,6 +85,7 @@ Item {
             }
 
             PrintStatusViewForm{
+                smooth: false
                 visible: bot.process.type == ProcessType.Print
                 fileName_: fileName
             }
@@ -91,10 +97,12 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
+            smooth: false
             visible: false
 
             Flickable {
                 id: flickableUsbStorage
+                smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
@@ -102,6 +110,7 @@ Item {
 
                 Column {
                     id: columnUsbStorage
+                    smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
                     anchors.top: parent.top
@@ -121,9 +130,11 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
+            smooth: false
             visible: false
 
             ListView {
+                smooth: false
                 anchors.fill: parent
                 boundsBehavior: Flickable.DragOverBounds
                 spacing: 1
@@ -148,11 +159,13 @@ Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2 // or 1 (both can use this Item theoretically)
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2
+            smooth: false // or 1 (both can use this Item theoretically)
             visible: false
 
             Flickable {
                 id: flickableFileOpt
+                smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
@@ -160,6 +173,7 @@ Item {
 
                 Column {
                     id: columnFilePrintOpt
+                    smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
                     anchors.top: parent.top
@@ -174,7 +188,7 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
                     MoreporkButton {
                         id: buttonFileInfo
@@ -183,17 +197,19 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
 
                     SwipeView {
                         id: printDeleteSwipeView
                         height: buttonFileInfo.height
+                        smooth: false
                         anchors.right: parent.right
                         anchors.left: parent.left
                         interactive: false
 
                         Item {
+                            smooth: false
                             MoreporkButton {
                                 id: buttonFileDelete
                                 buttonText.text: "Delete"
@@ -204,7 +220,9 @@ Item {
                         }
 
                         Item{
+                            smooth: false
                             Row{
+                                smooth: false
                                 MoreporkButton {
                                     id: buttonConfirmDelete
                                     anchors.left: {}
