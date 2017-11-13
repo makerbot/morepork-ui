@@ -72,6 +72,7 @@ Item {
                     context.arc(centreX, centreY, (parent.width / 2) - 5, 0,
                                 (Math.PI*(2.0*parent.percent/100)), false);
                     context.lineWidth = 10;
+                    context.lineCap = "round";
                     context.strokeStyle = parent.progressColor;
                     context.stroke()
                 }
