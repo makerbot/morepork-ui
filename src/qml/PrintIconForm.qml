@@ -153,10 +153,10 @@ Item {
 
         Rectangle {
             id: action_circle
-            width: 60
-            height: 60
+            width: 61
+            height: 61
             color: "#000000"
-            radius: 30
+            radius: 31
             antialiasing: false
             smooth: false
             anchors.top: parent.top
