@@ -39,8 +39,8 @@ ApplicationWindow {
             onOpened:
             {
                 position = 0
-                close()
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                close()
             }
         }
 
@@ -62,7 +62,7 @@ ApplicationWindow {
             anchors.topMargin: topBar.barHeight
             interactive: false
             transform: Translate {
-                        x: backSwipe.position * mainSwipeView.width
+                        x: backSwipe.position * mainSwipeView.width * 1.5
                     }
             property alias materialPage: materialPage
 
