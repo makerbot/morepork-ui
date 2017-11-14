@@ -91,6 +91,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             source: "qrc:/img/loading_gears.png"
+            visible: (bot.process.stateType == ProcessStateType.Loading)
 
             RotationAnimator {
                 target: status_image;
@@ -109,6 +110,8 @@ Item {
             source: "qrc:/img/loading_rings.png"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            visible: (bot.process.stateType == ProcessStateType.Loading ||
+                      bot.process.stateType == ProcessStateType.Paused)
 
             RotationAnimator {
                 target: loading_or_paused_image;
@@ -256,6 +259,7 @@ Item {
                 width: 224
                 height: 224
                 source: "qrc:/img/paused_rings.png"
+                visible: true
             }
 
             PropertyChanges {
