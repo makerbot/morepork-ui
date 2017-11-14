@@ -28,6 +28,22 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        Drawer{
+            id: backSwipe
+            width: 0
+            height: rootAppWindow.height
+            edge: rootItem.rotation == 180 ? Qt.RightEdge : Qt.LeftEdge
+            dim: false
+            interactive: mainSwipeView.currentIndex
+            onOpened:
+            {
+                position = 0
+                close()
+                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+
+            }
+        }
+
         TopBarForm{
             id: topBar
             z: 1
@@ -45,6 +61,9 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.topMargin: topBar.barHeight
             interactive: false
+            transform: Translate {
+                        x: backSwipe.position * mainSwipeView.width * 1.5
+                    }
             property alias materialPage: materialPage
 
             function swipeToItem(itemToDisplayDefaultIndex) {
