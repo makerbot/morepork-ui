@@ -4,6 +4,7 @@ Item {
     id: filament_item
     width: 22
     height: 22
+    smooth: false
     anchors.verticalCenter: parent.verticalCenter
 
     property int filamentColor
@@ -13,6 +14,8 @@ Item {
         id: filament_circle
         color: "#00000000"
         radius: 11
+        smooth: true
+        antialiasing: true
         anchors.fill: parent
         border.color: "#ffffff"
         border.width: 1
@@ -54,6 +57,8 @@ Item {
             id: unknown_filament_text
             color: "#ffffff"
             text: "?"
+            smooth: true
+            antialiasing: true
             anchors.verticalCenterOffset: 2
             anchors.horizontalCenterOffset: 1
             anchors.horizontalCenter: parent.horizontalCenter
@@ -66,6 +71,8 @@ Item {
 
         Canvas {
             id: canvas
+            smooth: true
+            antialiasing: true
             rotation: -90
             anchors.fill: parent
             onPaint:

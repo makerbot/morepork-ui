@@ -5,6 +5,7 @@ Item {
     id: item1
     width: 250
     height: 265
+    smooth: false
     property alias action_mouseArea: action_mouseArea
     property alias percentage_printing_text: percentage_printing_text
     property alias status_image: status_image
@@ -18,6 +19,8 @@ Item {
         height: 250
         color: "#00000000"
         radius: 125
+        antialiasing: true
+        smooth: true
         anchors.top: parent.top
         anchors.topMargin: 0
         visible: true
@@ -31,6 +34,8 @@ Item {
             height: 224
             color: "#00000000"
             radius: 112
+            antialiasing: false
+            smooth: false
             visible: false
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
@@ -54,6 +59,8 @@ Item {
             onPercentChanged: canvas.requestPaint()
             Canvas {
                 id: canvas
+                antialiasing: false
+                smooth: false
                 rotation : -90
                 anchors.fill: parent
                 onPaint:
@@ -61,13 +68,15 @@ Item {
                     var context = getContext("2d");
                     context.reset();
 
-                    var centreX = parent.width / 2;
-                    var centreY = parent.height / 2;
+                    var centreX = parent.width*0.5;
+                    var centreY = parent.height*0.5;
 
                     context.beginPath();
-                    context.arc(centreX, centreY, (parent.width / 2) - 5, 0,
-                                (Math.PI*(2.0*parent.percent/100)), false);
+                    //0.06283185 = PI*2/100
+                    context.arc(centreX, centreY, parent.width*0.5-5, 0,
+                                parent.percent*0.06283185, false);
                     context.lineWidth = 10;
+                    context.lineCap = "round";
                     context.strokeStyle = parent.progressColor;
                     context.stroke()
                 }
@@ -78,9 +87,11 @@ Item {
             id: status_image
             width: 68
             height: 68
+            smooth: false
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             source: "qrc:/img/loading_gears.png"
+            visible: (bot.process.stateType == ProcessStateType.Loading)
 
             RotationAnimator {
                 target: status_image;
@@ -95,9 +106,12 @@ Item {
             id: loading_or_paused_image
             width: 214
             height: 214
+            smooth: false
             source: "qrc:/img/loading_rings.png"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            visible: (bot.process.stateType == ProcessStateType.Loading ||
+                      bot.process.stateType == ProcessStateType.Paused)
 
             RotationAnimator {
                 target: loading_or_paused_image;
@@ -113,6 +127,8 @@ Item {
             id: percentage_printing_text
             color: "#ffffff"
             text: bot.process.printPercentage
+            antialiasing: false
+            smooth: false
             anchors.verticalCenterOffset: 4
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
@@ -127,6 +143,8 @@ Item {
                 id: percentage_symbol_text
                 color: "#ffffff"
                 text: "%"
+                antialiasing: false
+                smooth: false
                 anchors.top: parent.top
                 anchors.topMargin: 2
                 visible: false
@@ -142,10 +160,12 @@ Item {
 
         Rectangle {
             id: action_circle
-            width: 60
-            height: 60
+            width: 61
+            height: 61
             color: "#000000"
-            radius: 30
+            radius: 31
+            antialiasing: false
+            smooth: false
             anchors.top: parent.top
             anchors.topMargin: 201
             anchors.horizontalCenter: parent.horizontalCenter
@@ -157,12 +177,14 @@ Item {
                 id: action_image
                 width: 45
                 height: 45
+                smooth: false
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             MouseArea {
                 id: action_mouseArea
+                smooth: false
                 anchors.fill: parent
             }
         }
@@ -237,6 +259,7 @@ Item {
                 width: 224
                 height: 224
                 source: "qrc:/img/paused_rings.png"
+                visible: true
             }
 
             PropertyChanges {

@@ -4,6 +4,7 @@ import QtQuick.Controls 2.2
 Button {
     id: moreporkButton
     height: 100
+    smooth: false
     spacing: 0
     anchors.right: parent.right
     anchors.left: parent.left
@@ -13,6 +14,7 @@ Button {
 
     background: Rectangle {
         color: moreporkButton.down ? buttonPressColor : buttonColor
+        smooth: false
     }
 
     contentItem: Text {
@@ -26,5 +28,7 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
+        smooth: false
+        antialiasing: false
     }
 }

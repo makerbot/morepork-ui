@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.0
 Item {
     property alias flickable: flickable
     property alias defaultItem: flickable
+    smooth: false
 
     Flickable {
         id: flickable
@@ -16,9 +17,11 @@ Item {
         contentHeight: column.height
         property var backSwiper: mainSwipeView
         property int backSwipeIndex: 0
+        smooth: false
 
         Column {
             id: column
+            smooth: false
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.top: parent.top
@@ -57,22 +60,27 @@ Item {
             Item { //TODO: make this a QML Form
                 id: infoListItem
                 height: 45
+                smooth: false
                 width: parent.width
                 property alias dnsTextLabel: dnsTextLabel
 
                 RowLayout {
                     id: rowLayoutDns
+                    smooth: false
                     spacing: 25
                     anchors.verticalCenter: parent.verticalCenter
 
                     Item{
                         z: 1
                         height: parent.height
+                        smooth: false
                         width: dnsTextLabel.width
 
                         Text {
                             id: dnsTextLabel
                             text: qsTr("DNS") + cpUiTr.emptyStr
+                            smooth: false
+                            antialiasing: false
                             z: 2
                             font.family: "Antenna"
                             font.letterSpacing: 3
@@ -83,11 +91,13 @@ Item {
                         }
 
                         Item {
+                            smooth: false
                             anchors.fill: dnsTextLabel
                             anchors.leftMargin: -flickable.anchors.leftMargin
                             anchors.rightMargin: -rowLayoutDns.spacing
 
                             LinearGradient {
+                                smooth: false
                                 cached: true
                                 anchors.fill: parent
                                 start: Qt.point(parent.width, 0)
@@ -109,6 +119,7 @@ Item {
                     ListView {
                         width: 650 //TODO: Dynamically set this
                         height: infoListItem.height
+                        smooth: false
                         boundsBehavior: Flickable.DragOverBounds
                         spacing: 15
                         orientation: ListView.Horizontal

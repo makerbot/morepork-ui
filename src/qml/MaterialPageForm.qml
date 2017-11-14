@@ -6,15 +6,18 @@ import QtMultimedia 5.8
 Item {
     property alias filamentVideo: filamentVideo
     property alias defaultItem: tempItem
+    smooth: false
 
     Item {
         id: tempItem
         property var backSwiper: mainSwipeView
         property int backSwipeIndex: 0
+        smooth: false
     }
 
     Video {
         id: filamentVideo
+        smooth: false
         z: 3
         loops: MediaPlayer.Infinite
         anchors.right: parent.right
