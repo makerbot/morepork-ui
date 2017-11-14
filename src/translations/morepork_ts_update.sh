@@ -11,5 +11,3 @@ morepork_ko.ts \
 morepork_pr.ts \
 morepork_zh.ts
 
-# Generates .qm files for QtCreator builds
-lrelease ../../morepork-ui.pro
