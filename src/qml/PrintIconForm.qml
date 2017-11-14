@@ -65,12 +65,13 @@ Item {
                     var context = getContext("2d");
                     context.reset();
 
-                    var centreX = parent.width / 2;
-                    var centreY = parent.height / 2;
+                    var centreX = parent.width*0.5;
+                    var centreY = parent.height*0.5;
 
                     context.beginPath();
-                    context.arc(centreX, centreY, (parent.width / 2) - 5, 0,
-                                (Math.PI*(2.0*parent.percent/100)), false);
+                    //0.06283185 = PI*2/100
+                    context.arc(centreX, centreY, parent.width*0.5-5, 0,
+                                parent.percent*0.06283185, false);
                     context.lineWidth = 10;
                     context.lineCap = "round";
                     context.strokeStyle = parent.progressColor;
