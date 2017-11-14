@@ -44,8 +44,11 @@ Item {
             property string progressColor:
                 switch(printState)
                 {
-                case 4:
+                case ProcessStateType.PrintComplete:
                     "#3183AF"
+                    break;
+                case ProcessStateType.Failed:
+                    "#F79125"
                     break;
                 default:
                     "#FFFFFF"
@@ -285,6 +288,29 @@ Item {
                 height: 59
                 rotation: 0
                 source: "qrc:/img/check_mark.png"
+                visible: true
+            }
+
+        },
+        State {
+            name: "print_failed_state"
+            when: bot.process.stateType == ProcessStateType.Failed
+
+            PropertyChanges {
+                target: loading_or_paused_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: progress_circle
+                visible: true
+            }
+            PropertyChanges {
+                target: status_image
+                width: 16
+                height: 89
+                rotation: 0
+                source: "qrc:/img/exc_mark.png"
                 visible: true
             }
 
