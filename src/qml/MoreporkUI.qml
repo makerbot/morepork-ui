@@ -30,17 +30,17 @@ ApplicationWindow {
 
         Drawer{
             id: backSwipe
-            width: 0
+            width: rootAppWindow.width
             height: rootAppWindow.height
             edge: rootItem.rotation == 180 ? Qt.RightEdge : Qt.LeftEdge
             dim: false
+            opacity: 0
             interactive: mainSwipeView.currentIndex
             onOpened:
             {
                 position = 0
                 close()
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
-
             }
         }
 
@@ -62,7 +62,7 @@ ApplicationWindow {
             anchors.topMargin: topBar.barHeight
             interactive: false
             transform: Translate {
-                        x: backSwipe.position * mainSwipeView.width * 1.5
+                        x: backSwipe.position * mainSwipeView.width
                     }
             property alias materialPage: materialPage
 
