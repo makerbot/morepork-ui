@@ -6,6 +6,7 @@ Item {
     id: item_root
     width: 150
     height: 150
+    smooth: false
     property alias mouseArea: mouseArea
     property alias image: image
     property alias textIconDesc: textIconDesc
@@ -16,6 +17,7 @@ Item {
         x: 38
         width: 75
         height: 75
+        smooth: false
         anchors.top: parent.top
         anchors.topMargin: 10
         anchors.horizontalCenter: parent.horizontalCenter
@@ -33,6 +35,8 @@ Item {
         x: 52
         color: "#a0a0a0"
         text: "Icon Name"
+        antialiasing: false
+        smooth: false
         font.family: "Antenna"
         font.letterSpacing: 3
         font.weight: Font.Light
@@ -46,6 +50,7 @@ Item {
 
     MouseArea {
         id: mouseArea
+        smooth: false
         anchors.rightMargin: -125
         anchors.leftMargin: -125
         anchors.bottomMargin: -140

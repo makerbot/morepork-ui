@@ -64,8 +64,9 @@ qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC
     ${MOREPORK_UI_HEADERS}
     ${PARSED_ENUM_FILE_NAME})
 
-# Run the following to generate .ts files:
-# lupdate qml/MoreporkUI.qml -ts morepork_de.ts morepork_it.ts etc
+# Run the following to generate/update .ts files:
+# $ cd src/translations
+# $ ./morepork_ts_update.sh
 file(GLOB TS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_SOURCES})
 

@@ -7,9 +7,11 @@ Item {
     property int pageLevel: 1
     property alias settingsSwipeView: settingsSwipeView
     property alias defaultItem: itemSettings
+    smooth: false
 
     SwipeView {
         id: settingsSwipeView
+        smooth: false
         anchors.fill: parent
         interactive: false
 
@@ -27,10 +29,12 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
+            smooth: false
             visible: false
 
             Flickable {
                 id: flickableSettings
+                smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
@@ -38,6 +42,7 @@ Item {
 
                 Column {
                     id: columnSettings
+                    smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
                     anchors.top: parent.top
@@ -59,10 +64,12 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            smooth: false
             visible: false
 
             Flickable {
                 id: flickableLanguages
+                smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
@@ -70,6 +77,7 @@ Item {
 
                 Column {
                     id: columnLanguages
+                    smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
                     anchors.top: parent.top
@@ -83,7 +91,7 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
                     MoreporkButton {
                         id: buttonSpanish
@@ -93,7 +101,7 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
                     MoreporkButton {
                         id: buttonFrench
@@ -103,7 +111,7 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; Rectangle { color: "#505050"; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
                     MoreporkButton {
                         id: buttonItalian

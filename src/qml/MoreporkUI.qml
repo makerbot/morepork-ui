@@ -16,6 +16,7 @@ ApplicationWindow {
 
     Item{
         id: rootItem
+        smooth: false
         rotation: 180
         anchors.fill: parent
         objectName: "morepork_main_qml"
@@ -24,6 +25,7 @@ ApplicationWindow {
         Rectangle {
             id: rectangle
             color: "#000000"
+            smooth: false
             z: -1
             anchors.fill: parent
         }
@@ -48,6 +50,7 @@ ApplicationWindow {
             id: topBar
             z: 1
             width: parent.width
+            smooth: false
             backButton.visible: false
             imageDrawerArrow.visible: false
 
@@ -65,6 +68,7 @@ ApplicationWindow {
                         x: backSwipe.position * mainSwipeView.width * 1.5
                     }
             property alias materialPage: materialPage
+            smooth: false
 
             function swipeToItem(itemToDisplayDefaultIndex) {
                 var prevIndex = mainSwipeView.currentIndex
@@ -86,6 +90,7 @@ ApplicationWindow {
 
             // mainSwipeView.index = 0
             Item {
+                smooth: false
                 MainMenu {
                     id: mainMenu
                     anchors.fill: parent
@@ -123,9 +128,11 @@ ApplicationWindow {
             // mainSwipeView.index = 1
             Item {
                 property alias defaultItem: printPage.defaultItem
+                smooth: false
                 visible: false
                 PrintPage {
                     id: printPage
+                    smooth: false
                     anchors.fill: parent
                 }
             }
@@ -134,6 +141,7 @@ ApplicationWindow {
             Item {
                 property int defaultIndex: 2
                 property alias defaultItem: extruderPage.defaultItem
+                smooth: false
                 visible: false
                 ExtruderPage {
                     id: extruderPage
@@ -145,9 +153,11 @@ ApplicationWindow {
             Item {
                 property int defaultIndex: 3
                 property alias defaultItem: settingsPage.defaultItem
+                smooth: false
                 visible: false
                 SettingsPage {
                     id: settingsPage
+                    smooth: false
                     anchors.fill: parent
                     anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
                 }
@@ -157,6 +167,7 @@ ApplicationWindow {
             Item {
                 property int defaultIndex: 4
                 property alias defaultItem: infoPage.defaultItem
+                smooth: false
                 visible: false
                 InfoPage {
                     id: infoPage
@@ -169,9 +180,11 @@ ApplicationWindow {
             Item {
                 property int defaultIndex: 5
                 property alias defaultItem: materialPage.defaultItem
+                smooth: false
                 visible: false
                 MaterialPage {
                     id: materialPage
+                    smooth: false
                     anchors.fill: parent
                 }
             }
@@ -180,9 +193,11 @@ ApplicationWindow {
             Item {
                 property int defaultIndex: 6
                 property alias defaultItem: preheatPage.defaultItem
+                smooth: false
                 visible: false
                 PreheatPage {
                     id: preheatPage
+                    smooth: false
                     anchors.fill: parent
                 }
             }

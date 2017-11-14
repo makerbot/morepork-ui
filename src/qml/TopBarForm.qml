@@ -10,6 +10,7 @@ Item {
     // topFadeIn.height depending on what you are doing.
     property int barHeight: 40
     height: topFadeIn.height
+    smooth: false
     property alias topFadeIn: topFadeIn
     property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
@@ -21,6 +22,7 @@ Item {
         id: itemNotificationIcons
         width: 100
         height: 40
+        smooth: false
         z: 2
         anchors.right: parent.right
         anchors.rightMargin: 3
@@ -35,6 +37,7 @@ Item {
     LinearGradient {
         id: topFadeIn
         height: 60
+        smooth: false
         cached: true
         z: 1
         anchors.right: parent.right
@@ -59,6 +62,7 @@ Item {
         id: backButton
         width: 150
         height: barHeight
+        smooth: false
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.top: parent.top
@@ -68,6 +72,7 @@ Item {
         MouseArea {
             id: mouseArea_back
             height: topFadeIn.height
+            smooth: false
             anchors.leftMargin: -parent.anchors.leftMargin
             anchors.top: parent.top
             anchors.right: parent.right
@@ -78,6 +83,7 @@ Item {
         Image {
             id: imageBackArrow
             height: 25
+            smooth: false
             anchors.verticalCenterOffset: -1
             anchors.verticalCenter: text_back.verticalCenter
             anchors.left: parent.left
@@ -92,6 +98,8 @@ Item {
             width: 200
             color: "#a0a0a0"
             text: qsTr("BACK") + cpUiTr.emptyStr
+            antialiasing: false
+            smooth: false
             verticalAlignment: Text.AlignVCenter
             font.family: "Antenna"
             font.letterSpacing: 3
@@ -106,6 +114,7 @@ Item {
     Item {
         id: itemPrinterName
         height: barHeight
+        smooth: false
         z: 1
         anchors.top: parent.top
         anchors.right: parent.right
@@ -116,6 +125,8 @@ Item {
             id: textPrinterName
             color: "#a0a0a0"
             text: bot.name
+            antialiasing: false
+            smooth: false
             verticalAlignment: Text.AlignVCenter
             font.family: "Antenna"
             font.letterSpacing: 3
@@ -129,6 +140,7 @@ Item {
             id: imageDrawerArrow
             y: 227
             height: 25
+            smooth: false
             anchors.left: textPrinterName.right
             anchors.leftMargin: 10
             anchors.verticalCenter: textPrinterName.verticalCenter
@@ -141,6 +153,7 @@ Item {
                 id: mouseAreaTopDrawerDown
                 width: 40
                 height: 60
+                smooth: false
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 z: 2

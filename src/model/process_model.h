@@ -22,7 +22,8 @@ class ProcessModel : public BaseModel {
         Loading,
         Printing,
         Paused,
-        PrintComplete
+        PrintComplete,
+        Failed
     };
     Q_ENUM(ProcessType)
     Q_ENUM(ProcessStateType)
@@ -41,6 +42,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(ProcessStateType, stateType, Loading)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
+    MODEL_PROP(int, errorCode, 0)
 
   public:
     ProcessModel();

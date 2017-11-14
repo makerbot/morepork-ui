@@ -3,9 +3,11 @@ import QtQuick 2.4
 Item {
     width: 100
     height: 40
+    smooth: false
 
     Row {
         id: rowLayout
+        smooth: false
         spacing: 13
         anchors.fill: parent
 
@@ -25,10 +27,13 @@ Item {
             id: connectionType_item
             width: 26
             height: 26
+            smooth: false
             anchors.verticalCenter: parent.verticalCenter
 
             Image {
                 id: connection_type_image
+                antialiasing: true
+                smooth: true
                 anchors.fill: parent
                 visible: true
                 source:

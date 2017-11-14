@@ -45,6 +45,17 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(Paused);
         else if (kStepStr == "printing")
             stateTypeSet(Printing);
+        else if (kStepStr == "failed")
+            stateTypeSet(Failed);
+        else
+            stateTypeReset();
+    }
+
+    const Json::Value &error = proc["error"];
+    if (error.isObject()) {
+        UPDATE_INT_PROP(errorCode, error["code"]);
+    } else {
+        errorCodeReset();
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
