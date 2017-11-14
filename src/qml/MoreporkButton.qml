@@ -14,6 +14,7 @@ Button {
 
     background: Rectangle {
         color: moreporkButton.down ? buttonPressColor : buttonColor
+        smooth: false
     }
 
     contentItem: Text {
@@ -27,5 +28,7 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
+        smooth: false
+        antialiasing: false
     }
 }

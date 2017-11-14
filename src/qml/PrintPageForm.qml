@@ -16,6 +16,7 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
+    property bool internalStorage: false
     smooth: false
 
     PrintingDrawer {
@@ -67,17 +68,22 @@ Item {
                         id: buttonUsbStorage
                         buttonText.text: "USB Storage"
                         onClicked: {
+                            internalStorage = false
                             printSwipeView.swipeToItem(1)
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
+                        }
+                    }
 
                     MoreporkButton {
                         id: buttonInternalStorage
                         buttonText.text: "Internal Storage"
                         onClicked: {
                             bot.updateInternalStorageFileList()
+                            internalStorage = true
                             printSwipeView.swipeToItem(2)
                         }
                     }
@@ -142,12 +148,18 @@ Item {
                 flickableDirection: Flickable.VerticalFlick
 
                 model: bot.internalStorageFileList
-                delegate: MoreporkButton {
+                delegate:
+                MoreporkButton {
                     buttonText.text: modelData
+                    smooth: false
                     onClicked: {
                         if(buttonText.text !== "No Internal Files Found") {
                             fileName = buttonText.text
                             printSwipeView.swipeToItem(3)
+                        }
+                    }
+                    Item { width: parent.width; height: 1; smooth: false
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
                 }
@@ -159,8 +171,8 @@ Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2
-            smooth: false // or 1 (both can use this Item theoretically)
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : internalStorage ? 2 : 1
+            smooth: false
             visible: false
 
             Flickable {
@@ -188,7 +200,10 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
+                        }
+                    }
 
                     MoreporkButton {
                         id: buttonFileInfo
@@ -197,8 +212,10 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
-
+                    Item { width: parent.width; height: 1; smooth: false
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
+                        }
+                    }
 
                     SwipeView {
                         id: printDeleteSwipeView
