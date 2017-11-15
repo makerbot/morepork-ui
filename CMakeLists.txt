@@ -4,8 +4,23 @@ project(MoreporkUI CXX)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configs" FORCE)
 if("${CMAKE_BUILD_TYPE}" STREQUAL "")
-  message(STATUS "CMAKE_BUILD_TYPE was not set. Giving default value: Release")
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE Release)
+    message(STATUS "CMAKE_BUILD_TYPE not set. Giving default value: Release")
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE Release)
+else()
+    # Handle QtCreator MinSizeRel type (opt for Release)
+    if("${CMAKE_BUILD_TYPE}" STREQUAL "MinSizeRel")
+        message(STATUS "CMAKE_BUILD_TYPE MinSizeRel not supported."
+                       " Opting for value: Release")
+        set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE Release)
+    else()
+        # Handle QtCreator RelWithDebInfo and other types (opt for Debug)
+        if( NOT ( ("${CMAKE_BUILD_TYPE}" STREQUAL "Release") OR
+                ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug") ) )
+            message(STATUS "Unsupported CMAKE_BUILD_TYPE value."
+                           " Opting for value: Debug")
+            set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE Debug)
+        endif()
+    endif()
 endif()
 
 find_package(MBCMakeTools QUIET)
