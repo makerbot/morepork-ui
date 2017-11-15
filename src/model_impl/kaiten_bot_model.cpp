@@ -116,7 +116,7 @@ void KaitenBotModel::loadFilament(const int kToolIndex){
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["tool_index"] = Json::Value(kToolIndex);
-        conn->jsonrpc.invoke("loadFilament", json_params, std::weak_ptr<JsonRpcCallback>());
+        conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -129,7 +129,7 @@ void KaitenBotModel::unloadFilament(const int kToolIndex){
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["tool_index"] = Json::Value(kToolIndex);
-        conn->jsonrpc.invoke("unloadFilament", json_params, std::weak_ptr<JsonRpcCallback>());
+        conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
