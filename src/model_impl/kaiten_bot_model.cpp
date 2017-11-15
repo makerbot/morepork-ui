@@ -20,6 +20,8 @@ class KaitenBotModel : public BotModel {
     void cancel();
     void pausePrint();
     void print(QString file_name);
+    void loadFilament(const int kToolIndex);
+    void unloadFilament(const int kToolIndex);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -102,6 +104,32 @@ void KaitenBotModel::print(QString file_name){
         json_params["ensure_build_plate_clear"] = Json::Value(false);
         json_params["transfer_wait"] = Json::Value(false);
         conn->jsonrpc.invoke("print", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::loadFilament(const int kToolIndex){
+    try{
+        qDebug() << FL_STRM << "tool_index: " << kToolIndex;
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["tool_index"] = Json::Value(kToolIndex);
+        conn->jsonrpc.invoke("loadFilament", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::unloadFilament(const int kToolIndex){
+    try{
+        qDebug() << FL_STRM << "tool_index: " << kToolIndex;
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["tool_index"] = Json::Value(kToolIndex);
+        conn->jsonrpc.invoke("unloadFilament", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

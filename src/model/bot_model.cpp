@@ -29,6 +29,14 @@ void BotModel::print(QString file_name) {
     qDebug() << FL_STRM << "called with file name: " << file_name;
 }
 
+void BotModel::loadFilament(const int kToolIndex) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex;
+}
+
+void BotModel::unloadFilament(const int kToolIndex) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex;
+}
+
 void BotModel::updateInternalStorageFileList(){
   qDebug() << FL_STRM << "called";
   QStringList file_list;
