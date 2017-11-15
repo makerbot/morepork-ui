@@ -33,5 +33,7 @@
         <file>FilamentIconForm.qml</file>
         <file>PrintStatusView.qml</file>
         <file>PrintStatusViewForm.qml</file>
+        <file>FilamentBay.qml</file>
+        <file>FilamentBayForm.qml</file>
     </qresource>
 </RCC>
