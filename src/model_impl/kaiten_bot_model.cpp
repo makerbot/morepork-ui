@@ -21,6 +21,7 @@ class KaitenBotModel : public BotModel {
     void pausePrint();
     void print(QString file_name);
     void loadFilament(const int kToolIndex);
+    void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
@@ -117,6 +118,20 @@ void KaitenBotModel::loadFilament(const int kToolIndex){
         Json::Value json_params(Json::objectValue);
         json_params["tool_index"] = Json::Value(kToolIndex);
         conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+// Call to let load_filament() know the fliament is extruding
+void KaitenBotModel::loadFilamentStop(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("stop_filament");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

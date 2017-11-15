@@ -37,6 +37,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void updateInternalStorageFileList();
     Q_INVOKABLE virtual void deletePrintFile(QString file_name);
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex);
+    Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
   private:
     Q_OBJECT

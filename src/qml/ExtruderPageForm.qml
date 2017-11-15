@@ -48,6 +48,7 @@ Item {
                     MoreporkButton {
                         id: buttonLoadFilamentLeft
                         buttonText.text: "Left Extruder Load Filament"
+                        height: 80
                         onClicked: {
                             bot.loadFilament(1)
                         }
@@ -58,6 +59,7 @@ Item {
                     MoreporkButton {
                         id: buttonUnloadFilamentLeft
                         buttonText.text: "Left Extruder Unload Filament"
+                        height: 80
                         onClicked: {
                             bot.unloadFilament(1)
                         }
@@ -68,6 +70,7 @@ Item {
                     MoreporkButton {
                         id: buttonLoadFilamentRight
                         buttonText.text: "Right Extruder Load Filament"
+                        height: 80
                         onClicked: {
                             bot.loadFilament(0)
                         }
@@ -78,8 +81,20 @@ Item {
                     MoreporkButton {
                         id: buttonUnloadFilamentRight
                         buttonText.text: "Right Extruder Unload Filament"
+                        height: 80
                         onClicked: {
                             bot.unloadFilament(0)
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonloadFilamentStop
+                        buttonText.text: "Stop Load Filament"
+                        height: 80
+                        onClicked: {
+                            bot.loadFilamentStop()
                         }
                     }
                 }
