@@ -20,6 +20,9 @@ class KaitenBotModel : public BotModel {
     void cancel();
     void pausePrint();
     void print(QString file_name);
+    void loadFilament(const int kToolIndex);
+    void loadFilamentStop();
+    void unloadFilament(const int kToolIndex);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -102,6 +105,46 @@ void KaitenBotModel::print(QString file_name){
         json_params["ensure_build_plate_clear"] = Json::Value(false);
         json_params["transfer_wait"] = Json::Value(false);
         conn->jsonrpc.invoke("print", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::loadFilament(const int kToolIndex){
+    try{
+        qDebug() << FL_STRM << "tool_index: " << kToolIndex;
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["tool_index"] = Json::Value(kToolIndex);
+        conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+// Call to let load_filament() know the fliament is extruding
+void KaitenBotModel::loadFilamentStop(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("stop_filament");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::unloadFilament(const int kToolIndex){
+    try{
+        qDebug() << FL_STRM << "tool_index: " << kToolIndex;
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["tool_index"] = Json::Value(kToolIndex);
+        conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
