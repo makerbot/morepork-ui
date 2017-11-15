@@ -5,6 +5,7 @@ Description=Auto auther
 Type=simple
 ExecStart=/usr/bin/morepork_ui
 StandardOutput=null
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
