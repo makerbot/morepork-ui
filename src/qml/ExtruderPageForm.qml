@@ -24,7 +24,7 @@ Item {
         Item {
             id: itemLoadUnloadFilament
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: extruderSwipeView
+            property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
             smooth: false
             visible: false
