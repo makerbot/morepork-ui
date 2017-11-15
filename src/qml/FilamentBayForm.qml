@@ -14,6 +14,9 @@ Item {
     property string filamentMaterialColor: "COLOR"
     property string filamentQuantity: "-0.0"
 
+    property alias load_mouseArea: load_mouseArea
+    property alias unload_mouseArea: unload_mouseArea
+
     Rectangle {
         id: rectangle
         color: "#000000"

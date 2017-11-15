@@ -31,7 +31,7 @@ Item {
 //        autoLoad: true
 //        autoPlay: false
 //        source: mainSwipeView.rotation == 180 ? "" : "qrc:/vid/filament_installation.m4v"
-    //    }
+//    }
 
     FilamentBay{
         anchors.top: parent.top
@@ -40,6 +40,8 @@ Item {
         filamentMaterial: "MAT"
         filamentMaterialColor: "COLOR"
         filamentQuantity: "0.0"
+        load_mouseArea.onClicked: bot.loadFilament(0)
+        unload_mouseArea.onClicked: bot.unloadFilament(0)
     }
 
     FilamentBay{
@@ -49,5 +51,7 @@ Item {
         filamentMaterial: "MAT"
         filamentMaterialColor: "COLOR"
         filamentQuantity: "0.0"
+        load_mouseArea.onClicked: bot.loadFilament(1)
+        unload_mouseArea.onClicked: bot.unloadFilament(1)
     }
 }
