@@ -1,11 +1,14 @@
 [Unit]
 Description=Auto auther
+StartLimitIntervalSec=10000
+StartLimitBurst=2
 
 [Service]
 Type=simple
 ExecStart=/usr/bin/morepork_ui
 StandardOutput=null
-Restart=always
+Restart=on-abort
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
