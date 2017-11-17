@@ -132,7 +132,7 @@ Item {
     states: [
         State {
             name: "State1"
-            when: filamentBaySwitchActive && bot.process.filamentStateType == FilamentProcessStateType.Idle
+            when: filamentBaySwitchActive == true
 
             PropertyChanges {
                 target: main_instruction_text

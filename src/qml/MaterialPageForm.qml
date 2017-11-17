@@ -32,10 +32,11 @@ Item {
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
             smooth: false
-            visible: bot.process.type != ProcessType.Load
+            visible: true
 
             FilamentBay{
                 id: bay1
+                visible: bot.process.type != ProcessType.Load
                 anchors.top: parent.top
                 anchors.topMargin: 40
                 filamentBayID: 1
@@ -52,6 +53,7 @@ Item {
 
             FilamentBay{
                 id: bay2
+                visible: bot.process.type != ProcessType.Load
                 anchors.top: parent.top
                 anchors.topMargin: 240
                 filamentBayID: 2
@@ -65,14 +67,15 @@ Item {
                 }
                 unload_mouseArea.onClicked: bot.unloadFilament(1)
             }
-        }
 
-        Item{
-            id: itemLoadFilament
-            visible: bot.process.type == ProcessType.Load
-            LoadFilament{
-                id: loadFilamentProcess
+            Item{
+                id: itemLoadFilament
+                visible: bot.process.type == ProcessType.Load
+                LoadFilament{
+                    id: loadFilamentProcess
+                    filamentBaySwitchActive: bot.filamentBay1Switch
 
+                }
             }
         }
     }
