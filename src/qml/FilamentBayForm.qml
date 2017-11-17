@@ -20,8 +20,20 @@ Item {
     Rectangle {
         id: rectangle
         color: "#000000"
-        visible: true
+        visible: false
         anchors.fill: parent
+    }
+
+    Rectangle {
+        id: filament_color
+        width: filament_image.width
+        height: filament_image.height
+        color: "#1a455c"
+        visible: true
+        anchors.left: parent.left
+        anchors.leftMargin: 65
+        anchors.top: parent.top
+        anchors.topMargin: 45
     }
 
     Image {
@@ -32,10 +44,9 @@ Item {
         anchors.leftMargin: 65
         anchors.top: parent.top
         anchors.topMargin: 45
-        fillMode: Image.PreserveAspectFit
         smooth: false
         antialiasing: false
-        source: "qrc:/img/filamentbay_empty.png"
+        source: "qrc:/img/filamentbay_loaded.png"
 
         ColumnLayout {
             id: columnLayout
@@ -215,4 +226,6 @@ Item {
             }
         }
     }
+
+
 }

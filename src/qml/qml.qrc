@@ -35,5 +35,7 @@
         <file>PrintStatusViewForm.qml</file>
         <file>FilamentBay.qml</file>
         <file>FilamentBayForm.qml</file>
+        <file>LoadFilament.qml</file>
+        <file>LoadFilamentForm.qml</file>
     </qresource>
 </RCC>

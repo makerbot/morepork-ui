@@ -25,14 +25,24 @@ class ProcessModel : public BaseModel {
         PrintComplete,
         Failed
     };
+    //MOREPORK_QML_ENUM
+    enum FilamentProcessStateType {
+        Idle,
+        Preheating,
+        Extrusion,
+        Stopping,
+        UnloadingFilament
+    };
+
     Q_ENUM(ProcessType)
     Q_ENUM(ProcessStateType)
+    Q_ENUM(FilamentProcessStateType)
 
   private:
     Q_OBJECT
 
     MODEL_PROP(bool, active, false)
-    // 'nameStr' holds the value of params["info"]["current_process"]["name"]
+    // 'nameStr' holds the+6 value of params["info"]["current_process"]["name"]
     MODEL_PROP(QString, nameStr, "Unknown")
     // 'stepStr' holds the value of params["info"]["current_process"]["step"]
     MODEL_PROP(QString, stepStr, "Unknown")
@@ -40,6 +50,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(ProcessType, type, None)
     // 'stateType' is based on the value of params["info"]["current_process"]["step"]
     MODEL_PROP(ProcessStateType, stateType, Loading)
+    MODEL_PROP(FilamentProcessStateType, filamentStateType, Idle)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
     MODEL_PROP(int, errorCode, 0)
