@@ -6,9 +6,8 @@ import QtMultimedia 5.8
 Item {
     id: item1
     //    property alias filamentVideo: filamentVideo
-    property alias defaultItem: itemLoadUnloadFilament
-//    width: 800
-//    height: 420
+    property alias defaultItem: itemFilamentBay
+
     smooth: false
 
     SwipeView {
@@ -28,7 +27,7 @@ Item {
 
         // extruderSwipeView.index = 0
         Item {
-            id: itemLoadUnloadFilament
+            id: itemFilamentBay
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
@@ -46,14 +45,13 @@ Item {
                 filamentQuantity: "0.0"
                 load_mouseArea.onClicked:
                 {
-                    loadFilamentProcess.bayID = 1
+                    loadUnloadFilamentProcess.bayID = 1
                     bot.loadFilament(0)
                     materialSwipeView.swipeToItem(2)
                 }
                 unload_mouseArea.onClicked:
                 {
-                    loadFilamentProcess.unloadProcess = true
-                    loadFilamentProcess.bayID = 1
+                    loadUnloadFilamentProcess.bayID = 1
                     bot.unloadFilament(0)
                     materialSwipeView.swipeToItem(2)
                 }
@@ -70,14 +68,13 @@ Item {
                 filamentQuantity: "0.0"
                 load_mouseArea.onClicked:
                 {
-                    loadFilamentProcess.bayID = 2
+                    loadUnloadFilamentProcess.bayID = 2
                     bot.loadFilament(1)
                     materialSwipeView.swipeToItem(2)
                 }
                 unload_mouseArea.onClicked:
                 {
-                    loadFilamentProcess.unloadProcess = true
-                    loadFilamentProcess.bayID = 2
+                    loadUnloadFilamentProcess.bayID = 2
                     bot.unloadFilament(1)
                     materialSwipeView.swipeToItem(2)
                 }
@@ -90,12 +87,6 @@ Item {
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: 2
             visible: false
-
-//            Rectangle {
-//                id: rectangle
-//                color: "#000000"
-//                anchors.fill: parent
-//            }
 
             Rectangle {
                 id: base_rectangle
@@ -218,12 +209,12 @@ Item {
 
         // extruderSwipeView.index = 2
         Item{
-            id: itemLoadFilament
+            id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: 1
             visible: true
-            LoadFilament{
-                id: loadFilamentProcess
+            LoadUnloadFilament{
+                id: loadUnloadFilamentProcess
                 filamentBaySwitchActive: bayID == 1 ? bot.filamentBay1Switch : bot.filamentBay2Switch
             }
         }

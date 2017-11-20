@@ -13,7 +13,6 @@ Item {
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
     property int bayID: 1
-    property bool unloadProcess: false
 
     Rectangle {
         id: rectangle

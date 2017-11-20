@@ -42,7 +42,7 @@ class ProcessModel : public BaseModel {
     Q_OBJECT
 
     MODEL_PROP(bool, active, false)
-    // 'nameStr' holds the+6 value of params["info"]["current_process"]["name"]
+    // 'nameStr' holds the value of params["info"]["current_process"]["name"]
     MODEL_PROP(QString, nameStr, "Unknown")
     // 'stepStr' holds the value of params["info"]["current_process"]["step"]
     MODEL_PROP(QString, stepStr, "Unknown")
