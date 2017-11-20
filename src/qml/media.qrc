@@ -31,7 +31,7 @@
 	<file alias="close_bay_door.png">images/close_bay_door.png</file>
 	<file alias="confirm_extrusion.png">images/confirm_extrusion.png</file>
 	<file alias="extruder_heating.png">images/extruder_heating.png</file>
-	<file alias="unload_filaament.png">images/unload_filament.png</file>
+	<file alias="unload_filament.png">images/unload_filament.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
