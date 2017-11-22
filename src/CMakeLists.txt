@@ -7,11 +7,12 @@ endif()
 if(NOT ${QT_CREATOR_BUILD})
     find_package(JsonCpp REQUIRED)
     find_package(JsonRpc REQUIRED)
+    find_package(TinyThing REQUIRED)
 endif()
 
 # Build root installs the qt5 cmake configs to staging
 # so this just magically works.
-find_package(Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Multimedia Gui REQUIRED)
 find_package(Qt5LinguistTools)
 
 # Model impl sources aren't built for Qt creator so they just live here
@@ -21,14 +22,16 @@ set(SOURCES
     model/bot_model.cpp
     model/net_model.cpp
     model/process_model.cpp
-    gui_helpers.cpp)
+    storage/storage.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
     model_impl/kaiten_net_model.cpp
     model_impl/kaiten_process_model.cpp
     model_impl/kaiten_bot_model.cpp
-    model_impl/local_jsonrpc.cpp)
+    model_impl/local_jsonrpc.cpp
+    #gui_helpers.cpp
+    storage/makerbot_file_meta_reader.cpp)
 
 # automoc cannot be reliably used when it relies
 # on a dynamic header (ie. enum_parser)
@@ -38,7 +41,8 @@ set(MOREPORK_UI_HEADERS
     model/base_model.h
     model/bot_model.h
     model/net_model.h
-    model/process_model.h)
+    model/process_model.h
+    storage/storage.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})
@@ -90,7 +94,7 @@ target_link_libraries(morepork_ui
     Qt5::Quick
     Qt5::Multimedia)
 if(NOT ${QT_CREATOR_BUILD})
-    target_link_libraries(morepork_ui JsonRpc::jsonrpc)
+    target_link_libraries(morepork_ui JsonRpc::jsonrpc TinyThing::tinything)
 endif()
 
 if(NOT ${QT_CREATOR_BUILD})

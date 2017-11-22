@@ -24,6 +24,7 @@
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
 #endif
 #include "parsed_qml_enums.h"
+#include "storage/storage.h"
 
 
 int main(int argc, char ** argv) {
@@ -43,10 +44,13 @@ int main(int argc, char ** argv) {
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
 
     UiTranslator ui_trans;
+    MoreporkStorage storage;
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("bot", bot.data());
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("cpUiTr", (QObject*)&ui_trans);
+    engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
+    engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
 
     // So, basically, our UI is upside down when the one

@@ -10,6 +10,7 @@
 #include "net_model.h"
 #include "process_model.h"
 
+
 // The top level API for our bot model.  We don't allow direct instantiation
 // because this doesn't initialize submodels.
 class BotModel : public BaseModel {
@@ -34,8 +35,6 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pausePrint();
     Q_INVOKABLE virtual void print(QString file_name);
-    Q_INVOKABLE virtual void updateInternalStorageFileList();
-    Q_INVOKABLE virtual void deletePrintFile(QString file_name);
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex);
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
@@ -50,7 +49,6 @@ class BotModel : public BaseModel {
     MODEL_PROP(FilamentColor, filament2Color, Unknown)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
-    MODEL_PROP(QStringList, internalStorageFileList, {"No Internal Files Found"})
     MODEL_PROP(int, extruderACurrentTemp, -999)
     MODEL_PROP(int, extruderATargetTemp, -999)
     MODEL_PROP(int, extruderBCurrentTemp, -999)

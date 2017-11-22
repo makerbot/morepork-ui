@@ -82,8 +82,8 @@ Item {
                         id: buttonInternalStorage
                         buttonText.text: "Internal Storage"
                         onClicked: {
-                            bot.updateInternalStorageFileList()
                             internalStorage = true
+                            storage.updateInternalStorageFileList()
                             printSwipeView.swipeToItem(2)
                         }
                     }
@@ -147,21 +147,37 @@ Item {
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
 
-                model: bot.internalStorageFileList
+                model: storage.printFileList
                 delegate:
-                MoreporkButton {
-                    buttonText.text: modelData
+                Item {
+                    id: printFileItem
+                    height: 100
                     smooth: false
-                    onClicked: {
-                        if(buttonText.text !== "No Internal Files Found") {
-                            fileName = buttonText.text
-                            printSwipeView.swipeToItem(3)
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+
+                    RowLayout {
+                        smooth: false
+                        spacing: 0
+                        anchors.fill: parent
+
+                        Image { id: image; source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName }
+
+                        MoreporkButton {
+                            anchors.leftMargin: image.width
+                            buttonText.text: model.modelData.fileBaseName
+                            smooth: false
+                            onClicked: {
+                                if(model.modelData.fileBaseName !== "thing") {
+                                    fileName = model.modelData.filePath + "/" + model.modelData.fileName
+                                    printSwipeView.swipeToItem(3)
+                                }
+                            }
                         }
                     }
+
                     Item { width: parent.width; height: 1; smooth: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
-                        }
-                    }
+                           Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
                 }
             }
         }
