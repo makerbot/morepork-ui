@@ -18,8 +18,7 @@ private:
     const static QString PROJECT_DIR;
     const QStringList REQUIRED_ARTIFACTS = QStringList{
             "MBCoreUtils",
-            "Birdwing-Acceleration-Shared",
-            "morepork-mbcoreutils"};
+            "libtinything"};
 
     const QString DEFAULT_SERVER
       = "http://maven.soft.makerbot.net/artifactory/";
@@ -54,6 +53,7 @@ private:
     void SetDone(QString name);
     bool IsAllDone();
     size_t GetTotalArtifacts();
+    void MergeUsr();
 
     void ProcessInitialList(QJsonObject json_object);
     void ProcessBranchQuery(QJsonObject json_object, QString name);
