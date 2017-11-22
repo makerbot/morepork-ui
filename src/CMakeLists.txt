@@ -30,7 +30,6 @@ set(MODEL_IMPL_SOURCES
     model_impl/kaiten_process_model.cpp
     model_impl/kaiten_bot_model.cpp
     model_impl/local_jsonrpc.cpp
-    #gui_helpers.cpp
     storage/makerbot_file_meta_reader.cpp)
 
 # automoc cannot be reliably used when it relies
