@@ -4,14 +4,29 @@ if(${QT_CREATOR_BUILD})
     add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000)
 endif()
 
+set(HAVE_LIBTINYTHING false)
+# For Qt Creator builds check if we have a local libtinything artifact
+if(${QT_CREATOR_BUILD} AND EXISTS "${MoreporkUI_SOURCE_DIR}/artifacts/cmake")
+    set(TinyThing_DIR "${MoreporkUI_SOURCE_DIR}/artifacts/cmake")
+    set(JsonCpp_DIR "${MoreporkUI_SOURCE_DIR}/artifacts/cmake")
+    find_package(JsonCpp QUIET)
+    find_package(TinyThing QUIET)
+    if(TARGET JsonCpp::jsoncpp AND TARGET TinyThing::tinything)
+        set(HAVE_LIBTINYTHING true)
+        add_definitions(-DHAVE_LIBTINYTHING)
+    endif()
+endif()
+
 if(NOT ${QT_CREATOR_BUILD})
     find_package(JsonCpp REQUIRED)
     find_package(JsonRpc REQUIRED)
+    find_package(TinyThing REQUIRED)
+    add_definitions(-DHAVE_LIBTINYTHING)
 endif()
 
 # Build root installs the qt5 cmake configs to staging
 # so this just magically works.
-find_package(Qt5 COMPONENTS Core Quick Multimedia REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Multimedia Gui REQUIRED)
 find_package(Qt5LinguistTools)
 
 # Model impl sources aren't built for Qt creator so they just live here
@@ -21,14 +36,15 @@ set(SOURCES
     model/bot_model.cpp
     model/net_model.cpp
     model/process_model.cpp
-    gui_helpers.cpp)
+    storage/storage.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
     model_impl/kaiten_net_model.cpp
     model_impl/kaiten_process_model.cpp
     model_impl/kaiten_bot_model.cpp
-    model_impl/local_jsonrpc.cpp)
+    model_impl/local_jsonrpc.cpp
+    storage/makerbot_file_meta_reader.cpp)
 
 # automoc cannot be reliably used when it relies
 # on a dynamic header (ie. enum_parser)
@@ -38,11 +54,16 @@ set(MOREPORK_UI_HEADERS
     model/base_model.h
     model/bot_model.h
     model/net_model.h
-    model/process_model.h)
+    model/process_model.h
+    storage/storage.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})
     list(APPEND MOREPORK_UI_HEADERS model_impl/local_jsonrpc.h)
+else()
+    if(${HAVE_LIBTINYTHING})
+        list(APPEND SOURCES storage/makerbot_file_meta_reader.cpp)
+    endif()
 endif()
 
 # Call the enum parser if MOREPORK_UI_HEADERS or enum_parser.cmake changes
@@ -88,9 +109,13 @@ add_executable(morepork_ui
 target_link_libraries(morepork_ui
     Qt5::Core
     Qt5::Quick
-    Qt5::Multimedia)
+    Qt5::Multimedia TinyThing::tinything)
 if(NOT ${QT_CREATOR_BUILD})
-    target_link_libraries(morepork_ui JsonRpc::jsonrpc)
+    target_link_libraries(morepork_ui JsonRpc::jsonrpc TinyThing::tinything)
+else()
+    if(${HAVE_LIBTINYTHING})
+        target_link_libraries(morepork_ui JsonCpp::jsoncpp TinyThing::tinything)
+    endif()
 endif()
 
 if(NOT ${QT_CREATOR_BUILD})
