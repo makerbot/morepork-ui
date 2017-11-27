@@ -15,22 +15,23 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         const QString kNameStr = kName.asString().c_str();
         nameStrSet(kNameStr);
         if (kNameStr == "PrintProcess")
-            typeSet(Print);
+            typeSet(ProcessType::Print);
         else if (kNameStr == "LoadFilamentProcess")
-            typeSet(Load);
+            typeSet(ProcessType::Load);
         else if (kNameStr == "UnloadFilamentProcess")
-            typeSet(Unload);
+            typeSet(ProcessType::Unload);
         else
-            typeSet(Other);
+            typeSet(ProcessType::Other);
     }
     else {
-        typeSet(Other);
+        typeSet(ProcessType::Other);
     }
 
     const Json::Value &kStep = proc["step"];
     if (kStep.isString()) {
         const QString kStepStr = kStep.asString().c_str();
         stepStrSet(kStepStr);
+        // 'Print' states (steps)
         if (kStepStr == "initializing" ||
             kStepStr == "initial_heating" ||
             kStepStr == "final_heating" ||
@@ -40,13 +41,22 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             kStepStr == "preheating_resuming" ||
             kStepStr == "waiting_for_file" ||
             kStepStr == "transfer")
-            stateTypeSet(Loading);
+            stateTypeSet(ProcessStateType::Loading);
         else if (kStepStr == "suspended")
-            stateTypeSet(Paused);
+            stateTypeSet(ProcessStateType::Paused);
         else if (kStepStr == "printing")
-            stateTypeSet(Printing);
+            stateTypeSet(ProcessStateType::Printing);
         else if (kStepStr == "failed")
-            stateTypeSet(Failed);
+            stateTypeSet(ProcessStateType::Failed);
+        // 'Load' and 'Unload' states (steps)
+        else if (kStepStr == "preheating")
+            stateTypeSet(ProcessStateType::Preheating);
+        else if (kStepStr == "extrusion")
+            stateTypeSet(ProcessStateType::Extrusion);
+        else if (kStepStr == "stopping")
+            stateTypeSet(ProcessStateType::Stopping);
+        else if (kStepStr == "unloading_filament")
+            stateTypeSet(ProcessStateType::UnloadingFilament);
         else
             stateTypeReset();
     }

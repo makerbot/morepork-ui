@@ -18,16 +18,13 @@ class ProcessModel : public BaseModel {
     };
     //MOREPORK_QML_ENUM
     enum ProcessStateType {
-        Default,
+        Default, // Print states
         Loading,
         Printing,
         Paused,
         PrintComplete,
-        Failed
-    };
-    //MOREPORK_QML_ENUM
-    enum LoadUnloadProcessStateType {
-        Idle,
+        Failed,
+        Idle, // Load and Unload state types
         Preheating,
         Extrusion,
         Stopping,
@@ -36,7 +33,6 @@ class ProcessModel : public BaseModel {
 
     Q_ENUM(ProcessType)
     Q_ENUM(ProcessStateType)
-    Q_ENUM(LoadUnloadProcessStateType)
 
   private:
     Q_OBJECT
@@ -50,7 +46,6 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(ProcessType, type, None)
     // 'stateType' is based on the value of params["info"]["current_process"]["step"]
     MODEL_PROP(ProcessStateType, stateType, Loading)
-    MODEL_PROP(LoadUnloadProcessStateType, loadUnloadStateType, Idle)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
     MODEL_PROP(int, errorCode, 0)

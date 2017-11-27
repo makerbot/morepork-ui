@@ -32,4 +32,9 @@ else:
             revision="develop",
             debug=False,
             stable_required=True),
+        artifactory_utils.ArtifactSelector(
+            project="morepork-libtinything",
+            revision="develop",
+            debug=False,
+            stable_required=True),
     ]
