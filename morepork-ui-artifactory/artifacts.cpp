@@ -275,40 +275,49 @@ size_t Artifacts::GetTotalArtifacts() {
     return m_artifacts_list_.size() - 1; // 1 being the initial placeholder
 }
 
-void Artifacts::MergeUsr(){
+void MergeSubDir(const QString &sub_dir_path, const QString &dst_dir_path) {
+    if(QFileInfo(sub_dir_path).exists()){
+        QDirIterator it1(sub_dir_path);
+        while(it1.hasNext()){
+            QFileInfo file_info1 = it1.next();
+            QDir dir;
+            dir.rename(file_info1.absoluteFilePath(), dst_dir_path + "/"
+                + file_info1.fileName());
+        }
+    }
+}
+
+void Artifacts::MergeUsr() {
 #ifdef __linux__
-    QString include_rel_path = "usr/include",
-            lib_rel_path = "usr/lib";
-    QString usr_include_path = UNZIPPED_LOC+include_rel_path,
-            usr_lib_path = UNZIPPED_LOC+lib_rel_path;
-    QDir().mkpath(usr_include_path);
-    QDir().mkpath(usr_lib_path);
+    const QString include_rel_path = "usr/include",
+                  lib_rel_path = "usr/lib",
+                  bin_rel_path = "usr/bin",
+                  cmake_rel_path = "cmake";
+    const QString include_abs_path = UNZIPPED_LOC+include_rel_path,
+                  lib_abs_path = UNZIPPED_LOC+lib_rel_path,
+                  bin_abs_path = UNZIPPED_LOC+bin_rel_path,
+                  cmake_abs_path = UNZIPPED_LOC+cmake_rel_path;
+    QDir().mkpath(include_abs_path);
+    QDir().mkpath(lib_abs_path);
+    QDir().mkpath(bin_abs_path);
+    QDir().mkpath(cmake_abs_path);
 
     QDirIterator it0(UNZIPPED_LOC);
+    // iterate through UNZIPPED_LOC which should contain untar'd artifacts
+    // like 'libtinything' and 'MBCoreUtils'. they typically contain a 'usr'
+    // and 'cmake' directory.
+    QString sub_dir_path;
     while(it0.hasNext()){
         QFileInfo file_info0 = it0.next();
         if(file_info0.isDir() && file_info0.fileName() != "usr"){
-            QString sub_dir_path = file_info0.absoluteFilePath() + "/" +
-                include_rel_path;
-            if(QFileInfo(sub_dir_path).exists()){
-                QDirIterator it1(sub_dir_path);
-                while(it1.hasNext()){
-                    QFileInfo file_info1 = it1.next();
-                    QDir dir;
-                    dir.rename(file_info1.absoluteFilePath(), usr_include_path +
-                        "/" + file_info1.fileName());
-                }
-            }
+            sub_dir_path = file_info0.absoluteFilePath()+"/"+include_rel_path;
+            MergeSubDir(sub_dir_path, include_abs_path);
             sub_dir_path = file_info0.absoluteFilePath()+"/"+lib_rel_path;
-            if(QFileInfo(sub_dir_path).exists()){
-                QDirIterator it1(sub_dir_path);
-                while(it1.hasNext()){
-                    QFileInfo file_info1 = it1.next();
-                    QDir dir;
-                    dir.rename(file_info1.absoluteFilePath(), usr_lib_path + "/"
-                        + file_info1.fileName());
-                }
-            }
+            MergeSubDir(sub_dir_path, lib_abs_path);
+            sub_dir_path = file_info0.absoluteFilePath()+"/"+bin_rel_path;
+            MergeSubDir(sub_dir_path, bin_abs_path);
+            sub_dir_path = file_info0.absoluteFilePath()+"/"+cmake_rel_path;
+            MergeSubDir(sub_dir_path, cmake_abs_path);
         }
     }
 #endif
