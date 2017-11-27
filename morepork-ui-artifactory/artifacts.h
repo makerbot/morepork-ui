@@ -50,11 +50,10 @@ private:
     QString ExtractVersionNumber(QString str);
     QString GetProperFilename(const QUrl &url);
     bool SaveFile(const QString &filename, QIODevice *data);
-    bool Unzip(QString save_file_name, QString name);
+    bool Unzip(QString save_file_name);
     void SetDone(QString name);
     bool IsAllDone();
     size_t GetTotalArtifacts();
-    void MergeUsr();
 
     void ProcessInitialList(QJsonObject json_object);
     void ProcessBranchQuery(QJsonObject json_object, QString name);

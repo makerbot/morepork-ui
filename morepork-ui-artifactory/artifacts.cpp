@@ -191,13 +191,12 @@ void Artifacts::ProcessDownloadQuery(QNetworkReply* reply, QString name) {
                 reply->url());
     if (SaveFile(save_file_name, reply)) {
         qInfo() << "Successfully saved file " << save_file_name;
-        assert(Unzip(save_file_name, name));
+        assert(Unzip(save_file_name));
         qInfo() << "Unzip successful.";
         SetDone(name);
     }
     if (IsAllDone()) {
         qInfo() << "All complete!!!";
-        MergeUsr();
         Artifacts::AllDone();
     }
 }
@@ -236,8 +235,8 @@ bool Artifacts::SaveFile(const QString &filename, QIODevice *data) {
     return true;
 }
 
-bool Artifacts::Unzip(QString zipped_file_name, QString name) {
-    QString unzip_loc = UNZIPPED_LOC+name;
+bool Artifacts::Unzip(QString zipped_file_name) {
+    QString unzip_loc = UNZIPPED_LOC;
     if (!QDir(unzip_loc).exists()) {
         QDir().mkdir(unzip_loc);
     }
@@ -281,59 +280,3 @@ bool Artifacts::IsAllDone() {
 size_t Artifacts::GetTotalArtifacts() {
     return m_artifacts_list_.size() - 1; // 1 being the initial placeholder
 }
-
-void MergeSubDir(const QString &sub_dir_path, const QString &dst_dir_path) {
-    if(QFileInfo(sub_dir_path).exists()){
-        QDirIterator it1(sub_dir_path);
-        while(it1.hasNext()){
-            QFileInfo file_info1 = it1.next();
-            QDir dir;
-            dir.rename(file_info1.absoluteFilePath(), dst_dir_path + "/"
-                + file_info1.fileName());
-        }
-    }
-}
-
-void Artifacts::MergeUsr() {
-#ifdef __linux__
-    const QString root = "usr",
-                  include_rel_path = "usr/include",
-                  lib_rel_path = "usr/lib",
-                  bin_rel_path = "usr/bin",
-                  cmake_rel_path = "cmake";
-#elif __APPLE__
-    const QString root = "Library/MakerBot",
-                  include_rel_path = "Library/MakerBot/include",
-                  lib_rel_path = "Library/MakerBot/lib",
-                  bin_rel_path = "Library/MakerBot",
-                  cmake_rel_path = "cmake";
-#endif
-    const QString include_abs_path = UNZIPPED_LOC+include_rel_path,
-                  lib_abs_path = UNZIPPED_LOC+lib_rel_path,
-                  bin_abs_path = UNZIPPED_LOC+bin_rel_path,
-                  cmake_abs_path = UNZIPPED_LOC+cmake_rel_path;
-    QDir().mkpath(include_abs_path);
-    QDir().mkpath(lib_abs_path);
-    QDir().mkpath(bin_abs_path);
-    QDir().mkpath(cmake_abs_path);
-
-    QDirIterator it0(UNZIPPED_LOC);
-    // iterate through UNZIPPED_LOC which should contain untar'd artifacts
-    // like 'libtinything' and 'MBCoreUtils'. they typically contain a 'usr'
-    // and 'cmake' directory.
-    QString sub_dir_path;
-    while(it0.hasNext()){
-        QFileInfo file_info0 = it0.next();
-        if(file_info0.isDir() && file_info0.fileName() != root){
-            sub_dir_path = file_info0.absoluteFilePath()+"/"+include_rel_path;
-            MergeSubDir(sub_dir_path, include_abs_path);
-            sub_dir_path = file_info0.absoluteFilePath()+"/"+lib_rel_path;
-            MergeSubDir(sub_dir_path, lib_abs_path);
-            sub_dir_path = file_info0.absoluteFilePath()+"/"+bin_rel_path;
-            MergeSubDir(sub_dir_path, bin_abs_path);
-            sub_dir_path = file_info0.absoluteFilePath()+"/"+cmake_rel_path;
-            MergeSubDir(sub_dir_path, cmake_abs_path);
-        }
-    }
-}
-
