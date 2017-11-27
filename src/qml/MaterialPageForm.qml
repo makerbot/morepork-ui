@@ -7,6 +7,7 @@ Item {
     id: item1
     //    property alias filamentVideo: filamentVideo
     property alias defaultItem: itemFilamentBay
+    property bool isLoadFilament: false
 
     smooth: false
 
@@ -46,12 +47,14 @@ Item {
                 load_mouseArea.onClicked:
                 {
                     loadUnloadFilamentProcess.bayID = 1
+                    isLoadFilament = true
                     bot.loadFilament(0)
                     materialSwipeView.swipeToItem(2)
                 }
                 unload_mouseArea.onClicked:
                 {
                     loadUnloadFilamentProcess.bayID = 1
+                    isLoadFilament = false
                     bot.unloadFilament(0)
                     materialSwipeView.swipeToItem(2)
                 }
@@ -69,12 +72,14 @@ Item {
                 load_mouseArea.onClicked:
                 {
                     loadUnloadFilamentProcess.bayID = 2
+                    isLoadFilament = true
                     bot.loadFilament(1)
                     materialSwipeView.swipeToItem(2)
                 }
                 unload_mouseArea.onClicked:
                 {
                     loadUnloadFilamentProcess.bayID = 2
+                    isLoadFilament = false
                     bot.unloadFilament(1)
                     materialSwipeView.swipeToItem(2)
                 }
@@ -110,7 +115,8 @@ Item {
                     Text {
                         id: cancel_text
                         color: "#cbcbcb"
-                        text: "CANCEL MATERIAL LOADING?"
+                        text: isLoadFilament ? "CANCEL MATERIAL LOADING?" :
+                                               "CANCEL MATERIAL UNLOADING"
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.family: "Antennae"
@@ -121,7 +127,8 @@ Item {
                     Text {
                         id: cancel_description_text
                         color: "#cbcbcb"
-                        text: "Are you sure you want to cancel the material loading process?"
+                        text: isLoadFilament ? "Are you sure you want to cancel the material loading process?" :
+                                               "Are you sure you want to cancel the material unloading process?"
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -165,7 +172,7 @@ Item {
                     Text {
                         id: cancel_loading_text
                         color: "#ffffff"
-                        text: "CANCEL LOADING"
+                        text: isLoadFilament ? "CANCEL LOADING" : "CANCEL UNLOADING"
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -180,14 +187,17 @@ Item {
                             height: 75
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
-                            onClicked: bot.loadFilamentStop()
+                            onClicked: {
+                                materialSwipeView.swipeToItem(0)
+                                bot.loadFilamentStop()
+                            }
                         }
                     }
 
                     Text {
                         id: continue_loading_text
                         color: "#ffffff"
-                        text: "CONTINUE LOADING"
+                        text: isLoadFilament ? "CONTINUE LOADING" : "CONTINUE UNLOADING"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -215,7 +225,7 @@ Item {
             visible: true
             LoadUnloadFilament{
                 id: loadUnloadFilamentProcess
-                filamentBaySwitchActive: bayID == 1 ? bot.filamentBay1Switch : bot.filamentBay2Switch
+                filamentBaySwitchActive: bayID == 1 ? bot.filamentBayASwitch : bot.filamentBayBSwitch
             }
         }
     }
