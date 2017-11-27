@@ -19,7 +19,7 @@ private:
     const QStringList REQUIRED_ARTIFACTS = QStringList{
             "MBCoreUtils",
             "libtinything",
-            "morepork-json-cpp"};
+            "json-cpp"};
 
     const QString DEFAULT_SERVER
       = "http://maven.soft.makerbot.net/artifactory/";

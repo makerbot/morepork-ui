@@ -5,6 +5,15 @@ const QString Artifacts::PROJECT_DIR = PROJECT_SOURCE_DIR;
 const QString Artifacts::ZIP_LOC      = PROJECT_DIR + "/artifacts/";
 const QString Artifacts::UNZIPPED_LOC = PROJECT_DIR + "/../artifacts/";
 
+#if __APPLE__
+#define MB_PLATFORM "Mac64"
+#elif defined(__linux__)
+// TODO: Support more than one linux platform
+#define MB_PLATFORM "Ubuntu_1604_64"
+#else
+#error Building on unsupported platform
+#endif
+
 Artifacts::Artifacts(){
     qDebug() << "Initialized artifactory";
     finished_count = 0;
@@ -111,15 +120,13 @@ void Artifacts::ProcessBranchQuery(QJsonObject json_object, QString name) {
 
 void Artifacts::ProcessBuildQuery(QJsonObject json_object, QString name) {
     QJsonArray children = json_object["children"].toArray();
-    // Can go through all the builds here to find the one to work with,
-    // But for now just gonna use Ubuntu_1604_64
 
     bool has_seeking_build = false;
     QString curr_build = "";
     foreach (const QJsonValue &element, children) {
         QJsonObject obj = element.toObject();
         curr_build = obj["uri"].toString();
-        if (curr_build == "/Ubuntu_1604_64") {
+        if (curr_build == ("/" MB_PLATFORM)) {
             has_seeking_build = true;
             break;
         }
