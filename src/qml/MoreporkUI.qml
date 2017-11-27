@@ -116,7 +116,7 @@ ApplicationWindow {
 
                     mainMenuIcon_material.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(5)
-                        materialPage.filamentVideo.play()
+//                        materialPage.filamentVideo.play()
                     }
 
                     mainMenuIcon_preheat.mouseArea.onClicked: {
