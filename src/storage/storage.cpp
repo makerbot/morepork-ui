@@ -1,13 +1,13 @@
 #include "storage/storage.h"
 #include "error_utils.h"
-#ifndef MOREPORK_UI_QT_CREATOR_BUILD
+#ifdef HAVE_LIBTINYTHING
 #include "storage/makerbot_file_meta_reader.h"
 #endif
 
 
 QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
     QSize *size, const QSize &requestedSize){
-#ifndef MOREPORK_UI_QT_CREATOR_BUILD
+#ifdef HAVE_LIBTINYTHING
   const QFileInfo kFileInfo(kAbsoluteFilePath);
   if(kFileInfo.exists()){
     MakerbotFileMetaReader file_meta_reader(kFileInfo);
@@ -42,7 +42,7 @@ void MoreporkStorage::updateInternalStorageFileList(){
       const QFileInfo kFileInfo = QFileInfo(it.next());
       if(kFileInfo.suffix() == "makerbot"){
         unsigned int time_estimate = 0;
-#ifndef MOREPORK_UI_QT_CREATOR_BUILD
+#ifdef HAVE_LIBTINYTHING
         MakerbotFileMetaReader file_meta_reader(kFileInfo);
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
