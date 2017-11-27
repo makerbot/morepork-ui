@@ -289,10 +289,18 @@ void MergeSubDir(const QString &sub_dir_path, const QString &dst_dir_path) {
 
 void Artifacts::MergeUsr() {
 #ifdef __linux__
-    const QString include_rel_path = "usr/include",
+    const QString root = "usr",
+                  include_rel_path = "usr/include",
                   lib_rel_path = "usr/lib",
                   bin_rel_path = "usr/bin",
                   cmake_rel_path = "cmake";
+#elif __APPLE__
+    const QString root = "Library/MakerBot",
+                  include_rel_path = "Library/MakerBot/include",
+                  lib_rel_path = "Library/MakerBot/lib",
+                  bin_rel_path = "Library/MakerBot",
+                  cmake_rel_path = "cmake";
+#endif
     const QString include_abs_path = UNZIPPED_LOC+include_rel_path,
                   lib_abs_path = UNZIPPED_LOC+lib_rel_path,
                   bin_abs_path = UNZIPPED_LOC+bin_rel_path,
@@ -309,7 +317,7 @@ void Artifacts::MergeUsr() {
     QString sub_dir_path;
     while(it0.hasNext()){
         QFileInfo file_info0 = it0.next();
-        if(file_info0.isDir() && file_info0.fileName() != "usr"){
+        if(file_info0.isDir() && file_info0.fileName() != root){
             sub_dir_path = file_info0.absoluteFilePath()+"/"+include_rel_path;
             MergeSubDir(sub_dir_path, include_abs_path);
             sub_dir_path = file_info0.absoluteFilePath()+"/"+lib_rel_path;
@@ -320,6 +328,5 @@ void Artifacts::MergeUsr() {
             MergeSubDir(sub_dir_path, cmake_abs_path);
         }
     }
-#endif
 }
 
