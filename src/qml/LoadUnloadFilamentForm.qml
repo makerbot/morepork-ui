@@ -1,8 +1,8 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
-import LoadUnloadProcessStateTypeEnum 1.0
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     id: item1
@@ -134,7 +134,7 @@ Item {
         State {
             name: "State1"
             when: filamentBaySwitchActive == true &&
-                  bot.process.loadUnloadStateType == LoadUnloadProcessStateType.Idle
+                  bot.process.stateType == ProcessStateType.Idle
 
             PropertyChanges {
                 target: main_instruction_text
@@ -172,7 +172,7 @@ Item {
         },
         State {
             name: "State2"
-            when: bot.process.loadUnloadStateType == LoadUnloadProcessStateType.Preheating
+            when: bot.process.stateType == ProcessStateType.Preheating
 
             PropertyChanges {
                 target: main_instruction_text
@@ -196,7 +196,7 @@ Item {
         },
         State {
             name: "State3"
-            when: bot.process.loadUnloadStateType == LoadUnloadProcessStateType.Extrusion
+            when: bot.process.stateType == ProcessStateType.Extrusion
 
             PropertyChanges {
                 target: main_instruction_text
@@ -238,7 +238,7 @@ Item {
         },
         State {
             name: "State4"
-            when: bot.process.loadUnloadStateType == LoadUnloadProcessStateType.Stopping
+            when: bot.process.stateType == ProcessStateType.Stopping
 
             PropertyChanges {
                 target: main_instruction_text
@@ -283,7 +283,7 @@ Item {
         },
         State {
             name: "State5"
-            when: bot.process.loadUnloadStateType == LoadUnloadProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
+            when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
