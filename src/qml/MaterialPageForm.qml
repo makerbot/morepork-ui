@@ -219,20 +219,4 @@ Item {
             }
         }
     }
-    //    Video {
-    //        id: filamentVideo
-    //        smooth: false
-    //        z: 3
-    //        loops: MediaPlayer.Infinite
-    //        anchors.right: parent.right
-    //        anchors.rightMargin: (800-((800/480)*440))/2
-    //        anchors.left: parent.left
-    //        anchors.leftMargin: (800-((800/480)*440))/2
-    //        anchors.top: parent.top
-    //        anchors.topMargin: 40
-    //        anchors.bottom: parent.bottom
-    //        autoLoad: true
-    //        autoPlay: false
-    //        source: mainSwipeView.rotation == 180 ? "" : "qrc:/vid/filament_installation.m4v"
-    //    }
 }
