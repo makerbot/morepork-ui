@@ -23,6 +23,15 @@
         <file alias="back_build_volume.png">images/back_build_volume.png</file>
         <file alias="model.png">images/model.png</file>
         <file alias="exc_mark.png">images/exc_mark.png</file>
+	<file alias="filamentbay_empty.png">images/filamentbay_empty.png</file>
+	<file alias="filamentbay_loaded.png">images/filamentbay_loaded.png</file>
+	<file alias="insert_model_material.png">images/insert_model_material.png</file>
+	<file alias="insert_support_material.png">images/insert_support_material.png</file>
+	<file alias="clear_excess_material.png">images/clear_excess_material.png</file>
+	<file alias="close_bay_door.png">images/close_bay_door.png</file>
+	<file alias="confirm_extrusion.png">images/confirm_extrusion.png</file>
+	<file alias="extruder_heating.png">images/extruder_heating.png</file>
+	<file alias="unload_filament.png">images/unload_filament.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
