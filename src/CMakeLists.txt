@@ -109,7 +109,7 @@ add_executable(morepork_ui
 target_link_libraries(morepork_ui
     Qt5::Core
     Qt5::Quick
-    Qt5::Multimedia TinyThing::tinything)
+    Qt5::Multimedia)
 if(NOT ${QT_CREATOR_BUILD})
     target_link_libraries(morepork_ui JsonRpc::jsonrpc TinyThing::tinything)
 else()
