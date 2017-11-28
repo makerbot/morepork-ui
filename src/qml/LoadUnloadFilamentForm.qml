@@ -145,7 +145,8 @@ Item {
         State {
             name: "State1"
             when: filamentBaySwitchActive == true &&
-                  bot.process.stateType == ProcessStateType.Idle
+                  bot.process.stateType == ProcessStateType.Preheating &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -183,7 +184,8 @@ Item {
         },
         State {
             name: "State2"
-            when: bot.process.stateType == ProcessStateType.Preheating
+            when: bot.process.stateType == ProcessStateType.Preheating &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -207,7 +209,8 @@ Item {
         },
         State {
             name: "State3"
-            when: bot.process.stateType == ProcessStateType.Extrusion
+            when: bot.process.stateType == ProcessStateType.Extrusion &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -240,6 +243,7 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
+                onClicked: bot.loadFilamentStop()
             }
 
             PropertyChanges {
@@ -249,7 +253,8 @@ Item {
         },
         State {
             name: "State4"
-            when: bot.process.stateType == ProcessStateType.Stopping
+            when: bot.process.stateType == ProcessStateType.Stopping &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text

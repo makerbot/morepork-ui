@@ -189,7 +189,7 @@ Item {
                             anchors.horizontalCenter: parent.horizontalCenter
                             onClicked: {
                                 materialSwipeView.swipeToItem(0)
-                                bot.loadFilamentStop()
+                                bot.cancel()
                             }
                         }
                     }
