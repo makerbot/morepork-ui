@@ -5,14 +5,15 @@ import QtQuick.Layouts 1.3
 Drawer {
     objectName: "printingDrawer"
     edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
-    opacity: 0.75
     width: parent.width
     height: column.height
-    dim: false
+    dim: true
     interactive: false
     property alias mouseAreaTopDrawerUp: mouseAreaTopDrawerUp
     property alias buttonCancelPrint: buttonCancelPrint
     property alias buttonPausePrint: buttonPausePrint
+    property alias buttonChangeFilament: buttonChangeFilament
+    property alias buttonClose: buttonClose
 
     Rectangle {
         id: rectangle
@@ -57,7 +58,7 @@ Drawer {
                     font.family: "Antenna"
                     font.letterSpacing: 3
                     font.weight: Font.Light
-                    font.pixelSize: 30
+                    font.pixelSize: 22
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
                 }
@@ -87,20 +88,65 @@ Drawer {
                 }
             }
 
+            Rectangle{
+                width: parent.width; height: 1; color: "#4d4d4d"
+            }
+
             MoreporkButton {
                 id: buttonPausePrint
-                buttonText.text: qsTr("Pause Print") + cpUiTr.emptyStr
+                //buttonText.text: qsTr("Pause Print") + cpUiTr.emptyStr
+                buttonText.text: "PAUSE PRINT"
+                buttonImage.source: "qrc:/img/pause.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
+                height: 80
+            }
+
+            Rectangle{
+                width: parent.width; height: 1; color: "#4d4d4d"
             }
 
             MoreporkButton {
                 id: buttonCancelPrint
-                buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
+                //buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
+                buttonText.text: "CANCEL PRINT"
+                buttonImage.source: "qrc:/img/cancel.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
+                height: 80
             }
 
+            Rectangle{
+                width: parent.width; height: 1; color: "#4d4d4d"
+            }
+
+            MoreporkButton {
+                id: buttonChangeFilament
+                //buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
+                buttonText.text: "CHANGE FILAMENT"
+                buttonImage.source: "qrc:/img/change_filament.png"
+                buttonColor: "#000000"
+                buttonPressColor: "#0a0a0a"
+                height: 80
+            }
+
+            Rectangle{
+                width: parent.width; height: 1; color: "#4d4d4d"
+            }
+
+            MoreporkButton {
+                id: buttonClose
+                //buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
+                buttonText.text: "CLOSE"
+                buttonImage.source: "qrc:/img/close.png"
+                buttonColor: "#000000"
+                buttonPressColor: "#0a0a0a"
+                height: 80
+            }
+
+            Rectangle{
+                width: parent.width; height: 1; color: "#4d4d4d"
+            }
         }
     }
 }

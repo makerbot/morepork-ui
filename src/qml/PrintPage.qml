@@ -21,6 +21,14 @@ PrintPageForm {
         printingDrawer.close()
     }
 
+    printingDrawer.buttonChangeFilament.onClicked: {
+
+    }
+
+    printingDrawer.buttonClose.onClicked: {
+        printingDrawer.close()
+    }
+
     Component.onCompleted: {
        topBar.backClicked.connect(backClicked_)
     }
