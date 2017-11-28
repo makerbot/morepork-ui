@@ -189,7 +189,7 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: bayID == 1 ? "EXTRUDER 2 IS HEATING UP" : "EXTRUDER 1 IS HEATING UP"
+                text: bayID == 1 ? "EXTRUDER 1 IS HEATING UP" : "EXTRUDER 2 IS HEATING UP"
             }
 
             PropertyChanges {
