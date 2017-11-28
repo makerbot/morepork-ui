@@ -13,6 +13,7 @@ Item {
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
     property int bayID: 1
+    signal processDone
 
     Rectangle {
         id: rectangle
@@ -91,6 +92,16 @@ Item {
                     id: button_mouseArea
                     anchors.fill: parent
                     visible: false
+                    onPressed: {
+                        button_rectangle.color = "#ffffff"
+                        button_rectangle.border.color = "#000000"
+                        button_text.color = "#000000"
+                    }
+                    onReleased: {
+                        button_rectangle.color = "#00000000"
+                        button_rectangle.border.color = "#ffffff"
+                        button_text.color = "#ffffff"
+                    }
                 }
             }
 
@@ -274,6 +285,7 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
+                onClicked: processDone()
             }
 
             PropertyChanges {
@@ -293,7 +305,7 @@ Item {
                 target: instruction_description_text
                 y: 1
                 height: 60
-                text: "Open material bay " + bayID + " and carefully rewind the materialonto the spool. Secure the end of the filament in place and store in a cool dry space."
+                text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
                 anchors.topMargin: 170
             }
 
@@ -320,6 +332,7 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
+                onClicked: processDone()
             }
 
             PropertyChanges {

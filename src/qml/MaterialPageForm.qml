@@ -226,6 +226,7 @@ Item {
             LoadUnloadFilament{
                 id: loadUnloadFilamentProcess
                 filamentBaySwitchActive: bayID == 1 ? bot.filamentBayASwitch : bot.filamentBayBSwitch
+                onProcessDone: materialSwipeView.swipeToItem(0)
             }
         }
     }
