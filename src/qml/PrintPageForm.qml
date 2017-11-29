@@ -6,7 +6,6 @@ import ProcessTypeEnum 1.0
 Item {
     property string fileName: "unknown.makerbot"
     property alias printingDrawer: printingDrawer
-    property alias mouseAreaTopDrawerUp: printingDrawer.mouseAreaTopDrawerUp
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias printDeleteSwipeView: printDeleteSwipeView

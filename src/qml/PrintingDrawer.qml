@@ -7,22 +7,40 @@ Drawer {
     edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
     width: parent.width
     height: column.height
-    dim: true
+    dim: false
     interactive: false
-    property alias mouseAreaTopDrawerUp: mouseAreaTopDrawerUp
+    background:
+        Rectangle{
+            opacity: 0.8
+            smooth: false
+            gradient: Gradient {
+                      GradientStop { position: 0.0; color: "#00000000" }
+                      GradientStop { position: 0.1; color: "#00000000" }
+                      GradientStop { position: 0.11; color: "#000000" }
+                      GradientStop { position: 1.0; color: "#000000" }
+                  }
+            }
+
+    onPositionChanged:
+    {
+        if(position > 0.9)
+        {
+            topBar.backButton.visible = false
+            topBar.imageDrawerArrow.rotation = 90
+            topBar.text_printerName.color = "#ffffff"
+        }
+        else
+        {
+            topBar.backButton.visible = true
+            topBar.imageDrawerArrow.rotation = -90
+            topBar.text_printerName.color = "#a0a0a0"
+        }
+    }
+
     property alias buttonCancelPrint: buttonCancelPrint
     property alias buttonPausePrint: buttonPausePrint
     property alias buttonChangeFilament: buttonChangeFilament
     property alias buttonClose: buttonClose
-
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        smooth: false
-        visible: true
-        width: parent.width
-        height: column.height
-    }
 
     Flickable {
         id: flickable
@@ -38,54 +56,14 @@ Drawer {
             anchors.right: parent.right
             anchors.left: parent.left
 
-            Rectangle {
-                id: rectangle1
+            Item {
+                id: empty
                 height: 40
-                color: "#000000"
                 smooth: false
                 anchors.right: parent.right
                 anchors.rightMargin: 0
                 anchors.left: parent.left
                 anchors.leftMargin: 0
-
-                Text {
-                    id: textPrinterName
-                    color: "#a0a0a0"
-                    text: bot.name
-                    antialiasing: false
-                    smooth: false
-                    verticalAlignment: Text.AlignVCenter
-                    font.family: "Antenna"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 22
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-
-                Image {
-                    id: imageDrawerArrow
-                    y: 227
-                    height: 25
-                    smooth: false
-                    anchors.left: textPrinterName.right
-                    anchors.leftMargin: 10
-                    anchors.verticalCenter: textPrinterName.verticalCenter
-                    rotation: 90
-                    z: 1
-                    source: "qrc:/img/arrow_19pix.png"
-                    fillMode: Image.PreserveAspectFit
-
-                    MouseArea {
-                        id: mouseAreaTopDrawerUp
-                        width: 40
-                        height: 60
-                        smooth: false
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        z: 2
-                    }
-                }
             }
 
             Rectangle{
@@ -94,8 +72,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonPausePrint
-                //buttonText.text: qsTr("Pause Print") + cpUiTr.emptyStr
-                buttonText.text: "PAUSE PRINT"
+                buttonText.text: qsTr("PAUSE PRINT") + cpUiTr.emptyStr
                 buttonImage.source: "qrc:/img/pause.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -108,8 +85,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonCancelPrint
-                //buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
-                buttonText.text: "CANCEL PRINT"
+                buttonText.text: qsTr("CANCEL PRINT") + cpUiTr.emptyStr
                 buttonImage.source: "qrc:/img/cancel.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -122,8 +98,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonChangeFilament
-                //buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
-                buttonText.text: "CHANGE FILAMENT"
+                buttonText.text: qsTr("CHANGE FILAMENT") + cpUiTr.emptyStr
                 buttonImage.source: "qrc:/img/change_filament.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -136,8 +111,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonClose
-                //buttonText.text: qsTr("Cancel Print") + cpUiTr.emptyStr
-                buttonText.text: "CLOSE"
+                buttonText.text: qsTr("CLOSE") + cpUiTr.emptyStr
                 buttonImage.source: "qrc:/img/close.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

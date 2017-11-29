@@ -5,7 +5,6 @@ import QtMultimedia 5.8
 
 Item {
     id: item1
-    //    property alias filamentVideo: filamentVideo
     property alias defaultItem: itemFilamentBay
 
     smooth: false

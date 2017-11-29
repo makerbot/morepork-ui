@@ -7,10 +7,6 @@ PrintPageForm {
     buttonFileInfo.buttonText.text: qsTr("Info") + cpUiTr.emptyStr
     buttonFileDelete.buttonText.text: qsTr("Delete") + cpUiTr.emptyStr
 
-    printingDrawer.mouseAreaTopDrawerUp.onClicked: {
-        printingDrawer.close()
-    }
-
     printingDrawer.buttonCancelPrint.onClicked: {
         bot.cancel()
         printingDrawer.close()

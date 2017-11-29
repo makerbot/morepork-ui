@@ -36,7 +36,7 @@ Button {
         font.family: "Antenna"
         font.letterSpacing: 3
         font.weight: Font.Bold
-        font.pointSize: 15
+        font.pointSize: 14
         color: "#ffffff"
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
