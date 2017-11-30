@@ -38,6 +38,7 @@
 	      <file alias="unload_filament.png">images/unload_filament.png</file>
 	      <file alias="change_filament.png">images/change_filament.png</file>
 	      <file alias="close.png">images/close.png</file>
+	      <file alias="directory_icon.png">images/directory_icon.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

@@ -7,6 +7,7 @@
 #include <QDirIterator>
 #include <QImage>
 #include <QQuickImageProvider>
+#include <QStack>
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
@@ -23,6 +24,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(QString filePath READ filePath NOTIFY fileInfoChanged)
   Q_PROPERTY(QString fileName READ fileName NOTIFY fileInfoChanged)
   Q_PROPERTY(QString fileBaseName READ fileBaseName NOTIFY fileInfoChanged)
+  Q_PROPERTY(bool isDir READ isDir NOTIFY fileInfoChanged)
 
   // see morepork-libtinything/include/tinything/TinyThingReader.hh for a
   // complete list of the meta available meta items.
@@ -42,6 +44,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(QString slicerName READ slicerName NOTIFY fileInfoChanged)
 
   QString file_name_, file_path_, file_base_name_;
+  bool is_dir_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
   int extruder_temp_celcius_a_, extruder_temp_celcius_b_, chamber_temp_celcius_, num_shells_;
   float layer_height_mm_, infill_density_, time_estimate_sec_;
@@ -53,6 +56,7 @@ class PrintFileInfo : public QObject {
     PrintFileInfo(const QString &file_path,
                   const QString &file_name,
                   const QString &file_base_name,
+                  const bool &is_dir,
                   const float extrusion_mass_grams_a = 0.0f,
                   const float extrusion_mass_grams_b = 0.0f,
                   const int extruder_temp_celcius_a = 0,
@@ -72,6 +76,7 @@ class PrintFileInfo : public QObject {
                   file_path_(file_path),
                   file_name_(file_name),
                   file_base_name_(file_base_name),
+                  is_dir_(is_dir),
                   extrusion_mass_grams_a_(extrusion_mass_grams_a),
                   extrusion_mass_grams_b_(extrusion_mass_grams_b),
                   extruder_temp_celcius_a_(extruder_temp_celcius_a),
@@ -95,6 +100,9 @@ class PrintFileInfo : public QObject {
     }
     QString fileBaseName() const {
         return file_base_name_;
+    }
+    bool isDir() const {
+        return is_dir_;
     }
     float extrusionMassGramsA() const {
         return extrusion_mass_grams_a_;
@@ -156,12 +164,14 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
 class MoreporkStorage : public QObject {
   Q_OBJECT
   QFileSystemWatcher *storage_watcher_;
+  QStack<QString> back_dir_stack_;
 
   public:
     QList<QObject*> print_file_list_;
     MoreporkStorage();
-    Q_INVOKABLE virtual void updateInternalStorageFileList();
-    Q_INVOKABLE virtual void deletePrintFile(QString file_name);
+    Q_INVOKABLE void
+      updateInternalStorageFileList(const QString kDirectory = "");
+    Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList
       WRITE printFileListSet
@@ -170,6 +180,9 @@ class MoreporkStorage : public QObject {
     QList<QObject*> printFileList() const;
     void printFileListSet(const QList<QObject*> &print_file_list);
     void printFileListReset();
+    Q_INVOKABLE void backStackPush(const QString kDirPath);
+    Q_INVOKABLE QString backStackPop();
+    Q_INVOKABLE void backStackClear();
 
   signals:
     void printFileListChanged();
