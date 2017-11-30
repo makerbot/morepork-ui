@@ -159,48 +159,34 @@ Item {
 
                 model: storage.printFileList
                 delegate:
-                Item {
-                    id: printFileItem
-                    height: 100
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-
-                    RowLayout {
+                    FileButton{
+                        property int printTimeSecRaw: model.modelData.timeEstimateSec
+                        property int printTimeMinRaw: printTimeSecRaw/60
+                        property int printTimeHrRaw: printTimeMinRaw/60
+                        property int printTimeDay: printTimeHrRaw/24
+                        property int printTimeMin: printTimeMinRaw % 60
+                        property int printTimeHr: printTimeHrRaw % 24
                         smooth: false
-                        spacing: 0
-                        anchors.fill: parent
+                        antialiasing: false
+                        fileThumbnail.source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName
+                        filenameText.text: model.modelData.fileBaseName
+                        fileDesc_rowLayout.visible: !model.modelData.isDir
+                        filePrintTime.text: printTimeDay != 0 ? printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M" : printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M"
+                        fileMaterial.text: model.modelData.materialNameA == "" ? model.modelData.materialNameB : model.modelData.materialNameA + "+" + model.modelData.materialNameB
 
-                        Image {
-                            id: image
-                            asynchronous: true
-                            fillMode: Image.PreserveAspectFit
-                            Layout.maximumHeight: 100
-                            Layout.maximumWidth: 100
-                            Layout.fillHeight: true
-                            Layout.fillWidth: false
-                            source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName
-                        }
-
-                        MoreporkButton {
-                            anchors.leftMargin: image.width
-                            buttonText.text: model.modelData.fileBaseName
-                            smooth: false
-                            onClicked: {
-                                if(model.modelData.isDir){
-                                    storage.backStackPush(model.modelData.filePath)
-                                    storage.updateInternalStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
-                                }
-                                else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
-                                    fileName = model.modelData.filePath + "/" + model.modelData.fileName
-                                    printSwipeView.swipeToItem(3)
-                                }
+                        onClicked: {
+                            if(model.modelData.isDir){
+                                storage.backStackPush(model.modelData.filePath)
+                                storage.updateInternalStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
+                            }
+                            else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
+                                fileName = model.modelData.filePath + "/" + model.modelData.fileName
+                                printSwipeView.swipeToItem(3)
                             }
                         }
-                    }
 
                     Item { width: parent.width; height: 1; smooth: false
-                           Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                           Rectangle { color: "#4d4d4d"; smooth: false; anchors.fill: parent } }
                 }
             }
         }
