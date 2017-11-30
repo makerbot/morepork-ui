@@ -179,8 +179,7 @@ Item {
                             Layout.maximumWidth: 100
                             Layout.fillHeight: true
                             Layout.fillWidth: false
-                            source: model.modelData.isDir ? "qrc:/img/directory_icon.png" :
-                                    "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName
+                            source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName
                         }
 
                         MoreporkButton {
