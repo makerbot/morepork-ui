@@ -174,6 +174,7 @@ Item {
 
                         Image {
                             id: image
+                            asynchronous: true
                             fillMode: Image.PreserveAspectFit
                             Layout.maximumHeight: 100
                             Layout.maximumWidth: 100
