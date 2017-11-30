@@ -18,8 +18,8 @@ private:
     const static QString PROJECT_DIR;
     const QStringList REQUIRED_ARTIFACTS = QStringList{
             "MBCoreUtils",
-            "Birdwing-Acceleration-Shared",
-            "morepork-mbcoreutils"};
+            "libtinything",
+            "json-cpp"};
 
     const QString DEFAULT_SERVER
       = "http://maven.soft.makerbot.net/artifactory/";
@@ -50,7 +50,7 @@ private:
     QString ExtractVersionNumber(QString str);
     QString GetProperFilename(const QUrl &url);
     bool SaveFile(const QString &filename, QIODevice *data);
-    bool Unzip(QString save_file_name, QString name);
+    bool Unzip(QString save_file_name);
     void SetDone(QString name);
     bool IsAllDone();
     size_t GetTotalArtifacts();

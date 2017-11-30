@@ -1,7 +1,18 @@
 #include "artifacts.h"
+#include <cassert>
+#include <QDirIterator>
 const QString Artifacts::PROJECT_DIR = PROJECT_SOURCE_DIR;
 const QString Artifacts::ZIP_LOC      = PROJECT_DIR + "/artifacts/";
 const QString Artifacts::UNZIPPED_LOC = PROJECT_DIR + "/../artifacts/";
+
+#if __APPLE__
+#define MB_PLATFORM "Mac64"
+#elif defined(__linux__)
+// TODO: Support more than one linux platform
+#define MB_PLATFORM "Ubuntu_1604_64"
+#else
+#error Building on unsupported platform
+#endif
 
 Artifacts::Artifacts(){
     qDebug() << "Initialized artifactory";
@@ -109,15 +120,13 @@ void Artifacts::ProcessBranchQuery(QJsonObject json_object, QString name) {
 
 void Artifacts::ProcessBuildQuery(QJsonObject json_object, QString name) {
     QJsonArray children = json_object["children"].toArray();
-    // Can go through all the builds here to find the one to work with,
-    // But for now just gonna use Ubuntu_1604_64
 
     bool has_seeking_build = false;
     QString curr_build = "";
     foreach (const QJsonValue &element, children) {
         QJsonObject obj = element.toObject();
         curr_build = obj["uri"].toString();
-        if (curr_build == "/Ubuntu_1604_64") {
+        if (curr_build == ("/" MB_PLATFORM)) {
             has_seeking_build = true;
             break;
         }
@@ -181,11 +190,9 @@ void Artifacts::ProcessDownloadQuery(QNetworkReply* reply, QString name) {
     QString save_file_name = ZIP_LOC+GetProperFilename(
                 reply->url());
     if (SaveFile(save_file_name, reply)) {
-        qInfo() << "File " << save_file_name << "successfully saved";
-        qInfo() << "Unzipping " << save_file_name << " now";
-        if (Unzip(save_file_name, name)) {
-            qInfo() << "Unzipped successfully to " << UNZIPPED_LOC << name;
-        }
+        qInfo() << "Successfully saved file " << save_file_name;
+        assert(Unzip(save_file_name));
+        qInfo() << "Unzip successful.";
         SetDone(name);
     }
     if (IsAllDone()) {
@@ -228,30 +235,32 @@ bool Artifacts::SaveFile(const QString &filename, QIODevice *data) {
     return true;
 }
 
-bool Artifacts::Unzip(QString zipped_file_name, QString name) {
-    QString unzip_loc = UNZIPPED_LOC+name;
+bool Artifacts::Unzip(QString zipped_file_name) {
+    QString unzip_loc = UNZIPPED_LOC;
     if (!QDir(unzip_loc).exists()) {
         QDir().mkdir(unzip_loc);
     }
-    qDebug() << "Unzipping " + zipped_file_name + " now";
     QProcess decompressor;
-    QString cmd = "tar -zxf " + zipped_file_name +
+    QString cmd = "tar -jxf " + zipped_file_name +
                   " --directory " + unzip_loc;
+    qInfo() << cmd;
     decompressor.setProcessChannelMode(QProcess::MergedChannels);
     decompressor.start(cmd);
     decompressor.waitForFinished();
     // Continue reading the data until EOF reached
-    if (decompressor.error()) return false;
-    QByteArray output_data;
-    output_data.append(decompressor.readAllStandardOutput());
-    qDebug() << output_data.data();
+    if (decompressor.exitStatus() != QProcess::NormalExit){
+      QByteArray output_data;
+      output_data.append(decompressor.readAllStandardOutput());
+      qDebug() << output_data.data();
 
-    qDebug("Error: ");
-    QByteArray error_data;
-    error_data.append(decompressor.readAllStandardError());
-    qDebug() << error_data.data();
-    qDebug("Done!");
-
+      qDebug("Error: ");
+      QByteArray error_data;
+      error_data.append(decompressor.readAllStandardError());
+      qDebug() << error_data.data();
+      qDebug("Done!");
+      decompressor.close();
+      return false;
+    }
     decompressor.close();
     return true;
 }
