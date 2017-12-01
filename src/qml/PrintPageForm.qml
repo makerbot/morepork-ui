@@ -15,7 +15,7 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
-    property bool internalStorage: false
+    property bool useInternalStorage: false
     smooth: false
 
     PrintingDrawer {
@@ -64,10 +64,11 @@ Item {
                     spacing: 0
 
                     MoreporkButton {
-                        id: buttonUsbStorage
-                        buttonText.text: "USB Storage"
+                        id: buttonInternalStorage
+                        buttonText.text: "Internal Storage"
                         onClicked: {
-                            internalStorage = false
+                            useInternalStorage = true
+                            storage.updateStorageFileList(useInternalStorage)
                             printSwipeView.swipeToItem(1)
                         }
                     }
@@ -78,12 +79,12 @@ Item {
                     }
 
                     MoreporkButton {
-                        id: buttonInternalStorage
-                        buttonText.text: "Internal Storage"
+                        id: buttonUsbStorage
+                        buttonText.text: "USB Storage"
                         onClicked: {
-                            internalStorage = true
-                            storage.updateInternalStorageFileList()
-                            printSwipeView.swipeToItem(2)
+                            useInternalStorage = false
+                            storage.updateStorageFileList(useInternalStorage)
+                            printSwipeView.swipeToItem(1)
                         }
                     }
                 }
@@ -98,40 +99,7 @@ Item {
 
         // printSwipeView.index = 1
         Item {
-            id: itemPrintUsbStorage
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 0
-            smooth: false
-            visible: false
-
-            Flickable {
-                id: flickableUsbStorage
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
-                contentHeight: columnUsbStorage.height
-
-                Column {
-                    id: columnUsbStorage
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 0
-
-                    MoreporkButton {
-                        id: buttonNotImplemented1
-                        buttonText.text: "Not Implemented"
-                    }
-                }
-            }
-        }
-
-        // printSwipeView.index = 2
-        Item {
-            id: itemPrintInternalStorage
+            id: itemPrintStorage
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
@@ -142,7 +110,7 @@ Item {
             function altBack(){
                 var backDir = storage.backStackPop()
                 if(backDir !== ""){
-                    storage.updateInternalStorageFileList(storage.backStackPop())
+                    storage.updateStorageFileList(useInternalStorage, backDir)
                 }
                 else{
                     printSwipeView.swipeToItem(0)
@@ -189,7 +157,8 @@ Item {
                             onClicked: {
                                 if(model.modelData.isDir){
                                     storage.backStackPush(model.modelData.filePath)
-                                    storage.updateInternalStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
+                                    storage.updateStorageFileList(useInternalStorage,
+                                        model.modelData.filePath + "/" + model.modelData.fileName)
                                 }
                                 else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
                                     fileName = model.modelData.filePath + "/" + model.modelData.fileName
@@ -205,12 +174,12 @@ Item {
             }
         }
 
-        // printSwipeView.index = 3
+        // printSwipeView.index = 2
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : internalStorage ? 2 : 1
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 1
             smooth: false
             visible: false
 

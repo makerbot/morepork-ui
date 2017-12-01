@@ -11,10 +11,10 @@
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
-#define THINGS_DIR QString("/home/")+qgetenv("USER")+"/things"
+#define INTERNAL_THINGS_DIR QString("/home/")+qgetenv("USER")+"/things"
 #else
 // embedded linux path
-#define THINGS_DIR QString("/home/things")
+#define INTERNAL_THINGS_DIR QString("/home/things")
 #endif
 
 
@@ -165,12 +165,13 @@ class MoreporkStorage : public QObject {
   Q_OBJECT
   QFileSystemWatcher *storage_watcher_;
   QStack<QString> back_dir_stack_;
+  QString prev_thing_dir_;
 
   public:
     QList<QObject*> print_file_list_;
     MoreporkStorage();
-    Q_INVOKABLE void
-      updateInternalStorageFileList(const QString kDirectory = "");
+    Q_INVOKABLE void updateStorageFileList(const bool kInternal,
+      const QString kDirectory = "");
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList
@@ -183,6 +184,7 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
+    QString getUsbDir();
 
   signals:
     void printFileListChanged();

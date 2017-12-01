@@ -29,15 +29,18 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
 
 MoreporkStorage::MoreporkStorage(){
   storage_watcher_ = new QFileSystemWatcher();
-  storage_watcher_->addPath(THINGS_DIR);
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
-          this, SLOT(updateInternalStorageFileList(const QString)));
-  updateInternalStorageFileList();
+          this, SLOT(updateStorageFileList(const QString)));
 }
 
 
-void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
-  const QString kThingsDir = kDirectory.isEmpty() ? THINGS_DIR : kDirectory;
+void MoreporkStorage::updateStorageFileList(const bool kInternal,
+    const QString kDirectory){
+  const QString kThingsDir = kDirectory.isEmpty() ?
+    (kInternal ? INTERNAL_THINGS_DIR : getUsbDir()) : kDirectory;
+  storage_watcher_->removePath(prev_thing_dir_);
+  prev_thing_dir_ = kThingsDir;
+  storage_watcher_->addPath(kThingsDir);
   QStringList file_list;
   if(QDir(kThingsDir).exists()){
     QDirIterator it(kThingsDir, QDir::Dirs | QDir::Files |
@@ -86,16 +89,24 @@ void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
 #endif
       }
     }
-    printFileListSet(print_file_list);
+    if(print_file_list.empty())
+      printFileListReset();
+    else
+      printFileListSet(print_file_list);
   }
   else
     printFileListReset();
 }
 
 
+QString MoreporkStorage::getUsbDir(){
+  return QString();
+}
+
+
 void MoreporkStorage::deletePrintFile(QString file_name){
   qDebug() << FL_STRM << "called with file name: " << file_name;
-  QString abs_file_path = THINGS_DIR + "/" + file_name;
+  QString abs_file_path = INTERNAL_THINGS_DIR + "/" + file_name;
   QFileInfo file_info(abs_file_path);
   EXP_CHK(file_info.exists() && file_info.suffix() == "makerbot", return)
   QFile file(abs_file_path);
@@ -119,10 +130,10 @@ void MoreporkStorage::printFileListSet(const QList<QObject*> &print_file_list) {
 
 void MoreporkStorage::printFileListReset(){
   QList<QObject*> print_file_list;
-  print_file_list.append(new PrintFileInfo("/path/to",
-    "null_thing.makerbot", "thing", false));
-  print_file_list.append(new PrintFileInfo("/path/to",
-    "null_directory", "null_directory", true));
+  print_file_list.append(new PrintFileInfo("/null/path",
+    "No Items Present", "No Items Present", false));
+  print_file_list.append(new PrintFileInfo("/null/path",
+    "No Items Present", "No Items Present", true));
   printFileListSet(print_file_list);
 }
 
