@@ -122,7 +122,7 @@ Item {
                     spacing: 0
 
                     MoreporkButton {
-                        id: buttonNotImplemented1
+                        id: buttonNotImplemented
                         buttonText.text: "Not Implemented"
                     }
                 }
@@ -302,6 +302,139 @@ Item {
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        // printSwipeView.index = 4
+        Item {
+           id: itemPrintInfoOpt
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 3
+            smooth: false
+            visible: false
+
+            Flickable {
+                id: flickable
+                anchors.fill: parent
+                anchors.leftMargin: 15
+                interactive: true
+                flickableDirection: Flickable.VerticalFlick
+                contentHeight: column.height
+                smooth: false
+
+                Column {
+                    id: column
+                    smooth: false
+                    anchors.right: parent.right
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    spacing: 1
+
+                    InfoItem {
+                        id: printInfo_fileName
+                        width: parent.width
+                        textLabel.text: qsTr("Filename") + cpUiTr.emptyStr
+                        textData.text: model.modelData.fileBaseName
+                    }
+
+                    InfoItem {
+                        id: printInfo_filePath
+                        width: parent.width
+                        textLabel.text: qsTr("File Path") + cpUiTr.emptyStr
+                        textData.text: model.modelData.filePath
+                    }
+
+                    InfoItem {
+                        property int printTimeSecRaw: model.modelData.timeEstimateSec
+                        property int printTimeMinRaw: printTimeSecRaw/60
+                        property int printTimeHrRaw: printTimeMinRaw/60
+                        property int printTimeDay: printTimeHrRaw/24
+                        property int printTimeMin: printTimeMinRaw % 60
+                        property int printTimeHr: printTimeHrRaw % 24
+                        id: printInfo_timeEstimate
+                        width: parent.width
+                        textLabel.text: qsTr("Print Time Estimate") + cpUiTr.emptyStr
+                        textData.text: printTimeDay != 0 ? printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M" : printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M"
+                    }
+
+                    InfoItem {
+                        id: printInfo_material
+                        width: parent.width
+                        textLabel.text: qsTr("Print Material") + cpUiTr.emptyStr
+                        textData.text: model.modelData.materialNameA == "" ? model.modelData.materialNameB : model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                    }
+
+                    InfoItem {
+                        id: printInfo_layerHeight
+                        width: parent.width
+                        textLabel.text: qsTr("Layer Height") + cpUiTr.emptyStr
+                        textData.text: model.modelData.layerHeightMM + "mm"
+                    }
+
+                    InfoItem {
+                        id: printInfo_infillDensity
+                        width: parent.width
+                        textLabel.text: qsTr("Infill Density") + cpUiTr.emptyStr
+                        textData.text: model.modelData.infillDensity + "%"
+                    }
+
+                    InfoItem {
+                        id: printInfo_usesSupport
+                        width: parent.width
+                        textLabel.text: qsTr("Supports") + cpUiTr.emptyStr
+                        textData.text: model.modelData.usesSupport ? "YES" : "NO"
+                    }
+
+                    InfoItem {
+                        id: printInfo_usesRaft
+                        width: parent.width
+                        textLabel.text: qsTr("Rafts") + cpUiTr.emptyStr
+                        textData.text: model.modelData.usesSupport ? "YES" : "NO"
+                    }
+
+                    InfoItem {
+                        id: printInfo_modelMass
+                        width: parent.width
+                        textLabel.text: qsTr("Model") + cpUiTr.emptyStr
+                        textData.text: model.modelData.extrusionMassGramsB == "" ? "0 Kg" : model.modelData.extrusionMassGramsB/1000 + " Kg"
+                    }
+
+                    InfoItem {
+                        id: printInfo_supportMass
+                        width: parent.width
+                        textLabel.text: qsTr("Support") + cpUiTr.emptyStr
+                        textData.text: model.modelData.extrusionMassGramsA == "" ? "0 Kg" : model.modelData.extrusionMassGramsA/1000 + " Kg"
+                    }
+
+                    InfoItem {
+                        id: printInfo_Shells
+                        width: parent.width
+                        textLabel.text: qsTr("Shells") + cpUiTr.emptyStr
+                        textData.text: model.modelData.numShells
+                    }
+
+                    InfoItem {
+                        id: printInfo_extruderTemperature
+                        width: parent.width
+                        textLabel.text: qsTr("Extruder Temperature") + cpUiTr.emptyStr
+                        textData.text: model.modelData.extruderTempCelciusA == "" ? model.modelData.extruderTempCelciusB + "C" : model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
+                    }
+
+                    InfoItem {
+                        id: printInfo_chamberTemperature
+                        width: parent.width
+                        textLabel.text: qsTr("Chamber Temperature") + cpUiTr.emptyStr
+                        textData.text: model.modeData.chamberTempCelcius + "C"
+                    }
+
+                    InfoItem {
+                        id: printInfo_slicerName
+                        width: parent.width
+                        textLabel.text: qsTr("Slicer Name") + cpUiTr.emptyStr
+                        textData.text: model.modelData.slicerName
                     }
                 }
             }
