@@ -9,12 +9,25 @@ Button {
     anchors.right: parent.right
     anchors.left: parent.left
     property alias buttonText: buttonText
+    property alias buttonImage: buttonImage
     property color buttonColor: "#050505"
     property color buttonPressColor: "#0f0f0f"
 
     background: Rectangle {
+        opacity: 0
         color: moreporkButton.down ? buttonPressColor : buttonColor
         smooth: false
+    }
+
+    Image{
+        id: buttonImage
+        width: 34
+        height: 34
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.verticalCenter: parent.verticalCenter
+        smooth: false
+        antialiasing: false
     }
 
     contentItem: Text {
@@ -22,9 +35,9 @@ Button {
         text: qsTr("MoreporkButton Text")
         font.family: "Antenna"
         font.letterSpacing: 3
-        font.weight: Font.Light
-        font.pointSize: 30
-        color: "#a0a0a0"
+        font.weight: Font.Bold
+        font.pointSize: 14
+        color: "#ffffff"
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

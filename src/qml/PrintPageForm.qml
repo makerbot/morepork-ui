@@ -6,7 +6,6 @@ import ProcessTypeEnum 1.0
 Item {
     property string fileName: "unknown.makerbot"
     property alias printingDrawer: printingDrawer
-    property alias mouseAreaTopDrawerUp: printingDrawer.mouseAreaTopDrawerUp
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias printDeleteSwipeView: printDeleteSwipeView
@@ -136,8 +135,19 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack(){
+                var backDir = storage.backStackPop()
+                if(backDir !== ""){
+                    storage.updateInternalStorageFileList(storage.backStackPop())
+                }
+                else{
+                    printSwipeView.swipeToItem(0)
+                }
+            }
 
             ListView {
                 smooth: false
@@ -161,14 +171,27 @@ Item {
                         spacing: 0
                         anchors.fill: parent
 
-                        Image { id: image; source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName }
+                        Image {
+                            id: image
+                            asynchronous: true
+                            fillMode: Image.PreserveAspectFit
+                            Layout.maximumHeight: 100
+                            Layout.maximumWidth: 100
+                            Layout.fillHeight: true
+                            Layout.fillWidth: false
+                            source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName
+                        }
 
                         MoreporkButton {
                             anchors.leftMargin: image.width
                             buttonText.text: model.modelData.fileBaseName
                             smooth: false
                             onClicked: {
-                                if(model.modelData.fileBaseName !== "thing") {
+                                if(model.modelData.isDir){
+                                    storage.backStackPush(model.modelData.filePath)
+                                    storage.updateInternalStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
+                                }
+                                else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
                                     fileName = model.modelData.filePath + "/" + model.modelData.fileName
                                     printSwipeView.swipeToItem(3)
                                 }
@@ -211,6 +234,7 @@ Item {
                         id: buttonFilePrint
                         buttonText.text: "Print"
                         onClicked: {
+                            storage.backStackClear()
                             bot.print(fileName)
                             printSwipeView.swipeToItem(0)
                         }

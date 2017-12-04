@@ -2,6 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
+import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     id: itemTopBarForm
@@ -15,6 +17,7 @@ Item {
     property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
+    property alias text_printerName: textPrinterName
     signal backClicked()
     signal drawerDownClicked()
 
@@ -119,19 +122,78 @@ Item {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.left: parent.left
-        property alias text_printerName: textPrinterName
 
         Text {
             id: textPrinterName
             color: "#a0a0a0"
-            text: bot.name
+            text:
+            {
+                switch(bot.process.type)
+                {
+                case ProcessType.Print:
+                    switch(bot.process.stateType)
+                    {
+                    case ProcessStateType.Loading:
+                        "LOADING"
+                        break;
+                    case ProcessStateType.Printing:
+                        "PRINTING"
+                        break;
+                    case ProcessStateType.Paused:
+                        "PAUSED"
+                        break;
+                    case ProcessStateType.Failed:
+                        "FAILED"
+                        break;
+                    case ProcessStateType.PrintComplete:
+                        "PRINT COMPLETE"
+                        break;
+                    }
+                    break;
+                case ProcessType.Load:
+                    "LOAD MATERIAL"
+                    break;
+                case ProcessType.Unload:
+                    "UNLOAD MATERIAL"
+                    break;
+                default:
+                    switch(mainSwipeView.currentIndex)
+                    {
+                    case 0:
+                        bot.name
+                        break;
+                    case 1:
+                        "PRINT"
+                        break;
+                    case 2:
+                        "EXTRUDER"
+                        break;
+                    case 3:
+                        "SETTINGS"
+                        break;
+                    case 4:
+                        "INFO"
+                        break;
+                    case 5:
+                        "MATERIAL"
+                        break;
+                    case 6:
+                        "PREHEAT"
+                        break;
+                    default:
+                        bot.name
+                        break;
+                    }
+                    break;
+                }
+            }
             antialiasing: false
             smooth: false
             verticalAlignment: Text.AlignVCenter
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Light
-            font.pixelSize: 22
+            font.pixelSize: 18
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
@@ -161,6 +223,4 @@ Item {
             }
         }
     }
-
-
 }

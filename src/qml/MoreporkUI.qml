@@ -14,6 +14,15 @@ ApplicationWindow {
         currentItem = currentItem_
     }
 
+    function goBack(){
+        if(currentItem.hasAltBack){
+            currentItem.altBack()
+        }
+        else{
+            currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+        }
+    }
+
     Item{
         id: rootItem
         smooth: false
@@ -41,7 +50,7 @@ ApplicationWindow {
             onOpened:
             {
                 position = 0
-                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                goBack()
                 close()
             }
         }
@@ -55,7 +64,7 @@ ApplicationWindow {
             imageDrawerArrow.visible: false
 
             onBackClicked: {
-                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                goBack()
             }
         }
 
@@ -116,7 +125,6 @@ ApplicationWindow {
 
                     mainMenuIcon_material.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(5)
-//                        materialPage.filamentVideo.play()
                     }
 
                     mainMenuIcon_preheat.mouseArea.onClicked: {

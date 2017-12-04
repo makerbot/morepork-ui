@@ -10,12 +10,16 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
 #ifdef HAVE_LIBTINYTHING
   const QFileInfo kFileInfo(kAbsoluteFilePath);
   if(kFileInfo.exists()){
-    MakerbotFileMetaReader file_meta_reader(kFileInfo);
-    QImage thumbnail = file_meta_reader.getMediumThumbnail();
-    if(thumbnail.isNull())
-      return QPixmap::fromImage(QImage(":/img/makerbot_logo_110x80.png"));
-    else
-      return QPixmap::fromImage(thumbnail);
+    if(kFileInfo.isDir())
+      return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
+    else{
+      MakerbotFileMetaReader file_meta_reader(kFileInfo);
+      QImage thumbnail = file_meta_reader.getMediumThumbnail();
+      if(thumbnail.isNull())
+        return QPixmap::fromImage(QImage(":/img/makerbot_logo_110x80.png"));
+      else
+        return QPixmap::fromImage(thumbnail);
+    }
   }
   else
 #endif
@@ -27,20 +31,21 @@ MoreporkStorage::MoreporkStorage(){
   storage_watcher_ = new QFileSystemWatcher();
   storage_watcher_->addPath(THINGS_DIR);
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
-          this, SLOT(updateInternalStorageFileList()));
+          this, SLOT(updateInternalStorageFileList(const QString)));
   updateInternalStorageFileList();
 }
 
 
-void MoreporkStorage::updateInternalStorageFileList(){
-  const QString kThingsDir = THINGS_DIR;
+void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
+  const QString kThingsDir = kDirectory.isEmpty() ? THINGS_DIR : kDirectory;
   QStringList file_list;
   if(QDir(kThingsDir).exists()){
-    QDirIterator it(kThingsDir, QDirIterator::Subdirectories);
+    QDirIterator it(kThingsDir, QDir::Dirs | QDir::Files |
+      QDir::NoDotAndDotDot | QDir::Readable);
     QList<QObject*> print_file_list;
     while(it.hasNext()){
       const QFileInfo kFileInfo = QFileInfo(it.next());
-      if(kFileInfo.suffix() == "makerbot"){
+      if(kFileInfo.suffix() == "makerbot" || kFileInfo.isDir()){
         unsigned int time_estimate = 0;
 #ifdef HAVE_LIBTINYTHING
         MakerbotFileMetaReader file_meta_reader(kFileInfo);
@@ -50,6 +55,7 @@ void MoreporkStorage::updateInternalStorageFileList(){
             new PrintFileInfo(kThingsDir,
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
+                              kFileInfo.isDir(),
                               meta_data->extrusion_mass_g[1],
                               meta_data->extrusion_mass_g[0],
                               meta_data->extruder_temperature[1],
@@ -69,12 +75,14 @@ void MoreporkStorage::updateInternalStorageFileList(){
           print_file_list.append(
             new PrintFileInfo(kThingsDir,
                               kFileInfo.fileName(),
-                              kFileInfo.baseName()));
+                              kFileInfo.baseName(),
+                              kFileInfo.isDir()));
 #else
         print_file_list.append(
           new PrintFileInfo(kThingsDir,
                             kFileInfo.fileName(),
-                            kFileInfo.baseName()));
+                            kFileInfo.baseName(),
+                            kFileInfo.isDir()));
 #endif
       }
     }
@@ -112,7 +120,25 @@ void MoreporkStorage::printFileListSet(const QList<QObject*> &print_file_list) {
 void MoreporkStorage::printFileListReset(){
   QList<QObject*> print_file_list;
   print_file_list.append(new PrintFileInfo("/path/to",
-    "thing.makerbot", "thing", 0));
+    "null_thing.makerbot", "thing", false));
+  print_file_list.append(new PrintFileInfo("/path/to",
+    "null_directory", "null_directory", true));
   printFileListSet(print_file_list);
+}
+
+
+void MoreporkStorage::backStackPush(const QString kDirPath){
+  if(QFileInfo(kDirPath).isDir())
+    back_dir_stack_.push(kDirPath);
+}
+
+
+QString MoreporkStorage::backStackPop(){
+  return back_dir_stack_.empty() ? "" : back_dir_stack_.pop();
+}
+
+
+void MoreporkStorage::backStackClear(){
+  back_dir_stack_.clear();
 }
 
