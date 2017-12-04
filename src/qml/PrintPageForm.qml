@@ -5,6 +5,23 @@ import ProcessTypeEnum 1.0
 
 Item {
     property string fileName: "unknown.makerbot"
+    property string file_name
+    property string print_time
+    property string print_material
+    property string uses_support
+    property string uses_raft
+    property string model_mass
+    property string support_mass
+    property int num_shells
+    property string extruder_temp
+    property string chamber_temp
+    property string slicer_name
+    property int printTimeSecRaw
+    property int printTimeMinRaw
+    property int printTimeHrRaw
+    property int printTimeDay
+    property int printTimeMin
+    property int printTimeHr
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
@@ -181,6 +198,23 @@ Item {
                             }
                             else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
                                 fileName = model.modelData.filePath + "/" + model.modelData.fileName
+                                file_name = model.modelData.fileBaseName
+                                printTimeSecRaw = model.modelData.timeEstimateSec
+                                printTimeMinRaw = printTimeSecRaw/60
+                                printTimeHrRaw = printTimeMinRaw/60
+                                printTimeDay = printTimeHrRaw/24
+                                printTimeMin = printTimeMinRaw % 60
+                                printTimeHr = printTimeHrRaw % 24
+                                print_time = printTimeDay > 1 ? printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M" : printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M"
+                                print_material = model.modelData.materialNameA == "" ? model.modelData.materialNameB : model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                                uses_support = model.modelData.usesSupport ? "YES" : "NO"
+                                uses_raft = model.modelData.usesRaft ? "YES" : "NO"
+                                model_mass = model.modelData.extrusionMassGramsB < 1000 ? model.modelData.extrusionMassGramsB.toFixed(1) + " g" : (model.modelData.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
+                                support_mass = model.modelData.extrusionMassGramsA < 1000 ? model.modelData.extrusionMassGramsA.toFixed(1) + " g" : (model.modelData.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+                                num_shells = model.modelData.numShells
+                                extruder_temp = model.modelData.extruderTempCelciusA == 0 ? model.modelData.extruderTempCelciusB + "C" : model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
+                                chamber_temp = model.modelData.chamberTempCelcius + "C"
+                                slicer_name = model.modelData.slicerName
                                 printSwipeView.swipeToItem(3)
                             }
                         }
@@ -235,6 +269,7 @@ Item {
                         id: buttonFileInfo
                         buttonText.text: "Info"
                         onClicked: {
+                            printSwipeView.swipeToItem(4)
                         }
                     }
 
@@ -337,104 +372,77 @@ Item {
                         id: printInfo_fileName
                         width: parent.width
                         textLabel.text: qsTr("Filename") + cpUiTr.emptyStr
-                        textData.text: model.modelData.fileBaseName
+                        textData.text: file_name
                     }
 
                     InfoItem {
-                        id: printInfo_filePath
-                        width: parent.width
-                        textLabel.text: qsTr("File Path") + cpUiTr.emptyStr
-                        textData.text: model.modelData.filePath
-                    }
-
-                    InfoItem {
-                        property int printTimeSecRaw: model.modelData.timeEstimateSec
-                        property int printTimeMinRaw: printTimeSecRaw/60
-                        property int printTimeHrRaw: printTimeMinRaw/60
-                        property int printTimeDay: printTimeHrRaw/24
-                        property int printTimeMin: printTimeMinRaw % 60
-                        property int printTimeHr: printTimeHrRaw % 24
                         id: printInfo_timeEstimate
                         width: parent.width
                         textLabel.text: qsTr("Print Time Estimate") + cpUiTr.emptyStr
-                        textData.text: printTimeDay != 0 ? printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M" : printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M"
+                        textData.text: print_time
                     }
 
                     InfoItem {
                         id: printInfo_material
                         width: parent.width
                         textLabel.text: qsTr("Print Material") + cpUiTr.emptyStr
-                        textData.text: model.modelData.materialNameA == "" ? model.modelData.materialNameB : model.modelData.materialNameA + "+" + model.modelData.materialNameB
-                    }
-
-                    InfoItem {
-                        id: printInfo_layerHeight
-                        width: parent.width
-                        textLabel.text: qsTr("Layer Height") + cpUiTr.emptyStr
-                        textData.text: model.modelData.layerHeightMM + "mm"
-                    }
-
-                    InfoItem {
-                        id: printInfo_infillDensity
-                        width: parent.width
-                        textLabel.text: qsTr("Infill Density") + cpUiTr.emptyStr
-                        textData.text: model.modelData.infillDensity + "%"
+                        textData.text: print_material
                     }
 
                     InfoItem {
                         id: printInfo_usesSupport
                         width: parent.width
                         textLabel.text: qsTr("Supports") + cpUiTr.emptyStr
-                        textData.text: model.modelData.usesSupport ? "YES" : "NO"
+                        textData.text: uses_support
                     }
 
                     InfoItem {
                         id: printInfo_usesRaft
                         width: parent.width
                         textLabel.text: qsTr("Rafts") + cpUiTr.emptyStr
-                        textData.text: model.modelData.usesSupport ? "YES" : "NO"
+                        textData.text: uses_raft
                     }
 
                     InfoItem {
                         id: printInfo_modelMass
                         width: parent.width
                         textLabel.text: qsTr("Model") + cpUiTr.emptyStr
-                        textData.text: model.modelData.extrusionMassGramsB == "" ? "0 Kg" : model.modelData.extrusionMassGramsB/1000 + " Kg"
+                        textData.text: model_mass
                     }
 
                     InfoItem {
                         id: printInfo_supportMass
                         width: parent.width
                         textLabel.text: qsTr("Support") + cpUiTr.emptyStr
-                        textData.text: model.modelData.extrusionMassGramsA == "" ? "0 Kg" : model.modelData.extrusionMassGramsA/1000 + " Kg"
+                        textData.text: support_mass
                     }
 
                     InfoItem {
                         id: printInfo_Shells
                         width: parent.width
                         textLabel.text: qsTr("Shells") + cpUiTr.emptyStr
-                        textData.text: model.modelData.numShells
+                        textData.text: num_shells
                     }
 
                     InfoItem {
                         id: printInfo_extruderTemperature
                         width: parent.width
                         textLabel.text: qsTr("Extruder Temperature") + cpUiTr.emptyStr
-                        textData.text: model.modelData.extruderTempCelciusA == "" ? model.modelData.extruderTempCelciusB + "C" : model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
+                        textData.text: extruder_temp
                     }
 
                     InfoItem {
                         id: printInfo_chamberTemperature
                         width: parent.width
                         textLabel.text: qsTr("Chamber Temperature") + cpUiTr.emptyStr
-                        textData.text: model.modeData.chamberTempCelcius + "C"
+                        textData.text: chamber_temp
                     }
 
                     InfoItem {
                         id: printInfo_slicerName
                         width: parent.width
                         textLabel.text: qsTr("Slicer Name") + cpUiTr.emptyStr
-                        textData.text: model.modelData.slicerName
+                        textData.text: slicer_name
                     }
                 }
             }
