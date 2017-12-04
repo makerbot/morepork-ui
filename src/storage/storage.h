@@ -11,10 +11,12 @@
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
-#define INTERNAL_THINGS_DIR QString("/home/")+qgetenv("USER")+"/things"
+#define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
+#define USB_STORAGE_PATH QString()
 #else
 // embedded linux path
-#define INTERNAL_THINGS_DIR QString("/home/things")
+#define INTERNAL_STORAGE_PATH QString("/home/things")
+#define USB_STORAGE_PATH QString("/home/usb_storage")
 #endif
 
 

@@ -162,7 +162,7 @@ Item {
                                 }
                                 else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
                                     fileName = model.modelData.filePath + "/" + model.modelData.fileName
-                                    printSwipeView.swipeToItem(3)
+                                    printSwipeView.swipeToItem(2)
                                 }
                             }
                         }
@@ -268,7 +268,7 @@ Item {
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
-                                        printSwipeView.swipeToItem(2)
+                                        printSwipeView.swipeToItem(1)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
                                 }

@@ -37,7 +37,7 @@ MoreporkStorage::MoreporkStorage(){
 void MoreporkStorage::updateStorageFileList(const bool kInternal,
     const QString kDirectory){
   const QString kThingsDir = kDirectory.isEmpty() ?
-    (kInternal ? INTERNAL_THINGS_DIR : getUsbDir()) : kDirectory;
+    (kInternal ? INTERNAL_STORAGE_PATH : getUsbDir()) : kDirectory;
   storage_watcher_->removePath(prev_thing_dir_);
   prev_thing_dir_ = kThingsDir;
   storage_watcher_->addPath(kThingsDir);
@@ -100,13 +100,13 @@ void MoreporkStorage::updateStorageFileList(const bool kInternal,
 
 
 QString MoreporkStorage::getUsbDir(){
-  return QString();
+  return USB_STORAGE_PATH;
 }
 
 
 void MoreporkStorage::deletePrintFile(QString file_name){
   qDebug() << FL_STRM << "called with file name: " << file_name;
-  QString abs_file_path = INTERNAL_THINGS_DIR + "/" + file_name;
+  QString abs_file_path = INTERNAL_STORAGE_PATH + "/" + file_name;
   QFileInfo file_info(abs_file_path);
   EXP_CHK(file_info.exists() && file_info.suffix() == "makerbot", return)
   QFile file(abs_file_path);
