@@ -13,6 +13,7 @@ Item {
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
     property int bayID: 1
+    signal processDone
 
     Rectangle {
         id: rectangle
@@ -91,6 +92,16 @@ Item {
                     id: button_mouseArea
                     anchors.fill: parent
                     visible: false
+                    onPressed: {
+                        button_rectangle.color = "#ffffff"
+                        button_rectangle.border.color = "#000000"
+                        button_text.color = "#000000"
+                    }
+                    onReleased: {
+                        button_rectangle.color = "#00000000"
+                        button_rectangle.border.color = "#ffffff"
+                        button_text.color = "#ffffff"
+                    }
                 }
             }
 
@@ -134,7 +145,8 @@ Item {
         State {
             name: "State1"
             when: filamentBaySwitchActive == true &&
-                  bot.process.stateType == ProcessStateType.Idle
+                  bot.process.stateType == ProcessStateType.Preheating &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -172,11 +184,12 @@ Item {
         },
         State {
             name: "State2"
-            when: bot.process.stateType == ProcessStateType.Preheating
+            when: bot.process.stateType == ProcessStateType.Preheating &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
-                text: bayID == 1 ? "EXTRUDER 2 IS HEATING UP" : "EXTRUDER 1 IS HEATING UP"
+                text: bayID == 1 ? "EXTRUDER 1 IS HEATING UP" : "EXTRUDER 2 IS HEATING UP"
             }
 
             PropertyChanges {
@@ -196,7 +209,8 @@ Item {
         },
         State {
             name: "State3"
-            when: bot.process.stateType == ProcessStateType.Extrusion
+            when: bot.process.stateType == ProcessStateType.Extrusion &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -229,6 +243,7 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
+                onClicked: bot.loadFilamentStop()
             }
 
             PropertyChanges {
@@ -238,7 +253,8 @@ Item {
         },
         State {
             name: "State4"
-            when: bot.process.stateType == ProcessStateType.Stopping
+            when: bot.process.stateType == ProcessStateType.Stopping &&
+                  bot.process.type == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -274,6 +290,7 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
+                onClicked: processDone()
             }
 
             PropertyChanges {
@@ -293,7 +310,7 @@ Item {
                 target: instruction_description_text
                 y: 1
                 height: 60
-                text: "Open material bay " + bayID + " and carefully rewind the materialonto the spool. Secure the end of the filament in place and store in a cool dry space."
+                text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
                 anchors.topMargin: 170
             }
 
@@ -320,6 +337,7 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
+                onClicked: processDone()
             }
 
             PropertyChanges {

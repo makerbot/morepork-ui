@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 
 Item {
+    smooth: false
     property string fileName: "unknown.makerbot"
     property string file_name
     property string print_time
@@ -32,8 +33,14 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
-    property bool internalStorage: false
-    smooth: false
+    property bool browsingUsbStorage: false
+
+    property bool usbStorageConnected: storage.usbStorageConnected
+    onUsbStorageConnectedChanged: {
+        if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
+            browsingUsbStorage)
+            printSwipeView.swipeToItem(0)
+    }
 
     PrintingDrawer {
         id: printingDrawer
@@ -81,26 +88,28 @@ Item {
                     spacing: 0
 
                     MoreporkButton {
-                        id: buttonUsbStorage
-                        buttonText.text: "USB Storage"
+                        id: buttonInternalStorage
+                        buttonText.text: "Internal Storage"
                         onClicked: {
-                            internalStorage = false
+                            browsingUsbStorage = false
+                            storage.updateStorageFileList("?root_internal?")
                             printSwipeView.swipeToItem(1)
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false
+                    Item { width: parent.width; height: 1; smooth: false; visible: storage.usbStorageConnected
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
 
                     MoreporkButton {
-                        id: buttonInternalStorage
-                        buttonText.text: "Internal Storage"
+                        id: buttonUsbStorage
+                        buttonText.text: "USB Storage"
+                        visible: storage.usbStorageConnected
                         onClicked: {
-                            internalStorage = true
-                            storage.updateInternalStorageFileList()
-                            printSwipeView.swipeToItem(2)
+                            browsingUsbStorage = true
+                            storage.updateStorageFileList("?root_usb?")
+                            printSwipeView.swipeToItem(1)
                         }
                     }
                 }
@@ -115,40 +124,7 @@ Item {
 
         // printSwipeView.index = 1
         Item {
-            id: itemPrintUsbStorage
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: 0
-            smooth: false
-            visible: false
-
-            Flickable {
-                id: flickableUsbStorage
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
-                contentHeight: columnUsbStorage.height
-
-                Column {
-                    id: columnUsbStorage
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 0
-
-                    MoreporkButton {
-                        id: buttonNotImplemented
-                        buttonText.text: "Not Implemented"
-                    }
-                }
-            }
-        }
-
-        // printSwipeView.index = 2
-        Item {
-            id: itemPrintInternalStorage
+            id: itemPrintStorage
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: 0
@@ -159,7 +135,7 @@ Item {
             function altBack(){
                 var backDir = storage.backStackPop()
                 if(backDir !== ""){
-                    storage.updateInternalStorageFileList(storage.backStackPop())
+                    storage.updateStorageFileList(backDir)
                 }
                 else{
                     printSwipeView.swipeToItem(0)
@@ -185,18 +161,23 @@ Item {
                         property int printTimeHr: printTimeHrRaw % 24
                         smooth: false
                         antialiasing: false
-                        fileThumbnail.source: "image://thumbnail/" + model.modelData.filePath + "/" + model.modelData.fileName
+                        fileThumbnail.source: "image://thumbnail/" +
+                            model.modelData.filePath + "/" + model.modelData.fileName
                         filenameText.text: model.modelData.fileBaseName
                         fileDesc_rowLayout.visible: !model.modelData.isDir
-                        filePrintTime.text: printTimeDay != 0 ? printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M" : printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M"
-                        fileMaterial.text: model.modelData.materialNameA == "" ? model.modelData.materialNameB : model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                        filePrintTime.text: printTimeDay != 0 ?
+                            (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
+                            (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
+                        fileMaterial.text: model.modelData.materialNameA == "" ?
+                            model.modelData.materialNameB :
+                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
 
                         onClicked: {
                             if(model.modelData.isDir){
                                 storage.backStackPush(model.modelData.filePath)
                                 storage.updateInternalStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                             }
-                            else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
+                            else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                                 fileName = model.modelData.filePath + "/" + model.modelData.fileName
                                 file_name = model.modelData.fileBaseName
                                 printTimeSecRaw = model.modelData.timeEstimateSec
@@ -205,17 +186,25 @@ Item {
                                 printTimeDay = printTimeHrRaw/24
                                 printTimeMin = printTimeMinRaw % 60
                                 printTimeHr = printTimeHrRaw % 24
-                                print_time = printTimeDay > 1 ? printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M" : printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M"
-                                print_material = model.modelData.materialNameA == "" ? model.modelData.materialNameB : model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                                print_time = printTimeDay > 1 ? (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
+                                    (printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
+                                print_material = model.modelData.materialNameA == "" ? model.modelData.materialNameB :
+                                    model.modelData.materialNameA + "+" + model.modelData.materialNameB
                                 uses_support = model.modelData.usesSupport ? "YES" : "NO"
                                 uses_raft = model.modelData.usesRaft ? "YES" : "NO"
-                                model_mass = model.modelData.extrusionMassGramsB < 1000 ? model.modelData.extrusionMassGramsB.toFixed(1) + " g" : (model.modelData.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
-                                support_mass = model.modelData.extrusionMassGramsA < 1000 ? model.modelData.extrusionMassGramsA.toFixed(1) + " g" : (model.modelData.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+                                model_mass = model.modelData.extrusionMassGramsB < 1000 ?
+                                    model.modelData.extrusionMassGramsB.toFixed(1) + " g" :
+                                    (model.modelData.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
+                                support_mass = model.modelData.extrusionMassGramsA < 1000 ?
+                                    model.modelData.extrusionMassGramsA.toFixed(1) + " g" :
+                                    (model.modelData.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
                                 num_shells = model.modelData.numShells
-                                extruder_temp = model.modelData.extruderTempCelciusA == 0 ? model.modelData.extruderTempCelciusB + "C" : model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
+                                extruder_temp = model.modelData.extruderTempCelciusA == 0 ?
+                                    model.modelData.extruderTempCelciusB + "C" :
+                                    model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
                                 chamber_temp = model.modelData.chamberTempCelcius + "C"
                                 slicer_name = model.modelData.slicerName
-                                printSwipeView.swipeToItem(3)
+                                printSwipeView.swipeToItem(2)
                             }
                         }
 
@@ -225,12 +214,12 @@ Item {
             }
         }
 
-        // printSwipeView.index = 3
+        // printSwipeView.index = 2
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : internalStorage ? 2 : 1
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 1
             smooth: false
             visible: false
 
@@ -269,7 +258,7 @@ Item {
                         id: buttonFileInfo
                         buttonText.text: "Info"
                         onClicked: {
-                            printSwipeView.swipeToItem(4)
+                            printSwipeView.swipeToItem(3)
                         }
                     }
 
@@ -320,7 +309,7 @@ Item {
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
                                         bot.updateInternalStorageFileList()
-                                        printSwipeView.swipeToItem(2)
+                                        printSwipeView.swipeToItem(1)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
                                 }
@@ -342,12 +331,12 @@ Item {
             }
         }
 
-        // printSwipeView.index = 4
+        // printSwipeView.index = 3
         Item {
            id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 3
+            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2
             smooth: false
             visible: false
 
