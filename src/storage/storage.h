@@ -11,10 +11,12 @@
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
-#define THINGS_DIR QString("/home/")+qgetenv("USER")+"/things"
+#define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
+#define USB_STORAGE_PATH QString()
 #else
 // embedded linux path
-#define THINGS_DIR QString("/home/things")
+#define INTERNAL_STORAGE_PATH QString("/home/things")
+#define USB_STORAGE_PATH QString("/home/usb_storage")
 #endif
 
 
@@ -27,7 +29,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(bool isDir READ isDir NOTIFY fileInfoChanged)
 
   // see morepork-libtinything/include/tinything/TinyThingReader.hh for a
-  // complete list of the meta available meta items.
+  // complete list of the available meta items.
   Q_PROPERTY(float extrusionMassGramsA READ extrusionMassGramsA NOTIFY fileInfoChanged)
   Q_PROPERTY(float extrusionMassGramsB READ extrusionMassGramsB NOTIFY fileInfoChanged)
   Q_PROPERTY(int extruderTempCelciusA READ extruderTempCelciusA NOTIFY fileInfoChanged)
@@ -46,7 +48,8 @@ class PrintFileInfo : public QObject {
   QString file_name_, file_path_, file_base_name_;
   bool is_dir_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
-  int extruder_temp_celcius_a_, extruder_temp_celcius_b_, chamber_temp_celcius_, num_shells_;
+  int extruder_temp_celcius_a_, extruder_temp_celcius_b_,
+      chamber_temp_celcius_, num_shells_;
   float layer_height_mm_, infill_density_, time_estimate_sec_;
   bool uses_support_, uses_raft_;
   QString material_name_a_, material_name_b_, slicer_name_;
@@ -165,12 +168,12 @@ class MoreporkStorage : public QObject {
   Q_OBJECT
   QFileSystemWatcher *storage_watcher_;
   QStack<QString> back_dir_stack_;
+  QString prev_thing_dir_;
 
   public:
     QList<QObject*> print_file_list_;
     MoreporkStorage();
-    Q_INVOKABLE void
-      updateInternalStorageFileList(const QString kDirectory = "");
+    Q_INVOKABLE void updateStorageFileList(const QString kDirectory = "");
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList

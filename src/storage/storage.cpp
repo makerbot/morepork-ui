@@ -29,18 +29,25 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
 
 MoreporkStorage::MoreporkStorage(){
   storage_watcher_ = new QFileSystemWatcher();
-  storage_watcher_->addPath(THINGS_DIR);
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
-          this, SLOT(updateInternalStorageFileList(const QString)));
-  updateInternalStorageFileList();
+          this, SLOT(updateStorageFileList(const QString)));
 }
 
 
-void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
-  const QString kThingsDir = kDirectory.isEmpty() ? THINGS_DIR : kDirectory;
+void MoreporkStorage::updateStorageFileList(const QString kDirectory){
+  QString things_dir;
+  if(kDirectory == "?root_internal?")
+    things_dir = INTERNAL_STORAGE_PATH;
+  else if(kDirectory == "?root_usb?")
+    things_dir = USB_STORAGE_PATH;
+  else
+    things_dir = kDirectory;
+  storage_watcher_->removePath(prev_thing_dir_);
+  prev_thing_dir_ = things_dir;
+  storage_watcher_->addPath(things_dir);
   QStringList file_list;
-  if(QDir(kThingsDir).exists()){
-    QDirIterator it(kThingsDir, QDir::Dirs | QDir::Files |
+  if(QDir(things_dir).exists()){
+    QDirIterator it(things_dir, QDir::Dirs | QDir::Files |
       QDir::NoDotAndDotDot | QDir::Readable);
     QList<QObject*> print_file_list;
     while(it.hasNext()){
@@ -52,7 +59,7 @@ void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
           print_file_list.append(
-            new PrintFileInfo(kThingsDir,
+            new PrintFileInfo(kFileInfo.absolutePath(),
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
                               kFileInfo.isDir(),
@@ -73,20 +80,23 @@ void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
         }
         else
           print_file_list.append(
-            new PrintFileInfo(kThingsDir,
+            new PrintFileInfo(things_dir,
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
                               kFileInfo.isDir()));
 #else
         print_file_list.append(
-          new PrintFileInfo(kThingsDir,
+          new PrintFileInfo(things_dir,
                             kFileInfo.fileName(),
                             kFileInfo.baseName(),
                             kFileInfo.isDir()));
 #endif
       }
     }
-    printFileListSet(print_file_list);
+    if(print_file_list.empty())
+      printFileListReset();
+    else
+      printFileListSet(print_file_list);
   }
   else
     printFileListReset();
@@ -95,7 +105,7 @@ void MoreporkStorage::updateInternalStorageFileList(const QString kDirectory){
 
 void MoreporkStorage::deletePrintFile(QString file_name){
   qDebug() << FL_STRM << "called with file name: " << file_name;
-  QString abs_file_path = THINGS_DIR + "/" + file_name;
+  QString abs_file_path = INTERNAL_STORAGE_PATH + "/" + file_name;
   QFileInfo file_info(abs_file_path);
   EXP_CHK(file_info.exists() && file_info.suffix() == "makerbot", return)
   QFile file(abs_file_path);
@@ -119,10 +129,8 @@ void MoreporkStorage::printFileListSet(const QList<QObject*> &print_file_list) {
 
 void MoreporkStorage::printFileListReset(){
   QList<QObject*> print_file_list;
-  print_file_list.append(new PrintFileInfo("/path/to",
-    "null_thing.makerbot", "thing", false));
-  print_file_list.append(new PrintFileInfo("/path/to",
-    "null_directory", "null_directory", true));
+  print_file_list.append(new PrintFileInfo("/null/path",
+    "No Items Present", "No Items Present", false));
   printFileListSet(print_file_list);
 }
 
