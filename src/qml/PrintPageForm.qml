@@ -17,12 +17,12 @@ Item {
     property string extruder_temp
     property string chamber_temp
     property string slicer_name
-    property int printTimeSecRaw
-    property int printTimeMinRaw
-    property int printTimeHrRaw
-    property int printTimeDay
-    property int printTimeMin
-    property int printTimeHr
+//    property int printTimeSecRaw
+//    property int printTimeMinRaw
+//    property int printTimeHrRaw
+//    property int printTimeDay
+//    property int printTimeMin
+//    property int printTimeHr
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
@@ -142,6 +142,17 @@ Item {
                 }
             }
 
+            Text{
+                color: "#ffffff"
+                font.family: "Antennae"
+                font.weight: Font.Light
+                text: "No Items"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pointSize: 20
+                visible: model.modelData.fileBaseName === "No Items Present"
+            }
+
             ListView {
                 smooth: false
                 anchors.fill: parent
@@ -161,6 +172,7 @@ Item {
                         property int printTimeHr: printTimeHrRaw % 24
                         smooth: false
                         antialiasing: false
+                        visible: model.modelData.fileBaseName !== "No Items Present"
                         fileThumbnail.source: "image://thumbnail/" +
                             model.modelData.filePath + "/" + model.modelData.fileName
                         filenameText.text: model.modelData.fileBaseName
@@ -171,7 +183,6 @@ Item {
                         fileMaterial.text: model.modelData.materialNameA == "" ?
                             model.modelData.materialNameB :
                             model.modelData.materialNameA + "+" + model.modelData.materialNameB
-
                         onClicked: {
                             if(model.modelData.isDir){
                                 storage.backStackPush(model.modelData.filePath)
