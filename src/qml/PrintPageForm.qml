@@ -352,6 +352,7 @@ Item {
 
             Flickable {
                 id: flickable
+                anchors.topMargin: 10
                 anchors.fill: parent
                 anchors.leftMargin: 15
                 interactive: true
