@@ -15,10 +15,12 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
+    property bool browsingUsbStorage: false
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0)
+        if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
+            browsingUsbStorage)
             printSwipeView.swipeToItem(0)
     }
 
@@ -73,6 +75,7 @@ Item {
                         id: buttonInternalStorage
                         buttonText.text: "Internal Storage"
                         onClicked: {
+                            browsingUsbStorage = false
                             storage.updateStorageFileList("?root_internal?")
                             printSwipeView.swipeToItem(1)
                         }
@@ -88,6 +91,7 @@ Item {
                         buttonText.text: "USB Storage"
                         visible: storage.usbStorageConnected
                         onClicked: {
+                            browsingUsbStorage = true
                             storage.updateStorageFileList("?root_usb?")
                             printSwipeView.swipeToItem(1)
                         }
