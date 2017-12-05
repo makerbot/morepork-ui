@@ -22,7 +22,6 @@ else()
         endif()
     endif()
 endif()
-            set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE Debug)
 
 find_package(MBCMakeTools QUIET)
 
