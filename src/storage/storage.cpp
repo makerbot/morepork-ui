@@ -34,16 +34,20 @@ MoreporkStorage::MoreporkStorage(){
 }
 
 
-void MoreporkStorage::updateStorageFileList(const bool kInternal,
-    const QString kDirectory){
-  const QString kThingsDir = kDirectory.isEmpty() ?
-    (kInternal ? INTERNAL_STORAGE_PATH : USB_STORAGE_PATH) : kDirectory;
+void MoreporkStorage::updateStorageFileList(const QString kDirectory){
+  QString things_dir;
+  if(kDirectory == "?root_internal?")
+    things_dir = INTERNAL_STORAGE_PATH;
+  else if(kDirectory == "?root_usb?")
+    things_dir = USB_STORAGE_PATH;
+  else
+    things_dir = kDirectory;
   storage_watcher_->removePath(prev_thing_dir_);
-  prev_thing_dir_ = kThingsDir;
-  storage_watcher_->addPath(kThingsDir);
+  prev_thing_dir_ = things_dir;
+  storage_watcher_->addPath(things_dir);
   QStringList file_list;
-  if(QDir(kThingsDir).exists()){
-    QDirIterator it(kThingsDir, QDir::Dirs | QDir::Files |
+  if(QDir(things_dir).exists()){
+    QDirIterator it(things_dir, QDir::Dirs | QDir::Files |
       QDir::NoDotAndDotDot | QDir::Readable);
     QList<QObject*> print_file_list;
     while(it.hasNext()){
@@ -55,7 +59,7 @@ void MoreporkStorage::updateStorageFileList(const bool kInternal,
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
           print_file_list.append(
-            new PrintFileInfo(kThingsDir,
+            new PrintFileInfo(kFileInfo.absolutePath(),
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
                               kFileInfo.isDir(),
@@ -76,13 +80,13 @@ void MoreporkStorage::updateStorageFileList(const bool kInternal,
         }
         else
           print_file_list.append(
-            new PrintFileInfo(kThingsDir,
+            new PrintFileInfo(things_dir,
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
                               kFileInfo.isDir()));
 #else
         print_file_list.append(
-          new PrintFileInfo(kThingsDir,
+          new PrintFileInfo(things_dir,
                             kFileInfo.fileName(),
                             kFileInfo.baseName(),
                             kFileInfo.isDir()));
@@ -127,8 +131,6 @@ void MoreporkStorage::printFileListReset(){
   QList<QObject*> print_file_list;
   print_file_list.append(new PrintFileInfo("/null/path",
     "No Items Present", "No Items Present", false));
-  print_file_list.append(new PrintFileInfo("/null/path",
-    "No Items Present", "No Items Present", true));
   printFileListSet(print_file_list);
 }
 

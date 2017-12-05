@@ -15,7 +15,6 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
-    property bool useInternalStorage: false
     smooth: false
 
     PrintingDrawer {
@@ -67,8 +66,7 @@ Item {
                         id: buttonInternalStorage
                         buttonText.text: "Internal Storage"
                         onClicked: {
-                            useInternalStorage = true
-                            storage.updateStorageFileList(useInternalStorage)
+                            storage.updateStorageFileList("?root_internal?")
                             printSwipeView.swipeToItem(1)
                         }
                     }
@@ -82,8 +80,7 @@ Item {
                         id: buttonUsbStorage
                         buttonText.text: "USB Storage"
                         onClicked: {
-                            useInternalStorage = false
-                            storage.updateStorageFileList(useInternalStorage)
+                            storage.updateStorageFileList("?root_usb?")
                             printSwipeView.swipeToItem(1)
                         }
                     }
@@ -110,7 +107,7 @@ Item {
             function altBack(){
                 var backDir = storage.backStackPop()
                 if(backDir !== ""){
-                    storage.updateStorageFileList(useInternalStorage, backDir)
+                    storage.updateStorageFileList(backDir)
                 }
                 else{
                     printSwipeView.swipeToItem(0)
@@ -157,8 +154,7 @@ Item {
                             onClicked: {
                                 if(model.modelData.isDir){
                                     storage.backStackPush(model.modelData.filePath)
-                                    storage.updateStorageFileList(useInternalStorage,
-                                        model.modelData.filePath + "/" + model.modelData.fileName)
+                                    storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                                 }
                                 else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
                                     fileName = model.modelData.filePath + "/" + model.modelData.fileName

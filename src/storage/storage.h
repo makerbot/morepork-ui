@@ -173,8 +173,7 @@ class MoreporkStorage : public QObject {
   public:
     QList<QObject*> print_file_list_;
     MoreporkStorage();
-    Q_INVOKABLE void updateStorageFileList(const bool kInternal,
-      const QString kDirectory = "");
+    Q_INVOKABLE void updateStorageFileList(const QString kDirectory = "");
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList
