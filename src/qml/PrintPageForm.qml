@@ -175,7 +175,7 @@ Item {
                         onClicked: {
                             if(model.modelData.isDir){
                                 storage.backStackPush(model.modelData.filePath)
-                                storage.updateInternalStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
+                                storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                             }
                             else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                                 fileName = model.modelData.filePath + "/" + model.modelData.fileName
@@ -308,7 +308,6 @@ Item {
                                     buttonText.text: "Yes"
                                     onClicked: {
                                         bot.deletePrintFile(fileName)
-                                        bot.updateInternalStorageFileList()
                                         printSwipeView.swipeToItem(1)
                                         printDeleteSwipeView.setCurrentIndex(0)
                                     }
