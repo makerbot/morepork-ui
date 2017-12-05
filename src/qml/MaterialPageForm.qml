@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtMultimedia 5.8
+import QtQuick.Window 2.2
 
 Item {
     id: item1
@@ -108,20 +109,22 @@ Item {
         id: cancelLoadUnloadPopup
         width: 720
         height: 275
-        leftMargin: (parent.width - width)/2
-        topMargin: (parent.height - height)/2
+        leftMargin: rootItem.rotation == 0 ? (parent.width - width)/2 : 0
+        topMargin: rootItem.rotation == 0 ? (parent.height - height)/2 : 0
+        rightMargin: rootItem.rotation == 180 ? (parent.width - width)/2 : 0
+        bottomMargin: rootItem.rotation == 180 ? (parent.height - height)/2 : 0
         modal: true
         dim: true
         focus: true
         closePolicy: Popup.CloseOnPressOutside
         background: Rectangle{
             color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
             opacity: 0.7
             radius: 10
             border.width: 2
             border.color: "#ffffff"
         }
-
         enter: Transition {
                 NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
         }
@@ -131,6 +134,7 @@ Item {
 
         Item {
             id: baseItem
+            rotation: rootItem.rotation == 180 ? 180 : 0
             width: 720
             height: 275
             anchors.verticalCenter: parent.verticalCenter
