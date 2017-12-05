@@ -37,7 +37,7 @@ MoreporkStorage::MoreporkStorage(){
 void MoreporkStorage::updateStorageFileList(const bool kInternal,
     const QString kDirectory){
   const QString kThingsDir = kDirectory.isEmpty() ?
-    (kInternal ? INTERNAL_STORAGE_PATH : getUsbDir()) : kDirectory;
+    (kInternal ? INTERNAL_STORAGE_PATH : USB_STORAGE_PATH) : kDirectory;
   storage_watcher_->removePath(prev_thing_dir_);
   prev_thing_dir_ = kThingsDir;
   storage_watcher_->addPath(kThingsDir);
@@ -96,11 +96,6 @@ void MoreporkStorage::updateStorageFileList(const bool kInternal,
   }
   else
     printFileListReset();
-}
-
-
-QString MoreporkStorage::getUsbDir(){
-  return USB_STORAGE_PATH;
 }
 
 

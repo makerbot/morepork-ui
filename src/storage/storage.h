@@ -29,7 +29,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(bool isDir READ isDir NOTIFY fileInfoChanged)
 
   // see morepork-libtinything/include/tinything/TinyThingReader.hh for a
-  // complete list of the meta available meta items.
+  // complete list of the available meta items.
   Q_PROPERTY(float extrusionMassGramsA READ extrusionMassGramsA NOTIFY fileInfoChanged)
   Q_PROPERTY(float extrusionMassGramsB READ extrusionMassGramsB NOTIFY fileInfoChanged)
   Q_PROPERTY(int extruderTempCelciusA READ extruderTempCelciusA NOTIFY fileInfoChanged)
@@ -48,7 +48,8 @@ class PrintFileInfo : public QObject {
   QString file_name_, file_path_, file_base_name_;
   bool is_dir_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
-  int extruder_temp_celcius_a_, extruder_temp_celcius_b_, chamber_temp_celcius_, num_shells_;
+  int extruder_temp_celcius_a_, extruder_temp_celcius_b_,
+      chamber_temp_celcius_, num_shells_;
   float layer_height_mm_, infill_density_, time_estimate_sec_;
   bool uses_support_, uses_raft_;
   QString material_name_a_, material_name_b_, slicer_name_;
@@ -186,7 +187,6 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
-    QString getUsbDir();
 
   signals:
     void printFileListChanged();
