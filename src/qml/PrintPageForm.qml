@@ -15,6 +15,15 @@ Item {
     property alias buttonFilePrint: buttonFilePrint
     property alias buttonFileInfo: buttonFileInfo
     property alias buttonFileDelete: buttonFileDelete
+    property bool browsingUsbStorage: false
+
+    property bool usbStorageConnected: storage.usbStorageConnected
+    onUsbStorageConnectedChanged: {
+        if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
+            browsingUsbStorage)
+            printSwipeView.swipeToItem(0)
+    }
+
     smooth: false
 
     PrintingDrawer {
@@ -66,12 +75,13 @@ Item {
                         id: buttonInternalStorage
                         buttonText.text: "Internal Storage"
                         onClicked: {
+                            browsingUsbStorage = false
                             storage.updateStorageFileList("?root_internal?")
                             printSwipeView.swipeToItem(1)
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false
+                    Item { width: parent.width; height: 1; smooth: false; visible: storage.usbStorageConnected
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
@@ -79,7 +89,9 @@ Item {
                     MoreporkButton {
                         id: buttonUsbStorage
                         buttonText.text: "USB Storage"
+                        visible: storage.usbStorageConnected
                         onClicked: {
+                            browsingUsbStorage = true
                             storage.updateStorageFileList("?root_usb?")
                             printSwipeView.swipeToItem(1)
                         }
@@ -156,7 +168,7 @@ Item {
                                     storage.backStackPush(model.modelData.filePath)
                                     storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                                 }
-                                else if(model.modelData.fileBaseName !== "thing") { // Ignore default fileBaseName object
+                                else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                                     fileName = model.modelData.filePath + "/" + model.modelData.fileName
                                     printSwipeView.swipeToItem(2)
                                 }

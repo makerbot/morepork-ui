@@ -8,15 +8,19 @@
 #include <QImage>
 #include <QQuickImageProvider>
 #include <QStack>
+#include "model/base_model.h"
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString()
+#define USB_STORAGE_DEV_BY_PATH QString()
 #else
 // embedded linux path
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage")
+#define USB_STORAGE_DEV_BY_PATH \
+QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
 
 
@@ -167,8 +171,10 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
 class MoreporkStorage : public QObject {
   Q_OBJECT
   QFileSystemWatcher *storage_watcher_;
+  QFileSystemWatcher *usb_storage_watcher_;
   QStack<QString> back_dir_stack_;
   QString prev_thing_dir_;
+  MODEL_PROP(bool, usbStorageConnected, false)
 
   public:
     QList<QObject*> print_file_list_;
@@ -186,6 +192,9 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
+
+  private slots:
+    void updateUsbStorageConnected();
 
   signals:
     void printFileListChanged();
