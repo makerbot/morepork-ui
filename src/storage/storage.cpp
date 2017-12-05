@@ -29,8 +29,13 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
 
 MoreporkStorage::MoreporkStorage(){
   storage_watcher_ = new QFileSystemWatcher();
+  usb_storage_watcher_ = new QFileSystemWatcher();
+  usb_storage_watcher_->addPath("/dev/disk/by-path");
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateStorageFileList(const QString)));
+  connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
+          this, SLOT(updateUsbStorageConnected()));
+  usbStorageConnectedSet(false);
 }
 
 
@@ -100,6 +105,15 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
   }
   else
     printFileListReset();
+}
+
+
+void MoreporkStorage::updateUsbStorageConnected(){
+  const bool kUsbStorConnected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
+  usbStorageConnectedSet(kUsbStorConnected);
+  if(prev_thing_dir_.left(USB_STORAGE_PATH.size()) == USB_STORAGE_PATH &&
+     !kUsbStorConnected)
+      backStackClear();
 }
 
 
