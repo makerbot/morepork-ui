@@ -49,7 +49,6 @@ class BotModel : public BaseModel {
     MODEL_PROP(FilamentColor, filament2Color, Unknown)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
-    MODEL_PROP(QStringList, internalStorageFileList, {"No Internal Files Found"})
     MODEL_PROP(bool, filamentBayASwitch, false)
     MODEL_PROP(bool, filamentBayBSwitch, false)
     MODEL_PROP(int, extruderACurrentTemp, -999)
