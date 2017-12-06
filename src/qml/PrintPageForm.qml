@@ -17,12 +17,6 @@ Item {
     property string extruder_temp
     property string chamber_temp
     property string slicer_name
-//    property int printTimeSecRaw
-//    property int printTimeMinRaw
-//    property int printTimeHrRaw
-//    property int printTimeDay
-//    property int printTimeMin
-//    property int printTimeHr
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
@@ -150,7 +144,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: 20
-                visible: model.modelData.fileBaseName === "No Items Present"
+//              visible: To do
             }
 
             ListView {

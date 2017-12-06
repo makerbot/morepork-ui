@@ -28,7 +28,7 @@ Button {
 
     Image {
         id: fileThumbnail
-        height: 120
+        height: 80
         asynchronous: true
         anchors.left: parent.left
         anchors.leftMargin: 35
