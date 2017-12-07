@@ -36,6 +36,7 @@ MoreporkStorage::MoreporkStorage(){
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
   usbStorageConnectedSet(false);
+  storageIsEmptySet(true);
 }
 
 
@@ -100,8 +101,10 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
     }
     if(print_file_list.empty())
       printFileListReset();
-    else
+    else{
       printFileListSet(print_file_list);
+      storageIsEmptySet(false);
+    }
   }
   else
     printFileListReset();
@@ -142,6 +145,7 @@ void MoreporkStorage::printFileListSet(const QList<QObject*> &print_file_list) {
 
 
 void MoreporkStorage::printFileListReset(){
+  storageIsEmptySet(true);
   QList<QObject*> print_file_list;
   print_file_list.append(new PrintFileInfo("/null/path",
     "No Items Present", "No Items Present", false));
