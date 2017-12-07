@@ -98,7 +98,7 @@ QImage& MakerbotFileMetaReader::getLargeThumbnail() {
     }
   }
   if(large_thumbnail_.isNull())
-    large_thumbnail_ = QImage(":/img/makerbot_logo_55x40.png");
+    large_thumbnail_ = QImage(":/img/makerbot_logo_320x200.png");
   return large_thumbnail_;
 }
 

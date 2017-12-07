@@ -15,16 +15,16 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
       return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
     else{
       MakerbotFileMetaReader file_meta_reader(kFileInfo);
-      QImage thumbnail = file_meta_reader.getMediumThumbnail();
+      QImage thumbnail = file_meta_reader.getLargeThumbnail();
       if(thumbnail.isNull())
-        return QPixmap::fromImage(QImage(":/img/makerbot_logo_110x80.png"));
+        return QPixmap::fromImage(QImage(":/img/makerbot_logo_320x200.png"));
       else
         return QPixmap::fromImage(thumbnail);
     }
   }
   else
 #endif
-    return QPixmap::fromImage(QImage(":/img/makerbot_logo_110x80.png"));
+    return QPixmap::fromImage(QImage(":/img/makerbot_logo_320x200.png"));
 }
 
 
