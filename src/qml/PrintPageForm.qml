@@ -17,6 +17,7 @@ Item {
     property string extruder_temp
     property string chamber_temp
     property string slicer_name
+    property string readyByTime
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
@@ -32,8 +33,29 @@ Item {
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
         if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
-            browsingUsbStorage)
+                browsingUsbStorage)
             printSwipeView.swipeToItem(0)
+    }
+
+    function getReadyByTime(timeLeftSeconds)
+    {
+        var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
+        var currentTime = new Date()
+        var endMS = currentTime.getTime() + timeLeftSeconds*1000
+        var endTime = new Date()
+        endTime.setTime(endMS)
+        var daysLeft = endTime.getDate() - currentTime.getDate()
+        var doneByDayString = daysLeft > 1 ? daysLeft + " DAYS LATER" : daysLeft == 1 ? "TOMMORROW" : "TODAY"
+        var doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() : "12" + ":" + endTime.getMinutes() : endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
+        var doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
+        readyByTime = doneByTimeString + " " + doneByMeridianString + " " + doneByDayString
+    }
+
+    Rectangle {
+        id: rectangle
+        width: 800
+        height: 480
+        color: "#000000"
     }
 
     PrintingDrawer {
@@ -158,62 +180,63 @@ Item {
                 model: storage.printFileList
                 delegate:
                     FileButton{
-                        property int printTimeSecRaw: model.modelData.timeEstimateSec
-                        property int printTimeMinRaw: printTimeSecRaw/60
-                        property int printTimeHrRaw: printTimeMinRaw/60
-                        property int printTimeDay: printTimeHrRaw/24
-                        property int printTimeMin: printTimeMinRaw % 60
-                        property int printTimeHr: printTimeHrRaw % 24
-                        smooth: false
-                        antialiasing: false
-                        fileThumbnail.source: "image://thumbnail/" +
-                            model.modelData.filePath + "/" + model.modelData.fileName
-                        filenameText.text: model.modelData.fileBaseName
-                        fileDesc_rowLayout.visible: !model.modelData.isDir
-                        filePrintTime.text: printTimeDay != 0 ?
-                            (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
-                            (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
-                        fileMaterial.text: model.modelData.materialNameA == "" ?
-                            model.modelData.materialNameB :
-                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
-                        onClicked: {
-                            if(model.modelData.isDir){
-                                storage.backStackPush(model.modelData.filePath)
-                                storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
-                            }
-                            else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
-                                fileName = model.modelData.filePath + "/" + model.modelData.fileName
-                                file_name = model.modelData.fileBaseName
-                                printTimeSecRaw = model.modelData.timeEstimateSec
-                                printTimeMinRaw = printTimeSecRaw/60
-                                printTimeHrRaw = printTimeMinRaw/60
-                                printTimeDay = printTimeHrRaw/24
-                                printTimeMin = printTimeMinRaw % 60
-                                printTimeHr = printTimeHrRaw % 24
-                                print_time = printTimeDay > 1 ? (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
-                                    (printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
-                                print_material = model.modelData.materialNameA == "" ? model.modelData.materialNameB :
-                                    model.modelData.materialNameA + "+" + model.modelData.materialNameB
-                                uses_support = model.modelData.usesSupport ? "YES" : "NO"
-                                uses_raft = model.modelData.usesRaft ? "YES" : "NO"
-                                model_mass = model.modelData.extrusionMassGramsB < 1000 ?
-                                    model.modelData.extrusionMassGramsB.toFixed(1) + " g" :
-                                    (model.modelData.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
-                                support_mass = model.modelData.extrusionMassGramsA < 1000 ?
-                                    model.modelData.extrusionMassGramsA.toFixed(1) + " g" :
-                                    (model.modelData.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
-                                num_shells = model.modelData.numShells
-                                extruder_temp = model.modelData.extruderTempCelciusA == 0 ?
-                                    model.modelData.extruderTempCelciusB + "C" :
-                                    model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
-                                chamber_temp = model.modelData.chamberTempCelcius + "C"
-                                slicer_name = model.modelData.slicerName
-                                printSwipeView.swipeToItem(2)
-                            }
+                    property int printTimeSecRaw: model.modelData.timeEstimateSec
+                    property int printTimeMinRaw: printTimeSecRaw/60
+                    property int printTimeHrRaw: printTimeMinRaw/60
+                    property int printTimeDay: printTimeHrRaw/24
+                    property int printTimeMin: printTimeMinRaw % 60
+                    property int printTimeHr: printTimeHrRaw % 24
+                    smooth: false
+                    antialiasing: false
+                    fileThumbnail.source: "image://thumbnail/" +
+                                          model.modelData.filePath + "/" + model.modelData.fileName
+                    filenameText.text: model.modelData.fileBaseName
+                    fileDesc_rowLayout.visible: !model.modelData.isDir
+                    filePrintTime.text: printTimeDay != 0 ?
+                                            (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
+                                            (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
+                    fileMaterial.text: model.modelData.materialNameA == "" ?
+                                           model.modelData.materialNameB :
+                                           model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                    onClicked: {
+                        if(model.modelData.isDir){
+                            storage.backStackPush(model.modelData.filePath)
+                            storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
+                        else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
+                            fileName = model.modelData.filePath + "/" + model.modelData.fileName
+                            file_name = model.modelData.fileBaseName
+                            printTimeSecRaw = model.modelData.timeEstimateSec
+                            printTimeMinRaw = printTimeSecRaw/60
+                            printTimeHrRaw = printTimeMinRaw/60
+                            printTimeDay = printTimeHrRaw/24
+                            printTimeMin = printTimeMinRaw % 60
+                            printTimeHr = printTimeHrRaw % 24
+                            print_time = printTimeDay > 1 ? (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
+                                                            (printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
+                            print_material = model.modelData.materialNameA == "" ? model.modelData.materialNameB :
+                                                                                   model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                            uses_support = model.modelData.usesSupport ? "YES" : "NO"
+                            uses_raft = model.modelData.usesRaft ? "YES" : "NO"
+                            model_mass = model.modelData.extrusionMassGramsB < 1000 ?
+                                        model.modelData.extrusionMassGramsB.toFixed(1) + " g" :
+                                        (model.modelData.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
+                            support_mass = model.modelData.extrusionMassGramsA < 1000 ?
+                                        model.modelData.extrusionMassGramsA.toFixed(1) + " g" :
+                                        (model.modelData.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+                            num_shells = model.modelData.numShells
+                            extruder_temp = model.modelData.extruderTempCelciusA == 0 ?
+                                        model.modelData.extruderTempCelciusB + "C" :
+                                        model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
+                            chamber_temp = model.modelData.chamberTempCelcius + "C"
+                            slicer_name = model.modelData.slicerName
+                            getReadyByTime(printTimeSecRaw)
+                            printSwipeView.swipeToItem(2)
+                        }
+                    }
 
                     Item { width: parent.width; height: 1; smooth: false
-                           Rectangle { color: "#4d4d4d"; smooth: false; anchors.fill: parent } }
+                        Rectangle { color: "#4d4d4d"; smooth: false; anchors.fill: parent } }
                 }
             }
         }
@@ -227,6 +250,208 @@ Item {
             smooth: false
             visible: false
 
+            Item {
+                id: startPrintItem
+                anchors.fill: parent
+
+                Item {
+                    id: modelItem
+                    width: 212
+                    height: 300
+                    smooth: false
+                    anchors.left: parent.left
+                    anchors.leftMargin: 100
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Image {
+                        id: back_image
+                        smooth: false
+                        anchors.fill: parent
+                        source: "qrc:/img/back_build_volume.png"
+                    }
+
+                    Image {
+                        id: model_image
+                        smooth: false
+                        anchors.verticalCenterOffset: 50
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        source: "image://thumbnail/" + fileName
+                    }
+
+                    Image {
+                        id: front_image
+                        smooth: false
+                        anchors.fill: parent
+                        source: "qrc:/img/front_build_volume.png"
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayout
+                    width: 400
+                    height: 215
+                    antialiasing: false
+                    smooth: false
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 400
+
+                    Image {
+                        id: infoIcon
+                        width: sourceSize.width
+                        height: sourceSize.height
+                        antialiasing: false
+                        smooth: false
+                        source: "qrc:/img/info_icon_small.png"
+                    }
+
+                    Text {
+                        id: printName
+                        text: file_name
+                        smooth: false
+                        antialiasing: false
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 21
+                        color: "#cbcbcb"
+                    }
+
+                    RowLayout {
+                        id: printTimeRowLayout
+                        antialiasing: false
+                        smooth: false
+                        spacing: 10
+
+                        Text {
+                            id: printTimeLabel
+                            text: "PRINT TIME"
+                            smooth: false
+                            antialiasing: false
+                            font.letterSpacing: 3
+                            font.family: "Antennae"
+                            font.weight: Font.Light
+                            font.pixelSize: 20
+                            color: "#ffffff"
+                        }
+
+                        Rectangle {
+                            id: dividerRectangle
+                            width: 1
+                            height: 20
+                            color: "#ffffff"
+                            antialiasing: false
+                            smooth: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        }
+
+                        Text {
+                            id: printTime
+                            text: print_time
+                            smooth: false
+                            antialiasing: false
+                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.family: "Antennae"
+                            font.weight: Font.Light
+                            font.pixelSize: 20
+                            color: "#ffffff"
+                        }
+                    }
+
+                    Text {
+                        id: readyByLabel
+                        text: "READY BY : " + readyByTime
+                        smooth: false
+                        antialiasing: false
+                        font.letterSpacing: 3
+                        font.family: "Antennae"
+                        font.weight: Font.Light
+                        font.pixelSize: 20
+                        color: "#ffffff"
+
+                    }
+
+                    RowLayout {
+                        id: materialRowLayout
+                        antialiasing: false
+                        smooth: false
+                        spacing: 10
+
+                        Text {
+                            id: materialLabel
+                            text: "MATERIAL"
+                            smooth: false
+                            antialiasing: false
+                            font.letterSpacing: 3
+                            font.family: "Antennae"
+                            font.weight: Font.Light
+                            font.pixelSize: 20
+                            color: "#ffffff"
+                        }
+
+                        Rectangle {
+                            id: dividerRectangle1
+                            width: 1
+                            height: 20
+                            color: "#ffffff"
+                            antialiasing: false
+                            smooth: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        }
+
+                        Image {
+                            id: lowMaterialAlert
+                            height: sourceSize.height
+                            antialiasing: false
+                            smooth: false
+                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                            width: sourceSize.width
+                            source: "qrc:/img/alert.png"
+                        }
+                    }
+
+                    Rectangle {
+                        id: startPrintButton
+                        width: 210
+                        height: 50
+                        color: "#00000000"
+                        radius: 10
+                        smooth: false
+                        antialiasing: false
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
+                        border.width: 2
+                        border.color: "#ffffff"
+
+                        Text {
+                            id: startPrintLabel
+                            text: "START PRINT"
+                            smooth: false
+                            antialiasing: false
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.letterSpacing: 3
+                            font.family: "Antennae"
+                            font.weight: Font.Bold
+                            font.pixelSize: 20
+                            color: "#ffffff"
+                        }
+
+                        MouseArea {
+                            id: startPrintButtonMouseArea
+                            smooth: false
+                            anchors.fill: parent
+                            onClicked: {
+                                storage.backStackClear()
+                                bot.print(fileName)
+                                printSwipeView.swipeToItem(0)
+                            }
+                        }
+                    }
+
+                }
+            }
+
             Flickable {
                 id: flickableFileOpt
                 smooth: false
@@ -234,6 +459,7 @@ Item {
                 interactive: true
                 anchors.fill: parent
                 contentHeight: columnStorageOpt.height
+                visible: false
 
                 Column {
                     id: columnFilePrintOpt
@@ -332,11 +558,12 @@ Item {
                     }
                 }
             }
+
         }
 
         // printSwipeView.index = 3
         Item {
-           id: itemPrintInfoOpt
+            id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
             property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2
@@ -441,4 +668,5 @@ Item {
             }
         }
     }
+
 }
