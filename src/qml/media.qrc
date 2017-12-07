@@ -26,7 +26,6 @@
         <file alias="makerbot_logo_55x40.png">images/makerbot_logo_55x40.png</file>
         <file alias="makerbot_logo_110x80.png">images/makerbot_logo_110x80.png</file>
         <file alias="makerbot_logo_320x200.png">images/makerbot_logo_320x200.png</file>
-        <file alias="makerbot_logo_320x240.png">images/makerbot_logo_320x240.png</file>
 	<file alias="filamentbay_empty.png">images/filamentbay_empty.png</file>
 	<file alias="filamentbay_loaded.png">images/filamentbay_loaded.png</file>
 	<file alias="insert_model_material.png">images/insert_model_material.png</file>
