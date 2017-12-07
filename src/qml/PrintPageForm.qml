@@ -134,7 +134,7 @@ Item {
             PrintStatusViewForm{
                 smooth: false
                 visible: bot.process.type == ProcessType.Print
-                fileName_: fileName
+                fileName_: file_name
             }
         }
 
