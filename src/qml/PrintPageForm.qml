@@ -144,7 +144,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: 20
-//              visible: To do
+                visible: storage.storageIsEmpty
             }
 
             ListView {
@@ -154,7 +154,7 @@ Item {
                 spacing: 1
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
-
+                visible: !storage.storageIsEmpty
                 model: storage.printFileList
                 delegate:
                     FileButton{
@@ -166,7 +166,6 @@ Item {
                         property int printTimeHr: printTimeHrRaw % 24
                         smooth: false
                         antialiasing: false
-                        visible: model.modelData.fileBaseName !== "No Items Present"
                         fileThumbnail.source: "image://thumbnail/" +
                             model.modelData.filePath + "/" + model.modelData.fileName
                         filenameText.text: model.modelData.fileBaseName

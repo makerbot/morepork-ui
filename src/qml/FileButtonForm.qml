@@ -26,16 +26,22 @@ Button {
         smooth: false
     }
 
-    Image {
-        id: fileThumbnail
+    Item {
+        id: imageItem
         height: 80
-        asynchronous: true
+        width: 110
+        anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 35
-        anchors.verticalCenter: parent.verticalCenter
-        smooth: false
-        antialiasing: false
-        fillMode: Image.PreserveAspectFit
+
+        Image {
+            id: fileThumbnail
+            anchors.fill: parent
+            asynchronous: true
+            smooth: false
+            antialiasing: false
+            fillMode: Image.PreserveAspectFit
+        }
     }
 
     ColumnLayout {
@@ -115,4 +121,5 @@ Button {
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/img/arrow_19pix.png"
     }
+
 }
