@@ -154,6 +154,11 @@ class PrintFileInfo : public QObject {
         return slicer_name_;
     }
 
+    static bool fileNameLessThan(const QObject *a, const QObject *b){
+        return static_cast<const PrintFileInfo*>(a)->fileName() <
+               static_cast<const PrintFileInfo*>(b)->fileName();
+    }
+
     signals:
       void fileInfoChanged();
 };

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "storage/storage.h"
 #include "error_utils.h"
 #ifdef HAVE_LIBTINYTHING
@@ -102,6 +103,8 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
     if(print_file_list.empty())
       printFileListReset();
     else{
+      std::sort(print_file_list.begin(), print_file_list.end(),
+                PrintFileInfo::fileNameLessThan);
       printFileListSet(print_file_list);
       storageIsEmptySet(false);
     }
