@@ -175,6 +175,7 @@ class MoreporkStorage : public QObject {
   QStack<QString> back_dir_stack_;
   QString prev_thing_dir_;
   MODEL_PROP(bool, usbStorageConnected, false)
+  MODEL_PROP(bool, storageIsEmpty, true)
 
   public:
     QList<QObject*> print_file_list_;
