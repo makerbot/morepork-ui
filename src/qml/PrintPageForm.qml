@@ -21,13 +21,10 @@ Item {
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
-    property alias printDeleteSwipeView: printDeleteSwipeView
     property alias defaultItem: itemPrintStorageOpt
     property alias buttonUsbStorage: buttonUsbStorage
     property alias buttonInternalStorage: buttonInternalStorage
-    property alias buttonFilePrint: buttonFilePrint
-    property alias buttonFileInfo: buttonFileInfo
-    property alias buttonFileDelete: buttonFileDelete
+    property alias startPrintLabel: startPrintLabel
     property bool browsingUsbStorage: false
 
     property bool usbStorageConnected: storage.usbStorageConnected
@@ -306,6 +303,11 @@ Item {
                         antialiasing: false
                         smooth: false
                         source: "qrc:/img/info_icon_small.png"
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: printSwipeView.swipeToItem(3)
+                        }
                     }
 
                     Text {
@@ -434,6 +436,7 @@ Item {
                         Text {
                             id: startPrintLabel
                             text: "START PRINT"
+                            font.capitalization: Font.AllUppercase
                             smooth: false
                             antialiasing: false
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -458,114 +461,6 @@ Item {
                     }
                 }
             }
-
-            Flickable {
-                id: flickableFileOpt
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
-                contentHeight: columnStorageOpt.height
-                visible: false
-
-                Column {
-                    id: columnFilePrintOpt
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 0
-
-                    MoreporkButton {
-                        id: buttonFilePrint
-                        buttonText.text: "Print"
-                        onClicked: {
-                            storage.backStackClear()
-                            bot.print(fileName)
-                            printSwipeView.swipeToItem(0)
-                        }
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
-                        }
-                    }
-
-                    MoreporkButton {
-                        id: buttonFileInfo
-                        buttonText.text: "Info"
-                        onClicked: {
-                            printSwipeView.swipeToItem(3)
-                        }
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
-                        }
-                    }
-
-                    SwipeView {
-                        id: printDeleteSwipeView
-                        height: buttonFileInfo.height
-                        smooth: false
-                        anchors.right: parent.right
-                        anchors.left: parent.left
-                        interactive: false
-
-                        Item {
-                            smooth: false
-                            MoreporkButton {
-                                id: buttonFileDelete
-                                buttonText.text: "Delete"
-                                onClicked: {
-                                    printDeleteSwipeView.setCurrentIndex(1)
-                                }
-                            }
-                        }
-
-                        Item{
-                            smooth: false
-                            Row{
-                                smooth: false
-                                MoreporkButton {
-                                    id: buttonConfirmDelete
-                                    anchors.left: {}
-                                    anchors.right: {}
-                                    width: printDeleteSwipeView.width/3
-                                    buttonText.text: "For Real?"
-                                    buttonText.color: "#f0f0f0"
-                                    enabled: false
-                                }
-
-                                MoreporkButton {
-                                    id: buttonDeleteYes
-                                    anchors.left: {}
-                                    anchors.right: {}
-                                    width: printDeleteSwipeView.width/3
-                                    buttonText.text: "Yes"
-                                    onClicked: {
-                                        bot.deletePrintFile(fileName)
-                                        printSwipeView.swipeToItem(1)
-                                        printDeleteSwipeView.setCurrentIndex(0)
-                                    }
-                                }
-
-                                MoreporkButton {
-                                    id: buttonDeleteNo
-                                    anchors.left: {}
-                                    anchors.right: {}
-                                    width: printDeleteSwipeView.width/3
-                                    buttonText.text: "No"
-                                    onClicked: {
-                                        printDeleteSwipeView.setCurrentIndex(0)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
         }
 
         // printSwipeView.index = 3
