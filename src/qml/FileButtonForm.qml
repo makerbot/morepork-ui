@@ -15,7 +15,7 @@ Button {
     property alias fileMaterial: fileMaterial
     property alias filePrintTime: filePrintTime
     property alias fileDesc_rowLayout: fileDesc_rowLayout
-    property color buttonColor: "#050505"
+    property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
 
     background:

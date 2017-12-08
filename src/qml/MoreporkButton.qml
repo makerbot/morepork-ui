@@ -10,11 +10,11 @@ Button {
     anchors.left: parent.left
     property alias buttonText: buttonText
     property alias buttonImage: buttonImage
-    property color buttonColor: "#050505"
+    property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
 
     background: Rectangle {
-        opacity: 0
+        opacity: moreporkButton.down ? 1 : 0
         color: moreporkButton.down ? buttonPressColor : buttonColor
         smooth: false
     }
