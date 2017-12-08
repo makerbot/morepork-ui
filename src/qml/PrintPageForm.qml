@@ -273,6 +273,8 @@ Item {
                     Image {
                         id: model_image
                         smooth: false
+                        width: 320
+                        height: 200
                         anchors.verticalCenterOffset: 50
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
@@ -331,14 +333,14 @@ Item {
                             font.letterSpacing: 3
                             font.family: "Antennae"
                             font.weight: Font.Light
-                            font.pixelSize: 20
+                            font.pixelSize: 18
                             color: "#ffffff"
                         }
 
                         Rectangle {
                             id: dividerRectangle
                             width: 1
-                            height: 20
+                            height: 18
                             color: "#ffffff"
                             antialiasing: false
                             smooth: false
@@ -367,9 +369,8 @@ Item {
                         font.letterSpacing: 3
                         font.family: "Antennae"
                         font.weight: Font.Light
-                        font.pixelSize: 20
+                        font.pixelSize: 18
                         color: "#ffffff"
-
                     }
 
                     RowLayout {
@@ -386,14 +387,14 @@ Item {
                             font.letterSpacing: 3
                             font.family: "Antennae"
                             font.weight: Font.Light
-                            font.pixelSize: 20
+                            font.pixelSize: 18
                             color: "#ffffff"
                         }
 
                         Rectangle {
                             id: dividerRectangle1
                             width: 1
-                            height: 20
+                            height: 18
                             color: "#ffffff"
                             antialiasing: false
                             smooth: false
@@ -402,24 +403,31 @@ Item {
 
                         Image {
                             id: lowMaterialAlert
-                            height: sourceSize.height
+                            height: 24
+                            width: 24
                             antialiasing: false
                             smooth: false
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                            width: sourceSize.width
                             source: "qrc:/img/alert.png"
                         }
+                    }
+
+                    Item {
+                        id: spacingItem
+                        width: 200
+                        height: 5
+                        smooth: false
+                        antialiasing: false
                     }
 
                     Rectangle {
                         id: startPrintButton
                         width: 210
-                        height: 50
+                        height: 45
                         color: "#00000000"
                         radius: 10
                         smooth: false
                         antialiasing: false
-                        Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                         border.width: 2
                         border.color: "#ffffff"
 
@@ -448,7 +456,6 @@ Item {
                             }
                         }
                     }
-
                 }
             }
 
