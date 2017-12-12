@@ -1,4 +1,5 @@
 import QtQuick 2.4
+import ProcessStateTypeEnum 1.0
 
 PrintIconForm
 {
@@ -7,11 +8,11 @@ PrintIconForm
     {
         switch(bot.process.stateType)
         {
-            case 2:
+            case ProcessStateType.Printing:
                 //In Printing State
                 bot.pausePrint()
                 break;
-            case 3:
+            case ProcessStateType.Paused:
                 //In Paused State
                 break;
             default:

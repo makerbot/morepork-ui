@@ -7,10 +7,6 @@ Item {
     height: 265
     smooth: false
     property alias action_mouseArea: action_mouseArea
-    property alias percentage_printing_text: percentage_printing_text
-    property alias status_image: status_image
-    property alias loading_or_paused_image: loading_or_paused_image
-    property alias canvas: canvas
     property bool actionButton: true
 
     Rectangle {

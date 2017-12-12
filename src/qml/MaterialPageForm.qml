@@ -5,8 +5,14 @@ import QtMultimedia 5.8
 
 Item {
     id: item1
+    property alias bay1: bay1
+    property alias bay2: bay2
     property alias defaultItem: itemFilamentBay
-    property bool isLoadFilament: false
+    property alias materialSwipeView: materialSwipeView
+    property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
+    property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
+    property alias cancel_mouseArea: cancel_mouseArea
+    property alias continue_mouseArea: continue_mouseArea
 
     smooth: false
 
@@ -25,7 +31,7 @@ Item {
             materialSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // extruderSwipeView.index = 0
+        // materialSwipeView.index = 0
         Item {
             id: itemFilamentBay
             // backSwiper and backSwipeIndex are used by backClicked
@@ -43,20 +49,6 @@ Item {
                 filamentMaterial: "MAT"
                 filamentMaterialColor: "COLOR"
                 filamentQuantity: "0.0"
-                load_mouseArea.onClicked:
-                {
-                    loadUnloadFilamentProcess.bayID = 1
-                    isLoadFilament = true
-                    bot.loadFilament(1)
-                    materialSwipeView.swipeToItem(1)
-                }
-                unload_mouseArea.onClicked:
-                {
-                    loadUnloadFilamentProcess.bayID = 1
-                    isLoadFilament = false
-                    bot.unloadFilament(1)
-                    materialSwipeView.swipeToItem(1)
-                }
             }
 
             FilamentBay{
@@ -68,24 +60,10 @@ Item {
                 filamentMaterial: "MAT"
                 filamentMaterialColor: "COLOR"
                 filamentQuantity: "0.0"
-                load_mouseArea.onClicked:
-                {
-                    loadUnloadFilamentProcess.bayID = 2
-                    isLoadFilament = true
-                    bot.loadFilament(0)
-                    materialSwipeView.swipeToItem(2)
-                }
-                unload_mouseArea.onClicked:
-                {
-                    loadUnloadFilamentProcess.bayID = 2
-                    isLoadFilament = false
-                    bot.unloadFilament(0)
-                    materialSwipeView.swipeToItem(2)
-                }
             }
         }
 
-        // extruderSwipeView.index = 1
+        // materialSwipeView.index = 1
         Item{
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
@@ -222,11 +200,6 @@ Item {
                         height: 75
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
-                        onClicked: {
-                            bot.cancel()
-                            cancelLoadUnloadPopup.close()
-                            materialSwipeView.swipeToItem(0)
-                        }
                     }
                 }
 
@@ -246,7 +219,6 @@ Item {
                         height: 75
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
-                        onClicked: cancelLoadUnloadPopup.close()
                     }
                 }
             }
