@@ -16,10 +16,10 @@ LoadUnloadFilamentForm {
         }
 
         onClicked: {
-            if(state == "State5" || state == "State4") {
+            if(state == "unloaded_filament" || state == "loaded_filament") {
                 processDone()
             }
-            else if(state == "State3") {
+            else if(state == "extrusion") {
                 bot.loadFilamentStop()
             }
         }

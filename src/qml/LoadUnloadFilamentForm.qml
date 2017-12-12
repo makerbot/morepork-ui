@@ -135,7 +135,7 @@ Item {
     }
     states: [
         State {
-            name: "State1"
+            name: "feed_filament"
             when: filamentBaySwitchActive == true &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   bot.process.type == ProcessType.Load
@@ -175,7 +175,7 @@ Item {
             }
         },
         State {
-            name: "State2"
+            name: "preheating"
             when: bot.process.stateType == ProcessStateType.Preheating &&
                   bot.process.type == ProcessType.Load
 
@@ -200,7 +200,7 @@ Item {
             }
         },
         State {
-            name: "State3"
+            name: "extrusion"
             when: bot.process.stateType == ProcessStateType.Extrusion &&
                   bot.process.type == ProcessType.Load
 
@@ -243,7 +243,7 @@ Item {
             }
         },
         State {
-            name: "State4"
+            name: "loaded_filament"
             when: bot.process.stateType == ProcessStateType.Stopping &&
                   bot.process.type == ProcessType.Load
 
@@ -289,7 +289,7 @@ Item {
             }
         },
         State {
-            name: "State5"
+            name: "unloaded_filament"
             when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
             PropertyChanges {
                 target: main_instruction_text
