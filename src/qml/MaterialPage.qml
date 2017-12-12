@@ -24,13 +24,13 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = true
             bot.loadFilament(0)
-            materialSwipeView.swipeToItem(2)
+            materialSwipeView.swipeToItem(1)
         }
         unload_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = false
             bot.unloadFilament(0)
-            materialSwipeView.swipeToItem(2)
+            materialSwipeView.swipeToItem(1)
         }
     }
 
