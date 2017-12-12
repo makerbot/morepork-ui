@@ -11,7 +11,8 @@ Drawer {
     interactive: false
     background:
         Rectangle{
-            opacity: 0.8
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.9
             smooth: false
             gradient: Gradient {
                       GradientStop { position: 0.0; color: "#00000000" }

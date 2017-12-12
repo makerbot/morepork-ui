@@ -37,5 +37,7 @@
         <file>FilamentBayForm.qml</file>
         <file>LoadUnloadFilament.qml</file>
         <file>LoadUnloadFilamentForm.qml</file>
+        <file>FileButton.qml</file>
+        <file>FileButtonForm.qml</file>
     </qresource>
 </RCC>

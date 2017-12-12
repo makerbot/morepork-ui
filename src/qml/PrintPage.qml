@@ -3,9 +3,7 @@ import QtQuick 2.4
 PrintPageForm {
     buttonUsbStorage.buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
     buttonInternalStorage.buttonText.text: qsTr("Internal Storage") + cpUiTr.emptyStr
-    buttonFilePrint.buttonText.text: qsTr("Print") + cpUiTr.emptyStr
-    buttonFileInfo.buttonText.text: qsTr("Info") + cpUiTr.emptyStr
-    buttonFileDelete.buttonText.text: qsTr("Delete") + cpUiTr.emptyStr
+    startPrintLabel.text: qsTr("Start Print") + cpUiTr.emptyStr
 
     printingDrawer.buttonCancelPrint.onClicked: {
         bot.cancel()
@@ -23,13 +21,5 @@ PrintPageForm {
 
     printingDrawer.buttonClose.onClicked: {
         printingDrawer.close()
-    }
-
-    Component.onCompleted: {
-       topBar.backClicked.connect(backClicked_)
-    }
-
-    function backClicked_() {
-        printDeleteSwipeView.setCurrentIndex(0)
     }
 }
