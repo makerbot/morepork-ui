@@ -10,6 +10,11 @@ Item {
     smooth: false
 
     property string fileName_
+    property string filePathName
+    property string support_mass_
+    property string model_mass_
+    property string uses_support_
+    property string uses_raft_
     property string printerName: bot.name
     property int timeLeftSeconds: bot.process.timeRemaining
     property int timeLeftMinutes: timeLeftSeconds/60
@@ -169,10 +174,7 @@ Item {
                         Text {
                             id: timeLeft_text0
                             color: "#ffffff"
-                            text:
-                            {
-                                timeLeftString
-                            }
+                            text: timeLeftString
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -184,7 +186,7 @@ Item {
                         Text {
                             id: bay1_text0
                             color: "#ffffff"
-                            text: ".999 KG PLA"
+                            text: "-999 KG PVA"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -196,7 +198,7 @@ Item {
                         Text {
                             id: bay2_text0
                             color: "#ffffff"
-                            text: ".999 KG PLA"
+                            text: "-999 KG PLA"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -204,8 +206,6 @@ Item {
                             font.letterSpacing: 3
                             font.pixelSize: 18
                         }
-
-
                     }
                 }
             }
@@ -237,10 +237,12 @@ Item {
                 Image {
                     id: model_image
                     smooth: false
+                    width: 320
+                    height: 200
                     anchors.verticalCenterOffset: 50
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    source: "qrc:/img/model.png"
+                    source: "image://thumbnail/" + filePathName
                 }
 
                 Image {
@@ -382,7 +384,7 @@ Item {
                         Text {
                             id: supports_text
                             color: "#ffffff"
-                            text: "NULL"
+                            text: uses_support_
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -394,7 +396,7 @@ Item {
                         Text {
                             id: rafts_text
                             color: "#ffffff"
-                            text: "NULL"
+                            text: uses_raft_
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -406,7 +408,7 @@ Item {
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: "99.99KG PLA"
+                            text: model_mass_ + " PLA"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -418,7 +420,7 @@ Item {
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: "99.99KG PVA"
+                            text: support_mass_ + " PVA"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -645,10 +647,7 @@ Item {
                 Text {
                     id: done_by_label0
                     color: "#cbcbcb"
-                    text:
-                    {
-                        doneByDayString
-                    }
+                    text: doneByDayString
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -772,10 +771,7 @@ Item {
                         Text {
                             id: done_by_label1
                             color: "#cbcbcb"
-                            text:
-                            {
-                                doneByDayString
-                            }
+                            text: doneByDayString
                             antialiasing: false
                             smooth: false
                             anchors.bottom: parent.bottom

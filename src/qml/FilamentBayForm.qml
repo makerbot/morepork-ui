@@ -18,13 +18,6 @@ Item {
     property alias unload_mouseArea: unload_mouseArea
 
     Rectangle {
-        id: rectangle
-        color: "#000000"
-        visible: false
-        anchors.fill: parent
-    }
-
-    Rectangle {
         id: filament_color
         width: filament_image.width
         height: filament_image.height

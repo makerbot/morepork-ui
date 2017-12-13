@@ -5,21 +5,17 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 Item {
-    id: item1
+    id: loadUnloadForm
     width: 800
     height: 420
-
+    property alias button_mouseArea: button_mouseArea
+    property alias button_rectangle: button_rectangle
+    property alias button_text: button_text
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
     property int bayID: 1
     signal processDone
-
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        anchors.fill: parent
-    }
 
     Image {
         id: image
@@ -92,16 +88,6 @@ Item {
                     id: button_mouseArea
                     anchors.fill: parent
                     visible: false
-                    onPressed: {
-                        button_rectangle.color = "#ffffff"
-                        button_rectangle.border.color = "#000000"
-                        button_text.color = "#000000"
-                    }
-                    onReleased: {
-                        button_rectangle.color = "#00000000"
-                        button_rectangle.border.color = "#ffffff"
-                        button_text.color = "#ffffff"
-                    }
                 }
             }
 
@@ -143,7 +129,7 @@ Item {
     }
     states: [
         State {
-            name: "State1"
+            name: "feed_filament"
             when: filamentBaySwitchActive == true &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   bot.process.type == ProcessType.Load
@@ -183,7 +169,7 @@ Item {
             }
         },
         State {
-            name: "State2"
+            name: "preheating"
             when: bot.process.stateType == ProcessStateType.Preheating &&
                   bot.process.type == ProcessType.Load
 
@@ -208,7 +194,7 @@ Item {
             }
         },
         State {
-            name: "State3"
+            name: "extrusion"
             when: bot.process.stateType == ProcessStateType.Extrusion &&
                   bot.process.type == ProcessType.Load
 
@@ -243,7 +229,6 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
-                onClicked: bot.loadFilamentStop()
             }
 
             PropertyChanges {
@@ -252,7 +237,7 @@ Item {
             }
         },
         State {
-            name: "State4"
+            name: "loaded_filament"
             when: bot.process.stateType == ProcessStateType.Stopping &&
                   bot.process.type == ProcessType.Load
 
@@ -290,7 +275,6 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
-                onClicked: processDone()
             }
 
             PropertyChanges {
@@ -299,7 +283,7 @@ Item {
             }
         },
         State {
-            name: "State5"
+            name: "unloaded_filament"
             when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
             PropertyChanges {
                 target: main_instruction_text
@@ -337,7 +321,6 @@ Item {
             PropertyChanges {
                 target: button_mouseArea
                 visible: true
-                onClicked: processDone()
             }
 
             PropertyChanges {

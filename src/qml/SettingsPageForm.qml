@@ -7,6 +7,12 @@ Item {
     property int pageLevel: 1
     property alias settingsSwipeView: settingsSwipeView
     property alias defaultItem: itemSettings
+    property alias buttonChangeLanguage: buttonChangeLanguage
+    property alias buttonEnglish: buttonEnglish
+    property alias buttonSpanish: buttonSpanish
+    property alias buttonFrench: buttonFrench
+    property alias buttonItalian: buttonItalian
+
     smooth: false
 
     SwipeView {
@@ -51,9 +57,6 @@ Item {
                     MoreporkButton {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
-                        onClicked: {
-                            settingsSwipeView.swipeToItem(1)
-                       }
                     }
                 }
             }
@@ -86,9 +89,6 @@ Item {
                     MoreporkButton {
                         id: buttonEnglish
                         buttonText.text: "English"
-                        onClicked: {
-                            cpUiTr.selectLanguage("en")
-                        }
                     }
 
                     Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
@@ -96,9 +96,6 @@ Item {
                     MoreporkButton {
                         id: buttonSpanish
                         buttonText.text: "Espanol"
-                        onClicked: {
-                            cpUiTr.selectLanguage("es")
-                        }
                     }
 
                     Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
@@ -106,9 +103,6 @@ Item {
                     MoreporkButton {
                         id: buttonFrench
                         buttonText.text: "Francais"
-                        onClicked: {
-                            cpUiTr.selectLanguage("fr")
-                        }
                     }
 
                     Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
@@ -116,9 +110,6 @@ Item {
                     MoreporkButton {
                         id: buttonItalian
                         buttonText.text: "Italiano"
-                        onClicked: {
-                            cpUiTr.selectLanguage("it")
-                        }
                     }
                 }
             }

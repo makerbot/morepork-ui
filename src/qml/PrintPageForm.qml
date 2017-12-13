@@ -48,13 +48,6 @@ Item {
         readyByTime = doneByTimeString + " " + doneByMeridianString + " " + doneByDayString
     }
 
-    Rectangle {
-        id: rectangle
-        width: 800
-        height: 480
-        color: "#000000"
-    }
-
     PrintingDrawer {
         id: printingDrawer
     }
@@ -132,6 +125,11 @@ Item {
                 smooth: false
                 visible: bot.process.type == ProcessType.Print
                 fileName_: file_name
+                filePathName: fileName
+                support_mass_: support_mass
+                model_mass_: model_mass
+                uses_support_: uses_support
+                uses_raft_: uses_raft
             }
         }
 
