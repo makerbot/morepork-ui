@@ -4,10 +4,10 @@ MaterialPageForm {
 
     property bool isLoadFilament: false
 
-    function toggleDrawer()
+    function setDrawerState(state)
     {
-        topBar.imageDrawerArrow.visible = !topBar.imageDrawerArrow.visible
-        materialPageDrawer.interactive = !materialPageDrawer.interactive
+        topBar.imageDrawerArrow.visible = state
+        materialPageDrawer.interactive = state
     }
 
     bay1 {
@@ -15,14 +15,14 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = true
             bot.loadFilament(1)
-            toggleDrawer()
+            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
         unload_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = false
             bot.unloadFilament(1)
-            toggleDrawer()
+            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
     }
@@ -32,14 +32,14 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = true
             bot.loadFilament(0)
-            toggleDrawer()
+            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
         unload_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = false
             bot.unloadFilament(0)
-            toggleDrawer()
+            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
     }
@@ -47,7 +47,7 @@ MaterialPageForm {
     cancel_mouseArea.onClicked: {
         bot.cancel()
         cancelLoadUnloadPopup.close()
-        toggleDrawer()
+        setDrawerState(false)
         materialSwipeView.swipeToItem(0)
     }
 
