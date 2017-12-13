@@ -17,12 +17,6 @@ Item {
     property int bayID: 1
     signal processDone
 
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        anchors.fill: parent
-    }
-
     Image {
         id: image
         width: sourceSize.width

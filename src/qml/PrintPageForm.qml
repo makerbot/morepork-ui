@@ -48,13 +48,6 @@ Item {
         readyByTime = doneByTimeString + " " + doneByMeridianString + " " + doneByDayString
     }
 
-    Rectangle {
-        id: rectangle
-        width: 800
-        height: 480
-        color: "#000000"
-    }
-
     PrintingDrawer {
         id: printingDrawer
     }
