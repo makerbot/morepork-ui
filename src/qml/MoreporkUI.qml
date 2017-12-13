@@ -9,6 +9,7 @@ ApplicationWindow {
     height: 480
     property alias topBar: topBar
     property var currentItem: mainMenu
+    property var activeDrawer
 
     function setCurrentItem(currentItem_) {
         currentItem = currentItem_
@@ -21,6 +22,14 @@ ApplicationWindow {
         else{
             currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
         }
+    }
+
+    function disableDrawer()
+    {
+        topBar.backButton.visible = false
+        topBar.imageDrawerArrow.visible = false
+        activeDrawer.interactive = false
+        topBar.drawerDownClicked.disconnect(activeDrawer.open)
     }
 
     Item{
@@ -84,9 +93,7 @@ ApplicationWindow {
                 mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
                 if(itemToDisplayDefaultIndex === 0) {
                     mainSwipeView.setCurrentIndex(0)
-                    topBar.backButton.visible = false
-                    topBar.imageDrawerArrow.visible = false
-                    printPage.printingDrawer.interactive = false
+                    disableDrawer()
                 }
                 else {
                     mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem.visible = true
@@ -106,9 +113,10 @@ ApplicationWindow {
 
                     mainMenuIcon_print.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(1)
-                        printPage.printingDrawer.interactive = true
+                        activeDrawer = printPage.printingDrawer
+                        activeDrawer.interactive = true
                         topBar.imageDrawerArrow.visible = true
-                        topBar.drawerDownClicked.connect(printPage.printingDrawer.open)
+                        topBar.drawerDownClicked.connect(activeDrawer.open)
                     }
 
                     mainMenuIcon_extruder.mouseArea.onClicked: {
@@ -125,6 +133,8 @@ ApplicationWindow {
 
                     mainMenuIcon_material.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(5)
+                        activeDrawer = materialPage.materialPageDrawer
+                        topBar.drawerDownClicked.connect(activeDrawer.open)
                     }
 
                     mainMenuIcon_preheat.mouseArea.onClicked: {
