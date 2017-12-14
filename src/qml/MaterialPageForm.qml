@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 import QtMultimedia 5.8
 
 Item {
-    id: item1
     property alias bay1: bay1
     property alias bay2: bay2
     property alias defaultItem: itemFilamentBay
@@ -13,8 +12,13 @@ Item {
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
     property alias cancel_mouseArea: cancel_mouseArea
     property alias continue_mouseArea: continue_mouseArea
+    property alias materialPageDrawer: materialPageDrawer
 
     smooth: false
+
+    MaterialPageDrawer{
+        id: materialPageDrawer
+    }
 
     SwipeView {
         id: materialSwipeView
