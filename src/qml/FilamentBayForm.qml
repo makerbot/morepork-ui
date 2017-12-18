@@ -184,7 +184,7 @@ Item {
                 }
 
                 Rectangle {
-                    id: unoload_rectangle
+                    id: unload_rectangle
                     width: 160
                     height: 40
                     color: "#00000000"
