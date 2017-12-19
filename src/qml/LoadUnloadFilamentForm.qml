@@ -16,6 +16,20 @@ Item {
     property bool filamentBaySwitchActive: false
     property int bayID: 1
     signal processDone
+    property int currentState: bot.process.stateType
+    onCurrentStateChanged: {
+        switch(currentState)
+        {
+        case ProcessStateType.Stopping:
+            state = "loaded_filament"
+            break;
+        case ProcessStateType.UnloadingFilament:
+            state = "unloaded_filament"
+            break;
+        default:
+            break;
+        }
+    }
 
     Image {
         id: image
@@ -238,9 +252,9 @@ Item {
         },
         State {
             name: "loaded_filament"
-            when: bot.process.stateType == ProcessStateType.Stopping &&
+            /*when: bot.process.stateType == ProcessStateType.Stopping &&
                   bot.process.type == ProcessType.Load
-
+            */
             PropertyChanges {
                 target: main_instruction_text
                 text: "CLEAR EXCESS MATERIAL"
@@ -284,7 +298,7 @@ Item {
         },
         State {
             name: "unloaded_filament"
-            when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
+            //when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
