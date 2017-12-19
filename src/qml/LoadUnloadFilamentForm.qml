@@ -254,9 +254,7 @@ Item {
         },
         State {
             name: "loaded_filament"
-            /*when: bot.process.stateType == ProcessStateType.Stopping &&
-                  bot.process.type == ProcessType.Load
-            */
+
             PropertyChanges {
                 target: main_instruction_text
                 text: "CLEAR EXCESS MATERIAL"
@@ -301,7 +299,7 @@ Item {
         },
         State {
             name: "unloaded_filament"
-            //when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
+
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
