@@ -23,6 +23,8 @@ MaterialPageForm {
             isLoadFilament = false
             bot.unloadFilament(1)
             setDrawerState(true)
+            loadUnloadFilamentProcess.state = "preheating"
+            //loadUnloadForm.state = "preheating"
             materialSwipeView.swipeToItem(1)
         }
     }
@@ -40,6 +42,8 @@ MaterialPageForm {
             isLoadFilament = false
             bot.unloadFilament(0)
             setDrawerState(true)
+            loadUnloadFilamentProcess.state = "preheating"
+            //loadUnloadForm.state = "preheating"
             materialSwipeView.swipeToItem(1)
         }
     }

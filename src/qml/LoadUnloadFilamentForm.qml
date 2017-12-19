@@ -156,6 +156,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 height: 60
+                visible: true
                 text: "Push the door closed until you feel it click sealing the material bay."
             }
 
@@ -194,7 +195,7 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                visible: false
+                text: ""
             }
 
             PropertyChanges {
@@ -220,6 +221,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 height: 60
+                visible: true
                 text: "Look inside of the printer and wait until you see material begin to extrude."
             }
 
@@ -263,6 +265,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 height: 60
+                visible: true
                 text: "Wait a few moments until the material has cooled and remove the excess from the build chamber.                             (Do not touch the nozzle while it is hot, Red light on extruder)"
             }
 
@@ -308,6 +311,7 @@ Item {
                 target: instruction_description_text
                 y: 1
                 height: 60
+                visible: true
                 text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
                 anchors.topMargin: 170
             }
