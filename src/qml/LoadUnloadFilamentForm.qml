@@ -254,7 +254,10 @@ Item {
         },
         State {
             name: "loaded_filament"
-
+            //this state doesn't have a when condiiton unlike others and
+            //instead the switch case above is used to get into this state,
+            //since we need the UI to be held at this screen
+            //even after the process has completed, until the user presses 'done'.
             PropertyChanges {
                 target: main_instruction_text
                 text: "CLEAR EXCESS MATERIAL"
@@ -299,7 +302,10 @@ Item {
         },
         State {
             name: "unloaded_filament"
-
+            //this state doesn't have a when condiiton unlike others and
+            //instead the switch case above is used to get into this state,
+            //since we need the UI to be held at this screen
+            //even after the process has completed, until the user presses 'done'.
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
