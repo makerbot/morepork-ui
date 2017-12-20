@@ -61,6 +61,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Stopping);
         else if (kStepStr == "unloading_filament")
             stateTypeSet(ProcessStateType::UnloadingFilament);
+        // Base class 'Process' states (steps)
+        // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
+        else if (kStepStr == "done")
+            stateTypeSet(ProcessStateType::Done);
         else
             stateTypeReset();
     }
