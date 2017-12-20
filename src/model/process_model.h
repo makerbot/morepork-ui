@@ -22,7 +22,7 @@ class ProcessModel : public BaseModel {
         Loading,
         Printing,
         Paused,
-        PrintComplete,
+        Completed,
         Failed,
         Idle, // Load and Unload state types
         Preheating,

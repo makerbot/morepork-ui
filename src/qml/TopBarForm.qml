@@ -145,7 +145,7 @@ Item {
                     case ProcessStateType.Failed:
                         "FAILED"
                         break;
-                    case ProcessStateType.PrintComplete:
+                    case ProcessStateType.Completed:
                         "PRINT COMPLETE"
                         break;
                     }
