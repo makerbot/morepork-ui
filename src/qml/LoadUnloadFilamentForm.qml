@@ -21,6 +21,7 @@ Item {
         switch(currentState)
         {
         case ProcessStateType.Stopping:
+        case ProcessStateType.Done:
             state = "loaded_filament"
             break;
         case ProcessStateType.UnloadingFilament:
