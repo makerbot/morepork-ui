@@ -22,13 +22,14 @@ class ProcessModel : public BaseModel {
         Loading,
         Printing,
         Paused,
-        PrintComplete,
+        Completed,
         Failed,
-        Idle, // Load and Unload state types
+        Idle, // Load and Unload states
         Preheating,
         Extrusion,
         Stopping,
-        UnloadingFilament
+        UnloadingFilament,
+        Done // Base Process states
     };
 
     Q_ENUM(ProcessType)
