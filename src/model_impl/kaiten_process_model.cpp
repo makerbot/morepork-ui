@@ -32,6 +32,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         const QString kStepStr = kStep.asString().c_str();
         stepStrSet(kStepStr);
         // 'Print' states (steps)
+        // see morepork-kaiten/kaiten/src/kaiten/processes/printprocess.py
         if (kStepStr == "initializing" ||
             kStepStr == "initial_heating" ||
             kStepStr == "final_heating" ||
@@ -48,7 +49,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Printing);
         else if (kStepStr == "failed")
             stateTypeSet(ProcessStateType::Failed);
+        else if (kStepStr == "completed")
+            stateTypeSet(ProcessStateType::Completed);
         // 'Load' and 'Unload' states (steps)
+        // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
         else if (kStepStr == "preheating")
             stateTypeSet(ProcessStateType::Preheating);
         else if (kStepStr == "extrusion")

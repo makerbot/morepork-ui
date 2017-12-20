@@ -40,7 +40,7 @@ Item {
             property string progressColor:
                 switch(printState)
                 {
-                case ProcessStateType.PrintComplete:
+                case ProcessStateType.Completed:
                     "#3183AF"
                     break;
                 case ProcessStateType.Failed:
@@ -271,7 +271,7 @@ Item {
         },
         State {
             name: "print_complete_state"
-            when: bot.process.stateType == ProcessStateType.PrintComplete
+            when: bot.process.stateType == ProcessStateType.Completed
 
             PropertyChanges {
                 target: loading_or_paused_image
