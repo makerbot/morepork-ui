@@ -82,6 +82,7 @@ Item {
                 id: loadUnloadFilamentProcess
                 filamentBaySwitchActive: bayID == 1 ? bot.filamentBayASwitch : bot.filamentBayBSwitch
                 onProcessDone: {
+                    state = "base state"
                     materialSwipeView.swipeToItem(0)
                     setDrawerState(false)
                 }

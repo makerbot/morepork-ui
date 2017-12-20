@@ -16,6 +16,21 @@ Item {
     property bool filamentBaySwitchActive: false
     property int bayID: 1
     signal processDone
+    property int currentState: bot.process.stateType
+    onCurrentStateChanged: {
+        switch(currentState)
+        {
+        case ProcessStateType.Stopping:
+        case ProcessStateType.Done:
+            state = "loaded_filament"
+            break;
+        case ProcessStateType.UnloadingFilament:
+            state = "unloaded_filament"
+            break;
+        default:
+            break;
+        }
+    }
 
     Image {
         id: image
@@ -142,6 +157,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 height: 60
+                visible: true
                 text: "Push the door closed until you feel it click sealing the material bay."
             }
 
@@ -180,7 +196,7 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                visible: false
+                text: ""
             }
 
             PropertyChanges {
@@ -206,6 +222,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 height: 60
+                visible: true
                 text: "Look inside of the printer and wait until you see material begin to extrude."
             }
 
@@ -238,9 +255,10 @@ Item {
         },
         State {
             name: "loaded_filament"
-            when: bot.process.stateType == ProcessStateType.Stopping &&
-                  bot.process.type == ProcessType.Load
-
+            //this state doesn't have a when condiiton unlike others and
+            //instead the switch case above is used to get into this state,
+            //since we need the UI to be held at this screen
+            //even after the process has completed, until the user presses 'done'.
             PropertyChanges {
                 target: main_instruction_text
                 text: "CLEAR EXCESS MATERIAL"
@@ -249,6 +267,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 height: 60
+                visible: true
                 text: "Wait a few moments until the material has cooled and remove the excess from the build chamber.                             (Do not touch the nozzle while it is hot, Red light on extruder)"
             }
 
@@ -284,7 +303,10 @@ Item {
         },
         State {
             name: "unloaded_filament"
-            when: bot.process.stateType == ProcessStateType.UnloadingFilament && bot.process.type == ProcessType.Unload
+            //this state doesn't have a when condiiton unlike others and
+            //instead the switch case above is used to get into this state,
+            //since we need the UI to be held at this screen
+            //even after the process has completed, until the user presses 'done'.
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
@@ -294,6 +316,7 @@ Item {
                 target: instruction_description_text
                 y: 1
                 height: 60
+                visible: true
                 text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
                 anchors.topMargin: 170
             }
