@@ -22,7 +22,12 @@ Item {
         {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
-            state = "loaded_filament"
+            if(bot.process.type == ProcessType.Load) {
+                state = "loaded_filament"
+            }
+            else if(bot.process.type == ProcessType.Unload) {
+                state = "unloaded_filament"
+            }
             break;
         case ProcessStateType.UnloadingFilament:
             state = "unloaded_filament"
