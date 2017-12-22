@@ -192,7 +192,7 @@ Item {
         State {
             name: "preheating"
             when: bot.process.stateType == ProcessStateType.Preheating &&
-                  bot.process.type == ProcessType.Load
+                  (bot.process.type == ProcessType.Load || bot.process.type == ProcessType.Unload)
 
             PropertyChanges {
                 target: main_instruction_text
