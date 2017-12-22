@@ -29,9 +29,6 @@ Item {
                 state = "unloaded_filament"
             }
             break;
-        case ProcessStateType.UnloadingFilament:
-            state = "unloaded_filament"
-            break;
         default:
             break;
         }
@@ -94,7 +91,6 @@ Item {
                     id: button_text
                     width: 300
                     text: "Text"
-                    visible: false
                     font.family: "Antennae"
                     color: "#ffffff"
                     font.letterSpacing: 3
@@ -107,7 +103,6 @@ Item {
                 MouseArea {
                     id: button_mouseArea
                     anchors.fill: parent
-                    visible: false
                 }
             }
 
@@ -161,8 +156,6 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                height: 60
-                visible: true
                 text: "Push the door closed until you feel it click sealing the material bay."
             }
 
@@ -176,12 +169,6 @@ Item {
                 x: 30
                 y: 11
                 text: "THE DOOR IS CLOSED"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: button_mouseArea
-                visible: true
             }
 
             PropertyChanges {
@@ -226,8 +213,6 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                height: 60
-                visible: true
                 text: "Look inside of the printer and wait until you see material begin to extrude."
             }
 
@@ -245,17 +230,31 @@ Item {
                 width: 192
                 height: 49
                 text: "MATERIAL IS EXTRUDING"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: button_mouseArea
-                visible: true
             }
 
             PropertyChanges {
                 target: image
                 source: "qrc:/img/confirm_extrusion.png"
+            }
+        },
+        State {
+            name: "unloading_filament"
+            when: bot.process.stateType == ProcessStateType.UnloadingFilament &&
+                  bot.process.type == ProcessType.Unload
+
+            PropertyChanges {
+                target: main_instruction_text
+                text: "UNLOADING"
+            }
+
+            PropertyChanges {
+                target: instruction_description_text
+                text: "The filament is backing out of the extruder, please wait."
+            }
+
+            PropertyChanges {
+                target: image
+                source: "qrc:/img/clear_excess_material.png"
             }
         },
         State {
@@ -271,8 +270,6 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                height: 60
-                visible: true
                 text: "Wait a few moments until the material has cooled and remove the excess from the build chamber.                             (Do not touch the nozzle while it is hot, Red light on extruder)"
             }
 
@@ -282,7 +279,6 @@ Item {
                 y: 297
                 width: 100
                 height: 50
-                radius: 10
                 visible: true
             }
 
@@ -293,12 +289,6 @@ Item {
                 width: 75
                 height: 22
                 text: "DONE"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: button_mouseArea
-                visible: true
             }
 
             PropertyChanges {
@@ -319,11 +309,7 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                y: 1
-                height: 60
-                visible: true
                 text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
-                anchors.topMargin: 170
             }
 
             PropertyChanges {
@@ -332,7 +318,6 @@ Item {
                 y: 297
                 width: 100
                 height: 50
-                radius: 10
                 visible: true
             }
 
@@ -343,12 +328,6 @@ Item {
                 width: 75
                 height: 22
                 text: "DONE"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: button_mouseArea
-                visible: true
             }
 
             PropertyChanges {
