@@ -151,10 +151,39 @@ Item {
                     }
                     break;
                 case ProcessType.Load:
-                    "LOAD MATERIAL"
+                    switch(bot.process.stateType)
+                    {
+                    case ProcessStateType.Preheating:
+                        "PREHEATING"
+                        break;
+                    case ProcessStateType.Extrusion:
+                        "EXTRUDING"
+                        break;
+                    case ProcessStateType.Stopping:
+                    case ProcessStateType.Done:
+                        "MATERIAL LOADED"
+                        break;
+                    default:
+                        "LOAD MATERIAL"
+                        break;
+                    }
                     break;
                 case ProcessType.Unload:
-                    "UNLOAD MATERIAL"
+                    switch(bot.process.stateType)
+                    {
+                    case ProcessStateType.Preheating:
+                        "PREHEATING"
+                        break;
+                    case ProcessStateType.UnloadingFilament:
+                        "UNLOADING MATERIAL"
+                        break;
+                    case ProcessStateType.Done:
+                        "MATERIAL UNLOADED"
+                        break;
+                    default:
+                        "UNLOAD MATERIAL"
+                        break;
+                    }
                     break;
                 default:
                     switch(mainSwipeView.currentIndex)
