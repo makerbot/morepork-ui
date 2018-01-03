@@ -11,14 +11,15 @@ MaterialPageForm {
     }
 
     bay1 {
-        load_mouseArea.onClicked: {
+        loadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = true
             bot.loadFilament(1)
             setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
-        unload_mouseArea.onClicked: {
+
+        unloadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = false
             bot.unloadFilament(1)
@@ -28,14 +29,15 @@ MaterialPageForm {
     }
 
     bay2 {
-        load_mouseArea.onClicked: {
+        loadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = true
             bot.loadFilament(0)
             setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
-        unload_mouseArea.onClicked: {
+
+        unloadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = false
             bot.unloadFilament(0)

@@ -8,13 +8,13 @@ Item {
     width: 800
     height: 440
     smooth: false
-
     property string fileName_
     property string filePathName
     property string support_mass_
     property string model_mass_
     property string uses_support_
     property string uses_raft_
+    property string print_time_
     property string printerName: bot.name
     property int timeLeftSeconds: bot.process.timeRemaining
     property int timeLeftMinutes: timeLeftSeconds/60
@@ -22,7 +22,6 @@ Item {
     property string doneByTimeString: "99:99"
     property string timeLeftString: "99:99"
     property string doneByMeridianString
-
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime()
@@ -45,7 +44,6 @@ Item {
         currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         visible: true
-
         Item {
             id: page0
             width: 800
@@ -64,7 +62,7 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: 180
+                height: bot.process.stateType == ProcessStateType.Completed ? 225 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -73,30 +71,62 @@ Item {
                 Text {
                     id: status_text0
                     color: "#cbcbcb"
-                    text: "PRINTING"
+                    text:
+                    {
+                        switch(bot.process.stateType)
+                        {
+                        case ProcessStateType.Loading:
+                            "GETTING READY"
+                            break;
+                        case ProcessStateType.Printing:
+                            "PRINTING"
+                            break;
+                        case ProcessStateType.Paused:
+                            "PAUSED"
+                            break;
+                        case ProcessStateType.Completed:
+                            "PRINT COMPLETE"
+                            break;
+                        case ProcessStateType.Failed:
+                            "PRINT FAILED"
+                            break;
+                        default:
+                            ""
+                            break;
+                        }
+                    }
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 5
                     font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 22
-                }
-
-                Text {
-                    id: error_text0
-                    color: "#cbcbcb"
-                    text: "Error " + bot.process.errorCode
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Light
+                    font.weight: Font.Bold
                     font.pixelSize: 18
-                    visible: bot.process.stateType == ProcessStateType.Failed
                 }
 
                 Text {
-                    id: fileName_text0
+                    id: subtext0
                     color: "#cbcbcb"
-                    text: fileName_
+                    text: {
+                        switch(bot.process.stateType)
+                        {
+                        case ProcessStateType.Loading:
+                            "HEATING UP..."
+                            break;
+                        case ProcessStateType.Printing:
+                        case ProcessStateType.Paused:
+                            fileName_
+                            break;
+                        case ProcessStateType.Completed:
+                            print_time_ + " PRINT TIME"
+                            break;
+                        case ProcessStateType.Failed:
+                            "Error " + bot.process.errorCode
+                            break;
+                        default:
+                            ""
+                            break;
+                        }
+                    }
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 3
@@ -105,108 +135,57 @@ Item {
                     font.pixelSize: 18
                 }
 
-                Item {
-                    id: divider_item0
-                    width: 200
-                    height: 20
+                Text {
+                    id: subtext1
+                    color: "#cbcbcb"
+                    text: {
+                        switch(bot.process.stateType)
+                        {
+                        case ProcessStateType.Loading:
+                            bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
+                            break;
+                        case ProcessStateType.Printing:
+                        case ProcessStateType.Paused:
+                            timeLeftString + " REMAINING"
+                            break;
+                        default:
+                            ""
+                            break;
+                        }
+                    }
+                    antialiasing: false
                     smooth: false
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 18
                 }
 
-                RowLayout {
-                    id: rowLayout0
-                    width: 100
-                    height: 100
-                    smooth: false
-                    spacing: 65
-
-                    ColumnLayout {
-                        id: columnLayout0_1
-                        width: 100
-                        height: 100
-                        smooth: false
-
-                        Text {
-                            id: timeLeft_label
-                            color: "#cbcbcb"
-                            text: "TIME LEFT"
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: "Antenna"
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
-
-                        Text {
-                            id: bay1_label0
-                            color: "#cbcbcb"
-                            text: "BAY 1"
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: "Antenna"
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
-
-                        Text {
-                            id: bay2_label0
-                            color: "#cbcbcb"
-                            text: "BAY 2"
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: "Antenna"
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
+                RoundedButton {
+                    id: print_again_button
+                    buttonWidth: 200
+                    buttonHeight: 40
+                    label: "PRINT AGAIN"
+                    visible: bot.process.stateType == ProcessStateType.Completed
+                    button_mouseArea.onClicked: {
+                        print_page.printSwipeView.swipeToItem(2)
                     }
+                }
 
-                    ColumnLayout {
-                        id: columnLayout0_2
-                        width: 100
-                        height: 100
-                        smooth: false
+                RoundedButton {
+                    id: start_next_print_button
+                    buttonWidth: 300
+                    buttonHeight: 40
+                    label: "START NEXT PRINT"
+                    visible: bot.process.stateType == ProcessStateType.Completed
+                }
 
-                        Text {
-                            id: timeLeft_text0
-                            color: "#ffffff"
-                            text: timeLeftString
-                            antialiasing: false
-                            smooth: false
-                            font.family: "Antenna"
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
-
-                        Text {
-                            id: bay1_text0
-                            color: "#ffffff"
-                            text: "-999 KG PVA"
-                            antialiasing: false
-                            smooth: false
-                            font.family: "Antenna"
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
-
-                        Text {
-                            id: bay2_text0
-                            color: "#ffffff"
-                            text: "-999 KG PLA"
-                            antialiasing: false
-                            smooth: false
-                            font.family: "Antenna"
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
-                    }
+                RoundedButton {
+                    id: done_button
+                    buttonWidth: 100
+                    buttonHeight: 40
+                    label: "DONE"
+                    visible: bot.process.stateType == ProcessStateType.Completed
                 }
             }
         }

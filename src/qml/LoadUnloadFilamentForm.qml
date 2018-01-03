@@ -8,9 +8,8 @@ Item {
     id: loadUnloadForm
     width: 800
     height: 420
-    property alias button_mouseArea: button_mouseArea
-    property alias button_rectangle: button_rectangle
-    property alias button_text: button_text
+
+    property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
@@ -76,34 +75,12 @@ Item {
                 font.pixelSize: 16
             }
 
-            Rectangle {
-                id: button_rectangle
+            RoundedButton {
+                id: acknowledgeButton
+                buttonWidth: 350
+                buttonHeight: 45
                 y: 255
-                width: 350
-                height: 45
-                color: "#00000000"
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
                 visible: false
-
-                Text {
-                    id: button_text
-                    width: 300
-                    text: "Text"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                    horizontalAlignment: Text.AlignHCenter
-                    wrapMode: Text.WordWrap
-                }
-
-                MouseArea {
-                    id: button_mouseArea
-                    anchors.fill: parent
-                }
             }
 
             RowLayout {
@@ -160,15 +137,9 @@ Item {
             }
 
             PropertyChanges {
-                target: button_rectangle
+                target: acknowledgeButton
                 visible: true
-            }
-
-            PropertyChanges {
-                target: button_text
-                x: 30
-                y: 11
-                text: "THE DOOR IS CLOSED"
+                label: "THE DOOR IS CLOSED"
             }
 
             PropertyChanges {
@@ -217,19 +188,11 @@ Item {
             }
 
             PropertyChanges {
-                target: button_rectangle
-                width: 225
-                height: 75
+                target: acknowledgeButton
+                buttonWidth: 225
+                buttonHeight: 75
                 visible: true
-            }
-
-            PropertyChanges {
-                target: button_text
-                x: 17
-                y: 13
-                width: 192
-                height: 49
-                text: "MATERIAL IS EXTRUDING"
+                label: "MATERIAL IS EXTRUDING"
             }
 
             PropertyChanges {
@@ -274,21 +237,13 @@ Item {
             }
 
             PropertyChanges {
-                target: button_rectangle
+                target: acknowledgeButton
                 x: 0
                 y: 297
-                width: 100
-                height: 50
+                buttonWidth: 100
+                buttonHeight: 50
                 visible: true
-            }
-
-            PropertyChanges {
-                target: button_text
-                x: 13
-                y: 14
-                width: 75
-                height: 22
-                text: "DONE"
+                label: "DONE"
             }
 
             PropertyChanges {
@@ -313,21 +268,13 @@ Item {
             }
 
             PropertyChanges {
-                target: button_rectangle
+                target: acknowledgeButton
                 x: 0
                 y: 297
-                width: 100
-                height: 50
+                buttonWidth: 100
+                buttonHeight: 50
                 visible: true
-            }
-
-            PropertyChanges {
-                target: button_text
-                x: 13
-                y: 14
-                width: 75
-                height: 22
-                text: "DONE"
+                label: "DONE"
             }
 
             PropertyChanges {

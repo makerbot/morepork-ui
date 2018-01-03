@@ -313,7 +313,6 @@ Item {
                 source: "qrc:/img/exc_mark.png"
                 visible: true
             }
-
         }
     ]
 }
