@@ -14,8 +14,8 @@ Item {
     property string filamentMaterialColor: "COLOR"
     property string filamentQuantity: "-0.0"
 
-    property alias load_mouseArea: load_mouseArea
-    property alias unload_mouseArea: unload_mouseArea
+    property alias loadButton: loadButton
+    property alias unloadButton: unloadButton
 
     Rectangle {
         id: filament_color
@@ -149,76 +149,20 @@ Item {
                 smooth: false
                 antialiasing: false
 
-                Rectangle {
-                    id: load_rectangle
-                    width: 120
-                    height: 40
-                    color: "#00000000"
-                    radius: 10
-                    border.width: 2
-                    border.color: "#ffffff"
-                    smooth: false
-                    antialiasing: false
-
-                    Text {
-                        id: load_text
-                        color: "#ffffff"
-                        text: "LOAD"
-                        anchors.verticalCenterOffset: 2
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.letterSpacing: 4
-                        font.family: "Antenna"
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                        smooth: false
-                        antialiasing: false
-                    }
-
-                    MouseArea {
-                        id: load_mouseArea
-                        anchors.fill: parent
-                        smooth: false
-                        antialiasing: false
-                    }
+                RoundedButton {
+                    id: loadButton
+                    buttonWidth: 120
+                    buttonHeight: 40
+                    label: "LOAD"
                 }
 
-                Rectangle {
-                    id: unload_rectangle
-                    width: 160
-                    height: 40
-                    color: "#00000000"
-                    radius: 10
-                    border.width: 2
-                    border.color: "#ffffff"
-                    smooth: false
-                    antialiasing: false
-
-                    Text {
-                        id: unload_text
-                        color: "#ffffff"
-                        text: "UNLOAD"
-                        anchors.verticalCenterOffset: 2
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        font.letterSpacing: 4
-                        font.family: "Antenna"
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                        smooth: false
-                        antialiasing: false
-                    }
-
-                    MouseArea {
-                        id: unload_mouseArea
-                        anchors.fill: parent
-                        smooth: false
-                        antialiasing: false
-                    }
+                RoundedButton {
+                    id: unloadButton
+                    buttonWidth: 160
+                    buttonHeight: 40
+                    label: "UNLOAD"
                 }
             }
         }
     }
-
-
 }

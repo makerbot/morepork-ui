@@ -40,5 +40,7 @@
         <file>FileButtonForm.qml</file>
         <file>MaterialPageDrawer.qml</file>
         <file>MaterialPageDrawerForm.qml</file>
+        <file>RoundedButton.qml</file>
+        <file>RoundedButtonForm.qml</file>
     </qresource>
 </RCC>

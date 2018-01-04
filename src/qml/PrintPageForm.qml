@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 
 Item {
+    id: print_page
     smooth: false
     property string fileName: "unknown.makerbot"
     property string file_name
@@ -18,14 +19,15 @@ Item {
     property string chamber_temp
     property string slicer_name
     property string readyByTime
+    property int lastPrintTimeSec
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias defaultItem: itemPrintStorageOpt
     property alias buttonUsbStorage: buttonUsbStorage
     property alias buttonInternalStorage: buttonInternalStorage
-    property alias startPrintLabel: startPrintLabel
     property bool browsingUsbStorage: false
+    property alias printSwipeView: printSwipeView
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -36,6 +38,7 @@ Item {
 
     function getReadyByTime(timeLeftSeconds)
     {
+        lastPrintTimeSec = timeLeftSeconds
         var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
         var currentTime = new Date()
         var endMS = currentTime.getTime() + timeLeftSeconds*1000
@@ -130,6 +133,7 @@ Item {
                 model_mass_: model_mass
                 uses_support_: uses_support
                 uses_raft_: uses_raft
+                print_time_: print_time
             }
         }
 
@@ -420,41 +424,14 @@ Item {
                         antialiasing: false
                     }
 
-                    Rectangle {
-                        id: startPrintButton
-                        width: 210
-                        height: 45
-                        color: "#00000000"
-                        radius: 10
-                        smooth: false
-                        antialiasing: false
-                        border.width: 2
-                        border.color: "#ffffff"
-
-                        Text {
-                            id: startPrintLabel
-                            text: "START PRINT"
-                            font.capitalization: Font.AllUppercase
-                            smooth: false
-                            antialiasing: false
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.letterSpacing: 3
-                            font.family: "Antennae"
-                            font.weight: Font.Bold
-                            font.pixelSize: 20
-                            color: "#ffffff"
-                        }
-
-                        MouseArea {
-                            id: startPrintButtonMouseArea
-                            smooth: false
-                            anchors.fill: parent
-                            onClicked: {
-                                storage.backStackClear()
-                                bot.print(fileName)
-                                printSwipeView.swipeToItem(0)
-                            }
+                    RoundedButton {
+                        buttonWidth: 210
+                        buttonHeight: 45
+                        label: "START PRINT"
+                        button_mouseArea.onClicked: {
+                            storage.backStackClear()
+                            bot.print(fileName)
+                            printSwipeView.swipeToItem(0)
                         }
                     }
                 }
