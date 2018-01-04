@@ -19,6 +19,7 @@ Item {
     property string chamber_temp
     property string slicer_name
     property string readyByTime
+    property int lastPrintTimeSec
     property alias printingDrawer: printingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
@@ -37,6 +38,7 @@ Item {
 
     function getReadyByTime(timeLeftSeconds)
     {
+        lastPrintTimeSec = timeLeftSeconds
         var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
         var currentTime = new Date()
         var endMS = currentTime.getTime() + timeLeftSeconds*1000

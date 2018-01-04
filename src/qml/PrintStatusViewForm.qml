@@ -168,6 +168,7 @@ Item {
                     label: "PRINT AGAIN"
                     visible: bot.process.stateType == ProcessStateType.Completed
                     button_mouseArea.onClicked: {
+                        print_page.getReadyByTime(print_page.lastPrintTimeSec)
                         print_page.printSwipeView.swipeToItem(2)
                     }
                 }
