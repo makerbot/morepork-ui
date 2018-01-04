@@ -18,7 +18,7 @@ foreach(HEADER_FILE ${HEADER_FILE_LIST})
     endforeach()
 endforeach()
 file(WRITE ${PARSED_ENUM_FILE_NAME} "// Copyright 2017 Makerbot Industries\n\
-// This file was automatically generated using the enum_parser executable\n\n\
+// This file was automatically generated using the enum_parser.cmake script\n\n\
 #ifndef __PARSED_ENUM_FILE__\n\
 #define __PARSED_ENUM_FILE__\n\n\
 #include <QObject>\n\
