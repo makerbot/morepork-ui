@@ -38,6 +38,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex);
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
+    Q_INVOKABLE virtual void assistedLevel();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)

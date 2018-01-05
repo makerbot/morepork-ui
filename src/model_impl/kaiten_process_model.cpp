@@ -84,6 +84,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     UPDATE_FLOAT_PROP(targetHesLower, proc["target_hes_lower"]);
     UPDATE_FLOAT_PROP(currentHes, proc["current_hes"]);
     UPDATE_INT_PROP(levelState, proc["level_state"]);
+    UPDATE_STRING_PROP(levelStep, proc["step"]); //Temporarily for Walter to debug
 
     activeSet(true);
 }

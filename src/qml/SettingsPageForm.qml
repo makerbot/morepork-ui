@@ -160,6 +160,19 @@ Item {
                     visible: bot.process.type == ProcessType.AssistedLeveling
 
                     Text {
+                        id: text5
+                        color: "#ffffff"
+                        text: "Step: " + bot.process.levelStep
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        antialiasing: false
+                        smooth: false
+                        font.letterSpacing: 3
+                        font.family: "Antenna"
+                        font.weight: Font.Light
+                        font.pixelSize: 21
+                    }
+
+                    Text {
                         id: text1
                         color: "#ffffff"
                         text: "Current HES: " + bot.process.currentHes
@@ -229,6 +242,7 @@ Item {
                         font.weight: Font.Light
                         font.pixelSize: 21
                     }
+
                 }
             }
         }

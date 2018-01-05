@@ -23,6 +23,7 @@ class KaitenBotModel : public BotModel {
     void loadFilament(const int kToolIndex);
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
+    void assistedLevel();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -145,6 +146,17 @@ void KaitenBotModel::unloadFilament(const int kToolIndex){
         Json::Value json_params(Json::objectValue);
         json_params["tool_index"] = Json::Value(kToolIndex);
         conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::assistedLevel(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("assisted_level", Json::Value(), std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
