@@ -54,8 +54,8 @@
 #define UPDATE_FLOAT_PROP(PROP, JSON_VAL) \
     { \
         const Json::Value & json_val = JSON_VAL; \
-        if(json_val.isFloat()) \
-            PROP ## Set(json_val.asFloat()); \
+        if(json_val.isDouble()) \
+            PROP ## Set(json_val.asDouble()); \
         else \
             PROP ## Reset(); \
     }
