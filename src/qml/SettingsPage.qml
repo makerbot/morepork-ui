@@ -5,6 +5,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(1)
     }
 
+    buttonAssistedLeveling.onClicked: {
+        settingsSwipeView.swipeToItem(2)
+    }
+
     buttonEnglish.onClicked: {
         cpUiTr.selectLanguage("en")
     }

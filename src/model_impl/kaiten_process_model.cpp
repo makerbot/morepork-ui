@@ -20,6 +20,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::Load);
         else if (kNameStr == "UnloadFilamentProcess")
             typeSet(ProcessType::Unload);
+        else if (kNameStr == "SombreroAssistedLevelingProcess")
+            typeSet(ProcessType::AssistedLeveling);
         else
             typeSet(ProcessType::Other);
     }
@@ -78,6 +80,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
     UPDATE_INT_PROP(timeRemaining, proc["time_remaining"]);
+    UPDATE_FLOAT_PROP(targetHesUpper, proc["target_hes_upper"]);
+    UPDATE_FLOAT_PROP(targetHesLower, proc["target_hes_lower"]);
+    UPDATE_FLOAT_PROP(currentHes, proc["current_hes"]);
+    UPDATE_INT_PROP(levelState, proc["level_state"]);
 
     activeSet(true);
 }

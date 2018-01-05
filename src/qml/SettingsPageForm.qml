@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 
 Item {
     id: settingsPageForm
@@ -12,11 +13,13 @@ Item {
     property alias buttonSpanish: buttonSpanish
     property alias buttonFrench: buttonFrench
     property alias buttonItalian: buttonItalian
+    property alias buttonAssistedLeveling: buttonAssistedLeveling
 
     smooth: false
 
     SwipeView {
         id: settingsSwipeView
+        currentIndex: 0
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -58,12 +61,20 @@ Item {
                         id: buttonChangeLanguage
                         buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
                     }
+
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonAssistedLeveling
+                        buttonText.text: "Assisted Leveling"
+                    }
                 }
             }
         }
 
         // settingsSwipeView.index = 1
         Item {
+            id: itemLanguages
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
@@ -110,6 +121,113 @@ Item {
                     MoreporkButton {
                         id: buttonItalian
                         buttonText.text: "Italiano"
+                    }
+                }
+            }
+        }
+
+        // settingsSwipeView.index = 2
+        Item {
+            id: itemAssistedLeveling
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            Rectangle {
+                id: rectangle
+                color: "#000000"
+                anchors.fill: parent
+
+                Text {
+                    color: "#ffffff"
+                    text: "Bot Not in Assisted Leveling Process"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: bot.process.type != ProcessType.AssistedLeveling
+                    antialiasing: false
+                    smooth: false
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 21
+                }
+
+                ColumnLayout {
+                    id: columnLayout
+                    anchors.fill: parent
+                    visible: bot.process.type == ProcessType.AssistedLeveling
+
+                    Text {
+                        id: text1
+                        color: "#ffffff"
+                        text: "Current HES: " + bot.process.currentHes
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        antialiasing: false
+                        smooth: false
+                        font.letterSpacing: 3
+                        font.family: "Antenna"
+                        font.weight: Font.Light
+                        font.pixelSize: 21
+                    }
+
+                    Text {
+                        id: text2
+                        color: "#ffffff"
+                        text: "Target HES Upper: " + bot.process.targetHesUpper
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        antialiasing: false
+                        smooth: false
+                        font.letterSpacing: 3
+                        font.family: "Antenna"
+                        font.weight: Font.Light
+                        font.pixelSize: 21
+                    }
+
+                    Text {
+                        id: text3
+                        color: "#ffffff"
+                        text: "Target HES Lower: " + bot.process.targetHesLower
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        antialiasing: false
+                        smooth: false
+                        font.letterSpacing: 3
+                        font.family: "Antenna"
+                        font.weight: Font.Light
+                        font.pixelSize: 21
+                    }
+
+                    Text {
+                        id: text4
+                        color: "#ffffff"
+                        text: {
+                            switch(bot.process.levelState)
+                            {
+                            case 0:
+                                "Level State: " + bot.process.levelState
+                                break;
+                            case 1:
+                                "Level State: " + bot.process.levelState + " LOW"
+                                break;
+                            case 2:
+                                "Level State: " + bot.process.levelState + " HIGH"
+                                break;
+                            case 3:
+                                "Level State: " + bot.process.levelState + " OK"
+                                break;
+                            default:
+                                "Level State: " + bot.process.levelState
+                                break;
+                            }
+                        }
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        antialiasing: false
+                        smooth: false
+                        font.letterSpacing: 3
+                        font.family: "Antenna"
+                        font.weight: Font.Light
+                        font.pixelSize: 21
                     }
                 }
             }
