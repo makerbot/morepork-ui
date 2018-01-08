@@ -55,7 +55,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(double, targetHesLower, 0)
     MODEL_PROP(double, currentHes, 0)
     MODEL_PROP(int, levelState, 0)
-    MODEL_PROP(QString, levelStep, "Unknown")
+    MODEL_PROP(QString, levelStep, "Unknown") //temporary property for debugging assisted leveling
 
   public:
     ProcessModel();
