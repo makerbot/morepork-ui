@@ -14,6 +14,7 @@ class ProcessModel : public BaseModel {
         Print,
         Load,
         Unload,
+        AssistedLeveling,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -50,6 +51,11 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
     MODEL_PROP(int, errorCode, 0)
+    MODEL_PROP(double, targetHesUpper, 0)
+    MODEL_PROP(double, targetHesLower, 0)
+    MODEL_PROP(double, currentHes, 0)
+    MODEL_PROP(int, levelState, 0)
+    MODEL_PROP(QString, levelStep, "Unknown") //temporary property for debugging assisted leveling
 
   public:
     ProcessModel();

@@ -51,5 +51,14 @@
             PROP ## Reset(); \
     }
 
+#define UPDATE_FLOAT_PROP(PROP, JSON_VAL) \
+    { \
+        const Json::Value & json_val = JSON_VAL; \
+        if(json_val.isDouble()) \
+            PROP ## Set(json_val.asDouble()); \
+        else \
+            PROP ## Reset(); \
+    }
+
 #endif  // _SRC_IMPL_UTIL_H
 

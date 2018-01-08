@@ -312,11 +312,19 @@ Item {
                         }
                     }
 
+                    Item {
+                        width: 100
+                        height: 5
+                        antialiasing: false
+                        smooth: false
+                    }
+
                     Text {
                         id: printName
                         text: file_name
                         smooth: false
                         antialiasing: false
+                        font.letterSpacing: 3
                         font.family: "Antennae"
                         font.weight: Font.Bold
                         font.pixelSize: 21

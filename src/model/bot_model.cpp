@@ -32,6 +32,10 @@ void BotModel::unloadFilament(const int kToolIndex) {
     qDebug() << FL_STRM << "called with tool_index: " << kToolIndex;
 }
 
+void BotModel::assistedLevel() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
