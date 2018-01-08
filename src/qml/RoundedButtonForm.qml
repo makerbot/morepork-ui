@@ -23,6 +23,7 @@ Rectangle {
         id: button_text
         width: 300
         text: "Button Text"
+        anchors.verticalCenterOffset: 2
         font.capitalization: Font.AllUppercase
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
