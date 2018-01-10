@@ -68,18 +68,19 @@ Item {
                 color: "#cbcbcb"
                 text: "Open material bay " + bayID + " and insert the MakerBot Smart Spool. Feed the end of the material into the slot until you feel it being pulled in."
                 anchors.top: parent.top
-                anchors.topMargin: 180
+                anchors.topMargin: 165
                 wrapMode: Text.WordWrap
                 font.family: "Antennae"
                 font.weight: Font.Light
-                font.pixelSize: 16
+                font.pixelSize: 18
             }
 
             RoundedButton {
                 id: acknowledgeButton
                 buttonWidth: 350
                 buttonHeight: 45
-                y: 255
+                anchors.top: parent.top
+                anchors.topMargin: 280
                 visible: false
             }
 
@@ -192,6 +193,7 @@ Item {
                 buttonWidth: 225
                 buttonHeight: 75
                 visible: true
+                anchors.topMargin: 270
                 label: "MATERIAL IS EXTRUDING"
             }
 

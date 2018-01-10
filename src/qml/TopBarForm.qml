@@ -222,7 +222,7 @@ Item {
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Light
-            font.pixelSize: 18
+            font.pixelSize: 22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
