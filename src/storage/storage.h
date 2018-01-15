@@ -18,7 +18,7 @@
 #else
 // embedded linux path
 #define INTERNAL_STORAGE_PATH QString("/home/things")
-#define USB_STORAGE_PATH QString("/home/usb_storage")
+#define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define USB_STORAGE_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
