@@ -140,7 +140,7 @@ Item {
                     id: cancel_text
                     color: "#cbcbcb"
                     text: isLoadFilament ? "CANCEL MATERIAL LOADING?" :
-                                           "CANCEL MATERIAL UNLOADING"
+                                           "CANCEL MATERIAL UNLOADING?"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
