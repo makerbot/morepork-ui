@@ -135,17 +135,30 @@ Item {
             smooth: false
             visible: false
 
-            Rectangle {
-                id: rectangle
-                color: "#000000"
+            Text {
+                color: "#ffffff"
+                text: "Bot Not in Assisted Leveling Process"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                visible: bot.process.type != ProcessType.AssistedLeveling
+                antialiasing: false
+                smooth: false
+                font.letterSpacing: 3
+                font.family: "Antenna"
+                font.weight: Font.Light
+                font.pixelSize: 21
+            }
+
+            ColumnLayout {
+                id: columnLayout
                 anchors.fill: parent
+                visible: bot.process.type == ProcessType.AssistedLeveling
 
                 Text {
+                    id: text5
                     color: "#ffffff"
-                    text: "Bot Not in Assisted Leveling Process"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    visible: bot.process.type != ProcessType.AssistedLeveling
+                    text: "Step: " + bot.process.levelStep
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 3
@@ -154,95 +167,75 @@ Item {
                     font.pixelSize: 21
                 }
 
-                ColumnLayout {
-                    id: columnLayout
-                    anchors.fill: parent
-                    visible: bot.process.type == ProcessType.AssistedLeveling
+                Text {
+                    id: text1
+                    color: "#ffffff"
+                    text: "Current HES: " + bot.process.currentHes
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    antialiasing: false
+                    smooth: false
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 21
+                }
 
-                    Text {
-                        id: text5
-                        color: "#ffffff"
-                        text: "Step: " + bot.process.levelStep
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        antialiasing: false
-                        smooth: false
-                        font.letterSpacing: 3
-                        font.family: "Antenna"
-                        font.weight: Font.Light
-                        font.pixelSize: 21
-                    }
+                Text {
+                    id: text2
+                    color: "#ffffff"
+                    text: "Target HES Upper: " + bot.process.targetHesUpper
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    antialiasing: false
+                    smooth: false
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 21
+                }
 
-                    Text {
-                        id: text1
-                        color: "#ffffff"
-                        text: "Current HES: " + bot.process.currentHes
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        antialiasing: false
-                        smooth: false
-                        font.letterSpacing: 3
-                        font.family: "Antenna"
-                        font.weight: Font.Light
-                        font.pixelSize: 21
-                    }
+                Text {
+                    id: text3
+                    color: "#ffffff"
+                    text: "Target HES Lower: " + bot.process.targetHesLower
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    antialiasing: false
+                    smooth: false
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 21
+                }
 
-                    Text {
-                        id: text2
-                        color: "#ffffff"
-                        text: "Target HES Upper: " + bot.process.targetHesUpper
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        antialiasing: false
-                        smooth: false
-                        font.letterSpacing: 3
-                        font.family: "Antenna"
-                        font.weight: Font.Light
-                        font.pixelSize: 21
-                    }
-
-                    Text {
-                        id: text3
-                        color: "#ffffff"
-                        text: "Target HES Lower: " + bot.process.targetHesLower
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        antialiasing: false
-                        smooth: false
-                        font.letterSpacing: 3
-                        font.family: "Antenna"
-                        font.weight: Font.Light
-                        font.pixelSize: 21
-                    }
-
-                    Text {
-                        id: text4
-                        color: "#ffffff"
-                        text: {
-                            switch(bot.process.levelState)
-                            {
-                            case 0:
-                                "Level State: " + bot.process.levelState
-                                break;
-                            case 1:
-                                "Level State: " + bot.process.levelState + " LOW"
-                                break;
-                            case 2:
-                                "Level State: " + bot.process.levelState + " HIGH"
-                                break;
-                            case 3:
-                                "Level State: " + bot.process.levelState + " OK"
-                                break;
-                            default:
-                                "Level State: " + bot.process.levelState
-                                break;
-                            }
+                Text {
+                    id: text4
+                    color: "#ffffff"
+                    text: {
+                        switch(bot.process.levelState)
+                        {
+                        case 0:
+                            "Level State: " + bot.process.levelState
+                            break;
+                        case 1:
+                            "Level State: " + bot.process.levelState + " LOW"
+                            break;
+                        case 2:
+                            "Level State: " + bot.process.levelState + " HIGH"
+                            break;
+                        case 3:
+                            "Level State: " + bot.process.levelState + " OK"
+                            break;
+                        default:
+                            "Level State: " + bot.process.levelState
+                            break;
                         }
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        antialiasing: false
-                        smooth: false
-                        font.letterSpacing: 3
-                        font.family: "Antenna"
-                        font.weight: Font.Light
-                        font.pixelSize: 21
                     }
-
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    antialiasing: false
+                    smooth: false
+                    font.letterSpacing: 3
+                    font.family: "Antenna"
+                    font.weight: Font.Light
+                    font.pixelSize: 21
                 }
             }
         }

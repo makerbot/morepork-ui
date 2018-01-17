@@ -222,7 +222,7 @@ Item {
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Light
-            font.pixelSize: 18
+            font.pixelSize: 22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
         }
@@ -239,17 +239,18 @@ Item {
             z: 1
             source: "qrc:/img/arrow_19pix.png"
             fillMode: Image.PreserveAspectFit
+        }
 
-            MouseArea {
-                id: mouseAreaTopDrawerDown
-                width: 40
-                height: 60
-                smooth: false
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                z: 2
-                onClicked: drawerDownClicked()
-            }
+        MouseArea {
+            id: mouseAreaTopDrawerDown
+            x: 301
+            y: 40
+            width: 40
+            height: 60
+            smooth: false
+            anchors.fill: parent
+            z: 2
+            onClicked: drawerDownClicked()
         }
     }
 }

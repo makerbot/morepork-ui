@@ -307,12 +307,16 @@ Item {
                         source: "qrc:/img/info_icon_small.png"
 
                         MouseArea {
-                            anchors.fill: parent
+                            width: 80
+                            height: 80
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
                             onClicked: printSwipeView.swipeToItem(3)
                         }
                     }
 
                     Item {
+                        id: spacingItem
                         width: 100
                         height: 5
                         antialiasing: false
@@ -368,7 +372,7 @@ Item {
                             font.letterSpacing: 3
                             font.family: "Antennae"
                             font.weight: Font.Light
-                            font.pixelSize: 20
+                            font.pixelSize: 18
                             color: "#ffffff"
                         }
                     }
@@ -415,8 +419,8 @@ Item {
 
                         Image {
                             id: lowMaterialAlert
-                            height: 24
-                            width: 24
+                            height: 12
+                            width: 12
                             antialiasing: false
                             smooth: false
                             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -425,7 +429,7 @@ Item {
                     }
 
                     Item {
-                        id: spacingItem
+                        id: spacingItem1
                         width: 200
                         height: 5
                         smooth: false
