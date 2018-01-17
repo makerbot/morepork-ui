@@ -14,6 +14,7 @@ Item {
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
     property int bayID: 1
+    property int errorCode
     signal processDone
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
@@ -21,7 +22,11 @@ Item {
         {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
-            if(bot.process.type == ProcessType.Load) {
+            if(bot.process.errorCode > 0) {
+                errorCode = bot.process.errorCode
+                state = "error"
+            }
+            else if(bot.process.type == ProcessType.Load) {
                 state = "loaded_filament"
             }
             else if(bot.process.type == ProcessType.Unload) {
@@ -283,6 +288,48 @@ Item {
                 target: image
                 source: "qrc:/img/unload_filament.png"
             }
+        },
+        State {
+            name: "error"
+            //this state doesn't have a when condiiton unlike others and
+            //instead the switch case above is used to get into this state,
+            //since we need the UI to be held at this screen
+            //even after the process has completed, until the user presses 'done'.
+
+            PropertyChanges {
+                target: main_instruction_text
+                width: 300
+                text: switch(bot.process.type)
+                      {
+                      case ProcessType.Load:
+                          "FILAMENT LOADING FAILED"
+                          break;
+                      case ProcessType.Unload:
+                          "FILAMENT UNLOADING FAILED"
+                          break;
+                      }
+            }
+
+            PropertyChanges {
+                target: instruction_description_text
+                text: "Error " + errorCode
+            }
+
+            PropertyChanges {
+                target: acknowledgeButton
+                x: 0
+                y: 297
+                buttonWidth: 100
+                buttonHeight: 50
+                visible: true
+                label: "DONE"
+            }
+
+            PropertyChanges {
+                target: image
+                source: "qrc:/img/extruder_heating.png"
+            }
         }
+
     ]
 }

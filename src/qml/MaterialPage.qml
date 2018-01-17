@@ -49,6 +49,7 @@ MaterialPageForm {
     cancel_mouseArea.onClicked: {
         bot.cancel()
         cancelLoadUnloadPopup.close()
+        loadUnloadFilamentProcess.state = "base state"
         setDrawerState(false)
         materialSwipeView.swipeToItem(0)
     }

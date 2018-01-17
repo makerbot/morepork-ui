@@ -3,7 +3,7 @@ import QtQuick 2.4
 LoadUnloadFilamentForm {
     acknowledgeButton{
         button_mouseArea.onClicked: {
-            if(state == "unloaded_filament" || state == "loaded_filament") {
+            if(state == "unloaded_filament" || state == "loaded_filament" || state == "error") {
                 processDone()
             }
             else if(state == "extrusion") {
