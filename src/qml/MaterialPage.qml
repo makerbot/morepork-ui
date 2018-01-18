@@ -59,8 +59,23 @@ MaterialPageForm {
         setDrawerState(false)
         materialSwipeView.swipeToItem(0)
     }
+    cancel_mouseArea.onPressed: {
+        cancel_rectangle.color = "#0f0f0f"
+    }
+
+    cancel_mouseArea.onReleased: {
+        cancel_rectangle.color = "#00000000"
+    }
 
     continue_mouseArea.onClicked: cancelLoadUnloadPopup.close()
+
+    continue_mouseArea.onPressed: {
+        continue_rectangle.color = "#0f0f0f"
+    }
+
+    continue_mouseArea.onReleased: {
+        continue_rectangle.color = "#00000000"
+    }
 
     materialPageDrawer.buttonCancelMaterialChange.onClicked: {
         materialPageDrawer.close()
