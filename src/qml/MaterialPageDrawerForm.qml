@@ -7,7 +7,7 @@ Drawer {
     edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
     width: parent.width
     height: column.height
-    dim: false
+    dim: true
     interactive: false
     background:
         Rectangle{
