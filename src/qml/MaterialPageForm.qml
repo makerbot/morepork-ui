@@ -11,7 +11,9 @@ Item {
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
     property alias cancel_mouseArea: cancel_mouseArea
+    property alias cancel_rectangle: cancel_rectangle
     property alias continue_mouseArea: continue_mouseArea
+    property alias continue_rectangle: continue_rectangle
     property alias materialPageDrawer: materialPageDrawer
 
     smooth: false
@@ -193,43 +195,66 @@ Item {
                 anchors.bottomMargin: 0
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                Text {
-                    id: cancel_loading_text
-                    color: "#ffffff"
-                    text: isLoadFilament ? "CANCEL LOADING" : "CANCEL UNLOADING"
-                    Layout.fillHeight: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.fillWidth: false
-                    font.letterSpacing: 3
-                    font.weight: Font.Bold
-                    font.family: "Antennae"
-                    font.pixelSize: 16
+                Rectangle {
+                    id: cancel_rectangle
+                    width: 345
+                    height: 65
+                    color: "#00000000"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: -175
 
-                    MouseArea {
-                        id: cancel_mouseArea
-                        width: 300
-                        height: 75
+                    Text {
+                        id: cancel_loading_text
+                        color: "#ffffff"
+                        text: isLoadFilament ? "CANCEL LOADING" : "CANCEL UNLOADING"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 16
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
+
+                        MouseArea {
+                            id: cancel_mouseArea
+                            width: 300
+                            height: 75
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
                     }
                 }
 
-                Text {
-                    id: continue_loading_text
-                    color: "#ffffff"
-                    text: isLoadFilament ? "CONTINUE LOADING" : "CONTINUE UNLOADING"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.letterSpacing: 3
-                    font.weight: Font.Bold
-                    font.family: "Antennae"
-                    font.pixelSize: 16
-
-                    MouseArea {
-                        id: continue_mouseArea
-                        width: 300
-                        height: 75
-                        anchors.horizontalCenter: parent.horizontalCenter
+                Rectangle {
+                    id: continue_rectangle
+                    width: 350
+                    height: 65
+                    color: "#00000000"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenterOffset: 175
+                    Text {
+                        id: continue_loading_text
+                        color: "#ffffff"
+                        text: isLoadFilament ? "CONTINUE LOADING" : "CONTINUE UNLOADING"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 16
                         anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+
+                        MouseArea {
+                            id: continue_mouseArea
+                            width: 300
+                            height: 75
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
                     }
                 }
             }
