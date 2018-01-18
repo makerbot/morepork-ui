@@ -134,7 +134,6 @@ ApplicationWindow {
                     mainMenuIcon_material.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(5)
                         activeDrawer = materialPage.materialPageDrawer
-                        topBar.drawerDownClicked.connect(activeDrawer.open)
                     }
 
                     mainMenuIcon_preheat.mouseArea.onClicked: {

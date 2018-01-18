@@ -8,6 +8,12 @@ MaterialPageForm {
     {
         topBar.imageDrawerArrow.visible = state
         materialPageDrawer.interactive = state
+        if(state == true) {
+            topBar.drawerDownClicked.connect(activeDrawer.open)
+        }
+        else {
+            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        }
     }
 
     bay1 {
