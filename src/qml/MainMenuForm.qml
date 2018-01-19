@@ -13,22 +13,20 @@ Item {
     smooth: false
     MainMenuIcon {
         id: mainMenuIcon_print
+        y: 40
         smooth: false
-        z: 2
-        anchors.bottom: mainMenuIcon_extruder.bottom
-        anchors.bottomMargin: 0
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
         imageVisible: !(bot.process.type == ProcessType.Print)
         textIconDesc.text: "PRINT"
 
-        PrintIcon{
+        PrintIcon {
             smooth: false
             anchors.verticalCenterOffset: -25
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            scale: 75/250
+            scale: 0.3
             actionButton: false
             visible: !parent.imageVisible
         }
@@ -36,42 +34,36 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_extruder
-        y: parent.height*0.15
+        y: 40
         smooth: false
-        z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/extruder_icon.png"
-        textIconDesc.text: "EXTRUDER"
+        textIconDesc.text: "EXTRUDERS"
     }
 
     MainMenuIcon {
         id: mainMenuIcon_settings
+        y: 40
         smooth: false
-        z: 2
         anchors.horizontalCenterOffset: 220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
-        anchors.bottom: mainMenuIcon_extruder.bottom
-        anchors.bottomMargin: 0
         image.source: "qrc:/img/settings_icon.png"
         textIconDesc.text: "SETTINGS"
     }
 
     MainMenuIcon {
         id: mainMenuIcon_info
+        y: 220
         smooth: false
-        z: 2
         anchors.horizontalCenter: mainMenuIcon_print.horizontalCenter
-        anchors.bottom: mainMenuIcon_material.bottom
-        anchors.bottomMargin: 0
         image.source: "qrc:/img/info_icon.png"
         textIconDesc.text: "INFO"
     }
 
     MainMenuIcon {
         id: mainMenuIcon_material
-        y: parent.height*0.525
+        y: 220
         smooth: false
-        z: 2
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
         textIconDesc.text: "MATERIAL"
@@ -79,11 +71,9 @@ Item {
 
     MainMenuIcon {
         id: mainMenuIcon_preheat
+        y: 220
         smooth: false
-        z: 2
         anchors.horizontalCenter: mainMenuIcon_settings.horizontalCenter
-        anchors.bottom: mainMenuIcon_material.bottom
-        anchors.bottomMargin: 0
         image.source: "qrc:/img/preheat_icon.png"
         textIconDesc.text: "PREHEAT"
     }

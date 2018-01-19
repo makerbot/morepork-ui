@@ -216,6 +216,7 @@ Item {
                     break;
                 }
             }
+            font.capitalization: Font.AllUppercase
             antialiasing: false
             smooth: false
             verticalAlignment: Text.AlignVCenter

@@ -5,7 +5,6 @@ import ProcessTypeEnum 1.0
 
 Item {
     id: settingsPageForm
-    property int pageLevel: 1
     property alias settingsSwipeView: settingsSwipeView
     property alias defaultItem: itemSettings
     property alias buttonChangeLanguage: buttonChangeLanguage
