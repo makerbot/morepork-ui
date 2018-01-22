@@ -37,7 +37,6 @@ ApplicationWindow {
 
     function disableDrawer()
     {
-        topBar.backButton.visible = false
         topBar.imageDrawerArrow.visible = false
         activeDrawer.interactive = false
         topBar.drawerDownClicked.disconnect(activeDrawer.open)
@@ -104,6 +103,7 @@ ApplicationWindow {
                 mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
                 if(itemToDisplayDefaultIndex === 0) {
                     mainSwipeView.setCurrentIndex(0)
+                    topBar.backButton.visible = false
                     if(!printPage.isPrintProcess) {
                         disableDrawer()
                     }
