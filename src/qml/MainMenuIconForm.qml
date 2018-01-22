@@ -4,60 +4,66 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: item_root
-    width: 150
-    height: 150
+    width: 180
+    height: 180
     smooth: false
     property alias mouseArea: mouseArea
     property alias image: image
     property alias textIconDesc: textIconDesc
     property bool imageVisible: true
 
-    Image {
-        id: image
-        x: 38
-        width: 75
-        height: 75
+    Rectangle {
+        id: baseRectangle
+        anchors.fill: parent
+        color: "#00000000"
+        radius: 10
+        border.width: 2
+        border.color: "#00000000"
         smooth: false
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.horizontalCenter: parent.horizontalCenter
-        Layout.maximumHeight: 125
-        Layout.maximumWidth: 125
-        Layout.fillHeight: false
-        Layout.fillWidth: false
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        source: "qrc:/qtquickplugin/images/template_image.png"
-        visible: imageVisible
-    }
-
-    Text {
-        id: textIconDesc
-        x: 52
-        color: "#a0a0a0"
-        text: "Icon Name"
         antialiasing: false
-        smooth: false
-        font.family: "Antenna"
-        font.letterSpacing: 3
-        font.weight: Font.Light
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: image.bottom
-        anchors.topMargin: 10
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 22
-    }
 
-    MouseArea {
-        id: mouseArea
-        smooth: false
-        anchors.rightMargin: -125
-        anchors.leftMargin: -125
-        anchors.bottomMargin: -140
-        anchors.top: image.bottom
-        anchors.right: image.left
-        anchors.bottom: image.top
-        anchors.left: image.right
-        anchors.topMargin: -110
+        Image {
+            id: image
+            x: 38
+            width: 75
+            height: 75
+            smooth: false
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "qrc:/qtquickplugin/images/template_image.png"
+            visible: imageVisible
+        }
+
+        Text {
+            id: textIconDesc
+            x: 52
+            color: "#a0a0a0"
+            text: "Icon Name"
+            anchors.top: parent.top
+            anchors.topMargin: 130
+            antialiasing: false
+            smooth: false
+            font.family: "Antenna"
+            font.letterSpacing: 3
+            font.weight: Font.Light
+            anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 22
+        }
+
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            smooth: false
+
+            onPressed: {
+                baseRectangle.border.color = "#ffffff"
+            }
+
+            onReleased: {
+                baseRectangle.border.color = "#00000000"
+            }
+        }
     }
 }
