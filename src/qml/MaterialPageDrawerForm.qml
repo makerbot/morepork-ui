@@ -32,7 +32,9 @@ Drawer {
         }
         else
         {
-            topBar.backButton.visible = true
+            if(mainSwipeView.currentIndex != 0) {
+                topBar.backButton.visible = true
+            }
             topBar.imageDrawerArrow.rotation = -90
             topBar.text_printerName.color = "#a0a0a0"
         }
