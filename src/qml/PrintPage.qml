@@ -23,15 +23,21 @@ PrintPageForm {
     }
 
     sortingDrawer.buttonSortAZ.onClicked: {
-
+        sortingDrawer.buttonSortAZ.buttonImage.source = "qrc:/img/check_circle_small.png"
+        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
+        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
     }
 
     sortingDrawer.buttonSortDateAdded.onClicked: {
-
+        sortingDrawer.buttonSortAZ.buttonImage.source = ""
+        sortingDrawer.buttonSortDateAdded.buttonImage.source = "qrc:/img/check_circle_small.png"
+        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
     }
 
     sortingDrawer.buttonSortPrintTime.onClicked: {
-
+        sortingDrawer.buttonSortAZ.buttonImage.source = ""
+        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
+        sortingDrawer.buttonSortPrintTime.buttonImage.source = "qrc:/img/check_circle_small.png"
     }
 
     sortingDrawer.buttonClose.onClicked: {
