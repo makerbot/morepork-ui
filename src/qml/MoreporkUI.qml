@@ -38,7 +38,9 @@ ApplicationWindow {
     function disableDrawer()
     {
         topBar.imageDrawerArrow.visible = false
-        if(activeDrawer == printPage.printingDrawer || activeDrawer == materialPage.materialPageDrawer) {
+        if(activeDrawer == printPage.printingDrawer
+                || activeDrawer == materialPage.materialPageDrawer
+                || activeDrawer == printPage.sortingDrawer) {
             activeDrawer.interactive = false
             topBar.drawerDownClicked.disconnect(activeDrawer.open)
         }

@@ -21,4 +21,20 @@ PrintPageForm {
     printingDrawer.buttonClose.onClicked: {
         printingDrawer.close()
     }
+
+    sortingDrawer.buttonSortAZ.onClicked: {
+
+    }
+
+    sortingDrawer.buttonSortDateAdded.onClicked: {
+
+    }
+
+    sortingDrawer.buttonSortPrintTime.onClicked: {
+
+    }
+
+    sortingDrawer.buttonClose.onClicked: {
+        sortingDrawer.close()
+    }
 }
