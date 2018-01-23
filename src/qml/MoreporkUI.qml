@@ -38,8 +38,10 @@ ApplicationWindow {
     function disableDrawer()
     {
         topBar.imageDrawerArrow.visible = false
-        activeDrawer.interactive = false
-        topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        if(activeDrawer == printPage.printingDrawer || activeDrawer == materialPage.materialPageDrawer) {
+            activeDrawer.interactive = false
+            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        }
     }
 
     Item{
