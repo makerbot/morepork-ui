@@ -32,8 +32,10 @@ Item {
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
         if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
-                browsingUsbStorage)
+                browsingUsbStorage) {
+            setDrawerState(false)
             printSwipeView.swipeToItem(0)
+        }
     }
 
     property bool isPrintProcess: bot.process.type == ProcessType.Print
