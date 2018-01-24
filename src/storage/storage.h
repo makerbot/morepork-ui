@@ -8,6 +8,7 @@
 #include <QImage>
 #include <QQuickImageProvider>
 #include <QStack>
+#include <QDateTime>
 #include "model/base_model.h"
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
@@ -30,6 +31,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(QString filePath READ filePath NOTIFY fileInfoChanged)
   Q_PROPERTY(QString fileName READ fileName NOTIFY fileInfoChanged)
   Q_PROPERTY(QString fileBaseName READ fileBaseName NOTIFY fileInfoChanged)
+  Q_PROPERTY(QDateTime fileLastRead READ fileLastRead NOTIFY fileInfoChanged)
   Q_PROPERTY(bool isDir READ isDir NOTIFY fileInfoChanged)
 
   // see morepork-libtinything/include/tinything/TinyThingReader.hh for a
@@ -50,6 +52,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(QString slicerName READ slicerName NOTIFY fileInfoChanged)
 
   QString file_name_, file_path_, file_base_name_;
+  QDateTime file_last_read_;
   bool is_dir_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
   int extruder_temp_celcius_a_, extruder_temp_celcius_b_,
@@ -59,10 +62,19 @@ class PrintFileInfo : public QObject {
   QString material_name_a_, material_name_b_, slicer_name_;
 
   public:
+    //MOREPORK_QML_ENUM
+    enum StorageSortType {
+        Alphabetic,
+        DateAdded,
+        PrintTime
+    };
+    Q_ENUM(StorageSortType)
+
     PrintFileInfo(QObject *parent = 0) : QObject(parent) { }
     PrintFileInfo(const QString &file_path,
                   const QString &file_name,
                   const QString &file_base_name,
+                  const QDateTime &file_last_read,
                   const bool &is_dir,
                   const float extrusion_mass_grams_a = 0.0f,
                   const float extrusion_mass_grams_b = 0.0f,
@@ -83,6 +95,7 @@ class PrintFileInfo : public QObject {
                   file_path_(file_path),
                   file_name_(file_name),
                   file_base_name_(file_base_name),
+                  file_last_read_(file_last_read),
                   is_dir_(is_dir),
                   extrusion_mass_grams_a_(extrusion_mass_grams_a),
                   extrusion_mass_grams_b_(extrusion_mass_grams_b),
@@ -107,6 +120,9 @@ class PrintFileInfo : public QObject {
     }
     QString fileBaseName() const {
         return file_base_name_;
+    }
+    QDateTime fileLastRead() const {
+        return file_last_read_;
     }
     bool isDir() const {
         return is_dir_;
@@ -159,6 +175,16 @@ class PrintFileInfo : public QObject {
                static_cast<const PrintFileInfo*>(b)->fileName();
     }
 
+    static bool accessDateGreaterThan(const QObject *a, const QObject *b){
+        return static_cast<const PrintFileInfo*>(a)->fileLastRead().toSecsSinceEpoch() >
+               static_cast<const PrintFileInfo*>(b)->fileLastRead().toSecsSinceEpoch();
+    }
+
+    static bool timeEstimateSecLessThan(const QObject *a, const QObject *b){
+        return static_cast<const PrintFileInfo*>(a)->timeEstimateSec() <
+               static_cast<const PrintFileInfo*>(b)->timeEstimateSec();
+    }
+
     signals:
       void fileInfoChanged();
 };
@@ -181,11 +207,13 @@ class MoreporkStorage : public QObject {
   QString prev_thing_dir_;
   MODEL_PROP(bool, usbStorageConnected, false)
   MODEL_PROP(bool, storageIsEmpty, true)
+  MODEL_PROP(PrintFileInfo::StorageSortType, sortType,
+             PrintFileInfo::StorageSortType::Alphabetic)
 
   public:
     QList<QObject*> print_file_list_;
     MoreporkStorage();
-    Q_INVOKABLE void updateStorageFileList(const QString kDirectory = "");
+    Q_INVOKABLE void updateStorageFileList(const QString kDirectory);
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList
@@ -201,6 +229,7 @@ class MoreporkStorage : public QObject {
 
   private slots:
     void updateUsbStorageConnected();
+    void newSortType();
 
   signals:
     void printFileListChanged();
