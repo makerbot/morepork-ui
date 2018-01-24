@@ -192,7 +192,19 @@ Item {
                         bot.name
                         break;
                     case 1:
-                        "PRINT"
+                        switch(printPage.printSwipeView.currentIndex)
+                        {
+                        case 0:
+                        case 1:
+                            "CHOOSE A FILE"
+                            break;
+                        case 2:
+                            "PRINT"
+                            break;
+                        case 3:
+                            "FILE INFORMATION"
+                            break;
+                        }
                         break;
                     case 2:
                         "EXTRUDER"

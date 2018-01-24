@@ -4,15 +4,10 @@ MaterialPageForm {
 
     property bool isLoadFilament: false
 
-    function setDrawerState(state)
-    {
-        topBar.imageDrawerArrow.visible = state
-        materialPageDrawer.interactive = state
-        if(state == true) {
-            topBar.drawerDownClicked.connect(activeDrawer.open)
-        }
-        else {
-            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+    function enableMaterialDrawer() {
+        if(!printPage.isPrintProcess) {
+            activeDrawer = materialPage.materialPageDrawer
+            setDrawerState(true)
         }
     }
 
@@ -20,16 +15,16 @@ MaterialPageForm {
         loadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = true
+            enableMaterialDrawer()
             bot.loadFilament(1)
-            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
 
         unloadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = false
+            enableMaterialDrawer()
             bot.unloadFilament(1)
-            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
     }
@@ -38,16 +33,16 @@ MaterialPageForm {
         loadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = true
+            enableMaterialDrawer()
             bot.loadFilament(0)
-            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
 
         unloadButton.button_mouseArea.onClicked: {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = false
+            enableMaterialDrawer()
             bot.unloadFilament(0)
-            setDrawerState(true)
             materialSwipeView.swipeToItem(1)
         }
     }

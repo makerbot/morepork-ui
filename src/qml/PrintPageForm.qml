@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 
 Item {
-    id: print_page
     smooth: false
     property string fileName: "unknown.makerbot"
     property string file_name
@@ -34,6 +33,16 @@ Item {
         if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
                 browsingUsbStorage)
             printSwipeView.swipeToItem(0)
+    }
+
+    property bool isPrintProcess: bot.process.type == ProcessType.Print
+    onIsPrintProcessChanged: {
+        if(isPrintProcess) {
+            setDrawerState(true)
+        }
+        else {
+            setDrawerState(false)
+        }
     }
 
     function getReadyByTime(timeLeftSeconds)
@@ -86,7 +95,7 @@ Item {
                 interactive: true
                 anchors.fill: parent
                 contentHeight: columnStorageOpt.height
-                visible: (bot.process.type != ProcessType.Print)
+                visible: !isPrintProcess
 
                 Column {
                     id: columnStorageOpt
@@ -126,7 +135,7 @@ Item {
 
             PrintStatusViewForm{
                 smooth: false
-                visible: bot.process.type == ProcessType.Print
+                visible: isPrintProcess
                 fileName_: file_name
                 filePathName: fileName
                 support_mass_: support_mass
@@ -244,8 +253,8 @@ Item {
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 1
+            property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
+            property int backSwipeIndex: isPrintProcess ? 0 : 1
             smooth: false
             visible: false
 
@@ -442,6 +451,7 @@ Item {
                         label: "START PRINT"
                         button_mouseArea.onClicked: {
                             storage.backStackClear()
+                            activeDrawer = printPage.printingDrawer
                             bot.print(fileName)
                             printSwipeView.swipeToItem(0)
                         }
@@ -454,8 +464,8 @@ Item {
         Item {
             id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: bot.process.type == ProcessType.Print ? mainSwipeView : printSwipeView
-            property int backSwipeIndex: bot.process.type == ProcessType.Print ? 0 : 2
+            property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
+            property int backSwipeIndex: isPrintProcess ? 0 : 2
             smooth: false
             visible: false
 
@@ -557,5 +567,4 @@ Item {
             }
         }
     }
-
 }

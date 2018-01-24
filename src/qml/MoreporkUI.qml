@@ -11,6 +11,17 @@ ApplicationWindow {
     property var currentItem: mainMenu
     property var activeDrawer
 
+    function setDrawerState(state) {
+        topBar.imageDrawerArrow.visible = state
+        activeDrawer.interactive = state
+        if(state == true) {
+            topBar.drawerDownClicked.connect(activeDrawer.open)
+        }
+        else {
+            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        }
+    }
+
     function setCurrentItem(currentItem_) {
         currentItem = currentItem_
     }
@@ -26,10 +37,11 @@ ApplicationWindow {
 
     function disableDrawer()
     {
-        topBar.backButton.visible = false
         topBar.imageDrawerArrow.visible = false
-        activeDrawer.interactive = false
-        topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        if(activeDrawer == printPage.printingDrawer || activeDrawer == materialPage.materialPageDrawer) {
+            activeDrawer.interactive = false
+            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        }
     }
 
     Item{
@@ -93,7 +105,10 @@ ApplicationWindow {
                 mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
                 if(itemToDisplayDefaultIndex === 0) {
                     mainSwipeView.setCurrentIndex(0)
-                    disableDrawer()
+                    topBar.backButton.visible = false
+                    if(!printPage.isPrintProcess) {
+                        disableDrawer()
+                    }
                 }
                 else {
                     mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem.visible = true
@@ -113,10 +128,6 @@ ApplicationWindow {
 
                     mainMenuIcon_print.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(1)
-                        activeDrawer = printPage.printingDrawer
-                        activeDrawer.interactive = true
-                        topBar.imageDrawerArrow.visible = true
-                        topBar.drawerDownClicked.connect(activeDrawer.open)
                     }
 
                     mainMenuIcon_extruder.mouseArea.onClicked: {
@@ -133,7 +144,6 @@ ApplicationWindow {
 
                     mainMenuIcon_material.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(5)
-                        activeDrawer = materialPage.materialPageDrawer
                     }
 
                     mainMenuIcon_preheat.mouseArea.onClicked: {
