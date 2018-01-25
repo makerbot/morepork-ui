@@ -7,7 +7,7 @@ Drawer {
     edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
     width: parent.width
     height: column.height
-    dim: true
+    dim: false
     interactive: false
     background:
         Rectangle{
@@ -16,9 +16,10 @@ Drawer {
             smooth: false
             gradient: Gradient {
                       GradientStop { position: 0.0; color: "#00000000" }
-                      GradientStop { position: 0.1; color: "#00000000" }
-                      GradientStop { position: 0.11; color: "#000000" }
-                      GradientStop { position: 1.0; color: "#000000" }
+                      GradientStop { position: 0.08; color: "#00000000" }
+                      GradientStop { position: 0.09; color: "#000000" }
+                      GradientStop { position: 0.79; color: "#000000" }
+                      GradientStop { position: 0.80; color: "#00000000" }
                   }
             }
 
@@ -123,6 +124,14 @@ Drawer {
 
             Rectangle{
                 width: parent.width; height: 1; color: "#4d4d4d"
+            }
+
+            Rectangle {
+                id: emptyItem
+                width: parent.width
+                height: 100
+                color: "#000000"
+                opacity: position/2
             }
         }
     }
