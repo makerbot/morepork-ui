@@ -20,6 +20,7 @@ Item {
     property string readyByTime
     property int lastPrintTimeSec
     property alias printingDrawer: printingDrawer
+    property alias sortingDrawer: sortingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias defaultItem: itemPrintStorageOpt
@@ -31,8 +32,10 @@ Item {
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
         if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
-                browsingUsbStorage)
+                browsingUsbStorage) {
+            setDrawerState(false)
             printSwipeView.swipeToItem(0)
+        }
     }
 
     property bool isPrintProcess: bot.process.type == ProcessType.Print
@@ -62,6 +65,10 @@ Item {
 
     PrintingDrawer {
         id: printingDrawer
+    }
+
+    SortDrawer {
+        id: sortingDrawer
     }
 
     SwipeView {
@@ -111,6 +118,8 @@ Item {
                         onClicked: {
                             browsingUsbStorage = false
                             storage.updateStorageFileList("?root_internal?")
+                            activeDrawer = printPage.sortingDrawer
+                            setDrawerState(true)
                             printSwipeView.swipeToItem(1)
                         }
                     }
@@ -127,6 +136,8 @@ Item {
                         onClicked: {
                             browsingUsbStorage = true
                             storage.updateStorageFileList("?root_usb?")
+                            activeDrawer = printPage.sortingDrawer
+                            setDrawerState(true)
                             printSwipeView.swipeToItem(1)
                         }
                     }
@@ -162,6 +173,7 @@ Item {
                     storage.updateStorageFileList(backDir)
                 }
                 else{
+                    setDrawerState(false)
                     printSwipeView.swipeToItem(0)
                 }
             }
@@ -239,6 +251,7 @@ Item {
                             chamber_temp = model.modelData.chamberTempCelcius + "C"
                             slicer_name = model.modelData.slicerName
                             getReadyByTime(printTimeSecRaw)
+                            setDrawerState(false)
                             printSwipeView.swipeToItem(2)
                         }
                     }
@@ -255,8 +268,14 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
             property int backSwipeIndex: isPrintProcess ? 0 : 1
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack(){
+                setDrawerState(true)
+                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+            }
 
             Item {
                 id: startPrintItem

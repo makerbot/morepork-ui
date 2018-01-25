@@ -32,10 +32,12 @@ MoreporkStorage::MoreporkStorage(){
   storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_->addPath("/dev/disk/by-path");
+  prev_thing_dir_ = "";
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateStorageFileList(const QString)));
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
+  connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
   usbStorageConnectedSet(false);
   storageIsEmptySet(true);
 }
@@ -69,6 +71,7 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
             new PrintFileInfo(kFileInfo.absolutePath(),
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
+                              kFileInfo.lastRead(),
                               kFileInfo.isDir(),
                               meta_data->extrusion_mass_g[1],
                               meta_data->extrusion_mass_g[0],
@@ -90,12 +93,14 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
             new PrintFileInfo(things_dir,
                               kFileInfo.fileName(),
                               kFileInfo.baseName(),
+                              kFileInfo.lastRead(),
                               kFileInfo.isDir()));
 #else
         print_file_list.append(
           new PrintFileInfo(things_dir,
                             kFileInfo.fileName(),
                             kFileInfo.baseName(),
+                            kFileInfo.lastRead(),
                             kFileInfo.isDir()));
 #endif
       }
@@ -103,14 +108,30 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
     if(print_file_list.empty())
       printFileListReset();
     else{
-      std::sort(print_file_list.begin(), print_file_list.end(),
-                PrintFileInfo::fileNameLessThan);
+      if(m_sortType == PrintFileInfo::StorageSortType::Alphabetic){
+        std::sort(print_file_list.begin(), print_file_list.end(),
+                  PrintFileInfo::fileNameLessThan);
+      }
+      else if(m_sortType == PrintFileInfo::StorageSortType::PrintTime){
+        std::sort(print_file_list.begin(), print_file_list.end(),
+                  PrintFileInfo::timeEstimateSecLessThan);
+      }
+      else if(m_sortType == PrintFileInfo::StorageSortType::DateAdded){
+        std::sort(print_file_list.begin(), print_file_list.end(),
+                  PrintFileInfo::accessDateGreaterThan);
+      }
       printFileListSet(print_file_list);
       storageIsEmptySet(false);
     }
   }
   else
     printFileListReset();
+}
+
+
+void MoreporkStorage::newSortType(){
+  if(prev_thing_dir_ != "")
+    updateStorageFileList(prev_thing_dir_);
 }
 
 
@@ -151,7 +172,7 @@ void MoreporkStorage::printFileListReset(){
   storageIsEmptySet(true);
   QList<QObject*> print_file_list;
   print_file_list.append(new PrintFileInfo("/null/path",
-    "No Items Present", "No Items Present", false));
+    "No Items Present", "No Items Present", QDateTime(), false));
   printFileListSet(print_file_list);
 }
 
