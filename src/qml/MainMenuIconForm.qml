@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: item_root
-    width: 180
+    width: Math.max(textIconDesc.width + 20, 180)
     height: 180
     smooth: false
     property alias mouseArea: mouseArea
