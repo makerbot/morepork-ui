@@ -62,7 +62,8 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: bot.process.stateType == ProcessStateType.Completed ? 225 : 100
+                height: bot.process.stateType == ProcessStateType.Completed
+                        || bot.process.stateType == ProcessStateType.Failed ? 225 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -148,6 +149,9 @@ Item {
                         case ProcessStateType.Paused:
                             timeLeftString + " REMAINING"
                             break;
+                        case ProcessStateType.Failed:
+                            print_time_ + " PRINT TIME"
+                            break;
                         default:
                             ""
                             break;
@@ -166,10 +170,11 @@ Item {
                     buttonWidth: 200
                     buttonHeight: 40
                     label: "PRINT AGAIN"
-                    visible: bot.process.stateType == ProcessStateType.Completed
+                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
-                        print_page.getReadyByTime(print_page.lastPrintTimeSec)
-                        print_page.printSwipeView.swipeToItem(2)
+                        printPage.getReadyByTime(printPage.lastPrintTimeSec)
+                        printPage.printSwipeView.swipeToItem(2)
                     }
                 }
 
@@ -186,7 +191,16 @@ Item {
                     buttonWidth: 100
                     buttonHeight: 40
                     label: "DONE"
-                    visible: bot.process.stateType == ProcessStateType.Completed
+                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed
+                    button_mouseArea.onClicked: {
+                        if(bot.process.stateType == ProcessStateType.Failed) {
+                            bot.done("acknowledge_failure")
+                        }
+                        else if(bot.process.stateType == ProcessStateType.Completed){
+                            bot.done("acknowledge_completed")
+                        }
+                    }
                 }
             }
         }

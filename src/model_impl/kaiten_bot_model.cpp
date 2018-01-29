@@ -20,6 +20,7 @@ class KaitenBotModel : public BotModel {
     void cancel();
     void pausePrint();
     void print(QString file_name);
+    void done(QString acknowledge_result);
     void loadFilament(const int kToolIndex);
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
@@ -109,6 +110,19 @@ void KaitenBotModel::print(QString file_name){
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::done(QString acknowledge_result){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value(acknowledge_result.toStdString());
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FL_STRM << e.what();
     }
 }
 
