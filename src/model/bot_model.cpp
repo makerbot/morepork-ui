@@ -20,6 +20,10 @@ void BotModel::print(QString file_name) {
     qDebug() << FL_STRM << "called with file name: " << file_name;
 }
 
+void BotModel::done(QString acknowledge_result) {
+    qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
+}
+
 void BotModel::loadFilament(const int kToolIndex) {
     qDebug() << FL_STRM << "called with tool_index: " << kToolIndex;
 }

@@ -35,6 +35,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pausePrint();
     Q_INVOKABLE virtual void print(QString file_name);
+    Q_INVOKABLE virtual void done(QString acknowledge_result);
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex);
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
