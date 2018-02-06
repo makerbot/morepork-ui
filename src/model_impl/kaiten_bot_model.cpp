@@ -17,6 +17,7 @@ class KaitenBotModel : public BotModel {
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
+    void authRequestUpdate(const Json::Value &request);
     void cancel();
     void pausePrint();
     void print(QString file_name);
@@ -25,6 +26,9 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
+    static bool isAuthRequestPending;
+    void respondAuthRequest(QString response);
+    static std::shared_ptr<KaitenBotModel> authResp;
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -74,7 +78,32 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<NetStateCallback> m_netStateCb;
+
+    class AuthRequestMethod : public JsonRpcMethod {
+      public:
+        AuthRequestMethod(KaitenBotModel * bot) : m_bot(bot) {}
+            void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
+                if(!KaitenBotModel::authResp) {
+                    m_bot->authRequestUpdate(MakerBot::SafeJson::get_obj(params, "request"));
+                    authResp = static_cast<Response>(response);
+                }
+            }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<AuthRequestMethod> m_authReq;
 };
+
+void KaitenBotModel::respondAuthRequest(QString response){
+    if(KaitenBotModel::authResp) {
+        Json::Value json_params(Json::objectValue);                                      
+        json_params["answer"] = Json::Value(response.toStdString());
+        static_cast<JsonRpcMethod::Response>(KaitenBotModel::authResp)->sendResult(json_params);
+        KaitenBotModel::authResp = nullptr;
+        isAuthRequestPending = false;
+        // isAuthPendingReset();
+    }
+}
 
 void KaitenBotModel::cancel(){
     try{
@@ -182,7 +211,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_sysNot(new SystemNotification(this)),
         m_sysInfoCb(new SysInfoCallback(this)),
         m_netNot(new NetStateNotification(this)),
-        m_netStateCb(new NetStateCallback(this)) {
+        m_netStateCb(new NetStateCallback(this)),
+        m_authReq(new AuthRequestMethod(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -190,6 +220,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("system_notification", m_sysNot);
     conn->jsonrpc.addMethod("state_notification", m_sysNot);
     conn->jsonrpc.addMethod("network_state_change", m_netNot);
+    conn->jsonrpc.addMethod("authorize_user", m_authReq);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -254,6 +285,16 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
+}
+
+void KaitenBotModel::authRequestUpdate(const Json::Value &request) {
+    if(!request.isObject()) {
+        reset();
+        return;
+    }
+    isAuthRequestPending = true;
+    // isAuthRequestPendingSet(true);
+    UPDATE_STRING_PROP(username, request["username"]);
 }
 
 void KaitenBotModel::connected() {

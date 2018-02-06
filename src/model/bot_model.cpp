@@ -40,6 +40,10 @@ void BotModel::assistedLevel() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::respondAuthRequest(QString response) {
+    qDebug() << FL_STRM << "called with response: " << response;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

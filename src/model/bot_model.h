@@ -40,6 +40,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
     Q_INVOKABLE virtual void assistedLevel();
+    Q_INVOKABLE virtual void respondAuthRequest(QString response);
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
@@ -47,6 +48,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
+    MODEL_PROP(QString, username, "Unknown")
+    //MODEL_PROP(bool, isAuthRequestPending, false)
     MODEL_PROP(FilamentColor, filament1Color, Unknown)
     MODEL_PROP(FilamentColor, filament2Color, Unknown)
     MODEL_PROP(int, filament1Percent, 0)
