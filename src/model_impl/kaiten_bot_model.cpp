@@ -17,6 +17,7 @@ class KaitenBotModel : public BotModel {
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
+    void firmwareUpdate(const Json::Value & firmware_info);
     void cancel();
     void pausePrint();
     void print(QString file_name);
@@ -74,6 +75,28 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<NetStateCallback> m_netStateCb;
+
+    class FirmwareUpdateNotification : public JsonRpcNotification {
+      public:
+        FirmwareUpdateNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->firmwareUpdate(MakerBot::SafeJson::get_obj(params, "firmware_info"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<FirmwareUpdateNotification> m_fwareUpNot;
+
+    class FirmwareUpdateCallBack : public JsonRpcCallback {
+      public:
+        FirmwareUpdateCallBack(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->firmwareUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<FirmwareUpdateCallBack> m_fwareUpCb;
 };
 
 void KaitenBotModel::cancel(){
@@ -182,7 +205,9 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_sysNot(new SystemNotification(this)),
         m_sysInfoCb(new SysInfoCallback(this)),
         m_netNot(new NetStateNotification(this)),
-        m_netStateCb(new NetStateCallback(this)) {
+        m_netStateCb(new NetStateCallback(this)),
+        m_fwareUpNot(new FirmwareUpdateNotification(this)),
+        m_fwareUpCb(new FirmwareUpdateCallBack(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -190,6 +215,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("system_notification", m_sysNot);
     conn->jsonrpc.addMethod("state_notification", m_sysNot);
     conn->jsonrpc.addMethod("network_state_change", m_netNot);
+    conn->jsonrpc.addMethod("firmware_updates_info_change", m_fwareUpNot);
+
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -254,6 +281,19 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
+}
+
+void KaitenBotModel::firmwareUpdate(const Json::Value &firmware_info) {
+    if(!firmware_info.empty()){
+        if(firmware_info.isObject()){
+            if(firmware_info["update_available"].asBool()) {
+                firmwareUpdateAvailableSet(true);
+                UPDATE_STRING_PROP(firmwareUpdateVersion, firmware_info["version"]);
+                UPDATE_STRING_PROP(firmwareUpdateReleaseDate, firmware_info["release_date"]);
+                UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, firmware_info["release_notes"]);
+            }
+        }
+    }
 }
 
 void KaitenBotModel::connected() {
