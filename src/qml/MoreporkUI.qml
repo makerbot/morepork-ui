@@ -342,13 +342,13 @@ ApplicationWindow {
                                 dismiss_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(viewReleaseNotes) {
+                                if(viewReleaseNotes == true || skipFirmwareUpdate == false) {
                                     viewReleaseNotes = false
                                     skipFirmwareUpdate = true
                                 }
-                                else if(!skipFirmwareUpdate) {
-                                    skipFirmwareUpdate = true
-                                }
+//                                else if(!skipFirmwareUpdate) {
+//                                    skipFirmwareUpdate = true
+//                                }
                                 else {
                                     skipFirmwareUpdate = false
                                 }
@@ -469,6 +469,7 @@ ApplicationWindow {
 
                         MouseArea {
                             anchors.fill: parent
+                            visible: skipFirmwareUpdate ? false : true
                             onClicked: {
                                 viewReleaseNotes = true
                             }
