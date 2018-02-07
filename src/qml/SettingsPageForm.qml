@@ -13,6 +13,7 @@ Item {
     property alias buttonFrench: buttonFrench
     property alias buttonItalian: buttonItalian
     property alias buttonAssistedLeveling: buttonAssistedLeveling
+    property alias buttonFirmwareUpdate: buttonFirmwareUpdate
 
     smooth: false
 
@@ -66,6 +67,13 @@ Item {
                     MoreporkButton {
                         id: buttonAssistedLeveling
                         buttonText.text: "Assisted Leveling"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+
+                    MoreporkButton {
+                        id: buttonFirmwareUpdate
+                        buttonText.text: "FIRMWARE UPDATE"
                     }
                 }
             }
@@ -236,6 +244,19 @@ Item {
                     font.weight: Font.Light
                     font.pixelSize: 21
                 }
+            }
+        }
+
+        //settingsSwipeView.index = 3
+        Item {
+            id: firmwareUpdateItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            FirmwareUpdatePage{
+
             }
         }
     }
