@@ -17,6 +17,7 @@ ApplicationWindow {
         }
     }
     property bool skipFirmwareUpdate: false
+    property bool viewReleaseNotes: false
 
     function setDrawerState(state) {
         topBar.imageDrawerArrow.visible = state
@@ -246,10 +247,6 @@ ApplicationWindow {
             id: firmwareUpdatePopup
             width: 800
             height: 480
-//            leftMargin: rootItem.rotation == 0 ? (parent.width - width)/2 : 0
-//            topMargin: rootItem.rotation == 0 ? (parent.height - height)/2 : 0
-//            rightMargin: rootItem.rotation == 180 ? (parent.width - width)/2 : 0
-//            bottomMargin: rootItem.rotation == 180 ? (parent.height - height)/2 : 0
             modal: true
             dim: false
             focus: true
@@ -273,7 +270,7 @@ ApplicationWindow {
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
                 width: 720
-                height: 275
+                height: skipFirmwareUpdate ? 200 : 275
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
@@ -321,7 +318,7 @@ ApplicationWindow {
                         Text {
                             id: dismiss_text
                             color: "#ffffff"
-                            text: "NOT NOW"
+                            text: viewReleaseNotes ? "CANCEL" : skipFirmwareUpdate ? "BACK" : "NOT NOW"
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -345,26 +342,14 @@ ApplicationWindow {
                                 dismiss_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(!skipFirmwareUpdate) {
-                                    basePopupItem.height = 200
-                                    authenticate_header_text.text = "CANCEL FIRMWARE UPDATING"
-                                    authenticate_description_text1.text = "Are you sure you want to cancel?"
-                                    authenticate_description_text2.visible = true
-                                    authenticate_description_text2.text = ""
-                                    emptyItem.visible = false
-                                    dismiss_text.text = "BACK"
-                                    update_text.text = "CONTINUE"
+                                if(viewReleaseNotes) {
+                                    viewReleaseNotes = false
+                                    skipFirmwareUpdate = true
+                                }
+                                else if(!skipFirmwareUpdate) {
                                     skipFirmwareUpdate = true
                                 }
                                 else {
-                                    basePopupItem.height = 275
-                                    authenticate_header_text.text = "NEW FIRMWARE AVAILABLE"
-                                    authenticate_description_text1.text = "A new version of the firmware is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
-                                    authenticate_description_text2.visible = true
-                                    authenticate_description_text2.text = "Tap to see the Release Notes"
-                                    emptyItem.visible = true
-                                    dismiss_text.text = "CANCEL"
-                                    update_text.text = "UPDATE"
                                     skipFirmwareUpdate = false
                                 }
                             }
@@ -383,7 +368,7 @@ ApplicationWindow {
                         Text {
                             id: update_text
                             color: "#ffffff"
-                            text: "UPDATE"
+                            text: skipFirmwareUpdate ? "CONTINUE" : "UPDATE"
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -406,15 +391,9 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 if(skipFirmwareUpdate) {
-                                    firmwareUpdatePopup.close()
-                                    basePopupItem.height = 275
-                                    authenticate_header_text.text = "NEW FIRMWARE AVAILABLE"
-                                    authenticate_description_text1.text = "A new version of the firmware is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
-                                    authenticate_description_text2.text = "Tap to see the Release Notes"
-                                    dismiss_text.text = "NOT NOW"
-                                    update_text.text = "UPDATE"
                                     skipFirmwareUpdate = false
-                                    emptyItem.visible = true
+                                    viewReleaseNotes = false
+                                    firmwareUpdatePopup.close()
                                 }
                                 else {
 
@@ -436,7 +415,7 @@ ApplicationWindow {
                     Text {
                         id: authenticate_header_text
                         color: "#cbcbcb"
-                        text: "NEW FIRMWARE AVAILABLE"
+                        text: viewReleaseNotes ? "FIRMWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES" : skipFirmwareUpdate ? "CANCEL FIRMWARE UPDATING" : "NEW FIRMWARE AVAILABLE"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
                         font.family: "Antennae"
@@ -449,13 +428,14 @@ ApplicationWindow {
                         width: 200
                         height: 10
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        visible: viewReleaseNotes ? false : skipFirmwareUpdate ? false : true
                     }
 
                     Text {
                         id: authenticate_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: "A new version of the firmware is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "Are you sure you want to cancel?" : "A new version of the firmware is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
@@ -470,12 +450,13 @@ ApplicationWindow {
                         width: 200
                         height: 10
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        visible: true
                     }
 
                     Text {
                         id: authenticate_description_text2
                         color: "#cbcbcb"
-                        text: "Tap to see the Release Notes"
+                        text: skipFirmwareUpdate ? "" : "Tap to see the Release Notes"
                         font.underline: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -484,14 +465,12 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap
                         font.family: "Antennae"
                         font.pixelSize: 18
+                        visible: viewReleaseNotes ? false : true
 
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                authenticate_header_text.text = "FIRMWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES"
-                                authenticate_description_text1.text = bot.firmwareUpdateReleaseNotes
-                                authenticate_description_text2.visible = false
-                                dismiss_text.text = "CANCEL"
+                                viewReleaseNotes = true
                             }
                         }
                     }
