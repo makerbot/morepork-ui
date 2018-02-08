@@ -19,6 +19,11 @@ ApplicationWindow {
     property bool skipFirmwareUpdate: false
     property bool viewReleaseNotes: false
 
+    onSkipFirmwareUpdateChanged: {
+        update_rectangle.color = "#ffffff"
+        update_text.color = "000000"
+    }
+
     function setDrawerState(state) {
         topBar.imageDrawerArrow.visible = state
         activeDrawer.interactive = state
@@ -264,7 +269,10 @@ ApplicationWindow {
             exit: Transition {
                 NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
             }
-
+            onOpened: {
+                update_rectangle.color = "#ffffff"
+                update_text.color = "#000000"
+            }
             Rectangle {
                 id: basePopupItem
                 color: "#000000"
@@ -336,6 +344,8 @@ ApplicationWindow {
                             onPressed: {
                                 dismiss_text.color = "#000000"
                                 dismiss_rectangle.color = "#ffffff"
+                                update_text.color = "#ffffff"
+                                update_rectangle.color = "#00000000"
                             }
                             onReleased: {
                                 dismiss_text.color = "#ffffff"
@@ -346,9 +356,6 @@ ApplicationWindow {
                                     viewReleaseNotes = false
                                     skipFirmwareUpdate = true
                                 }
-//                                else if(!skipFirmwareUpdate) {
-//                                    skipFirmwareUpdate = true
-//                                }
                                 else {
                                     skipFirmwareUpdate = false
                                 }
@@ -396,7 +403,11 @@ ApplicationWindow {
                                     firmwareUpdatePopup.close()
                                 }
                                 else {
-
+                                    mainSwipeView.swipeToItem(3)
+                                    settingsPage.settingsSwipeView.swipeToItem(3)
+                                    skipFirmwareUpdate = false
+                                    viewReleaseNotes = false
+                                    firmwareUpdatePopup.close()
                                 }
                             }
                         }

@@ -255,7 +255,7 @@ Item {
             smooth: false
             visible: false
 
-            FirmwareUpdatePage{
+            FirmwareUpdatePage {
 
             }
         }

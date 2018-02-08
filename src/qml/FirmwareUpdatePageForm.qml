@@ -19,6 +19,7 @@ Item {
         y: 120
         width: 350
         height: 150
+        anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
 
         Text {
