@@ -28,7 +28,7 @@ class KaitenBotModel : public BotModel {
     void assistedLevel();
     static bool isAuthRequestPending;
     void respondAuthRequest(QString response);
-    static std::shared_ptr<KaitenBotModel> authResp;
+    static std::shared_ptr<JsonRpcMethod::Response> authResp;
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -85,7 +85,7 @@ class KaitenBotModel : public BotModel {
             void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
                 if(!KaitenBotModel::authResp) {
                     m_bot->authRequestUpdate(MakerBot::SafeJson::get_obj(params, "request"));
-                    authResp = static_cast<Response>(response);
+                    authResp = response;
                 }
             }
       private:
@@ -98,7 +98,7 @@ void KaitenBotModel::respondAuthRequest(QString response){
     if(KaitenBotModel::authResp) {
         Json::Value json_params(Json::objectValue);                                      
         json_params["answer"] = Json::Value(response.toStdString());
-        static_cast<JsonRpcMethod::Response>(KaitenBotModel::authResp)->sendResult(json_params);
+        KaitenBotModel::authResp->sendResult(json_params);
         KaitenBotModel::authResp = nullptr;
         isAuthRequestPending = false;
         // isAuthPendingReset();
