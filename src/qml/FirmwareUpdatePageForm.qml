@@ -1,6 +1,8 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     id: item1
@@ -88,6 +90,7 @@ Item {
     states: [
         State {
             name: "firmware_update_available"
+            when: isfirmwareUpdateAvailable
 
             PropertyChanges {
                 target: main_status_text
@@ -120,6 +123,8 @@ Item {
         },
         State {
             name: "no_firmware_update_available"
+            when: !isfirmwareUpdateAvailable
+
             PropertyChanges {
                 target: main_status_text
                 text: "NO NEWER VERSION AVAILABLE"
@@ -156,6 +161,7 @@ Item {
         },
         State {
             name: "firmware_update_failed"
+
             PropertyChanges {
                 target: main_status_text
                 text: "FIRMWARE DOWNLOAD FAILED"
@@ -195,15 +201,48 @@ Item {
         },
         State {
             name: "updating_firmware"
+            when: bot.process.stateType == ProcessType.FirmwareUpdate
 
             PropertyChanges {
                 target: main_status_text
-                text: "UPDATING FIRMWARE"
+                text: {
+                    switch(bot.process.stateType)
+                    {
+                    case ProcessStateType.TransferringFirmware:
+                        "UPDATING FIRMWARE [1/3]"
+                        break;
+                    case ProcessStateType.VerifyingFirmware:
+                        "UPDATING FIRMWARE [2/3]"
+                        break;
+                    case ProcessStateType.InstallingFirmware:
+                        "UPDATING FIRMWARE [3/3]"
+                        break;
+                    default:
+                        "CHECKING FOR UPDATES"
+                        break;
+                    }
+                }
             }
 
             PropertyChanges {
                 target: sub_status_text
-                text: "TRANSFERRING FILE..."
+                text: {
+                    switch(bot.process.stateType)
+                    {
+                    case ProcessStateType.TransferringFirmware:
+                        "TRANSFERRING FILE..."
+                        break;
+                    case ProcessStateType.VerifyingFirmware:
+                        "VERIFYING FILE..."
+                        break;
+                    case ProcessStateType.InstallingFirmware:
+                        "INSTALLING..."
+                        break;
+                    default:
+                        "PLEASE WAIT A MOMENT"
+                        break;
+                    }
+                }
             }
 
             PropertyChanges {

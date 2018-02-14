@@ -11,13 +11,12 @@
 #include "local_jsonrpc.h"
 #include "error_utils.h"
 
-
 class KaitenBotModel : public BotModel {
   public:
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
-    void firmwareUpdate(const Json::Value & firmware_info);
+    void firmwareUpdateNotif(const Json::Value & firmware_info);
     void cancel();
     void pausePrint();
     void print(QString file_name);
@@ -26,6 +25,7 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
+    void firmwareUpdateCheck(QString dont_force_check);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -80,7 +80,7 @@ class KaitenBotModel : public BotModel {
       public:
         FirmwareUpdateNotification(KaitenBotModel * bot) : m_bot(bot) {}
         void invoke(const Json::Value &params) override {
-            m_bot->firmwareUpdate(MakerBot::SafeJson::get_obj(params, "firmware_info"));
+            m_bot->firmwareUpdateNotif(params);
         }
       private:
         KaitenBotModel *m_bot;
@@ -91,7 +91,7 @@ class KaitenBotModel : public BotModel {
       public:
         FirmwareUpdateCallBack(KaitenBotModel * bot) : m_bot(bot) {}
         void response(const Json::Value & resp) override {
-            m_bot->firmwareUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+            m_bot->firmwareUpdateNotif(MakerBot::SafeJson::get_obj(resp, "result"));
         }
       private:
         KaitenBotModel *m_bot;
@@ -200,6 +200,19 @@ void KaitenBotModel::assistedLevel(){
     }
 }
 
+void KaitenBotModel::firmwareUpdateCheck(QString dont_force_check){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["only_notify"] = Json::Value(dont_force_check.toStdString());
+        conn->jsonrpc.invoke("update_available_firmware", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -215,7 +228,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("system_notification", m_sysNot);
     conn->jsonrpc.addMethod("state_notification", m_sysNot);
     conn->jsonrpc.addMethod("network_state_change", m_netNot);
-    conn->jsonrpc.addMethod("firmware_updates_info_change", m_fwareUpNot);
+    conn->jsonrpc.addMethod("firware_updates_info_change", m_fwareUpNot);
 
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
@@ -283,15 +296,13 @@ void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
 }
 
-void KaitenBotModel::firmwareUpdate(const Json::Value &firmware_info) {
-    if(!firmware_info.empty()){
-        if(firmware_info.isObject()){
-            if(firmware_info["update_available"].asBool()) {
-                firmwareUpdateAvailableSet(true);
-                UPDATE_STRING_PROP(firmwareUpdateVersion, firmware_info["version"]);
-                UPDATE_STRING_PROP(firmwareUpdateReleaseDate, firmware_info["release_date"]);
-                UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, firmware_info["release_notes"]);
-            }
+void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
+    if(!params.empty()){
+        if(params["update_available"].asBool()) {
+            firmwareUpdateAvailableSet(true);
+            UPDATE_STRING_PROP(firmwareUpdateVersion, params["version"]);
+            UPDATE_STRING_PROP(firmwareUpdateReleaseDate, params["release_date"]);
+            UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, params["release_notes"]);
         }
     }
 }

@@ -13,7 +13,9 @@ ApplicationWindow {
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
     onIsfirmwareUpdateAvailableChanged: {
         if(isfirmwareUpdateAvailable) {
-            firmwareUpdatePopup.open()
+            if(settingsPage.settingsSwipeView.currentIndex != 3) {
+                firmwareUpdatePopup.open()
+            }
         }
     }
     property bool skipFirmwareUpdate: false
@@ -144,7 +146,6 @@ ApplicationWindow {
                     anchors.fill: parent
 
                     mainMenuIcon_print.mouseArea.onClicked: {
-                        firmwareUpdatePopup.open()
                         mainSwipeView.swipeToItem(1)
                     }
 
@@ -403,8 +404,11 @@ ApplicationWindow {
                                     firmwareUpdatePopup.close()
                                 }
                                 else {
-                                    mainSwipeView.swipeToItem(3)
-                                    settingsPage.settingsSwipeView.swipeToItem(3)
+                                    if(mainSwipeView.currentIndex != 3
+                                    || settingsPage.settingsSwipeView.currentIndex != 3) {
+                                        mainSwipeView.swipeToItem(3)
+                                        settingsPage.settingsSwipeView.swipeToItem(3)
+                                    }
                                     skipFirmwareUpdate = false
                                     viewReleaseNotes = false
                                     firmwareUpdatePopup.close()
