@@ -41,7 +41,7 @@ ApplicationWindow {
         currentItem = currentItem_
     }
 
-    function goBack(){
+    function goBack() {
         if(currentItem.hasAltBack){
             currentItem.altBack()
         }
@@ -50,8 +50,7 @@ ApplicationWindow {
         }
     }
 
-    function disableDrawer()
-    {
+    function disableDrawer() {
         topBar.imageDrawerArrow.visible = false
         if(activeDrawer == printPage.printingDrawer
                 || activeDrawer == materialPage.materialPageDrawer
@@ -72,7 +71,6 @@ ApplicationWindow {
         Rectangle {
             id: rectangle
             color: "#000000"
-            //visible: false
             smooth: false
             z: -1
             anchors.fill: parent
@@ -86,8 +84,7 @@ ApplicationWindow {
             dim: false
             opacity: 0
             interactive: mainSwipeView.currentIndex
-            onOpened:
-            {
+            onOpened: {
                 position = 0
                 goBack()
                 close()
@@ -116,7 +113,6 @@ ApplicationWindow {
                 x: backSwipe.position * mainSwipeView.width * 1.5
             }
             property alias materialPage: materialPage
-            //visible: false
             smooth: false
 
             function swipeToItem(itemToDisplayDefaultIndex) {
@@ -146,7 +142,6 @@ ApplicationWindow {
                     anchors.fill: parent
 
                     mainMenuIcon_print.mouseArea.onClicked: {
-                        firmwareUpdatePopup.open()
                         mainSwipeView.swipeToItem(1)
                     }
 

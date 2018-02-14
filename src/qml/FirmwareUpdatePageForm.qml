@@ -10,10 +10,6 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
 
     Rectangle {
         id: loading_icon
