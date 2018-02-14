@@ -146,6 +146,7 @@ ApplicationWindow {
                     anchors.fill: parent
 
                     mainMenuIcon_print.mouseArea.onClicked: {
+                        firmwareUpdatePopup.open()
                         mainSwipeView.swipeToItem(1)
                     }
 
@@ -327,7 +328,7 @@ ApplicationWindow {
                         Text {
                             id: dismiss_text
                             color: "#ffffff"
-                            text: viewReleaseNotes ? "CANCEL" : skipFirmwareUpdate ? "BACK" : "NOT NOW"
+                            text: skipFirmwareUpdate ? "SKIP" : "NOT NOW"
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -353,12 +354,13 @@ ApplicationWindow {
                                 dismiss_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(viewReleaseNotes == true || skipFirmwareUpdate == false) {
+                                if(skipFirmwareUpdate) {
+                                    firmwareUpdatePopup.close()
                                     viewReleaseNotes = false
-                                    skipFirmwareUpdate = true
+                                    skipFirmwareUpdate = false
                                 }
                                 else {
-                                    skipFirmwareUpdate = false
+                                    skipFirmwareUpdate = true
                                 }
                             }
                         }
@@ -376,7 +378,7 @@ ApplicationWindow {
                         Text {
                             id: update_text
                             color: "#ffffff"
-                            text: skipFirmwareUpdate ? "CONTINUE" : "UPDATE"
+                            text: "UPDATE"
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -398,21 +400,14 @@ ApplicationWindow {
                                 update_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(skipFirmwareUpdate) {
-                                    skipFirmwareUpdate = false
-                                    viewReleaseNotes = false
-                                    firmwareUpdatePopup.close()
+                                if(mainSwipeView.currentIndex != 3
+                                || settingsPage.settingsSwipeView.currentIndex != 3) {
+                                    mainSwipeView.swipeToItem(3)
+                                    settingsPage.settingsSwipeView.swipeToItem(3)
                                 }
-                                else {
-                                    if(mainSwipeView.currentIndex != 3
-                                    || settingsPage.settingsSwipeView.currentIndex != 3) {
-                                        mainSwipeView.swipeToItem(3)
-                                        settingsPage.settingsSwipeView.swipeToItem(3)
-                                    }
-                                    skipFirmwareUpdate = false
-                                    viewReleaseNotes = false
-                                    firmwareUpdatePopup.close()
-                                }
+                                skipFirmwareUpdate = false
+                                viewReleaseNotes = false
+                                firmwareUpdatePopup.close()
                             }
                         }
                     }
@@ -430,7 +425,7 @@ ApplicationWindow {
                     Text {
                         id: authenticate_header_text
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? "FIRMWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES" : skipFirmwareUpdate ? "CANCEL FIRMWARE UPDATING" : "NEW FIRMWARE AVAILABLE"
+                        text: viewReleaseNotes ? "SOFTWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES" : skipFirmwareUpdate ? "SKIP SOFTWARE UPDATE?" : "SOFTWARE UPDATE AVAILABLE"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
                         font.family: "Antennae"
@@ -450,7 +445,7 @@ ApplicationWindow {
                         id: authenticate_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "Are you sure you want to cancel?" : "A new version of the firmware is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "We recommend using the most up to date software for your printer" : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
@@ -471,7 +466,7 @@ ApplicationWindow {
                     Text {
                         id: authenticate_description_text2
                         color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? "" : "Tap to see the Release Notes"
+                        text: skipFirmwareUpdate ? "" : "Tap to see Release Notes"
                         font.underline: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter

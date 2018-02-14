@@ -26,6 +26,7 @@ class KaitenBotModel : public BotModel {
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
     void firmwareUpdateCheck(QString dont_force_check);
+    void installFirmware();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -212,6 +213,17 @@ void KaitenBotModel::firmwareUpdateCheck(QString dont_force_check){
         qWarning() << FFL_STRM << e.what();
     }
 }
+
+void KaitenBotModel::installFirmware(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("download_and_install_firmware", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+} 
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),

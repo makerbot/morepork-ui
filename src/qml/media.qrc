@@ -42,6 +42,9 @@
 	<file alias="check_mark_small.png">images/check_mark_small.png</file>
 	<file alias="info_icon_small.png">images/info_icon_small.png</file>
 	<file alias="check_circle_small.png">images/check_circle_small.png</file>
+	<file alias="firmware_update_available.png">images/firmware_update_available.png</file>
+	<file alias="firmware_update_error.png">images/firmware_update_error.png</file>
+	<file alias="firmware_update_success.png">images/firmware_update_success.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

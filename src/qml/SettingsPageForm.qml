@@ -73,7 +73,7 @@ Item {
 
                     MoreporkButton {
                         id: buttonFirmwareUpdate
-                        buttonText.text: "FIRMWARE UPDATE"
+                        buttonText.text: "SOFTWARE UPDATE"
                     }
                 }
             }

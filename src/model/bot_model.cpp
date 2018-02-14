@@ -44,6 +44,9 @@ void BotModel::firmwareUpdateCheck(QString dont_force_check) {
     qDebug() << FL_STRM << "called with parameter: " << dont_force_check;
 }
 
+void BotModel::installFirmware() {
+    qDebug() << FL_STRM << "called";
+}
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
