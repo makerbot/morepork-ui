@@ -138,7 +138,7 @@ ApplicationWindow {
                     anchors.fill: parent
 
                     mainMenuIcon_print.mouseArea.onClicked: {
-//                        authenticatePrinterPopup.open()
+                        //authenticatePrinterPopup.open()
                         mainSwipeView.swipeToItem(1)
                     }
 

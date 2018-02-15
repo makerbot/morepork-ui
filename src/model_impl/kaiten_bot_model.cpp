@@ -26,9 +26,9 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
-    static bool isAuthRequestPending;
+    //static bool isAuthRequestPending;
+    std::shared_ptr<JsonRpcMethod::Response> authResp;
     void respondAuthRequest(QString response);
-    static std::shared_ptr<JsonRpcMethod::Response> authResp;
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -83,7 +83,7 @@ class KaitenBotModel : public BotModel {
       public:
         AuthRequestMethod(KaitenBotModel * bot) : m_bot(bot) {}
             void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
-                if(!KaitenBotModel::authResp) {
+                if(!authResp) {
                     m_bot->authRequestUpdate(MakerBot::SafeJson::get_obj(params, "request"));
                     authResp = response;
                 }
@@ -94,14 +94,24 @@ class KaitenBotModel : public BotModel {
     std::shared_ptr<AuthRequestMethod> m_authReq;
 };
 
+void KaitenBotModel::authRequestUpdate(const Json::Value &request){
+    if(!request.isObject()) {
+        reset();
+        return;
+    }
+    //isAuthRequestPending = true;
+    isAuthRequestPendingSet(true);
+    UPDATE_STRING_PROP(username, request["username"]);
+}
+
 void KaitenBotModel::respondAuthRequest(QString response){
-    if(KaitenBotModel::authResp) {
+    if(authResp) {
         Json::Value json_params(Json::objectValue);                                      
         json_params["answer"] = Json::Value(response.toStdString());
-        KaitenBotModel::authResp->sendResult(json_params);
-        KaitenBotModel::authResp = nullptr;
-        isAuthRequestPending = false;
-        // isAuthPendingReset();
+        authResp->sendResult(json_params);
+        authResp = nullptr;
+        //isAuthRequestPending = false;
+        isAuthRequestPendingReset();
     }
 }
 
@@ -285,16 +295,6 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
-}
-
-void KaitenBotModel::authRequestUpdate(const Json::Value &request) {
-    if(!request.isObject()) {
-        reset();
-        return;
-    }
-    isAuthRequestPending = true;
-    // isAuthRequestPendingSet(true);
-    UPDATE_STRING_PROP(username, request["username"]);
 }
 
 void KaitenBotModel::connected() {

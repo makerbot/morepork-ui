@@ -49,7 +49,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QString, username, "Unknown")
-    //MODEL_PROP(bool, isAuthRequestPending, false)
+    MODEL_PROP(bool, isAuthRequestPending, false)
     MODEL_PROP(FilamentColor, filament1Color, Unknown)
     MODEL_PROP(FilamentColor, filament2Color, Unknown)
     MODEL_PROP(int, filament1Percent, 0)
