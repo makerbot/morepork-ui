@@ -62,8 +62,8 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: bot.process.stateType == ProcessStateType.Completed
-                        || bot.process.stateType == ProcessStateType.Failed ? 225 : 100
+                height: bot.process.stateType == ProcessStateType.Completed ? 245 :
+                        bot.process.stateType == ProcessStateType.Failed ? 210 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
