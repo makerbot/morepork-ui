@@ -168,7 +168,7 @@ Item {
                 RoundedButton {
                     id: print_again_button
                     buttonWidth: 200
-                    buttonHeight: 40
+                    buttonHeight: 45
                     label: "PRINT AGAIN"
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
@@ -181,7 +181,7 @@ Item {
                 RoundedButton {
                     id: start_next_print_button
                     buttonWidth: 300
-                    buttonHeight: 40
+                    buttonHeight: 45
                     label: "START NEXT PRINT"
                     visible: bot.process.stateType == ProcessStateType.Completed
                 }
@@ -189,7 +189,7 @@ Item {
                 RoundedButton {
                     id: done_button
                     buttonWidth: 100
-                    buttonHeight: 40
+                    buttonHeight: 45
                     label: "DONE"
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed

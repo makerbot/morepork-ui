@@ -24,58 +24,47 @@ Item {
         border.width: 3
         border.color: "#484848"
 
-        Rectangle {
-            id: progress_circle
-            width: 224
-            height: 224
-            color: "#00000000"
-            radius: 112
+        property int percent: bot.process.printPercentage
+        property int printState: bot.process.stateType
+        property string progressColor:
+            switch(printState)
+            {
+            case ProcessStateType.Completed:
+                "#3183AF"
+                break;
+            case ProcessStateType.Failed:
+                "#F79125"
+                break;
+            default:
+                "#FFFFFF"
+                break;
+            }
+
+        onPrintStateChanged: canvas.requestPaint()
+        onPercentChanged: canvas.requestPaint()
+        Canvas {
+            id: canvas
+            visible: false
             antialiasing: false
             smooth: false
-            visible: false
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            property int percent: bot.process.printPercentage
-            property int printState: bot.process.stateType
-            property string progressColor:
-                switch(printState)
-                {
-                case ProcessStateType.Completed:
-                    "#3183AF"
-                    break;
-                case ProcessStateType.Failed:
-                    "#F79125"
-                    break;
-                default:
-                    "#FFFFFF"
-                    break;
-                }
+            rotation : -90
+            anchors.fill: parent
+            onPaint:
+            {
+                var context = getContext("2d");
+                context.reset();
 
-            onPrintStateChanged: canvas.requestPaint()
-            onPercentChanged: canvas.requestPaint()
-            Canvas {
-                id: canvas
-                antialiasing: false
-                smooth: false
-                rotation : -90
-                anchors.fill: parent
-                onPaint:
-                {
-                    var context = getContext("2d");
-                    context.reset();
+                var centreX = parent.width*0.5;
+                var centreY = parent.height*0.5;
 
-                    var centreX = parent.width*0.5;
-                    var centreY = parent.height*0.5;
-
-                    context.beginPath();
-                    //0.06283185 = PI*2/100
-                    context.arc(centreX, centreY, parent.width*0.5-5, 0,
-                                parent.percent*0.06283185, false);
-                    context.lineWidth = 10;
-                    context.lineCap = "round";
-                    context.strokeStyle = parent.progressColor;
-                    context.stroke()
-                }
+                context.beginPath();
+                //0.06283185 = PI*2/100
+                context.arc(centreX, centreY, parent.width*0.5-15, 0,
+                            parent.percent*0.06283185, false);
+                context.lineWidth = 10;
+                context.lineCap = "round";
+                context.strokeStyle = parent.progressColor;
+                context.stroke()
             }
         }
 
@@ -212,7 +201,7 @@ Item {
             }
 
             PropertyChanges {
-                target: progress_circle
+                target: canvas
                 visible: true
             }
 
@@ -246,7 +235,7 @@ Item {
             }
 
             PropertyChanges {
-                target: progress_circle
+                target: canvas
                 visible: false
             }
 
@@ -279,7 +268,7 @@ Item {
             }
 
             PropertyChanges {
-                target: progress_circle
+                target: canvas
                 visible: true
             }
             PropertyChanges {
@@ -302,7 +291,7 @@ Item {
             }
 
             PropertyChanges {
-                target: progress_circle
+                target: canvas
                 visible: true
             }
             PropertyChanges {
