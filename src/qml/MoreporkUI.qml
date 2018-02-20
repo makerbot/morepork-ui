@@ -94,7 +94,6 @@ ApplicationWindow {
         Rectangle {
             id: rectangle
             color: "#000000"
-            //visible: false
             smooth: false
             z: -1
             anchors.fill: parent
@@ -134,7 +133,6 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.topMargin: topBar.barHeight
             interactive: false
-            //visible: false
             transform: Translate {
                 x: backSwipe.position * mainSwipeView.width * 1.5
             }
