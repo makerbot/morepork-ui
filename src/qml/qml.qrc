@@ -44,5 +44,7 @@
         <file>RoundedButtonForm.qml</file>
         <file>SortDrawer.qml</file>
         <file>SortDrawerForm.qml</file>
+        <file>MaterialIcon.qml</file>
+        <file>MaterialIconForm.qml</file>
     </qresource>
 </RCC>
