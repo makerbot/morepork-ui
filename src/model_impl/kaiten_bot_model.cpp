@@ -304,6 +304,9 @@ void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
             UPDATE_STRING_PROP(firmwareUpdateReleaseDate, params["release_date"]);
             UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, params["release_notes"]);
         }
+        else {
+            firmwareUpdateAvailableReset();
+        }
     }
 }
 
