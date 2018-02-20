@@ -356,6 +356,7 @@ ApplicationWindow {
                                 }
                                 else {
                                     skipFirmwareUpdate = true
+                                    viewReleaseNotes = false
                                 }
                             }
                         }

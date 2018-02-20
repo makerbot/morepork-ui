@@ -10,6 +10,8 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
+    property alias button1: button1
+    property alias button2: button2
 
     Rectangle {
         id: loading_icon
@@ -75,10 +77,9 @@ Item {
         visible: false
     }
 
-    ColumnLayout {
+    Item {
         id: columnLayout
         x: 400
-        y: 120
         width: 350
         height: 150
         anchors.verticalCenterOffset: -20
@@ -87,6 +88,9 @@ Item {
         Text {
             id: main_status_text
             text: "CHECKING FOR UPDATES"
+            width: parent.width
+            anchors.top: parent.top
+            anchors.topMargin: 0
             wrapMode: Text.WordWrap
             font.letterSpacing: 3
             color: "#cbcbcb"
@@ -94,13 +98,15 @@ Item {
             font.weight: Font.Bold
             font.capitalization: Font.AllUppercase
             font.pixelSize: 20
-            Layout.fillWidth: true
             visible: true
         }
 
         Text {
             id: sub_status_text
             text: "PLEASE WAIT A MOMENT"
+            width: parent.width
+            anchors.top: parent.top
+            anchors.topMargin: 75
             font.wordSpacing: 1
             font.letterSpacing: 2
             color: "#cbcbcb"
@@ -108,7 +114,6 @@ Item {
             font.weight: Font.Light
             font.capitalization: Font.AllUppercase
             font.pixelSize: 18
-            Layout.fillWidth: true
             wrapMode: Text.WordWrap
             visible: true
         }
@@ -123,6 +128,8 @@ Item {
             font.capitalization: Font.AllUppercase
             font.pixelSize: 18
             visible: false
+            anchors.top: parent.top
+            anchors.topMargin: 0
 
             MouseArea {
                 id: viewReleaseNotesMouseArea
@@ -137,14 +144,18 @@ Item {
         RoundedButton {
             id: button1
             buttonWidth: 265
-            buttonHeight: 45
+            buttonHeight: 50
             label: "TEXT"
             visible: false
+            anchors.top: parent.top
+            anchors.topMargin: 0
         }
 
         RoundedButton {
             id: button2
             visible: false
+            anchors.top: parent.top
+            anchors.topMargin: 0
         }
     }
     states: [
@@ -168,32 +179,37 @@ Item {
             PropertyChanges {
                 target: main_status_text
                 text: "NEW SOFTWARE AVAILABLE"
+                anchors.topMargin: 30
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: "A NEW VERSION OF SOFTWARE IS AVAILABLE. DO YOU WANT TO UPDATE TO THE MOST RECENT VERSION " + bot.firmwareUpdateVersion + " ?"
+                anchors.topMargin: 110
             }
 
             PropertyChanges {
                 target: release_notes_text
+                anchors.topMargin: 220
                 visible: true
             }
 
             PropertyChanges {
                 target: button1
+                anchors.topMargin: 265
                 buttonWidth: 265
-                buttonHeight: 45
+                buttonHeight: 50
                 label: "INSTALL UPDATE"
                 visible: true
-                button_mouseArea.onClicked: {
-                    bot.installFirmware()
-                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
             }
 
             PropertyChanges {
                 target: columnLayout
-                width: 315
                 height: 335
             }
         },
@@ -217,11 +233,13 @@ Item {
             PropertyChanges {
                 target: main_status_text
                 text: "SOFTWARE IS UP TO DATE"
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: "NO UPDATE IS REQUIRED AT THIS TIME."
+                anchors.topMargin: 100
             }
 
             PropertyChanges {
@@ -232,12 +250,10 @@ Item {
             PropertyChanges {
                 target: button1
                 buttonWidth: 75
-                buttonHeight: 45
+                buttonHeight: 50
                 label: "OK"
                 visible: true
-                button_mouseArea.onClicked: {
-                    goBack()
-                }
+                anchors.topMargin: 180
             }
 
             PropertyChanges {
@@ -247,7 +263,6 @@ Item {
 
             PropertyChanges {
                 target: columnLayout
-                width: 350
                 height: 250
             }
         },
@@ -270,11 +285,13 @@ Item {
             PropertyChanges {
                 target: main_status_text
                 text: "SOFTWARE DOWNLOAD FAILED"
+                anchors.topMargin: 20
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: "Make sure your printer is connected to the internet and please try again."
+                anchors.topMargin: 100
             }
 
             PropertyChanges {
@@ -286,27 +303,22 @@ Item {
                 target: button1
                 label: "TRY AGAIN"
                 buttonWidth: 175
-                buttonHeight: 45
+                buttonHeight: 50
                 visible: true
-                button_mouseArea.onClicked: {
-                    bot.firmwareUpdateCheck("False")
-                }
+                anchors.topMargin: 190
             }
 
             PropertyChanges {
                 target: button2
                 label: "BACK TO MENU"
                 buttonWidth: 240
-                buttonHeight: 45
+                buttonHeight: 50
                 visible: true
-                button_mouseArea.onClicked: {
-                    settingsSwipeView.swipeToItem(0)
-                }
+                anchors.topMargin: 260
             }
 
             PropertyChanges {
                 target: columnLayout
-                width: 315
                 height: 290
             }
         },
@@ -343,6 +355,7 @@ Item {
                         break;
                     }
                 }
+                anchors.topMargin: 0
             }
 
             PropertyChanges {
@@ -364,6 +377,7 @@ Item {
                         break;
                     }
                 }
+                anchors.topMargin: 75
             }
 
             PropertyChanges {
@@ -383,7 +397,6 @@ Item {
 
             PropertyChanges {
                 target: columnLayout
-                width: 350
                 height: 150
             }
         }

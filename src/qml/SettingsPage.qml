@@ -11,7 +11,7 @@ SettingsPageForm {
     }
 
     buttonFirmwareUpdate.onClicked: {
-        bot.firmwareUpdateCheck("False")
+        bot.firmwareUpdateCheck(false)
         settingsSwipeView.swipeToItem(3)
     }
 

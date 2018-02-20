@@ -40,7 +40,7 @@ void BotModel::assistedLevel() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::firmwareUpdateCheck(QString dont_force_check) {
+void BotModel::firmwareUpdateCheck(bool dont_force_check) {
     qDebug() << FL_STRM << "called with parameter: " << dont_force_check;
 }
 

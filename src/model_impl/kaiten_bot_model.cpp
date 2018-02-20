@@ -25,7 +25,7 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
-    void firmwareUpdateCheck(QString dont_force_check);
+    void firmwareUpdateCheck(bool dont_force_check);
     void installFirmware();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
@@ -87,17 +87,6 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<FirmwareUpdateNotification> m_fwareUpNot;
-
-    class FirmwareUpdateCallBack : public JsonRpcCallback {
-      public:
-        FirmwareUpdateCallBack(KaitenBotModel * bot) : m_bot(bot) {}
-        void response(const Json::Value & resp) override {
-            m_bot->firmwareUpdateNotif(MakerBot::SafeJson::get_obj(resp, "result"));
-        }
-      private:
-        KaitenBotModel *m_bot;
-    };
-    std::shared_ptr<FirmwareUpdateCallBack> m_fwareUpCb;
 };
 
 void KaitenBotModel::cancel(){
@@ -201,12 +190,12 @@ void KaitenBotModel::assistedLevel(){
     }
 }
 
-void KaitenBotModel::firmwareUpdateCheck(QString dont_force_check){
+void KaitenBotModel::firmwareUpdateCheck(bool dont_force_check){
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["only_notify"] = Json::Value(dont_force_check.toStdString());
+        json_params["only_notify"] = Json::Value(dont_force_check);
         conn->jsonrpc.invoke("update_available_firmware", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
@@ -231,8 +220,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_sysInfoCb(new SysInfoCallback(this)),
         m_netNot(new NetStateNotification(this)),
         m_netStateCb(new NetStateCallback(this)),
-        m_fwareUpNot(new FirmwareUpdateNotification(this)),
-        m_fwareUpCb(new FirmwareUpdateCallBack(this)) {
+        m_fwareUpNot(new FirmwareUpdateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 

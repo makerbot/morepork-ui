@@ -40,7 +40,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
     Q_INVOKABLE virtual void assistedLevel();
-    Q_INVOKABLE virtual void firmwareUpdateCheck(QString dont_force_check);
+    Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
     Q_INVOKABLE virtual void installFirmware();
   private:
     Q_OBJECT
