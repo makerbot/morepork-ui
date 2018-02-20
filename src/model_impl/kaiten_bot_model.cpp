@@ -26,8 +26,7 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
-    //static bool isAuthRequestPending;
-    std::shared_ptr<JsonRpcMethod::Response> authResp;
+    std::shared_ptr<JsonRpcMethod::Response> m_authResp;
     void respondAuthRequest(QString response);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
@@ -83,9 +82,9 @@ class KaitenBotModel : public BotModel {
       public:
         AuthRequestMethod(KaitenBotModel * bot) : m_bot(bot) {}
             void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
-                if(!authResp) {
-                    m_bot->authRequestUpdate(MakerBot::SafeJson::get_obj(params, "request"));
-                    authResp = response;
+                if(!m_bot->m_authResp) {
+                    m_bot->authRequestUpdate(params);
+                    m_bot->m_authResp = response;
                 }
             }
       private:
@@ -99,18 +98,16 @@ void KaitenBotModel::authRequestUpdate(const Json::Value &request){
         reset();
         return;
     }
-    //isAuthRequestPending = true;
     isAuthRequestPendingSet(true);
     UPDATE_STRING_PROP(username, request["username"]);
 }
 
 void KaitenBotModel::respondAuthRequest(QString response){
-    if(authResp) {
+    if(m_authResp) {
         Json::Value json_params(Json::objectValue);                                      
         json_params["answer"] = Json::Value(response.toStdString());
-        authResp->sendResult(json_params);
-        authResp = nullptr;
-        //isAuthRequestPending = false;
+        m_authResp->sendResult(json_params);
+        m_authResp = nullptr;
         isAuthRequestPendingReset();
     }
 }
@@ -303,6 +300,7 @@ void KaitenBotModel::connected() {
         "get_system_information", Json::Value(), m_sysInfoCb);
     m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
     // TODO: Wait for callbacks before setting state to connected
+    m_conn->jsonrpc.invoke("register_lcd", Json::Value(), std::weak_ptr<JsonRpcCallback>());
     stateSet(ConnectionState::Connected);
 }
 

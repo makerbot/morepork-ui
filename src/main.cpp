@@ -26,7 +26,6 @@
 #include "parsed_qml_enums.h"
 #include "storage/storage.h"
 
-
 int main(int argc, char ** argv) {
     QGuiApplication qapp(argc, argv);
 
