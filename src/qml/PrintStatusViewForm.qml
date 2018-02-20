@@ -62,8 +62,8 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: bot.process.stateType == ProcessStateType.Completed
-                        || bot.process.stateType == ProcessStateType.Failed ? 225 : 100
+                height: bot.process.stateType == ProcessStateType.Completed ? 245 :
+                        bot.process.stateType == ProcessStateType.Failed ? 210 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -168,7 +168,7 @@ Item {
                 RoundedButton {
                     id: print_again_button
                     buttonWidth: 200
-                    buttonHeight: 40
+                    buttonHeight: 45
                     label: "PRINT AGAIN"
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
@@ -181,7 +181,7 @@ Item {
                 RoundedButton {
                     id: start_next_print_button
                     buttonWidth: 300
-                    buttonHeight: 40
+                    buttonHeight: 45
                     label: "START NEXT PRINT"
                     visible: bot.process.stateType == ProcessStateType.Completed
                 }
@@ -189,7 +189,7 @@ Item {
                 RoundedButton {
                     id: done_button
                     buttonWidth: 100
-                    buttonHeight: 40
+                    buttonHeight: 45
                     label: "DONE"
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed

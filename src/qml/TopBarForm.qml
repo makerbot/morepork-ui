@@ -100,7 +100,7 @@ Item {
             id: text_back
             width: 200
             color: "#a0a0a0"
-            text: qsTr("BACK") + cpUiTr.emptyStr
+            text: "    "
             antialiasing: false
             smooth: false
             verticalAlignment: Text.AlignVCenter
