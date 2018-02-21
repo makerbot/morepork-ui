@@ -19,6 +19,8 @@ ApplicationWindow {
         onTriggered: {
             if(authRequest) {
                 bot.respondAuthRequest("timedout")
+                skipAuthentication = false
+                isAuthenticated = false
                 authenticatePrinterPopup.close()
                 authTimeOut.stop()
             }
@@ -37,14 +39,16 @@ ApplicationWindow {
 
     onAuthRequestChanged: {
         if(authRequest) {
+            isAuthenticated = false
             authenticatePrinterPopup.open()
             authTimeOut.interval = 300000
             authTimeOut.start()
         }
         else {
-            isAuthenticated = true
-            authTimeOut.interval = 3000
-            authTimeOut.start()
+            if(isAuthenticated) {
+                authTimeOut.interval = 3000
+                authTimeOut.start()
+            }
         }
     }
 
@@ -320,7 +324,7 @@ ApplicationWindow {
                     visible: !skipAuthentication
                 }
 
-                ColumnLayout {
+                Item {
                     id: columnLayout
                     x: 345
                     y: 87
@@ -335,28 +339,27 @@ ApplicationWindow {
                         id: authenticate_header_text
                         color: "#cbcbcb"
                         text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATE"
-                        Layout.fillWidth: true
+                        width: skipAuthentication ? 600 : 300
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        anchors.top: parent.top
+                        anchors.topMargin: skipAuthentication ? 5 : 0
                         wrapMode: Text.WordWrap
-                        Layout.alignment: skipAuthentication ? Qt.AlignHCenter | Qt.AlignVCenter : Qt.AlignLeft
                         font.letterSpacing: 5
                         font.family: "Antennae"
                         font.weight: Font.Bold
                         font.pixelSize: skipAuthentication ? 20 : 24
                     }
 
-                    Item {
-                        id: emptyItem
-                        width: 200
-                        height: 10
-                    }
-
                     Text {
                         id: authenticate_description_text1
                         color: "#cbcbcb"
                         text: isAuthenticated ? "" : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
+                        anchors.left: parent.left
+                        anchors.leftMargin: skipAuthentication ? 30 : 0
+                        anchors.top: parent.top
+                        anchors.topMargin: skipAuthentication ? 55 : 65
                         horizontalAlignment: Text.AlignLeft
-                        Layout.alignment: skipAuthentication ? Qt.AlignHCenter | Qt.AlignVCenter : Qt.AlignLeft
-                        Layout.fillWidth: true
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
                         font.family: "Antennae"
@@ -368,6 +371,10 @@ ApplicationWindow {
                         id: authenticate_description_text2
                         color: "#ffffff"
                         text: skipAuthentication ? "" : bot.username
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        anchors.top: parent.top
+                        anchors.topMargin: 100
                         horizontalAlignment: Text.AlignLeft
                         font.weight: Font.Bold
                         wrapMode: Text.NoWrap
@@ -381,6 +388,10 @@ ApplicationWindow {
                         id: authenticate_description_text3
                         color: "#cbcbcb"
                         text: isAuthenticated ? "is now authenticated to this printer" : skipAuthentication ? "" : "to this printer?"
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        anchors.top: parent.top
+                        anchors.topMargin: 135
                         horizontalAlignment: Text.AlignLeft
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
@@ -452,6 +463,8 @@ ApplicationWindow {
                             onPressed: {
                                 dismiss_text.color = "#000000"
                                 dismiss_rectangle.color = "#ffffff"
+                                authenticate_text.color = "#ffffff"
+                                authenticate_rectangle.color = "#00000000"
                             }
                             onReleased: {
                                 dismiss_text.color = "#ffffff"
@@ -504,11 +517,13 @@ ApplicationWindow {
                             onClicked: {
                                 if(skipAuthentication == false) {
                                     bot.respondAuthRequest("accepted")
+                                    isAuthenticated = true
                                 }
                                 else if(skipAuthentication == true) {
                                     bot.respondAuthRequest("rejected")
-                                    authenticatePrinterPopup.close()
+                                    isAuthenticated = false
                                     skipAuthentication = false
+                                    authenticatePrinterPopup.close()
                                 }
                             }
                         }

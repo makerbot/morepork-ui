@@ -86,6 +86,11 @@ class KaitenBotModel : public BotModel {
                     m_bot->authRequestUpdate(params);
                     m_bot->m_authResp = response;
                 }
+                else {
+                    Json::Value json_params(Json::objectValue);
+                    json_params["answer"] = Json::Value("rejected");
+                    response->sendResult(json_params);
+                }
             }
       private:
         KaitenBotModel *m_bot;
@@ -94,17 +99,13 @@ class KaitenBotModel : public BotModel {
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
-    if(!request.isObject()) {
-        reset();
-        return;
-    }
     isAuthRequestPendingSet(true);
     UPDATE_STRING_PROP(username, request["username"]);
 }
 
 void KaitenBotModel::respondAuthRequest(QString response){
     if(m_authResp) {
-        Json::Value json_params(Json::objectValue);                                      
+        Json::Value json_params(Json::objectValue);
         json_params["answer"] = Json::Value(response.toStdString());
         m_authResp->sendResult(json_params);
         m_authResp = nullptr;
@@ -138,7 +139,7 @@ void KaitenBotModel::print(QString file_name){
     try{
         qDebug() << FL_STRM << "file_name: " << file_name;
         auto conn = m_conn.data();
-        Json::Value json_params(Json::objectValue);                                      
+        Json::Value json_params(Json::objectValue);
         json_params["filepath"] = Json::Value(file_name.toStdString());
         json_params["ensure_build_plate_clear"] = Json::Value(false);
         json_params["transfer_wait"] = Json::Value(false);
