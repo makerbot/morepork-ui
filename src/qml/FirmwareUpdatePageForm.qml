@@ -98,6 +98,7 @@ Item {
             font.weight: Font.Bold
             font.capitalization: Font.AllUppercase
             font.pixelSize: 20
+            lineHeight: 1.35
             visible: true
         }
 
@@ -106,7 +107,7 @@ Item {
             text: "PLEASE WAIT A MOMENT"
             width: parent.width
             anchors.top: parent.top
-            anchors.topMargin: 75
+            anchors.topMargin: 70
             font.wordSpacing: 1
             font.letterSpacing: 2
             color: "#cbcbcb"
@@ -114,6 +115,7 @@ Item {
             font.weight: Font.Light
             font.capitalization: Font.AllUppercase
             font.pixelSize: 18
+            lineHeight: 1.35
             wrapMode: Text.WordWrap
             visible: true
         }
@@ -190,13 +192,13 @@ Item {
 
             PropertyChanges {
                 target: release_notes_text
-                anchors.topMargin: 220
+                anchors.topMargin: 235
                 visible: true
             }
 
             PropertyChanges {
                 target: button1
-                anchors.topMargin: 265
+                anchors.topMargin: 275
                 buttonWidth: 265
                 buttonHeight: 50
                 label: "INSTALL UPDATE"
@@ -305,7 +307,7 @@ Item {
                 buttonWidth: 175
                 buttonHeight: 50
                 visible: true
-                anchors.topMargin: 190
+                anchors.topMargin: 200
             }
 
             PropertyChanges {
@@ -314,7 +316,7 @@ Item {
                 buttonWidth: 240
                 buttonHeight: 50
                 visible: true
-                anchors.topMargin: 260
+                anchors.topMargin: 265
             }
 
             PropertyChanges {

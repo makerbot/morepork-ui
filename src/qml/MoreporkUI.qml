@@ -275,7 +275,7 @@ ApplicationWindow {
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
                 width: 720
-                height: skipFirmwareUpdate ? 200 : 275
+                height: skipFirmwareUpdate ? 220 : 275
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
@@ -441,7 +441,7 @@ ApplicationWindow {
                         id: authenticate_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "We recommend using the most up to date software for your printer" : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "We recommend using the most up to date software for your printer." : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
@@ -449,14 +449,7 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap
                         font.family: "Antennae"
                         font.pixelSize: 18
-                    }
-
-                    Item {
-                        id: emptyItem1
-                        width: 200
-                        height: 10
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        visible: true
+                        lineHeight: 1.35
                     }
 
                     Text {
