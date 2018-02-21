@@ -37,6 +37,10 @@ Item {
             break;
         }
     }
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+    }
 
     Image {
         id: image
@@ -64,6 +68,7 @@ Item {
                 font.family: "Antennae"
                 font.weight: Font.Bold
                 font.pixelSize: 20
+                lineHeight: 1.35
             }
 
             Text {
@@ -73,11 +78,12 @@ Item {
                 color: "#cbcbcb"
                 text: "Open material bay " + bayID + " and insert the MakerBot Smart Spool. Feed the end of the material into the slot until you feel it being pulled in."
                 anchors.top: parent.top
-                anchors.topMargin: 165
+                anchors.topMargin: 180
                 wrapMode: Text.WordWrap
                 font.family: "Antennae"
                 font.weight: Font.Light
                 font.pixelSize: 18
+                lineHeight: 1.35
             }
 
             RoundedButton {
@@ -197,8 +203,8 @@ Item {
                 target: acknowledgeButton
                 buttonWidth: 225
                 buttonHeight: 75
+                anchors.topMargin: 280
                 visible: true
-                anchors.topMargin: 270
                 label: "MATERIAL IS EXTRUDING"
             }
 
@@ -220,6 +226,7 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 text: "The filament is backing out of the extruder, please wait."
+                anchors.topMargin: 165
             }
 
             PropertyChanges {
@@ -245,8 +252,7 @@ Item {
 
             PropertyChanges {
                 target: acknowledgeButton
-                x: 0
-                y: 297
+                anchors.topMargin: 330
                 buttonWidth: 100
                 buttonHeight: 50
                 visible: true
@@ -272,14 +278,14 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
+                anchors.topMargin: 165
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                x: 0
-                y: 297
                 buttonWidth: 100
                 buttonHeight: 50
+                anchors.topMargin: 300
                 visible: true
                 label: "DONE"
             }
@@ -317,10 +323,9 @@ Item {
 
             PropertyChanges {
                 target: acknowledgeButton
-                x: 0
-                y: 297
                 buttonWidth: 100
                 buttonHeight: 50
+                anchors.topMargin: 265
                 visible: true
                 label: "DONE"
             }
@@ -330,6 +335,5 @@ Item {
                 source: "qrc:/img/extruder_heating.png"
             }
         }
-
     ]
 }
