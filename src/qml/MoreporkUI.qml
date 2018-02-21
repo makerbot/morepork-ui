@@ -45,10 +45,8 @@ ApplicationWindow {
             authTimeOut.start()
         }
         else {
-            if(isAuthenticated) {
-                authTimeOut.interval = 3000
-                authTimeOut.start()
-            }
+            authTimeOut.interval = 3000
+            authTimeOut.start()
         }
     }
 
@@ -339,6 +337,7 @@ ApplicationWindow {
                         id: authenticate_header_text
                         color: "#cbcbcb"
                         text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATE"
+                        lineHeight: 1.5
                         width: skipAuthentication ? 600 : 300
                         anchors.left: parent.left
                         anchors.leftMargin: 0
@@ -356,9 +355,9 @@ ApplicationWindow {
                         color: "#cbcbcb"
                         text: isAuthenticated ? "" : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
                         anchors.left: parent.left
-                        anchors.leftMargin: skipAuthentication ? 30 : 0
+                        anchors.leftMargin: skipAuthentication ? 34 : 0
                         anchors.top: parent.top
-                        anchors.topMargin: skipAuthentication ? 55 : 65
+                        anchors.topMargin: skipAuthentication ? 55 : 62
                         horizontalAlignment: Text.AlignLeft
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
