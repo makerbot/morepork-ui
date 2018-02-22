@@ -4,159 +4,118 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
-    property alias flickable: flickable
-    property alias defaultItem: flickable
+    property alias defaultItem: baseItem
     smooth: false
+    width: 800
+    height: 440
 
-    Flickable {
-        id: flickable
+    Rectangle {
         anchors.fill: parent
-        anchors.leftMargin: 15
-        interactive: true
-        flickableDirection: Flickable.VerticalFlick
-        contentHeight: column.height
+        color: "#000000"
+    }
+
+    Item {
+        id: baseItem
+        anchors.fill: parent
         property var backSwiper: mainSwipeView
         property int backSwipeIndex: 0
-        smooth: false
 
-        Column {
-            id: column
-            smooth: false
-            anchors.right: parent.right
+        Text {
             anchors.left: parent.left
+            anchors.leftMargin: 65
             anchors.top: parent.top
-            spacing: 1
+            anchors.topMargin: 5
+            text: bot.name + " info"
+            font.pixelSize: 22
+            font.capitalization: Font.AllUppercase
+            color: "#cbcbcb"
+            font.family: "Antennae"
+            font.weight: Font.Bold
+            font.letterSpacing: 5
+        }
+
+        ColumnLayout {
+            id: columnLayout
+            width: 600
+            height: 350
+            anchors.left: parent.left
+            anchors.leftMargin: 65
+            anchors.top: parent.top
+            anchors.topMargin: 50
+            smooth: false
 
             InfoItemForm {
                 id: info_firmwareVersion
-                width: parent.width
-                textLabel.text: qsTr("Firmware Version") + cpUiTr.emptyStr
-                textData.text: bot.version
+                labelText: qsTr("Firmware Version") + cpUiTr.emptyStr
+                dataText: bot.version
             }
             InfoItem {
                 id: info_connectionType
-                width: parent.width
-                textLabel.text: qsTr("Connection Type") + cpUiTr.emptyStr
-                textData.text: bot.net.interface
+                labelText: qsTr("Connection Type") + cpUiTr.emptyStr
+                dataText: bot.net.interface
             }
             InfoItem {
                 id: info_ipAddress
-                width: parent.width
-                textLabel.text: qsTr("IP Address") + cpUiTr.emptyStr
-                textData.text: bot.net.ipAddr
+                labelText: qsTr("IP Address") + cpUiTr.emptyStr
+                dataText: bot.net.ipAddr
             }
             InfoItem {
                 id: info_subnet
-                width: parent.width
-                textLabel.text: qsTr("Netmask") + cpUiTr.emptyStr
-                textData.text: bot.net.netmask
+                labelText: qsTr("Netmask") + cpUiTr.emptyStr
+                dataText: bot.net.netmask
             }
             InfoItem {
                 id: info_gateway
-                width: parent.width
-                textLabel.text: qsTr("Gateway") + cpUiTr.emptyStr
-                textData.text: bot.net.gateway
+                labelText: qsTr("Gateway") + cpUiTr.emptyStr
+                dataText: bot.net.gateway
             }
-            Item { //TODO: make this a QML Form
-                id: infoListItem
-                height: 45
-                smooth: false
-                width: parent.width
-                property alias dnsTextLabel: dnsTextLabel
-
-                RowLayout {
-                    id: rowLayoutDns
+            InfoItem {
+                id: info_dns
+                height: listView.height
+                labelText: qsTr("DNS") + cpUiTr.emptyStr
+                dataText: bot.net.gateway
+                labelElement.anchors.top: baseElement.top
+                labelElement.anchors.topMargin: 0
+                dataElement.visible: false
+                ListView {
+                    id: listView
+                    x: 350
+                    anchors.top: parent.top
+                    anchors.topMargin: 0
+                    width: 100
+                    height: 50
+                    boundsBehavior: Flickable.DragOverBounds
+                    orientation: ListView.Vertical
+                    flickableDirection: Flickable.VerticalFlick
+                    spacing: 5
                     smooth: false
-                    spacing: 25
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    Item{
-                        z: 1
-                        height: parent.height
-                        smooth: false
-                        width: dnsTextLabel.width
-
+                    model: bot.net.dns
+                    delegate:
                         Text {
-                            id: dnsTextLabel
-                            text: qsTr("DNS") + cpUiTr.emptyStr
-                            smooth: false
-                            antialiasing: false
-                            z: 2
-                            font.family: "Antenna"
-                            font.letterSpacing: 3
-                            font.pixelSize: 28
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: "#ffffff"
-
-                        }
-
-                        Item {
-                            smooth: false
-                            anchors.fill: dnsTextLabel
-                            anchors.leftMargin: -flickable.anchors.leftMargin
-                            anchors.rightMargin: -rowLayoutDns.spacing
-
-                            LinearGradient {
-                                smooth: false
-                                cached: true
-                                anchors.fill: parent
-                                start: Qt.point(parent.width, 0)
-                                end: Qt.point(0, 0)
-                                gradient: Gradient {
-                                  GradientStop {
-                                    position: 0.0
-                                    color: "#00000000"
-                                  }
-                                  GradientStop {
-                                    position: 0.25
-                                    color: "#FF000000"
-                                  }
-                                }
-                            }
-                        }
-                    }
-
-                    ListView {
-                        width: 650 //TODO: Dynamically set this
-                        height: infoListItem.height
-                        smooth: false
-                        boundsBehavior: Flickable.DragOverBounds
-                        spacing: 15
-                        orientation: ListView.Horizontal
-                        flickableDirection: Flickable.HorizontalFlick
-                        z: 0
-
-                        model: bot.net.dns
-                        delegate: Text {
-                            text: modelData
-                            font.family: "Antenna"
-                            font.letterSpacing: 3
-                            font.weight: Font.Light
-                            font.pixelSize: 26
-                            verticalAlignment: Text.AlignTop
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: "#ffffff"
-                        }
+                        text: model.modelData
+                        font.family: "Antenna"
+                        font.letterSpacing: 2
+                        font.weight: Font.Bold
+                        font.pixelSize: 18
+                        color: "#ffffff"
                     }
                 }
             }
+
             InfoItem {
                 id: info_wifiNetwork
-                width: parent.width
-                textLabel.text: qsTr("WiFi Name") + cpUiTr.emptyStr
-                textData.text: bot.net.interface === "wifi" ? "null" : "n/a"
+                labelText: qsTr("WiFi Name") + cpUiTr.emptyStr
+                dataText: bot.net.interface === "wifi" ? "null" : "n/a"
             }
             InfoItem {
                 id: info_ethMacAddress
-                width: parent.width
-                textLabel.text: qsTr("Ethernet MAC Address") + cpUiTr.emptyStr
-                textData.text: bot.net.ethMacAddr
+                labelText: qsTr("Ethernet MAC Address") + cpUiTr.emptyStr
+                dataText: bot.net.ethMacAddr
             }
             InfoItem {
                 id: info_wlanMacAddress
-                width: parent.width
-                textLabel.text: qsTr("WiFi MAC Address") + cpUiTr.emptyStr
-                textData.text: bot.net.wlanMacAddr
+                labelText: qsTr("WiFi MAC Address") + cpUiTr.emptyStr
+                dataText: bot.net.wlanMacAddr
             }
         }
     }

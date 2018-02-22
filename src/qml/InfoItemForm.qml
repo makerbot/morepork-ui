@@ -4,40 +4,53 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: infoItem
-    height: 45
+    height: 20
+    width: 600
     smooth: false
-    property alias textData: textData
-    property alias textLabel: textLabel
+    property alias labelText: labelText.text
+    property alias dataText: dataText.text
+    property alias dataElement: dataText
+    property alias labelElement: labelText
+    property alias baseElement: baseItem
 
-    RowLayout {
-        smooth: false
-        spacing: 25
-        anchors.verticalCenter: parent.verticalCenter
+    Rectangle{
+        anchors.fill: parent
+        color: "#000000"
+    }
+
+    Item {
+        id: baseItem
+        anchors.fill: parent
         Text {
-            id: textLabel
-            text: "Info Label"
+            id: labelText
+            text: "label"
             antialiasing: false
             smooth: false
+            anchors.left: parent.left
+            anchors.leftMargin: 0
             font.family: "Antenna"
+            font.weight: Font.Light
             font.letterSpacing: 3
-            font.pixelSize: 28
+            font.pixelSize: 18
             anchors.verticalCenter: parent.verticalCenter
-            color: "#ffffff"
-
+            color: "#cbcbcb"
+            font.capitalization: Font.AllUppercase
         }
 
         Text {
-            id: textData
-            text: "null"
+            id: dataText
+            text: "data"
+            anchors.left: parent.left
+            anchors.leftMargin: 350
             antialiasing: false
             smooth: false
             font.family: "Antenna"
-            font.letterSpacing: 3
-            font.weight: Font.Light
-            font.pixelSize: 26
-            verticalAlignment: Text.AlignTop
+            font.letterSpacing: 5
+            font.weight: Font.Bold
+            font.pixelSize: 18
             anchors.verticalCenter: parent.verticalCenter
             color: "#ffffff"
+            font.capitalization: Font.AllUppercase
         }
     }
 }
