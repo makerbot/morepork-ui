@@ -269,7 +269,14 @@ ApplicationWindow {
             onOpened: {
                 update_rectangle.color = "#ffffff"
                 update_text.color = "#000000"
+                viewReleaseNotes = false
+                skipFirmwareUpdate = false
             }
+            onClosed: {
+                viewReleaseNotes = false
+                skipFirmwareUpdate = false
+            }
+
             Rectangle {
                 id: basePopupItem
                 color: "#000000"
@@ -351,8 +358,6 @@ ApplicationWindow {
                             onClicked: {
                                 if(skipFirmwareUpdate) {
                                     firmwareUpdatePopup.close()
-                                    viewReleaseNotes = false
-                                    skipFirmwareUpdate = false
                                 }
                                 else {
                                     skipFirmwareUpdate = true
@@ -401,8 +406,6 @@ ApplicationWindow {
                                     mainSwipeView.swipeToItem(3)
                                     settingsPage.settingsSwipeView.swipeToItem(3)
                                 }
-                                skipFirmwareUpdate = false
-                                viewReleaseNotes = false
                                 firmwareUpdatePopup.close()
                             }
                         }
