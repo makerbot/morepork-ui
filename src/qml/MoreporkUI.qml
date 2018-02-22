@@ -19,13 +19,10 @@ ApplicationWindow {
         onTriggered: {
             if(authRequest) {
                 bot.respondAuthRequest("timedout")
-                skipAuthentication = false
-                isAuthenticated = false
                 authenticatePrinterPopup.close()
                 authTimeOut.stop()
             }
             else {
-                isAuthenticated = false
                 authenticatePrinterPopup.close()
                 authTimeOut.stop()
             }
@@ -39,13 +36,12 @@ ApplicationWindow {
 
     onAuthRequestChanged: {
         if(authRequest) {
-            isAuthenticated = false
             authenticatePrinterPopup.open()
             authTimeOut.interval = 300000
             authTimeOut.start()
         }
         else {
-            authTimeOut.interval = 3000
+            authTimeOut.interval = 1500
             authTimeOut.start()
         }
     }
@@ -296,113 +292,113 @@ ApplicationWindow {
             onOpened: {
                 authenticate_rectangle.color = "#ffffff"
                 authenticate_text.color = "#000000"
+                isAuthenticated = false
+                skipAuthentication = false
+            }
+            onClosed: {
+                isAuthenticated = false
+                skipAuthentication = false
             }
 
             Rectangle {
                 id: basePopupItem
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: skipAuthentication ? 225 : 400
+                width: 740
+                height: skipAuthentication ? 225 : 410
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                Image {
-                    id: authImage
-                    width: 241
-                    height: 240
-                    anchors.left: parent.left
-                    anchors.leftMargin: 70
-                    anchors.top: parent.top
-                    anchors.topMargin: 42
-                    source: isAuthenticated ? "qrc:/img/auth_success.png" : "qrc:/img/auth_waiting.png"
-                    visible: !skipAuthentication
-                }
-
                 Item {
                     id: columnLayout
-                    x: 345
-                    y: 87
-                    width: 300
-                    height: 150
+                    width: 600
+                    height: 300
                     anchors.top: parent.top
-                    anchors.topMargin: skipAuthentication ? 35 : 87
-                    anchors.right: parent.right
-                    anchors.rightMargin: skipAuthentication ? 250 : 60
+                    anchors.topMargin: isAuthenticated ? 60 : 35
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     Text {
                         id: authenticate_header_text
                         color: "#cbcbcb"
-                        text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATE"
-                        lineHeight: 1.5
-                        width: skipAuthentication ? 600 : 300
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
+                        text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATION REQUEST"
                         anchors.top: parent.top
-                        anchors.topMargin: skipAuthentication ? 5 : 0
-                        wrapMode: Text.WordWrap
+                        anchors.topMargin: 0
+                        anchors.horizontalCenter: parent.horizontalCenter
                         font.letterSpacing: 5
                         font.family: "Antennae"
                         font.weight: Font.Bold
-                        font.pixelSize: skipAuthentication ? 20 : 24
+                        font.pixelSize: 22
+                    }
+
+                    Image {
+                        id: authImage
+                        width: sourceSize.width * 0.517
+                        height: sourceSize.height * 0.517
+                        anchors.topMargin: 17
+                        anchors.top: authenticate_header_text.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        source: skipAuthentication ? "" : isAuthenticated ? "qrc:/img/auth_success.png" : "qrc:/img/auth_waiting.png"
+                        visible: !skipAuthentication
                     }
 
                     Text {
                         id: authenticate_description_text1
-                        color: "#cbcbcb"
-                        text: isAuthenticated ? "" : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
-                        anchors.left: parent.left
-                        anchors.leftMargin: skipAuthentication ? 34 : 0
-                        anchors.top: parent.top
-                        anchors.topMargin: skipAuthentication ? 55 : 62
+                        color: isAuthenticated ? "#ffffff" : "#cbcbcb"
+                        text: isAuthenticated ? bot.username : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.topMargin: 17
+                        anchors.top: authImage.bottom
                         horizontalAlignment: Text.AlignLeft
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
+                        font.weight: isAuthenticated ? Font.Bold : Font.Light
                         font.family: "Antennae"
                         font.pixelSize: 18
-                        font.letterSpacing: 1
+                        font.letterSpacing: isAuthenticated ? 3 : 1
+                        font.capitalization: isAuthenticated ? Font.AllUppercase : Font.MixedCase
                     }
 
-                    Text {
-                        id: authenticate_description_text2
-                        color: "#ffffff"
-                        text: skipAuthentication ? "" : bot.username
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
-                        anchors.top: parent.top
-                        anchors.topMargin: 100
-                        horizontalAlignment: Text.AlignLeft
-                        font.weight: Font.Bold
-                        wrapMode: Text.NoWrap
-                        font.capitalization: Font.AllUppercase
-                        font.family: "Antennae"
-                        font.pixelSize: 18
-                        font.letterSpacing: 3
-                    }
+                    RowLayout {
+                        id: item2
+                        width: children.width
+                        height: 20
+                        anchors.topMargin: 17
+                        anchors.top: authenticate_description_text1.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
 
-                    Text {
-                        id: authenticate_description_text3
-                        color: "#cbcbcb"
-                        text: isAuthenticated ? "is now authenticated to this printer" : skipAuthentication ? "" : "to this printer?"
-                        anchors.left: parent.left
-                        anchors.leftMargin: 0
-                        anchors.top: parent.top
-                        anchors.topMargin: 135
-                        horizontalAlignment: Text.AlignLeft
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: "Antennae"
-                        font.pixelSize: 18
-                        font.letterSpacing: 1
+                        Text {
+                            id: authenticate_description_text2
+                            color: "#ffffff"
+                            text: skipAuthentication ? "" : bot.username
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.weight: Font.Bold
+                            font.capitalization: Font.AllUppercase
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            font.letterSpacing: 3
+                            visible: !isAuthenticated
+                        }
+
+                        Text {
+                            id: authenticate_description_text3
+                            color: "#cbcbcb"
+                            text: isAuthenticated ? "is now authenticated to this printer" : "to this printer?"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            font.weight: Font.Light
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            font.letterSpacing: 1
+                            visible: !skipAuthentication
+                        }
                     }
                 }
 
                 Rectangle {
                     id: horizontal_divider
-                    width: 720
+                    width: parent.width
                     height: 2
                     color: "#ffffff"
                     anchors.bottom: parent.bottom
@@ -426,7 +422,7 @@ ApplicationWindow {
 
                 Item {
                     id: item1
-                    width: 720
+                    width: parent.width
                     height: 72
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 0
@@ -436,7 +432,7 @@ ApplicationWindow {
                         id: dismiss_rectangle
                         x: 0
                         y: 0
-                        width: 360
+                        width: parent.width * 0.5
                         height: 72
                         color: "#00000000"
                         radius: 10
@@ -482,9 +478,9 @@ ApplicationWindow {
 
                     Rectangle {
                         id: authenticate_rectangle
-                        x: 360
+                        x: parent.width * 0.5
                         y: 0
-                        width: 360
+                        width: parent.width * 0.5
                         height: 72
                         color: "#00000000"
                         radius: 10
@@ -520,8 +516,6 @@ ApplicationWindow {
                                 }
                                 else if(skipAuthentication == true) {
                                     bot.respondAuthRequest("rejected")
-                                    isAuthenticated = false
-                                    skipAuthentication = false
                                     authenticatePrinterPopup.close()
                                 }
                             }
