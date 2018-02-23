@@ -113,7 +113,7 @@ Item {
             color: "#cbcbcb"
             font.family: "Antennae"
             font.weight: Font.Light
-            font.capitalization: Font.AllUppercase
+//            font.capitalization: Font.AllUppercase
             font.pixelSize: 18
             lineHeight: 1.35
             wrapMode: Text.WordWrap
@@ -186,7 +186,7 @@ Item {
 
             PropertyChanges {
                 target: sub_status_text
-                text: "A NEW VERSION OF SOFTWARE IS AVAILABLE. DO YOU WANT TO UPDATE TO THE MOST RECENT VERSION " + bot.firmwareUpdateVersion + " ?"
+                text: "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
                 anchors.topMargin: 110
             }
 
@@ -240,7 +240,7 @@ Item {
 
             PropertyChanges {
                 target: sub_status_text
-                text: "NO UPDATE IS REQUIRED AT THIS TIME."
+                text: "No update is required at this time."
                 anchors.topMargin: 100
             }
 
