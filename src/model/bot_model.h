@@ -41,12 +41,18 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex);
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
+    Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
+    Q_INVOKABLE virtual void installFirmware();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
     SUBMODEL(ProcessModel, process)
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
+    MODEL_PROP(bool, firmwareUpdateAvailable, false)
+    MODEL_PROP(QString, firmwareUpdateVersion, "Unknown")
+    MODEL_PROP(QString, firmwareUpdateReleaseDate, "Unknown")
+    MODEL_PROP(QString, firmwareUpdateReleaseNotes, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QString, username, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)

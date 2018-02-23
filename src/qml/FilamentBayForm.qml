@@ -8,47 +8,30 @@ Item {
     height: 180
     smooth: false
     antialiasing: false
-
     property int filamentBayID: 0
-    property string filamentMaterial: "MAT"
-    property string filamentMaterialColor: "COLOR"
-    property string filamentQuantity: "-0.0"
-
+    property alias filamentMaterialType: materialIconLarge.filamentType
+    property alias filamentMaterialColor: materialIconLarge.filamentColor
+    property alias filamentMaterialPercent: materialIconLarge.filamentPercent
+    property string filamentMaterialColorText: "COLOR"
+    property string filamentMaterialQuantity: "-0.0"
     property alias loadButton: loadButton
     property alias unloadButton: unloadButton
 
-    Rectangle {
-        id: filament_color
-        width: filament_image.width
-        height: filament_image.height
-        color: "#1a455c"
-        visible: true
+    MaterialIcon {
+        id: materialIconLarge
         anchors.left: parent.left
-        anchors.leftMargin: 65
-        anchors.top: parent.top
-        anchors.topMargin: 45
-    }
-
-    Image {
-        id: filament_image
-        width: sourceSize.width
-        height: sourceSize.height
-        anchors.left: parent.left
-        anchors.leftMargin: 65
-        anchors.top: parent.top
-        anchors.topMargin: 45
+        anchors.leftMargin: 100
+        anchors.verticalCenter: parent.verticalCenter
         smooth: false
         antialiasing: false
-        source: "qrc:/img/filamentbay_loaded.png"
 
         ColumnLayout {
             id: columnLayout
             width: 360
-            height: 130
-            anchors.top: parent.top
-            anchors.topMargin: -45
+            height: 150
             anchors.left: parent.left
-            anchors.leftMargin: filament_image.width
+            anchors.leftMargin: 250
+            anchors.verticalCenter: parent.verticalCenter
             spacing: 5
             smooth: false
             antialiasing: false
@@ -58,10 +41,10 @@ Item {
                 color: "#cbcbcb"
                 text: "FILAMENT BAY " + filamentBayID
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                font.letterSpacing: 4
+                font.letterSpacing: 5
                 font.family: "Antenna"
                 font.weight: Font.Bold
-                font.pixelSize: 21
+                font.pixelSize: 20
                 smooth: false
                 antialiasing: false
             }
@@ -75,10 +58,10 @@ Item {
                 antialiasing: false
 
                 Text {
-                    id: material_text
-                    color: "#cbcbcb"
-                    text: filamentMaterial
-                    font.letterSpacing: 2
+                    id: material_color_text
+                    color: "#ffffff"
+                    text: filamentMaterialColorText
+                    font.letterSpacing: 4
                     font.family: "Antenna"
                     font.weight: Font.Light
                     font.pixelSize: 18
@@ -93,19 +76,39 @@ Item {
                     color: "#ffffff"
                     smooth: false
                     antialiasing: false
-                    visible: filamentMaterialColor != ""
                 }
 
                 Text {
-                    id: material_color_text
-                    color: "#cbcbcb"
-                    text: filamentMaterialColor
-                    font.letterSpacing: 2
+                    id: material_quantity_text
+                    color: "#ffffff"
+                    text: filamentMaterialQuantity +"KG" + " REMAINING"
+                    font.letterSpacing: 4
                     font.family: "Antenna"
                     font.weight: Font.Light
                     font.pixelSize: 18
                     smooth: false
                     antialiasing: false
+                }
+            }
+
+            RowLayout {
+                id: rowLayout2
+                width: 300
+                height: 25
+                spacing: 10
+                smooth: false
+                antialiasing: false
+
+                Text {
+                    id: humidity_text
+                    color: "#ffffff"
+                    text: "HUMIDITY"
+                    font.letterSpacing: 4
+                    smooth: false
+                    font.pixelSize: 18
+                    font.weight: Font.Light
+                    antialiasing: false
+                    font.family: "Antenna"
                 }
 
                 Rectangle {
@@ -115,26 +118,23 @@ Item {
                     color: "#ffffff"
                     smooth: false
                     antialiasing: false
-                    visible: filamentQuantity != "0"
                 }
 
-                Text {
-                    id: material_quantity_text
-                    color: "#cbcbcb"
-                    text: filamentQuantity +"KG"
-                    font.letterSpacing: 2
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 18
-                    smooth: false
+                Image {
+                    id: humidity_alert
+                    height: 12
+                    width: 12
                     antialiasing: false
+                    smooth: false
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    source: "qrc:/img/check_mark_small.png"
                 }
             }
 
             Item {
                 id: item1
                 width: 300
-                height: 10
+                height: 3
                 visible: true
                 smooth: false
                 antialiasing: false
@@ -144,7 +144,6 @@ Item {
                 id: rowLayout1
                 width: 300
                 height: 60
-                Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
                 spacing: 30
                 smooth: false
                 antialiasing: false
@@ -152,14 +151,14 @@ Item {
                 RoundedButton {
                     id: loadButton
                     buttonWidth: 120
-                    buttonHeight: 40
+                    buttonHeight: 50
                     label: "LOAD"
                 }
 
                 RoundedButton {
                     id: unloadButton
                     buttonWidth: 160
-                    buttonHeight: 40
+                    buttonHeight: 50
                     label: "UNLOAD"
                 }
             }

@@ -10,6 +10,11 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(2)
     }
 
+    buttonFirmwareUpdate.onClicked: {
+        bot.firmwareUpdateCheck(false)
+        settingsSwipeView.swipeToItem(3)
+    }
+
     buttonEnglish.onClicked: {
         cpUiTr.selectLanguage("en")
     }

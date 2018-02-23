@@ -44,6 +44,23 @@ ApplicationWindow {
             authTimeOut.interval = 1500
             authTimeOut.start()
         }
+        
+    property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
+    
+    onIsfirmwareUpdateAvailableChanged: {
+        if(isfirmwareUpdateAvailable) {
+            if(settingsPage.settingsSwipeView.currentIndex != 3) {
+                firmwareUpdatePopup.open()
+            }
+        }
+    }
+    
+    property bool skipFirmwareUpdate: false
+    property bool viewReleaseNotes: false
+
+    onSkipFirmwareUpdateChanged: {
+        update_rectangle.color = "#ffffff"
+        update_text.color = "000000"
     }
 
     function setDrawerState(state) {
@@ -61,7 +78,7 @@ ApplicationWindow {
         currentItem = currentItem_
     }
 
-    function goBack(){
+    function goBack() {
         if(currentItem.hasAltBack){
             currentItem.altBack()
         }
@@ -70,8 +87,7 @@ ApplicationWindow {
         }
     }
 
-    function disableDrawer()
-    {
+    function disableDrawer() {
         topBar.imageDrawerArrow.visible = false
         if(activeDrawer == printPage.printingDrawer
                 || activeDrawer == materialPage.materialPageDrawer
@@ -105,8 +121,7 @@ ApplicationWindow {
             dim: false
             opacity: 0
             interactive: mainSwipeView.currentIndex
-            onOpened:
-            {
+            onOpened: {
                 position = 0
                 goBack()
                 close()
@@ -266,263 +281,499 @@ ApplicationWindow {
                 }
             }
         }
+        
+				Popup {
+						id: authenticatePrinterPopup
+						width: 800
+						height: 480
+						modal: true
+						dim: false
+						focus: true
+						closePolicy: Popup.CloseOnPressOutside
+						background: Rectangle {
+								id: popupBackgroundDim
+								color: "#000000"
+								rotation: rootItem.rotation == 180 ? 180 : 0
+								opacity: 0.5
+								anchors.fill: parent
+						}
+						enter: Transition {
+								NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+						}
+						exit: Transition {
+								NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+						}
+						onOpened: {
+								authenticate_rectangle.color = "#ffffff"
+								authenticate_text.color = "#000000"
+								isAuthenticated = false
+								skipAuthentication = false
+						}
+						onClosed: {
+								isAuthenticated = false
+								skipAuthentication = false
 
-        Popup {
-            id: authenticatePrinterPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
-            }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
+						Rectangle {
+								id: basePopupItem
+								color: "#000000"
+								rotation: rootItem.rotation == 180 ? 180 : 0
+								width: 740
+								height: skipAuthentication ? 225 : 410
+								radius: 10
+								border.width: 2
+								border.color: "#ffffff"
+								anchors.verticalCenter: parent.verticalCenter
+								anchors.horizontalCenter: parent.horizontalCenter
 
-            onOpened: {
-                authenticate_rectangle.color = "#ffffff"
-                authenticate_text.color = "#000000"
-                isAuthenticated = false
-                skipAuthentication = false
-            }
-            onClosed: {
-                isAuthenticated = false
-                skipAuthentication = false
-            }
+						Item {
+								id: columnLayout
+								width: 600
+								height: 300
+								anchors.top: parent.top
+								anchors.topMargin: isAuthenticated ? 60 : 35
+								anchors.horizontalCenter: parent.horizontalCenter
 
-            Rectangle {
-                id: basePopupItem
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 740
-                height: skipAuthentication ? 225 : 410
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
+								Text {
+										id: authenticate_header_text
+										color: "#cbcbcb"
+										text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATION REQUEST"
+										anchors.top: parent.top
+										anchors.topMargin: 0
+										anchors.horizontalCenter: parent.horizontalCenter
+										font.letterSpacing: 5
+										font.family: "Antennae"
+										font.weight: Font.Bold
+										font.pixelSize: 22
+								}
 
-                Item {
-                    id: columnLayout
-                    width: 600
-                    height: 300
-                    anchors.top: parent.top
-                    anchors.topMargin: isAuthenticated ? 60 : 35
-                    anchors.horizontalCenter: parent.horizontalCenter
+								Image {
+										id: authImage
+										width: sourceSize.width * 0.517
+										height: sourceSize.height * 0.517
+										anchors.topMargin: 17
+										anchors.top: authenticate_header_text.bottom
+										anchors.horizontalCenter: parent.horizontalCenter
+										source: skipAuthentication ? "" : isAuthenticated ? "qrc:/img/auth_success.png" : "qrc:/img/auth_waiting.png"
+										visible: !skipAuthentication
+								}
 
-                    Text {
-                        id: authenticate_header_text
-                        color: "#cbcbcb"
-                        text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATION REQUEST"
-                        anchors.top: parent.top
-                        anchors.topMargin: 0
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.letterSpacing: 5
-                        font.family: "Antennae"
-                        font.weight: Font.Bold
-                        font.pixelSize: 22
-                    }
+								Text {
+										id: authenticate_description_text1
+										color: isAuthenticated ? "#ffffff" : "#cbcbcb"
+										text: isAuthenticated ? bot.username : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
+										anchors.horizontalCenter: parent.horizontalCenter
+										anchors.topMargin: 17
+										anchors.top: authImage.bottom
+										horizontalAlignment: Text.AlignLeft
+										font.weight: isAuthenticated ? Font.Bold : Font.Light
+										font.family: "Antennae"
+										font.pixelSize: 18
+										font.letterSpacing: isAuthenticated ? 3 : 1
+										font.capitalization: isAuthenticated ? Font.AllUppercase : Font.MixedCase
+								}
 
-                    Image {
-                        id: authImage
-                        width: sourceSize.width * 0.517
-                        height: sourceSize.height * 0.517
-                        anchors.topMargin: 17
-                        anchors.top: authenticate_header_text.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        source: skipAuthentication ? "" : isAuthenticated ? "qrc:/img/auth_success.png" : "qrc:/img/auth_waiting.png"
-                        visible: !skipAuthentication
-                    }
+								RowLayout {
+										id: item2
+										width: children.width
+										height: 20
+										anchors.topMargin: 17
+										anchors.top: authenticate_description_text1.bottom
+										anchors.horizontalCenter: parent.horizontalCenter
 
-                    Text {
-                        id: authenticate_description_text1
-                        color: isAuthenticated ? "#ffffff" : "#cbcbcb"
-                        text: isAuthenticated ? bot.username : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.topMargin: 17
-                        anchors.top: authImage.bottom
-                        horizontalAlignment: Text.AlignLeft
-                        font.weight: isAuthenticated ? Font.Bold : Font.Light
-                        font.family: "Antennae"
-                        font.pixelSize: 18
-                        font.letterSpacing: isAuthenticated ? 3 : 1
-                        font.capitalization: isAuthenticated ? Font.AllUppercase : Font.MixedCase
-                    }
+										Text {
+												id: authenticate_description_text2
+												color: "#ffffff"
+												text: skipAuthentication ? "" : bot.username
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												horizontalAlignment: Text.AlignLeft
+												font.weight: Font.Bold
+												font.capitalization: Font.AllUppercase
+												font.family: "Antennae"
+												font.pixelSize: 18
+												font.letterSpacing: 3
+												visible: !isAuthenticated
+										}
 
-                    RowLayout {
-                        id: item2
-                        width: children.width
-                        height: 20
-                        anchors.topMargin: 17
-                        anchors.top: authenticate_description_text1.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
+										Text {
+												id: authenticate_description_text3
+												color: "#cbcbcb"
+												text: isAuthenticated ? "is now authenticated to this printer" : "to this printer?"
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												horizontalAlignment: Text.AlignLeft
+												font.weight: Font.Light
+												font.family: "Antennae"
+												font.pixelSize: 18
+												font.letterSpacing: 1
+												visible: !skipAuthentication
+										}
+								}
+						}
 
-                        Text {
-                            id: authenticate_description_text2
-                            color: "#ffffff"
-                            text: skipAuthentication ? "" : bot.username
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            horizontalAlignment: Text.AlignLeft
-                            font.weight: Font.Bold
-                            font.capitalization: Font.AllUppercase
-                            font.family: "Antennae"
-                            font.pixelSize: 18
-                            font.letterSpacing: 3
-                            visible: !isAuthenticated
-                        }
+						Rectangle {
+								id: horizontal_divider
+								width: parent.width
+								height: 2
+								color: "#ffffff"
+								anchors.bottom: parent.bottom
+								anchors.bottomMargin: 72
+								visible: !isAuthenticated
+						}
 
-                        Text {
-                            id: authenticate_description_text3
-                            color: "#cbcbcb"
-                            text: isAuthenticated ? "is now authenticated to this printer" : "to this printer?"
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            horizontalAlignment: Text.AlignLeft
-                            font.weight: Font.Light
-                            font.family: "Antennae"
-                            font.pixelSize: 18
-                            font.letterSpacing: 1
-                            visible: !skipAuthentication
-                        }
-                    }
-                }
+						Rectangle {
+								id: vertical_divider
+								x: 359
+								y: 328
+								width: 2
+								height: 72
+								color: "#ffffff"
+								Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+								anchors.bottom: parent.bottom
+								anchors.bottomMargin: 0
+								anchors.horizontalCenter: parent.horizontalCenter
+								visible: !isAuthenticated
+						}
 
-                Rectangle {
-                    id: horizontal_divider
-                    width: parent.width
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                    visible: !isAuthenticated
-                }
+						Item {
+								id: item1
+								width: parent.width
+								height: 72
+								anchors.bottom: parent.bottom
+								anchors.bottomMargin: 0
+								visible: !isAuthenticated
 
-                Rectangle {
-                    id: vertical_divider
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: !isAuthenticated
-                }
+								Rectangle {
+										id: dismiss_rectangle
+										x: 0
+										y: 0
+										width: parent.width * 0.5
+										height: 72
+										color: "#00000000"
+										radius: 10
 
-                Item {
-                    id: item1
-                    width: parent.width
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    visible: !isAuthenticated
+										Text {
+												id: dismiss_text
+												color: "#ffffff"
+												text: skipAuthentication ? "BACK" : "DISMISS"
+												Layout.fillHeight: false
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												Layout.fillWidth: false
+												font.letterSpacing: 3
+												font.weight: Font.Bold
+												font.family: "Antennae"
+												font.pixelSize: 18
+												anchors.verticalCenter: parent.verticalCenter
+												anchors.horizontalCenter: parent.horizontalCenter
+										}
 
-                    Rectangle {
-                        id: dismiss_rectangle
-                        x: 0
-                        y: 0
-                        width: parent.width * 0.5
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
+										MouseArea {
+												id: dismiss_mouseArea
+												anchors.fill: parent
+												onPressed: {
+														dismiss_text.color = "#000000"
+														dismiss_rectangle.color = "#ffffff"
+														authenticate_text.color = "#ffffff"
+														authenticate_rectangle.color = "#00000000"
+												}
+												onReleased: {
+														dismiss_text.color = "#ffffff"
+														dismiss_rectangle.color = "#00000000"
+												}
+												onClicked: {
+														if(skipAuthentication == false) {
+																skipAuthentication = true
+														}
+														else if(skipAuthentication == true) {
+																skipAuthentication = false
+														}
+												}
+										}
+								}
 
-                        Text {
-                            id: dismiss_text
-                            color: "#ffffff"
-                            text: skipAuthentication ? "BACK" : "DISMISS"
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: "Antennae"
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
+								Rectangle {
+										id: authenticate_rectangle
+										x: parent.width * 0.5
+										y: 0
+										width: parent.width * 0.5
+										height: 72
+										color: "#00000000"
+										radius: 10
 
-                        MouseArea {
-                            id: dismiss_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                dismiss_text.color = "#000000"
-                                dismiss_rectangle.color = "#ffffff"
-                                authenticate_text.color = "#ffffff"
-                                authenticate_rectangle.color = "#00000000"
-                            }
-                            onReleased: {
-                                dismiss_text.color = "#ffffff"
-                                dismiss_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                if(skipAuthentication == false) {
-                                    skipAuthentication = true
-                                }
-                                else if(skipAuthentication == true) {
-                                    skipAuthentication = false
-                                }
-                            }
-                        }
-                    }
+										Text {
+												id: authenticate_text
+												color: "#ffffff"
+												text: skipAuthentication ? "CONTINUE" : "AUTHENTICATE"
 
-                    Rectangle {
-                        id: authenticate_rectangle
-                        x: parent.width * 0.5
-                        y: 0
-                        width: parent.width * 0.5
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												font.letterSpacing: 3
+												font.weight: Font.Bold
+												font.family: "Antennae"
+												font.pixelSize: 18
+												anchors.verticalCenter: parent.verticalCenter
+												anchors.horizontalCenter: parent.horizontalCenter
+										}
 
-                        Text {
-                            id: authenticate_text
-                            color: "#ffffff"
-                            text: skipAuthentication ? "CONTINUE" : "AUTHENTICATE"
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: "Antennae"
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
+										MouseArea {
+												id: authenticate_mouseArea
+												anchors.fill: parent
+												onPressed: {
+													authenticate_text.color = "#000000"
+													authenticate_rectangle.color = "#ffffff"
+												}
+												onReleased: {
+														authenticate_text.color = "#ffffff"
+														authenticate_rectangle.color = "#00000000"
+												}
+												onClicked: {
+														if(skipAuthentication == false) {
+																bot.respondAuthRequest("accepted")
+																isAuthenticated = true
+														}
+														else if(skipAuthentication == true) {
+																bot.respondAuthRequest("rejected")
+																authenticatePrinterPopup.close()
+														}
+												}
+										}
+								}
+						}
+				}
+        
+				Popup {
+						id: firmwareUpdatePopup
+						width: 800
+						height: 480
+						modal: true
+						dim: false
+						focus: true
+						closePolicy: Popup.CloseOnPressOutside
+						background: Rectangle {
+								id: popupBackgroundDim
+								color: "#000000"
+								rotation: rootItem.rotation == 180 ? 180 : 0
+								opacity: 0.5
+								anchors.fill: parent
+						}
+						enter: Transition {
+								NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+						}
+						exit: Transition {
+								NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+						}
 
-                        MouseArea {
-                            id: authenticate_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                authenticate_text.color = "#000000"
-                                authenticate_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                authenticate_text.color = "#ffffff"
-                                authenticate_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                if(skipAuthentication == false) {
-                                    bot.respondAuthRequest("accepted")
-                                    isAuthenticated = true
-                                }
-                                else if(skipAuthentication == true) {
-                                    bot.respondAuthRequest("rejected")
-                                    authenticatePrinterPopup.close()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+						onOpened: {
+								update_rectangle.color = "#ffffff"
+								update_text.color = "#000000"
+								viewReleaseNotes = false
+								skipFirmwareUpdate = false
+						}
+						onClosed: {
+								viewReleaseNotes = false
+								skipFirmwareUpdate = false
+						}
+
+						Rectangle {
+								id: basePopupItem
+								color: "#000000"
+								rotation: rootItem.rotation == 180 ? 180 : 0
+								width: 720
+								height: skipFirmwareUpdate ? 220 : 275
+								radius: 10
+								border.width: 2
+								border.color: "#ffffff"
+								anchors.verticalCenter: parent.verticalCenter
+								anchors.horizontalCenter: parent.horizontalCenter
+
+								Rectangle {
+										id: horizontal_divider
+										width: 720
+										height: 2
+										color: "#ffffff"
+										anchors.bottom: parent.bottom
+										anchors.bottomMargin: 72
+								}
+
+								Rectangle {
+										id: vertical_divider
+										x: 359
+										y: 328
+										width: 2
+										height: 72
+										color: "#ffffff"
+										Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+										anchors.bottom: parent.bottom
+										anchors.bottomMargin: 0
+										anchors.horizontalCenter: parent.horizontalCenter
+								}
+
+								Item {
+										id: buttonBar
+										width: 720
+										height: 72
+										anchors.bottom: parent.bottom
+										anchors.bottomMargin: 0
+
+										Rectangle {
+												id: dismiss_rectangle
+												x: 0
+												y: 0
+												width: 360
+												height: 72
+												color: "#00000000"
+												radius: 10
+												
+												Text {
+														id: dismiss_text
+														color: "#ffffff"
+														text: skipFirmwareUpdate ? "SKIP" : "NOT NOW"
+														Layout.fillHeight: false
+														Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+														Layout.fillWidth: false
+														font.letterSpacing: 3
+														font.weight: Font.Bold
+														font.family: "Antennae"
+														font.pixelSize: 18
+														anchors.verticalCenter: parent.verticalCenter
+														anchors.horizontalCenter: parent.horizontalCenter
+												}
+
+												MouseArea {
+														id: notnow_mouseArea
+														anchors.fill: parent
+														onPressed: {
+																dismiss_text.color = "#000000"
+																dismiss_rectangle.color = "#ffffff"
+																update_text.color = "#ffffff"
+																update_rectangle.color = "#00000000"
+														}
+														onReleased: {
+																dismiss_text.color = "#ffffff"
+																dismiss_rectangle.color = "#00000000"
+														}
+														onClicked: {
+
+																if(skipFirmwareUpdate) {
+																		firmwareUpdatePopup.close()
+																}
+																else {
+																		skipFirmwareUpdate = true
+																		viewReleaseNotes = false
+																}
+														}
+												}
+										}
+
+										Rectangle {
+												id: update_rectangle
+												x: 360
+												y: 0
+												width: 360
+												height: 72
+												color: "#00000000"
+												radius: 10
+
+												Text {
+														id: update_text
+														color: "#ffffff"
+														text: "UPDATE"
+														Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+														font.letterSpacing: 3
+														font.weight: Font.Bold
+														font.family: "Antennae"
+														font.pixelSize: 18
+														anchors.verticalCenter: parent.verticalCenter
+														anchors.horizontalCenter: parent.horizontalCenter
+												}
+
+												MouseArea {
+														id: update_mouseArea
+														anchors.fill: parent
+														onPressed: {
+																update_text.color = "#000000"
+																update_rectangle.color = "#ffffff"
+														}
+														onReleased: {
+																update_text.color = "#ffffff"
+																update_rectangle.color = "#00000000"
+														}
+														onClicked: {
+																if(mainSwipeView.currentIndex != 3
+																|| settingsPage.settingsSwipeView.currentIndex != 3) {
+																		mainSwipeView.swipeToItem(3)
+																		settingsPage.settingsSwipeView.swipeToItem(3)
+																}
+																firmwareUpdatePopup.close()
+														}
+												}
+										}
+								}
+
+								ColumnLayout {
+										id: columnLayout
+										x: 130
+										width: 550
+										height: 150
+										anchors.top: parent.top
+										anchors.topMargin: 26
+										anchors.horizontalCenter: parent.horizontalCenter
+
+										Text {
+												id: authenticate_header_text
+												color: "#cbcbcb"
+												text: viewReleaseNotes ? "SOFTWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES" : skipFirmwareUpdate ? "SKIP SOFTWARE UPDATE?" : "SOFTWARE UPDATE AVAILABLE"
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												font.letterSpacing: 5
+												font.family: "Antennae"
+												font.weight: Font.Bold
+												font.pixelSize: 18
+										}
+
+										Item {
+												id: emptyItem
+												width: 200
+												height: 10
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												visible: viewReleaseNotes ? false : skipFirmwareUpdate ? false : true
+										}
+
+										Text {
+												id: authenticate_description_text1
+												width: 500
+												color: "#cbcbcb"
+												text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "We recommend using the most up to date software for your printer." : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												horizontalAlignment: Text.AlignHCenter
+												Layout.fillWidth: true
+												font.weight: Font.Light
+												wrapMode: Text.WordWrap
+												font.family: "Antennae"
+												font.pixelSize: 18
+												lineHeight: 1.35
+										}
+
+										Text {
+												id: authenticate_description_text2
+												color: "#cbcbcb"
+												text: skipFirmwareUpdate ? "" : "Tap to see Release Notes"
+												font.underline: true
+												Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+												horizontalAlignment: Text.AlignHCenter
+												Layout.fillWidth: true
+												font.weight: Font.Light
+												wrapMode: Text.WordWrap
+												font.family: "Antennae"
+												font.pixelSize: 18
+												visible: viewReleaseNotes ? false : true
+
+												MouseArea {
+														anchors.fill: parent
+														visible: skipFirmwareUpdate ? false : true
+														onClicked: {
+																viewReleaseNotes = true
+														}
+												}
+										}
+								}
+						}
+				}
+		}
 }

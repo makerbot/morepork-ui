@@ -11,13 +11,13 @@
 #include "local_jsonrpc.h"
 #include "error_utils.h"
 
-
 class KaitenBotModel : public BotModel {
   public:
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
     void authRequestUpdate(const Json::Value &request);
+    void firmwareUpdateNotif(const Json::Value & firmware_info);
     void cancel();
     void pausePrint();
     void print(QString file_name);
@@ -28,6 +28,8 @@ class KaitenBotModel : public BotModel {
     void assistedLevel();
     std::shared_ptr<JsonRpcMethod::Response> m_authResp;
     void respondAuthRequest(QString response);
+    void firmwareUpdateCheck(bool dont_force_check);
+    void installFirmware();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -96,6 +98,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<AuthRequestMethod> m_authReq;
+  
+    class FirmwareUpdateNotification : public JsonRpcNotification {
+      public:
+        FirmwareUpdateNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->firmwareUpdateNotif(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<FirmwareUpdateNotification> m_fwareUpNot;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -214,6 +227,30 @@ void KaitenBotModel::assistedLevel(){
     }
 }
 
+void KaitenBotModel::firmwareUpdateCheck(bool dont_force_check){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["only_notify"] = Json::Value(dont_force_check);
+        conn->jsonrpc.invoke("update_available_firmware", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::installFirmware(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("download_and_install_firmware", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+} 
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -221,6 +258,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_netNot(new NetStateNotification(this)),
         m_netStateCb(new NetStateCallback(this)),
         m_authReq(new AuthRequestMethod(this)) {
+        m_fwareUpNot(new FirmwareUpdateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -229,6 +267,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("state_notification", m_sysNot);
     conn->jsonrpc.addMethod("network_state_change", m_netNot);
     conn->jsonrpc.addMethod("authorize_user", m_authReq);
+    conn->jsonrpc.addMethod("firware_updates_info_change", m_fwareUpNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -293,6 +332,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
+}
+
+void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
+    if(!params.empty()){
+        if(params["update_available"].asBool()) {
+            firmwareUpdateAvailableSet(true);
+            UPDATE_STRING_PROP(firmwareUpdateVersion, params["version"]);
+            UPDATE_STRING_PROP(firmwareUpdateReleaseDate, params["release_date"]);
+            UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, params["release_notes"]);
+        }
+        else {
+            firmwareUpdateAvailableReset();
+        }
+    }
 }
 
 void KaitenBotModel::connected() {

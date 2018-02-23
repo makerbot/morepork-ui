@@ -319,12 +319,13 @@ Item {
                 ColumnLayout {
                     id: columnLayout
                     width: 400
-                    height: 215
+                    height: 225
                     antialiasing: false
                     smooth: false
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 400
+                    spacing: 10
 
                     Image {
                         id: infoIcon
@@ -388,7 +389,6 @@ Item {
                             color: "#ffffff"
                             antialiasing: false
                             smooth: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         }
 
                         Text {
@@ -396,7 +396,6 @@ Item {
                             text: print_time
                             smooth: false
                             antialiasing: false
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.family: "Antennae"
                             font.weight: Font.Light
@@ -442,7 +441,6 @@ Item {
                             color: "#ffffff"
                             antialiasing: false
                             smooth: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         }
 
                         Image {
@@ -451,7 +449,6 @@ Item {
                             width: 12
                             antialiasing: false
                             smooth: false
-                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                             source: "qrc:/img/alert.png"
                         }
                     }
@@ -459,14 +456,14 @@ Item {
                     Item {
                         id: spacingItem1
                         width: 200
-                        height: 5
+                        height: 3
                         smooth: false
                         antialiasing: false
                     }
 
                     RoundedButton {
                         buttonWidth: 210
-                        buttonHeight: 45
+                        buttonHeight: 50
                         label: "START PRINT"
                         button_mouseArea.onClicked: {
                             storage.backStackClear()
