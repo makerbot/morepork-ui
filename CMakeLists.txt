@@ -33,7 +33,7 @@ else()
 endif()
 
 if(NOT ${QT_CREATOR_BUILD})
-    #add_subdirectory(auther)
+    add_subdirectory(auther)
 endif()
 
 if(${CMAKE_CROSSCOMPILING} OR ${QT_CREATOR_BUILD})

@@ -20,5 +20,9 @@ function(install_enabled_service service)
     install(FILES ${service} DESTINATION ${systemd_libpath})
 endfunction()
 
-install_enabled_service(auther.service)
+function(install_disabled_service service)
+    install(FILES ${service} DESTINATION ${systemd_libpath})
+endfunction()
+
+install_disabled_service(auther.service)
 install_enabled_service(morepork_ui.service)
