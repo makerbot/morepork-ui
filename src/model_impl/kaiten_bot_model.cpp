@@ -257,7 +257,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_sysInfoCb(new SysInfoCallback(this)),
         m_netNot(new NetStateNotification(this)),
         m_netStateCb(new NetStateCallback(this)),
-        m_authReq(new AuthRequestMethod(this)) {
+        m_authReq(new AuthRequestMethod(this)),
         m_fwareUpNot(new FirmwareUpdateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
