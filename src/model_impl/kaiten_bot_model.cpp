@@ -16,6 +16,7 @@ class KaitenBotModel : public BotModel {
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
+    void authRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
     void cancel();
     void pausePrint();
@@ -25,6 +26,8 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex);
     void assistedLevel();
+    std::shared_ptr<JsonRpcMethod::Response> m_authResp;
+    void respondAuthRequest(QString response);
     void firmwareUpdateCheck(bool dont_force_check);
     void installFirmware();
 
@@ -77,6 +80,25 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<NetStateCallback> m_netStateCb;
 
+    class AuthRequestMethod : public JsonRpcMethod {
+      public:
+        AuthRequestMethod(KaitenBotModel * bot) : m_bot(bot) {}
+            void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
+                if(!m_bot->m_authResp) {
+                    m_bot->authRequestUpdate(params);
+                    m_bot->m_authResp = response;
+                }
+                else {
+                    Json::Value json_params(Json::objectValue);
+                    json_params["answer"] = Json::Value("rejected");
+                    response->sendResult(json_params);
+                }
+            }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<AuthRequestMethod> m_authReq;
+  
     class FirmwareUpdateNotification : public JsonRpcNotification {
       public:
         FirmwareUpdateNotification(KaitenBotModel * bot) : m_bot(bot) {}
@@ -88,6 +110,21 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<FirmwareUpdateNotification> m_fwareUpNot;
 };
+
+void KaitenBotModel::authRequestUpdate(const Json::Value &request){
+    isAuthRequestPendingSet(true);
+    UPDATE_STRING_PROP(username, request["username"]);
+}
+
+void KaitenBotModel::respondAuthRequest(QString response){
+    if(m_authResp) {
+        Json::Value json_params(Json::objectValue);
+        json_params["answer"] = Json::Value(response.toStdString());
+        m_authResp->sendResult(json_params);
+        m_authResp = nullptr;
+        isAuthRequestPendingReset();
+    }
+}
 
 void KaitenBotModel::cancel(){
     try{
@@ -115,7 +152,7 @@ void KaitenBotModel::print(QString file_name){
     try{
         qDebug() << FL_STRM << "file_name: " << file_name;
         auto conn = m_conn.data();
-        Json::Value json_params(Json::objectValue);                                      
+        Json::Value json_params(Json::objectValue);
         json_params["filepath"] = Json::Value(file_name.toStdString());
         json_params["ensure_build_plate_clear"] = Json::Value(false);
         json_params["transfer_wait"] = Json::Value(false);
@@ -220,6 +257,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_sysInfoCb(new SysInfoCallback(this)),
         m_netNot(new NetStateNotification(this)),
         m_netStateCb(new NetStateCallback(this)),
+        m_authReq(new AuthRequestMethod(this)) {
         m_fwareUpNot(new FirmwareUpdateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
@@ -228,8 +266,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("system_notification", m_sysNot);
     conn->jsonrpc.addMethod("state_notification", m_sysNot);
     conn->jsonrpc.addMethod("network_state_change", m_netNot);
+    conn->jsonrpc.addMethod("authorize_user", m_authReq);
     conn->jsonrpc.addMethod("firware_updates_info_change", m_fwareUpNot);
-
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -316,6 +354,7 @@ void KaitenBotModel::connected() {
         "get_system_information", Json::Value(), m_sysInfoCb);
     m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
     // TODO: Wait for callbacks before setting state to connected
+    m_conn->jsonrpc.invoke("register_lcd", Json::Value(), std::weak_ptr<JsonRpcCallback>());
     stateSet(ConnectionState::Connected);
 }
 
