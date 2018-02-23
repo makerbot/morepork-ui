@@ -49,6 +49,18 @@ Item {
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/settings_icon.png"
         textIconDesc.text: "SETTINGS"
+
+        Image {
+            id: image
+            width: sourceSize.width
+            height: sourceSize.height
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 75
+            anchors.right: parent.right
+            anchors.rightMargin: 35
+            source: "qrc:/img/alert.png"
+            visible: isfirmwareUpdateAvailable
+        }
     }
 
     MainMenuIcon {

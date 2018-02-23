@@ -10,6 +10,21 @@ ApplicationWindow {
     property alias topBar: topBar
     property var currentItem: mainMenu
     property var activeDrawer
+    property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
+    onIsfirmwareUpdateAvailableChanged: {
+        if(isfirmwareUpdateAvailable) {
+            if(settingsPage.settingsSwipeView.currentIndex != 3) {
+                firmwareUpdatePopup.open()
+            }
+        }
+    }
+    property bool skipFirmwareUpdate: false
+    property bool viewReleaseNotes: false
+
+    onSkipFirmwareUpdateChanged: {
+        update_rectangle.color = "#ffffff"
+        update_text.color = "000000"
+    }
 
     function setDrawerState(state) {
         topBar.imageDrawerArrow.visible = state
@@ -26,7 +41,7 @@ ApplicationWindow {
         currentItem = currentItem_
     }
 
-    function goBack(){
+    function goBack() {
         if(currentItem.hasAltBack){
             currentItem.altBack()
         }
@@ -35,8 +50,7 @@ ApplicationWindow {
         }
     }
 
-    function disableDrawer()
-    {
+    function disableDrawer() {
         topBar.imageDrawerArrow.visible = false
         if(activeDrawer == printPage.printingDrawer
                 || activeDrawer == materialPage.materialPageDrawer
@@ -70,8 +84,7 @@ ApplicationWindow {
             dim: false
             opacity: 0
             interactive: mainSwipeView.currentIndex
-            onOpened:
-            {
+            onOpened: {
                 position = 0
                 goBack()
                 close()
@@ -97,8 +110,8 @@ ApplicationWindow {
             anchors.topMargin: topBar.barHeight
             interactive: false
             transform: Translate {
-                        x: backSwipe.position * mainSwipeView.width * 1.5
-                    }
+                x: backSwipe.position * mainSwipeView.width * 1.5
+            }
             property alias materialPage: materialPage
             smooth: false
 
@@ -228,6 +241,242 @@ ApplicationWindow {
                     id: preheatPage
                     smooth: false
                     anchors.fill: parent
+                }
+            }
+        }
+
+        Popup {
+            id: firmwareUpdatePopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            closePolicy: Popup.CloseOnPressOutside
+            background: Rectangle {
+                id: popupBackgroundDim
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+            onOpened: {
+                update_rectangle.color = "#ffffff"
+                update_text.color = "#000000"
+                viewReleaseNotes = false
+                skipFirmwareUpdate = false
+            }
+            onClosed: {
+                viewReleaseNotes = false
+                skipFirmwareUpdate = false
+            }
+
+            Rectangle {
+                id: basePopupItem
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: skipFirmwareUpdate ? 220 : 275
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    id: horizontal_divider
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Rectangle {
+                    id: vertical_divider
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Item {
+                    id: buttonBar
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: dismiss_rectangle
+                        x: 0
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: dismiss_text
+                            color: "#ffffff"
+                            text: skipFirmwareUpdate ? "SKIP" : "NOT NOW"
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: notnow_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                dismiss_text.color = "#000000"
+                                dismiss_rectangle.color = "#ffffff"
+                                update_text.color = "#ffffff"
+                                update_rectangle.color = "#00000000"
+                            }
+                            onReleased: {
+                                dismiss_text.color = "#ffffff"
+                                dismiss_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                if(skipFirmwareUpdate) {
+                                    firmwareUpdatePopup.close()
+                                }
+                                else {
+                                    skipFirmwareUpdate = true
+                                    viewReleaseNotes = false
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: update_rectangle
+                        x: 360
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: update_text
+                            color: "#ffffff"
+                            text: "UPDATE"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: update_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                update_text.color = "#000000"
+                                update_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                update_text.color = "#ffffff"
+                                update_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                if(mainSwipeView.currentIndex != 3
+                                || settingsPage.settingsSwipeView.currentIndex != 3) {
+                                    mainSwipeView.swipeToItem(3)
+                                    settingsPage.settingsSwipeView.swipeToItem(3)
+                                }
+                                firmwareUpdatePopup.close()
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayout
+                    x: 130
+                    width: 550
+                    height: 150
+                    anchors.top: parent.top
+                    anchors.topMargin: 26
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: authenticate_header_text
+                        color: "#cbcbcb"
+                        text: viewReleaseNotes ? "SOFTWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES" : skipFirmwareUpdate ? "SKIP SOFTWARE UPDATE?" : "SOFTWARE UPDATE AVAILABLE"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 5
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 18
+                    }
+
+                    Item {
+                        id: emptyItem
+                        width: 200
+                        height: 10
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        visible: viewReleaseNotes ? false : skipFirmwareUpdate ? false : true
+                    }
+
+                    Text {
+                        id: authenticate_description_text1
+                        width: 500
+                        color: "#cbcbcb"
+                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "We recommend using the most up to date software for your printer." : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        lineHeight: 1.35
+                    }
+
+                    Text {
+                        id: authenticate_description_text2
+                        color: "#cbcbcb"
+                        text: skipFirmwareUpdate ? "" : "Tap to see Release Notes"
+                        font.underline: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        visible: viewReleaseNotes ? false : true
+
+                        MouseArea {
+                            anchors.fill: parent
+                            visible: skipFirmwareUpdate ? false : true
+                            onClicked: {
+                                viewReleaseNotes = true
+                            }
+                        }
+                    }
                 }
             }
         }

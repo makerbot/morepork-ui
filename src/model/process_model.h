@@ -15,6 +15,7 @@ class ProcessModel : public BaseModel {
         Load,
         Unload,
         AssistedLeveling,
+        FirmwareUpdate,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -30,7 +31,10 @@ class ProcessModel : public BaseModel {
         Extrusion,
         Stopping,
         UnloadingFilament,
-        Done // Base Process states
+        Done, // Base Process states
+        TransferringFirmware, // Firmware update states
+        VerifyingFirmware,
+        InstallingFirmware
     };
 
     Q_ENUM(ProcessType)
