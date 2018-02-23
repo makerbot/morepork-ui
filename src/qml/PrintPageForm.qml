@@ -485,89 +485,80 @@ Item {
             smooth: false
             visible: false
 
-            Flickable {
-                id: flickable
-                anchors.topMargin: 10
-                anchors.fill: parent
-                anchors.leftMargin: 15
-                interactive: true
-                flickableDirection: Flickable.VerticalFlick
-                contentHeight: column.height
+            ColumnLayout {
+                id: layout
+                width: 600
+                height: 350
+                anchors.left: parent.left
+                anchors.leftMargin: 65
+                anchors.top: parent.top
+                anchors.topMargin: 50
                 smooth: false
 
-                Column {
-                    id: column
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 1
+                InfoItem {
+                    id: printInfo_fileName
+                    labelText: qsTr("Filename") + cpUiTr.emptyStr
+                    dataText: file_name
+                }
 
-                    InfoItem {
-                        id: printInfo_fileName
-                        labelText: qsTr("Filename") + cpUiTr.emptyStr
-                        dataText: file_name
-                    }
+                InfoItem {
+                    id: printInfo_timeEstimate
+                    labelText: qsTr("Print Time Estimate") + cpUiTr.emptyStr
+                    dataText: print_time
+                }
 
-                    InfoItem {
-                        id: printInfo_timeEstimate
-                        labelText: qsTr("Print Time Estimate") + cpUiTr.emptyStr
-                        dataText: print_time
-                    }
+                InfoItem {
+                    id: printInfo_material
+                    labelText: qsTr("Print Material") + cpUiTr.emptyStr
+                    dataText: print_material
+                }
 
-                    InfoItem {
-                        id: printInfo_material
-                        labelText: qsTr("Print Material") + cpUiTr.emptyStr
-                        dataText: print_material
-                    }
+                InfoItem {
+                    id: printInfo_usesSupport
+                    labelText: qsTr("Supports") + cpUiTr.emptyStr
+                    dataText: uses_support
+                }
 
-                    InfoItem {
-                        id: printInfo_usesSupport
-                        labelText: qsTr("Supports") + cpUiTr.emptyStr
-                        dataText: uses_support
-                    }
+                InfoItem {
+                    id: printInfo_usesRaft
+                    labelText: qsTr("Rafts") + cpUiTr.emptyStr
+                    dataText: uses_raft
+                }
 
-                    InfoItem {
-                        id: printInfo_usesRaft
-                        labelText: qsTr("Rafts") + cpUiTr.emptyStr
-                        dataText: uses_raft
-                    }
+                InfoItem {
+                    id: printInfo_modelMass
+                    labelText: qsTr("Model") + cpUiTr.emptyStr
+                    dataText: model_mass
+                }
 
-                    InfoItem {
-                        id: printInfo_modelMass
-                        labelText: qsTr("Model") + cpUiTr.emptyStr
-                        dataText: model_mass
-                    }
+                InfoItem {
+                    id: printInfo_supportMass
+                    labelText: qsTr("Support") + cpUiTr.emptyStr
+                    dataText: support_mass
+                }
 
-                    InfoItem {
-                        id: printInfo_supportMass
-                        labelText: qsTr("Support") + cpUiTr.emptyStr
-                        dataText: support_mass
-                    }
+                InfoItem {
+                    id: printInfo_Shells
+                    labelText: qsTr("Shells") + cpUiTr.emptyStr
+                    dataText: num_shells
+                }
 
-                    InfoItem {
-                        id: printInfo_Shells
-                        labelText: qsTr("Shells") + cpUiTr.emptyStr
-                        dataText: num_shells
-                    }
+                InfoItem {
+                    id: printInfo_extruderTemperature
+                    labelText: qsTr("Extruder Temperature") + cpUiTr.emptyStr
+                    dataText: extruder_temp
+                }
 
-                    InfoItem {
-                        id: printInfo_extruderTemperature
-                        labelText: qsTr("Extruder Temperature") + cpUiTr.emptyStr
-                        dataText: extruder_temp
-                    }
+                InfoItem {
+                    id: printInfo_chamberTemperature
+                    labelText: qsTr("Chamber Temperature") + cpUiTr.emptyStr
+                    dataText: chamber_temp
+                }
 
-                    InfoItem {
-                        id: printInfo_chamberTemperature
-                        labelText: qsTr("Chamber Temperature") + cpUiTr.emptyStr
-                        dataText: chamber_temp
-                    }
-
-                    InfoItem {
-                        id: printInfo_slicerName
-                        labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
-                        dataText: slicer_name
-                    }
+                InfoItem {
+                    id: printInfo_slicerName
+                    labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
+                    dataText: slicer_name
                 }
             }
         }
