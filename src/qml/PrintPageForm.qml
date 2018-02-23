@@ -485,100 +485,80 @@ Item {
             smooth: false
             visible: false
 
-            Flickable {
-                id: flickable
-                anchors.topMargin: 10
-                anchors.fill: parent
-                anchors.leftMargin: 15
-                interactive: true
-                flickableDirection: Flickable.VerticalFlick
-                contentHeight: column.height
+            ColumnLayout {
+                id: layout
+                width: 600
+                height: 350
+                anchors.left: parent.left
+                anchors.leftMargin: 65
+                anchors.top: parent.top
+                anchors.topMargin: 50
                 smooth: false
 
-                Column {
-                    id: column
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 1
+                InfoItem {
+                    id: printInfo_fileName
+                    labelText: qsTr("Filename") + cpUiTr.emptyStr
+                    dataText: file_name
+                }
 
-                    InfoItem {
-                        id: printInfo_fileName
-                        width: parent.width
-                        textLabel.text: qsTr("Filename") + cpUiTr.emptyStr
-                        textData.text: file_name
-                    }
+                InfoItem {
+                    id: printInfo_timeEstimate
+                    labelText: qsTr("Print Time Estimate") + cpUiTr.emptyStr
+                    dataText: print_time
+                }
 
-                    InfoItem {
-                        id: printInfo_timeEstimate
-                        width: parent.width
-                        textLabel.text: qsTr("Print Time Estimate") + cpUiTr.emptyStr
-                        textData.text: print_time
-                    }
+                InfoItem {
+                    id: printInfo_material
+                    labelText: qsTr("Print Material") + cpUiTr.emptyStr
+                    dataText: print_material
+                }
 
-                    InfoItem {
-                        id: printInfo_material
-                        width: parent.width
-                        textLabel.text: qsTr("Print Material") + cpUiTr.emptyStr
-                        textData.text: print_material
-                    }
+                InfoItem {
+                    id: printInfo_usesSupport
+                    labelText: qsTr("Supports") + cpUiTr.emptyStr
+                    dataText: uses_support
+                }
 
-                    InfoItem {
-                        id: printInfo_usesSupport
-                        width: parent.width
-                        textLabel.text: qsTr("Supports") + cpUiTr.emptyStr
-                        textData.text: uses_support
-                    }
+                InfoItem {
+                    id: printInfo_usesRaft
+                    labelText: qsTr("Rafts") + cpUiTr.emptyStr
+                    dataText: uses_raft
+                }
 
-                    InfoItem {
-                        id: printInfo_usesRaft
-                        width: parent.width
-                        textLabel.text: qsTr("Rafts") + cpUiTr.emptyStr
-                        textData.text: uses_raft
-                    }
+                InfoItem {
+                    id: printInfo_modelMass
+                    labelText: qsTr("Model") + cpUiTr.emptyStr
+                    dataText: model_mass
+                }
 
-                    InfoItem {
-                        id: printInfo_modelMass
-                        width: parent.width
-                        textLabel.text: qsTr("Model") + cpUiTr.emptyStr
-                        textData.text: model_mass
-                    }
+                InfoItem {
+                    id: printInfo_supportMass
+                    labelText: qsTr("Support") + cpUiTr.emptyStr
+                    dataText: support_mass
+                }
 
-                    InfoItem {
-                        id: printInfo_supportMass
-                        width: parent.width
-                        textLabel.text: qsTr("Support") + cpUiTr.emptyStr
-                        textData.text: support_mass
-                    }
+                InfoItem {
+                    id: printInfo_Shells
+                    labelText: qsTr("Shells") + cpUiTr.emptyStr
+                    dataText: num_shells
+                }
 
-                    InfoItem {
-                        id: printInfo_Shells
-                        width: parent.width
-                        textLabel.text: qsTr("Shells") + cpUiTr.emptyStr
-                        textData.text: num_shells
-                    }
+                InfoItem {
+                    id: printInfo_extruderTemperature
+                    labelText: qsTr("Extruder Temperature") + cpUiTr.emptyStr
+                    dataText: extruder_temp
+                }
 
-                    InfoItem {
-                        id: printInfo_extruderTemperature
-                        width: parent.width
-                        textLabel.text: qsTr("Extruder Temperature") + cpUiTr.emptyStr
-                        textData.text: extruder_temp
-                    }
+                InfoItem {
+                    id: printInfo_chamberTemperature
+                    labelText: qsTr("Chamber Temperature") + cpUiTr.emptyStr
+                    dataText: chamber_temp
+                }
 
-                    InfoItem {
-                        id: printInfo_chamberTemperature
-                        width: parent.width
-                        textLabel.text: qsTr("Chamber Temperature") + cpUiTr.emptyStr
-                        textData.text: chamber_temp
-                    }
-
-                    InfoItem {
-                        id: printInfo_slicerName
-                        width: parent.width
-                        textLabel.text: qsTr("Slicer Name") + cpUiTr.emptyStr
-                        textData.text: slicer_name
-                    }
+                InfoItem {
+                    id: printInfo_slicerName
+                    labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
+                    dataText: slicer_name
                 }
             }
         }
