@@ -61,7 +61,7 @@ ApplicationWindow {
 
     onSkipFirmwareUpdateChanged: {
         update_rectangle.color = "#ffffff"
-        update_text.color = "000000"
+        update_text.color = "#000000"
     }
 
     function setDrawerState(state) {
@@ -565,8 +565,6 @@ ApplicationWindow {
             onOpened: {
                 update_rectangle.color = "#ffffff"
                 update_text.color = "#000000"
-                viewReleaseNotes = false
-                skipFirmwareUpdate = false
             }
             onClosed: {
                 viewReleaseNotes = false
@@ -642,14 +640,14 @@ ApplicationWindow {
                             id: notnow_mouseArea
                             anchors.fill: parent
                             onPressed: {
-                                dismiss_text.color = "#000000"
-                                dismiss_rectangle.color = "#ffffff"
+                                dismiss_text1.color = "#000000"
+                                dismiss_rectangle1.color = "#ffffff"
                                 update_text.color = "#ffffff"
                                 update_rectangle.color = "#00000000"
                             }
                             onReleased: {
-                                dismiss_text.color = "#ffffff"
-                                dismiss_rectangle.color = "#00000000"
+                                dismiss_text1.color = "#ffffff"
+                                dismiss_rectangle1.color = "#00000000"
                             }
                             onClicked: {
                                 if(skipFirmwareUpdate) {
