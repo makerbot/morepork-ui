@@ -113,7 +113,6 @@ Item {
             color: "#cbcbcb"
             font.family: "Antennae"
             font.weight: Font.Light
-//            font.capitalization: Font.AllUppercase
             font.pixelSize: 18
             lineHeight: 1.35
             wrapMode: Text.WordWrap
@@ -343,6 +342,9 @@ Item {
                 text: {
                     switch(bot.process.stateType)
                     {
+                    // Since 'transfer' step also maps to
+                    // 'loading' state in print process
+                    case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
                         "UPDATING SOFTWARE [1/3]"
                         break;
@@ -365,14 +367,17 @@ Item {
                 text: {
                     switch(bot.process.stateType)
                     {
+                    // Since 'transfer' step also maps to
+                    // 'loading' state in print process
+                    case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
-                        "TRANSFERRING..."
+                        "TRANSFERRING... " + bot.process.printPercentage + "%"
                         break;
                     case ProcessStateType.VerifyingFirmware:
-                        "VERIFYING FILE..."
+                        "VERIFYING FILE... " + bot.process.printPercentage + "%"
                         break;
                     case ProcessStateType.InstallingFirmware:
-                        "INSTALLING..."
+                        "INSTALLING... " + bot.process.printPercentage + "%"
                         break;
                     default:
                         "PLEASE WAIT A MOMENT"
