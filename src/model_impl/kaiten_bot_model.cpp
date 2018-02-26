@@ -109,6 +109,19 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<FirmwareUpdateNotification> m_fwareUpNot;
+
+   class AllowUnknownFirmware : public JsonRpcMethod {
+      public:
+        AllowUnknownFirmware(KaitenBotModel * bot) : m_bot(bot) {}
+            void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
+                Json::Value json_params(Json::objectValue);
+                json_params = Json::Value("allow");
+                response->sendResult(json_params);
+            }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<AllowUnknownFirmware> m_allowUnkFw;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -258,7 +271,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_netNot(new NetStateNotification(this)),
         m_netStateCb(new NetStateCallback(this)),
         m_authReq(new AuthRequestMethod(this)),
-        m_fwareUpNot(new FirmwareUpdateNotification(this)) {
+        m_fwareUpNot(new FirmwareUpdateNotification(this)),
+        m_allowUnkFw(new AllowUnknownFirmware(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -268,6 +282,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("network_state_change", m_netNot);
     conn->jsonrpc.addMethod("authorize_user", m_authReq);
     conn->jsonrpc.addMethod("firware_updates_info_change", m_fwareUpNot);
+    conn->jsonrpc.addMethod("allow_unknown_firmware", m_allowUnkFw);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);

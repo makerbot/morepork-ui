@@ -22,6 +22,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::Unload);
         else if (kNameStr == "SombreroAssistedLevelingProcess")
             typeSet(ProcessType::AssistedLeveling);
+        else if (kNameStr == "FirmwareBurningProcess")
+            typeSet(ProcessType::FirmwareUpdate);
         else
             typeSet(ProcessType::Other);
     }
@@ -67,6 +69,15 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
         else if (kStepStr == "done")
             stateTypeSet(ProcessStateType::Done);
+        // Firmware Updating States
+        // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
+        else if (kStepStr == "downloading")
+        //Another possible step for firmwareUpdate is 'transfer' which is mapped to 'Loading' 
+            stateTypeSet(ProcessStateType::TransferringFirmware);
+        else if (kStepStr == "verify_firmware")
+            stateTypeSet(ProcessStateType::VerifyingFirmware);
+        else if (kStepStr == "writing")
+            stateTypeSet(ProcessStateType::InstallingFirmware);
         else
             stateTypeReset();
     }
