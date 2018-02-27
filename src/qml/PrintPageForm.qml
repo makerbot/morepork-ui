@@ -112,9 +112,14 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    MoreporkButton {
+                    FileButton {
                         id: buttonInternalStorage
-                        buttonText.text: "Internal Storage"
+                        fileThumbnail.source: "qrc:/img/sombrero_icon.png"
+                        fileThumbnail.width: 96
+                        fileThumbnail.height: 120
+                        filenameText.text: "INTERNAL STORAGE"
+                        filePrintTime.text: "FILES SAVED ON PRINTER"
+                        fileMaterial.visible: false
                         onClicked: {
                             browsingUsbStorage = false
                             storage.updateStorageFileList("?root_internal?")
@@ -124,21 +129,34 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; visible: storage.usbStorageConnected
+                    Item { width: parent.width; height: 1; smooth: false
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
 
-                    MoreporkButton {
+                    FileButton {
                         id: buttonUsbStorage
-                        buttonText.text: "USB Storage"
-                        visible: storage.usbStorageConnected
+                        fileThumbnail.source: "qrc:/img/usb_icon.png"
+                        fileThumbnail.opacity: usbStorageConnected ? 1 : 0.4
+                        fileThumbnail.width: 96
+                        fileThumbnail.height: 120
+                        filenameText.text: "USB"
+                        filenameText.opacity: usbStorageConnected ? 1 : 0.4
+                        filePrintTime.text: usbStorageConnected ? "EXTERNAL STORAGE" : "PLEASE INSERT A USB DRIVE"
+                        filePrintTime.opacity: usbStorageConnected ? 1 : 0.4
+                        fileMaterial.visible: false
                         onClicked: {
-                            browsingUsbStorage = true
-                            storage.updateStorageFileList("?root_usb?")
-                            activeDrawer = printPage.sortingDrawer
-                            setDrawerState(true)
-                            printSwipeView.swipeToItem(1)
+                            if(usbStorageConnected) {
+                                browsingUsbStorage = true
+                                storage.updateStorageFileList("?root_usb?")
+                                activeDrawer = printPage.sortingDrawer
+                                setDrawerState(true)
+                                printSwipeView.swipeToItem(1)
+                            }
+                        }
+                    }
+                    Item { width: parent.width; height: 1; smooth: false
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
                 }

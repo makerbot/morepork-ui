@@ -44,7 +44,7 @@ Button {
         }
     }
 
-    ColumnLayout {
+    Item {
         id: columnLayout
         width: 100
         height: 50
@@ -65,10 +65,14 @@ Button {
             elide: Text.ElideRight
             smooth: false
             antialiasing: false
+            anchors.top: parent.top
+            anchors.topMargin: fileDesc_rowLayout.visible ? 0 : 15
         }
 
         RowLayout {
             id: fileDesc_rowLayout
+            anchors.top: parent.top
+            anchors.topMargin: 32
             spacing: 10
 
             Text{
@@ -83,7 +87,6 @@ Button {
                 verticalAlignment: Text.Left
                 smooth: false
                 antialiasing: false
-
             }
 
             Rectangle {
@@ -91,6 +94,7 @@ Button {
                 width: 1
                 height: 20
                 color: "#ffffff"
+                visible: fileMaterial.visible
             }
 
             Text {
@@ -106,7 +110,6 @@ Button {
                 verticalAlignment: Text.Left
                 smooth: false
                 antialiasing: false
-
             }
         }
     }
@@ -121,5 +124,4 @@ Button {
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/img/arrow_19pix.png"
     }
-
 }
