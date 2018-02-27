@@ -299,7 +299,7 @@ Item {
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
+            property var backSwiper: printSwipeView
             property int backSwipeIndex: isPrintProcess ? 0 : 1
             property bool hasAltBack: true
             smooth: false
@@ -514,7 +514,7 @@ Item {
         Item {
             id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
+            property var backSwiper: printSwipeView
             property int backSwipeIndex: isPrintProcess ? 0 : 2
             smooth: false
             visible: false
