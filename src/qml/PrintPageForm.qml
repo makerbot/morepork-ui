@@ -28,6 +28,7 @@ Item {
     property alias buttonInternalStorage: buttonInternalStorage
     property bool browsingUsbStorage: false
     property alias printSwipeView: printSwipeView
+    property bool waitingForPrintToStart: false
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -41,6 +42,14 @@ Item {
     property bool isPrintProcess: bot.process.type == ProcessType.Print
     onIsPrintProcessChanged: {
         if(isPrintProcess) {
+            //Move to index 0 of print page swipe
+            //view when print process actually starts
+            //assuming the user had navigated to other
+            //pages before the print starts.
+            if(printSwipeView.currentIndex != 0) {
+                printSwipeView.swipeToItem(0)
+            }
+            waitingForPrintToStart = false //reset when the print actually starts
             setDrawerState(true)
         }
         else {
@@ -112,33 +121,57 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    MoreporkButton {
+                    FileButton {
                         id: buttonInternalStorage
-                        buttonText.text: "Internal Storage"
+                        fileThumbnail.source: "qrc:/img/sombrero_icon.png"
+                        fileThumbnail.width: 96
+                        fileThumbnail.height: 120
+                        filenameText.text: "INTERNAL STORAGE"
+                        filePrintTime.text: "FILES SAVED ON PRINTER"
+                        fileMaterial.visible: false
                         onClicked: {
-                            browsingUsbStorage = false
-                            storage.updateStorageFileList("?root_internal?")
-                            activeDrawer = printPage.sortingDrawer
-                            setDrawerState(true)
-                            printSwipeView.swipeToItem(1)
+                            //Disable moving into the file selection
+                            //screen if waiting for a print to start
+                            if(!waitingForPrintToStart) {
+                                browsingUsbStorage = false
+                                storage.updateStorageFileList("?root_internal?")
+                                activeDrawer = printPage.sortingDrawer
+                                setDrawerState(true)
+                                printSwipeView.swipeToItem(1)
+                            }
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; visible: storage.usbStorageConnected
+                    Item { width: parent.width; height: 1; smooth: false
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
 
-                    MoreporkButton {
+                    FileButton {
                         id: buttonUsbStorage
-                        buttonText.text: "USB Storage"
-                        visible: storage.usbStorageConnected
+                        fileThumbnail.source: "qrc:/img/usb_icon.png"
+                        fileThumbnail.opacity: usbStorageConnected ? 1 : 0.4
+                        fileThumbnail.width: 96
+                        fileThumbnail.height: 120
+                        filenameText.text: "USB"
+                        filenameText.opacity: usbStorageConnected ? 1 : 0.4
+                        filePrintTime.text: usbStorageConnected ? "EXTERNAL STORAGE" : "PLEASE INSERT A USB DRIVE"
+                        filePrintTime.opacity: usbStorageConnected ? 1 : 0.4
+                        fileMaterial.visible: false
                         onClicked: {
-                            browsingUsbStorage = true
-                            storage.updateStorageFileList("?root_usb?")
-                            activeDrawer = printPage.sortingDrawer
-                            setDrawerState(true)
-                            printSwipeView.swipeToItem(1)
+                            //Disable moving into the file selection
+                            //screen if waiting for a print to start
+                            if(usbStorageConnected && !waitingForPrintToStart) {
+                                browsingUsbStorage = true
+                                storage.updateStorageFileList("?root_usb?")
+                                activeDrawer = printPage.sortingDrawer
+                                setDrawerState(true)
+                                printSwipeView.swipeToItem(1)
+                            }
+                        }
+                    }
+                    Item { width: parent.width; height: 1; smooth: false
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
                 }
@@ -266,7 +299,7 @@ Item {
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
+            property var backSwiper: printSwipeView
             property int backSwipeIndex: isPrintProcess ? 0 : 1
             property bool hasAltBack: true
             smooth: false
@@ -469,6 +502,7 @@ Item {
                             storage.backStackClear()
                             activeDrawer = printPage.printingDrawer
                             bot.print(fileName)
+                            waitingForPrintToStart = true
                             printSwipeView.swipeToItem(0)
                         }
                     }
@@ -480,7 +514,7 @@ Item {
         Item {
             id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: isPrintProcess ? mainSwipeView : printSwipeView
+            property var backSwiper: printSwipeView
             property int backSwipeIndex: isPrintProcess ? 0 : 2
             smooth: false
             visible: false

@@ -2,8 +2,8 @@ import QtQuick 2.4
 import StorageSortTypeEnum 1.0
 
 PrintPageForm {
-    buttonUsbStorage.buttonText.text: qsTr("USB Storage") + cpUiTr.emptyStr
-    buttonInternalStorage.buttonText.text: qsTr("Internal Storage") + cpUiTr.emptyStr
+    buttonUsbStorage.filenameText.text: qsTr("USB") + cpUiTr.emptyStr
+    buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE") + cpUiTr.emptyStr
 
     printingDrawer.buttonCancelPrint.onClicked: {
         bot.cancel()
