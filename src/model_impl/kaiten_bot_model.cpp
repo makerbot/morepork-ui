@@ -18,6 +18,7 @@ class KaitenBotModel : public BotModel {
     void netUpdate(const Json::Value & info);
     void authRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
+    void printFileValidNotif(const Json::Value &info);
     void cancel();
     void pausePrint();
     void print(QString file_name);
@@ -83,17 +84,17 @@ class KaitenBotModel : public BotModel {
     class AuthRequestMethod : public JsonRpcMethod {
       public:
         AuthRequestMethod(KaitenBotModel * bot) : m_bot(bot) {}
-            void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
-                if(!m_bot->m_authResp) {
-                    m_bot->authRequestUpdate(params);
-                    m_bot->m_authResp = response;
-                }
-                else {
-                    Json::Value json_params(Json::objectValue);
-                    json_params["answer"] = Json::Value("rejected");
-                    response->sendResult(json_params);
-                }
+        void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
+            if(!m_bot->m_authResp) {
+                m_bot->authRequestUpdate(params);
+                m_bot->m_authResp = response;
             }
+            else {
+                Json::Value json_params(Json::objectValue);
+                json_params["answer"] = Json::Value("rejected");
+                response->sendResult(json_params);
+            }
+        }
       private:
         KaitenBotModel *m_bot;
     };
@@ -113,15 +114,26 @@ class KaitenBotModel : public BotModel {
    class AllowUnknownFirmware : public JsonRpcMethod {
       public:
         AllowUnknownFirmware(KaitenBotModel * bot) : m_bot(bot) {}
-            void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
-                Json::Value json_params(Json::objectValue);
-                json_params = Json::Value("allow");
-                response->sendResult(json_params);
-            }
+        void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
+            Json::Value json_params(Json::objectValue);
+            json_params = Json::Value("allow");
+            response->sendResult(json_params);
+        }
       private:
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<AllowUnknownFirmware> m_allowUnkFw;
+
+    class PrintFileUpdate : public JsonRpcNotification {
+      public:
+        PrintFileUpdate(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) {
+            m_bot->printFileValidNotif(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<PrintFileUpdate> m_prtFileVld;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -272,7 +284,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_netStateCb(new NetStateCallback(this)),
         m_authReq(new AuthRequestMethod(this)),
         m_fwareUpNot(new FirmwareUpdateNotification(this)),
-        m_allowUnkFw(new AllowUnknownFirmware(this)) {
+        m_allowUnkFw(new AllowUnknownFirmware(this)),
+        m_prtFileVld(new PrintFileUpdate(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -283,6 +296,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("authorize_user", m_authReq);
     conn->jsonrpc.addMethod("firware_updates_info_change", m_fwareUpNot);
     conn->jsonrpc.addMethod("allow_unknown_firmware", m_allowUnkFw);
+    conn->jsonrpc.addMethod("print_file_valid", m_prtFileVld);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -363,10 +377,13 @@ void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
     }
 }
 
+void KaitenBotModel::printFileValidNotif(const Json::Value &params) {
+    dynamic_cast<KaitenProcessModel*>(m_process.data())->printFileUpdate(params);
+}
+
 void KaitenBotModel::connected() {
     // TODO: Kaiten codegen?
-    m_conn->jsonrpc.invoke(
-        "get_system_information", Json::Value(), m_sysInfoCb);
+    m_conn->jsonrpc.invoke("get_system_information", Json::Value(), m_sysInfoCb);
     m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
     // TODO: Wait for callbacks before setting state to connected
     m_conn->jsonrpc.invoke("register_lcd", Json::Value(), std::weak_ptr<JsonRpcCallback>());

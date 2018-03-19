@@ -164,7 +164,7 @@ Item {
                 Text {
                     id: text5
                     color: "#ffffff"
-                    text: "Step: " + bot.process.levelStep
+                    text: "Step: " + bot.process.stepStr
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     antialiasing: false
                     smooth: false

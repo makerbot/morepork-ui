@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessStateTypeEnum 1.0
 
 Item {
-    id: item1
+    id: printStatusPage
     width: 800
     height: 440
     smooth: false
@@ -22,6 +22,7 @@ Item {
     property string doneByTimeString: "99:99"
     property string timeLeftString: "99:99"
     property string doneByMeridianString
+    property alias printStatusSwipeView: printStatusSwipeView
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime()
