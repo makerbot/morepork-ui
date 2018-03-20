@@ -164,7 +164,7 @@ Item {
                 Text {
                     id: text5
                     color: "#ffffff"
-                    text: "Step: " + bot.process.levelStep
+                    text: "Step: " + bot.process.stepStr
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     antialiasing: false
                     smooth: false
@@ -219,17 +219,14 @@ Item {
                     text: {
                         switch(bot.process.levelState)
                         {
-                        case 0:
-                            "Level State: " + bot.process.levelState
-                            break;
                         case 1:
-                            "Level State: " + bot.process.levelState + " LOW"
+                            "Level State: LOW"
                             break;
                         case 2:
-                            "Level State: " + bot.process.levelState + " HIGH"
+                            "Level State: HIGH"
                             break;
                         case 3:
-                            "Level State: " + bot.process.levelState + " OK"
+                            "Level State: OK"
                             break;
                         default:
                             "Level State: " + bot.process.levelState
