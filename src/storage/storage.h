@@ -16,8 +16,10 @@
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString()
 #define USB_STORAGE_DEV_BY_PATH QString()
+#define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #else
 // embedded linux path
+#define CURRENT_THING_PATH QString("/home/current_thing")
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define USB_STORAGE_DEV_BY_PATH \
@@ -111,6 +113,30 @@ class PrintFileInfo : public QObject {
                   material_name_a_(material_name_a),
                   material_name_b_(material_name_b),
                   slicer_name_(slicer_name) { }
+
+    PrintFileInfo& operator=(const PrintFileInfo& rvalue){
+        PrintFileInfo* temp = new PrintFileInfo(
+                rvalue.file_path_,
+                rvalue.file_name_,
+                rvalue.file_base_name_,
+                rvalue.file_last_read_,
+                rvalue.is_dir_,
+                rvalue.extrusion_mass_grams_a_,
+                rvalue.extrusion_mass_grams_b_,
+                rvalue.extruder_temp_celcius_a_,
+                rvalue.extruder_temp_celcius_b_,
+                rvalue.chamber_temp_celcius_,
+                rvalue.num_shells_,
+                rvalue.layer_height_mm_,
+                rvalue.infill_density_,
+                rvalue.time_estimate_sec_,
+                rvalue.uses_support_,
+                rvalue. uses_raft_,
+                rvalue.material_name_a_,
+                rvalue.material_name_b_,
+                rvalue.slicer_name_);
+        return *temp;
+    }
 
     QString filePath() const {
         return file_path_;
@@ -212,6 +238,7 @@ class MoreporkStorage : public QObject {
 
   public:
     QList<QObject*> print_file_list_;
+    PrintFileInfo* current_thing_;
     MoreporkStorage();
     Q_INVOKABLE void updateStorageFileList(const QString kDirectory);
     Q_INVOKABLE void deletePrintFile(QString file_name);
@@ -223,6 +250,14 @@ class MoreporkStorage : public QObject {
     QList<QObject*> printFileList() const;
     void printFileListSet(const QList<QObject*> &print_file_list);
     void printFileListReset();
+    Q_INVOKABLE void updateCurrentThing();
+    Q_PROPERTY(PrintFileInfo* currentThing
+      READ currentThing
+      WRITE currentThingSet
+      RESET currentThingReset)
+    PrintFileInfo* currentThing() const;
+    void currentThingSet(PrintFileInfo* current_thing);
+    Q_INVOKABLE void currentThingReset();
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();

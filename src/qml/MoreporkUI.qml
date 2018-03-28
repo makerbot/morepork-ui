@@ -66,12 +66,16 @@ ApplicationWindow {
 
     function setDrawerState(state) {
         topBar.imageDrawerArrow.visible = state
-        activeDrawer.interactive = state
-        if(state == true) {
-            topBar.drawerDownClicked.connect(activeDrawer.open)
-        }
-        else {
-            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+        if(activeDrawer == printPage.printingDrawer
+                || activeDrawer == materialPage.materialPageDrawer
+                || activeDrawer == printPage.sortingDrawer) {
+            activeDrawer.interactive = state
+            if(state) {
+                topBar.drawerDownClicked.connect(activeDrawer.open)
+            }
+            else {
+                topBar.drawerDownClicked.disconnect(activeDrawer.open)
+            }
         }
     }
 

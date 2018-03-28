@@ -91,8 +91,11 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
     UPDATE_INT_PROP(timeRemaining, proc["time_remaining"]);
-
     activeSet(true);
+}
+
+void KaitenProcessModel::printFileUpdate(const Json::Value &printFileDetails) {
+    printFileValidSet(true);
 }
 
 void KaitenProcessModel::asstLevelUpdate(const Json::Value & update) {
@@ -103,5 +106,3 @@ void KaitenProcessModel::asstLevelUpdate(const Json::Value & update) {
         UPDATE_FLOAT_PROP(targetHesLower, update["target_hes_lower"]);
     }
 }
-
-

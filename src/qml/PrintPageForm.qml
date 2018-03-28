@@ -42,6 +42,7 @@ Item {
     property bool isPrintProcess: bot.process.type == ProcessType.Print
     onIsPrintProcessChanged: {
         if(isPrintProcess) {
+            storage.backStackClear()
             //Move to index 0 of print page swipe
             //view when print process actually starts
             //assuming the user had navigated to other
@@ -50,15 +51,83 @@ Item {
                 printSwipeView.swipeToItem(0)
             }
             waitingForPrintToStart = false //reset when the print actually starts
+            setDrawerState(false)
+            activeDrawer = printPage.printingDrawer
             setDrawerState(true)
+            getPrintDetailsTImer.start() //for prints started from repl
         }
         else {
+            printStatusView.printStatusSwipeView.setCurrentIndex(0)
             setDrawerState(false)
+            storage.currentThingReset()
+            resetPrintFileDetails()
         }
     }
 
-    function getReadyByTime(timeLeftSeconds)
-    {
+    property bool isPrintFileValid: bot.process.printFileValid
+    onIsPrintFileValidChanged: {
+        if(isPrintFileValid) {
+            storage.updateCurrentThing()
+            getPrintFileDetails(storage.currentThing)
+        }
+    }
+
+    Timer {
+        id: getPrintDetailsTImer
+        interval: 3000
+        onTriggered: {
+            storage.updateCurrentThing()
+            getPrintFileDetails(storage.currentThing)
+            this.stop()
+        }
+    }
+
+    function getPrintFileDetails(file) {
+        var printTimeSecRaw = file.timeEstimateSec
+        var printTimeMinRaw = Math.floor(printTimeSecRaw/60)
+        var printTimeHrRaw = Math.floor(printTimeMinRaw/60)
+        var printTimeDay = Math.floor(printTimeHrRaw/24)
+        var printTimeMin = printTimeMinRaw % 60
+        var printTimeHr = printTimeHrRaw % 24
+        fileName = file.filePath + "/" + file.fileName
+        file_name = file.fileBaseName
+        print_time = printTimeDay > 1 ? (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
+                                        (printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
+        print_material = file.materialNameA == "" ? file.materialNameB :
+                                                               file.materialNameA + "+" + file.materialNameB
+        uses_support = file.usesSupport ? "YES" : "NO"
+        uses_raft = file.usesRaft ? "YES" : "NO"
+        model_mass = file.extrusionMassGramsB < 1000 ?
+                    file.extrusionMassGramsB.toFixed(1) + " g" :
+                    (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
+        support_mass = file.extrusionMassGramsA < 1000 ?
+                    file.extrusionMassGramsA.toFixed(1) + " g" :
+                    (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+        num_shells = file.numShells
+        extruder_temp = file.extruderTempCelciusA == 0 ?
+                    file.extruderTempCelciusB + "C" :
+                    file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
+        chamber_temp = file.chamberTempCelcius + "C"
+        slicer_name = file.slicerName
+        getReadyByTime(printTimeSecRaw)
+    }
+
+    function resetPrintFileDetails() {
+        fileName = ""
+        file_name = ""
+        print_time = ""
+        print_material = ""
+        uses_support = ""
+        uses_raft = ""
+        model_mass = ""
+        support_mass = ""
+        num_shells = ""
+        extruder_temp = ""
+        chamber_temp = ""
+        slicer_name = ""
+    }
+
+    function getReadyByTime(timeLeftSeconds) {
         lastPrintTimeSec = timeLeftSeconds
         var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
         var currentTime = new Date()
@@ -178,6 +247,7 @@ Item {
             }
 
             PrintStatusViewForm{
+                id: printStatusView
                 smooth: false
                 visible: isPrintProcess
                 fileName_: file_name
@@ -257,33 +327,7 @@ Item {
                             storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
-                            fileName = model.modelData.filePath + "/" + model.modelData.fileName
-                            file_name = model.modelData.fileBaseName
-                            printTimeSecRaw = model.modelData.timeEstimateSec
-                            printTimeMinRaw = printTimeSecRaw/60
-                            printTimeHrRaw = printTimeMinRaw/60
-                            printTimeDay = printTimeHrRaw/24
-                            printTimeMin = printTimeMinRaw % 60
-                            printTimeHr = printTimeHrRaw % 24
-                            print_time = printTimeDay > 1 ? (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
-                                                            (printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
-                            print_material = model.modelData.materialNameA == "" ? model.modelData.materialNameB :
-                                                                                   model.modelData.materialNameA + "+" + model.modelData.materialNameB
-                            uses_support = model.modelData.usesSupport ? "YES" : "NO"
-                            uses_raft = model.modelData.usesRaft ? "YES" : "NO"
-                            model_mass = model.modelData.extrusionMassGramsB < 1000 ?
-                                        model.modelData.extrusionMassGramsB.toFixed(1) + " g" :
-                                        (model.modelData.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
-                            support_mass = model.modelData.extrusionMassGramsA < 1000 ?
-                                        model.modelData.extrusionMassGramsA.toFixed(1) + " g" :
-                                        (model.modelData.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
-                            num_shells = model.modelData.numShells
-                            extruder_temp = model.modelData.extruderTempCelciusA == 0 ?
-                                        model.modelData.extruderTempCelciusB + "C" :
-                                        model.modelData.extruderTempCelciusA + "C" + " + " + model.modelData.extruderTempCelciusB + "C"
-                            chamber_temp = model.modelData.chamberTempCelcius + "C"
-                            slicer_name = model.modelData.slicerName
-                            getReadyByTime(printTimeSecRaw)
+                            getPrintFileDetails(model.modelData)
                             setDrawerState(false)
                             printSwipeView.swipeToItem(2)
                         }
@@ -306,6 +350,7 @@ Item {
             visible: false
 
             function altBack(){
+                resetPrintFileDetails()
                 setDrawerState(true)
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
             }

@@ -49,6 +49,7 @@ int main(int argc, char ** argv) {
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("cpUiTr", (QObject*)&ui_trans);
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
+    qmlRegisterType<PrintFileInfo>("PrintFileObject", 1, 0, "PrintFileInfo");
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
 
