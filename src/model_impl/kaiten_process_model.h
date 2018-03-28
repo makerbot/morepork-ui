@@ -10,6 +10,7 @@ class KaitenProcessModel : public ProcessModel {
   public:
     void procUpdate(const Json::Value & proc);
     void printFileUpdate(const Json::Value &printFileDetails);
+    void asstLevelUpdate(const Json::Value & update);
 };
 
 #endif  // _SRC_KAITEN_PROCESS_MODEL_H
