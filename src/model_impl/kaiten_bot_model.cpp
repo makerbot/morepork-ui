@@ -18,6 +18,7 @@ class KaitenBotModel : public BotModel {
     void netUpdate(const Json::Value & info);
     void authRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
+    void assistedLevelUpdate(const Json::Value & status);
     void cancel();
     void pausePrint();
     void print(QString file_name);
@@ -122,6 +123,28 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<AllowUnknownFirmware> m_allowUnkFw;
+
+    class AssistedLevelNotification : public JsonRpcNotification {
+      public:
+        AssistedLevelNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->assistedLevelUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<AssistedLevelNotification> m_asstLvlNot;
+
+    class AssistedLevelCallback : public JsonRpcCallback {
+      public:
+        AssistedLevelCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->assistedLevelUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<AssistedLevelCallback> m_asstLvlCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -272,7 +295,9 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_netStateCb(new NetStateCallback(this)),
         m_authReq(new AuthRequestMethod(this)),
         m_fwareUpNot(new FirmwareUpdateNotification(this)),
-        m_allowUnkFw(new AllowUnknownFirmware(this)) {
+        m_allowUnkFw(new AllowUnknownFirmware(this)),
+        m_asstLvlNot(new AssistedLevelNotification(this)),
+        m_asstLvlCb(new AssistedLevelCallback(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -283,6 +308,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("authorize_user", m_authReq);
     conn->jsonrpc.addMethod("firware_updates_info_change", m_fwareUpNot);
     conn->jsonrpc.addMethod("allow_unknown_firmware", m_allowUnkFw);
+    conn->jsonrpc.addMethod("assisted_level_status", m_asstLvlNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -361,6 +387,10 @@ void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
             firmwareUpdateAvailableReset();
         }
     }
+}
+
+void KaitenBotModel::assistedLevelUpdate(const Json::Value &status) {
+    dynamic_cast<KaitenProcessModel*>(m_process.data())->asstLevelUpdate(status);
 }
 
 void KaitenBotModel::connected() {

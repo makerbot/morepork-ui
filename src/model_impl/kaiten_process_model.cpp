@@ -91,12 +91,17 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
     UPDATE_INT_PROP(timeRemaining, proc["time_remaining"]);
-    UPDATE_FLOAT_PROP(targetHesUpper, proc["target_hes_upper"]);
-    UPDATE_FLOAT_PROP(targetHesLower, proc["target_hes_lower"]);
-    UPDATE_FLOAT_PROP(currentHes, proc["current_hes"]);
-    UPDATE_INT_PROP(levelState, proc["level_state"]);
-    UPDATE_STRING_PROP(levelStep, proc["step"]); //Temporarily for Walter to debug
 
     activeSet(true);
 }
+
+void KaitenProcessModel::asstLevelUpdate(const Json::Value & update) {
+    if(!update.empty()) {
+        UPDATE_FLOAT_PROP(levelState, update["level_state"]);
+        UPDATE_FLOAT_PROP(currentHes, update["current_hes"]);
+        UPDATE_FLOAT_PROP(targetHesUpper, update["target_hes_upper"]);
+        UPDATE_FLOAT_PROP(targetHesLower, update["target_hes_lower"]);
+    }
+}
+
 
