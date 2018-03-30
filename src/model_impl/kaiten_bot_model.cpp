@@ -194,7 +194,7 @@ void KaitenBotModel::pauseResumePrint(QString action){
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
-        qWarning() << FL_STRM << e.what();
+        qWarning() << FFL_STRM << e.what();
     }
 }
 
@@ -222,7 +222,7 @@ void KaitenBotModel::done(QString acknowledge_result){
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
-        qWarning() << FL_STRM << e.what();
+        qWarning() << FFL_STRM << e.what();
     }
 }
 
