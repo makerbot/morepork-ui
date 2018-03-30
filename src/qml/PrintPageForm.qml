@@ -50,11 +50,13 @@ Item {
             if(printSwipeView.currentIndex != 0) {
                 printSwipeView.swipeToItem(0)
             }
-            waitingForPrintToStart = false //reset when the print actually starts
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
             setDrawerState(true)
-            //getPrintDetailsTImer.start() //for prints started from repl
+            if(!waitingForPrintToStart) {
+                getPrintDetailsTimer.start() //for prints started from repl
+            }
+            waitingForPrintToStart = false //reset when the print actually starts
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -73,7 +75,7 @@ Item {
     }
 
     Timer {
-        id: getPrintDetailsTImer
+        id: getPrintDetailsTimer
         interval: 3000
         onTriggered: {
             storage.updateCurrentThing()
