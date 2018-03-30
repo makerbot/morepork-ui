@@ -54,7 +54,7 @@ Item {
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
             setDrawerState(true)
-            getPrintDetailsTImer.start() //for prints started from repl
+            //getPrintDetailsTImer.start() //for prints started from repl
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)

@@ -12,8 +12,8 @@ void BotModel::cancel() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::pausePrint() {
-    qDebug() << FL_STRM << "called";
+void BotModel::pauseResumePrint(QString action) {
+    qDebug() << FL_STRM << "called with action: " << action;
 }
 
 void BotModel::print(QString file_name) {
