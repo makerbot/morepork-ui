@@ -33,7 +33,7 @@ class BotModel : public BaseModel {
     Q_ENUM(ConnectionState)
     Q_ENUM(FilamentColor)
     Q_INVOKABLE virtual void cancel();
-    Q_INVOKABLE virtual void pausePrint();
+    Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
     Q_INVOKABLE virtual void done(QString acknowledge_result);
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex);

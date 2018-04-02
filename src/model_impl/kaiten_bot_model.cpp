@@ -21,7 +21,7 @@ class KaitenBotModel : public BotModel {
     void printFileValidNotif(const Json::Value &info);
     void assistedLevelUpdate(const Json::Value & status);
     void cancel();
-    void pausePrint();
+    void pauseResumePrint(QString action);
     void print(QString file_name);
     void done(QString acknowledge_result);
     void loadFilament(const int kToolIndex);
@@ -185,11 +185,13 @@ void KaitenBotModel::cancel(){
     }
 }
 
-void KaitenBotModel::pausePrint(){
+void KaitenBotModel::pauseResumePrint(QString action){
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
-        conn->jsonrpc.invoke("pause", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value(action.toStdString());
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -220,7 +222,7 @@ void KaitenBotModel::done(QString acknowledge_result){
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
-        qWarning() << FL_STRM << e.what();
+        qWarning() << FFL_STRM << e.what();
     }
 }
 

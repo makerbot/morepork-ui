@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import ProcessStateTypeEnum 1.0
 
 Drawer {
     objectName: "printingDrawer"
@@ -76,7 +77,19 @@ Drawer {
 
             MoreporkButton {
                 id: buttonPausePrint
-                buttonText.text: qsTr("PAUSE PRINT") + cpUiTr.emptyStr
+                buttonText.text: {
+                    switch(bot.process.stateType) {
+                    case ProcessStateType.Printing:
+                        qsTr("PAUSE PRINT") + cpUiTr.emptyStr
+                        break;
+                    case ProcessStateType.Paused:
+                        qsTr("RESUME PRINT") + cpUiTr.emptyStr
+                        break;
+                    default:
+                        "PAUSE PRINT"
+                        break;
+                    }
+                }
                 buttonImage.source: "qrc:/img/pause.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

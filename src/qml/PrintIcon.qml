@@ -10,10 +10,11 @@ PrintIconForm
         {
             case ProcessStateType.Printing:
                 //In Printing State
-                bot.pausePrint()
+                bot.pauseResumePrint("suspend")
                 break;
             case ProcessStateType.Paused:
                 //In Paused State
+                bot.pauseResumePrint("resume")
                 break;
             default:
                 break;

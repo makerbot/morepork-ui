@@ -1,5 +1,6 @@
 import QtQuick 2.4
 import StorageSortTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 PrintPageForm {
     buttonUsbStorage.filenameText.text: qsTr("USB") + cpUiTr.emptyStr
@@ -11,7 +12,12 @@ PrintPageForm {
     }
 
     printingDrawer.buttonPausePrint.onClicked: {
-        bot.pausePrint()
+        if(bot.process.stateType == ProcessStateType.Printing) {
+            bot.pauseResumePrint("suspend")
+        }
+        else if(bot.process.stateType == ProcessStateType.Paused) {
+            bot.pauseResumePrint("resume")
+        }
         printingDrawer.close()
     }
 
