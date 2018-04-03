@@ -43,6 +43,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
     Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
     Q_INVOKABLE virtual void installFirmware();
+    Q_INVOKABLE virtual void calibrateToolheads(QList<QString> toolheads, QList<QString> axes);
+    Q_INVOKABLE virtual void buildPlateState(bool state);
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
