@@ -52,6 +52,22 @@ void BotModel::installFirmware() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::calibrateToolheads(QList<QString> toolheads, QList<QString> axes) {
+    qDebug() << FL_STRM << "called";
+    qDebug() << "Toolheads Requested:";
+    for(int i = 0; i < toolheads.size(); i++) {
+        qDebug() << toolheads.value(i);
+    }
+    qDebug() << "Axes Requested:";
+    for(int i = 0; i < axes.size(); i++) {
+        qDebug() << axes.value(i);
+    }
+}
+
+void BotModel::buildPlateState(bool state) {
+    qDebug() << FL_STRM << "called with parameter: " << state;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

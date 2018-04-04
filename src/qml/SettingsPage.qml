@@ -15,6 +15,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(3)
     }
 
+    buttonCalibrateToolhead.onClicked: {
+        settingsSwipeView.swipeToItem(4)
+    }
+
     buttonEnglish.onClicked: {
         cpUiTr.selectLanguage("en")
     }

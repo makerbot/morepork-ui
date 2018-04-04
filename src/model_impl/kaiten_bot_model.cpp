@@ -32,6 +32,8 @@ class KaitenBotModel : public BotModel {
     void respondAuthRequest(QString response);
     void firmwareUpdateCheck(bool dont_force_check);
     void installFirmware();
+    void calibrateToolheads(QList<QString> toolheads, QList<QString> axes);
+    void buildPlateState(bool state);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -299,7 +301,43 @@ void KaitenBotModel::installFirmware(){
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
     }
-} 
+}
+
+void KaitenBotModel::calibrateToolheads(QList<QString> toolheads, QList<QString> axes){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        Json::Value toolheads_list(Json::arrayValue);
+        Json::Value axes_list(Json::arrayValue);
+
+        for(int i = 0; i < toolheads.size(); i++)
+            toolheads_list[i] = (toolheads.value(i)).toStdString();
+
+        for(int i = 0; i < axes.size(); i++)
+            axes_list[i] = (axes.value(i)).toStdString();
+
+        json_params["toolheads"] = Json::Value(toolheads_list);
+        json_params["axes"] = Json::Value(axes_list);
+        conn->jsonrpc.invoke("calibrate_toolheads", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::buildPlateState(bool state){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = state ? Json::Value("build_plate_installed") : Json::Value("build_plate_removed");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
