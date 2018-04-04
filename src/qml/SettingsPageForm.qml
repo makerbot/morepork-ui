@@ -392,8 +392,8 @@ Item {
                 text: bot.process.stepStr
                 color: "#ffffff"
                 font.family: "Antennae"
-                font.pixelSize: 18
-                font.weight: Font.Light
+                font.pixelSize: 24
+                font.weight: Font.Bold
                 anchors.left: parent.left
                 anchors.leftMargin: 500
                 anchors.top: parent.top
