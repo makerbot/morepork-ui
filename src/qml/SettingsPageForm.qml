@@ -281,6 +281,7 @@ Item {
 
             Switch {
                 id: toolheadA
+                checked: true
                 anchors.horizontalCenterOffset: -250
                 anchors.top: parent.top
                 anchors.topMargin: 10
@@ -299,6 +300,7 @@ Item {
 
             Switch {
                 id: toolheadB
+                checked: true
                 anchors.horizontalCenterOffset: -50
                 anchors.top: parent.top
                 anchors.topMargin: 10
@@ -362,7 +364,7 @@ Item {
             RoundedButton {
                 id: buildPlateAttached
                 anchors.top: parent.top
-                anchors.topMargin: 235
+                anchors.topMargin: 325
                 anchors.horizontalCenterOffset: -150
                 anchors.horizontalCenter: parent.horizontalCenter
                 buttonWidth: 240
@@ -377,7 +379,7 @@ Item {
                 id: buildPlateRemoved
                 anchors.horizontalCenterOffset: -150
                 anchors.top: parent.top
-                anchors.topMargin: 325
+                anchors.topMargin: 235
                 anchors.horizontalCenter: parent.horizontalCenter
                 buttonWidth: 220
                 buttonHeight: 75

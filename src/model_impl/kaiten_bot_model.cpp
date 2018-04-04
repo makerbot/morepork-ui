@@ -331,7 +331,7 @@ void KaitenBotModel::buildPlateState(bool state){
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["method"] = state ? Json::Value("install_build_plate") : Json::Value("remove_build_plate");
+        json_params["method"] = state ? Json::Value("build_plate_installed") : Json::Value("build_plate_removed");
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
