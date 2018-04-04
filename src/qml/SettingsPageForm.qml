@@ -367,7 +367,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 buttonWidth: 240
                 buttonHeight: 75
-                label: "BUILD PLATE ATTACHED"
+                label: "BUILD PLATE INSTALLED"
                 button_mouseArea.onClicked: {
                     bot.buildPlateState(true)
                 }
@@ -393,7 +393,7 @@ Item {
                 color: "#ffffff"
                 font.family: "Antennae"
                 font.pixelSize: 24
-                font.weight: Font.Bold
+                font.weight: Font.Light
                 anchors.left: parent.left
                 anchors.leftMargin: 500
                 anchors.top: parent.top
