@@ -66,8 +66,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBSwitch, false)
     MODEL_PROP(int, extruderACurrentTemp, -999)
     MODEL_PROP(int, extruderATargetTemp, -999)
+    MODEL_PROP(bool, extruderAPresent, false)
+    MODEL_PROP(bool, extruderAFilamentPresent, false)
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
+    MODEL_PROP(bool, extruderBPresent, false)
+    MODEL_PROP(bool, extruderBFilamentPresent, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
   protected:

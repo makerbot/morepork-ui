@@ -8,12 +8,14 @@ Rectangle {
     property alias buttonWidth: button_rectangle.width
     property alias buttonHeight: button_rectangle.height
     property alias label: button_text.text
+    property int label_size: 20
+    property bool disable_button: false
 
     id: button_rectangle
     width: 200
     height: 40
     color: "#00000000"
-    radius: 10
+    radius: 8
     smooth: false
     antialiasing: false
     border.width: 2
@@ -33,7 +35,7 @@ Rectangle {
         antialiasing: false
         font.letterSpacing: 3
         font.weight: Font.Bold
-        font.pixelSize: 20
+        font.pixelSize: label_size
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
     }

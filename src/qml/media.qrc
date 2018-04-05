@@ -50,6 +50,8 @@
       	<file alias="firmware_update_success.png">images/firmware_update_success.png</file>
 	<file alias="sombrero_icon.png">images/sombrero_icon.png</file>
       	<file alias="usb_icon.png">images/usb_icon.png</file>
+	<file alias="extruder_attached.png">images/extruder_attached.png</file>
+	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

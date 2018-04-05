@@ -274,11 +274,6 @@ Item {
             smooth: false
             visible: false
 
-            Rectangle {
-                color: "#000000"
-                anchors.fill: parent
-            }
-
             Switch {
                 id: toolheadA
                 checked: true
