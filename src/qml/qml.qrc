@@ -48,5 +48,7 @@
         <file>FirmwareUpdatePageForm.qml</file>
         <file>MaterialIcon.qml</file>
         <file>MaterialIconForm.qml</file>
+        <file>Extruder.qml</file>
+        <file>ExtruderForm.qml</file>
     </qresource>
 </RCC>

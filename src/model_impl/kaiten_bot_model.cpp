@@ -387,11 +387,19 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder A temps
             UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
             UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
+            kExtruderA["tool_present"].asBool() ?
+                extruderAPresentSet(true) : extruderAPresentSet(false);
+            kExtruderA["filament_presence"].asBool() ? 
+                extruderAFilamentPresentSet(true) : extruderAFilamentPresentSet(false);
           }
           if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
             UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
             UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
+            kExtruderB["tool_present"].asBool() ?
+                extruderBPresentSet(true) : extruderBPresentSet(false);
+            kExtruderB["filament_presence"].asBool() ? 
+                extruderBFilamentPresentSet(true) : extruderBFilamentPresentSet(false);
           }
         }
         const Json::Value & kChamber = kToolheads["chamber"];
