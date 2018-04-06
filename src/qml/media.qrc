@@ -52,6 +52,10 @@
       	<file alias="usb_icon.png">images/usb_icon.png</file>
 	<file alias="extruder_attached.png">images/extruder_attached.png</file>
 	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
+	<file alias="extruder_left.png">images/extruder_left.png</file>
+	<file alias="extruder_right.png">images/extruder_right.png</file>
+	<file alias="extruder_none.png">images/extruder_none.png</file>
+	<file alias="extruder_both.png">images/extruder_both.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
