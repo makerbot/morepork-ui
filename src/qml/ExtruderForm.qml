@@ -22,7 +22,7 @@ Item {
         anchors.bottom: extruder_image.top
         anchors.bottomMargin: 0
         anchors.horizontalCenter: extruder_image.horizontalCenter
-        anchors.horizontalCenterOffset: -6
+        anchors.horizontalCenterOffset: -8
         width: 6
         height: 25
         color: "#ffffff"

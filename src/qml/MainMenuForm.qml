@@ -37,7 +37,49 @@ Item {
         y: 40
         smooth: false
         anchors.horizontalCenter: parent.horizontalCenter
-        image.source: "qrc:/img/extruder_icon.png"
+        Rectangle {
+            id: filament_rectangle_left
+            z: -1
+            width: 22
+            height: 50
+            color: "#cbcbcb"
+            smooth: false
+            antialiasing: false
+            anchors.verticalCenterOffset: -34
+            anchors.horizontalCenterOffset: -20
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            visible: bot.extruderBPresent && bot.extruderBFilamentPresent
+        }
+        Rectangle {
+            id: filament_rectangle_right
+            z: -1
+            width: 10
+            height: 40
+            color: "#cbcbcb"
+            smooth: false
+            antialiasing: false
+            anchors.verticalCenterOffset: -35
+            anchors.horizontalCenterOffset: 8
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            visible: bot.extruderAPresent && bot.extruderAFilamentPresent
+        }
+
+        image.source: {
+            if(bot.extruderAPresent && bot.extruderBPresent) {
+                "qrc:/img/extruder_both.png"
+            }
+            else if(bot.extruderAPresent && !bot.extruderBPresent) {
+                "qrc:/img/extruder_right.png"
+            }
+            else if(!bot.extruderAPresent && bot.extruderBPresent) {
+                "qrc:/img/extruder_left.png"
+            }
+            else if(!bot.extruderAPresent && !bot.extruderBPresent) {
+                "qrc:/img/extruder_none.png"
+            }
+        }
         textIconDesc.text: "EXTRUDERS"
     }
 
