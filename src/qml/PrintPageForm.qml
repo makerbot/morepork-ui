@@ -28,7 +28,7 @@ Item {
     property alias buttonInternalStorage: buttonInternalStorage
     property bool browsingUsbStorage: false
     property alias printSwipeView: printSwipeView
-    property bool waitingForPrintToStart: false
+    property bool printFromUI: false
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -53,10 +53,10 @@ Item {
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
             setDrawerState(true)
-            if(!waitingForPrintToStart) {
+            if(!printFromUI) {
                 getPrintDetailsTimer.start() //for prints started from repl
             }
-            waitingForPrintToStart = false //reset when the print actually starts
+            printFromUI = false //reset when the print actually starts
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -201,15 +201,11 @@ Item {
                         filePrintTime.text: "FILES SAVED ON PRINTER"
                         fileMaterial.visible: false
                         onClicked: {
-                            //Disable moving into the file selection
-                            //screen if waiting for a print to start
-                            if(!waitingForPrintToStart) {
-                                browsingUsbStorage = false
-                                storage.updateStorageFileList("?root_internal?")
-                                activeDrawer = printPage.sortingDrawer
-                                setDrawerState(true)
-                                printSwipeView.swipeToItem(1)
-                            }
+                            browsingUsbStorage = false
+                            storage.updateStorageFileList("?root_internal?")
+                            activeDrawer = printPage.sortingDrawer
+                            setDrawerState(true)
+                            printSwipeView.swipeToItem(1)
                         }
                     }
 
@@ -230,9 +226,7 @@ Item {
                         filePrintTime.opacity: usbStorageConnected ? 1 : 0.4
                         fileMaterial.visible: false
                         onClicked: {
-                            //Disable moving into the file selection
-                            //screen if waiting for a print to start
-                            if(usbStorageConnected && !waitingForPrintToStart) {
+                            if(usbStorageConnected) {
                                 browsingUsbStorage = true
                                 storage.updateStorageFileList("?root_usb?")
                                 activeDrawer = printPage.sortingDrawer
@@ -549,7 +543,7 @@ Item {
                             storage.backStackClear()
                             activeDrawer = printPage.printingDrawer
                             bot.print(fileName)
-                            waitingForPrintToStart = true
+                            printFromUI = true
                             printSwipeView.swipeToItem(0)
                         }
                     }
