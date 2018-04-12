@@ -16,7 +16,7 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = true
             enableMaterialDrawer()
-            bot.loadFilament(1)
+            bot.loadFilament(0)
             materialSwipeView.swipeToItem(1)
         }
 
@@ -24,7 +24,7 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = false
             enableMaterialDrawer()
-            bot.unloadFilament(1)
+            bot.unloadFilament(0)
             materialSwipeView.swipeToItem(1)
         }
     }
@@ -34,7 +34,7 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = true
             enableMaterialDrawer()
-            bot.loadFilament(0)
+            bot.loadFilament(1)
             materialSwipeView.swipeToItem(1)
         }
 
@@ -42,7 +42,7 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = false
             enableMaterialDrawer()
-            bot.unloadFilament(0)
+            bot.unloadFilament(1)
             materialSwipeView.swipeToItem(1)
         }
     }
