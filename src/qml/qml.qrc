@@ -50,5 +50,7 @@
         <file>MaterialIconForm.qml</file>
         <file>Extruder.qml</file>
         <file>ExtruderForm.qml</file>
+        <file>AssistedLeveling.qml</file>
+        <file>AssistedLevelingForm.qml</file>
     </qresource>
 </RCC>

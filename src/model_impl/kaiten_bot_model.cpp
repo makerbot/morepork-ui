@@ -34,6 +34,7 @@ class KaitenBotModel : public BotModel {
     void installFirmware();
     void calibrateToolheads(QList<QString> toolheads, QList<QString> axes);
     void buildPlateState(bool state);
+    void acknowledge_level();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -332,6 +333,19 @@ void KaitenBotModel::buildPlateState(bool state){
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["method"] = state ? Json::Value("build_plate_installed") : Json::Value("build_plate_removed");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::acknowledge_level(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("acknowledge_level");
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){

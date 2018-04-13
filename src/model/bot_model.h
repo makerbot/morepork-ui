@@ -45,6 +45,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void installFirmware();
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> toolheads, QList<QString> axes);
     Q_INVOKABLE virtual void buildPlateState(bool state);
+    Q_INVOKABLE virtual void acknowledge_level();
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)

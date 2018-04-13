@@ -68,6 +68,10 @@ void BotModel::buildPlateState(bool state) {
     qDebug() << FL_STRM << "called with parameter: " << state;
 }
 
+void BotModel::acknowledge_level() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
