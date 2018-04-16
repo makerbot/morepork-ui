@@ -56,6 +56,10 @@
 	<file alias="extruder_right.png">images/extruder_right.png</file>
 	<file alias="extruder_none.png">images/extruder_none.png</file>
 	<file alias="extruder_both.png">images/extruder_both.png</file>
+	<file alias="build_plate_level.png">images/build_plate_level.png</file>
+	<file alias="build_plate_not_level.png">images/build_plate_not_level.png</file>
+	<file alias="build_plate_level_range.png">images/build_plate_level_range.png</file>
+	<file alias="build_plate_level_begin.png">images/build_plate_level_begin.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

@@ -61,14 +61,14 @@ Item {
 
                     MoreporkButton {
                         id: buttonChangeLanguage
-                        buttonText.text: qsTr("Change Language") + cpUiTr.emptyStr
+                        buttonText.text: "CHANGE LANGUAGE"
                     }
 
                     Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
 
                     MoreporkButton {
                         id: buttonAssistedLeveling
-                        buttonText.text: "Assisted Leveling"
+                        buttonText.text: "ASSISTED LEVELING"
                     }
 
                     Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
@@ -148,108 +148,19 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
 
-            Text {
-                color: "#ffffff"
-                text: "Bot Not in Assisted Leveling Process"
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                visible: bot.process.type != ProcessType.AssistedLeveling
-                antialiasing: false
-                smooth: false
-                font.letterSpacing: 3
-                font.family: "Antenna"
-                font.weight: Font.Light
-                font.pixelSize: 21
+            function altBack(){
+                bot.cancel()
+                settingsSwipeView.swipeToItem(0)
             }
 
-            ColumnLayout {
-                id: columnLayout
-                anchors.fill: parent
-                visible: bot.process.type == ProcessType.AssistedLeveling
-
-                Text {
-                    id: text5
-                    color: "#ffffff"
-                    text: "Step: " + bot.process.stepStr
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 21
-                }
-
-                Text {
-                    id: text1
-                    color: "#ffffff"
-                    text: "Current HES: " + bot.process.currentHes
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 21
-                }
-
-                Text {
-                    id: text2
-                    color: "#ffffff"
-                    text: "Target HES Upper: " + bot.process.targetHesUpper
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 21
-                }
-
-                Text {
-                    id: text3
-                    color: "#ffffff"
-                    text: "Target HES Lower: " + bot.process.targetHesLower
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 21
-                }
-
-                Text {
-                    id: text4
-                    color: "#ffffff"
-                    text: {
-                        switch(bot.process.levelState)
-                        {
-                        case 1:
-                            "Level State: LOW"
-                            break;
-                        case 2:
-                            "Level State: HIGH"
-                            break;
-                        case 3:
-                            "Level State: OK"
-                            break;
-                        default:
-                            "Level State: " + bot.process.levelState
-                            break;
-                        }
-                    }
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Light
-                    font.pixelSize: 21
-                }
+            AssistedLeveling {
+                currentHES: bot.process.currentHes
+                targetHESLower: bot.process.targetHesLower
+                targetHESUpper: bot.process.targetHesUpper
             }
         }
 
