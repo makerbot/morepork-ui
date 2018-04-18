@@ -47,7 +47,7 @@
       	<file alias="auth_error.png">images/auth_error.png</file>
       	<file alias="firmware_update_available.png">images/firmware_update_available.png</file>
       	<file alias="firmware_update_error.png">images/firmware_update_error.png</file>
-      	<file alias="firmware_update_success.png">images/firmware_update_success.png</file>
+      	<file alias="process_successful.png">images/process_successful.png</file>
 	<file alias="sombrero_icon.png">images/sombrero_icon.png</file>
       	<file alias="usb_icon.png">images/usb_icon.png</file>
 	<file alias="extruder_attached.png">images/extruder_attached.png</file>
@@ -60,6 +60,7 @@
 	<file alias="build_plate_not_level.png">images/build_plate_not_level.png</file>
 	<file alias="build_plate_level_range.png">images/build_plate_level_range.png</file>
 	<file alias="build_plate_level_begin.png">images/build_plate_level_begin.png</file>
+	<file alias="sombrero_build_plate.png">images/sombrero_build_plate.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
