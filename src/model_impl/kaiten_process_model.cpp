@@ -78,6 +78,16 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::VerifyingFirmware);
         else if (kStepStr == "writing")
             stateTypeSet(ProcessStateType::InstallingFirmware);
+        // Assisted Leveling States
+        // see morepork-kaiten/kaiten/src/kaiten/processes/sombreroassistedlevelingprocess.py
+        else if (kStepStr == "checking_first_point")
+            stateTypeSet(ProcessStateType::CheckFirstPoint);
+        else if (kStepStr == "checking_left_level")
+            stateTypeSet(ProcessStateType::CheckLeftLevel);
+        else if (kStepStr == "checking_right_level")
+            stateTypeSet(ProcessStateType::CheckRightLevel);
+        else if (kStepStr == "finishing_level")
+            stateTypeSet(ProcessStateType::LevelingComplete)
         else
             stateTypeReset();
     }

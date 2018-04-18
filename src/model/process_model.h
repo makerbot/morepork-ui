@@ -34,7 +34,11 @@ class ProcessModel : public BaseModel {
         Done, // Base Process states
         TransferringFirmware, // Firmware update states
         VerifyingFirmware,
-        InstallingFirmware
+        InstallingFirmware,
+        CheckFirstPoint, //Assisted leveling states
+        CheckLeftLevel,
+        CheckRightLevel,
+        LevelingComplete
     };
 
     Q_ENUM(ProcessType)
