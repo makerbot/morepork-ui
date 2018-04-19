@@ -29,6 +29,7 @@ Item {
     property bool browsingUsbStorage: false
     property alias printSwipeView: printSwipeView
     property bool printFromUI: false
+    property alias printStatusView: printStatusView
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {

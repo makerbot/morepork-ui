@@ -32,6 +32,26 @@ Item {
             else if(bot.process.type == ProcessType.Unload) {
                 state = "unloaded_filament"
             }
+            //The case when loading/unloading is stopped by user
+            //in the middle of print process. Then the bot goes to
+            //'Stopping' step and then to 'Paused' step
+            else if(printPage.isPrintProcess) {
+                isLoadFilament ?
+                    state = "loaded_filament" :
+                    state = "unloaded_filament"
+                if(bot.process.errorCode > 0) {
+                    errorCode = bot.process.errorCode
+                    state = "error"
+                }
+            }
+            break;
+        //The case when loading/unloading completes normally by
+        //itself, in the middle of print process. Then the bot doesn't
+        //go to 'Stopping' step, but directly to 'Paused' step.
+        case ProcessStateType.Paused:
+            isLoadFilament ?
+                state = "loaded_filament" :
+                state = "unloaded_filament"
             break;
         default:
             break;
@@ -158,7 +178,9 @@ Item {
         State {
             name: "preheating"
             when: bot.process.stateType == ProcessStateType.Preheating &&
-                  (bot.process.type == ProcessType.Load || bot.process.type == ProcessType.Unload)
+                  (bot.process.type == ProcessType.Load ||
+                   bot.process.type == ProcessType.Unload ||
+                   bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
@@ -183,7 +205,8 @@ Item {
         State {
             name: "extrusion"
             when: bot.process.stateType == ProcessStateType.Extrusion &&
-                  bot.process.type == ProcessType.Load
+                  (bot.process.type == ProcessType.Load ||
+                   bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
@@ -212,7 +235,8 @@ Item {
         State {
             name: "unloading_filament"
             when: bot.process.stateType == ProcessStateType.UnloadingFilament &&
-                  bot.process.type == ProcessType.Unload
+                  (bot.process.type == ProcessType.Unload ||
+                   bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text

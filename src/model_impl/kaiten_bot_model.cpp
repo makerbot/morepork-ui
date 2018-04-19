@@ -24,9 +24,9 @@ class KaitenBotModel : public BotModel {
     void pauseResumePrint(QString action);
     void print(QString file_name);
     void done(QString acknowledge_result);
-    void loadFilament(const int kToolIndex);
+    void loadFilament(const int kToolIndex, bool whilePrinting);
     void loadFilamentStop();
-    void unloadFilament(const int kToolIndex);
+    void unloadFilament(const int kToolIndex, bool whilePrinting);
     void assistedLevel();
     std::shared_ptr<JsonRpcMethod::Response> m_authResp;
     void respondAuthRequest(QString response);
@@ -229,13 +229,23 @@ void KaitenBotModel::done(QString acknowledge_result){
     }
 }
 
-void KaitenBotModel::loadFilament(const int kToolIndex){
+void KaitenBotModel::loadFilament(const int kToolIndex, bool whilePrinting){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["tool_index"] = Json::Value(kToolIndex);
-        conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+
+        if(!whilePrinting) {
+            json_params["tool_index"] = Json::Value(kToolIndex);
+            conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+        }
+        else {
+            json_params["method"] = Json::Value("load_filament");
+            Json::Value json_args(Json::objectValue);
+            json_args["tool_index"] = Json::Value(kToolIndex);
+            json_params["params"] = Json::Value(json_args);
+            conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+        }
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -256,13 +266,22 @@ void KaitenBotModel::loadFilamentStop(){
     }
 }
 
-void KaitenBotModel::unloadFilament(const int kToolIndex){
+void KaitenBotModel::unloadFilament(const int kToolIndex, bool whilePrinting){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["tool_index"] = Json::Value(kToolIndex);
-        conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+        if(!whilePrinting) {
+            json_params["tool_index"] = Json::Value(kToolIndex);
+            conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
+        }
+        else {
+            json_params["method"] = Json::Value("unload_filament");
+            Json::Value json_args(Json::objectValue);
+            json_args["tool_index"] = Json::Value(kToolIndex);
+            json_params["params"] = Json::Value(json_args);
+            conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+        }
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
