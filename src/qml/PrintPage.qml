@@ -22,7 +22,15 @@ PrintPageForm {
     }
 
     printingDrawer.buttonChangeFilament.onClicked: {
-
+        if(bot.process.stateType == ProcessStateType.Paused) {
+            if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
+                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+            }
+            if(mainSwipeView.currentIndex != 5) {
+                mainSwipeView.swipeToItem(5)
+            }
+            printingDrawer.close()
+        }
     }
 
     printingDrawer.buttonClose.onClicked: {

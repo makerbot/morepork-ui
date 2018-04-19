@@ -25,10 +25,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         else if (kNameStr == "FirmwareBurningProcess")
             typeSet(ProcessType::FirmwareUpdate);
         else
-            typeSet(ProcessType::Other);
+            typeSet(ProcessType::None);
     }
     else {
-        typeSet(ProcessType::Other);
+        typeSet(ProcessType::None);
     }
 
     const Json::Value &kStep = proc["step"];
@@ -57,11 +57,15 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Completed);
         // 'Load' and 'Unload' states (steps)
         // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
-        else if (kStepStr == "preheating")
+        else if (kStepStr == "preheating" ||
+                 kStepStr == "preheating_loading" ||
+                 kStepStr == "preheating_unloading") //preheating while load/unload durng PrintProcess
             stateTypeSet(ProcessStateType::Preheating);
-        else if (kStepStr == "extrusion")
+        else if (kStepStr == "extrusion" ||
+                 kStepStr == "loading_filament") //extrusion while load/unload during Print Process
             stateTypeSet(ProcessStateType::Extrusion);
-        else if (kStepStr == "stopping")
+        else if (kStepStr == "stopping" ||
+                 kStepStr == "stopping_filament") //stopping while load/unload during Print Process
             stateTypeSet(ProcessStateType::Stopping);
         else if (kStepStr == "unloading_filament")
             stateTypeSet(ProcessStateType::UnloadingFilament);

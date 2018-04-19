@@ -24,16 +24,16 @@ void BotModel::done(QString acknowledge_result) {
     qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
 }
 
-void BotModel::loadFilament(const int kToolIndex) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex;
+void BotModel::loadFilament(const int kToolIndex, bool whilePrinting) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " whilePrinting " << whilePrinting;
 }
 
 void BotModel::loadFilamentStop() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::unloadFilament(const int kToolIndex) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex;
+void BotModel::unloadFilament(const int kToolIndex, bool whilePrinting) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << "whilePrinting " << whilePrinting;
 }
 
 void BotModel::assistedLevel() {

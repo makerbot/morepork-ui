@@ -15,6 +15,7 @@ Item {
     property alias continue_mouseArea: continue_mouseArea
     property alias continue_rectangle: continue_rectangle
     property alias materialPageDrawer: materialPageDrawer
+    property bool isLoadFilament: false
 
     smooth: false
 
@@ -95,6 +96,13 @@ Item {
                     state = "base state"
                     materialSwipeView.swipeToItem(0)
                     setDrawerState(false)
+                    // If load/unload process completes successfully while,
+                    // in print process enable print drawer to set UI back,
+                    // to printing state.
+                    if(printPage.isPrintProcess) {
+                        activeDrawer = printPage.printingDrawer
+                        setDrawerState(true)
+                    }
                 }
             }
         }

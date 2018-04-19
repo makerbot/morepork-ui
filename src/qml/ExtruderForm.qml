@@ -34,6 +34,7 @@ Item {
         width: 86
         height: 382
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 5
         anchors.left: parent.left
         anchors.leftMargin: 50
         source: extruderPresent ?
