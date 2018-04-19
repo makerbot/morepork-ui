@@ -25,7 +25,7 @@ Rectangle {
         id: button_text
         width: 300
         text: "Button Text"
-        anchors.verticalCenterOffset: 2
+        anchors.verticalCenterOffset: 7
         font.capitalization: Font.AllUppercase
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -38,6 +38,7 @@ Rectangle {
         font.pixelSize: label_size
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
+        lineHeight: 1.5
     }
 
     MouseArea {

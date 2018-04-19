@@ -114,8 +114,9 @@ Item {
             RowLayout {
                 id: rowLayout
                 y: 173
-                width: 150
+                width: children.width
                 height: 35
+                spacing: 10
                 visible: false
 
                 Text {
@@ -221,7 +222,7 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 buttonWidth: 225
-                buttonHeight: 75
+                buttonHeight: 85
                 anchors.topMargin: 280
                 visible: true
                 label: "MATERIAL IS EXTRUDING"
