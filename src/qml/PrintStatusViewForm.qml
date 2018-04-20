@@ -115,8 +115,12 @@ Item {
                             "HEATING UP..."
                             break;
                         case ProcessStateType.Printing:
-                        case ProcessStateType.Paused:
                             fileName_
+                            break;
+                        case ProcessStateType.Paused:
+                            (bot.process.errorCode?
+                                "Error " + bot.process.errorCode :
+                                fileName_)
                             break;
                         case ProcessStateType.Completed:
                             print_time_ + " PRINT TIME"
