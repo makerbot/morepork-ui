@@ -112,10 +112,6 @@ Item {
         id: cancelLoadUnloadPopup
         width: 800
         height: 480
-        leftMargin: rootItem.rotation == 0 ? (parent.width - width)/2 : 0
-        topMargin: rootItem.rotation == 0 ? (parent.height - height)/2 : 0
-        rightMargin: rootItem.rotation == 180 ? (parent.width - width)/2 : 0
-        bottomMargin: rootItem.rotation == 180 ? (parent.height - height)/2 : 0
         modal: true
         dim: false
         focus: true
@@ -139,19 +135,124 @@ Item {
             color: "#000000"
             rotation: rootItem.rotation == 180 ? 180 : 0
             width: 720
-            height: 275
+            height: 220
             radius: 10
             border.width: 2
             border.color: "#ffffff"
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: rotation == 180 ? 40 : -40
             anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Item {
+                id: buttonBar
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: cancel_rectangle
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: cancel_loading_text
+                        color: "#ffffff"
+                        text: isLoadFilament ? "CANCEL LOADING" : "CANCEL UNLOADING"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: cancel_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            cancel_loading_text.color = "#000000"
+                            cancel_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            cancel_loading_text.color = "#ffffff"
+                            cancel_rectangle.color = "#00000000"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: continue_rectangle
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: continue_loading_text
+                        color: "#ffffff"
+                        text: isLoadFilament ? "CONTINUE LOADING" : "CONTINUE UNLOADING"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: continue_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            continue_loading_text.color = "#000000"
+                            continue_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            continue_loading_text.color = "#ffffff"
+                            continue_rectangle.color = "#00000000"
+                        }
+                    }
+                }
+            }
 
             ColumnLayout {
                 id: columnLayout
-                width: 484
+                width: 590
                 height: 100
                 anchors.top: parent.top
-                anchors.topMargin: 40
+                anchors.topMargin: 25
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
@@ -169,8 +270,8 @@ Item {
                 Text {
                     id: cancel_description_text
                     color: "#cbcbcb"
-                    text: isLoadFilament ? "Are you sure you want to cancel the material loading process?" :
-                                           "Are you sure you want to cancel the material unloading process?"
+                    text: "Are you sure you want to cancel the material " +
+                                (isLoadFilament ? "loading" : "unloading") + " process?"
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -178,100 +279,7 @@ Item {
                     wrapMode: Text.WordWrap
                     font.family: "Antennae"
                     font.pixelSize: 18
-                }
-            }
-
-            Rectangle {
-                id: horizontal_divider
-                width: 720
-                height: 1
-                color: "#ffffff"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
-            }
-
-            Rectangle {
-                id: vertical_divider
-                x: 360
-                y: 178
-                width: 1
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            RowLayout {
-                id: rowLayout
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Rectangle {
-                    id: cancel_rectangle
-                    width: 345
-                    height: 65
-                    color: "#00000000"
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.horizontalCenterOffset: -175
-
-                    Text {
-                        id: cancel_loading_text
-                        color: "#ffffff"
-                        text: isLoadFilament ? "CANCEL LOADING" : "CANCEL UNLOADING"
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: "Antennae"
-                        font.pixelSize: 16
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        MouseArea {
-                            id: cancel_mouseArea
-                            width: 300
-                            height: 75
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: continue_rectangle
-                    width: 350
-                    height: 65
-                    color: "#00000000"
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.horizontalCenterOffset: 175
-                    Text {
-                        id: continue_loading_text
-                        color: "#ffffff"
-                        text: isLoadFilament ? "CONTINUE LOADING" : "CONTINUE UNLOADING"
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: "Antennae"
-                        font.pixelSize: 16
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-
-                        MouseArea {
-                            id: continue_mouseArea
-                            width: 300
-                            height: 75
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                        }
-                    }
+                    lineHeight: 1.3
                 }
             }
         }
