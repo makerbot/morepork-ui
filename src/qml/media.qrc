@@ -56,11 +56,17 @@
 	<file alias="extruder_right.png">images/extruder_right.png</file>
 	<file alias="extruder_none.png">images/extruder_none.png</file>
 	<file alias="extruder_both.png">images/extruder_both.png</file>
-	<file alias="build_plate_level.png">images/build_plate_level.png</file>
-	<file alias="build_plate_not_level.png">images/build_plate_not_level.png</file>
-	<file alias="build_plate_level_range.png">images/build_plate_level_range.png</file>
-	<file alias="build_plate_level_begin.png">images/build_plate_level_begin.png</file>
-	<file alias="sombrero_build_plate.png">images/sombrero_build_plate.png</file>
+	<file alias="build_plate_level.png">images/ast_lvl_build_plate_level.png</file>
+	<file alias="build_plate_not_level.png">images/ast_lvl_build_plate_not_level.png</file>
+	<file alias="build_plate_level_range.png">images/ast_lvl_build_plate_level_range.png</file>
+	<file alias="build_plate_level_begin.png">images/ast_lvl_build_plate_level_begin.png</file>
+	<file alias="sombrero_build_plate.png">images/ast_lvl_sombrero_build_plate.png</file>
+	<file alias="build_plate_open_door.png">images/ast_lvl_build_plate_open_door.png</file>
+	<file alias="build_plate_left_lock_unlock.png">images/ast_lvl_build_plate_left_lock_unlock.png</file>
+	<file alias="build_plate_left_adjust.png">images/ast_lvl_build_plate_left_adjust.png</file>
+	<file alias="build_plate_right_lock_unlock.png">images/ast_lvl_build_plate_right_lock_unlock.png</file>
+	<file alias="build_plate_right_adjust.png">images/ast_lvl_build_plate_right_adjust.png</file>
+	<file alias="build_plate_leveled.png">images/ast_lvl_build_plate_leveled.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

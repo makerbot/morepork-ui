@@ -161,6 +161,11 @@ Item {
                 currentHES: bot.process.currentHes
                 targetHESLower: bot.process.targetHesLower
                 targetHESUpper: bot.process.targetHesUpper
+
+                onProcessDone: {
+                    state = "base state"
+                    settingsSwipeView.swipeToItem(0)
+                }
             }
         }
 
