@@ -6,7 +6,6 @@ SettingsPageForm {
     }
 
     buttonAssistedLeveling.onClicked: {
-        bot.assistedLevel()
         settingsSwipeView.swipeToItem(2)
     }
 

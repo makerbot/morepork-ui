@@ -13,59 +13,13 @@ Item {
     property alias button1: button1
     property alias button2: button2
 
-    Rectangle {
+    LoadingIcon {
         id: loading_icon
-        width: 250
-        height: 250
-        color: "#00000000"
-        radius: 125
         anchors.left: parent.left
         anchors.leftMargin: 80
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
-        border.width: 3
-        border.color: "#484848"
-        antialiasing: true
-        smooth: true
-        visible: true
-
-        Image {
-            id: inner_image
-            width: 68
-            height: 68
-            smooth: false
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            source: "qrc:/img/loading_gears.png"
-            visible: parent.visible
-
-            RotationAnimator {
-                target: inner_image
-                from: 360000
-                to: 0
-                duration: 10000000
-                running: parent.visible
-            }
-        }
-
-        Image {
-            id: outer_image
-            width: 214
-            height: 214
-            smooth: false
-            source: "qrc:/img/loading_rings.png"
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            visible: parent.visible
-
-            RotationAnimator {
-                target: outer_image
-                from: 0
-                to: 360000
-                duration: 10000000
-                running: parent.visible
-            }
-        }
+        loading: true
     }
 
     Image {
@@ -166,7 +120,7 @@ Item {
 
             PropertyChanges {
                 target: loading_icon
-                visible: false
+                loading: false
             }
 
             PropertyChanges {
@@ -220,12 +174,12 @@ Item {
 
             PropertyChanges {
                 target: loading_icon
-                visible: false
+                loading: false
             }
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/firmware_update_success.png"
+                source: "qrc:/img/process_successful.png"
                 height: sourceSize.height
                 width: sourceSize.width
                 visible: true
@@ -272,7 +226,7 @@ Item {
 
             PropertyChanges {
                 target: loading_icon
-                visible: false
+                loading: false
             }
 
             PropertyChanges {
@@ -329,7 +283,7 @@ Item {
 
             PropertyChanges {
                 target: loading_icon
-                visible: true
+                loading: true
             }
 
             PropertyChanges {
