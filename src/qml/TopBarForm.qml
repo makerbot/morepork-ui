@@ -139,6 +139,12 @@ Item {
                     case ProcessStateType.Printing:
                         "PRINTING"
                         break;
+                    case ProcessStateType.Pausing:
+                        "PAUSING"
+                        break;
+                    case ProcessStateType.Resuming:
+                        "RESUMING"
+                        break;
                     case ProcessStateType.Paused:
                         "PAUSED"
                         break;

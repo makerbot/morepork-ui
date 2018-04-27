@@ -25,8 +25,7 @@ Item {
     property alias printStatusSwipeView: printStatusSwipeView
     onTimeLeftMinutesChanged: updateTime()
 
-    function updateTime()
-    {
+    function updateTime() {
         var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
         var currentTime = new Date()
         var endMS = currentTime.getTime() + timeLeftSeconds*1000
@@ -83,7 +82,15 @@ Item {
                         case ProcessStateType.Printing:
                             "PRINTING"
                             break;
+                        case ProcessStateType.Pausing:
+                            "PAUSING"
+                            break;
+                        case ProcessStateType.Resuming:
+                            "RESUMING"
+                            break;
                         case ProcessStateType.Paused:
+                        case ProcessStateType.UnloadingFilament: // Out of filament during print
+                        case ProcessStateType.Preheating:
                             "PAUSED"
                             break;
                         case ProcessStateType.Completed:
@@ -117,6 +124,8 @@ Item {
                         case ProcessStateType.Printing:
                             fileName_
                             break;
+                        case ProcessStateType.Pausing:
+                        case ProcessStateType.Resuming:
                         case ProcessStateType.Paused:
                             (bot.process.errorCode?
                                 "Error " + bot.process.errorCode :
@@ -127,6 +136,10 @@ Item {
                             break;
                         case ProcessStateType.Failed:
                             "Error " + bot.process.errorCode
+                            break;
+                        case ProcessStateType.UnloadingFilament:
+                        case ProcessStateType.Preheating: //Out of filament while printing
+                            "OUT OF FILAMENT - UNLOADING"
                             break;
                         default:
                             ""
@@ -151,6 +164,8 @@ Item {
                             bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
                             break;
                         case ProcessStateType.Printing:
+                        case ProcessStateType.Pausing:
+                        case ProcessStateType.Resuming:
                         case ProcessStateType.Paused:
                             timeLeftString + " REMAINING"
                             break;
