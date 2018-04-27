@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     smooth: false
@@ -82,6 +83,20 @@ Item {
             storage.updateCurrentThing()
             getPrintFileDetails(storage.currentThing)
             this.stop()
+        }
+    }
+
+    property bool isPrintFinished: bot.process.stateType == ProcessStateType.Completed ||
+                                   bot.process.stateType == ProcessStateType.Failed
+
+    onIsPrintFinishedChanged: {
+        if(isPrintFinished) {
+            var timeElapsed = new Date("", "", "", "", "", bot.process.elapsedTime)
+            print_time = timeElapsed.getDate() != 31 ?
+                        timeElapsed.getDate() + "D " + timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
+                        timeElapsed.getHours() != 0 ?
+                            timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
+                            timeElapsed.getMinutes() + "M"
         }
     }
 

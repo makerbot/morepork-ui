@@ -84,7 +84,8 @@ Item {
                 from: 360000;
                 to: 0;
                 duration: 10000000
-                running: parent.visible
+                running: (bot.process.stateType == ProcessStateType.Loading ||
+                          bot.process.stateType == ProcessStateType.Preheating)
             }
         }
 
@@ -108,7 +109,12 @@ Item {
                 from: 0;
                 to: 360000;
                 duration: 10000000
-                running: parent.visible
+                running: (bot.process.stateType == ProcessStateType.Loading ||
+                          bot.process.stateType == ProcessStateType.Paused ||
+                          bot.process.stateType == ProcessStateType.Pausing ||
+                          bot.process.stateType == ProcessStateType.Resuming ||
+                          bot.process.stateType == ProcessStateType.Preheating || // Out of filament
+                          bot.process.stateType == ProcessStateType.UnloadingFilament) // while printing
             }
         }
 
