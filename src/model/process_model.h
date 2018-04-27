@@ -23,6 +23,8 @@ class ProcessModel : public BaseModel {
         Default, // Print states
         Loading,
         Printing,
+        Pausing,
+        Resuming,
         Paused,
         Completed,
         Failed,

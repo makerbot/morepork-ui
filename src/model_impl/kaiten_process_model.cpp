@@ -47,6 +47,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             kStepStr == "waiting_for_file" ||
             kStepStr == "transfer")
             stateTypeSet(ProcessStateType::Loading);
+        else if (kStepStr == "suspending")
+            stateTypeSet(ProcessStateType::Pausing);
+        else if (kStepStr == "unsuspending")
+            stateTypeSet(ProcessStateType::Resuming);
         else if (kStepStr == "suspended")
             stateTypeSet(ProcessStateType::Paused);
         else if (kStepStr == "printing")
@@ -59,7 +63,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
         else if (kStepStr == "preheating" ||
                  kStepStr == "preheating_loading" ||
-                 kStepStr == "preheating_unloading") //preheating while load/unload durng PrintProcess
+                 kStepStr == "preheating_unloading") //preheating while load/unload durng Print Process
             stateTypeSet(ProcessStateType::Preheating);
         else if (kStepStr == "extrusion" ||
                  kStepStr == "loading_filament") //extrusion while load/unload during Print Process
@@ -67,7 +71,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         else if (kStepStr == "stopping" ||
                  kStepStr == "stopping_filament") //stopping while load/unload during Print Process
             stateTypeSet(ProcessStateType::Stopping);
-        else if (kStepStr == "unloading_filament")
+        else if (kStepStr == "unloading_filament") //regular unloading & also during Print Process
             stateTypeSet(ProcessStateType::UnloadingFilament);
         // Base class 'Process' states (steps)
         // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
