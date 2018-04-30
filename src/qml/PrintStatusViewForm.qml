@@ -193,7 +193,7 @@ Item {
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
-                        printPage.getReadyByTime(printPage.lastPrintTimeSec)
+                        printPage.getPrintTimes(printPage.lastPrintTimeSec)
                         printPage.printSwipeView.swipeToItem(2)
                     }
                 }
@@ -220,6 +220,7 @@ Item {
                         else if(bot.process.stateType == ProcessStateType.Completed){
                             bot.done("acknowledge_completed")
                         }
+                        printPage.resetPrintFileDetails()
                     }
                 }
             }
