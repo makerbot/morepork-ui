@@ -64,7 +64,6 @@ Item {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
             setDrawerState(false)
             storage.currentThingReset()
-            resetPrintFileDetails()
         }
     }
 
@@ -101,16 +100,10 @@ Item {
     }
 
     function getPrintFileDetails(file) {
-        var printTimeSecRaw = file.timeEstimateSec
-        var printTimeMinRaw = Math.floor(printTimeSecRaw/60)
-        var printTimeHrRaw = Math.floor(printTimeMinRaw/60)
-        var printTimeDay = Math.floor(printTimeHrRaw/24)
-        var printTimeMin = printTimeMinRaw % 60
-        var printTimeHr = printTimeHrRaw % 24
+        var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
         file_name = file.fileBaseName
-        print_time = printTimeDay > 1 ? (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
-                                        (printTimeHr > 1 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
+
         print_material = file.materialNameA == "" ? file.materialNameB :
                                                                file.materialNameA + "+" + file.materialNameB
         uses_support = file.usesSupport ? "YES" : "NO"
@@ -127,7 +120,7 @@ Item {
                     file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
         chamber_temp = file.chamberTempCelcius + "C"
         slicer_name = file.slicerName
-        getReadyByTime(printTimeSecRaw)
+        getPrintTimes(printTimeSec)
     }
 
     function resetPrintFileDetails() {
@@ -145,11 +138,19 @@ Item {
         slicer_name = ""
     }
 
-    function getReadyByTime(timeLeftSeconds) {
-        lastPrintTimeSec = timeLeftSeconds
-        var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
+    // Compute print time, print end time & get them in string format for UI.
+    // Called when selecting a file for print & also while clicking print again
+    // at the end of a print to get new end time.
+    function getPrintTimes(printTimeSec) {
+        lastPrintTimeSec = printTimeSec
+        var timeLeft = new Date("", "", "", "", "", printTimeSec)
+        print_time = timeLeft.getDate() != 31 ?
+                    timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                    timeLeft.getHours() != 0 ?
+                        timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                        timeLeft.getMinutes() + "M"
         var currentTime = new Date()
-        var endMS = currentTime.getTime() + timeLeftSeconds*1000
+        var endMS = currentTime.getTime() + printTimeSec*1000
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
