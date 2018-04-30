@@ -134,7 +134,7 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
           print_file_list.append(
             new PrintFileInfo(kFileInfo.absolutePath(),
                               kFileInfo.fileName(),
-                              kFileInfo.baseName(),
+                              kFileInfo.completeBaseName(), // For .makerbot's look until last '.'
                               kFileInfo.lastRead(),
                               kFileInfo.isDir(),
                               meta_data->extrusion_mass_g[1],
@@ -156,14 +156,15 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
           print_file_list.append(
             new PrintFileInfo(things_dir,
                               kFileInfo.fileName(),
-                              kFileInfo.baseName(),
+                              kFileInfo.fileName(), // For dirs get the complete name including
+                                                    // after the '.', because they're part of the name
                               kFileInfo.lastRead(),
                               kFileInfo.isDir()));
 #else
         print_file_list.append(
           new PrintFileInfo(things_dir,
                             kFileInfo.fileName(),
-                            kFileInfo.baseName(),
+                            kFileInfo.fileName(), // If tinything library is unavailable, get everything
                             kFileInfo.lastRead(),
                             kFileInfo.isDir()));
 #endif
