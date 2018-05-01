@@ -40,11 +40,11 @@ MaterialPageForm {
             // unloadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bay2.switch1.checked ? bot.unloadFilament(0, true, true) :
+                bay1.switch1.checked ? bot.unloadFilament(0, true, true) :
                                   bot.unloadFilament(0, false, true)
             }
             else {
-                bay2.switch1.checked ? bot.unloadFilament(0, true, false) :
+                bay1.switch1.checked ? bot.unloadFilament(0, true, false) :
                                   bot.unloadFilament(0, false, false)
             }
             materialSwipeView.swipeToItem(1)
@@ -59,10 +59,12 @@ MaterialPageForm {
             // loadFilament(int tool_index, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.loadFilament(1, false, true)
+                bay2.switch1.checked ? bot.loadFilament(1, true, true) :
+                                  bot.loadFilament(1, false, true)
             }
             else {
-                bot.loadFilament(1, false, false)
+                bay2.switch1.checked ? bot.loadFilament(1, true, false) :
+                                  bot.loadFilament(1, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -74,10 +76,12 @@ MaterialPageForm {
             // unloadFilament(int tool_index, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.unloadFilament(1, false, true)
+                bay2.switch1.checked ? bot.unloadFilament(1, true, true) :
+                                  bot.unloadFilament(1, false, true)
             }
             else {
-                bot.unloadFilament(1, false, false)
+                bay2.switch1.checked ? bot.unloadFilament(1, true, false) :
+                                  bot.unloadFilament(1, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
