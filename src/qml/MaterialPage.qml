@@ -18,15 +18,17 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = true
             enableMaterialDrawer()
-            // loadFilament(int tool_index, bool whilePrinitng)
+            // loadFilament(int tool_index, bool external, bool whilePrinitng)
             // if load/unload happens while in print process
             // i.e. while print paused, set whilePrinting to true
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.loadFilament(0, true)
+                bay1.switch1.checked ? bot.loadFilament(0, true, true) :
+                                  bot.loadFilament(0, false, true)
             }
             else {
-                bot.loadFilament(0, false)
+                bay1.switch1.checked ? bot.loadFilament(0, true, false) :
+                                  bot.loadFilament(0, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -35,13 +37,15 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 1
             isLoadFilament = false
             enableMaterialDrawer()
-            // unloadFilament(int tool_index, bool whilePrinitng)
+            // unloadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.unloadFilament(0, true)
+                bay1.switch1.checked ? bot.unloadFilament(0, true, true) :
+                                  bot.unloadFilament(0, false, true)
             }
             else {
-                bot.unloadFilament(0, false)
+                bay1.switch1.checked ? bot.unloadFilament(0, true, false) :
+                                  bot.unloadFilament(0, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -55,10 +59,12 @@ MaterialPageForm {
             // loadFilament(int tool_index, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.loadFilament(1, true)
+                bay2.switch1.checked ? bot.loadFilament(1, true, true) :
+                                  bot.loadFilament(1, false, true)
             }
             else {
-                bot.loadFilament(1, false)
+                bay2.switch1.checked ? bot.loadFilament(1, true, false) :
+                                  bot.loadFilament(1, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -70,10 +76,12 @@ MaterialPageForm {
             // unloadFilament(int tool_index, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.unloadFilament(1, true)
+                bay2.switch1.checked ? bot.unloadFilament(1, true, true) :
+                                  bot.unloadFilament(1, false, true)
             }
             else {
-                bot.unloadFilament(1, false)
+                bay2.switch1.checked ? bot.unloadFilament(1, true, false) :
+                                  bot.unloadFilament(1, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }

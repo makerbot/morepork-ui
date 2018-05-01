@@ -36,9 +36,9 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
     Q_INVOKABLE virtual void done(QString acknowledge_result);
-    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool whilePrinting);
+    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external, bool whilePrinting);
     Q_INVOKABLE virtual void loadFilamentStop();
-    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool whilePrinting);
+    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
     Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
