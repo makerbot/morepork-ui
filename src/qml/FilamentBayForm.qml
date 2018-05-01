@@ -16,6 +16,7 @@ Item {
     property string filamentMaterialQuantity: "-0.0"
     property alias loadButton: loadButton
     property alias unloadButton: unloadButton
+    property alias switch1: switch1
 
     MaterialIcon {
         id: materialIconLarge
@@ -162,6 +163,38 @@ Item {
                     label: "UNLOAD"
                 }
             }
+        }
+    }
+
+    Switch {
+        id: switch1
+        checked: true
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 700
+
+        Text {
+            id: text1
+            text: "Int."
+            anchors.horizontalCenterOffset: -25
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: switch1.bottom
+            anchors.topMargin: 0
+            color: "#ffffff"
+            font.pixelSize: 15
+            font.family: "Antennae"
+        }
+
+        Text {
+            id: text2
+            text: "Ext."
+            anchors.horizontalCenterOffset: 25
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: switch1.bottom
+            anchors.topMargin: 0
+            color: "#ffffff"
+            font.pixelSize: 15
+            font.family: "Antennae"
         }
     }
 }
