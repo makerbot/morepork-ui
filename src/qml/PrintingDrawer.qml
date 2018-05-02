@@ -116,6 +116,8 @@ Drawer {
             MoreporkButton {
                 id: buttonChangeFilament
                 buttonText.text: qsTr("CHANGE FILAMENT") + cpUiTr.emptyStr
+                buttonText.color: bot.process.stateType != ProcessStateType.Paused ?
+                                      "#545454" : "#ffffff"
                 buttonImage.source: "qrc:/img/change_filament.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
