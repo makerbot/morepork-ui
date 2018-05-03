@@ -64,10 +64,10 @@ Item {
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
             setDrawerState(false)
-            storage.currentThingReset()
             // Only reset at end of 'Print Process'
             // if 'Print Again' option isn't used
             if(!printAgain) {
+                storage.currentThingReset()
                 resetPrintFileDetails()
             }
             printAgain = false
