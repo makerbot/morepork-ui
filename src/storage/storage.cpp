@@ -58,7 +58,7 @@ void MoreporkStorage::updateCurrentThing(){
             auto &meta_data = file_meta_reader.meta_data_;
             current_thing = new PrintFileInfo(kFileInfo.absolutePath(),
                                 kFileInfo.fileName(),
-                                kFileInfo.baseName(),
+                                kFileInfo.completeBaseName(),
                                 kFileInfo.lastRead(),
                                 kFileInfo.isDir(),
                                 meta_data->extrusion_mass_g[1],
@@ -79,7 +79,7 @@ void MoreporkStorage::updateCurrentThing(){
   #else
           current_thing = new PrintFileInfo(CURRENT_THING_PATH,
                               kFileInfo.fileName(),
-                              kFileInfo.baseName(),
+                              kFileInfo.filename(),
                               kFileInfo.lastRead(),
                               kFileInfo.isDir()));
   #endif

@@ -193,6 +193,7 @@ Item {
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
+                        printAgain = true
                         printPage.getPrintTimes(printPage.lastPrintTimeSec)
                         printPage.printSwipeView.swipeToItem(2)
                     }
