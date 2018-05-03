@@ -8,6 +8,7 @@ MaterialPageForm {
         if(bot.process.type == ProcessType.None ||
            (printPage.isPrintProcess &&
             bot.process.stateType == ProcessStateType.Paused)) {
+            setDrawerState(false)
             activeDrawer = materialPage.materialPageDrawer
             setDrawerState(true)
         }
@@ -23,8 +24,7 @@ MaterialPageForm {
             // i.e. while print paused, set whilePrinting to true
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bay1.switch1.checked ? bot.loadFilament(0, true, true) :
-                                  bot.loadFilament(0, false, true)
+                bot.loadFilament(0, true, true)
             }
             else {
                 bay1.switch1.checked ? bot.loadFilament(0, true, false) :
@@ -40,8 +40,7 @@ MaterialPageForm {
             // unloadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bay1.switch1.checked ? bot.unloadFilament(0, true, true) :
-                                  bot.unloadFilament(0, false, true)
+                bot.unloadFilament(0, true, true)
             }
             else {
                 bay1.switch1.checked ? bot.unloadFilament(0, true, false) :
@@ -59,8 +58,7 @@ MaterialPageForm {
             // loadFilament(int tool_index, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bay2.switch1.checked ? bot.loadFilament(1, true, true) :
-                                  bot.loadFilament(1, false, true)
+                bot.loadFilament(1, true, true)
             }
             else {
                 bay2.switch1.checked ? bot.loadFilament(1, true, false) :
@@ -76,8 +74,7 @@ MaterialPageForm {
             // unloadFilament(int tool_index, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bay2.switch1.checked ? bot.unloadFilament(1, true, true) :
-                                  bot.unloadFilament(1, false, true)
+                bot.unloadFilament(1, true, true)
             }
             else {
                 bay2.switch1.checked ? bot.unloadFilament(1, true, false) :
@@ -92,24 +89,34 @@ MaterialPageForm {
         // the current process. While loading/unloading in the
         // middle of a print, while the bot is still in 'PrintProcess'
         // don't call cancel() which will end the print process.
-        if(printPage.isPrintProcess &&
-           bot.process.stateType != ProcessStateType.Paused &&
-           isLoadFilament) {
-            bot.loadFilamentStop()
+        if(printPage.isPrintProcess) {
+            if(bot.process.stateType == ProcessStateType.Extrusion
+                    && isLoadFilament) {
+                bot.loadFilamentStop()
+            }
+            else if(bot.process.stateType == ProcessStateType.Paused) {
+                loadUnloadFilamentProcess.state = "base state"
+                materialSwipeView.swipeToItem(0)
+                // If cancelled out of load/unload while in print process
+                // enable print drawer to set UI back to printing state.
+                setDrawerState(false)
+                activeDrawer = printPage.printingDrawer
+                setDrawerState(true)
+            }
         }
-        else {
+        else if(bot.process.type == ProcessType.Load ||
+                bot.process.type == ProcessType.Unload) {
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(0)
+            setDrawerState(false)
+        }
+        else if(bot.process.type == ProcessType.None) {
+            loadUnloadFilamentProcess.state = "base state"
+            materialSwipeView.swipeToItem(0)
+            setDrawerState(false)
         }
         cancelLoadUnloadPopup.close()
-        setDrawerState(false)
-        // If cancelled out of load/unload while in print process
-        // enable print drawer to set UI back to printing state.
-        if(printPage.isPrintProcess) {
-            activeDrawer = printPage.printingDrawer
-            setDrawerState(true)
-        }
     }
 
     continue_mouseArea.onClicked: cancelLoadUnloadPopup.close()
