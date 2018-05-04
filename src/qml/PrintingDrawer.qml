@@ -119,6 +119,8 @@ Drawer {
                 buttonText.color: bot.process.stateType != ProcessStateType.Paused ?
                                       "#545454" : "#ffffff"
                 buttonImage.source: "qrc:/img/change_filament.png"
+                buttonImage.opacity: bot.process.stateType != ProcessStateType.Paused ?
+                                         0.2 : 1
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
                 height: 80
