@@ -74,6 +74,7 @@ ApplicationWindow {
                 topBar.drawerDownClicked.connect(activeDrawer.open)
             }
             else {
+                activeDrawer.close()
                 topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
         }

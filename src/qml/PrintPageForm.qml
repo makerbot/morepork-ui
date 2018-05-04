@@ -30,6 +30,7 @@ Item {
     property bool browsingUsbStorage: false
     property alias printSwipeView: printSwipeView
     property bool printFromUI: false
+    property bool printAgain: false
     property alias printStatusView: printStatusView
 
     property bool usbStorageConnected: storage.usbStorageConnected
@@ -63,7 +64,13 @@ Item {
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
             setDrawerState(false)
-            storage.currentThingReset()
+            // Only reset at end of 'Print Process'
+            // if 'Print Again' option isn't used
+            if(!printAgain) {
+                storage.currentThingReset()
+                resetPrintFileDetails()
+            }
+            printAgain = false
         }
     }
 
