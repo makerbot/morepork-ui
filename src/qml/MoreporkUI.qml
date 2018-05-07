@@ -68,9 +68,9 @@ ApplicationWindow {
 
     function setDrawerState(state) {
         topBar.imageDrawerArrow.visible = state
-        if(activeDrawer == printPage.printingDrawer
-                || activeDrawer == materialPage.materialPageDrawer
-                || activeDrawer == printPage.sortingDrawer) {
+        if(activeDrawer == printPage.printingDrawer ||
+           activeDrawer == materialPage.materialPageDrawer ||
+           activeDrawer == printPage.sortingDrawer) {
             activeDrawer.interactive = state
             if(state) {
                 topBar.drawerDownClicked.connect(activeDrawer.open)
@@ -87,25 +87,25 @@ ApplicationWindow {
     }
 
     function goBack() {
-        if(currentItem.hasAltBack){
+        if(currentItem.hasAltBack) {
             currentItem.altBack()
         }
-        else{
+        else {
             currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
         }
     }
 
     function disableDrawer() {
         topBar.imageDrawerArrow.visible = false
-        if(activeDrawer == printPage.printingDrawer
-                || activeDrawer == materialPage.materialPageDrawer
-                || activeDrawer == printPage.sortingDrawer) {
+        if(activeDrawer == printPage.printingDrawer ||
+           activeDrawer == materialPage.materialPageDrawer ||
+           activeDrawer == printPage.sortingDrawer) {
             activeDrawer.interactive = false
             topBar.drawerDownClicked.disconnect(activeDrawer.open)
         }
     }
 
-    Item{
+    Item {
         id: rootItem
         smooth: false
         rotation: 180
@@ -121,7 +121,7 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
-        Drawer{
+        Drawer {
             id: backSwipe
             width: rootAppWindow.width
             height: rootAppWindow.height
@@ -702,8 +702,8 @@ ApplicationWindow {
                                 update_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(mainSwipeView.currentIndex != 3
-                                || settingsPage.settingsSwipeView.currentIndex != 3) {
+                                if(mainSwipeView.currentIndex != 3 ||
+                                   settingsPage.settingsSwipeView.currentIndex != 3) {
                                     mainSwipeView.swipeToItem(3)
                                     settingsPage.settingsSwipeView.swipeToItem(3)
                                 }

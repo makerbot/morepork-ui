@@ -72,8 +72,7 @@ Item {
             antialiasing: true
             rotation: -90
             anchors.fill: parent
-            onPaint:
-            {
+            onPaint: {
                 var context = getContext("2d");
                 context.reset();
                 var centreX = parent.width * 0.5;

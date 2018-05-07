@@ -1,7 +1,6 @@
 import QtQuick 2.4
 
 RoundedButtonForm {
-
     button_mouseArea {
         onPressed: {
             if(!disable_button) {

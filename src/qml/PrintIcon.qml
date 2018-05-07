@@ -4,10 +4,8 @@ import ProcessStateTypeEnum 1.0
 PrintIconForm
 {
     id: printIcon
-    action_mouseArea.onClicked:
-    {
-        switch(currentStep)
-        {
+    action_mouseArea.onClicked: {
+        switch(currentStep) {
             case ProcessStateType.Printing:
                 //In Printing State
                 bot.pauseResumePrint("suspend")

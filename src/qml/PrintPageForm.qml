@@ -35,8 +35,9 @@ Item {
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
-                browsingUsbStorage) {
+        if(!storage.usbStorageConnected &&
+           printSwipeView.currentIndex != 0 &&
+           browsingUsbStorage) {
             setDrawerState(false)
             printSwipeView.swipeToItem(0)
         }
@@ -290,18 +291,18 @@ Item {
             smooth: false
             visible: false
 
-            function altBack(){
+            function altBack() {
                 var backDir = storage.backStackPop()
-                if(backDir !== ""){
+                if(backDir !== "") {
                     storage.updateStorageFileList(backDir)
                 }
-                else{
+                else {
                     setDrawerState(false)
                     printSwipeView.swipeToItem(0)
                 }
             }
 
-            Text{
+            Text {
                 color: "#ffffff"
                 font.family: "Antennae"
                 font.weight: Font.Light
@@ -322,7 +323,7 @@ Item {
                 visible: !storage.storageIsEmpty
                 model: storage.printFileList
                 delegate:
-                    FileButton{
+                    FileButton {
                     property int printTimeSecRaw: model.modelData.timeEstimateSec
                     property int printTimeMinRaw: printTimeSecRaw/60
                     property int printTimeHrRaw: printTimeMinRaw/60
@@ -342,7 +343,7 @@ Item {
                                            model.modelData.materialNameB :
                                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
                     onClicked: {
-                        if(model.modelData.isDir){
+                        if(model.modelData.isDir) {
                             storage.backStackPush(model.modelData.filePath)
                             storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
@@ -369,7 +370,7 @@ Item {
             smooth: false
             visible: false
 
-            function altBack(){
+            function altBack() {
                 resetPrintFileDetails()
                 setDrawerState(true)
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)

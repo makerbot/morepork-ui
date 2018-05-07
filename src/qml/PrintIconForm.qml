@@ -27,8 +27,7 @@ Item {
         property int percent: bot.process.printPercentage
         property int printState: currentStep
         property string progressColor:
-            switch(printState)
-            {
+            switch(printState) {
             case ProcessStateType.Completed:
                 "#3183AF"
                 break;
@@ -49,8 +48,7 @@ Item {
             smooth: false
             rotation : -90
             anchors.fill: parent
-            onPaint:
-            {
+            onPaint: {
                 var context = getContext("2d");
                 context.reset();
 
@@ -270,7 +268,6 @@ Item {
                 target: percentage_symbol_text
                 visible: true
             }
-
         },
         State {
             name: "print_complete_state"
@@ -285,6 +282,7 @@ Item {
                 target: canvas
                 visible: true
             }
+
             PropertyChanges {
                 target: status_image
                 width: 79
@@ -293,7 +291,6 @@ Item {
                 source: "qrc:/img/check_mark.png"
                 visible: true
             }
-
         },
         State {
             name: "print_failed_state"
@@ -308,6 +305,7 @@ Item {
                 target: canvas
                 visible: true
             }
+
             PropertyChanges {
                 target: status_image
                 width: 16

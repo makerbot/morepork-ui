@@ -16,7 +16,6 @@ Item {
     property alias buttonAssistedLeveling: buttonAssistedLeveling
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
-
     smooth: false
 
     SwipeView {
@@ -64,21 +63,27 @@ Item {
                         buttonText.text: "CHANGE LANGUAGE"
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
 
                     MoreporkButton {
                         id: buttonAssistedLeveling
                         buttonText.text: "ASSISTED LEVELING"
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
 
                     MoreporkButton {
                         id: buttonFirmwareUpdate
                         buttonText.text: "SOFTWARE UPDATE"
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
 
                     MoreporkButton {
                         id: buttonCalibrateToolhead
@@ -118,21 +123,27 @@ Item {
                         buttonText.text: "English"
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
 
                     MoreporkButton {
                         id: buttonSpanish
                         buttonText.text: "Espanol"
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
 
                     MoreporkButton {
                         id: buttonFrench
                         buttonText.text: "Francais"
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; Rectangle { color: "#505050"; smooth: false; anchors.fill: parent } }
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
 
                     MoreporkButton {
                         id: buttonItalian
@@ -152,7 +163,7 @@ Item {
             smooth: false
             visible: false
 
-            function altBack(){
+            function altBack() {
                 bot.cancel()
                 settingsSwipeView.swipeToItem(0)
             }
@@ -197,7 +208,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 10
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text{
+                Text {
                     text: "Toolhead A/1"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
@@ -216,7 +227,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 10
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text{
+                Text {
                     text: "Toolhead B/2"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom

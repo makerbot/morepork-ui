@@ -11,7 +11,7 @@ Drawer {
     dim: false
     interactive: false
     background:
-        Rectangle{
+        Rectangle {
             rotation: rootItem.rotation == 180 ? 180 : 0
             opacity: 0.9
             smooth: false
@@ -24,16 +24,13 @@ Drawer {
                   }
             }
 
-    onPositionChanged:
-    {
-        if(position > 0.9)
-        {
+    onPositionChanged: {
+        if(position > 0.9) {
             topBar.backButton.visible = false
             topBar.imageDrawerArrow.rotation = 90
             topBar.text_printerName.color = "#ffffff"
         }
-        else
-        {
+        else {
             if(mainSwipeView.currentIndex != 0) {
                 topBar.backButton.visible = true
             }
@@ -71,7 +68,7 @@ Drawer {
                 anchors.leftMargin: 0
             }
 
-            Rectangle{
+            Rectangle {
                 width: parent.width; height: 1; color: "#4d4d4d"
             }
 
@@ -96,7 +93,7 @@ Drawer {
                 height: 80
             }
 
-            Rectangle{
+            Rectangle {
                 width: parent.width; height: 1; color: "#4d4d4d"
             }
 
@@ -109,7 +106,7 @@ Drawer {
                 height: 80
             }
 
-            Rectangle{
+            Rectangle {
                 width: parent.width; height: 1; color: "#4d4d4d"
             }
 
@@ -126,7 +123,7 @@ Drawer {
                 height: 80
             }
 
-            Rectangle{
+            Rectangle {
                 width: parent.width; height: 1; color: "#4d4d4d"
             }
 
@@ -139,7 +136,7 @@ Drawer {
                 height: 80
             }
 
-            Rectangle{
+            Rectangle {
                 width: parent.width; height: 1; color: "#4d4d4d"
             }
 

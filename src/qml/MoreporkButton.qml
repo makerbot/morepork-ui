@@ -19,7 +19,7 @@ Button {
         smooth: false
     }
 
-    Image{
+    Image {
         id: buttonImage
         width: 34
         height: 34

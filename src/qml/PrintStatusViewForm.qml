@@ -52,7 +52,7 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            PrintIcon{
+            PrintIcon {
                 anchors.verticalCenterOffset: 7
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
@@ -62,8 +62,11 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: currentStep == ProcessStateType.Completed ? 245 :
-                        currentStep == ProcessStateType.Failed ? 210 : 100
+                height: currentStep == ProcessStateType.Completed ?
+                            245 :
+                            currentStep == ProcessStateType.Failed ?
+                                210 :
+                                100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -72,10 +75,8 @@ Item {
                 Text {
                     id: status_text0
                     color: "#cbcbcb"
-                    text:
-                    {
-                        switch(currentStep)
-                        {
+                    text: {
+                        switch(currentStep) {
                         case ProcessStateType.Loading:
                             "GETTING READY"
                             break;
@@ -116,8 +117,7 @@ Item {
                     id: subtext0
                     color: "#cbcbcb"
                     text: {
-                        switch(currentStep)
-                        {
+                        switch(currentStep) {
                         case ProcessStateType.Loading:
                             "HEATING UP..."
                             break;
@@ -158,8 +158,7 @@ Item {
                     id: subtext1
                     color: "#cbcbcb"
                     text: {
-                        switch(currentStep)
-                        {
+                        switch(currentStep) {
                         case ProcessStateType.Loading:
                             bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
                             break;
@@ -218,7 +217,7 @@ Item {
                         if(currentStep == ProcessStateType.Failed) {
                             bot.done("acknowledge_failure")
                         }
-                        else if(currentStep == ProcessStateType.Completed){
+                        else if(currentStep == ProcessStateType.Completed) {
                             bot.done("acknowledge_completed")
                         }
                         printPage.resetPrintFileDetails()
@@ -447,10 +446,9 @@ Item {
                     }
                 }
             }
-
         }
 
-        Item{
+        Item {
             id: page2
             width: 800
             height: 420
@@ -478,6 +476,7 @@ Item {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 3
+
                 Text {
                     id: printerName_text2
                     color: "#cbcbcb"
@@ -503,12 +502,14 @@ Item {
                     height: 100
                     smooth: false
                     spacing: 45
+
                     ColumnLayout {
                         id: columnLayout3
                         width: 100
                         height: 100
                         smooth: false
                         spacing: 10
+
                         Text {
                             id: extruder1_temp_label
                             color: "#cbcbcb"
@@ -581,6 +582,7 @@ Item {
                         height: 100
                         smooth: false
                         spacing: 10
+
                         Text {
                             id: extruder1_temp_text
                             color: "#ffffff"
@@ -645,7 +647,7 @@ Item {
             }
         }
 
-        Item{
+        Item {
             id: page3
             width: 800
             height: 420
@@ -729,7 +731,7 @@ Item {
             }
         }
 
-        Item{
+        Item {
             id: page4
             width: 800
             height: 420
@@ -827,7 +829,7 @@ Item {
         anchors.bottomMargin: 12
         anchors.horizontalCenter: parent.horizontalCenter
 
-        delegate: Rectangle{
+        delegate: Rectangle {
             implicitWidth: 12
             implicitHeight: 12
 
@@ -835,7 +837,9 @@ Item {
             border.width: 1
             border.color: "#ffffff"
 
-            color: index === indicator.currentIndex ? "#ffffff" : "#00000000"
+            color: index === indicator.currentIndex ?
+                       "#ffffff" :
+                       "#00000000"
 
             Behavior on color {
                 ColorAnimation {

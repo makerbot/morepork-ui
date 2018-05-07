@@ -9,11 +9,6 @@ Item {
     width: 800
     height: 440
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Item {
         id: baseItem
         anchors.fill: parent

@@ -30,8 +30,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 3
 
-        NotificationIconsForm
-        {
+        NotificationIcons {
             id: notificationIcons
             anchors.fill: parent
         }
@@ -126,13 +125,10 @@ Item {
         Text {
             id: textPrinterName
             color: "#a0a0a0"
-            text:
-            {
-                switch(currentProcess)
-                {
+            text: {
+                switch(currentProcess) {
                 case ProcessType.Print:
-                    switch(currentStep)
-                    {
+                    switch(currentStep) {
                     case ProcessStateType.Loading:
                         "LOADING"
                         break;
@@ -157,8 +153,7 @@ Item {
                     }
                     break;
                 case ProcessType.Load:
-                    switch(currentStep)
-                    {
+                    switch(currentStep) {
                     case ProcessStateType.Preheating:
                         "PREHEATING"
                         break;
@@ -175,8 +170,7 @@ Item {
                     }
                     break;
                 case ProcessType.Unload:
-                    switch(currentStep)
-                    {
+                    switch(currentStep) {
                     case ProcessStateType.Preheating:
                         "PREHEATING"
                         break;
@@ -192,14 +186,12 @@ Item {
                     }
                     break;
                 default:
-                    switch(mainSwipeView.currentIndex)
-                    {
+                    switch(mainSwipeView.currentIndex) {
                     case 0:
                         bot.name
                         break;
                     case 1:
-                        switch(printPage.printSwipeView.currentIndex)
-                        {
+                        switch(printPage.printSwipeView.currentIndex) {
                         case 0:
                         case 1:
                             "CHOOSE A FILE"

@@ -75,7 +75,7 @@ Button {
             anchors.topMargin: 32
             spacing: 10
 
-            Text{
+            Text {
                 id: filePrintTime
                 text: "File Print Time"
                 font.family: "Antenna"
