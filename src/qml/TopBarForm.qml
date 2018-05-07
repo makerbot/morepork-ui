@@ -128,10 +128,10 @@ Item {
             color: "#a0a0a0"
             text:
             {
-                switch(bot.process.type)
+                switch(currentProcess)
                 {
                 case ProcessType.Print:
-                    switch(bot.process.stateType)
+                    switch(currentStep)
                     {
                     case ProcessStateType.Loading:
                         "LOADING"
@@ -157,7 +157,7 @@ Item {
                     }
                     break;
                 case ProcessType.Load:
-                    switch(bot.process.stateType)
+                    switch(currentStep)
                     {
                     case ProcessStateType.Preheating:
                         "PREHEATING"
@@ -175,7 +175,7 @@ Item {
                     }
                     break;
                 case ProcessType.Unload:
-                    switch(bot.process.stateType)
+                    switch(currentStep)
                     {
                     case ProcessStateType.Preheating:
                         "PREHEATING"

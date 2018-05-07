@@ -7,6 +7,8 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
+    property int currentProcess: bot.process.type
+    property int currentStep: bot.process.stateType
     property alias topBar: topBar
     property var currentItem: mainMenu
     property var activeDrawer

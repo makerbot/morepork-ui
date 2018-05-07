@@ -42,7 +42,7 @@ Item {
         }
     }
 
-    property bool isPrintProcess: bot.process.type == ProcessType.Print
+    property bool isPrintProcess: currentProcess == ProcessType.Print
     onIsPrintProcessChanged: {
         if(isPrintProcess) {
             storage.backStackClear()
@@ -92,8 +92,8 @@ Item {
         }
     }
 
-    property bool isPrintFinished: bot.process.stateType == ProcessStateType.Completed ||
-                                   bot.process.stateType == ProcessStateType.Failed
+    property bool isPrintFinished: currentStep == ProcessStateType.Completed ||
+                                   currentStep == ProcessStateType.Failed
 
     onIsPrintFinishedChanged: {
         if(isPrintFinished) {

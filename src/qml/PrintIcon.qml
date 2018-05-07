@@ -6,7 +6,7 @@ PrintIconForm
     id: printIcon
     action_mouseArea.onClicked:
     {
-        switch(bot.process.stateType)
+        switch(currentStep)
         {
             case ProcessStateType.Printing:
                 //In Printing State

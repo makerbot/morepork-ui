@@ -18,7 +18,7 @@ Item {
         anchors.horizontalCenterOffset: -220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
-        imageVisible: !(bot.process.type == ProcessType.Print)
+        imageVisible: !(currentProcess == ProcessType.Print)
         textIconDesc.text: "PRINT"
 
         PrintIcon {

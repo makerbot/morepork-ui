@@ -62,8 +62,8 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: bot.process.stateType == ProcessStateType.Completed ? 245 :
-                        bot.process.stateType == ProcessStateType.Failed ? 210 : 100
+                height: currentStep == ProcessStateType.Completed ? 245 :
+                        currentStep == ProcessStateType.Failed ? 210 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -74,7 +74,7 @@ Item {
                     color: "#cbcbcb"
                     text:
                     {
-                        switch(bot.process.stateType)
+                        switch(currentStep)
                         {
                         case ProcessStateType.Loading:
                             "GETTING READY"
@@ -116,7 +116,7 @@ Item {
                     id: subtext0
                     color: "#cbcbcb"
                     text: {
-                        switch(bot.process.stateType)
+                        switch(currentStep)
                         {
                         case ProcessStateType.Loading:
                             "HEATING UP..."
@@ -158,7 +158,7 @@ Item {
                     id: subtext1
                     color: "#cbcbcb"
                     text: {
-                        switch(bot.process.stateType)
+                        switch(currentStep)
                         {
                         case ProcessStateType.Loading:
                             bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
@@ -190,8 +190,8 @@ Item {
                     buttonWidth: 200
                     buttonHeight: 45
                     label: "PRINT AGAIN"
-                    visible: bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed
+                    visible: currentStep == ProcessStateType.Completed ||
+                             currentStep == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
                         printAgain = true
                         printPage.getPrintTimes(printPage.lastPrintTimeSec)
@@ -204,7 +204,7 @@ Item {
                     buttonWidth: 300
                     buttonHeight: 45
                     label: "START NEXT PRINT"
-                    visible: bot.process.stateType == ProcessStateType.Completed
+                    visible: currentStep == ProcessStateType.Completed
                 }
 
                 RoundedButton {
@@ -212,13 +212,13 @@ Item {
                     buttonWidth: 100
                     buttonHeight: 45
                     label: "DONE"
-                    visible: bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed
+                    visible: currentStep == ProcessStateType.Completed ||
+                             currentStep == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
-                        if(bot.process.stateType == ProcessStateType.Failed) {
+                        if(currentStep == ProcessStateType.Failed) {
                             bot.done("acknowledge_failure")
                         }
-                        else if(bot.process.stateType == ProcessStateType.Completed){
+                        else if(currentStep == ProcessStateType.Completed){
                             bot.done("acknowledge_completed")
                         }
                         printPage.resetPrintFileDetails()

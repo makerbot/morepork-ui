@@ -25,9 +25,9 @@
 #define USB_STORAGE_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 // TODO(chris): Remove this when we no longer need to support rev B boards
+#endif
 #define LEGACY_USB_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
-#endif
 
 
 class PrintFileInfo : public QObject {

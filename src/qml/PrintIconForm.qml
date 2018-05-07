@@ -25,7 +25,7 @@ Item {
         border.color: "#484848"
 
         property int percent: bot.process.printPercentage
-        property int printState: bot.process.stateType
+        property int printState: currentStep
         property string progressColor:
             switch(printState)
             {
@@ -76,16 +76,16 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             source: "qrc:/img/loading_gears.png"
-            visible: (bot.process.stateType == ProcessStateType.Loading ||
-                      bot.process.stateType == ProcessStateType.Preheating)
+            visible: (currentStep == ProcessStateType.Loading ||
+                      currentStep == ProcessStateType.Preheating)
 
             RotationAnimator {
                 target: status_image;
                 from: 360000;
                 to: 0;
                 duration: 10000000
-                running: (bot.process.stateType == ProcessStateType.Loading ||
-                          bot.process.stateType == ProcessStateType.Preheating)
+                running: (currentStep == ProcessStateType.Loading ||
+                          currentStep == ProcessStateType.Preheating)
             }
         }
 
@@ -97,24 +97,24 @@ Item {
             source: "qrc:/img/loading_rings.png"
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            visible: (bot.process.stateType == ProcessStateType.Loading ||
-                      bot.process.stateType == ProcessStateType.Paused ||
-                      bot.process.stateType == ProcessStateType.Pausing ||
-                      bot.process.stateType == ProcessStateType.Resuming ||
-                      bot.process.stateType == ProcessStateType.Preheating || // Out of filament
-                      bot.process.stateType == ProcessStateType.UnloadingFilament) // while printing
+            visible: (currentStep == ProcessStateType.Loading ||
+                      currentStep == ProcessStateType.Paused ||
+                      currentStep == ProcessStateType.Pausing ||
+                      currentStep == ProcessStateType.Resuming ||
+                      currentStep == ProcessStateType.Preheating || // Out of filament
+                      currentStep == ProcessStateType.UnloadingFilament) // while printing
 
             RotationAnimator {
                 target: loading_or_paused_image;
                 from: 0;
                 to: 360000;
                 duration: 10000000
-                running: (bot.process.stateType == ProcessStateType.Loading ||
-                          bot.process.stateType == ProcessStateType.Paused ||
-                          bot.process.stateType == ProcessStateType.Pausing ||
-                          bot.process.stateType == ProcessStateType.Resuming ||
-                          bot.process.stateType == ProcessStateType.Preheating || // Out of filament
-                          bot.process.stateType == ProcessStateType.UnloadingFilament) // while printing
+                running: (currentStep == ProcessStateType.Loading ||
+                          currentStep == ProcessStateType.Paused ||
+                          currentStep == ProcessStateType.Pausing ||
+                          currentStep == ProcessStateType.Resuming ||
+                          currentStep == ProcessStateType.Preheating || // Out of filament
+                          currentStep == ProcessStateType.UnloadingFilament) // while printing
             }
         }
 
@@ -188,7 +188,7 @@ Item {
     states: [
         State {
             name: "printing_state"
-            when: bot.process.stateType == ProcessStateType.Printing
+            when: currentStep == ProcessStateType.Printing
 
             PropertyChanges {
                 target: status_image
@@ -227,11 +227,11 @@ Item {
         },
         State {
             name: "paused_state"
-            when: bot.process.stateType == ProcessStateType.Paused ||
-                  bot.process.stateType == ProcessStateType.Pausing ||
-                  bot.process.stateType == ProcessStateType.Resuming ||
-                  bot.process.stateType == ProcessStateType.Prehaeting || // Out of filament
-                  bot.process.stateType == ProcessStateType.UnloadingFilament // while printing
+            when: currentStep == ProcessStateType.Paused ||
+                  currentStep == ProcessStateType.Pausing ||
+                  currentStep == ProcessStateType.Resuming ||
+                  currentStep == ProcessStateType.Prehaeting || // Out of filament
+                  currentStep == ProcessStateType.UnloadingFilament // while printing
 
             PropertyChanges {
                 target: status_image
@@ -274,7 +274,7 @@ Item {
         },
         State {
             name: "print_complete_state"
-            when: bot.process.stateType == ProcessStateType.Completed
+            when: currentStep == ProcessStateType.Completed
 
             PropertyChanges {
                 target: loading_or_paused_image
@@ -297,7 +297,7 @@ Item {
         },
         State {
             name: "print_failed_state"
-            when: bot.process.stateType == ProcessStateType.Failed
+            when: currentStep == ProcessStateType.Failed
 
             PropertyChanges {
                 target: loading_or_paused_image

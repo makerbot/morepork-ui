@@ -16,7 +16,7 @@ Item {
     property int bayID: 1
     property int errorCode
     signal processDone
-    property int currentState: bot.process.stateType
+    property int currentState: currentStep
     onCurrentStateChanged: {
         switch(currentState)
         {
@@ -26,10 +26,10 @@ Item {
                 errorCode = bot.process.errorCode
                 state = "error"
             }
-            else if(bot.process.type == ProcessType.Load) {
+            else if(currentProcess == ProcessType.Load) {
                 state = "loaded_filament"
             }
-            else if(bot.process.type == ProcessType.Unload) {
+            else if(currentProcess == ProcessType.Unload) {
                 state = "unloaded_filament"
             }
             //The case when loading/unloading is stopped by user
@@ -152,8 +152,8 @@ Item {
         State {
             name: "feed_filament"
             when: filamentBaySwitchActive == true &&
-                  bot.process.stateType == ProcessStateType.Preheating &&
-                  bot.process.type == ProcessType.Load
+                  currentStep == ProcessStateType.Preheating &&
+                  currentProcess == ProcessType.Load
 
             PropertyChanges {
                 target: main_instruction_text
@@ -178,10 +178,10 @@ Item {
         },
         State {
             name: "preheating"
-            when: bot.process.stateType == ProcessStateType.Preheating &&
-                  (bot.process.type == ProcessType.Load ||
-                   bot.process.type == ProcessType.Unload ||
-                   bot.process.type == ProcessType.Print)
+            when: currentStep == ProcessStateType.Preheating &&
+                  (currentProcess == ProcessType.Load ||
+                   currentProcess == ProcessType.Unload ||
+                   currentProcess == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
@@ -205,9 +205,9 @@ Item {
         },
         State {
             name: "extrusion"
-            when: bot.process.stateType == ProcessStateType.Extrusion &&
-                  (bot.process.type == ProcessType.Load ||
-                   bot.process.type == ProcessType.Print)
+            when: currentStep == ProcessStateType.Extrusion &&
+                  (currentProcess == ProcessType.Load ||
+                   currentProcess == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
@@ -235,9 +235,9 @@ Item {
         },
         State {
             name: "unloading_filament"
-            when: bot.process.stateType == ProcessStateType.UnloadingFilament &&
-                  (bot.process.type == ProcessType.Unload ||
-                   bot.process.type == ProcessType.Print)
+            when: currentStep == ProcessStateType.UnloadingFilament &&
+                  (currentProcess == ProcessType.Unload ||
+                   currentProcess == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
@@ -326,7 +326,7 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 width: 300
-                text: switch(bot.process.type)
+                text: switch(currentProcess)
                       {
                       case ProcessType.Load:
                           "FILAMENT LOADING FAILED"
