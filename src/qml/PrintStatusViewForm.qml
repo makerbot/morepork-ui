@@ -32,9 +32,15 @@ Item {
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
-        timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getMinutes() + "M"
-        doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" : daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
-        doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() : "12" + ":" + endTime.getMinutes() : endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
+        timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                                                    timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                                                                               timeLeft.getMinutes() + "M"
+        doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" :
+                                         daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
+        doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() :
+                                                                                      "12" + ":" + endTime.getMinutes() :
+                                                          endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() :
+                                                                                      endTime.getHours() % 12 + ":" + endTime.getMinutes()
         doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
     }
 
@@ -62,11 +68,8 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: currentStep == ProcessStateType.Completed ?
-                            245 :
-                            currentStep == ProcessStateType.Failed ?
-                                210 :
-                                100
+                height: bot.process.stateType == ProcessStateType.Completed ? 245 :
+                            bot.process.stateType == ProcessStateType.Failed ? 210 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -76,7 +79,7 @@ Item {
                     id: status_text0
                     color: "#cbcbcb"
                     text: {
-                        switch(currentStep) {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             "GETTING READY"
                             break;
@@ -117,7 +120,7 @@ Item {
                     id: subtext0
                     color: "#cbcbcb"
                     text: {
-                        switch(currentStep) {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             "HEATING UP..."
                             break;
@@ -158,7 +161,7 @@ Item {
                     id: subtext1
                     color: "#cbcbcb"
                     text: {
-                        switch(currentStep) {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
                             break;
@@ -189,8 +192,8 @@ Item {
                     buttonWidth: 200
                     buttonHeight: 45
                     label: "PRINT AGAIN"
-                    visible: currentStep == ProcessStateType.Completed ||
-                             currentStep == ProcessStateType.Failed
+                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
                         printAgain = true
                         printPage.getPrintTimes(printPage.lastPrintTimeSec)
@@ -203,7 +206,7 @@ Item {
                     buttonWidth: 300
                     buttonHeight: 45
                     label: "START NEXT PRINT"
-                    visible: currentStep == ProcessStateType.Completed
+                    visible: bot.process.stateType == ProcessStateType.Completed
                 }
 
                 RoundedButton {
@@ -211,13 +214,13 @@ Item {
                     buttonWidth: 100
                     buttonHeight: 45
                     label: "DONE"
-                    visible: currentStep == ProcessStateType.Completed ||
-                             currentStep == ProcessStateType.Failed
+                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
-                        if(currentStep == ProcessStateType.Failed) {
+                        if(bot.process.stateType == ProcessStateType.Failed) {
                             bot.done("acknowledge_failure")
                         }
-                        else if(currentStep == ProcessStateType.Completed) {
+                        else if(bot.process.stateType == ProcessStateType.Completed) {
                             bot.done("acknowledge_completed")
                         }
                         printPage.resetPrintFileDetails()
@@ -836,10 +839,7 @@ Item {
             radius: width / 2
             border.width: 1
             border.color: "#ffffff"
-
-            color: index === indicator.currentIndex ?
-                       "#ffffff" :
-                       "#00000000"
+            color: index === indicator.currentIndex ? "#ffffff" : "#00000000"
 
             Behavior on color {
                 ColorAnimation {

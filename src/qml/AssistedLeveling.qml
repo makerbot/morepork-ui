@@ -23,8 +23,7 @@ AssistedLevelingForm {
                 // move to the next screen if the build plate is not
                 // in leveled, based on reported HES values.
                 (currentHES < targetHESUpper) &&
-                (currentHES > targetHESLower) ?
-                            false : true
+                (currentHES > targetHESLower) ? false : true
             }
             else {
                 // Button is always enabled in other states(unlock_knob &

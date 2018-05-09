@@ -37,9 +37,8 @@ Item {
         anchors.verticalCenterOffset: 5
         anchors.left: parent.left
         anchors.leftMargin: 50
-        source: extruderPresent ?
-                    "qrc:/img/extruder_attached.png" :
-                    "qrc:/img/extruder_not_attached.png"
+        source: extruderPresent ? "qrc:/img/extruder_attached.png" :
+                                  "qrc:/img/extruder_not_attached.png"
 
         Item {
             id: item1
@@ -159,7 +158,8 @@ Item {
 
             Item {
                 id: extruderStats
-                anchors.top: extruderPresent ? extruderDetails.bottom : attachButton.bottom
+                anchors.top: extruderPresent ? extruderDetails.bottom :
+                                               attachButton.bottom
                 anchors.topMargin: extruderPresent ? 25 : 1
                 width: 135
                 height: 100

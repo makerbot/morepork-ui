@@ -5,7 +5,7 @@ PrintIconForm
 {
     id: printIcon
     action_mouseArea.onClicked: {
-        switch(currentStep) {
+        switch(bot.process.stateType) {
             case ProcessStateType.Printing:
                 //In Printing State
                 bot.pauseResumePrint("suspend")

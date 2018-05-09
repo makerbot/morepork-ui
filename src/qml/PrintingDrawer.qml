@@ -75,7 +75,7 @@ Drawer {
             MoreporkButton {
                 id: buttonPausePrint
                 buttonText.text: {
-                    switch(currentStep) {
+                    switch(bot.process.stateType) {
                     case ProcessStateType.Printing:
                         qsTr("PAUSE PRINT") + cpUiTr.emptyStr
                         break;
@@ -113,10 +113,10 @@ Drawer {
             MoreporkButton {
                 id: buttonChangeFilament
                 buttonText.text: qsTr("CHANGE FILAMENT") + cpUiTr.emptyStr
-                buttonText.color: currentStep != ProcessStateType.Paused ?
+                buttonText.color: bot.process.stateType != ProcessStateType.Paused ?
                                       "#545454" : "#ffffff"
                 buttonImage.source: "qrc:/img/change_filament.png"
-                buttonImage.opacity: currentStep != ProcessStateType.Paused ?
+                buttonImage.opacity: bot.process.stateType != ProcessStateType.Paused ?
                                          0.2 : 1
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

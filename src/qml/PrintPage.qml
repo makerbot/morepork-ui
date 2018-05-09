@@ -12,17 +12,17 @@ PrintPageForm {
     }
 
     printingDrawer.buttonPausePrint.onClicked: {
-        if(currentStep == ProcessStateType.Printing) {
+        if(bot.process.stateType == ProcessStateType.Printing) {
             bot.pauseResumePrint("suspend")
         }
-        else if(currentStep == ProcessStateType.Paused) {
+        else if(bot.process.stateType == ProcessStateType.Paused) {
             bot.pauseResumePrint("resume")
         }
         printingDrawer.close()
     }
 
     printingDrawer.buttonChangeFilament.onClicked: {
-        if(currentStep == ProcessStateType.Paused) {
+        if(bot.process.stateType == ProcessStateType.Paused) {
             if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
                 printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
             }

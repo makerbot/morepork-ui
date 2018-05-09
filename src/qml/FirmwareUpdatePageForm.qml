@@ -116,7 +116,7 @@ Item {
     states: [
         State {
             name: "firmware_update_available"
-            when: isfirmwareUpdateAvailable && currentProcess != ProcessType.FirmwareUpdate
+            when: isfirmwareUpdateAvailable && bot.process.type != ProcessType.FirmwareUpdate
 
             PropertyChanges {
                 target: loading_icon
@@ -170,7 +170,7 @@ Item {
         },
         State {
             name: "no_firmware_update_available"
-            when: !isfirmwareUpdateAvailable && currentProcess != ProcessType.FirmwareUpdate
+            when: !isfirmwareUpdateAvailable && bot.process.type != ProcessType.FirmwareUpdate
 
             PropertyChanges {
                 target: loading_icon
@@ -279,7 +279,7 @@ Item {
         },
         State {
             name: "updating_firmware"
-            when: currentProcess == ProcessType.FirmwareUpdate
+            when: bot.process.type == ProcessType.FirmwareUpdate
 
             PropertyChanges {
                 target: loading_icon
@@ -294,7 +294,7 @@ Item {
             PropertyChanges {
                 target: main_status_text
                 text: {
-                    switch(currentStep)
+                    switch(bot.process.stateType)
                     {
                     // Since 'transfer' step also maps to
                     // 'loading' state in print process
@@ -319,7 +319,7 @@ Item {
             PropertyChanges {
                 target: sub_status_text
                 text: {
-                    switch(currentStep)
+                    switch(bot.process.stateType)
                     {
                     // Since 'transfer' step also maps to
                     // 'loading' state in print process

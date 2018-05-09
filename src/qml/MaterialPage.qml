@@ -5,8 +5,8 @@ import ProcessStateTypeEnum 1.0
 MaterialPageForm {
 
     function enableMaterialDrawer() {
-        if(currentProcess == ProcessType.None ||
-          (printPage.isPrintProcess && currentStep == ProcessStateType.Paused)) {
+        if(bot.process.type == ProcessType.None ||
+          (printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused)) {
             setDrawerState(false)
             activeDrawer = materialPage.materialPageDrawer
             setDrawerState(true)
@@ -22,7 +22,7 @@ MaterialPageForm {
             // if load/unload happens while in print process
             // i.e. while print paused, set whilePrinting to true
             if(printPage.isPrintProcess &&
-             currentStep == ProcessStateType.Paused) {
+             bot.process.stateType == ProcessStateType.Paused) {
                 bot.loadFilament(0, true, true)
             }
             else {
@@ -38,7 +38,7 @@ MaterialPageForm {
             enableMaterialDrawer()
             // unloadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
-             currentStep == ProcessStateType.Paused) {
+             bot.process.stateType == ProcessStateType.Paused) {
                 bot.unloadFilament(0, true, true)
             }
             else {
@@ -56,7 +56,7 @@ MaterialPageForm {
             enableMaterialDrawer()
             // loadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
-             currentStep == ProcessStateType.Paused) {
+             bot.process.stateType == ProcessStateType.Paused) {
                 bot.loadFilament(1, true, true)
             }
             else {
@@ -72,7 +72,7 @@ MaterialPageForm {
             enableMaterialDrawer()
             // unloadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
-             currentStep == ProcessStateType.Paused) {
+             bot.process.stateType == ProcessStateType.Paused) {
                 bot.unloadFilament(1, true, true)
             }
             else {
@@ -90,11 +90,11 @@ MaterialPageForm {
         // middle of a print, while the bot is still in 'PrintProcess'
         // don't call cancel() which will end the print process.
         if(printPage.isPrintProcess) {
-            if(currentStep == ProcessStateType.Extrusion &&
+            if(bot.process.stateType == ProcessStateType.Extrusion &&
                isLoadFilament) {
                 bot.loadFilamentStop()
             }
-            else if(currentStep == ProcessStateType.Paused) {
+            else if(bot.process.stateType == ProcessStateType.Paused) {
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(0)
                 // If cancelled out of load/unload while in print process
@@ -104,14 +104,14 @@ MaterialPageForm {
                 setDrawerState(true)
             }
         }
-        else if(currentProcess == ProcessType.Load ||
-                currentProcess == ProcessType.Unload) {
+        else if(bot.process.type == ProcessType.Load ||
+                bot.process.type == ProcessType.Unload) {
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(0)
             setDrawerState(false)
         }
-        else if(currentProcess == ProcessType.None) {
+        else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(0)
             setDrawerState(false)

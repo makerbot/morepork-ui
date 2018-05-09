@@ -16,10 +16,10 @@ Item {
     property int targetHESLower
     signal processDone
 
-    property int currentState: currentStep
+    property int currentState: bot.process.stateType
     onCurrentStateChanged: {
         // Conditions to move to appropriate UI states
-        if(currentProcess == ProcessType.AssistedLeveling) {
+        if(bot.process.type == ProcessType.AssistedLeveling) {
             switch(currentState) {
                 case ProcessStateType.LevelingLeft:
                 case ProcessStateType.LevelingRight:
@@ -236,8 +236,8 @@ Item {
     states: [
         State {
             name: "buildplate_instructions"
-            when: currentProcess == ProcessType.AssistedLeveling &&
-                  currentStep == ProcessStateType.BuildPlateInstructions
+            when: bot.process.type == ProcessType.AssistedLeveling &&
+                  bot.process.stateType == ProcessStateType.BuildPlateInstructions
 
             PropertyChanges {
                 target: header_image
@@ -280,11 +280,11 @@ Item {
 
         State {
             name: "loading_state"
-            when: currentProcess == ProcessType.AssistedLeveling &&
-                  (currentStep == ProcessStateType.Loading ||
-                   currentStep == ProcessStateType.CheckFirstPoint ||
-                   currentStep == ProcessStateType.CheckLeftLevel ||
-                   currentStep == ProcessStateType.CheckRightLevel)
+            when: bot.process.type == ProcessType.AssistedLeveling &&
+                  (bot.process.stateType == ProcessStateType.Loading ||
+                   bot.process.stateType == ProcessStateType.CheckFirstPoint ||
+                   bot.process.stateType == ProcessStateType.CheckLeftLevel ||
+                   bot.process.stateType == ProcessStateType.CheckRightLevel)
 
             PropertyChanges {
                 target: header_image
@@ -299,7 +299,7 @@ Item {
             PropertyChanges {
                 target: processText
                 text: {
-                    switch(currentStep) {
+                    switch(bot.process.stateType) {
                     case ProcessStateType.Loading:
                         "HOMING TO CENTER POINT"
                         break;
@@ -342,7 +342,7 @@ Item {
                 target: levelingDirections
                 anchors.verticalCenterOffset: -100
                 source: {
-                    switch(currentStep) {
+                    switch(bot.process.stateType) {
                     case ProcessStateType.LevelingLeft:
                         "qrc:/img/build_plate_left_lock_unlock.png"
                         break;
@@ -357,7 +357,7 @@ Item {
             PropertyChanges {
                 target: leveling_instruction
                 text: {
-                    switch(currentStep) {
+                    switch(bot.process.stateType) {
                     case ProcessStateType.LevelingLeft:
                         "Loosen front left lock."
                         break;
@@ -411,7 +411,7 @@ Item {
                         "qrc:/img/build_plate_leveled.png"
                     }
                     else{
-                        switch(currentStep) {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
                             "qrc:/img/build_plate_left_adjust.png"
                             break;
@@ -503,7 +503,7 @@ Item {
                 target: levelingDirections
                 anchors.verticalCenterOffset: -100
                 source: {
-                    switch(currentStep) {
+                    switch(bot.process.stateType) {
                     case ProcessStateType.LevelingLeft:
                         "qrc:/img/build_plate_left_lock_unlock.png"
                         break;
@@ -518,7 +518,7 @@ Item {
             PropertyChanges {
                 target: leveling_instruction
                 text: {
-                    switch(currentStep) {
+                    switch(bot.process.stateType) {
                     case ProcessStateType.LevelingLeft:
                         "Tighten front left lock."
                         break;
