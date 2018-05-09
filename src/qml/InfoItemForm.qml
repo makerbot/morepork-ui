@@ -13,11 +13,6 @@ Item {
     property alias labelElement: labelText
     property alias baseElement: baseItem
 
-    Rectangle{
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Item {
         id: baseItem
         anchors.fill: parent

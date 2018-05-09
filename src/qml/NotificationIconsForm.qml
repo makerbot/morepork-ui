@@ -11,13 +11,13 @@ Item {
         spacing: 13
         anchors.fill: parent
 
-        FilamentIcon{
+        FilamentIcon {
             id: filament1_icon
             filamentPercent: bot.filament1Percent
             filamentColor: bot.filament1Color
         }
 
-        FilamentIcon{
+        FilamentIcon {
             id: filament2_icon
             filamentPercent: bot.filament2Percent
             filamentColor: bot.filament2Color
@@ -36,10 +36,8 @@ Item {
                 smooth: true
                 anchors.fill: parent
                 visible: true
-                source:
-                {
-                    switch(bot.net.interface)
-                    {
+                source: {
+                    switch(bot.net.interface) {
                     case "wifi":
                         "qrc:/img/wifi_connected.png"
                         break;

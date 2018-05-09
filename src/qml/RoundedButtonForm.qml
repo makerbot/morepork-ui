@@ -1,7 +1,6 @@
 import QtQuick 2.4
 
 Rectangle {
-
     property alias button_rectangle: button_rectangle
     property alias button_text: button_text
     property alias button_mouseArea: button_mouseArea

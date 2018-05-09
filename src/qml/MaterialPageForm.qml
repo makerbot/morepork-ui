@@ -19,7 +19,7 @@ Item {
 
     smooth: false
 
-    MaterialPageDrawer{
+    MaterialPageDrawer {
         id: materialPageDrawer
     }
 
@@ -47,7 +47,7 @@ Item {
             smooth: false
             visible: true
 
-            FilamentBay{
+            FilamentBay {
                 id: bay1
                 visible: true
                 anchors.top: parent.top
@@ -62,7 +62,7 @@ Item {
                 filamentMaterialQuantity: "0.0"
             }
 
-            FilamentBay{
+            FilamentBay {
                 id: bay2
                 visible: true
                 anchors.top: parent.top
@@ -79,17 +79,18 @@ Item {
         }
 
         // materialSwipeView.index = 1
-        Item{
+        Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: 1
             property bool hasAltBack: true
             visible: true
 
-            function altBack(){
+            function altBack() {
                 cancelLoadUnloadPopup.open()
             }
-            LoadUnloadFilament{
+
+            LoadUnloadFilament {
                 id: loadUnloadFilamentProcess
                 filamentBaySwitchActive: bayID == 1 ? bot.filamentBayASwitch : bot.filamentBayBSwitch
                 onProcessDone: {
@@ -108,7 +109,7 @@ Item {
         }
     }
 
-    Popup{
+    Popup {
         id: cancelLoadUnloadPopup
         width: 800
         height: 480

@@ -35,8 +35,9 @@ Item {
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(!storage.usbStorageConnected && printSwipeView.currentIndex != 0 &&
-                browsingUsbStorage) {
+        if(!storage.usbStorageConnected &&
+           printSwipeView.currentIndex != 0 &&
+           browsingUsbStorage) {
             setDrawerState(false)
             printSwipeView.swipeToItem(0)
         }
@@ -98,11 +99,9 @@ Item {
     onIsPrintFinishedChanged: {
         if(isPrintFinished) {
             var timeElapsed = new Date("", "", "", "", "", bot.process.elapsedTime)
-            print_time = timeElapsed.getDate() != 31 ?
-                        timeElapsed.getDate() + "D " + timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
-                        timeElapsed.getHours() != 0 ?
-                            timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
-                            timeElapsed.getMinutes() + "M"
+            print_time = timeElapsed.getDate() != 31 ? timeElapsed.getDate() + "D " + timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
+                                                       timeElapsed.getHours() != 0 ? timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
+                                                                                     timeElapsed.getMinutes() + "M"
         }
     }
 
@@ -110,21 +109,17 @@ Item {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
         file_name = file.fileBaseName
-
         print_material = file.materialNameA == "" ? file.materialNameB :
-                                                               file.materialNameA + "+" + file.materialNameB
+                                                    file.materialNameA + "+" + file.materialNameB
         uses_support = file.usesSupport ? "YES" : "NO"
         uses_raft = file.usesRaft ? "YES" : "NO"
-        model_mass = file.extrusionMassGramsB < 1000 ?
-                    file.extrusionMassGramsB.toFixed(1) + " g" :
-                    (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
-        support_mass = file.extrusionMassGramsA < 1000 ?
-                    file.extrusionMassGramsA.toFixed(1) + " g" :
-                    (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+        model_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
+                                                       (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
+        support_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
+                                                         (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
         num_shells = file.numShells
-        extruder_temp = file.extruderTempCelciusA == 0 ?
-                    file.extruderTempCelciusB + "C" :
-                    file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
+        extruder_temp = file.extruderTempCelciusA == 0 ? file.extruderTempCelciusB + "C" :
+                                                         file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
         chamber_temp = file.chamberTempCelcius + "C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
@@ -151,18 +146,19 @@ Item {
     function getPrintTimes(printTimeSec) {
         lastPrintTimeSec = printTimeSec
         var timeLeft = new Date("", "", "", "", "", printTimeSec)
-        print_time = timeLeft.getDate() != 31 ?
-                    timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
-                    timeLeft.getHours() != 0 ?
-                        timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
-                        timeLeft.getMinutes() + "M"
+        print_time = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                                                timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                                                                           timeLeft.getMinutes() + "M"
         var currentTime = new Date()
         var endMS = currentTime.getTime() + printTimeSec*1000
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
         var doneByDayString = daysLeft > 1 ? daysLeft + " DAYS LATER" : daysLeft == 1 ? "TOMMORROW" : "TODAY"
-        var doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() : "12" + ":" + endTime.getMinutes() : endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
+        var doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() :
+                                                                                          "12" + ":" + endTime.getMinutes() :
+                                                              endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() :
+                                                                                          endTime.getHours() % 12 + ":" + endTime.getMinutes()
         var doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
         readyByTime = doneByTimeString + " " + doneByMeridianString + " " + doneByDayString
     }
@@ -290,18 +286,18 @@ Item {
             smooth: false
             visible: false
 
-            function altBack(){
+            function altBack() {
                 var backDir = storage.backStackPop()
-                if(backDir !== ""){
+                if(backDir !== "") {
                     storage.updateStorageFileList(backDir)
                 }
-                else{
+                else {
                     setDrawerState(false)
                     printSwipeView.swipeToItem(0)
                 }
             }
 
-            Text{
+            Text {
                 color: "#ffffff"
                 font.family: "Antennae"
                 font.weight: Font.Light
@@ -322,7 +318,7 @@ Item {
                 visible: !storage.storageIsEmpty
                 model: storage.printFileList
                 delegate:
-                    FileButton{
+                    FileButton {
                     property int printTimeSecRaw: model.modelData.timeEstimateSec
                     property int printTimeMinRaw: printTimeSecRaw/60
                     property int printTimeHrRaw: printTimeMinRaw/60
@@ -342,7 +338,7 @@ Item {
                                            model.modelData.materialNameB :
                                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
                     onClicked: {
-                        if(model.modelData.isDir){
+                        if(model.modelData.isDir) {
                             storage.backStackPush(model.modelData.filePath)
                             storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
@@ -369,7 +365,7 @@ Item {
             smooth: false
             visible: false
 
-            function altBack(){
+            function altBack() {
                 resetPrintFileDetails()
                 setDrawerState(true)
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)

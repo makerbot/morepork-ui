@@ -18,9 +18,9 @@ Item {
 
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
+        // Conditions to move to appropriate UI states
         if(bot.process.type == ProcessType.AssistedLeveling) {
-            switch(currentState)
-            {
+            switch(currentState) {
                 case ProcessStateType.LevelingLeft:
                 case ProcessStateType.LevelingRight:
                     state = "unlock_knob"
@@ -32,12 +32,6 @@ Item {
                     break;
             }
         }
-    }
-
-    Rectangle {
-        id: rectangle
-        color: "#000000"
-        anchors.fill: parent
     }
 
     Image {
@@ -333,6 +327,11 @@ Item {
 
         State {
             name: "unlock_knob"
+            // To get into this UI state, the switch case
+            // at the top of file is used instead of the
+            // usual 'when' condition, as we need the UI to
+            // be held at this state and move forward only
+            // after user input.
 
             PropertyChanges {
                 target: header_image
@@ -389,6 +388,10 @@ Item {
 
         State {
             name: "leveling"
+            // To get into this UI state, the user has to
+            // press the 'acknowledgeLevelButton' while in
+            // the 'unlock_knob' state. The behavior is
+            // defined in the onClicked action of the button.
 
             PropertyChanges {
                 target: header_image
@@ -486,6 +489,10 @@ Item {
 
         State {
             name: "lock_knob"
+            // To get into this UI state, the user has to
+            // press the 'acknowledgeLevelButton' while in
+            // the 'leveling' state. The behavior is defined
+            // in the onClicked action of the button.
 
             PropertyChanges {
                 target: header_image
@@ -542,6 +549,11 @@ Item {
         },
         State {
             name: "leveling_complete"
+            // To get into this UI state, the switch case
+            // at the top of file is used instead of the
+            // usual 'when' condition, as we need the UI to
+            // be held at this state and move forward only
+            // after user input.
 
             PropertyChanges {
                 target: header_image

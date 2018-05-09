@@ -18,8 +18,7 @@ Item {
     signal processDone
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
-        switch(currentState)
-        {
+        switch(currentState) {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
             if(bot.process.errorCode > 0) {
@@ -36,9 +35,8 @@ Item {
             //in the middle of print process. Then the bot goes to
             //'Stopping' step and then to 'Paused' step
             else if(printPage.isPrintProcess) {
-                isLoadFilament ?
-                    state = "loaded_filament" :
-                    state = "unloaded_filament"
+                isLoadFilament ? state = "loaded_filament" :
+                                 state = "unloaded_filament"
                 if(bot.process.errorCode > 0) {
                     errorCode = bot.process.errorCode
                     state = "error"
@@ -49,9 +47,8 @@ Item {
         //itself, in the middle of print process. Then the bot doesn't
         //go to 'Stopping' step, but directly to 'Paused' step.
         case ProcessStateType.Paused:
-            isLoadFilament ?
-                state = "loaded_filament" :
-                state = "unloaded_filament"
+            isLoadFilament ? state = "loaded_filament" :
+                             state = "unloaded_filament"
             break;
         default:
             break;

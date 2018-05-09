@@ -2,8 +2,7 @@ import QtQuick 2.4
 
 FirmwareUpdatePageForm {
     button1.button_mouseArea.onClicked: {
-        switch(state)
-        {
+        switch(state) {
         case "firmware_update_available":
             bot.installFirmware()
             break;
@@ -19,8 +18,7 @@ FirmwareUpdatePageForm {
     }
 
     button2.button_mouseArea.onClicked: {
-        switch(state)
-        {
+        switch(state) {
         case "firmware_update_failed":
             goBack()
             break;

@@ -22,8 +22,7 @@ Item {
         visible: true
 
         property int fillPercent: filamentPercent
-        property string fillColor:
-        {
+        property string fillColor: {
             switch(filamentColor)
             {
             case 1:
@@ -75,8 +74,7 @@ Item {
             antialiasing: true
             rotation: -90
             anchors.fill: parent
-            onPaint:
-            {
+            onPaint: {
                 var context = getContext("2d");
                 context.reset();
 
@@ -91,6 +89,5 @@ Item {
                 context.fill();
             }
         }
-
     }
 }

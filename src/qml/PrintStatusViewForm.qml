@@ -32,9 +32,15 @@ Item {
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
-        timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" : timeLeft.getMinutes() + "M"
-        doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" : daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
-        doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() : "12" + ":" + endTime.getMinutes() : endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() : endTime.getHours() % 12 + ":" + endTime.getMinutes()
+        timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                                                    timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
+                                                                               timeLeft.getMinutes() + "M"
+        doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" :
+                                         daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
+        doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() :
+                                                                                      "12" + ":" + endTime.getMinutes() :
+                                                          endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() :
+                                                                                      endTime.getHours() % 12 + ":" + endTime.getMinutes()
         doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
     }
 
@@ -52,7 +58,7 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            PrintIcon{
+            PrintIcon {
                 anchors.verticalCenterOffset: 7
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
@@ -63,7 +69,7 @@ Item {
                 id: columnLayout_page0
                 width: 400
                 height: bot.process.stateType == ProcessStateType.Completed ? 245 :
-                        bot.process.stateType == ProcessStateType.Failed ? 210 : 100
+                            bot.process.stateType == ProcessStateType.Failed ? 210 : 100
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -72,10 +78,8 @@ Item {
                 Text {
                     id: status_text0
                     color: "#cbcbcb"
-                    text:
-                    {
-                        switch(bot.process.stateType)
-                        {
+                    text: {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             "GETTING READY"
                             break;
@@ -116,8 +120,7 @@ Item {
                     id: subtext0
                     color: "#cbcbcb"
                     text: {
-                        switch(bot.process.stateType)
-                        {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             "HEATING UP..."
                             break;
@@ -158,8 +161,7 @@ Item {
                     id: subtext1
                     color: "#cbcbcb"
                     text: {
-                        switch(bot.process.stateType)
-                        {
+                        switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
                             break;
@@ -218,7 +220,7 @@ Item {
                         if(bot.process.stateType == ProcessStateType.Failed) {
                             bot.done("acknowledge_failure")
                         }
-                        else if(bot.process.stateType == ProcessStateType.Completed){
+                        else if(bot.process.stateType == ProcessStateType.Completed) {
                             bot.done("acknowledge_completed")
                         }
                         printPage.resetPrintFileDetails()
@@ -447,10 +449,9 @@ Item {
                     }
                 }
             }
-
         }
 
-        Item{
+        Item {
             id: page2
             width: 800
             height: 420
@@ -478,6 +479,7 @@ Item {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 3
+
                 Text {
                     id: printerName_text2
                     color: "#cbcbcb"
@@ -503,12 +505,14 @@ Item {
                     height: 100
                     smooth: false
                     spacing: 45
+
                     ColumnLayout {
                         id: columnLayout3
                         width: 100
                         height: 100
                         smooth: false
                         spacing: 10
+
                         Text {
                             id: extruder1_temp_label
                             color: "#cbcbcb"
@@ -581,6 +585,7 @@ Item {
                         height: 100
                         smooth: false
                         spacing: 10
+
                         Text {
                             id: extruder1_temp_text
                             color: "#ffffff"
@@ -645,7 +650,7 @@ Item {
             }
         }
 
-        Item{
+        Item {
             id: page3
             width: 800
             height: 420
@@ -729,7 +734,7 @@ Item {
             }
         }
 
-        Item{
+        Item {
             id: page4
             width: 800
             height: 420
@@ -827,14 +832,13 @@ Item {
         anchors.bottomMargin: 12
         anchors.horizontalCenter: parent.horizontalCenter
 
-        delegate: Rectangle{
+        delegate: Rectangle {
             implicitWidth: 12
             implicitHeight: 12
 
             radius: width / 2
             border.width: 1
             border.color: "#ffffff"
-
             color: index === indicator.currentIndex ? "#ffffff" : "#00000000"
 
             Behavior on color {

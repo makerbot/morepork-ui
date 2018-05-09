@@ -6,8 +6,7 @@ MaterialPageForm {
 
     function enableMaterialDrawer() {
         if(bot.process.type == ProcessType.None ||
-           (printPage.isPrintProcess &&
-            bot.process.stateType == ProcessStateType.Paused)) {
+          (printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused)) {
             setDrawerState(false)
             activeDrawer = materialPage.materialPageDrawer
             setDrawerState(true)
@@ -28,7 +27,7 @@ MaterialPageForm {
             }
             else {
                 bay1.switch1.checked ? bot.loadFilament(0, true, false) :
-                                  bot.loadFilament(0, false, false)
+                                       bot.loadFilament(0, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -44,7 +43,7 @@ MaterialPageForm {
             }
             else {
                 bay1.switch1.checked ? bot.unloadFilament(0, true, false) :
-                                  bot.unloadFilament(0, false, false)
+                                       bot.unloadFilament(0, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -55,14 +54,14 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = true
             enableMaterialDrawer()
-            // loadFilament(int tool_index, bool whilePrinitng)
+            // loadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
                 bot.loadFilament(1, true, true)
             }
             else {
                 bay2.switch1.checked ? bot.loadFilament(1, true, false) :
-                                  bot.loadFilament(1, false, false)
+                                       bot.loadFilament(1, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -71,27 +70,28 @@ MaterialPageForm {
             loadUnloadFilamentProcess.bayID = 2
             isLoadFilament = false
             enableMaterialDrawer()
-            // unloadFilament(int tool_index, bool whilePrinitng)
+            // unloadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
                 bot.unloadFilament(1, true, true)
             }
             else {
                 bay2.switch1.checked ? bot.unloadFilament(1, true, false) :
-                                  bot.unloadFilament(1, false, false)
+                                       bot.unloadFilament(1, false, false)
             }
             materialSwipeView.swipeToItem(1)
         }
     }
 
     cancel_mouseArea.onClicked: {
+        cancelLoadUnloadPopup.close()
         // Call the appropriate cancel function depending on the
         // the current process. While loading/unloading in the
         // middle of a print, while the bot is still in 'PrintProcess'
         // don't call cancel() which will end the print process.
         if(printPage.isPrintProcess) {
-            if(bot.process.stateType == ProcessStateType.Extrusion
-                    && isLoadFilament) {
+            if(bot.process.stateType == ProcessStateType.Extrusion &&
+               isLoadFilament) {
                 bot.loadFilamentStop()
             }
             else if(bot.process.stateType == ProcessStateType.Paused) {
@@ -116,7 +116,6 @@ MaterialPageForm {
             materialSwipeView.swipeToItem(0)
             setDrawerState(false)
         }
-        cancelLoadUnloadPopup.close()
     }
 
     continue_mouseArea.onClicked: cancelLoadUnloadPopup.close()
