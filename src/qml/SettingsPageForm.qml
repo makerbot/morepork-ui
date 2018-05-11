@@ -16,6 +16,8 @@ Item {
     property alias buttonAssistedLeveling: buttonAssistedLeveling
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
+    property alias buttonAdvancedInfo: buttonAdvancedInfo
+
     smooth: false
 
     SwipeView {
@@ -88,6 +90,15 @@ Item {
                     MoreporkButton {
                         id: buttonCalibrateToolhead
                         buttonText.text: "CALIBRATE TOOLHEADS"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MoreporkButton {
+                        id: buttonAdvancedInfo
+                        buttonText.text: "ADVANCED INFO"
                     }
                 }
             }
@@ -202,6 +213,19 @@ Item {
             visible: false
 
             ToolheadCalibration {
+
+            }
+        }
+
+        //settingsSwipeView.index = 5
+        Item {
+            id: advancedInfoItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            AdvancedInfo {
 
             }
         }

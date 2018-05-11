@@ -18,6 +18,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(4)
     }
 
+    buttonAdvancedInfo.onClicked: {
+        settingsSwipeView.swipeToItem(5)
+    }
+
     buttonEnglish.onClicked: {
         cpUiTr.selectLanguage("en")
     }

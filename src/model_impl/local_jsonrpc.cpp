@@ -5,6 +5,9 @@
 #include <QTimer>
 
 #include <jsonrpc/jsonrpcoutputstream.h>
+#include <fstream>
+
+std::ofstream myFile;
 
 class LocalJsonRpc::Output : public JsonRpcOutputStream {
   public:
@@ -89,7 +92,10 @@ void LocalJsonRpc::sockConnected() {
 }
 
 void LocalJsonRpc::readyRead() {
+    myFile.open("socket_dump.txt", std::ios::app);
     auto data = m_socket->readAll();
+    myFile << data.data();
+    myFile.close();
     jsonrpc.feedInput(data.data(), data.size());
 }
 
