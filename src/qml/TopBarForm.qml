@@ -208,7 +208,14 @@ Item {
                         "EXTRUDER"
                         break;
                     case 3:
-                        "SETTINGS"
+                        switch(settingsPage.settingsSwipeView.currentIndex) {
+                        case 5:
+                            bot.name + " ADVANCED INFO"
+                            break;
+                        default:
+                            "SETTINGS"
+                            break;
+                        }
                         break;
                     case 4:
                         "INFO"
