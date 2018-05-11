@@ -439,7 +439,6 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("allow_unknown_firmware", m_allowUnkFw);
     conn->jsonrpc.addMethod("print_file_valid", m_prtFileVld);
     conn->jsonrpc.addMethod("assisted_level_status", m_asstLvlNot);
-    //conn->jsonrpc.addMethod("query_status", m_queryStatusNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
