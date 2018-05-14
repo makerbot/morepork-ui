@@ -15,6 +15,7 @@ Item {
     property alias zCalibrateButton : zCalibrateButton
     property alias buildPlateAttached: buildPlateAttached
     property alias buildPlateRemoved: buildPlateRemoved
+    property alias buttonCancel: buttonCancel
 
     property int errorCode
     property bool hasFailed: bot.process.errorCode != 0
@@ -118,6 +119,17 @@ Item {
         anchors.leftMargin: 500
         anchors.top: parent.top
         anchors.topMargin: 210
+    }
+
+    RoundedButton {
+        id: buttonCancel
+        anchors.left: buildPlateAttached.right
+        anchors.leftMargin: 100
+        anchors.top: currentStepText.bottom
+        anchors.topMargin: 100
+        buttonWidth: 150
+        buttonHeight: 50
+        label: "CANCEL"
     }
 
     Image {
