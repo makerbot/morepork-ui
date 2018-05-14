@@ -47,4 +47,10 @@ ToolheadCalibrationForm {
             bot.buildPlateState(false)
         }
     }
+
+    buttonCancel {
+        button_mouseArea.onClicked: {
+            bot.cancel()
+        }
+    }
 }
