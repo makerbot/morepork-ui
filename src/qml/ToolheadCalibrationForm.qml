@@ -9,8 +9,6 @@ Item {
     smooth: false
     antialiasing: false
     property alias buttonOk: buttonOk
-    property alias toolheadA: toolheadA
-    property alias toolheadB: toolheadB
     property alias xyCalibrateButton: xyCalibrateButton
     property alias zCalibrateButton : zCalibrateButton
     property alias buildPlateAttached: buildPlateAttached
@@ -26,48 +24,10 @@ Item {
         }
     }
 
-    Switch {
-        id: toolheadA
-        checked: true
-        anchors.horizontalCenterOffset: -250
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.horizontalCenter: parent.horizontalCenter
-        Text {
-            text: "Toolhead A/1"
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: -20
-            color: "#ffffff"
-            font.family: "Antennae"
-            font.weight: Font.Light
-            font.pixelSize: 18
-        }
-    }
-
-    Switch {
-        id: toolheadB
-        checked: true
-        anchors.horizontalCenterOffset: -50
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.horizontalCenter: parent.horizontalCenter
-        Text {
-            text: "Toolhead B/2"
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: -20
-            color: "#ffffff"
-            font.family: "Antennae"
-            font.weight: Font.Light
-            font.pixelSize: 18
-        }
-    }
-
     RoundedButton {
         id: xyCalibrateButton
         anchors.top: parent.top
-        anchors.topMargin: 90
+        anchors.topMargin: 10
         anchors.horizontalCenterOffset: -150
         anchors.horizontalCenter: parent.horizontalCenter
         buttonWidth: 240
@@ -79,7 +39,7 @@ Item {
         id: zCalibrateButton
         anchors.horizontalCenterOffset: -150
         anchors.top: parent.top
-        anchors.topMargin: 165
+        anchors.topMargin: 95
         anchors.horizontalCenter: parent.horizontalCenter
         buttonWidth: 200
         buttonHeight: 50
@@ -89,11 +49,11 @@ Item {
     RoundedButton {
         id: buildPlateAttached
         anchors.top: parent.top
-        anchors.topMargin: 325
+        anchors.topMargin: 295
         anchors.horizontalCenterOffset: -150
         anchors.horizontalCenter: parent.horizontalCenter
         buttonWidth: 240
-        buttonHeight: 75
+        buttonHeight: 85
         label: "BUILD PLATE INSTALLED"
     }
 
@@ -101,10 +61,10 @@ Item {
         id: buildPlateRemoved
         anchors.horizontalCenterOffset: -150
         anchors.top: parent.top
-        anchors.topMargin: 235
+        anchors.topMargin: 180
         anchors.horizontalCenter: parent.horizontalCenter
         buttonWidth: 220
-        buttonHeight: 75
+        buttonHeight: 85
         label: "BUILD PLATE REMOVED"
     }
 
@@ -126,7 +86,7 @@ Item {
         anchors.left: buildPlateAttached.right
         anchors.leftMargin: 100
         anchors.top: currentStepText.bottom
-        anchors.topMargin: 100
+        anchors.topMargin: 80
         buttonWidth: 150
         buttonHeight: 50
         label: "CANCEL"

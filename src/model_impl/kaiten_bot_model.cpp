@@ -32,7 +32,7 @@ class KaitenBotModel : public BotModel {
     void respondAuthRequest(QString response);
     void firmwareUpdateCheck(bool dont_force_check);
     void installFirmware();
-    void calibrateToolheads(QList<QString> toolheads, QList<QString> axes);
+    void calibrateToolheads(QList<QString> axes);
     void buildPlateState(bool state);
     void acknowledge_level();
 
@@ -326,21 +326,16 @@ void KaitenBotModel::installFirmware(){
     }
 }
 
-void KaitenBotModel::calibrateToolheads(QList<QString> toolheads, QList<QString> axes){
+void KaitenBotModel::calibrateToolheads(QList<QString> axes){
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        Json::Value toolheads_list(Json::arrayValue);
         Json::Value axes_list(Json::arrayValue);
-
-        for(int i = 0; i < toolheads.size(); i++)
-            toolheads_list[i] = (toolheads.value(i)).toStdString();
 
         for(int i = 0; i < axes.size(); i++)
             axes_list[i] = (axes.value(i)).toStdString();
 
-        json_params["toolheads"] = Json::Value(toolheads_list);
         json_params["axes"] = Json::Value(axes_list);
         conn->jsonrpc.invoke("calibrate_toolheads", json_params, std::weak_ptr<JsonRpcCallback>());
     }
