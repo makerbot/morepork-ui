@@ -79,9 +79,9 @@ void MoreporkStorage::updateCurrentThing(){
   #else
           current_thing = new PrintFileInfo(CURRENT_THING_PATH,
                               kFileInfo.fileName(),
-                              kFileInfo.filename(),
+                              kFileInfo.fileName(),
                               kFileInfo.lastRead(),
-                              kFileInfo.isDir()));
+                              kFileInfo.isDir());
   #endif
         }
       }

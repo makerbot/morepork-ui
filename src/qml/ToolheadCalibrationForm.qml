@@ -16,9 +16,9 @@ Item {
     property alias buttonCancel: buttonCancel
 
     property int errorCode
-    property bool hasFailed: bot.process.errorCode != 0
+    property bool hasFailed: bot.process.errorCode !== 0
     onHasFailedChanged: {
-        if(bot.process.errorCode != 0) {
+        if(bot.process.errorCode !== 0) {
             errorCode = bot.process.errorCode
             state = "failed"
         }
@@ -32,7 +32,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         buttonWidth: 240
         buttonHeight: 50
-        label: "XY Calibrate"
+        label: "XYZ Calibrate"
     }
 
     RoundedButton {
