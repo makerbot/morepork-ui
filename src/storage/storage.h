@@ -16,6 +16,7 @@
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString()
 #define USB_STORAGE_DEV_BY_PATH QString()
+#define LEGACY_USB_DEV_BY_PATH QString()
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #else
 // embedded linux path

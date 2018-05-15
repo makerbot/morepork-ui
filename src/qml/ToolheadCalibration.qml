@@ -10,29 +10,13 @@ ToolheadCalibrationForm {
 
     xyCalibrateButton {
         button_mouseArea.onClicked: {
-            if(toolheadA.checked && toolheadB.checked) {
-                bot.calibrateToolheads(["a","b"], ["x","y"])
-            }
-            else if(toolheadA.checked) {
-                bot.calibrateToolheads(["a"], ["x","y"])
-            }
-            else if(toolheadB.checked) {
-                bot.calibrateToolheads(["b"], ["x","y"])
-            }
+            bot.calibrateToolheads(["x","y"])
         }
     }
 
     zCalibrateButton {
         button_mouseArea.onClicked: {
-            if(toolheadA.checked && toolheadB.checked) {
-                bot.calibrateToolheads(["a","b"], ["z"])
-            }
-            else if(toolheadA.checked) {
-                bot.calibrateToolheads(["a"], ["z"])
-            }
-            else if(toolheadB.checked) {
-                bot.calibrateToolheads(["b"], ["z"])
-            }
+            bot.calibrateToolheads(["z"])
         }
     }
 
