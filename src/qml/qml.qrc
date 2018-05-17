@@ -56,5 +56,7 @@
         <file>LoadingIconForm.qml</file>
         <file>ToolheadCalibration.qml</file>
         <file>ToolheadCalibrationForm.qml</file>
+        <file>AdvancedInfo.qml</file>
+        <file>AdvancedInfoForm.qml</file>
     </qresource>
 </RCC>

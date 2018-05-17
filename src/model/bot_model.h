@@ -46,6 +46,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> axes);
     Q_INVOKABLE virtual void buildPlateState(bool state);
     Q_INVOKABLE virtual void acknowledge_level();
+    Q_INVOKABLE virtual void query_status();
+
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
@@ -75,6 +77,79 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderBFilamentPresent, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
+
+    // Advanced Info Properties
+    // Chamber
+    MODEL_PROP(int, infoChamberCurrentTemp, -999)
+    MODEL_PROP(int, infoChamberTargetTemp, -999)
+    MODEL_PROP(int, infoChamberFanASpeed, -999)
+    MODEL_PROP(int, infoChamberFanBSpeed, -999)
+    MODEL_PROP(int, infoChamberHeaterATemp, -999)
+    MODEL_PROP(int, infoChamberHeaterBTemp, -999)
+    MODEL_PROP(int, infoChamberError, -0)
+    // Filament Bay
+    // Bay 1
+    MODEL_PROP(int, infoBay1Temp, -999)
+    MODEL_PROP(int, infoBay1Humidity, -999)
+    MODEL_PROP(bool, infoBay1FilamentPresent, false)
+    MODEL_PROP(bool, infoBay1TagPresent, -999)
+    MODEL_PROP(QString, infoBay1TagUID, "Unknown")
+    MODEL_PROP(int, infoBay1Error, -999)
+    // Bay 2
+    MODEL_PROP(int, infoBay2Temp, -999)
+    MODEL_PROP(int, infoBay2Humidity, -999)
+    MODEL_PROP(bool, infoBay2FilamentPresent, false)
+    MODEL_PROP(bool, infoBay2TagPresent, -999)
+    MODEL_PROP(QString, infoBay2TagUID, "Unknown")
+    MODEL_PROP(int, infoBay2Error, -999)
+    // Motion Status
+    // Axis Enabled
+    MODEL_PROP(bool, infoAxisXEnabled, false)
+    MODEL_PROP(bool, infoAxisYEnabled, false)
+    MODEL_PROP(bool, infoAxisZEnabled, false)
+    MODEL_PROP(bool, infoAxisAEnabled, false)
+    MODEL_PROP(bool, infoAxisBEnabled, false)
+    MODEL_PROP(bool, infoAxisAAEnabled, false)
+    MODEL_PROP(bool, infoAxisBBEnabled, false)
+    // Endstop Activated
+    MODEL_PROP(bool, infoAxisXEndStopActive, false)
+    MODEL_PROP(bool, infoAxisYEndStopActive, false)
+    MODEL_PROP(bool, infoAxisZEndStopActive, false)
+    MODEL_PROP(bool, infoAxisAEndStopActive, false)
+    MODEL_PROP(bool, infoAxisBEndStopActive, false)
+    MODEL_PROP(bool, infoAxisAAEndStopActive, false)
+    MODEL_PROP(bool, infoAxisBBEndStopActive, false)
+    // Position
+    MODEL_PROP(float, infoAxisXPosition, -999.999)
+    MODEL_PROP(float, infoAxisYPosition, -999.999)
+    MODEL_PROP(float, infoAxisZPosition, -999.999)
+    MODEL_PROP(float, infoAxisAPosition, -999.999)
+    MODEL_PROP(float, infoAxisBPosition, -999.999)
+    MODEL_PROP(float, infoAxisAAPosition, -999.999)
+    MODEL_PROP(float, infoAxisBBPosition, -999.999)
+    // Toolheads
+    // Toolhead A/1
+    MODEL_PROP(bool, infoToolheadAAttached, false)
+    MODEL_PROP(bool, infoToolheadAFilamentPresent, false)
+    MODEL_PROP(bool, infoToolheadAFilamentJamEnabled, false)
+    MODEL_PROP(int, infoToolheadACurrentTemp, -999)
+    MODEL_PROP(int, infoToolheadATargetTemp, -999)
+    MODEL_PROP(int, infoToolheadAActiveFanRPM, -999)
+    MODEL_PROP(int, infoToolheadAGradientFanRPM, -999)
+    MODEL_PROP(float, infoToolheadAHESValue, -999.999)
+    // Toolhead B/2
+    MODEL_PROP(bool, infoToolheadBAttached, false)
+    MODEL_PROP(bool, infoToolheadBFilamentPresent, false)
+    MODEL_PROP(bool, infoToolheadBFilamentJamEnabled, false)
+    MODEL_PROP(int, infoToolheadBCurrentTemp, -999)
+    MODEL_PROP(int, infoToolheadBTargetTemp, -999)
+    MODEL_PROP(int, infoToolheadBActiveFanRPM, -999)
+    MODEL_PROP(int, infoToolheadBGradientFanRPM, -999)
+    MODEL_PROP(float, infoToolheadBHESValue, -999.999)
+    // Misc.
+    MODEL_PROP(bool, infoDoorActivated, false)
+    MODEL_PROP(bool, infoLidActivated, false)
+
   protected:
     BotModel();
 };

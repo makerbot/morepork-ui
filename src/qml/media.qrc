@@ -67,6 +67,8 @@
 	<file alias="build_plate_right_lock_unlock.png">images/ast_lvl_build_plate_right_lock_unlock.png</file>
 	<file alias="build_plate_right_adjust.png">images/ast_lvl_build_plate_right_adjust.png</file>
 	<file alias="build_plate_leveled.png">images/ast_lvl_build_plate_leveled.png</file>
+	<file alias="refresh.png">images/refresh.png</file>
+	<file alias="refresh_black.png">images/refresh_black.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

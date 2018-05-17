@@ -30,7 +30,6 @@ QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
 
-
 class PrintFileInfo : public QObject {
   Q_OBJECT
 
