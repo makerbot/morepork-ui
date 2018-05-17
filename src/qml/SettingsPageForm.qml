@@ -60,8 +60,9 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonChangeLanguage
+                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
                         buttonText.text: "CHANGE LANGUAGE"
                     }
 
@@ -69,8 +70,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonAssistedLeveling
+                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
                         buttonText.text: "ASSISTED LEVELING"
                     }
 
@@ -78,8 +80,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonFirmwareUpdate
+                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
                         buttonText.text: "SOFTWARE UPDATE"
                     }
 
@@ -87,8 +90,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonCalibrateToolhead
+                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
                         buttonText.text: "CALIBRATE TOOLHEADS"
                     }
 
@@ -96,8 +100,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonAdvancedInfo
+                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
                         buttonText.text: "ADVANCED INFO"
                     }
                 }

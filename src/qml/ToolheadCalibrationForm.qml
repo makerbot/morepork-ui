@@ -181,6 +181,11 @@ Item {
                 target: image
                 visible: true
             }
+
+            PropertyChanges {
+                target: buttonCancel
+                visible: false
+            }
         }
     ]
 }
