@@ -58,5 +58,7 @@
         <file>ToolheadCalibrationForm.qml</file>
         <file>AdvancedInfo.qml</file>
         <file>AdvancedInfoForm.qml</file>
+        <file>MenuButton.qml</file>
+        <file>MenuButtonForm.qml</file>
     </qresource>
 </RCC>
