@@ -62,7 +62,7 @@ Item {
 
                     MenuButton {
                         id: buttonChangeLanguage
-                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
+                        buttonImage.source: "qrc:/img/icon_change_language.png"
                         buttonText.text: "CHANGE LANGUAGE"
                     }
 
@@ -72,7 +72,7 @@ Item {
 
                     MenuButton {
                         id: buttonAssistedLeveling
-                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
+                        buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
                         buttonText.text: "ASSISTED LEVELING"
                     }
 
@@ -82,7 +82,7 @@ Item {
 
                     MenuButton {
                         id: buttonFirmwareUpdate
-                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
+                        buttonImage.source: "qrc:/img/icon_software_update.png"
                         buttonText.text: "SOFTWARE UPDATE"
                     }
 
@@ -92,7 +92,7 @@ Item {
 
                     MenuButton {
                         id: buttonCalibrateToolhead
-                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
+                        buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
                         buttonText.text: "CALIBRATE TOOLHEADS"
                     }
 
@@ -102,7 +102,7 @@ Item {
 
                     MenuButton {
                         id: buttonAdvancedInfo
-                        buttonImage.source: "qrc:/img/makerbot_logo_55x40.png"
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "ADVANCED INFO"
                     }
                 }
@@ -134,8 +134,9 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonEnglish
+                        buttonImage.source: "qrc:/img/icon_change_language.png"
                         buttonText.text: "English"
                     }
 
@@ -143,8 +144,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonSpanish
+                        buttonImage.source: "qrc:/img/icon_change_language.png"
                         buttonText.text: "Espanol"
                     }
 
@@ -152,8 +154,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonFrench
+                        buttonImage.source: "qrc:/img/icon_change_language.png"
                         buttonText.text: "Francais"
                     }
 
@@ -161,8 +164,9 @@ Item {
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
-                    MoreporkButton {
+                    MenuButton {
                         id: buttonItalian
+                        buttonImage.source: "qrc:/img/icon_change_language.png"
                         buttonText.text: "Italiano"
                     }
                 }
