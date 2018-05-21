@@ -24,6 +24,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::AssistedLeveling);
         else if (kNameStr == "FirmwareBurningProcess")
             typeSet(ProcessType::FirmwareUpdate);
+        else if (kNameStr == "NozzleCalibrationProcess")
+            typeSet(ProcessType::CalibrationProcess);
         else
             typeSet(ProcessType::None);
     }
