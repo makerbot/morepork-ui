@@ -69,6 +69,11 @@
 	<file alias="build_plate_leveled.png">images/ast_lvl_build_plate_leveled.png</file>
 	<file alias="refresh.png">images/refresh.png</file>
 	<file alias="refresh_black.png">images/refresh_black.png</file>
+	<file alias="icon_advanced_info.png">images/icon_advanced_info.png</file>
+	<file alias="icon_assisted_leveling.png">images/icon_assisted_leveling.png</file>
+	<file alias="icon_calibrate_toolhead.png">images/icon_calibrate_toolhead.png</file>
+	<file alias="icon_change_language.png">images/icon_change_language.png</file>
+	<file alias="icon_software_update.png">images/icon_software_update.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

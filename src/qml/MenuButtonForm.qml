@@ -21,8 +21,8 @@ Button {
 
     Image {
         id: buttonImage
-        width: 55*1.2
-        height: 40*1.2
+        width: sourceSize.width
+        height: sourceSize.height
         anchors.left: parent.left
         anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
@@ -39,7 +39,7 @@ Button {
         font.pointSize: 14
         color: "#ffffff"
         anchors.left: buttonImage.right
-        anchors.leftMargin: 25
+        anchors.leftMargin: 28
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         smooth: false
