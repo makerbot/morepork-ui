@@ -4,6 +4,22 @@ import ProcessStateTypeEnum 1.0
 
 MaterialPageForm {
 
+    // Flag to get the filament load/unload UI to end
+    // with the correct state. When filament load/unload
+    // is cancelled kaiten reports the final step as
+    // 'done' before killing the Load/Unload Process.
+    // But we have mapped the 'done' step to trigger
+    // the successful Load/Unload completion screen
+    // depending on load/unload process being executed.
+    // However since cancelling also ends with 'done' step,
+    // the UI closes with the wrong state i.e. load/unload
+    // successful. So the next time Load/Unload buttons are
+    // hit the UI shows the load/unload successful screen
+    // before going into preheating/extrusion/unloading states.
+    // This flag is used to prevent the UI to go into load/unload
+    // successful state while the process is cancelled by user.
+    property bool materialChangeCancelled: false
+
     function enableMaterialDrawer() {
         if(bot.process.type == ProcessType.None ||
           (printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused)) {
@@ -104,8 +120,8 @@ MaterialPageForm {
                 setDrawerState(true)
             }
         }
-        else if(bot.process.type == ProcessType.Load ||
-                bot.process.type == ProcessType.Unload) {
+        else if(bot.process.type == ProcessType.Load) {
+            materialChangeCancelled = true
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(0)
@@ -122,7 +138,7 @@ MaterialPageForm {
 
     materialPageDrawer.buttonCancelMaterialChange.onClicked: {
         materialPageDrawer.close()
-        cancelLoadUnloadPopup.open()
+        exitMaterialChange()
     }
 
     materialPageDrawer.buttonResume.onClicked: {
