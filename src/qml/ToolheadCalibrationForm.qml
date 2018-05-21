@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 
 Item {
     id: calibrationPage
@@ -18,7 +19,7 @@ Item {
     property int errorCode
     property bool hasFailed: bot.process.errorCode !== 0
     onHasFailedChanged: {
-        if(bot.process.errorCode !== 0) {
+        if(bot.process.type == ProcessType.CalibrationProcess) {
             errorCode = bot.process.errorCode
             state = "failed"
         }
@@ -66,6 +67,19 @@ Item {
         buttonWidth: 220
         buttonHeight: 85
         label: "BUILD PLATE REMOVED"
+    }
+
+    Text {
+        id: currentProcessText
+        text: bot.process.nameStr
+        anchors.left: parent.left
+        anchors.leftMargin: 500
+        anchors.top: parent.top
+        anchors.topMargin: 170
+        color: "#ffffff"
+        font.family: "Antennae"
+        font.pixelSize: 24
+        font.weight: Font.Light
     }
 
     Text {
@@ -138,6 +152,7 @@ Item {
         }
     }
 
+
     states: [
         State {
             name: "failed"
@@ -184,6 +199,11 @@ Item {
 
             PropertyChanges {
                 target: buttonCancel
+                visible: false
+            }
+
+            PropertyChanges {
+                target: currentProcessText
                 visible: false
             }
         }
