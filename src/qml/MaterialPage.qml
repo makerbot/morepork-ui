@@ -10,14 +10,14 @@ MaterialPageForm {
     // 'done' before killing the Load/Unload Process.
     // But we have mapped the 'done' step to trigger
     // the successful Load/Unload completion screen
-    // depending on load/unload process being executed.
-    // However since cancelling also ends with 'done' step,
-    // the UI closes with the wrong state i.e. load/unload
-    // successful. So the next time Load/Unload buttons are
-    // hit the UI shows the load/unload successful screen
-    // before going into preheating/extrusion/unloading states.
-    // This flag is used to prevent the UI to go into load/unload
-    // successful state while the process is cancelled by user.
+    // depending on the process. However since cancelling
+    // also ends with 'done' step,the UI closes with the
+    // wrong state i.e. load/unload successful. So the next
+    // time Load/Unload buttons are hit the UI shows the
+    // load/unload successful screen for sometime before
+    // moving into preheating/extrusion/unloading states
+    // depending on the process invoked(load or unload).
+    // This flag is used to prevent this UI behavior.
     property bool materialChangeCancelled: false
 
     function enableMaterialDrawer() {
