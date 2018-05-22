@@ -122,7 +122,8 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            "HEATING UP..."
+                            bot.extruderATargetTemp > 0 ? "HEATING UP EXTRUDER..." :
+                                                          "HEATING UP CHAMBER..."
                             break;
                         case ProcessStateType.Printing:
                             fileName_
@@ -163,7 +164,9 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C"
+                            bot.extruderATargetTemp > 0 ?
+                                (bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C") :
+                                (bot.chamberCurrentTemp + " C" + " | " + bot.chamberTargetTemp + " C")
                             break;
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
