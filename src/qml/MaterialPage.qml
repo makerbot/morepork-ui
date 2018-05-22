@@ -58,8 +58,7 @@ MaterialPageForm {
                 bot.unloadFilament(0, true, true)
             }
             else {
-                bay1.switch1.checked ? bot.unloadFilament(0, true, false) :
-                                       bot.unloadFilament(0, false, false)
+                bot.unloadFilament(0, true, false)
             }
             materialSwipeView.swipeToItem(1)
         }
@@ -92,8 +91,7 @@ MaterialPageForm {
                 bot.unloadFilament(1, true, true)
             }
             else {
-                bay2.switch1.checked ? bot.unloadFilament(1, true, false) :
-                                       bot.unloadFilament(1, false, false)
+                bot.unloadFilament(1, true, false)
             }
             materialSwipeView.swipeToItem(1)
         }
