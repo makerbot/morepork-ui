@@ -26,9 +26,23 @@ Item {
                 state = "error"
             }
             else if(bot.process.type == ProcessType.Load) {
-                state = "loaded_filament"
+                // Cancelling Load/Unload ends with 'done' step
+                // but the UI shouldn't go into load/unload
+                // successful state, but to the default state.
+                if(!materialChangeCancelled) {
+                    state = "loaded_filament"
+                }
+                else {
+                    // Moving to default state is handled in cnacel
+                    // button onClicked action, we just reset the
+                    // cancelled flag here.
+                    materialChangeCancelled = false
+                }
             }
             else if(bot.process.type == ProcessType.Unload) {
+                // We cant' cancel out of unloading so we don't
+                // need the UI state logic like in the 'Load'
+                // process above.
                 state = "unloaded_filament"
             }
             //The case when loading/unloading is stopped by user

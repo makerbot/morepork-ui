@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QtMultimedia 5.8
+import ProcessTypeEnum 1.0
 
 Item {
     property alias bay1: bay1
@@ -18,6 +18,21 @@ Item {
     property bool isLoadFilament: false
 
     smooth: false
+
+    function exitMaterialChange() {
+        if(bot.process.type == ProcessType.Load) {
+            cancelLoadUnloadPopup.open()
+        }
+        else if(bot.process.type == ProcessType.Unload) {
+            waitUntilUnloadedPopup.open()
+            closeWaitUntilUnloadedPopup.start()
+        }
+        else if(bot.process.type == ProcessType.None) {
+            loadUnloadFilamentProcess.state = "base state"
+            materialSwipeView.swipeToItem(0)
+            setDrawerState(false)
+        }
+    }
 
     MaterialPageDrawer {
         id: materialPageDrawer
@@ -87,7 +102,7 @@ Item {
             visible: true
 
             function altBack() {
-                cancelLoadUnloadPopup.open()
+                exitMaterialChange()
             }
 
             LoadUnloadFilament {
@@ -282,6 +297,68 @@ Item {
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }
+            }
+        }
+    }
+
+    Timer {
+        id: closeWaitUntilUnloadedPopup
+        interval: 3000
+        onTriggered: {
+            waitUntilUnloadedPopup.close()
+        }
+    }
+
+    Popup {
+        id: waitUntilUnloadedPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim1
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        Rectangle {
+            id: basePopupItem1
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 100
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: rotation == 180 ? 40 : -40
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: popup_content_text
+                color: "#cbcbcb"
+                text: "Please wait until the unloading process completes."
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: "Antennae"
+                font.pixelSize: 18
+                lineHeight: 1.3
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }
