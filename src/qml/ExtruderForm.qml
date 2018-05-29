@@ -71,10 +71,10 @@ Item {
                     {
                         switch(extruderID) {
                         case 1:
-                            "SUPPORT EXTRUDER"
+                            "MATERIAL EXTRUDER"
                             break;
                         case 2:
-                            "MATERIAL EXTRUDER"
+                            "SUPPORT EXTRUDER"
                             break;
                         }
                     }
@@ -119,10 +119,10 @@ Item {
                     text: {
                         switch(extruderID) {
                         case 1:
-                            "PVA"
+                            "PLA"
                             break;
                         case 2:
-                            "PLA"
+                            "PVA"
                             break;
                         }
                     }
