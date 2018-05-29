@@ -49,7 +49,7 @@ Item {
             anchors.horizontalCenterOffset: -20
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            visible: bot.extruderBPresent && bot.extruderBFilamentPresent
+            visible: bot.extruderAPresent && bot.extruderAFilamentPresent
         }
         Rectangle {
             id: filament_rectangle_right
@@ -63,7 +63,7 @@ Item {
             anchors.horizontalCenterOffset: 8
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            visible: bot.extruderAPresent && bot.extruderAFilamentPresent
+            visible: bot.extruderBPresent && bot.extruderBFilamentPresent
         }
 
         image.source: {
@@ -71,10 +71,10 @@ Item {
                 "qrc:/img/extruder_both.png"
             }
             else if(bot.extruderAPresent && !bot.extruderBPresent) {
-                "qrc:/img/extruder_right.png"
+                "qrc:/img/extruder_left.png"
             }
             else if(!bot.extruderAPresent && bot.extruderBPresent) {
-                "qrc:/img/extruder_left.png"
+                "qrc:/img/extruder_right.png"
             }
             else if(!bot.extruderAPresent && !bot.extruderBPresent) {
                 "qrc:/img/extruder_none.png"

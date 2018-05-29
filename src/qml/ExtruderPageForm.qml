@@ -107,7 +107,7 @@ Item {
                         height: 105
                         color: "#cbcbcb"
                         text: "Open the latch labeled " + parent.extruder
-                            + " and insert a " + (parent.extruder == 1 ? "material" : "support")
+                            + " and insert a " + (parent.extruder == 1 ? "support" : "material")
                             + " extruder into the slot. Then close the latch and snap it into place."
                         anchors.top: parent.top
                         anchors.topMargin: 155
