@@ -7,10 +7,6 @@ Item {
     width: 800
     height: 440
     smooth: false
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
 
     RoundedButton {
         id: roundedButton
