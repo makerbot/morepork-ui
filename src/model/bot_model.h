@@ -137,6 +137,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoToolheadAActiveFanRPM, -999)
     MODEL_PROP(int, infoToolheadAGradientFanRPM, -999)
     MODEL_PROP(float, infoToolheadAHESValue, -999.999)
+    MODEL_PROP(int, infoToolheadAError, -0)
+
     // Toolhead B/2
     MODEL_PROP(bool, infoToolheadBAttached, false)
     MODEL_PROP(bool, infoToolheadBFilamentPresent, false)
@@ -146,6 +148,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoToolheadBActiveFanRPM, -999)
     MODEL_PROP(int, infoToolheadBGradientFanRPM, -999)
     MODEL_PROP(float, infoToolheadBHESValue, -999.999)
+    MODEL_PROP(int, infoToolheadBError, -0)
+
     // Misc.
     MODEL_PROP(bool, infoDoorActivated, false)
     MODEL_PROP(bool, infoLidActivated, false)

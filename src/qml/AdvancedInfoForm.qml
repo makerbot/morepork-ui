@@ -606,6 +606,13 @@ Item {
                         text: "HES VALUE"
                         font.pixelSize: 12
                     }
+
+                    Text {
+                        id: text116
+                        color: "#ffffff"
+                        text: "ERROR"
+                        font.pixelSize: 12
+                    }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
@@ -666,6 +673,13 @@ Item {
                         id: text34
                         color: "#ffffff"
                         text: bot.infoToolheadAHESValue
+                        font.pixelSize: 12
+                    }
+
+                    Text {
+                        id: text117
+                        color: "#ffffff"
+                        text: bot.infoToolheadAError
                         font.pixelSize: 12
                     }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -738,6 +752,13 @@ Item {
                         text: "HES VALUE"
                         font.pixelSize: 12
                     }
+
+                    Text {
+                        id: text118
+                        color: "#ffffff"
+                        text: "ERROR"
+                        font.pixelSize: 12
+                    }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
@@ -798,6 +819,13 @@ Item {
                         id: text50
                         color: "#ffffff"
                         text: bot.infoToolheadBHESValue
+                        font.pixelSize: 12
+                    }
+
+                    Text {
+                        id: text119
+                        color: "#ffffff"
+                        text: bot.infoToolheadBError
                         font.pixelSize: 12
                     }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
