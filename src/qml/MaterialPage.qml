@@ -60,6 +60,12 @@ MaterialPageForm {
             else {
                 bot.unloadFilament(0, true, false)
             }
+            // We move explicitly to the 'preheating' state to
+            // avoid letting the UI show the 'base state' for
+            // sometime until kaiten reports the current step
+            // as 'preheating'. This isn't required for loading
+            // as the 'base state' is one of the loading screens.
+            loadUnloadFilamentProcess.state = "preheating"
             materialSwipeView.swipeToItem(1)
         }
     }
@@ -93,6 +99,12 @@ MaterialPageForm {
             else {
                 bot.unloadFilament(1, true, false)
             }
+            // We move explicitly to the 'preheating' state to
+            // avoid letting the UI show the 'base state' for
+            // sometime until kaiten reports the current step
+            // as 'preheating'. This isn't required for loading
+            // as the 'base state' is one of the loading screens.
+            loadUnloadFilamentProcess.state = "preheating"
             materialSwipeView.swipeToItem(1)
         }
     }
