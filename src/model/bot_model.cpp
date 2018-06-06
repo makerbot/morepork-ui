@@ -72,6 +72,10 @@ void BotModel::query_status() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::buildPlateCleared() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

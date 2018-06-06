@@ -62,6 +62,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(ProcessType, type, None)
     // 'stateType' is based on the value of params["info"]["current_process"]["step"]
     MODEL_PROP(ProcessStateType, stateType, Loading)
+    MODEL_PROP(bool, isBuildPlateClear, false)
     MODEL_PROP(bool, printFileValid, false)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)

@@ -112,6 +112,13 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeReset();
     }
 
+    const QString kStepStr = kStep.asString().c_str();
+    if(kStepStr == "clear_build_plate") {
+        isBuildPlateClearSet(true);
+    } else {
+        isBuildPlateClearReset();
+    }
+
     const Json::Value &error = proc["error"];
     if (error.isObject()) {
         UPDATE_INT_PROP(errorCode, error["code"]);
