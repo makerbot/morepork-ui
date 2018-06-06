@@ -114,7 +114,8 @@ Item {
 
                     MenuButton {
                         id: buttonResetToFactory
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonImage.anchors.leftMargin: 30
+                        buttonImage.source: "qrc:/img/alert.png"
                         buttonText.text: "RESET TO FACTORY"
                     }
                 }
