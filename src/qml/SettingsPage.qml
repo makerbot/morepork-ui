@@ -22,6 +22,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(5)
     }
 
+    buttonResetToFactory.onClicked: {
+        resetFactoryConfirmPopup.open()
+    }
+
     buttonEnglish.onClicked: {
         cpUiTr.selectLanguage("en")
     }

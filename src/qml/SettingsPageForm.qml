@@ -17,6 +17,8 @@ Item {
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
     property alias buttonAdvancedInfo: buttonAdvancedInfo
+    property alias buttonResetToFactory: buttonResetToFactory
+    property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
 
     smooth: false
 
@@ -104,6 +106,16 @@ Item {
                         id: buttonAdvancedInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "ADVANCED INFO"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonResetToFactory
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "RESET TO FACTORY"
                     }
                 }
             }
@@ -236,6 +248,219 @@ Item {
 
             AdvancedInfo {
 
+            }
+        }
+    }
+
+    Popup {
+        id: resetFactoryConfirmPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        Rectangle {
+            id: basePopupItem
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 265
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: rotation == 180 ? 55 : -55
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Item {
+                id: buttonBar
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: yes_rectangle
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: yes_text
+                        color: "#ffffff"
+                        text: "YES"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: yes_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            yes_text.color = "#000000"
+                            yes_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            yes_text.color = "#ffffff"
+                            yes_rectangle.color = "#00000000"
+                        }
+                        onClicked: {
+                            bot.resetToFactory(clearCalibrationSettings.checked)
+                            resetFactoryConfirmPopup.close()
+                            clearCalibrationSettings.checked = false
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: no_rectangle
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: no_text
+                        color: "#ffffff"
+                        text: "NO"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: no_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            no_text.color = "#000000"
+                            no_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            no_text.color = "#ffffff"
+                            no_rectangle.color = "#00000000"
+                        }
+                        onClicked: {
+                            clearCalibrationSettings.checked = false
+                            resetFactoryConfirmPopup.close()
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout
+                width: 590
+                height: 160
+                spacing: 0
+                anchors.top: parent.top
+                anchors.topMargin: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text
+                    color: "#cbcbcb"
+                    text: "RESET TO FACTORY"
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Item {
+                    id: emptyItem
+                    width: 10
+                    height: 10
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Text {
+                    id: description_text
+                    color: "#cbcbcb"
+                    text: "Are you sure?"
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: "Antennae"
+                    font.pixelSize: 18
+                    lineHeight: 1.3
+                }
+
+                RowLayout {
+                    id: rowLayout
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    CheckBox {
+                        id: clearCalibrationSettings
+                        checked: false
+                    }
+
+                    Text {
+                        id: clear_calibration_settings_text
+                        color: "#cbcbcb"
+                        text: "Clear calibration settings"
+                        font.letterSpacing: 2
+                        font.family: "Antennae"
+                        font.weight: Font.Light
+                        font.pixelSize: 16
+                    }
+                }
             }
         }
     }
