@@ -19,8 +19,27 @@ Item {
     property alias buttonAdvancedInfo: buttonAdvancedInfo
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
+    property bool isResetting: false
+    property bool hasReset: false
+    property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
+                                    bot.process.stateType == ProcessStateType.Done
 
     smooth: false
+    Timer {
+        id: closeResetPopupTimer
+        interval: 2500
+        onTriggered: {
+            resetFactoryConfirmPopup.close()
+            mainSwipeView.swipeToItem(0)
+        }
+    }
+
+    onDoneFactoryResetChanged: {
+        if(doneFactoryReset) {
+            hasReset = true
+            closeResetPopupTimer.start()
+        }
+    }
 
     SwipeView {
         id: settingsSwipeView
@@ -275,6 +294,12 @@ Item {
             NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
         }
 
+        onClosed: {
+            isResetting = false
+            hasReset = false
+            clearCalibrationSettings.checked = false
+        }
+
         Rectangle {
             id: basePopupItem
             color: "#000000"
@@ -295,6 +320,7 @@ Item {
                 color: "#ffffff"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 72
+                visible: !isResetting
             }
 
             Rectangle {
@@ -308,6 +334,7 @@ Item {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
                 anchors.horizontalCenter: parent.horizontalCenter
+                visible: !isResetting
             }
 
             Item {
@@ -316,6 +343,7 @@ Item {
                 height: 72
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
+                visible: !isResetting
 
                 Rectangle {
                     id: yes_rectangle
@@ -354,8 +382,7 @@ Item {
                         }
                         onClicked: {
                             bot.resetToFactory(clearCalibrationSettings.checked)
-                            resetFactoryConfirmPopup.close()
-                            clearCalibrationSettings.checked = false
+                            isResetting = true
                         }
                     }
                 }
@@ -394,7 +421,6 @@ Item {
                             no_rectangle.color = "#00000000"
                         }
                         onClicked: {
-                            clearCalibrationSettings.checked = false
                             resetFactoryConfirmPopup.close()
                         }
                     }
@@ -407,13 +433,13 @@ Item {
                 height: 160
                 spacing: 0
                 anchors.top: parent.top
-                anchors.topMargin: 25
+                anchors.topMargin: isResetting ? 50 : 25
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
                     id: alert_text
                     color: "#cbcbcb"
-                    text: "RESET TO FACTORY"
+                    text: hasReset ? "RESET SUCCESSFUL" : isResetting ? "RESETTING TO FACTORY..." : "RESET TO FACTORY"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -426,12 +452,13 @@ Item {
                     width: 10
                     height: 10
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: !hasReset
                 }
 
                 Text {
                     id: description_text
                     color: "#cbcbcb"
-                    text: "Are you sure?"
+                    text: hasReset ? "" : isResetting ? "Please wait." : "Are you sure?"
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
@@ -441,15 +468,18 @@ Item {
                     font.family: "Antennae"
                     font.pixelSize: 18
                     lineHeight: 1.3
+                    visible: !hasReset
                 }
 
                 RowLayout {
                     id: rowLayout
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: !hasReset
 
                     CheckBox {
                         id: clearCalibrationSettings
                         checked: false
+                        visible: !isResetting && !hasReset
                     }
 
                     Text {
@@ -460,6 +490,13 @@ Item {
                         font.family: "Antennae"
                         font.weight: Font.Light
                         font.pixelSize: 16
+                        visible: !isResetting && !hasReset
+                    }
+
+                    BusyIndicator {
+                        id: busyIndicator
+                        running: isResetting && !hasReset
+                        visible: isResetting && !hasReset
                     }
                 }
             }

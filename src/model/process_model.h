@@ -17,6 +17,7 @@ class ProcessModel : public BaseModel {
         AssistedLeveling,
         FirmwareUpdate,
         CalibrationProcess,
+        FactoryResetProcess,
         Other
     };
     //MOREPORK_QML_ENUM
