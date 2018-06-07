@@ -279,7 +279,7 @@ Item {
         modal: true
         dim: false
         focus: true
-        closePolicy: Popup.CloseOnPressOutside
+        closePolicy: Popup.NoAutoClose
         background: Rectangle {
             id: popupBackgroundDim
             color: "#000000"
