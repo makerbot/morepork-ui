@@ -136,6 +136,8 @@ Item {
                         buttonImage.anchors.leftMargin: 30
                         buttonImage.source: "qrc:/img/alert.png"
                         buttonText.text: "RESET TO FACTORY"
+                        opacity: bot.process.type == ProcessType.None ? 1 :
+                                                                        0.3
                     }
                 }
             }
