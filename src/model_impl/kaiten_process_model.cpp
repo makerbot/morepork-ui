@@ -79,7 +79,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
         else if (kStepStr == "done")
             stateTypeSet(ProcessStateType::Done);
-        else if (kStepStr == "cnacelling")
+        else if (kStepStr == "cancelling")
             stateTypeSet(ProcessStateType::Cancelling);
         else if(kStepStr == "cleaning_up")
             stateTypeSet(ProcessStateType::CleaningUp);

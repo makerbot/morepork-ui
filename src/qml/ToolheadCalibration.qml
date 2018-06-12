@@ -30,7 +30,6 @@ ToolheadCalibrationForm {
     stopButton {
         onClicked: {
             bot.cancel()
-            state = "cancelling"
             cancelCalibrationPopup.close()
         }
     }
