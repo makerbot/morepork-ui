@@ -35,6 +35,8 @@ class ProcessModel : public BaseModel {
         Stopping,
         UnloadingFilament,
         Done, // Base Process states
+        Cancelling,
+        CleaningUp,
         TransferringFirmware, // Firmware update states
         VerifyingFirmware,
         InstallingFirmware,
@@ -44,7 +46,10 @@ class ProcessModel : public BaseModel {
         CheckRightLevel,
         LevelingLeft,
         LevelingRight,
-        LevelingComplete
+        LevelingComplete,
+        CalibratingToolheads, // Toolhead calibration states
+        InstallBuildPlate,
+        RemoveBuildPlate,
     };
 
     Q_ENUM(ProcessType)

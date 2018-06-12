@@ -79,6 +79,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
         else if (kStepStr == "done")
             stateTypeSet(ProcessStateType::Done);
+        else if (kStepStr == "cnacelling")
+            stateTypeSet(ProcessStateType::Cancelling);
+        else if(kStepStr == "cleaning_up")
+            stateTypeSet(ProcessStateType::CleaningUp);
         // Firmware Updating States
         // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
         else if (kStepStr == "downloading")
@@ -108,6 +112,18 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::LevelingRight);
         else if (kStepStr == "finishing_level")
             stateTypeSet(ProcessStateType::LevelingComplete);
+        // Toolhead Calibration States
+        // see morepork-kaiten/kaiten/src/kaiten/processes/nozzlecalibrationprocess.py
+        else if (kStepStr == "homing_xy" ||
+                 kStepStr == "homing_z"  ||
+                 kStepStr == "nozzle_offset_cal" ||
+                 kStepStr == "calibrating_xy" ||
+                 kStepStr == "build_plate_zero_cal")
+            stateTypeSet(ProcessStateType::CalibratingToolheads);
+        else if (kStepStr == "remove_build_plate")
+            stateTypeSet(ProcessStateType::RemoveBuildPlate);
+        else if (kStepStr == "install_build_plate")
+            stateTypeSet(ProcessStateType::InstallBuildPlate);
         else
             stateTypeReset();
     }

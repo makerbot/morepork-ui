@@ -8,33 +8,36 @@ ToolheadCalibrationForm {
         }
     }
 
-    xyCalibrateButton {
+    actionButton {
         button_mouseArea.onClicked: {
-            bot.calibrateToolheads(["x","y"])
+            if(state == "remove_build_plate") {
+                bot.buildPlateState(false)
+                state = "calibrating"
+            }
+            else if(state == "install_build_plate") {
+                bot.buildPlateState(true)
+                state = "calibrating"
+            }
+            else if(state == "calibration_finished") {
+                processDone()
+            }
+            else {
+                bot.calibrateToolheads(["x","y"])
+            }
         }
     }
 
-    zCalibrateButton {
-        button_mouseArea.onClicked: {
-            bot.calibrateToolheads(["z"])
-        }
-    }
-
-    buildPlateAttached {
-        button_mouseArea.onClicked: {
-            bot.buildPlateState(true)
-        }
-    }
-
-    buildPlateRemoved {
-        button_mouseArea.onClicked: {
-            bot.buildPlateState(false)
-        }
-    }
-
-    buttonCancel {
-        button_mouseArea.onClicked: {
+    stopButton {
+        onClicked: {
             bot.cancel()
+            state = "cancelling"
+            cancelCalibrationPopup.close()
+        }
+    }
+
+    continueButton {
+        onClicked: {
+            cancelCalibrationPopup.close()
         }
     }
 }

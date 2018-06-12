@@ -218,11 +218,28 @@ Item {
             id: calibrateToolheadsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
 
-            ToolheadCalibration {
+            function altBack() {
+                if(bot.process.type == ProcessType.CalibrationProcess) {
+                    toolheadCalibration.cancelCalibrationPopup.open()
+                }
+                else {
+                    toolheadCalibration.state = "base state"
+                    if(settingsSwipeView.currentIndex != 0) {
+                        settingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
 
+            ToolheadCalibration {
+                id: toolheadCalibration
+                onProcessDone: {
+                    state = "base state"
+                    settingsSwipeView.swipeToItem(0)
+                }
             }
         }
 
