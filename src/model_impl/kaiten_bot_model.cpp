@@ -623,6 +623,7 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                                                              infoToolheadAFilamentJamEnabledSet(false);
                UPDATE_INT_PROP(infoToolheadACurrentTemp, kToolheadA["current_temperature"]);
                UPDATE_INT_PROP(infoToolheadATargetTemp, kToolheadA["target_temperature"]);
+               UPDATE_INT_PROP(infoToolheadAEncoderTicks, kToolheadA["encoder_ticks"]);
                UPDATE_INT_PROP(infoToolheadAActiveFanRPM, kToolheadA["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadAGradientFanRPM, kToolheadA["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadAHESValue, kToolheadA["hes_value"]);
@@ -638,6 +639,7 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                                                              infoToolheadBFilamentJamEnabledSet(false);
                UPDATE_INT_PROP(infoToolheadBCurrentTemp, kToolheadB["current_temperature"]);
                UPDATE_INT_PROP(infoToolheadBTargetTemp, kToolheadB["target_temperature"]);
+               UPDATE_INT_PROP(infoToolheadBEncoderTicks, kToolheadB["encoder_ticks"]);
                UPDATE_INT_PROP(infoToolheadBActiveFanRPM, kToolheadB["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadBGradientFanRPM, kToolheadB["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadBHESValue, kToolheadB["hes_value"]);
