@@ -452,8 +452,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       if(kToolheads.isObject()){
         const Json::Value & kExtruder = kToolheads["extruder"];
         if(kExtruder.isArray() && kExtruder.size() >= 2){
-          const Json::Value & kExtruderA = kExtruder[0], // Right Extruder
-                            & kExtruderB = kExtruder[1]; // Left Extruder
+          const Json::Value & kExtruderA = kExtruder[0], // Left Extruder
+                            & kExtruderB = kExtruder[1]; // Right Extruder
+          bool updating_extruder_firmware = false;
           if(kExtruderA.isObject()){
             // Update GUI variables for extruder A temps
             UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
@@ -462,6 +463,10 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 extruderAPresentSet(true) : extruderAPresentSet(false);
             kExtruderA["filament_presence"].asBool() ? 
                 extruderAFilamentPresentSet(true) : extruderAFilamentPresentSet(false);
+            updating_extruder_firmware |=
+                kExtruderA["updating_extruder_firmware"].asBool();
+            UPDATE_INT_PROP(extruderFirmwareUpdateProgressA,
+                            kExtruderA["extruder_firmware_update_progress"])
           }
           if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
@@ -471,7 +476,12 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 extruderBPresentSet(true) : extruderBPresentSet(false);
             kExtruderB["filament_presence"].asBool() ? 
                 extruderBFilamentPresentSet(true) : extruderBFilamentPresentSet(false);
+            updating_extruder_firmware |=
+                kExtruderB["updating_extruder_firmware"].asBool();
+            UPDATE_INT_PROP(extruderFirmwareUpdateProgressB,
+                            kExtruderB["extruder_firmware_update_progress"])
           }
+          updatingExtruderFirmwareSet(updating_extruder_firmware);
         }
         const Json::Value & kChamber = kToolheads["chamber"];
         if(kChamber.isArray() && kChamber.size() > 0){

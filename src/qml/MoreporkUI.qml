@@ -11,8 +11,13 @@ ApplicationWindow {
     property var currentItem: mainMenu
     property var activeDrawer
     property bool authRequest: bot.isAuthRequestPending
+    property bool updatingExtruderFirmware: bot.updatingExtruderFirmware
+    property int extruderFirmwareUpdateProgressA: bot.extruderFirmwareUpdateProgressA
+    property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
     property bool skipAuthentication: false
     property bool isAuthenticated: false
+    property bool updatedExtruderFirmwareA: false
+    property bool updatedExtruderFirmwareB: false
 
     Timer {
         id: authTimeOut
@@ -43,6 +48,35 @@ ApplicationWindow {
         else {
             authTimeOut.interval = 1500
             authTimeOut.start()
+        }
+    }
+
+    onUpdatingExtruderFirmwareChanged: {
+        if(updatingExtruderFirmware) {
+            updatingExtruderFirmwarePopup.open()
+        }
+        else {
+            updatingExtruderFirmwarePopup.close()
+        }
+    }
+
+    // When firmware is finished updating for an extruder, the progress doesn't
+    // go to 100 and instead returns to 0. In a situation where both extruders are
+    // programming, one could finish before the other and when it finishes, 0% will
+    // display instead of 100%. Here we check to see if the percentage passed an
+    // arbitrary 90% and if it did, we toggle the updatedExtruderFirmwareA flag so
+    // the text will display 100% instead of 0%. We reset this flag in the
+    // popups onClosed function is called
+    onExtruderFirmwareUpdateProgressAChanged: {
+        if(extruderFirmwareUpdateProgressA > 90 && !updatedExtruderFirmwareA) {
+            updatedExtruderFirmwareA = true
+        }
+    }
+
+    // See onExtruderFirmwareUpdateProgressAChanged comment
+    onExtruderFirmwareUpdateProgressBChanged: {
+        if(extruderFirmwareUpdateProgressB > 90 && !updatedExtruderFirmwareB) {
+            updatedExtruderFirmwareB = true
         }
     }
         
@@ -778,6 +812,65 @@ ApplicationWindow {
                             }
                         }
                     }
+                }
+            }
+        }
+
+
+        Popup {
+            id: updatingExtruderFirmwarePopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            closePolicy: Popup.CloseOnPressOutside
+            parent: Overlay.overlay
+            background: Rectangle {
+                id: updatingExtruderFirmwareBackRect
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.7
+                anchors.fill: parent
+            }
+            enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+            onClosed: {
+                updatedExtruderFirmwareA = false
+                updatedExtruderFirmwareB = false
+            }
+            Rectangle {
+                id: updatingExtruderFirmwarePopupRect
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: skipFirmwareUpdate ? 220 : 275
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                Text {
+                    id: updatingExtruderFirmwareText
+                    color: "#ffffff"
+                    text: "Updating Extruder Firmware. Please Wait.\nProgressA = " +
+                          ((updatedExtruderFirmwareA && extruderFirmwareUpdateProgressA == 0) ?
+                          100 : extruderFirmwareUpdateProgressA) + "%\nProgressB = " +
+                          ((updatedExtruderFirmwareB && extruderFirmwareUpdateProgressB == 0) ?
+                          100 : extruderFirmwareUpdateProgressB) + "%"
+                    Layout.fillHeight: false
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.fillWidth: false
+                    font.letterSpacing: 3
+                    font.weight: Font.Bold
+                    font.family: "Antennae"
+                    font.pixelSize: 18
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         }
