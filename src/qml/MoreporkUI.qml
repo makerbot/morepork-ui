@@ -65,7 +65,7 @@ ApplicationWindow {
     // programming, one could finish before the other and when it finishes, 0% will
     // display instead of 100%. Here we check to see if the percentage passed an
     // arbitrary 90% and if it did, we toggle the updatedExtruderFirmwareA flag so
-    // the text will display 100% instead of 0%. We reset this flag in the
+    // the text will display 100% instead of 0%. We reset this flag when the
     // popups onClosed function is called
     onExtruderFirmwareUpdateProgressAChanged: {
         if(extruderFirmwareUpdateProgressA > 90 && !updatedExtruderFirmwareA) {
