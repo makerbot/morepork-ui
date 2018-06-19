@@ -131,6 +131,7 @@ Item {
         modal: true
         dim: false
         focus: true
+        parent: overlay
         closePolicy: Popup.CloseOnPressOutside
         background: Rectangle {
             id: popupBackgroundDim
@@ -156,7 +157,6 @@ Item {
             border.width: 2
             border.color: "#ffffff"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: rotation == 180 ? 40 : -40
             anchors.horizontalCenter: parent.horizontalCenter
 
             Rectangle {
@@ -316,6 +316,7 @@ Item {
         modal: true
         dim: false
         focus: true
+        parent: overlay
         closePolicy: Popup.CloseOnPressOutside
         background: Rectangle {
             id: popupBackgroundDim1
@@ -341,7 +342,6 @@ Item {
             border.width: 2
             border.color: "#ffffff"
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: rotation == 180 ? 40 : -40
             anchors.horizontalCenter: parent.horizontalCenter
 
             Text {
