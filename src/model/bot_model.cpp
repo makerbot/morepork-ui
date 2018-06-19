@@ -76,6 +76,10 @@ void BotModel::resetToFactory(bool clearCalibration) {
     qDebug() << FL_STRM << "called with parameter: " << clearCalibration;
 }
 
+void BotModel::buildPlateCleared() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

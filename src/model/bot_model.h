@@ -48,6 +48,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void acknowledge_level();
     Q_INVOKABLE virtual void query_status();
     Q_INVOKABLE virtual void resetToFactory(bool clearCalibration);
+    Q_INVOKABLE virtual void buildPlateCleared();
 
   private:
     Q_OBJECT
