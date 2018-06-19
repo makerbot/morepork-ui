@@ -1,4 +1,5 @@
 import QtQuick 2.4
+import ProcessTypeEnum 1.0
 
 SettingsPageForm {
     buttonChangeLanguage.onClicked: {
@@ -20,6 +21,12 @@ SettingsPageForm {
 
     buttonAdvancedInfo.onClicked: {
         settingsSwipeView.swipeToItem(5)
+    }
+
+    buttonResetToFactory.onClicked: {
+        if(bot.process.type == ProcessType.None) {
+            resetFactoryConfirmPopup.open()
+        }
     }
 
     buttonEnglish.onClicked: {

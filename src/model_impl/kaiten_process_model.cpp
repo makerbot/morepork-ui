@@ -26,6 +26,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::FirmwareUpdate);
         else if (kNameStr == "NozzleCalibrationProcess")
             typeSet(ProcessType::CalibrationProcess);
+        else if (kNameStr == "ResetToFactoryProcess")
+            typeSet(ProcessType::FactoryResetProcess);
         else
             typeSet(ProcessType::None);
     }

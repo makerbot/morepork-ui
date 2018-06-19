@@ -37,6 +37,7 @@ class KaitenBotModel : public BotModel {
     void buildPlateState(bool state);
     void acknowledge_level();
     void query_status();
+    void resetToFactory(bool clearCalibration);
     void buildPlateCleared();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
@@ -404,6 +405,19 @@ void KaitenBotModel::query_status(){
         json_params["machine_func"] = Json::Value("query_status");
         json_params["params"] = Json::Value(Json::objectValue);
         conn->jsonrpc.invoke("machine_query_command", json_params, m_queryStatusCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::resetToFactory(bool clearCalibration){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["clear_calibration"] = Json::Value(clearCalibration);
+        conn->jsonrpc.invoke("reset_to_factory", Json::Value(), std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
