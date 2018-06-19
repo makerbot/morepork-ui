@@ -270,6 +270,7 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
             json_params["method"] = Json::Value("load_filament");
             Json::Value json_args(Json::objectValue);
             json_args["tool_index"] = Json::Value(kToolIndex);
+            json_args["external"] = Json::Value(external);
             json_params["params"] = Json::Value(json_args);
             conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
         }
@@ -466,8 +467,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       if(kToolheads.isObject()){
         const Json::Value & kExtruder = kToolheads["extruder"];
         if(kExtruder.isArray() && kExtruder.size() >= 2){
-          const Json::Value & kExtruderA = kExtruder[0], // Right Extruder
-                            & kExtruderB = kExtruder[1]; // Left Extruder
+          const Json::Value & kExtruderA = kExtruder[0], // Left Extruder
+                            & kExtruderB = kExtruder[1]; // Right Extruder
+          bool updating_extruder_firmware = false;
           if(kExtruderA.isObject()){
             // Update GUI variables for extruder A temps
             UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
@@ -476,6 +478,10 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 extruderAPresentSet(true) : extruderAPresentSet(false);
             kExtruderA["filament_presence"].asBool() ? 
                 extruderAFilamentPresentSet(true) : extruderAFilamentPresentSet(false);
+            updating_extruder_firmware |=
+                kExtruderA["updating_extruder_firmware"].asBool();
+            UPDATE_INT_PROP(extruderFirmwareUpdateProgressA,
+                            kExtruderA["extruder_firmware_update_progress"])
           }
           if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
@@ -485,7 +491,12 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 extruderBPresentSet(true) : extruderBPresentSet(false);
             kExtruderB["filament_presence"].asBool() ? 
                 extruderBFilamentPresentSet(true) : extruderBFilamentPresentSet(false);
+            updating_extruder_firmware |=
+                kExtruderB["updating_extruder_firmware"].asBool();
+            UPDATE_INT_PROP(extruderFirmwareUpdateProgressB,
+                            kExtruderB["extruder_firmware_update_progress"])
           }
+          updatingExtruderFirmwareSet(updating_extruder_firmware);
         }
         const Json::Value & kChamber = kToolheads["chamber"];
         if(kChamber.isArray() && kChamber.size() > 0){
@@ -637,6 +648,7 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                                                              infoToolheadAFilamentJamEnabledSet(false);
                UPDATE_INT_PROP(infoToolheadACurrentTemp, kToolheadA["current_temperature"]);
                UPDATE_INT_PROP(infoToolheadATargetTemp, kToolheadA["target_temperature"]);
+               UPDATE_INT_PROP(infoToolheadAEncoderTicks, kToolheadA["encoder_ticks"]);
                UPDATE_INT_PROP(infoToolheadAActiveFanRPM, kToolheadA["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadAGradientFanRPM, kToolheadA["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadAHESValue, kToolheadA["hes_value"]);
@@ -652,6 +664,7 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                                                              infoToolheadBFilamentJamEnabledSet(false);
                UPDATE_INT_PROP(infoToolheadBCurrentTemp, kToolheadB["current_temperature"]);
                UPDATE_INT_PROP(infoToolheadBTargetTemp, kToolheadB["target_temperature"]);
+               UPDATE_INT_PROP(infoToolheadBEncoderTicks, kToolheadB["encoder_ticks"]);
                UPDATE_INT_PROP(infoToolheadBActiveFanRPM, kToolheadB["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadBGradientFanRPM, kToolheadB["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadBHESValue, kToolheadB["hes_value"]);
