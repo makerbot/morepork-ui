@@ -8,6 +8,7 @@ Rectangle {
     property alias buttonHeight: button_rectangle.height
     property alias label: button_text.text
     property int label_size: 20
+    property int label_width: 300
     property bool disable_button: false
 
     id: button_rectangle
@@ -22,7 +23,7 @@ Rectangle {
 
     Text {
         id: button_text
-        width: 300
+        width: label_width
         text: "Button Text"
         anchors.verticalCenterOffset: 7
         font.capitalization: Font.AllUppercase

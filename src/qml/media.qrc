@@ -74,6 +74,10 @@
 	<file alias="icon_calibrate_toolhead.png">images/icon_calibrate_toolhead.png</file>
 	<file alias="icon_change_language.png">images/icon_change_language.png</file>
 	<file alias="icon_software_update.png">images/icon_software_update.png</file>
+	<file alias="calib_extruder.png">images/calib_extruder.png</file>
+	<file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
+	<file alias="calib_remove_build_plate.png">images/calib_remove_build_plate.png</file>
+	<file alias="calib_successful.png">images/calib_successful.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
