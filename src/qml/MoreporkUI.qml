@@ -16,6 +16,7 @@ ApplicationWindow {
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
     property bool skipAuthentication: false
     property bool isAuthenticated: false
+    property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
 
@@ -96,6 +97,12 @@ ApplicationWindow {
     onSkipFirmwareUpdateChanged: {
         update_rectangle.color = "#ffffff"
         update_text.color = "#000000"
+    }
+
+    onIsBuildPlateClearChanged: {
+        if(isBuildPlateClear) {
+            buildPlateClearPopup.open()
+        }
     }
 
     function setDrawerState(state) {
@@ -816,6 +823,198 @@ ApplicationWindow {
             }
         }
 
+        Popup {
+            id: buildPlateClearPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            closePolicy: Popup.CloseOnPressOutside
+            background: Rectangle {
+                id: popupBackgroundDim2
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+            onOpened: {
+                start_print_text.color = "#000000"
+                start_print_rectangle.color = "#ffffff"
+            }
+
+            Rectangle {
+                id: basePopupItem2
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: 220
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: rotation == 180 ? 20 : -20
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    id: horizontal_divider2
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Rectangle {
+                    id: vertical_divider2
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Item {
+                    id: buttonBar1
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: start_print_rectangle
+                        x: 0
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: start_print_text
+                            color: "#ffffff"
+                            text: "START PRINT"
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: start_print_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                start_print_text.color = "#000000"
+                                start_print_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                start_print_text.color = "#ffffff"
+                                start_print_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                bot.buildPlateCleared()
+                                buildPlateClearPopup.close()
+                                if(mainSwipeView.currentIndex != 1) {
+                                    mainSwipeView.swipeToItem(1)
+                                }
+                                if(printPage.printSwipeView.currentIndex != 0) {
+                                    printPage.printSwipeView.swipeToItem(0)
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: cancel_print_rectangle
+                        x: 360
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: cancel_print_text
+                            color: "#ffffff"
+                            text: "CANCEL"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: cancel_print_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                cancel_print_text.color = "#000000"
+                                cancel_print_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                cancel_print_text.color = "#ffffff"
+                                cancel_print_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                bot.cancel()
+                                buildPlateClearPopup.close()
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayout2
+                    width: 590
+                    height: 100
+                    anchors.top: parent.top
+                    anchors.topMargin: 25
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: clear_build_plate_text
+                        color: "#cbcbcb"
+                        text: "CLEAR BUILD PLATE"
+                        font.letterSpacing: 3
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 20
+                    }
+
+                    Text {
+                        id: clear_build_plate_desc_text
+                        color: "#cbcbcb"
+                        text: "Please be sure your build plate is clear."
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        lineHeight: 1.3
+                    }
+                }
+            }
+        }
 
         Popup {
             id: updatingExtruderFirmwarePopup
@@ -852,7 +1051,7 @@ ApplicationWindow {
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter                
                 anchors.horizontalCenter: parent.horizontalCenter
                 Text {
                     id: updatingExtruderFirmwareText
