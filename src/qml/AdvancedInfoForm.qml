@@ -38,11 +38,6 @@ Item {
 
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Item {
         id: base
         anchors.fill: parent
