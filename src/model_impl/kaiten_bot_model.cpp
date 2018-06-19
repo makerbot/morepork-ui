@@ -269,6 +269,7 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
             json_params["method"] = Json::Value("load_filament");
             Json::Value json_args(Json::objectValue);
             json_args["tool_index"] = Json::Value(kToolIndex);
+            json_args["external"] = Json::Value(external);
             json_params["params"] = Json::Value(json_args);
             conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
         }

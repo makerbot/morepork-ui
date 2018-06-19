@@ -39,7 +39,8 @@ MaterialPageForm {
             // i.e. while print paused, set whilePrinting to true
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.loadFilament(0, true, true)
+                bay1.switch1.checked ? bot.loadFilament(0, true, true) :
+                                       bot.loadFilament(0, false, true)
             }
             else {
                 bay1.switch1.checked ? bot.loadFilament(0, true, false) :
@@ -78,7 +79,8 @@ MaterialPageForm {
             // loadFilament(int tool_index, bool external, bool whilePrinitng)
             if(printPage.isPrintProcess &&
              bot.process.stateType == ProcessStateType.Paused) {
-                bot.loadFilament(1, true, true)
+                bay2.switch1.checked ? bot.loadFilament(1, true, true) :
+                                       bot.loadFilament(1, false, true)
             }
             else {
                 bay2.switch1.checked ? bot.loadFilament(1, true, false) :
