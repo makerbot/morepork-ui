@@ -587,6 +587,13 @@ Item {
                     }
 
                     Text {
+                        id: text120
+                        color: "#ffffff"
+                        text: "ENCODER TICKS"
+                        font.pixelSize: 12
+                    }
+
+                    Text {
                         id: text22
                         color: "#ffffff"
                         text: "ACTIVE FAN RPM"
@@ -613,6 +620,7 @@ Item {
                         text: "ERROR"
                         font.pixelSize: 12
                     }
+
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
@@ -656,6 +664,13 @@ Item {
                     }
 
                     Text {
+                        id: text121
+                        color: "#ffffff"
+                        text: bot.infoToolheadAEncoderTicks
+                        font.pixelSize: 12
+                    }
+
+                    Text {
                         id: text29
                         color: "#ffffff"
                         text: bot.infoToolheadAActiveFanRPM
@@ -682,6 +697,7 @@ Item {
                         text: bot.infoToolheadAError
                         font.pixelSize: 12
                     }
+
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
@@ -733,6 +749,13 @@ Item {
                     }
 
                     Text {
+                        id: text122
+                        color: "#ffffff"
+                        text: "ENCODER TICKS"
+                        font.pixelSize: 12
+                    }
+
+                    Text {
                         id: text40
                         color: "#ffffff"
                         text: "ACTIVE FAN RPM"
@@ -759,6 +782,7 @@ Item {
                         text: "ERROR"
                         font.pixelSize: 12
                     }
+
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
@@ -802,6 +826,13 @@ Item {
                     }
 
                     Text {
+                        id: text123
+                        color: "#ffffff"
+                        text: bot.infoToolheadBEncoderTicks
+                        font.pixelSize: 12
+                    }
+
+                    Text {
                         id: text48
                         color: "#ffffff"
                         text: bot.infoToolheadBActiveFanRPM
@@ -828,6 +859,7 @@ Item {
                         text: bot.infoToolheadBError
                         font.pixelSize: 12
                     }
+
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 anchors.horizontalCenter: parent.horizontalCenter

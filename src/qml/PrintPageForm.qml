@@ -336,7 +336,7 @@ Item {
                                             (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
                     fileMaterial.text: model.modelData.materialNameA == "" ?
                                            model.modelData.materialNameB :
-                                           model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                                           model.modelData.materialNameB + "+" + model.modelData.materialNameA
                     onClicked: {
                         if(model.modelData.isDir) {
                             storage.backStackPush(model.modelData.filePath)
