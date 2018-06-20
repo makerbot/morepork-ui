@@ -33,7 +33,7 @@ Item {
                 state = "cancelling"
                 break;
             case ProcessStateType.CleaningUp:
-               if(state != "cancelling") {
+               if(state != "cancelling" && state != "failed") {
                    state = "calibration_finished"
                }
                break;
