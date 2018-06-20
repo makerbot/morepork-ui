@@ -337,7 +337,7 @@ ApplicationWindow {
             dim: false
             focus: true
             closePolicy: Popup.CloseOnPressOutside
-            parent: Overlay.overlay
+            parent: overlay
             background: Rectangle {
                 id: popupBackgroundDim
                 color: "#000000"
@@ -596,7 +596,7 @@ ApplicationWindow {
             dim: false
             focus: true
             closePolicy: Popup.CloseOnPressOutside
-            parent: Overlay.overlay
+            parent: overlay
             background: Rectangle {
                 id: popupBackgroundDim1
                 color: "#000000"
@@ -830,6 +830,7 @@ ApplicationWindow {
             modal: true
             dim: false
             focus: true
+            parent: overlay
             closePolicy: Popup.CloseOnPressOutside
             background: Rectangle {
                 id: popupBackgroundDim2
@@ -1024,7 +1025,7 @@ ApplicationWindow {
             dim: false
             focus: true
             closePolicy: Popup.CloseOnPressOutside
-            parent: Overlay.overlay
+            parent: overlay
             background: Rectangle {
                 id: updatingExtruderFirmwareBackRect
                 color: "#000000"
