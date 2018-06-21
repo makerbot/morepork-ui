@@ -488,10 +488,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder A temps
             UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
             UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
-            kExtruderA["tool_present"].asBool() ?
-                extruderAPresentSet(true) : extruderAPresentSet(false);
-            kExtruderA["filament_presence"].asBool() ? 
-                extruderAFilamentPresentSet(true) : extruderAFilamentPresentSet(false);
+            extruderAPresentSet(kExtruderA["tool_present"].asBool());
+            extruderAFilamentPresentSet(kExtruderA["filament_presence"].asBool());
             updating_extruder_firmware |=
                 kExtruderA["updating_extruder_firmware"].asBool();
             UPDATE_INT_PROP(extruderFirmwareUpdateProgressA,
@@ -501,10 +499,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder B temps
             UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
             UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
-            kExtruderB["tool_present"].asBool() ?
-                extruderBPresentSet(true) : extruderBPresentSet(false);
-            kExtruderB["filament_presence"].asBool() ? 
-                extruderBFilamentPresentSet(true) : extruderBFilamentPresentSet(false);
+            extruderBPresentSet(kExtruderB["tool_present"].asBool());
+            extruderBFilamentPresentSet(kExtruderB["filament_presence"].asBool());
             updating_extruder_firmware |=
                 kExtruderB["updating_extruder_firmware"].asBool();
             UPDATE_INT_PROP(extruderFirmwareUpdateProgressB,
@@ -588,52 +584,46 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
             if(kBayA.isObject()){
                 UPDATE_INT_PROP(infoBay1Temp, kBayA["temperature"]);
                 UPDATE_INT_PROP(infoBay1Humidity, kBayA["humidity"]);
-                kBayA["filament_present"].asBool() ? infoBay1FilamentPresentSet(true) :
-                                                     infoBay1FilamentPresentSet(false);
-                kBayA["tag_present"].asBool() ? infoBay1TagPresentSet(true) :
-                                                infoBay1TagPresentSet(false);
+                infoBay1FilamentPresentSet(kBayA["filament_present"].asBool());
+                infoBay1TagPresentSet(kBayA["tag_present"].asBool());
                 UPDATE_STRING_PROP(infoBay1TagUID, kBayA["tag_uid"]);
                 UPDATE_INT_PROP(infoBay1Error, kBayA["error"]);
             }
             if(kBayB.isObject()){
                 UPDATE_INT_PROP(infoBay2Temp, kBayB["temperature"]);
                 UPDATE_INT_PROP(infoBay2Humidity, kBayB["humidity"]);
-                kBayB["filament_present"].asBool() ? infoBay2FilamentPresentSet(true) :
-                                                     infoBay2FilamentPresentSet(false);
-                kBayB["tag_present"].asBool() ? infoBay2TagPresentSet(true) :
-                                                infoBay2TagPresentSet(false);
+                infoBay2FilamentPresentSet(kBayB["filament_present"].asBool());
+                infoBay2TagPresentSet(kBayB["tag_present"].asBool());
                 UPDATE_STRING_PROP(infoBay2TagUID, kBayB["tag_uid"]);
                 UPDATE_INT_PROP(infoBay2Error, kBayB["error"]);
             }
         }
 
-        info["door_activated"].asBool() ? infoDoorActivatedSet(true) :
-                                          infoDoorActivatedSet(false);
-        info["lid_activated"].asBool() ? infoLidActivatedSet(true) :
-                                         infoLidActivatedSet(false);
+        infoDoorActivatedSet(info["door_activated"].asBool());
+        infoLidActivatedSet(info["lid_activated"].asBool());
 
         const Json::Value &kMotionStatus = info["motion_status"];
         if(kMotionStatus.isObject()){
             const Json::Value &kAxesEnabled = kMotionStatus["axis_enabled"];
             if(kAxesEnabled.isArray() && kAxesEnabled.size() > 0){
-                kAxesEnabled[0].asBool() ? infoAxisXEnabledSet(true) : infoAxisXEnabledSet(false);
-                kAxesEnabled[1].asBool() ? infoAxisYEnabledSet(true) : infoAxisYEnabledSet(false);
-                kAxesEnabled[2].asBool() ? infoAxisZEnabledSet(true) : infoAxisZEnabledSet(false);
-                kAxesEnabled[3].asBool() ? infoAxisAEnabledSet(true) : infoAxisAEnabledSet(false);
-                kAxesEnabled[4].asBool() ? infoAxisBEnabledSet(true) : infoAxisBEnabledSet(false);
-                kAxesEnabled[5].asBool() ? infoAxisAAEnabledSet(true) : infoAxisAAEnabledSet(false);
-                kAxesEnabled[6].asBool() ? infoAxisBBEnabledSet(true) : infoAxisBBEnabledSet(false);
+                infoAxisXEnabledSet(kAxesEnabled[0].asBool());
+                infoAxisYEnabledSet(kAxesEnabled[1].asBool());
+                infoAxisZEnabledSet(kAxesEnabled[2].asBool());
+                infoAxisAEnabledSet(kAxesEnabled[3].asBool());
+                infoAxisBEnabledSet(kAxesEnabled[4].asBool());
+                infoAxisAAEnabledSet(kAxesEnabled[5].asBool());
+                infoAxisBBEnabledSet(kAxesEnabled[6].asBool());
             }
 
             const Json::Value &kEndstopActivated = kMotionStatus["endstop_activated"];
             if(kEndstopActivated.isArray() && kEndstopActivated.size() > 0){
-                kEndstopActivated[0].asBool() ? infoAxisXEndStopActiveSet(true) : infoAxisXEndStopActiveSet(false);
-                kEndstopActivated[1].asBool() ? infoAxisYEndStopActiveSet(true) : infoAxisYEndStopActiveSet(false);
-                kEndstopActivated[2].asBool() ? infoAxisZEndStopActiveSet(true) : infoAxisZEndStopActiveSet(false);
-                kEndstopActivated[3].asBool() ? infoAxisAEndStopActiveSet(true) : infoAxisAEndStopActiveSet(false);
-                kEndstopActivated[4].asBool() ? infoAxisBEndStopActiveSet(true) : infoAxisBEndStopActiveSet(false);
-                kEndstopActivated[5].asBool() ? infoAxisAAEndStopActiveSet(true) : infoAxisAAEndStopActiveSet(false);
-                kEndstopActivated[6].asBool() ? infoAxisBBEndStopActiveSet(true) : infoAxisBBEndStopActiveSet(false);
+                infoAxisXEndStopActiveSet(kEndstopActivated[0].asBool());
+                infoAxisYEndStopActiveSet(kEndstopActivated[1].asBool());
+                infoAxisZEndStopActiveSet(kEndstopActivated[2].asBool());
+                infoAxisAEndStopActiveSet(kEndstopActivated[3].asBool());
+                infoAxisBEndStopActiveSet(kEndstopActivated[4].asBool());
+                infoAxisAAEndStopActiveSet(kEndstopActivated[5].asBool());
+                infoAxisBBEndStopActiveSet(kEndstopActivated[6].asBool());
             }
 
             const Json::Value &kAxesPosition = kMotionStatus["position"];
@@ -654,12 +644,9 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                               &kToolheadB = kToolheads[1];
 
             if(kToolheadA.isObject()){
-               kToolheadA["attached"].asBool() ? infoToolheadAAttachedSet(true) :
-                                                 infoToolheadAAttachedSet(false);
-               kToolheadA["filament_presence"].asBool() ? infoToolheadAFilamentPresentSet(true) :
-                                                          infoToolheadAFilamentPresentSet(false);
-               kToolheadA["filament_jam_enabled"].asBool() ? infoToolheadAFilamentJamEnabledSet(true) :
-                                                             infoToolheadAFilamentJamEnabledSet(false);
+               infoToolheadAAttachedSet(kToolheadA["attached"].asBool());
+               infoToolheadAFilamentPresentSet(kToolheadA["filament_presence"].asBool());
+               infoToolheadAFilamentJamEnabledSet(kToolheadA["filament_jam_enabled"].asBool());
                UPDATE_INT_PROP(infoToolheadACurrentTemp, kToolheadA["current_temperature"]);
                UPDATE_INT_PROP(infoToolheadATargetTemp, kToolheadA["target_temperature"]);
                UPDATE_INT_PROP(infoToolheadAEncoderTicks, kToolheadA["encoder_ticks"]);
@@ -670,12 +657,9 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
             }
 
             if(kToolheadB.isObject()){
-               kToolheadB["attached"].asBool() ? infoToolheadBAttachedSet(true) :
-                                                 infoToolheadBAttachedSet(false);
-               kToolheadB["filament_presence"].asBool() ? infoToolheadBFilamentPresentSet(true) :
-                                                          infoToolheadBFilamentPresentSet(false);
-               kToolheadB["filament_jam_enabled"].asBool() ? infoToolheadBFilamentJamEnabledSet(true) :
-                                                             infoToolheadBFilamentJamEnabledSet(false);
+               infoToolheadBAttachedSet(kToolheadB["attached"].asBool());
+               infoToolheadBFilamentPresentSet(kToolheadB["filament_presence"].asBool());
+               infoToolheadBFilamentJamEnabledSet(kToolheadB["filament_jam_enabled"].asBool());
                UPDATE_INT_PROP(infoToolheadBCurrentTemp, kToolheadB["current_temperature"]);
                UPDATE_INT_PROP(infoToolheadBTargetTemp, kToolheadB["target_temperature"]);
                UPDATE_INT_PROP(infoToolheadBEncoderTicks, kToolheadB["encoder_ticks"]);
