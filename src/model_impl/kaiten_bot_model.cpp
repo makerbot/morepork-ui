@@ -522,6 +522,28 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           }
         }
       }
+      // Update filament bay status variables
+      const Json::Value &kFilamentBay = info["filamentbays"];
+      if(kFilamentBay.isArray()){
+        if(kFilamentBay.size() > 0){
+          const Json::Value &kBay = kFilamentBay[0];
+          if(kBay.isObject()){
+            UPDATE_INT_PROP(filamentBayATemp, kBay["temperature"]);
+            UPDATE_INT_PROP(filamentBayAHumidity, kBay["humidity"]);
+            filamentBayAFilamentPresentSet(kBay["filament_present"].asBool());
+            filamentBayATagPresentSet(kBay["tag_present"].asBool());
+          }
+        }
+        if(kFilamentBay.size() > 1){
+          const Json::Value &kBay = kFilamentBay[1];
+          if(kBay.isObject()){
+            UPDATE_INT_PROP(filamentBayBTemp, kBay["temperature"]);
+            UPDATE_INT_PROP(filamentBayBHumidity, kBay["humidity"]);
+            filamentBayBFilamentPresentSet(kBay["filament_present"].asBool());
+            filamentBayBTagPresentSet(kBay["tag_present"].asBool());
+          }
+        }
+      }
     }
 
     // TODO(chris): This bit is a mess...

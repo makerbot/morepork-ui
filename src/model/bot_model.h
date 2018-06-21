@@ -82,6 +82,14 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderBFilamentPresent, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
+    MODEL_PROP(int, filamentBayATemp, -999)
+    MODEL_PROP(int, filamentBayBTemp, -999)
+    MODEL_PROP(int, filamentBayAHumidity, -999)
+    MODEL_PROP(int, filamentBayBHumidity, -999)
+    MODEL_PROP(bool, filamentBayAFilamentPresent, false)
+    MODEL_PROP(bool, filamentBayBFilamentPresent, false)
+    MODEL_PROP(bool, filamentBayATagPresent, false)
+    MODEL_PROP(bool, filamentBayBTagPresent, false)
 
     // Advanced Info Properties
     // Chamber
