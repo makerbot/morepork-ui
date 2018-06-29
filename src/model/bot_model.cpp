@@ -100,6 +100,11 @@ void BotModel::forgetWifi(QString path) {
     qDebug() << FL_STRM << "called with parameter:" << path;
 }
 
+void BotModel::addMakerbotAccount(QString username, QString makerbot_token) {
+    qDebug() << FL_STRM << "called with parameters:"
+             << username << "; " <<  makerbot_token;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

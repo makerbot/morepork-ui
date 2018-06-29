@@ -54,6 +54,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void disconnectWifi(QString path);
     Q_INVOKABLE virtual void connectWifi(QString path, QString password, QString name);
     Q_INVOKABLE virtual void forgetWifi(QString path);
+    Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
 
   private:
     Q_OBJECT

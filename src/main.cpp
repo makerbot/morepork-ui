@@ -29,7 +29,6 @@
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     QGuiApplication qapp(argc, argv);
-
     // This includes objects of classes defined in parsed_qml_enums.h
     // so QML can use cpp defined enumerations with namespaces
     QML_ENUM_OBJECTS
@@ -42,7 +41,6 @@ int main(int argc, char ** argv) {
 #endif
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
-
     UiTranslator ui_trans;
     MoreporkStorage storage;
     QQmlApplicationEngine engine;
@@ -53,7 +51,6 @@ int main(int argc, char ** argv) {
     qmlRegisterType<PrintFileInfo>("PrintFileObject", 1, 0, "PrintFileInfo");
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
-
     // So, basically, our UI is upside down when the one
     // is compared on the bot, to that of test in qtcreator.
     // So, that correction is done here
@@ -68,6 +65,5 @@ int main(int argc, char ** argv) {
     else
         qCritical() << "Cannot find morepork_main_qml";
 #endif
-
     return qapp.exec();
 }
