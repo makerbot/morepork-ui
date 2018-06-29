@@ -337,7 +337,7 @@ Item {
                                 x: showPassword.leftPadding
                                 y: parent.height / 2 - height / 2
                                 radius: 3
-                                border.color: showPassword.down ? "#3183af" : "#45a2d3"
+                                border.color: showPassword.down ? lightBlue : otherBlue
 
                                 Rectangle {
                                     width: 14
@@ -345,7 +345,7 @@ Item {
                                     x: 6
                                     y: 6
                                     radius: 2
-                                    color: showPassword.down ? "#3183af" : "#45a2d3"
+                                    color: showPassword.down ? lightBlue : otherBlue
                                     visible: showPassword.checked
                                 }
                             }

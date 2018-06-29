@@ -25,6 +25,9 @@ Item {
     property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
                                     bot.process.stateType == ProcessStateType.Done
     property alias wifiPage: wifiPage
+    property string lightBlue: "#3183af"
+    property string otherBlue: "#45a2d3"
+
     smooth: false
     Timer {
         id: closeResetPopupTimer
@@ -134,7 +137,7 @@ Item {
                                     x: switchWifi.leftPadding
                                     y: parent.height / 2 - height / 2
                                     radius: 17
-                                    color: switchWifi.checked ? "#3183af" : "#ffffff"
+                                    color: switchWifi.checked ? lightBlue : "#ffffff"
                                     border.color: switchWifi.checked ? "#3183af" : "#cccccc"
 
                                     Rectangle {
@@ -144,7 +147,7 @@ Item {
                                         height: 32
                                         radius: 16
                                         color: switchWifi.down ? "#cccccc" : "#ffffff"
-                                        border.color: switchWifi.checked ? "#3183af" : "#999999"
+                                        border.color: switchWifi.checked ? lightBlue : "#999999"
                                     }
                                 }
                             checked: bot.net.wifiEnabled
@@ -565,7 +568,7 @@ Item {
                                 x: clearCalibrationSettings.leftPadding
                                 y: parent.height / 2 - height / 2
                                 radius: 3
-                                border.color: clearCalibrationSettings.down ? "#45a2d3" : "#3183af"
+                                border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
 
                                 Rectangle {
                                     width: 14
@@ -573,7 +576,7 @@ Item {
                                     x: 6
                                     y: 6
                                     radius: 2
-                                    color: clearCalibrationSettings.down ? "#45a2d3" : "#3183af"
+                                    color: clearCalibrationSettings.down ? otherBlue : lightBlue
                                     visible: clearCalibrationSettings.checked
                                 }
                             }
