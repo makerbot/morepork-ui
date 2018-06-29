@@ -16,6 +16,7 @@ Item {
     property alias buttonAssistedLeveling: buttonAssistedLeveling
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
+    property alias buttonWiFi: buttonWiFi
     property alias buttonAdvancedInfo: buttonAdvancedInfo
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
@@ -23,7 +24,7 @@ Item {
     property bool hasReset: false
     property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
                                     bot.process.stateType == ProcessStateType.Done
-
+    property alias wifiPage: wifiPage
     smooth: false
     Timer {
         id: closeResetPopupTimer
@@ -122,6 +123,32 @@ Item {
                     }
 
                     MenuButton {
+                        id: buttonWiFi
+                        buttonImage.source: "qrc:/img/icon_wifi.png"
+                        buttonText.text: "WiFi"
+                        Switch {
+                            id: switchWifi
+                            checked: bot.net.wifiEnabled
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 50
+
+                            onClicked: {
+                                if(switchWifi.checked) {
+                                    bot.toggleWifi(true)
+                                }
+                                else if(!switchWifi.checked) {
+                                    bot.toggleWifi(false)
+                                }
+                            }
+                        }
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
                         id: buttonAdvancedInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "ADVANCED INFO"
@@ -136,8 +163,7 @@ Item {
                         buttonImage.anchors.leftMargin: 30
                         buttonImage.source: "qrc:/img/alert.png"
                         buttonText.text: "RESET TO FACTORY"
-                        opacity: bot.process.type == ProcessType.None ? 1 :
-                                                                        0.3
+                        opacity: bot.process.type == ProcessType.None ? 1 : 0.3
                     }
                 }
             }
@@ -278,6 +304,21 @@ Item {
         }
 
         //settingsSwipeView.index = 5
+        Item {
+            id: wifiItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            WiFiPageForm {
+                id: wifiPage
+
+            }
+
+        }
+
+        //settingsSwipeView.index = 6
         Item {
             id: advancedInfoItem
             property var backSwiper: settingsSwipeView

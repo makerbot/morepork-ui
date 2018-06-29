@@ -100,7 +100,7 @@ Item {
             InfoItem {
                 id: info_wifiNetwork
                 labelText: qsTr("WiFi Name") + cpUiTr.emptyStr
-                dataText: bot.net.interface === "wifi" ? "null" : "n/a"
+                dataText: bot.net.interface === "wifi" ? bot.net.name : "n/a"
             }
             InfoItem {
                 id: info_ethMacAddress

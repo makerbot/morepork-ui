@@ -46,7 +46,7 @@
       	<file alias="auth_success.png">images/auth_success.png</file>
       	<file alias="auth_error.png">images/auth_error.png</file>
       	<file alias="firmware_update_available.png">images/firmware_update_available.png</file>
-      	<file alias="firmware_update_error.png">images/firmware_update_error.png</file>
+	<file alias="error.png">images/error.png</file>
       	<file alias="process_successful.png">images/process_successful.png</file>
 	<file alias="sombrero_icon.png">images/sombrero_icon.png</file>
       	<file alias="usb_icon.png">images/usb_icon.png</file>
@@ -78,6 +78,12 @@
 	<file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
 	<file alias="calib_remove_build_plate.png">images/calib_remove_build_plate.png</file>
 	<file alias="calib_successful.png">images/calib_successful.png</file>
+	<file alias="icon_wifi.png">images/icon_wifi.png</file>
+	<file alias="lock_icon.png">images/lock_icon.png</file>
+	<file alias="wifi_poor.png">images/wifi_poor.png</file>
+	<file alias="wifi_low.png">images/wifi_low.png</file>
+	<file alias="wifi_medium.png">images/wifi_medium.png</file>
+	<file alias="wifi_strong.png">images/wifi_strong.png</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

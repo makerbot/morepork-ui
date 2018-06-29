@@ -210,6 +210,9 @@ Item {
                     case 3:
                         switch(settingsPage.settingsSwipeView.currentIndex) {
                         case 5:
+                            "CHOOSE WIFI NETWORK"
+                            break;
+                        case 6:
                             bot.name + " ADVANCED INFO"
                             break;
                         default:

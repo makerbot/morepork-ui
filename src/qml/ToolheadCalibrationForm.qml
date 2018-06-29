@@ -56,7 +56,7 @@ Item {
         anchors.topMargin: 30
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
-        source: "qrc:/img/firmware_update_error.png"
+        source: "qrc:/img/error.png"
 
         Text {
             id: text1

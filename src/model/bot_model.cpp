@@ -80,6 +80,26 @@ void BotModel::buildPlateCleared() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::scanWifi(bool force_rescan) {
+    qDebug() << FL_STRM << "called with parameter:" << force_rescan;
+}
+
+void BotModel::toggleWifi(bool enable) {
+    qDebug() << FL_STRM << "called with parameter:" << enable;
+}
+
+void BotModel::disconnectWifi(QString path) {
+    qDebug() << FL_STRM << "called with parameter:" << path;
+}
+
+void BotModel::connectWifi(QString path, QString password, QString name) {
+    qDebug() << FL_STRM << "called with parameter:" << path << password << name;
+}
+
+void BotModel::forgetWifi(QString path) {
+    qDebug() << FL_STRM << "called with parameter:" << path;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

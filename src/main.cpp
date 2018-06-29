@@ -27,6 +27,7 @@
 #include "storage/storage.h"
 
 int main(int argc, char ** argv) {
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
     QGuiApplication qapp(argc, argv);
 
     // This includes objects of classes defined in parsed_qml_enums.h

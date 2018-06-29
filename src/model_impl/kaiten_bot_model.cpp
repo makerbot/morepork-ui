@@ -21,6 +21,7 @@ class KaitenBotModel : public BotModel {
     void printFileValidNotif(const Json::Value &info);
     void assistedLevelUpdate(const Json::Value & status);
     void queryStatusUpdate(const Json::Value & info);
+    void wifiUpdate(const Json::Value & result);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -39,6 +40,11 @@ class KaitenBotModel : public BotModel {
     void query_status();
     void resetToFactory(bool clearCalibration);
     void buildPlateCleared();
+    void toggleWifi(bool enable);
+    void scanWifi(bool force_rescan);
+    void connectWifi(QString path, QString password, QString name);
+    void disconnectWifi(QString path);
+    void forgetWifi(QString path);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -119,7 +125,7 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<FirmwareUpdateNotification> m_fwareUpNot;
 
-   class AllowUnknownFirmware : public JsonRpcMethod {
+    class AllowUnknownFirmware : public JsonRpcMethod {
       public:
         AllowUnknownFirmware(KaitenBotModel * bot) : m_bot(bot) {}
         void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
@@ -186,6 +192,28 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<QueryStatusCallback> m_queryStatusCb;
+
+    class WifiUpdateResult : public JsonRpcNotification {
+      public:
+        WifiUpdateResult(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->wifiUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<WifiUpdateResult> m_wifiResult;
+
+    class WifiUpdateCallback : public JsonRpcCallback {
+      public:
+        WifiUpdateCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->wifiUpdate(resp);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<WifiUpdateCallback> m_wifiCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -437,6 +465,75 @@ void KaitenBotModel::buildPlateCleared(){
     }
 }
 
+void KaitenBotModel::toggleWifi(bool enable){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        if (enable) {
+            conn->jsonrpc.invoke("wifi_enable", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+        } else {
+            conn->jsonrpc.invoke("wifi_disable", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+        }
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::scanWifi(bool forceRescan){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["force_rescan"] = Json::Value(forceRescan);
+        conn->jsonrpc.invoke("wifi_scan", json_params, m_wifiCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::connectWifi(QString path, QString password, QString name){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["path"] = Json::Value(path.toStdString());
+        json_params["password"] = Json::Value(password.toStdString());
+        json_params["name"] = Json::Value(name.toStdString());
+        conn->jsonrpc.invoke("wifi_connect", json_params, m_wifiCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::disconnectWifi(QString path) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["path"] = Json::Value(path.toStdString());
+        conn->jsonrpc.invoke("wifi_disconnect", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::forgetWifi(QString path) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["path"] = Json::Value(path.toStdString());
+        conn->jsonrpc.invoke("wifi_forget", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -450,7 +547,9 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_asstLvlNot(new AssistedLevelNotification(this)),
         m_asstLvlCb(new AssistedLevelCallback(this)),
         m_queryStatusNot(new QueryStatusNotification(this)),
-        m_queryStatusCb(new QueryStatusCallback(this)) {
+        m_queryStatusCb(new QueryStatusCallback(this)),
+        m_wifiResult(new WifiUpdateResult(this)),
+        m_wifiCb(new WifiUpdateCallback(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -582,8 +681,13 @@ void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
 void KaitenBotModel::printFileValidNotif(const Json::Value &params) {
     dynamic_cast<KaitenProcessModel*>(m_process.data())->printFileUpdate(params);
 }
+
 void KaitenBotModel::assistedLevelUpdate(const Json::Value &status) {
     dynamic_cast<KaitenProcessModel*>(m_process.data())->asstLevelUpdate(status);
+}
+
+void KaitenBotModel::wifiUpdate(const Json::Value &result) {
+    dynamic_cast<KaitenNetModel*>(m_net.data())->wifiUpdate(result);
 }
 
 void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {

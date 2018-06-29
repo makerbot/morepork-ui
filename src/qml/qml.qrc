@@ -60,5 +60,9 @@
         <file>AdvancedInfoForm.qml</file>
         <file>MenuButton.qml</file>
         <file>MenuButtonForm.qml</file>
+        <file>WiFiPageForm.qml</file>
+        <file>WiFiButton.qml</file>
+        <file>WiFiButtonForm.qml</file>
+        <file>WiFiPage.qml</file>
     </qresource>
 </RCC>
