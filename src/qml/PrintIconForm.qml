@@ -81,7 +81,7 @@ Item {
                 target: status_image;
                 from: 360000;
                 to: 0;
-                duration: 10000000
+                loops: Animation.Infinite
                 running: (bot.process.stateType == ProcessStateType.Loading ||
                           bot.process.stateType == ProcessStateType.Preheating)
             }
@@ -106,7 +106,7 @@ Item {
                 target: loading_or_paused_image;
                 from: 0;
                 to: 360000;
-                duration: 10000000
+                loops: Animation.Infinite
                 running: (bot.process.stateType == ProcessStateType.Loading ||
                           bot.process.stateType == ProcessStateType.Paused ||
                           bot.process.stateType == ProcessStateType.Pausing ||
