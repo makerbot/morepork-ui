@@ -49,6 +49,11 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void query_status();
     Q_INVOKABLE virtual void resetToFactory(bool clearCalibration);
     Q_INVOKABLE virtual void buildPlateCleared();
+    Q_INVOKABLE virtual void scanWifi(bool force_rescan);
+    Q_INVOKABLE virtual void toggleWifi(bool enable);
+    Q_INVOKABLE virtual void disconnectWifi(QString path);
+    Q_INVOKABLE virtual void connectWifi(QString path, QString password, QString name);
+    Q_INVOKABLE virtual void forgetWifi(QString path);
 
   private:
     Q_OBJECT

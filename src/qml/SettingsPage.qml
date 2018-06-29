@@ -1,5 +1,6 @@
 import QtQuick 2.4
 import ProcessTypeEnum 1.0
+import WifiStateEnum 1.0
 
 SettingsPageForm {
     buttonChangeLanguage.onClicked: {
@@ -19,8 +20,21 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(4)
     }
 
-    buttonAdvancedInfo.onClicked: {
+    buttonWiFi.onClicked: {
+        if((bot.net.wifiState == WifiState.Connected) ||
+            wifiPage.isWifiConnected) {
+            bot.scanWifi(false)
+        }
+        else if(bot.net.wifiState == WifiState.NotConnected ||
+                bot.net.wifiState == WifiState.NoWifiFound) {
+            bot.net.setWifiState(WifiState.Searching)
+            bot.scanWifi(true)
+        }
         settingsSwipeView.swipeToItem(5)
+    }
+
+    buttonAdvancedInfo.onClicked: {
+        settingsSwipeView.swipeToItem(6)
     }
 
     buttonResetToFactory.onClicked: {

@@ -231,7 +231,7 @@ Item {
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/firmware_update_error.png"
+                source: "qrc:/img/error.png"
                 height: sourceSize.height
                 width: sourceSize.width
                 visible: true
