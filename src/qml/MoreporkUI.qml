@@ -1061,9 +1061,62 @@ ApplicationWindow {
                     anchors.verticalCenter: parent.verticalCenter
 
                     BusyIndicator {
-                        id: busyIndicator
+                        id: extruderBusyIndicator
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         running: updatingExtruderFirmwarePopup.opened
+
+                        contentItem: Item {
+                                implicitWidth: 64
+                                implicitHeight: 64
+
+                                Item {
+                                    id: itemExtruderBusy
+                                    x: parent.width / 2 - 32
+                                    y: parent.height / 2 - 32
+                                    width: 64
+                                    height: 64
+                                    opacity: extruderBusyIndicator.running ? 1 : 0
+
+                                    Behavior on opacity {
+                                        OpacityAnimator {
+                                            duration: 250
+                                        }
+                                    }
+
+                                    RotationAnimator {
+                                        target: itemExtruderBusy
+                                        running: extruderBusyIndicator.visible && extruderBusyIndicator.running
+                                        from: 0
+                                        to: 360
+                                        loops: Animation.Infinite
+                                        duration: 1500
+                                    }
+
+                                    Repeater {
+                                        id: repeater1
+                                        model: 6
+
+                                        Rectangle {
+                                            x: itemExtruderBusy.width / 2 - width / 2
+                                            y: itemExtruderBusy.height / 2 - height / 2
+                                            implicitWidth: 2
+                                            implicitHeight: 16
+                                            radius: 0
+                                            color: "#ffffff"
+                                            transform: [
+                                                Translate {
+                                                    y: -Math.min(itemExtruderBusy.width, itemExtruderBusy.height) * 0.5 + 5
+                                                },
+                                                Rotation {
+                                                    angle: index / repeater1.count * 360
+                                                    origin.x: 1
+                                                    origin.y: 8
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
                     }
 
                     Text {
