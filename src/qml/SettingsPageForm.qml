@@ -129,19 +129,20 @@ Item {
                         Switch {
                             id: switchWifi
                             indicator: Rectangle {
-                                    implicitWidth: 52
-                                    implicitHeight: 30
+                                    implicitWidth: 68
+                                    implicitHeight: 35
                                     x: switchWifi.leftPadding
                                     y: parent.height / 2 - height / 2
-                                    radius: 15
+                                    radius: 17
                                     color: switchWifi.checked ? "#3183af" : "#ffffff"
                                     border.color: switchWifi.checked ? "#3183af" : "#cccccc"
 
                                     Rectangle {
-                                        x: switchWifi.checked ? parent.width - width : 0
-                                        width: 30
-                                        height: 30
-                                        radius: 15
+                                        x: switchWifi.checked ? parent.width - width - 3 : 3
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: 32
+                                        height: 32
+                                        radius: 16
                                         color: switchWifi.down ? "#cccccc" : "#ffffff"
                                         border.color: switchWifi.checked ? "#3183af" : "#999999"
                                     }
