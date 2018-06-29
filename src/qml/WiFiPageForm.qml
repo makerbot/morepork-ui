@@ -105,6 +105,7 @@ Item {
             // We also use the condition that the wifi list isn't
             // populated yet by the backend.
             BusyIndicator {
+                id: wifiBusyIndicator
                 running: true
                 visible: wifiList.count == 0 &&
                         (isWifiConnected ||
@@ -112,6 +113,60 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -20
                 anchors.horizontalCenter: parent.horizontalCenter
+
+
+                contentItem: Item {
+                        implicitWidth: 64
+                        implicitHeight: 64
+
+                        Item {
+                            id: item
+                            x: parent.width / 2 - 32
+                            y: parent.height / 2 - 32
+                            width: 64
+                            height: 64
+                            opacity: wifiBusyIndicator.running ? 1 : 0
+
+                            Behavior on opacity {
+                                OpacityAnimator {
+                                    duration: 250
+                                }
+                            }
+
+                            RotationAnimator {
+                                target: item
+                                running: wifiBusyIndicator.visible && wifiBusyIndicator.running
+                                from: 0
+                                to: 360
+                                loops: Animation.Infinite
+                                duration: 1500
+                            }
+
+                            Repeater {
+                                id: repeater
+                                model: 6
+
+                                Rectangle {
+                                    x: item.width / 2 - width / 2
+                                    y: item.height / 2 - height / 2
+                                    implicitWidth: 2
+                                    implicitHeight: 16
+                                    radius: 0
+                                    color: "#ffffff"
+                                    transform: [
+                                        Translate {
+                                            y: -Math.min(item.width, item.height) * 0.5 + 5
+                                        },
+                                        Rotation {
+                                            angle: index / repeater.count * 360
+                                            origin.x: 1
+                                            origin.y: 8
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
             }
 
             // The wifi list shows up when the scan retuns atleast
@@ -166,7 +221,7 @@ Item {
                     }
 
                     onPressAndHold: {
-                        if(isSaved || !isSecured) {
+                        if(isSaved || isConnected) {
                             isForgetEnabled = true
                             selectedWifiPath = model.modelData.path
                             selectedWifiName = model.modelData.name
@@ -276,6 +331,24 @@ Item {
                     CheckBox {
                         id: showPassword
                         checked: false
+                        indicator: Rectangle {
+                                implicitWidth: 26
+                                implicitHeight: 26
+                                x: showPassword.leftPadding
+                                y: parent.height / 2 - height / 2
+                                radius: 3
+                                border.color: showPassword.down ? lightBlue : otherBlue
+
+                                Rectangle {
+                                    width: 14
+                                    height: 14
+                                    x: 6
+                                    y: 6
+                                    radius: 2
+                                    color: showPassword.down ? lightBlue : otherBlue
+                                    visible: showPassword.checked
+                                }
+                            }
                     }
 
                     Text {
@@ -613,11 +686,65 @@ Item {
                 }
 
                 BusyIndicator {
+                    id: wifiConnectingBusy
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     running: true
                     visible: (bot.net.wifiState == WifiState.Connecting ||
                              bot.net.wifiState == WifiState.Connected) &&
                              !isForgetEnabled
+
+                    contentItem: Item {
+                            implicitWidth: 64
+                            implicitHeight: 64
+
+                            Item {
+                                id: item1
+                                x: parent.width / 2 - 32
+                                y: parent.height / 2 - 32
+                                width: 64
+                                height: 64
+                                opacity: wifiConnectingBusy.running ? 1 : 0
+
+                                Behavior on opacity {
+                                    OpacityAnimator {
+                                        duration: 250
+                                    }
+                                }
+
+                                RotationAnimator {
+                                    target: item1
+                                    running: wifiConnectingBusy.visible && wifiConnectingBusy.running
+                                    from: 0
+                                    to: 360
+                                    loops: Animation.Infinite
+                                    duration: 1500
+                                }
+
+                                Repeater {
+                                    id: repeater1
+                                    model: 6
+
+                                    Rectangle {
+                                        x: item1.width / 2 - width / 2
+                                        y: item1.height / 2 - height / 2
+                                        implicitWidth: 2
+                                        implicitHeight: 16
+                                        radius: 0
+                                        color: "#ffffff"
+                                        transform: [
+                                            Translate {
+                                                y: -Math.min(item1.width, item1.height) * 0.5 + 5
+                                            },
+                                            Rotation {
+                                                angle: index / repeater1.count * 360
+                                                origin.x: 1
+                                                origin.y: 8
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
                 }
 
                 Item {

@@ -25,6 +25,9 @@ Item {
     property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
                                     bot.process.stateType == ProcessStateType.Done
     property alias wifiPage: wifiPage
+    property string lightBlue: "#3183af"
+    property string otherBlue: "#45a2d3"
+
     smooth: false
     Timer {
         id: closeResetPopupTimer
@@ -128,6 +131,25 @@ Item {
                         buttonText.text: "WiFi"
                         Switch {
                             id: switchWifi
+                            indicator: Rectangle {
+                                    implicitWidth: 68
+                                    implicitHeight: 35
+                                    x: switchWifi.leftPadding
+                                    y: parent.height / 2 - height / 2
+                                    radius: 17
+                                    color: switchWifi.checked ? lightBlue : "#ffffff"
+                                    border.color: switchWifi.checked ? "#3183af" : "#cccccc"
+
+                                    Rectangle {
+                                        x: switchWifi.checked ? parent.width - width - 3 : 3
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: 32
+                                        height: 32
+                                        radius: 16
+                                        color: switchWifi.down ? "#cccccc" : "#ffffff"
+                                        border.color: switchWifi.checked ? lightBlue : "#999999"
+                                    }
+                                }
                             checked: bot.net.wifiEnabled
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
@@ -540,6 +562,24 @@ Item {
                         id: clearCalibrationSettings
                         checked: false
                         visible: !isResetting && !hasReset
+                        indicator: Rectangle {
+                                implicitWidth: 26
+                                implicitHeight: 26
+                                x: clearCalibrationSettings.leftPadding
+                                y: parent.height / 2 - height / 2
+                                radius: 3
+                                border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
+
+                                Rectangle {
+                                    width: 14
+                                    height: 14
+                                    x: 6
+                                    y: 6
+                                    radius: 2
+                                    color: clearCalibrationSettings.down ? otherBlue : lightBlue
+                                    visible: clearCalibrationSettings.checked
+                                }
+                            }
                     }
 
                     Text {
@@ -557,6 +597,61 @@ Item {
                         id: busyIndicator
                         running: isResetting && !hasReset
                         visible: isResetting && !hasReset
+
+                        contentItem: Item {
+                                implicitWidth: 64
+                                implicitHeight: 64
+
+                                Item {
+                                    id: item
+                                    x: parent.width / 2 - 32
+                                    y: parent.height / 2 - 32
+                                    width: 64
+                                    height: 64
+                                    opacity: busyIndicator.running ? 1 : 0
+
+                                    Behavior on opacity {
+                                        OpacityAnimator {
+                                            duration: 250
+                                        }
+                                    }
+
+                                    RotationAnimator {
+                                        target: item
+                                        running: busyIndicator.visible && busyIndicator.running
+                                        from: 0
+                                        to: 360
+                                        loops: Animation.Infinite
+                                        duration: 1500
+                                    }
+
+                                    Repeater {
+                                        id: repeater
+                                        model: 6
+
+                                        Rectangle {
+                                            x: item.width / 2 - width / 2
+                                            y: item.height / 2 - height / 2
+                                            implicitWidth: 2
+                                            implicitHeight: 16
+                                            radius: 0
+                                            color: "#ffffff"
+                                            transform: [
+                                                Translate {
+                                                    y: -Math.min(item.width, item.height) * 0.5 + 5
+                                                },
+                                                Rotation {
+                                                    angle: index / repeater.count * 360
+                                                    origin.x: 1
+                                                    origin.y: 8
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+
+
                     }
                 }
             }
