@@ -79,8 +79,9 @@ Item {
 
             RotationAnimator {
                 target: status_image;
-                from: 360000;
-                to: 0;
+                from: 360
+                to: 0
+                duration: 10000
                 loops: Animation.Infinite
                 running: (bot.process.stateType == ProcessStateType.Loading ||
                           bot.process.stateType == ProcessStateType.Preheating)
@@ -104,8 +105,9 @@ Item {
 
             RotationAnimator {
                 target: loading_or_paused_image;
-                from: 0;
-                to: 360000;
+                from: 0
+                to: 360
+                duration: 10000
                 loops: Animation.Infinite
                 running: (bot.process.stateType == ProcessStateType.Loading ||
                           bot.process.stateType == ProcessStateType.Paused ||

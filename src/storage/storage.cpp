@@ -46,9 +46,9 @@ MoreporkStorage::MoreporkStorage(){
 
 void MoreporkStorage::updateCurrentThing(){
   if(QDir(CURRENT_THING_PATH).exists()){
-      QDirIterator current_thing_dir(CURRENT_THING_PATH, QDir::Dirs | QDir::Files |
-        QDir::NoDotAndDotDot | QDir::Readable);
-      PrintFileInfo* current_thing;
+      QDirIterator current_thing_dir(CURRENT_THING_PATH, QDir::Files |
+                                QDir::NoDotAndDotDot | QDir::Readable);
+      PrintFileInfo* current_thing = nullptr;
       if(current_thing_dir.hasNext()){
         const QFileInfo kFileInfo = QFileInfo(current_thing_dir.next());
         if(kFileInfo.suffix() == "makerbot"){
@@ -104,7 +104,7 @@ void MoreporkStorage::currentThingSet(PrintFileInfo* current_thing){
 
 
 void MoreporkStorage::currentThingReset(){
-  PrintFileInfo* temp = new PrintFileInfo("/null/path", "No Items Present", "No Items Present", QDateTime(), false);
+  PrintFileInfo* temp = new PrintFileInfo("/null/path", "null", "null", QDateTime(), false);
   currentThingSet(temp);
 }
 
