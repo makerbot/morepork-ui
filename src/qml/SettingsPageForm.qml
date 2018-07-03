@@ -19,6 +19,7 @@ Item {
     property alias buttonWiFi: buttonWiFi
     property alias buttonAdvancedInfo: buttonAdvancedInfo
     property alias buttonResetToFactory: buttonResetToFactory
+    property alias buttonLCDTest: buttonLCDTest
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
     property bool isResetting: false
     property bool hasReset: false
@@ -187,6 +188,17 @@ Item {
                         buttonText.text: "RESET TO FACTORY"
                         opacity: bot.process.type == ProcessType.None ? 1 : 0.3
                     }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonLCDTest
+                        buttonImage.anchors.leftMargin: 30
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "TEST LCD"
+                    }
                 }
             }
         }
@@ -349,6 +361,29 @@ Item {
             visible: false
 
             AdvancedInfo {
+
+            }
+        }
+
+        //settingsSwipeView.index = 7
+        Item {
+            id: lcdTestItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                settingsSwipeView.swipeToItem(0)
+                if(lcdTest.lcdTestSwipeView.currentIndex != 0) {
+                    lcdTest.lcdTestSwipeView.setCurrentIndex(0)
+                }
+                topBar.visible = true
+            }
+
+            LCDTest {
+                id: lcdTest
 
             }
         }

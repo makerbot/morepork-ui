@@ -37,6 +37,11 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(6)
     }
 
+    buttonLCDTest.onClicked: {
+        topBar.visible = false
+        settingsSwipeView.swipeToItem(7)
+    }
+
     buttonResetToFactory.onClicked: {
         if(bot.process.type == ProcessType.None) {
             resetFactoryConfirmPopup.open()

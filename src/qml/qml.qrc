@@ -64,5 +64,7 @@
         <file>WiFiButton.qml</file>
         <file>WiFiButtonForm.qml</file>
         <file>WiFiPage.qml</file>
+        <file>LCDTest.qml</file>
+        <file>LCDTestForm.qml</file>
     </qresource>
 </RCC>
