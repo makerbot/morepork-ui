@@ -860,7 +860,6 @@ ApplicationWindow {
                 border.width: 2
                 border.color: "#ffffff"
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: rotation == 180 ? 20 : -20
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Rectangle {
@@ -1024,7 +1023,7 @@ ApplicationWindow {
             modal: true
             dim: false
             focus: true
-            closePolicy: Popup.CloseOnPressOutside
+            closePolicy: Popup.NoAutoClose
             parent: overlay
             background: Rectangle {
                 id: updatingExtruderFirmwareBackRect
@@ -1048,29 +1047,88 @@ ApplicationWindow {
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
                 width: 720
-                height: skipFirmwareUpdate ? 220 : 275
+                height: 275
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
                 anchors.verticalCenter: parent.verticalCenter                
                 anchors.horizontalCenter: parent.horizontalCenter
-                Text {
-                    id: updatingExtruderFirmwareText
-                    color: "#ffffff"
-                    text: "Updating Extruder Firmware. Please Wait.\nProgressA = " +
-                          ((updatedExtruderFirmwareA && extruderFirmwareUpdateProgressA == 0) ?
-                          100 : extruderFirmwareUpdateProgressA) + "%\nProgressB = " +
-                          ((updatedExtruderFirmwareB && extruderFirmwareUpdateProgressB == 0) ?
-                          100 : extruderFirmwareUpdateProgressB) + "%"
-                    Layout.fillHeight: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.fillWidth: false
-                    font.letterSpacing: 3
-                    font.weight: Font.Bold
-                    font.family: "Antennae"
-                    font.pixelSize: 18
-                    anchors.verticalCenter: parent.verticalCenter
+                ColumnLayout {
+                    id: columnLayout3
+                    width: 590
+                    height: 165
                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    BusyIndicator {
+                        id: extruderBusyIndicator
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        running: updatingExtruderFirmwarePopup.opened
+
+                        contentItem: Item {
+                                implicitWidth: 64
+                                implicitHeight: 64
+
+                                Item {
+                                    id: itemExtruderBusy
+                                    x: parent.width / 2 - 32
+                                    y: parent.height / 2 - 32
+                                    width: 64
+                                    height: 64
+                                    opacity: extruderBusyIndicator.running ? 1 : 0
+
+                                    Behavior on opacity {
+                                        OpacityAnimator {
+                                            duration: 250
+                                        }
+                                    }
+
+                                    RotationAnimator {
+                                        target: itemExtruderBusy
+                                        running: extruderBusyIndicator.visible && extruderBusyIndicator.running
+                                        from: 0
+                                        to: 360
+                                        loops: Animation.Infinite
+                                        duration: 1500
+                                    }
+
+                                    Repeater {
+                                        id: repeater1
+                                        model: 6
+
+                                        Rectangle {
+                                            x: itemExtruderBusy.width / 2 - width / 2
+                                            y: itemExtruderBusy.height / 2 - height / 2
+                                            implicitWidth: 2
+                                            implicitHeight: 16
+                                            radius: 0
+                                            color: "#ffffff"
+                                            transform: [
+                                                Translate {
+                                                    y: -Math.min(itemExtruderBusy.width, itemExtruderBusy.height) * 0.5 + 5
+                                                },
+                                                Rotation {
+                                                    angle: index / repeater1.count * 360
+                                                    origin.x: 1
+                                                    origin.y: 8
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                    }
+
+                    Text {
+                        id: alert_text
+                        color: "#cbcbcb"
+                        text: "EXTRUDERS ARE BEING PROGRAMMED..."
+                        font.letterSpacing: 3
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 20
+                    }
                 }
             }
         }
