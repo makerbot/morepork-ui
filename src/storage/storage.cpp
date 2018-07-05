@@ -117,7 +117,8 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
     things_dir = USB_STORAGE_PATH;
   else
     things_dir = kDirectory;
-  storage_watcher_->removePath(prev_thing_dir_);
+  if(QFileInfo(prev_thing_dir_).exists())
+    storage_watcher_->removePath(prev_thing_dir_);
   prev_thing_dir_ = things_dir;
   storage_watcher_->addPath(things_dir);
   if(QDir(things_dir).exists()){
