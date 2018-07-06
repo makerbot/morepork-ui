@@ -13,6 +13,19 @@ Item {
     property alias button1: button1
     property alias button2: button2
 
+    property bool isFwUpdProcess: bot.process.type == ProcessType.FirmwareUpdate
+
+    onIsFwUpdProcessChanged: {
+        if(isFwUpdProcess) {
+            if(mainSwipeView.currentIndex != 3) {
+                mainSwipeView.swipeToItem(3)
+            }
+            if(settingsSwipeView.currentIndex != 3) {
+                settingsSwipeView.swipeToItem(3)
+            }
+        }
+    }
+
     LoadingIcon {
         id: loading_icon
         anchors.left: parent.left
