@@ -5,14 +5,18 @@ import QtQuick.VirtualKeyboard 2.3
 
 Item {
     property alias signInSwipeView: signInSwipeView
+
     property alias addAccountButton: addAccountButton
+
     property alias noAccountButton: noAccountButton
     property alias enteredUsernameButton: enteredUsernameButton
     property alias usernameTextField: usernameTextField
-    property alias enterPasswordView: enterPasswordView
+
     property alias authorizeButton: authorizeButton
+    property alias showPassword: showPassword
     property alias passwordField: passwordField
     property alias forgotPasswordButton: forgotPasswordButton
+
     property alias signInPagePopup: signInPagePopup
     property alias authorizingContents: authorizingContents
     property alias noAccountContents: noAccountContents
@@ -20,7 +24,7 @@ Item {
     property alias signInFailedContents: signInFailedContents
     property alias signInSucceededContents: signInSucceededContents
 
-    property string username: "testname"
+    property string username: ""
 
     width: 800
     height: 440
@@ -36,10 +40,13 @@ Item {
 
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = signInSwipeView.currentIndex
+            if (prevIndex == itemToDisplayDefaultIndex) {
+                return;
+            }
+
             signInSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
             signInSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            signInSwipeView.itemAt(prevIndex).visible = false
         }
 
         // settingsSwipeView.index = 0
@@ -52,10 +59,7 @@ Item {
             property bool hasAltBack: true
 
             function altBack() {
-                usernameTextField.clear()
-                passwordField.clear()
-                showPassword.checked = false
-                settingsSwipeView.swipeToItem(0)
+                backToSettings();
             }
 
             Image {
@@ -435,6 +439,10 @@ Item {
 
         Item {
             anchors.fill: parent
+
+            Component.onDestruction: {
+                backToSettings();
+            }
 
             Image {
                 id: authCompleteImage

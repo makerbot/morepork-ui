@@ -1,6 +1,14 @@
 import QtQuick 2.7
 
 SignInPageForm {
+    function backToSettings() {
+        usernameTextField.clear();
+        passwordField.clear();
+        showPassword.checked = false;
+        signInSwipeView.swipeToItem(0);
+        settingsSwipeView.swipeToItem(0);
+    }
+
     function closePopup() {
         signInPagePopup.close();
     }
@@ -8,9 +16,8 @@ SignInPageForm {
     function showAuthorizingPopup() {
         var p = signInPagePopup;
         p.setButtonBarVisible(false);
-        p.setPopupContents(authorizingContents);
+        p.setPopupContents(authorizingContents, null, null, true);
         p.open();
-        // TODO: should not be closable by clicking outside
     }
 
     function showNoAccountPopup() {
@@ -110,9 +117,7 @@ SignInPageForm {
                                 "Received unexpected response: " +
                                 http.responseText);
                             showSignInFailedPopup();
-                            return;
                         }
-
                     } else {
                         showSignInFailedPopup();
                         console.log(http.responseText);

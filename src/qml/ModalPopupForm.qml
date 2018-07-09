@@ -14,6 +14,7 @@ Popup {
 
     property bool showButtonBar: false
     property bool showTwoButtons: false
+    property bool disableUserClose: false
 
     id: popup
     modal: true
@@ -35,7 +36,7 @@ Popup {
         y: (parent.height - height) / 2
     }
 
-    closePolicy: Popup.CloseOnPressOutside
+    closePolicy: disableUserClose ? Popup.NoAutoClose : Popup.CloseOnPressOutside
     enter: Transition {
             NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
     }
@@ -43,12 +44,13 @@ Popup {
             NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
     }
 
-    onClosed: {
+    onAboutToHide: {
         showButtonBar = false;
         showTwoButtons = false;
-        left_text.text = ""
-        right_text.text = ""
-        full_button_text.text = ""
+        left_text.text = "";
+        right_text.text = "";
+        full_button_text.text = "";
+        popup_contents.contentItem = null;
         // TODO: other resetting things
     }
 

@@ -2,7 +2,10 @@ import QtQuick 2.4
 
 ModalPopupForm {
 
-    function setPopupContents(contentsComponent, button1_text, button2_text) {
+    function setPopupContents(contentsComponent,
+                              button1_text,
+                              button2_text,
+                              disable_user_close) {
         var obj = contentsComponent.createObject(popup_contents);
         popup_contents.contentItem = obj;
 
@@ -17,6 +20,7 @@ ModalPopupForm {
         } else {
             setButtonBarVisible(false);
         }
+        disableUserClose = !!disable_user_close;
     }
 
     function setTwoButtonText(leftText, rightText) {
