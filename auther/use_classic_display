@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Older version of the sombrero printer use a screen where the capacitive
+# touch panel and the RGB panel are aligned. The entire display was upside down
+# though and required us to apply a 180 degree rotation to the screen. Newer
+# versions of the display have the touch and RGB panels rotated 180 degrees
+# from each other. Also, the RGB panel is now upright so we no longer need to
+# rotate the display.
+
+# This script should be run on bots with older displays.
+
+# delete the line containing the string QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS
+sed -i '/QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS/d' /usr/lib/systemd/system/morepork_ui.service
+
+# modifiy the execution command to pass an argument for rotating the display 180 degress
+sed -i '/ExecStart=\/usr\/bin\/morepork_ui/c\ExecStart=\/usr\/bin\/morepork_ui --rotate_display_180' /usr/lib/systemd/system/morepork_ui.service
+
+# since we modified the systemd service file on disk, we need to call...
+systemctl daemon-reload
+
+# now restart the service, which will restart the ui
+systemctl restart morepork_ui
+
