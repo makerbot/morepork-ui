@@ -1,5 +1,4 @@
 // Copyright 2017 MakerBot Industries
-
 #include <memory>
 
 #include <QDebug>
@@ -8,6 +7,7 @@
 #include <QQmlContext>
 
 #include "ui_translator.h"
+#include "logger.h"
 
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
@@ -18,10 +18,13 @@
 #include "host/host_model.h"
 #define MOREPORK_UI_QML_MAIN QUrl("qrc:/host/host_main.qml")
 #define MOREPORK_BOT_MODEL makeHostBotModel()
+#define MOREPORK_LOGGER makeLogger()
 #else
 #include "model_impl/kaiten_bot_model.h"
+#include "model_impl/bot_logger.h"
 #define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/MoreporkUI.qml"
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
+#define MOREPORK_LOGGER makeBotLogger()
 #endif
 #include "parsed_qml_enums.h"
 #include "storage/storage.h"
@@ -48,6 +51,10 @@ int main(int argc, char ** argv) {
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("cpUiTr", (QObject*)&ui_trans);
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
+
+    QScopedPointer<Logger, QScopedPointerDeleteLater> log(MOREPORK_LOGGER);
+    engine.rootContext()->setContextProperty("log", log.data());
+
     qmlRegisterType<PrintFileInfo>("PrintFileObject", 1, 0, "PrintFileInfo");
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
@@ -57,6 +64,7 @@ int main(int argc, char ** argv) {
     // There is an update lag for the robot when performing
     // rotations from c++. Better to have the UI flipped for
     // the robot by default from qml.
+
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
     QObject *rootObject = engine.rootObjects().first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
