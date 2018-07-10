@@ -54,20 +54,14 @@ int main(int argc, char ** argv) {
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
 
-    // So, basically, our UI is upside down when the one
-    // is compared on the bot, to that of test in qtcreator.
-    // So, that correction is done here
-    // There is an update lag for the robot when performing
-    // rotations from c++. Better to have the UI flipped for
-    // the robot by default from qml.
-#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+
     QObject *rootObject = engine.rootObjects().first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
-    if (qmlObject)
-        qmlObject->setProperty("rotation", 0);
-    else
-        qCritical() << "Cannot find morepork_main_qml";
-#endif
+    if(argc > 1 && std::string(argv[1]) == "--rotate_display_180")
+        if (qmlObject)
+            qmlObject->setProperty("rotation", 180);
+        else
+            qCritical() << "Cannot find morepork_main_qml";
 
     return qapp.exec();
 }
