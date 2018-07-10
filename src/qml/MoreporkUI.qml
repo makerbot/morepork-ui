@@ -147,7 +147,7 @@ ApplicationWindow {
     Item {
         id: rootItem
         smooth: false
-        rotation: 180
+        rotation: 0
         anchors.fill: parent
         objectName: "morepork_main_qml"
         z: 0
