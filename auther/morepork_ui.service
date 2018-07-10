@@ -5,6 +5,7 @@ StartLimitBurst=2
 
 [Service]
 Environment=QT_QPA_EGLFS_INTEGRATION=none
+Environment=QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="rotate=180"
 Type=simple
 ExecStart=/usr/bin/morepork_ui
 StandardOutput=null
