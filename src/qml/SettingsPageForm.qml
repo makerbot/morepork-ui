@@ -52,6 +52,10 @@ Item {
 
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = settingsSwipeView.currentIndex
+            if (prevIndex == itemToDisplayDefaultIndex) {
+                return;
+            }
+
             settingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             setCurrentItem(settingsSwipeView.itemAt(itemToDisplayDefaultIndex))
             settingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)

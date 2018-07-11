@@ -53,6 +53,7 @@ set(SOURCES
     model/net_model.cpp
     model/process_model.cpp
     model/logger.cpp
+    model/network.cpp
     storage/storage.cpp)
 
 # These are not used QtCreator build
@@ -76,6 +77,7 @@ set(MOREPORK_UI_HEADERS
     model/bot_model.h
     model/net_model.h
     model/process_model.h
+    model/network.h
     storage/storage.h)
 
 if(NOT ${QT_CREATOR_BUILD})

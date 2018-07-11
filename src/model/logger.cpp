@@ -6,7 +6,7 @@ Logger::Logger() {
 }
 
 void Logger::info(QString msg) {
-    qDebug() << msg;
+    qInfo() << msg;
 }
 
 class DummyLogger : public Logger {

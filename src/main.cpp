@@ -8,6 +8,7 @@
 
 #include "ui_translator.h"
 #include "logger.h"
+#include "network.h"
 
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
@@ -54,6 +55,10 @@ int main(int argc, char ** argv) {
 
     QScopedPointer<Logger, QScopedPointerDeleteLater> log(MOREPORK_LOGGER);
     engine.rootContext()->setContextProperty("log", log.data());
+
+    QScopedPointer<Network, QScopedPointerDeleteLater> network(
+            new Network(engine.networkAccessManager()));
+    engine.rootContext()->setContextProperty("network", network.data());
 
     qmlRegisterType<PrintFileInfo>("PrintFileObject", 1, 0, "PrintFileInfo");
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);

@@ -76,6 +76,14 @@ SignInPageForm {
     authorizeButton {
         button_mouseArea.onClicked: {
             var password = passwordField.text;
+
+            // Not sure if we want to switch back to using this (and get rid of
+            // the Network class that we're using as a workaround) if we're able
+            // to get this to work on the bot? This seems to be the standard way
+            // of http requests on the qml side...? If we don't care to switch,
+            // then delete all of this.
+
+            /*
             var http = new XMLHttpRequest();
             http.open(
                     "POST",
@@ -103,13 +111,6 @@ SignInPageForm {
                                 http.responseText.split("&")[0].split("=")[1];
                             bot.addMakerbotAccount(username, token);
 
-                            // Soooo, ideally this should wait until we actually
-                            // got a success response back from kaiten first
-                            // before showing the success popup, but I don't
-                            //think we really do that for any other jsonrpc
-                            // calls, and that infrastructure should really be
-                            // codegen'd, so until that happens, it's probably
-                            // okay to just leave this like so..?
                             showSignInSucceededPopup();
                         } catch(err) {
                             console.log(err);
@@ -127,6 +128,36 @@ SignInPageForm {
 
             http.send(data);
             showAuthorizingPopup();
+            */
+
+            // set up signal handlers
+            function getTokenFailed() {
+                showSignInFailedPopup();
+                disconnectGetTokenHandlers();
+            }
+            function getTokenSucceeded(token) {
+                bot.addMakerbotAccount(username, token);
+
+                // Soooo, ideally this should wait until we actually
+                // got a success response back from kaiten first
+                // before showing the success popup, but I don't
+                // think we really do that for any other jsonrpc
+                // calls, and that infrastructure should really be
+                // codegen'd, so until that happens, it's probably
+                // okay to just leave this like so..?
+                showSignInSucceededPopup();
+                disconnectGetTokenHandlers();
+            }
+            function disconnectGetTokenHandlers() {
+                network.onGetMakerBotTokenFailed.disconnect(getTokenFailed);
+                network.onGetMakerBotTokenFinished.disconnect(getTokenSucceeded);
+            }
+
+            network.onGetMakerBotTokenFailed.connect(getTokenFailed);
+            network.onGetMakerBotTokenFinished.connect(getTokenSucceeded);
+
+            showAuthorizingPopup();
+            network.GetMakerBotToken(username, password);
         }
     }
 }

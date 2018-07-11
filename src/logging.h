@@ -13,11 +13,21 @@
 #ifndef __FILENAME__
 #define __FILENAME__ __FILE__
 #endif
+
+// (dump everything into qtcreator console if qtcreator build)
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+#define LOG(level) \
+    qInfo() << "[" << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "] "
+#define TELEM(level) \
+    qInfo() << "[" << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "] "\
+            << "[TELEM] "
+#else
 #define LOG(level) \
     BOOST_LOG_SEV(Logging::GeneralLog(), boost::log::trivial::level) << "["\
     << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "] "
 #define TELEM(level) \
     BOOST_LOG_SEV(Logging::TelemetryLog(), boost::log::trivial::level)
+#endif
 
 namespace Logging {
     typedef boost::log::sources
