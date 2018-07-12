@@ -35,9 +35,6 @@ if(NOT ${QT_CREATOR_BUILD})
       chrono
     )
     add_definitions(-DHAVE_LIBTINYTHING)
-    add_definitions(-DBOOST_TEST_DYN_LINK)
-    add_definitions(-DBOOST_TEST_MAIN)
-    add_definitions(-DMB_TESTING_ENABLED)
 endif()
 
 # Build root installs the qt5 cmake configs to staging
