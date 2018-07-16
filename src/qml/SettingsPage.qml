@@ -33,6 +33,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(5)
     }
 
+    buttonAccounts.onClicked: {
+        settingsSwipeView.swipeToItem(7)
+    }
+
     buttonAdvancedInfo.onClicked: {
         settingsSwipeView.swipeToItem(6)
     }

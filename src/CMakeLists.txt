@@ -21,6 +21,19 @@ if(NOT ${QT_CREATOR_BUILD})
     find_package(JsonCpp REQUIRED)
     find_package(JsonRpc REQUIRED)
     find_package(TinyThing REQUIRED)
+    find_package(Boost
+      REQUIRED
+      CONFIG
+      COMPONENTS
+      log
+      log_setup
+      system
+      filesystem
+      date_time
+      regex
+      thread
+      chrono
+    )
     add_definitions(-DHAVE_LIBTINYTHING)
 endif()
 
@@ -36,25 +49,32 @@ set(SOURCES
     model/bot_model.cpp
     model/net_model.cpp
     model/process_model.cpp
+    model/logger.cpp
+    model/network.cpp
     storage/storage.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
+    logging.cpp
     model_impl/kaiten_net_model.cpp
     model_impl/kaiten_process_model.cpp
     model_impl/kaiten_bot_model.cpp
     model_impl/local_jsonrpc.cpp
+    model_impl/bot_logger.cpp
     storage/makerbot_file_meta_reader.cpp)
 
 # automoc cannot be reliably used when it relies
 # on a dynamic header (ie. enum_parser)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} model model_impl)
 set(MOREPORK_UI_HEADERS
+    logging.h
     ui_translator.h
     model/base_model.h
+    model/logger.h
     model/bot_model.h
     model/net_model.h
     model/process_model.h
+    model/network.h
     storage/storage.h)
 
 if(NOT ${QT_CREATOR_BUILD})
@@ -109,9 +129,23 @@ add_executable(morepork_ui
 target_link_libraries(morepork_ui
     Qt5::Core
     Qt5::Quick
-    Qt5::Multimedia)
+    Qt5::Multimedia
+)
+
 if(NOT ${QT_CREATOR_BUILD})
-    target_link_libraries(morepork_ui JsonRpc::jsonrpc TinyThing::tinything)
+    target_link_libraries(morepork_ui
+        JsonRpc::jsonrpc
+        TinyThing::tinything
+        Boost::log
+        Boost::log_setup
+        Boost::system
+        Boost::filesystem
+        Boost::regex
+        Boost::date_time
+        Boost::thread
+        Boost::chrono
+        pthread
+      )
 else()
     if(${HAVE_LIBTINYTHING})
         target_link_libraries(morepork_ui JsonCpp::jsoncpp TinyThing::tinything)
@@ -137,4 +171,3 @@ endif()
 
 # Read qml qrc file, parse out all qml file names, and install them
 add_subdirectory(qml)
-

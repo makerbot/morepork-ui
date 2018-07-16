@@ -64,5 +64,11 @@
         <file>WiFiButton.qml</file>
         <file>WiFiButtonForm.qml</file>
         <file>WiFiPage.qml</file>
+        <file>SignInPage.qml</file>
+        <file>SignInPageForm.qml</file>
+        <file>ModalPopup.qml</file>
+        <file>ModalPopupForm.qml</file>
+        <file>TitleText.qml</file>
+        <file>BodyText.qml</file>
     </qresource>
 </RCC>
