@@ -7,16 +7,16 @@
 # from each other. Also, the RGB panel is now upright so we no longer need to
 # rotate the display.
 
-# This script creates the file /home/use_classic_display.blank
+# This script creates the file /home/use_new_display.blank
 
 # The pressence of the above file is cheked by both
-# morepork_ui_classic_display.service and morepork_ui.service. If the file
-# exists, morepork_ui_classic_display.service will start the UI with the
+# morepork_ui_new_display.service and morepork_ui.service. If the file
+# exists, morepork_ui_new_display.service will start the UI with the
 # --rotate_display_180 option. If the file does not exist, morepork_ui.service
 # will start the UI with no rotation option, but will include an environment
 # variable that rotates only the capactive touch input.
 
-touch /home/use_classic_display.blank
+touch /home/use_new_display.blank
 
 systemctl stop morepork_ui
-systemctl restart morepork_ui_classic_display
+systemctl restart morepork_ui_new_display

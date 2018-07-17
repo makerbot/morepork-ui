@@ -54,7 +54,6 @@ int main(int argc, char ** argv) {
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
 
-
     QObject *rootObject = engine.rootObjects().first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
     if(argc > 1 && std::string(argv[1]) == "--rotate_display_180")

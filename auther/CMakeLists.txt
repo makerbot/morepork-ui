@@ -26,7 +26,7 @@ endfunction()
 
 install_disabled_service(auther.service)
 install_enabled_service(morepork_ui.service)
-install_enabled_service(morepork_ui_classic_display.service)
+install_enabled_service(morepork_ui_new_display.service)
 
-install(PROGRAMS use_classic_display DESTINATION ${BIN_INSTALL_DIR})
+install(PROGRAMS use_new_display DESTINATION ${BIN_INSTALL_DIR})
 

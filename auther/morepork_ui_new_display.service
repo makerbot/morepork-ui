@@ -1,13 +1,14 @@
 [Unit]
-Description=Qt UI for Sombrero Printers (with classic display)
-ConditionPathExists=/home/use_classic_display.blank
+Description=Qt UI for Sombrero Printers (with new display)
+ConditionPathExists=/home/use_new_display.blank
 StartLimitIntervalSec=10000
 StartLimitBurst=2
 
 [Service]
 Environment=QT_QPA_EGLFS_INTEGRATION=none
+Environment=QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="rotate=180"
 Type=simple
-ExecStart=/usr/bin/morepork_ui --rotate_display_180
+ExecStart=/usr/bin/morepork_ui
 StandardOutput=null
 Restart=on-abort
 RestartSec=5
