@@ -17,6 +17,7 @@ Item {
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
     property alias buttonWiFi: buttonWiFi
+    property alias buttonAccounts: buttonAccounts
     property alias buttonAdvancedInfo: buttonAdvancedInfo
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
@@ -54,6 +55,10 @@ Item {
 
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = settingsSwipeView.currentIndex
+            if (prevIndex == itemToDisplayDefaultIndex) {
+                return;
+            }
+
             settingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             setCurrentItem(settingsSwipeView.itemAt(itemToDisplayDefaultIndex))
             settingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
@@ -174,6 +179,16 @@ Item {
                         id: buttonAdvancedInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "ADVANCED INFO"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonAccounts
+                        buttonImage.source: "qrc:/img/icon_authorize_account.png"
+                        buttonText.text: "AUTHORIZE MAKERBOT ACCOUNT"
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -350,6 +365,18 @@ Item {
 
             AdvancedInfo {
 
+            }
+        }
+
+        //settingsSwipeView.index = 7
+        Item {
+            id: accountsItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            SignInPage {
             }
         }
     }

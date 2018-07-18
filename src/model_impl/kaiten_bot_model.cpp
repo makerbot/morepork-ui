@@ -45,6 +45,7 @@ class KaitenBotModel : public BotModel {
     void connectWifi(QString path, QString password, QString name);
     void disconnectWifi(QString path);
     void forgetWifi(QString path);
+    void addMakerbotAccount(QString username, QString makerbot_token);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -528,6 +529,23 @@ void KaitenBotModel::forgetWifi(QString path) {
         Json::Value json_params(Json::objectValue);
         json_params["path"] = Json::Value(path.toStdString());
         conn->jsonrpc.invoke("wifi_forget", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::addMakerbotAccount(QString username, QString makerbot_token) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["username"] = Json::Value(username.toStdString());
+        json_params["makerbot_token"] = Json::Value(makerbot_token.toStdString());
+        conn->jsonrpc.invoke(
+                "add_makerbot_account",
+                json_params,
+                std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
