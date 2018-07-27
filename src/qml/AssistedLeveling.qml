@@ -5,7 +5,8 @@ AssistedLevelingForm {
     startDoneButton {
         button_mouseArea.onClicked: {
             if(!startDoneButton.disable_button) {
-                if(state == "leveling_complete") {
+                if(state == "leveling_complete" ||
+                   state == "leveling_failed") {
                     processDone()
                 }
                 else {
@@ -50,5 +51,15 @@ AssistedLevelingForm {
                 }
             }
         }
+    }
+
+    cancelLeveling.onClicked: {
+        bot.cancel()
+        state = "cancelling"
+        cancelAssistedLevelingPopup.close()
+    }
+
+    continueLeveling.onClicked: {
+        cancelAssistedLevelingPopup.close()
     }
 }
