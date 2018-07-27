@@ -9,6 +9,9 @@ Item {
     width: 800
     height: 440
     smooth: false
+    property alias cancelLeveling: cancel_mouseArea
+    property alias continueLeveling: continue_mouseArea
+    property alias cancelAssistedLevelingPopup: cancelAssistedLevelingPopup
     property alias startDoneButton: startDoneButton
     property alias acknowledgeLevelButton: acknowledgeLevelButton
     property int currentHES
@@ -16,6 +19,7 @@ Item {
     property int targetHESLower
     signal processDone
 
+    property bool hasFailed: bot.process.errorCode !== 0
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
         // Conditions to move to appropriate UI states
@@ -26,11 +30,28 @@ Item {
                     state = "unlock_knob"
                     break;
                 case ProcessStateType.LevelingComplete:
-                    state = "leveling_complete"
+                    if(state != "leveling_failed" &&
+                       state != "cancelling") {
+                        state = "leveling_complete"
+                    }
+                    break;
+                case ProcessStateType.Cancelling:
+                    state = "cancelling"
                     break;
                 default:
                     break;
             }
+        }
+        else if(bot.process.type == ProcessType.None) {
+            if(state == "cancelling") {
+                processDone()
+            }
+        }
+    }
+
+    onHasFailedChanged: {
+        if(bot.process.type == ProcessType.AssistedLeveling) {
+            state = "leveling_failed"
         }
     }
 
@@ -593,6 +614,256 @@ Item {
                 target: levelingDirections
                 visible: false
             }
+        },
+        State {
+            name: "leveling_failed"
+            PropertyChanges {
+                target: header_image
+                anchors.leftMargin: 80
+                source: "qrc:/img/error.png"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: title
+                width: 390
+                text: "ASSISTED LEVELING FAILED"
+                font.pixelSize: 25
+                anchors.topMargin: 55
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: ""
+            }
+
+            PropertyChanges {
+                target: startDoneButton
+                disable_button: false
+                buttonWidth: 100
+                anchors.topMargin: "-10"
+                label: "DONE"
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: levelingDirections
+                visible: false
+            }
+
+            PropertyChanges {
+                target: mainItem
+                anchors.leftMargin: 40
+            }
+        },
+        State {
+            name: "cancelling"
+            PropertyChanges {
+                target: header_image
+                anchors.leftMargin: 80
+                source: "qrc:/img/error.png"
+                visible: false
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                visible: true
+            }
+
+            PropertyChanges {
+                target: processText
+                text: "CANCELLING LEVELING"
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: ""
+            }
+
+            PropertyChanges {
+                target: levelingDirections
+                visible: false
+            }
         }
     ]
+
+    Popup {
+        id: cancelAssistedLevelingPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        parent: overlay
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        Rectangle {
+            id: basePopupItem
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 220
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Item {
+                id: buttonBar
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: cancel_rectangle
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: cancel_leveling_text
+                        color: "#ffffff"
+                        text: "CANCEL LEVELING"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: cancel_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            cancel_leveling_text.color = "#000000"
+                            cancel_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            cancel_leveling_text.color = "#ffffff"
+                            cancel_rectangle.color = "#00000000"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: continue_rectangle
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: continue_leveling_text
+                        color: "#ffffff"
+                        text: "CONTINUE LEVELING"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: continue_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            continue_leveling_text.color = "#000000"
+                            continue_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            continue_leveling_text.color = "#ffffff"
+                            continue_rectangle.color = "#00000000"
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout
+                width: 590
+                height: 100
+                anchors.top: parent.top
+                anchors.topMargin: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: cancel_text
+                    color: "#cbcbcb"
+                    text: "CANCEL ASSISTED LEVELING"
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: cancel_description_text
+                    color: "#cbcbcb"
+                    text: "Are you sure you want to cancel the leveling process?"
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: "Antennae"
+                    font.pixelSize: 18
+                    lineHeight: 1.3
+                }
+            }
+        }
+    }
 }

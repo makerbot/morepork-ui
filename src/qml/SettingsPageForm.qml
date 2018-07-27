@@ -281,18 +281,26 @@ Item {
             visible: false
 
             function altBack() {
-                bot.cancel()
-                settingsSwipeView.swipeToItem(0)
+                if(bot.process.type == ProcessType.AssistedLeveling) {
+                    assistedLevel.cancelAssistedLevelingPopup.open()
+                }
+                else {
+                    assistedLevel.state = "base state"
+                    settingsSwipeView.swipeToItem(0)
+                }
             }
 
             AssistedLeveling {
+                id: assistedLevel
                 currentHES: bot.process.currentHes
                 targetHESLower: bot.process.targetHesLower
                 targetHESUpper: bot.process.targetHesUpper
 
                 onProcessDone: {
                     state = "base state"
-                    settingsSwipeView.swipeToItem(0)
+                    if(settingsSwipeView.currentIndex != 0) {
+                        settingsSwipeView.swipeToItem(0)
+                    }
                 }
             }
         }
