@@ -17,8 +17,9 @@ Item {
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
     property alias buttonWiFi: buttonWiFi
-    property alias buttonAccounts: buttonAccounts
     property alias buttonAdvancedInfo: buttonAdvancedInfo
+    property alias buttonAccounts: buttonAccounts
+    property alias buttonSpoolInfo: buttonSpoolInfo
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
     property bool isResetting: false
@@ -28,6 +29,7 @@ Item {
     property alias wifiPage: wifiPage
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
+    property alias spoolInfoPage: spoolInfoPage
 
     smooth: false
     Timer {
@@ -189,6 +191,16 @@ Item {
                         id: buttonAccounts
                         buttonImage.source: "qrc:/img/icon_authorize_account.png"
                         buttonText.text: "AUTHORIZE MAKERBOT ACCOUNT"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonSpoolInfo
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "SPOOL INFO"
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -377,6 +389,19 @@ Item {
             visible: false
 
             SignInPage {
+            }
+        }
+
+        //settingsSwipeView.index = 8
+        Item {
+            id: spoolInfoItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            SpoolInfoPage {
+                id: spoolInfoPage
             }
         }
     }

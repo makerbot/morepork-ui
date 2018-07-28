@@ -55,6 +55,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void connectWifi(QString path, QString password, QString name);
     Q_INVOKABLE virtual void forgetWifi(QString path);
     Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
+    Q_INVOKABLE virtual void getSpoolInfo(const int bayIndex);
 
   private:
     Q_OBJECT
@@ -96,6 +97,23 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBFilamentPresent, false)
     MODEL_PROP(bool, filamentBayATagPresent, false)
     MODEL_PROP(bool, filamentBayBTagPresent, false)
+
+    MODEL_PROP(int, spoolAOriginalAmount, 0)
+    MODEL_PROP(int, spoolBOriginalAmount, 0)
+    MODEL_PROP(int, spoolAVersion, 0)
+    MODEL_PROP(int, spoolBVersion, 0)
+    MODEL_PROP(int, spoolAManufacturingLotCode, 0)
+    MODEL_PROP(int, spoolBManufacturingLotCode, 0)
+    MODEL_PROP(int, spoolASupplierCode, 0)
+    MODEL_PROP(int, spoolBSupplierCode, 0)
+    MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>())
+    MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>())
+    MODEL_PROP(QString, spoolAMaterial, "Unknown")
+    MODEL_PROP(QString, spoolBMaterial, "Unknown")
+    MODEL_PROP(int, spoolAManufacturingDate, 0)
+    MODEL_PROP(int, spoolBManufacturingDate, 0)
+    MODEL_PROP(int, spoolAChecksum, 0)
+    MODEL_PROP(int, spoolBChecksum, 0)
 
     // Advanced Info Properties
     // Chamber

@@ -46,6 +46,8 @@ class KaitenBotModel : public BotModel {
     void disconnectWifi(QString path);
     void forgetWifi(QString path);
     void addMakerbotAccount(QString username, QString makerbot_token);
+    void getSpoolInfo(const int bayIndex);
+    void spoolUpdate(const Json::Value & res, const int bayIndex);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -114,7 +116,7 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<AuthRequestMethod> m_authReq;
-  
+
     class FirmwareUpdateNotification : public JsonRpcNotification {
       public:
         FirmwareUpdateNotification(KaitenBotModel * bot) : m_bot(bot) {}
@@ -149,7 +151,7 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<PrintFileUpdate> m_prtFileVld;
-  
+
     class AssistedLevelNotification : public JsonRpcNotification {
       public:
         AssistedLevelNotification(KaitenBotModel * bot) : m_bot(bot) {}
@@ -215,6 +217,20 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<WifiUpdateCallback> m_wifiCb;
+
+    class SpoolInfoCallback : public JsonRpcCallback {
+      public:
+        SpoolInfoCallback(KaitenBotModel * bot, const int bayIndex)
+                : m_bot(bot),
+                  m_index(bayIndex) {}
+        void response(const Json::Value & resp) override {
+            m_bot->spoolUpdate(resp, m_index);
+        }
+      private:
+        const int m_index;
+        KaitenBotModel *m_bot;
+    };
+    std::vector<std::shared_ptr<SpoolInfoCallback> > m_spoolInfoCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -552,6 +568,22 @@ void KaitenBotModel::addMakerbotAccount(QString username, QString makerbot_token
     }
 }
 
+void KaitenBotModel::getSpoolInfo(const int bayIndex){
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["bay_index"] = Json::Value(bayIndex);
+      conn->jsonrpc.invoke(
+              "get_spool_info",
+              json_params,
+              m_spoolInfoCb[bayIndex]);
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -567,7 +599,11 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_queryStatusNot(new QueryStatusNotification(this)),
         m_queryStatusCb(new QueryStatusCallback(this)),
         m_wifiResult(new WifiUpdateResult(this)),
-        m_wifiCb(new WifiUpdateCallback(this)) {
+        m_wifiCb(new WifiUpdateCallback(this)),
+        m_spoolInfoCb{std::shared_ptr<SpoolInfoCallback>(
+                              new SpoolInfoCallback(this, 0)),
+                      std::shared_ptr<SpoolInfoCallback>(
+                              new SpoolInfoCallback(this, 1))} {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -645,6 +681,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(filamentBayAHumidity, kBay["humidity"]);
             filamentBayAFilamentPresentSet(kBay["filament_present"].asBool());
             filamentBayATagPresentSet(kBay["tag_present"].asBool());
+            if (kBay.isMember("tag_uid")) {
+                UPDATE_STRING_PROP(infoBay1TagUID, kBay["tag_uid"]);
+            }
           }
         }
         if(kFilamentBay.size() > 1){
@@ -654,6 +693,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(filamentBayBHumidity, kBay["humidity"]);
             filamentBayBFilamentPresentSet(kBay["filament_present"].asBool());
             filamentBayBTagPresentSet(kBay["tag_present"].asBool());
+            if (kBay.isMember("tag_uid")) {
+                UPDATE_STRING_PROP(infoBay2TagUID, kBay["tag_uid"]);
+            }
           }
         }
       }
@@ -706,6 +748,34 @@ void KaitenBotModel::assistedLevelUpdate(const Json::Value &status) {
 
 void KaitenBotModel::wifiUpdate(const Json::Value &result) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->wifiUpdate(result);
+}
+
+void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
+    // :(
+    switch(index) {
+        case 0: {
+            UPDATE_INT_PROP(spoolAOriginalAmount, result["original_amount"]);
+            UPDATE_INT_PROP(spoolAVersion, result["version"]);
+            UPDATE_INT_PROP(spoolAManufacturingLotCode, result["manufacturing_lot_code"]);
+            UPDATE_INT_PROP(spoolAManufacturingDate, result["manufacturing_date"]);
+            UPDATE_INT_PROP(spoolASupplierCode, result["supplier_code"]);
+            UPDATE_STRING_PROP(spoolAMaterial, result["material_type"]);
+            UPDATE_INT_PROP(spoolAChecksum, result["checksum"]);
+            UPDATE_INT_LIST_PROP(spoolAColorRGB, result["material_color"]);
+            break;
+        }
+        case 1: {
+            UPDATE_INT_PROP(spoolBOriginalAmount, result["original_amount"]);
+            UPDATE_INT_PROP(spoolBVersion, result["version"]);
+            UPDATE_INT_PROP(spoolBManufacturingLotCode, result["manufacturing_lot_code"]);
+            UPDATE_INT_PROP(spoolBManufacturingDate, result["manufacturing_date"]);
+            UPDATE_INT_PROP(spoolBSupplierCode, result["supplier_code"]);
+            UPDATE_STRING_PROP(spoolBMaterial, result["material_type"]);
+            UPDATE_INT_PROP(spoolBChecksum, result["checksum"]);
+            UPDATE_INT_LIST_PROP(spoolBColorRGB, result["material_color"]);
+            break;
+        }
+    }
 }
 
 void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {

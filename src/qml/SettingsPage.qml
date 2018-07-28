@@ -33,12 +33,17 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(5)
     }
 
+    buttonAdvancedInfo.onClicked: {
+        settingsSwipeView.swipeToItem(6)
+    }
+
     buttonAccounts.onClicked: {
         settingsSwipeView.swipeToItem(7)
     }
 
-    buttonAdvancedInfo.onClicked: {
-        settingsSwipeView.swipeToItem(6)
+    buttonSpoolInfo.onClicked: {
+        settingsSwipeView.swipeToItem(8)
+        spoolInfoPage.init();
     }
 
     buttonResetToFactory.onClicked: {
