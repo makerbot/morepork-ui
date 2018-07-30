@@ -43,6 +43,7 @@ SettingsPageForm {
 
     buttonSpoolInfo.onClicked: {
         settingsSwipeView.swipeToItem(8)
+        // TODO(shirley): is there a better place to call this?
         spoolInfoPage.init();
     }
 

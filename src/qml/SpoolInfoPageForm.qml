@@ -13,6 +13,37 @@ Item {
     anchors.leftMargin: 40
     anchors.rightMargin: 40
 
+    RoundedButton {
+        id: roundedButton
+        x: 600
+        y: 288
+        buttonWidth: 120
+        buttonHeight: 120
+        button_text.visible: false
+        Image {
+            id: img
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: "qrc:/img/refresh.png"
+            width: sourceSize.width
+            height: sourceSize.height
+        }
+
+        button_mouseArea.onClicked: {
+            bot.getSpoolInfo(0)
+            bot.getSpoolInfo(1)
+        }
+
+        button_mouseArea.onPressed: {
+            img.source = "qrc:/img/refresh_black.png"
+        }
+
+        button_mouseArea.onReleased: {
+            img.source = "qrc:/img/refresh.png"
+        }
+
+    }
+
     RowLayout {
         anchors.fill: parent
 

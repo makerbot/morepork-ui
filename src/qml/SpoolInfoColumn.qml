@@ -7,14 +7,20 @@ SpoolInfoColumnForm {
         title.text = index ? "SPOOL B/2" : "SPOOL A/1";
         var name = index ? "spoolB" : "spoolA";
 
+        // UID (doesn't follow the 'spoolA/spoolB' naming convention)
+        var uidKey = keyItem.createObject(keys);
+        uidKey.text = "UID";
+        var uidVal = valItem.createObject(vals);
+        uidVal.key = "infoBay%1TagUID".arg(index+1);
+
         var properties = [
-            {
-                key: "infoBay%1TagUID".arg(index+1),
-                displayString: "UID",
-            },
             {
                 key: "Material",
                 displayString: "MATERIAL",
+            },
+            {
+                key: "ColorName",
+                displayString: "COLOR NAME",
             },
             {
                 key: "ColorRGB",
@@ -92,10 +98,15 @@ SpoolInfoColumnForm {
         }
 
         // connect tag change signal
+        // TODO(shirley): I think this ends up getting called before the
+        // get_spool_info cache is ready, so it gets a result of
+        // { "tag_uid": null } ... For now, there's a refresh button.
+        /*
         var spoolUIDchangedSignal = "onInfoBay%1TagUIDChanged".arg(index+1);
         bot[spoolUIDchangedSignal].connect(function() {
             bot.getSpoolInfo(index);
         });
+        */
 
         initialized = true;
     }

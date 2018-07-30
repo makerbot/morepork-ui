@@ -751,41 +751,45 @@ void KaitenBotModel::wifiUpdate(const Json::Value &result) {
 }
 
 void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
+    const Json::Value & res = result["result"];
+
     // :(
     switch(index) {
         case 0: {
-            UPDATE_INT_PROP(spoolAOriginalAmount, result["original_amount"]);
-            UPDATE_INT_PROP(spoolAVersion, result["version"]);
-            UPDATE_INT_PROP(spoolAManufacturingLotCode, result["manufacturing_lot_code"]);
-            UPDATE_INT_PROP(spoolAManufacturingDate, result["manufacturing_date"]);
-            UPDATE_INT_PROP(spoolASupplierCode, result["supplier_code"]);
-            UPDATE_STRING_PROP(spoolAMaterial, result["material_type"]);
-            UPDATE_INT_PROP(spoolAChecksum, result["checksum"]);
-            UPDATE_INT_LIST_PROP(spoolAColorRGB, result["material_color"]);
-            UPDATE_INT_PROP(spoolAChecksum, result["checksum"]);
+            UPDATE_INT_PROP(spoolAOriginalAmount, res["original_amount"]);
+            UPDATE_INT_PROP(spoolAVersion, res["version"]);
+            UPDATE_INT_PROP(spoolAManufacturingLotCode, res["manufacturing_lot_code"]);
+            UPDATE_INT_PROP(spoolAManufacturingDate, res["manufacturing_date"]);
+            UPDATE_STRING_PROP(spoolASupplierCode, res["supplier_code"]);
+            UPDATE_INT_PROP(spoolAMaterial, res["material_type"]);
+            UPDATE_INT_PROP(spoolAChecksum, res["checksum"]);
+            UPDATE_INT_LIST_PROP(spoolAColorRGB, res["material_color_rgb"]);
+            UPDATE_STRING_PROP(spoolAColorName, res["material_color_name"]);
+            UPDATE_INT_PROP(spoolAChecksum, res["checksum"]);
 
-            UPDATE_INT_PROP(spoolAAmountRemaining, result["amount_remaining"]);
-            UPDATE_INT_PROP(spoolAFirstLoadDate, result["first_load_date"]);
-            UPDATE_INT_PROP(spoolAMaxHumidity, result["max_humidity"]);
-            UPDATE_INT_PROP(spoolAMaxTemperature, result["max_temperature"]);
-            UPDATE_INT_PROP(spoolASchemaVersion, result["schema_version"]);
+            UPDATE_INT_PROP(spoolAAmountRemaining, res["amount_remaining"]);
+            UPDATE_INT_PROP(spoolAFirstLoadDate, res["first_load_date"]);
+            UPDATE_INT_PROP(spoolAMaxHumidity, res["max_humidity"]);
+            UPDATE_INT_PROP(spoolAMaxTemperature, res["max_temperature"]);
+            UPDATE_INT_PROP(spoolASchemaVersion, res["rw_version"]);
             break;
         }
         case 1: {
-            UPDATE_INT_PROP(spoolBOriginalAmount, result["original_amount"]);
-            UPDATE_INT_PROP(spoolBVersion, result["version"]);
-            UPDATE_INT_PROP(spoolBManufacturingLotCode, result["manufacturing_lot_code"]);
-            UPDATE_INT_PROP(spoolBManufacturingDate, result["manufacturing_date"]);
-            UPDATE_INT_PROP(spoolBSupplierCode, result["supplier_code"]);
-            UPDATE_STRING_PROP(spoolBMaterial, result["material_type"]);
-            UPDATE_INT_PROP(spoolBChecksum, result["checksum"]);
-            UPDATE_INT_LIST_PROP(spoolBColorRGB, result["material_color"]);
+            UPDATE_INT_PROP(spoolBOriginalAmount, res["original_amount"]);
+            UPDATE_INT_PROP(spoolBVersion, res["version"]);
+            UPDATE_INT_PROP(spoolBManufacturingLotCode, res["manufacturing_lot_code"]);
+            UPDATE_INT_PROP(spoolBManufacturingDate, res["manufacturing_date"]);
+            UPDATE_STRING_PROP(spoolBSupplierCode, res["supplier_code"]);
+            UPDATE_INT_PROP(spoolBMaterial, res["material_type"]);
+            UPDATE_INT_LIST_PROP(spoolBColorRGB, res["material_color_rgb"]);
+            UPDATE_STRING_PROP(spoolBColorName, res["material_color_name"]);
+            UPDATE_INT_PROP(spoolBChecksum, res["checksum"]);
 
-            UPDATE_INT_PROP(spoolBAmountRemaining, result["amount_remaining"]);
-            UPDATE_INT_PROP(spoolBFirstLoadDate, result["first_load_date"]);
-            UPDATE_INT_PROP(spoolBMaxHumidity, result["max_humidity"]);
-            UPDATE_INT_PROP(spoolBMaxTemperature, result["max_temperature"]);
-            UPDATE_INT_PROP(spoolBSchemaVersion, result["schema_version"]);
+            UPDATE_INT_PROP(spoolBAmountRemaining, res["amount_remaining"]);
+            UPDATE_INT_PROP(spoolBFirstLoadDate, res["first_load_date"]);
+            UPDATE_INT_PROP(spoolBMaxHumidity, res["max_humidity"]);
+            UPDATE_INT_PROP(spoolBMaxTemperature, res["max_temperature"]);
+            UPDATE_INT_PROP(spoolBSchemaVersion, res["rw_version"]);
             break;
         }
     }

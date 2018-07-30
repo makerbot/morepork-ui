@@ -104,12 +104,18 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, spoolBVersion, 0)
     MODEL_PROP(int, spoolAManufacturingLotCode, 0)
     MODEL_PROP(int, spoolBManufacturingLotCode, 0)
-    MODEL_PROP(int, spoolASupplierCode, 0)
-    MODEL_PROP(int, spoolBSupplierCode, 0)
+    MODEL_PROP(QString, spoolASupplierCode, "Unknown")
+    MODEL_PROP(QString, spoolBSupplierCode, "Unknown")
     MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>({0,0,0}))
     MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>({0,0,0}))
-    MODEL_PROP(QString, spoolAMaterial, "Unknown")
-    MODEL_PROP(QString, spoolBMaterial, "Unknown")
+    // TODO(shirley): (duplicate with filament1/2Color)
+    MODEL_PROP(QString, spoolAColorName, "Unknown")
+    MODEL_PROP(QString, spoolBColorName, "Unknown")
+
+    // TODO(shirley) Should probably convert to string when mapping of codes to
+    // filament type names is available
+    MODEL_PROP(int, spoolAMaterial, 0)
+    MODEL_PROP(int, spoolBMaterial, 0)
     MODEL_PROP(int, spoolAManufacturingDate, 0)
     MODEL_PROP(int, spoolBManufacturingDate, 0)
     MODEL_PROP(int, spoolAChecksum, 0)
