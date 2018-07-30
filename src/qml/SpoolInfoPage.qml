@@ -7,8 +7,6 @@ SpoolInfoPageForm {
         spoolAInfo.init();
         spoolBInfo.init();
         initialized = true;
-
-        console.log(spoolAInfo.width, spoolAInfo.height);
     }
 }
 

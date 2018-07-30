@@ -762,6 +762,13 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
             UPDATE_STRING_PROP(spoolAMaterial, result["material_type"]);
             UPDATE_INT_PROP(spoolAChecksum, result["checksum"]);
             UPDATE_INT_LIST_PROP(spoolAColorRGB, result["material_color"]);
+            UPDATE_INT_PROP(spoolAChecksum, result["checksum"]);
+
+            UPDATE_INT_PROP(spoolAAmountRemaining, result["amount_remaining"]);
+            UPDATE_INT_PROP(spoolAFirstLoadDate, result["first_load_date"]);
+            UPDATE_INT_PROP(spoolAMaxHumidity, result["max_humidity"]);
+            UPDATE_INT_PROP(spoolAMaxTemperature, result["max_temperature"]);
+            UPDATE_INT_PROP(spoolASchemaVersion, result["schema_version"]);
             break;
         }
         case 1: {
@@ -773,6 +780,12 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
             UPDATE_STRING_PROP(spoolBMaterial, result["material_type"]);
             UPDATE_INT_PROP(spoolBChecksum, result["checksum"]);
             UPDATE_INT_LIST_PROP(spoolBColorRGB, result["material_color"]);
+
+            UPDATE_INT_PROP(spoolBAmountRemaining, result["amount_remaining"]);
+            UPDATE_INT_PROP(spoolBFirstLoadDate, result["first_load_date"]);
+            UPDATE_INT_PROP(spoolBMaxHumidity, result["max_humidity"]);
+            UPDATE_INT_PROP(spoolBMaxTemperature, result["max_temperature"]);
+            UPDATE_INT_PROP(spoolBSchemaVersion, result["schema_version"]);
             break;
         }
     }

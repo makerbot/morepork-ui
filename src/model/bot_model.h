@@ -106,14 +106,25 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, spoolBManufacturingLotCode, 0)
     MODEL_PROP(int, spoolASupplierCode, 0)
     MODEL_PROP(int, spoolBSupplierCode, 0)
-    MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>())
-    MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>())
+    MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>({0,0,0}))
+    MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>({0,0,0}))
     MODEL_PROP(QString, spoolAMaterial, "Unknown")
     MODEL_PROP(QString, spoolBMaterial, "Unknown")
     MODEL_PROP(int, spoolAManufacturingDate, 0)
     MODEL_PROP(int, spoolBManufacturingDate, 0)
     MODEL_PROP(int, spoolAChecksum, 0)
     MODEL_PROP(int, spoolBChecksum, 0)
+
+    MODEL_PROP(int, spoolAAmountRemaining, 0)
+    MODEL_PROP(int, spoolBAmountRemaining, 0)
+    MODEL_PROP(int, spoolAFirstLoadDate, 0)
+    MODEL_PROP(int, spoolBFirstLoadDate, 0)
+    MODEL_PROP(int, spoolAMaxHumidity, 0)
+    MODEL_PROP(int, spoolBMaxHumidity, 0)
+    MODEL_PROP(int, spoolAMaxTemperature, 0)
+    MODEL_PROP(int, spoolBMaxTemperature, 0)
+    MODEL_PROP(int, spoolASchemaVersion, 0)
+    MODEL_PROP(int, spoolBSchemaVersion, 0)
 
     // Advanced Info Properties
     // Chamber

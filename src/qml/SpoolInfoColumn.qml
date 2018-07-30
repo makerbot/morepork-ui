@@ -7,25 +7,88 @@ SpoolInfoColumnForm {
         title.text = index ? "SPOOL B/2" : "SPOOL A/1";
         var name = index ? "spoolB" : "spoolA";
 
-        // TODO: color
-        // UPDATE_INT_LIST_PROP(spoolAColorRGB, result["material_color"]);
+        var properties = [
+            {
+                key: "infoBay%1TagUID".arg(index+1),
+                displayString: "UID",
+            },
+            {
+                key: "Material",
+                displayString: "MATERIAL",
+            },
+            {
+                key: "ColorRGB",
+                displayString: "COLOR",
+                type: "color"
+            },
+            {
+                key: "AmountRemaining",
+                displayString: "AMOUNT REMAINING",
+                unit: "g"
+            },
+            {
+                key: "OriginalAmount",
+                displayString: "ORIGINAL AMOUNT",
+                unit: "g"
+            },
+            {
+                key: "FirstLoadDate",
+                displayString: "FIRST LOAD DATE",
+                type: "date"
+            },
+            {
+              key: "MaxHumidity",
+                displayString: "MAX HUMIDITY",
+                unit: "%"
+            },
+            {
+                key: "MaxTemperature",
+                displayString: "MAX TEMPERATURE",
+                unit: "\u00b0C"
+            },
+            {
+                key: "ManufacturingLotCode",
+                displayString: "MANUFACTURING LOT CODE",
+            },
+            {
+                key: "ManufacturingDate",
+                displayString: "MANUFACTURING DATE",
+                type: "date"
+            },
+            {
+                key: "SupplierCode",
+                displayString: "SUPPLIER CODE",
+            },
+            {
+                key: "Checksum",
+                displayString: "CHECKSUM"
+            },
+            {
+                key: "Version",
+                displayString: "VERSION",
+            },
+            {
+                key: "SchemaVersion",
+                displayString: "SCHEMA VERSION",
+            },
+        ];
 
-        var key_string_map = {
-            "OriginalAmount": "ORIGINAL AMOUNT",
-            "Version": "VERSION",
-            "ManufacturingLotCode": "MANUFACTURING LOT CODE",
-            "ManufacturingDate": "MANUFACTURING DATE",
-            "SupplierCode": "SUPPLIER CODE",
-            "Material": "MATERIAL",
-            "Checksum": "CHECKSUM"
-        }
-
-        for (var key in key_string_map) {
+        for (var idx in properties) {
+            var prop = properties[idx];
             var keyObj = keyItem.createObject(keys);
-            keyObj.text = key_string_map[key];
+            keyObj.text = prop.displayString;
 
-            var valObj = valItem.createObject(vals);
-            valObj.key = name+key;
+            if (prop.type && prop.type === "date") {
+                var valObj = dateValItem.createObject(vals);
+            } else if (prop.type && prop.type === "color") {
+                var valObj = colorItem.createObject(vals);
+            } else {
+                var valObj = valItem.createObject(vals);
+                if (prop.unit) {
+                    valObj.unit = prop.unit;
+                }
+            }
+            valObj.key = name+prop.key;
         }
 
         // connect tag change signal
