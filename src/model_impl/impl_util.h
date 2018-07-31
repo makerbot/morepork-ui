@@ -60,5 +60,18 @@
             PROP ## Reset(); \
     }
 
+#define UPDATE_INT_LIST_PROP(PROP, JSON_VAL) \
+    { \
+        const Json::Value & json_val = JSON_VAL; \
+        if(json_val.isArray()) { \
+            QList<int> l; \
+            for (int i = 0; i < json_val.size(); i++) { \
+                l.append(json_val[i].asInt()); \
+            } \
+            PROP ## Set(l); \
+        } else \
+            PROP ## Reset(); \
+    }
+
 #endif  // _SRC_IMPL_UTIL_H
 

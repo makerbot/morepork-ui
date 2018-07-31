@@ -105,6 +105,10 @@ void BotModel::addMakerbotAccount(QString username, QString makerbot_token) {
              << username << "; " <<  makerbot_token;
 }
 
+void BotModel::getSpoolInfo(const int bayIndex) {
+    qDebug() << FL_STRM << "called with parameter: " << bayIndex;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

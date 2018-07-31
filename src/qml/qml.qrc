@@ -70,5 +70,9 @@
         <file>ModalPopupForm.qml</file>
         <file>TitleText.qml</file>
         <file>BodyText.qml</file>
+        <file>SpoolInfoPage.qml</file>
+        <file>SpoolInfoPageForm.qml</file>
+        <file>SpoolInfoColumn.qml</file>
+        <file>SpoolInfoColumnForm.qml</file>
     </qresource>
 </RCC>

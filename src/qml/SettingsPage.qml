@@ -33,12 +33,18 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(5)
     }
 
+    buttonAdvancedInfo.onClicked: {
+        settingsSwipeView.swipeToItem(6)
+    }
+
     buttonAccounts.onClicked: {
         settingsSwipeView.swipeToItem(7)
     }
 
-    buttonAdvancedInfo.onClicked: {
-        settingsSwipeView.swipeToItem(6)
+    buttonSpoolInfo.onClicked: {
+        settingsSwipeView.swipeToItem(8)
+        // TODO(shirley): is there a better place to call this?
+        spoolInfoPage.init();
     }
 
     buttonResetToFactory.onClicked: {
