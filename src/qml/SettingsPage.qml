@@ -1,5 +1,6 @@
 import QtQuick 2.4
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
 
 SettingsPageForm {
@@ -45,6 +46,40 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(8)
         // TODO(shirley): is there a better place to call this?
         spoolInfoPage.init();
+    }
+
+    buttonCopyLogs.onClicked: {
+        if (buttonCopyLogs.enabled) {
+            var now = new Date();
+            copyingLogsPopup.logBundlePath =
+                    storage.usbStoragePath + "/Logs_" +
+                    now.toString().replace(/[\s,:]/g, "_") +
+                    ".zip";
+            bot.zipLogs(copyingLogsPopup.logBundlePath);
+        }
+
+        if (!copyingLogsPopup.initialized) {
+            bot.process.onStateTypeChanged.connect(function() {
+                if (bot.process.type === ProcessType.ZipLogsProcess) {
+                    copyingLogsPopup.zipLogsInProgress =
+                             bot.process.stateType !== ProcessStateType.Done;
+
+                    var succeeded = !(bot.process.errorCode);
+                    if (bot.process.stateType === ProcessStateType.Done &&
+                            succeeded) {
+                        bot.forceSyncFile(copyingLogsPopup.logBundlePath)
+                    }
+                    copyLogsFinishedPopup.succeeded = succeeded;
+                } else {
+                    copyingLogsPopup.zipLogsInProgress = false;
+                }
+            });
+
+            copyingLogsPopup.onAboutToHide.connect(function() {
+                copyLogsFinishedPopup.open();
+            });
+            copyingLogsPopup.initialized = true;
+        }
     }
 
     buttonResetToFactory.onClicked: {

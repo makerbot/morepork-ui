@@ -18,6 +18,7 @@ class ProcessModel : public BaseModel {
         FirmwareUpdate,
         CalibrationProcess,
         FactoryResetProcess,
+        ZipLogsProcess,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -51,6 +52,7 @@ class ProcessModel : public BaseModel {
         CalibratingToolheads, // Toolhead calibration states
         InstallBuildPlate,
         RemoveBuildPlate,
+        Running
     };
 
     Q_ENUM(ProcessType)

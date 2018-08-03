@@ -21,7 +21,7 @@ Popup {
     dim: false
     focus: true
     width: 720
-    height: 320
+    height: showButtonBar ? 320 : 275
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
     parent: overlay
@@ -44,13 +44,12 @@ Popup {
             NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
     }
 
-    onAboutToHide: {
+    onClosed: {
         showButtonBar = false;
         showTwoButtons = false;
         left_text.text = "";
         right_text.text = "";
         full_button_text.text = "";
-        popup_contents.contentItem = null;
         // TODO: other resetting things
     }
 
@@ -58,8 +57,8 @@ Popup {
         id: basePopupItem
         color: "#000000"
         rotation: rootItem.rotation == 180 ? 180 : 0
-        width: 720
-        height: 320
+        width: popup.width
+        height: popup.height
         radius: 10
         border.width: 2
         border.color: "#ffffff"

@@ -28,7 +28,8 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
 }
 
 
-MoreporkStorage::MoreporkStorage(){
+MoreporkStorage::MoreporkStorage()
+    : usbStoragePath(USB_STORAGE_PATH) {
   storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_->addPath("/dev/disk/by-path");

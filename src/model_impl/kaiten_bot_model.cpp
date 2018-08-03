@@ -2,6 +2,9 @@
 
 #include "kaiten_bot_model.h"
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #include <memory>
 #include <sstream>
 
@@ -10,6 +13,7 @@
 #include "kaiten_process_model.h"
 #include "local_jsonrpc.h"
 #include "error_utils.h"
+#include "logging.h"
 
 class KaitenBotModel : public BotModel {
   public:
@@ -48,6 +52,8 @@ class KaitenBotModel : public BotModel {
     void addMakerbotAccount(QString username, QString makerbot_token);
     void getSpoolInfo(const int bayIndex);
     void spoolUpdate(const Json::Value & res, const int bayIndex);
+    void zipLogs(QString path);
+    void forceSyncFile(QString path);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -584,6 +590,22 @@ void KaitenBotModel::getSpoolInfo(const int bayIndex){
   }
 }
 
+void KaitenBotModel::zipLogs(QString path) {
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["zip_path"] = Json::Value(path.toStdString());
+      conn->jsonrpc.invoke(
+              "zip_logs",
+              json_params,
+              std::weak_ptr<JsonRpcCallback>());
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -919,6 +941,12 @@ void KaitenBotModel::disconnected() {
 
 void KaitenBotModel::timeout() {
     stateSet(ConnectionState::TimedOut);
+}
+
+void KaitenBotModel::forceSyncFile(QString path) {
+    int fd = open(path.toStdString().c_str(), O_APPEND);
+    fsync(fd);
+    close(fd);
 }
 
 BotModel * makeKaitenBotModel(const char * socketpath) {

@@ -30,8 +30,10 @@ class BotModel : public BaseModel {
         Orange,
         Violet
     };
+
     Q_ENUM(ConnectionState)
     Q_ENUM(FilamentColor)
+
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
@@ -56,6 +58,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void forgetWifi(QString path);
     Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
     Q_INVOKABLE virtual void getSpoolInfo(const int bayIndex);
+    Q_INVOKABLE virtual void zipLogs(QString path);
+    Q_INVOKABLE virtual void forceSyncFile(QString path);
 
   private:
     Q_OBJECT

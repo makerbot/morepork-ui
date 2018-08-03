@@ -74,5 +74,6 @@
         <file>SpoolInfoPageForm.qml</file>
         <file>SpoolInfoColumn.qml</file>
         <file>SpoolInfoColumnForm.qml</file>
+        <file>BusyPopup.qml</file>
     </qresource>
 </RCC>

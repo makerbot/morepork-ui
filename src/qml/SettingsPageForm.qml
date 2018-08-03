@@ -20,6 +20,9 @@ Item {
     property alias buttonAdvancedInfo: buttonAdvancedInfo
     property alias buttonAccounts: buttonAccounts
     property alias buttonSpoolInfo: buttonSpoolInfo
+    property alias buttonCopyLogs: buttonCopyLogs
+    property alias copyingLogsPopup: copyingLogsPopup
+    property alias copyLogsFinishedPopup: copyLogsFinishedPopup
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
     property bool isResetting: false
@@ -201,6 +204,20 @@ Item {
                         id: buttonSpoolInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "SPOOL INFO"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        property bool enabled: (bot.process.type === ProcessType.None &&
+                                                storage.usbStorageConnected)
+                        id: buttonCopyLogs
+
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "COPY LOGS TO USB"
+                        opacity: enabled ? 1 : 0.3
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -410,6 +427,33 @@ Item {
 
             SpoolInfoPage {
                 id: spoolInfoPage
+            }
+        }
+    }
+
+    BusyPopup {
+        property bool initialized: false
+        property bool zipLogsInProgress: false
+        property string logBundlePath: ""
+
+        id: copyingLogsPopup
+        visible: zipLogsInProgress
+        busyPopupText: "COPYING LOGS TO USB..."
+    }
+
+    ModalPopup {
+        property bool succeeded: false
+
+        id: copyLogsFinishedPopup
+        visible: false
+        popup_contents.contentItem: Item {
+            anchors.fill: parent
+            TitleText {
+                text: copyLogsFinishedPopup.succeeded ?
+                            "FINISHED COPYING LOGS TO USB" :
+                            "FAILED TO COPY LOGS TO USB"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
     }
