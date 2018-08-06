@@ -833,6 +833,12 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
         infoDoorActivatedSet(info["door_activated"].asBool());
         infoLidActivatedSet(info["lid_activated"].asBool());
 
+        const Json::Value &kTopBunkFanRPM = info["top_bunk_fan_rpm"];
+        if(kTopBunkFanRPM.isArray() && kTopBunkFanRPM.size() > 0){
+            infoTopBunkFanARPMSet(kTopBunkFanRPM[0].asInt());
+            infoTopBunkFanBRPMSet(kTopBunkFanRPM[1].asInt());
+        }
+
         const Json::Value &kMotionStatus = info["motion_status"];
         if(kMotionStatus.isObject()){
             const Json::Value &kAxesEnabled = kMotionStatus["axis_enabled"];

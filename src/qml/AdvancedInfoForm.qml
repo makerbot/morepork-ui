@@ -44,7 +44,7 @@ Item {
 
         Item {
             id: chamber
-            x: 383
+            x: 375
             y: 206
             width: 200
             height: 200
@@ -1007,6 +1007,7 @@ Item {
                         id: text66
                         color: "#ffffff"
                         text: bot.infoBay1TagUID
+                        Layout.leftMargin: -80
                         font.pixelSize: 12
                     }
 
@@ -1115,6 +1116,7 @@ Item {
                         id: text76
                         color: "#ffffff"
                         text: bot.infoBay2TagUID
+                        Layout.leftMargin: -80
                         font.pixelSize: 12
                     }
 
@@ -1134,8 +1136,8 @@ Item {
 
         Item {
             id: misc
-            x: 645
-            y: 205
+            x: 600
+            y: 170
             width: 112
             height: 109
 
@@ -1171,6 +1173,20 @@ Item {
                     text: "LID ACTIVATED"
                     font.pixelSize: 12
                 }
+
+                Text {
+                    id: text124
+                    color: "#ffffff"
+                    text: "TOP BUNK FAN A RPM"
+                    font.pixelSize: 12
+                }
+
+                Text {
+                    id: text125
+                    color: "#ffffff"
+                    text: "TOP BUNK FAN B RPM"
+                    font.pixelSize: 12
+                }
             }
 
             ColumnLayout {
@@ -1191,6 +1207,24 @@ Item {
                     id: text114
                     color: "#ffffff"
                     text: bot.infoLidActivated
+                    font.pixelSize: 12
+                }
+
+                Text {
+                    id: text126
+                    x: 100
+                    color: "#ffffff"
+                    text: bot.infoTopBunkFanARPM
+                    Layout.leftMargin: 30
+                    font.pixelSize: 12
+                }
+
+                Text {
+                    id: text127
+                    x: 100
+                    color: "#ffffff"
+                    text: bot.infoTopBunkFanBRPM
+                    Layout.leftMargin: 30
                     font.pixelSize: 12
                 }
             }
