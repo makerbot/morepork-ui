@@ -209,6 +209,8 @@ class BotModel : public BaseModel {
     // Misc.
     MODEL_PROP(bool, infoDoorActivated, false)
     MODEL_PROP(bool, infoLidActivated, false)
+    MODEL_PROP(int, infoTopBunkFanARPM, -999)
+    MODEL_PROP(int, infoTopBunkFanBRPM, -999)
 
   protected:
     BotModel();
