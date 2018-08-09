@@ -945,6 +945,11 @@ void KaitenBotModel::timeout() {
 
 void KaitenBotModel::forceSyncFile(QString path) {
     int fd = open(path.toStdString().c_str(), O_APPEND);
+    if (fd < 0) {
+        LOG(error) << "Failed to sync file " << path.toStdString() << ": "
+                   << errno << ": " << strerror(errno);
+        return;
+    }
     fsync(fd);
     close(fd);
 }
