@@ -109,6 +109,14 @@ void BotModel::getSpoolInfo(const int bayIndex) {
     qDebug() << FL_STRM << "called with parameter: " << bayIndex;
 }
 
+void BotModel::zipLogs(QString path) {
+    qDebug() << FL_STRM << "called with parameter: " << path;
+}
+
+void BotModel::forceSyncFile(QString path) {
+    qDebug() << FL_STRM << "called with parameter: " << path;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

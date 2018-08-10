@@ -243,6 +243,7 @@ class MoreporkStorage : public QObject {
     QList<QObject*> print_file_list_;
     PrintFileInfo* current_thing_;
     MoreporkStorage();
+    Q_PROPERTY(const QString usbStoragePath CONSTANT MEMBER usbStoragePath);
     Q_INVOKABLE void updateStorageFileList(const QString kDirectory);
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
@@ -264,6 +265,9 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
+
+  private:
+    const QString usbStoragePath;
 
   private slots:
     void updateUsbStorageConnected();

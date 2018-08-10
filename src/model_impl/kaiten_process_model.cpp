@@ -28,6 +28,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::CalibrationProcess);
         else if (kNameStr == "ResetToFactoryProcess")
             typeSet(ProcessType::FactoryResetProcess);
+        else if (kNameStr == "ZipLogsProcess")
+            typeSet(ProcessType::ZipLogsProcess);
         else
             typeSet(ProcessType::None);
     }
@@ -79,6 +81,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::UnloadingFilament);
         // Base class 'Process' states (steps)
         // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
+        else if (kStepStr == "running")
+            stateTypeSet(ProcessStateType::Running);
         else if (kStepStr == "done")
             stateTypeSet(ProcessStateType::Done);
         else if (kStepStr == "cancelling")
