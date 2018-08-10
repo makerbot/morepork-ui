@@ -31,7 +31,7 @@ MaterialPageForm {
 
     bay1 {
         loadButton.button_mouseArea.onClicked: {
-            loadUnloadFilamentProcess.bayID = 1
+            startLoadUnloadFromUI = true
             isLoadFilament = true
             enableMaterialDrawer()
             // loadFilament(int tool_index, bool external, bool whilePrinitng)
@@ -50,7 +50,7 @@ MaterialPageForm {
         }
 
         unloadButton.button_mouseArea.onClicked: {
-            loadUnloadFilamentProcess.bayID = 1
+            startLoadUnloadFromUI = true
             isLoadFilament = false
             enableMaterialDrawer()
             // unloadFilament(int tool_index, bool external, bool whilePrinitng)
@@ -73,7 +73,7 @@ MaterialPageForm {
 
     bay2 {
         loadButton.button_mouseArea.onClicked: {
-            loadUnloadFilamentProcess.bayID = 2
+            startLoadUnloadFromUI = true
             isLoadFilament = true
             enableMaterialDrawer()
             // loadFilament(int tool_index, bool external, bool whilePrinitng)
@@ -90,7 +90,7 @@ MaterialPageForm {
         }
 
         unloadButton.button_mouseArea.onClicked: {
-            loadUnloadFilamentProcess.bayID = 2
+            startLoadUnloadFromUI = true
             isLoadFilament = false
             enableMaterialDrawer()
             // unloadFilament(int tool_index, bool external, bool whilePrinitng)

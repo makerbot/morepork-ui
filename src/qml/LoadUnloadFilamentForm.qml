@@ -13,7 +13,7 @@ Item {
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentBaySwitchActive: false
-    property int bayID: 1
+    property int bayID: bot.process.currentToolIndex + 1
     property int errorCode
     signal processDone
     property int currentState: bot.process.stateType
