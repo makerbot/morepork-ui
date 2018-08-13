@@ -135,7 +135,9 @@ Item {
 
             LoadUnloadFilament {
                 id: loadUnloadFilamentProcess
-                filamentBaySwitchActive: bayID == 1 ? bot.filamentBayASwitch : bot.filamentBayBSwitch
+                filamentPresentSwitch: bayID == 1 ?
+                                    bot.filamentBayAFilamentPresent :
+                                    bot.filamentBayBFilamentPresent
                 onProcessDone: {
                     state = "base state"
                     materialSwipeView.swipeToItem(0)
