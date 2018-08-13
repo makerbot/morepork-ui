@@ -27,6 +27,7 @@ Item {
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
     property bool isResetting: false
     property bool hasReset: false
+    property bool isFactoryResetProcess: bot.process.type == ProcessType.FactoryResetProcess
     property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
                                     bot.process.stateType == ProcessStateType.Done
     property alias wifiPage: wifiPage
@@ -40,7 +41,16 @@ Item {
         interval: 2500
         onTriggered: {
             resetFactoryConfirmPopup.close()
-            mainSwipeView.swipeToItem(0)
+            if(mainSwipeView.currentIndex != 0) {
+                mainSwipeView.swipeToItem(0)
+            }
+        }
+    }
+
+    onIsFactoryResetProcessChanged: {
+        if(isFactoryResetProcess){
+            resetFactoryConfirmPopup.open()
+            isResetting = true
         }
     }
 

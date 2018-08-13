@@ -16,6 +16,34 @@ Item {
     property alias continue_rectangle: continue_rectangle
     property alias materialPageDrawer: materialPageDrawer
     property bool isLoadFilament: false
+    property bool startLoadUnloadFromUI: false
+    property bool isLoadUnloadProcess: bot.process.type == ProcessType.Load ||
+                                       bot.process.type == ProcessType.Unload
+
+    onIsLoadUnloadProcessChanged: {
+        if(isLoadUnloadProcess && !startLoadUnloadFromUI){
+            if(mainSwipeView.currentIndex != 5){
+                mainSwipeView.swipeToItem(5)
+            }
+            enableMaterialDrawer()
+            if(materialSwipeView.currentIndex != 1){
+                materialSwipeView.swipeToItem(1)
+            }
+            switch(bot.process.type) {
+            case ProcessType.Load:
+                isLoadFilament = true
+                break;
+            case ProcessType.Unload:
+                isLoadFilament = false
+                break;
+            default:
+                break;
+            }
+        }
+        else {
+            startLoadUnloadFromUI = false
+        }
+    }
 
     smooth: false
 
