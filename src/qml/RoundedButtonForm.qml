@@ -20,6 +20,7 @@ Rectangle {
     antialiasing: false
     border.width: 2
     border.color: "#ffffff"
+    opacity: disable_button ? 0.3 : 1
 
     Text {
         id: button_text

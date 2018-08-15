@@ -12,7 +12,8 @@ Item {
     property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
-    property bool filamentBaySwitchActive: false
+    property bool filamentPresentSwitch: false
+    property bool isExternalLoad: false
     property int bayID: bot.process.currentToolIndex + 1
     property int errorCode
     signal processDone
@@ -162,7 +163,7 @@ Item {
     states: [
         State {
             name: "feed_filament"
-            when: filamentBaySwitchActive == true &&
+            when: filamentPresentSwitch && !isExternalLoad &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   bot.process.type == ProcessType.Load
 
@@ -189,7 +190,8 @@ Item {
         },
         State {
             name: "preheating"
-            when: bot.process.stateType == ProcessStateType.Preheating &&
+            when: (filamentPresentSwitch || isExternalLoad) &&
+                  bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)

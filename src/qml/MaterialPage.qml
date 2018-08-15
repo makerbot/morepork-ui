@@ -21,93 +21,121 @@ MaterialPageForm {
     property bool materialChangeCancelled: false
 
     function enableMaterialDrawer() {
+        setDrawerState(false)
+        activeDrawer = materialPage.materialPageDrawer
+        setDrawerState(true)
+    }
+
+    function canLoadUnloadStart() {
         if(bot.process.type == ProcessType.None ||
-          (printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused)) {
-            setDrawerState(false)
-            activeDrawer = materialPage.materialPageDrawer
-            setDrawerState(true)
+          (printPage.isPrintProcess &&
+           bot.process.stateType == ProcessStateType.Paused)) {
+            return true
+        }
+        else {
+            return false
         }
     }
 
     bay1 {
-        loadButton.button_mouseArea.onClicked: {
-            startLoadUnloadFromUI = true
-            isLoadFilament = true
-            enableMaterialDrawer()
-            // loadFilament(int tool_index, bool external, bool whilePrinitng)
-            // if load/unload happens while in print process
-            // i.e. while print paused, set whilePrinting to true
-            if(printPage.isPrintProcess &&
-             bot.process.stateType == ProcessStateType.Paused) {
-                bay1.switch1.checked ? bot.loadFilament(0, true, true) :
-                                       bot.loadFilament(0, false, true)
+        loadButton {
+            button_mouseArea.onClicked: {
+                if(canLoadUnloadStart()) {
+                    startLoadUnloadFromUI = true
+                    isLoadFilament = true
+                    enableMaterialDrawer()
+                    // loadFilament(int tool_index, bool external, bool whilePrinitng)
+                    // if load/unload happens while in print process
+                    // i.e. while print paused, set whilePrinting to true
+                    if(printPage.isPrintProcess &&
+                     bot.process.stateType == ProcessStateType.Paused) {
+                        bay1.switch1.checked ? bot.loadFilament(0, true, true) :
+                                               bot.loadFilament(0, false, true)
+                    }
+                    else {
+                        bay1.switch1.checked ? bot.loadFilament(0, true, false) :
+                                               bot.loadFilament(0, false, false)
+                    }
+                    materialSwipeView.swipeToItem(1)
+                }
             }
-            else {
-                bay1.switch1.checked ? bot.loadFilament(0, true, false) :
-                                       bot.loadFilament(0, false, false)
-            }
-            materialSwipeView.swipeToItem(1)
+            disable_button: !canLoadUnloadStart()
         }
 
-        unloadButton.button_mouseArea.onClicked: {
-            startLoadUnloadFromUI = true
-            isLoadFilament = false
-            enableMaterialDrawer()
-            // unloadFilament(int tool_index, bool external, bool whilePrinitng)
-            if(printPage.isPrintProcess &&
-             bot.process.stateType == ProcessStateType.Paused) {
-                bot.unloadFilament(0, true, true)
+        unloadButton {
+            button_mouseArea.onClicked: {
+                if(canLoadUnloadStart()) {
+                    startLoadUnloadFromUI = true
+                    isLoadFilament = false
+                    enableMaterialDrawer()
+                    // unloadFilament(int tool_index, bool external, bool whilePrinitng)
+                    if(printPage.isPrintProcess &&
+                     bot.process.stateType == ProcessStateType.Paused) {
+                        bot.unloadFilament(0, true, true)
+                    }
+                    else {
+                        bot.unloadFilament(0, true, false)
+                    }
+                    // We move explicitly to the 'preheating' state to
+                    // avoid letting the UI show the 'base state' for
+                    // sometime until kaiten reports the current step
+                    // as 'preheating'. This isn't required for loading
+                    // as the 'base state' is one of the loading screens.
+                    loadUnloadFilamentProcess.state = "preheating"
+                    materialSwipeView.swipeToItem(1)
+                }
             }
-            else {
-                bot.unloadFilament(0, true, false)
-            }
-            // We move explicitly to the 'preheating' state to
-            // avoid letting the UI show the 'base state' for
-            // sometime until kaiten reports the current step
-            // as 'preheating'. This isn't required for loading
-            // as the 'base state' is one of the loading screens.
-            loadUnloadFilamentProcess.state = "preheating"
-            materialSwipeView.swipeToItem(1)
+            disable_button: !canLoadUnloadStart()
         }
     }
 
     bay2 {
-        loadButton.button_mouseArea.onClicked: {
-            startLoadUnloadFromUI = true
-            isLoadFilament = true
-            enableMaterialDrawer()
-            // loadFilament(int tool_index, bool external, bool whilePrinitng)
-            if(printPage.isPrintProcess &&
-             bot.process.stateType == ProcessStateType.Paused) {
-                bay2.switch1.checked ? bot.loadFilament(1, true, true) :
-                                       bot.loadFilament(1, false, true)
+        loadButton {
+            button_mouseArea.onClicked: {
+                if(canLoadUnloadStart()) {
+                    startLoadUnloadFromUI = true
+                    isLoadFilament = true
+                    enableMaterialDrawer()
+                    // loadFilament(int tool_index, bool external, bool whilePrinitng)
+                    if(printPage.isPrintProcess &&
+                     bot.process.stateType == ProcessStateType.Paused) {
+                        bay2.switch1.checked ? bot.loadFilament(1, true, true) :
+                                               bot.loadFilament(1, false, true)
+                    }
+                    else {
+                        bay2.switch1.checked ? bot.loadFilament(1, true, false) :
+                                               bot.loadFilament(1, false, false)
+                    }
+                    materialSwipeView.swipeToItem(1)
+                }
             }
-            else {
-                bay2.switch1.checked ? bot.loadFilament(1, true, false) :
-                                       bot.loadFilament(1, false, false)
-            }
-            materialSwipeView.swipeToItem(1)
+            disable_button: !canLoadUnloadStart()
         }
 
-        unloadButton.button_mouseArea.onClicked: {
-            startLoadUnloadFromUI = true
-            isLoadFilament = false
-            enableMaterialDrawer()
-            // unloadFilament(int tool_index, bool external, bool whilePrinitng)
-            if(printPage.isPrintProcess &&
-             bot.process.stateType == ProcessStateType.Paused) {
-                bot.unloadFilament(1, true, true)
+        unloadButton {
+            button_mouseArea.onClicked: {
+                if(canLoadUnloadStart()) {
+                    startLoadUnloadFromUI = true
+                    isLoadFilament = false
+                    enableMaterialDrawer()
+                    // unloadFilament(int tool_index, bool external, bool whilePrinitng)
+                    if(printPage.isPrintProcess &&
+                     bot.process.stateType == ProcessStateType.Paused) {
+                        bot.unloadFilament(1, true, true)
+                    }
+                    else {
+                        bot.unloadFilament(1, true, false)
+                    }
+                    // We move explicitly to the 'preheating' state to
+                    // avoid letting the UI show the 'base state' for
+                    // sometime until kaiten reports the current step
+                    // as 'preheating'. This isn't required for loading
+                    // as the 'base state' is one of the loading screens.
+                    loadUnloadFilamentProcess.state = "preheating"
+                    materialSwipeView.swipeToItem(1)
+                }
             }
-            else {
-                bot.unloadFilament(1, true, false)
-            }
-            // We move explicitly to the 'preheating' state to
-            // avoid letting the UI show the 'base state' for
-            // sometime until kaiten reports the current step
-            // as 'preheating'. This isn't required for loading
-            // as the 'base state' is one of the loading screens.
-            loadUnloadFilamentProcess.state = "preheating"
-            materialSwipeView.swipeToItem(1)
+            disable_button: !canLoadUnloadStart()
         }
     }
 
