@@ -24,6 +24,7 @@ Item {
     property alias copyingLogsPopup: copyingLogsPopup
     property alias copyLogsFinishedPopup: copyLogsFinishedPopup
     property alias buttonResetToFactory: buttonResetToFactory
+    property alias buttonColorSwatch: buttonColorSwatch
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
     property bool isResetting: false
     property bool hasReset: false
@@ -241,6 +242,17 @@ Item {
                         buttonText.text: "RESET TO FACTORY"
                         opacity: bot.process.type == ProcessType.None ? 1 : 0.3
                     }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonColorSwatch
+                        buttonImage.anchors.leftMargin: 30
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "COLOR SWATCH"
+                    }
                 }
             }
         }
@@ -437,6 +449,19 @@ Item {
 
             SpoolInfoPage {
                 id: spoolInfoPage
+            }
+        }
+
+        //settingsSwipeView.index = 9
+        Item {
+            id: colorSwatchItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            ColorSwatchPage {
+                id: colorSwatch
             }
         }
     }
