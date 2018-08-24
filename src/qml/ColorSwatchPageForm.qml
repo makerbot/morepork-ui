@@ -7,6 +7,17 @@ Item {
     width: 800
     height: 440
 
+    Image {
+        id: image
+        width: 300
+        height: 300
+        anchors.verticalCenterOffset: -20
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 50
+        source: "qrc:/img/pattern.png"
+    }
+
     Rectangle {
         id: colorDisplay
         width: 300
