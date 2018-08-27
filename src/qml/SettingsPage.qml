@@ -48,6 +48,10 @@ SettingsPageForm {
         spoolInfoPage.init();
     }
 
+    buttonColorSwatch.onClicked: {
+        settingsSwipeView.swipeToItem(9)
+    }
+
     buttonCopyLogs.onClicked: {
         if (buttonCopyLogs.enabled) {
             var now = new Date();

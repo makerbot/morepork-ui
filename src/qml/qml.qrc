@@ -75,5 +75,9 @@
         <file>SpoolInfoColumn.qml</file>
         <file>SpoolInfoColumnForm.qml</file>
         <file>BusyPopup.qml</file>
+        <file>ColorSwatchPage.qml</file>
+        <file>ColorSwatchPageForm.qml</file>
+        <file>ColorSelectorBox.qml</file>
+        <file>ColorSelectorBoxForm.qml</file>
     </qresource>
 </RCC>
