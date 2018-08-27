@@ -103,6 +103,10 @@ Item {
                         case ProcessStateType.Failed:
                             "PRINT FAILED"
                             break;
+                        case ProcessStateType.Cancelling:
+                        case ProcessStateType.CleaningUp:
+                            "CANCELLING"
+                            break;
                         default:
                             ""
                             break;

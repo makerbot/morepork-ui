@@ -75,16 +75,18 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             source: "qrc:/img/loading_gears.png"
             visible: (bot.process.stateType == ProcessStateType.Loading ||
-                      bot.process.stateType == ProcessStateType.Preheating)
+                      bot.process.stateType == ProcessStateType.Preheating ||
+                      bot.process.stateType == ProcessStateType.Cancelling ||
+                      bot.process.stateType == ProcessStateType.CleaningUp ||
+                      bot.process.stateType == ProcessStateType.Done) // Part of cancelling step
 
             RotationAnimator {
-                target: status_image;
+                target: status_image
                 from: 360
                 to: 0
                 duration: 10000
                 loops: Animation.Infinite
-                running: (bot.process.stateType == ProcessStateType.Loading ||
-                          bot.process.stateType == ProcessStateType.Preheating)
+                running: parent.visible
             }
         }
 
@@ -101,7 +103,10 @@ Item {
                       bot.process.stateType == ProcessStateType.Pausing ||
                       bot.process.stateType == ProcessStateType.Resuming ||
                       bot.process.stateType == ProcessStateType.Preheating || // Out of filament
-                      bot.process.stateType == ProcessStateType.UnloadingFilament) // while printing
+                      bot.process.stateType == ProcessStateType.UnloadingFilament || // while printing
+                      bot.process.stateType == ProcessStateType.Cancelling ||
+                      bot.process.stateType == ProcessStateType.CleaningUp || // Part of cancelling step
+                      bot.process.stateType == ProcessStateType.Done) // Part of cancelling step
 
             RotationAnimator {
                 target: loading_or_paused_image;
@@ -109,12 +114,7 @@ Item {
                 to: 360
                 duration: 10000
                 loops: Animation.Infinite
-                running: (bot.process.stateType == ProcessStateType.Loading ||
-                          bot.process.stateType == ProcessStateType.Paused ||
-                          bot.process.stateType == ProcessStateType.Pausing ||
-                          bot.process.stateType == ProcessStateType.Resuming ||
-                          bot.process.stateType == ProcessStateType.Preheating || // Out of filament
-                          bot.process.stateType == ProcessStateType.UnloadingFilament) // while printing
+                running: parent.visible
             }
         }
 

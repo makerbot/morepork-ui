@@ -88,6 +88,9 @@ Drawer {
                     }
                 }
                 buttonImage.source: "qrc:/img/pause.png"
+                disableButton:
+                    !(bot.process.stateType == ProcessStateType.Paused ||
+                     bot.process.stateType == ProcessStateType.Printing)
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
                 height: 80
@@ -113,14 +116,11 @@ Drawer {
             MoreporkButton {
                 id: buttonChangeFilament
                 buttonText.text: qsTr("CHANGE FILAMENT") + cpUiTr.emptyStr
-                buttonText.color: bot.process.stateType != ProcessStateType.Paused ?
-                                      "#545454" : "#ffffff"
                 buttonImage.source: "qrc:/img/change_filament.png"
-                buttonImage.opacity: bot.process.stateType != ProcessStateType.Paused ?
-                                         0.2 : 1
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
                 height: 80
+                disableButton: bot.process.stateType != ProcessStateType.Paused
             }
 
             Rectangle {

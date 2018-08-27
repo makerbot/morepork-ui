@@ -12,6 +12,7 @@ Button {
     property alias buttonImage: buttonImage
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
+    property bool disableButton: false
 
     background: Rectangle {
         opacity: moreporkButton.down ? 1 : 0
@@ -28,6 +29,7 @@ Button {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
         antialiasing: false
+        opacity: disableButton ? 0.2 : 1
     }
 
     contentItem: Text {
@@ -37,7 +39,7 @@ Button {
         font.letterSpacing: 3
         font.weight: Font.Bold
         font.pointSize: 14
-        color: "#ffffff"
+        color: disableButton ? "#545454" : "#ffffff"
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
