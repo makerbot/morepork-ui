@@ -141,6 +141,18 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         isBuildPlateClearReset();
     }
 
+    if(kStepStr == "preheating_loading" ||
+       kStepStr == "preheating_unloading") {
+        isLoadUnloadWhilePausedSet(true);
+
+        kStepStr == "preheating_loading" ?
+                isLoadSet(true) :
+                isLoadSet(false);
+    }
+    else {
+        isLoadUnloadWhilePausedReset();
+    }
+
     const Json::Value &error = proc["error"];
     if (error.isObject()) {
         UPDATE_INT_PROP(errorCode, error["code"]);
