@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     property alias bay1: bay1
@@ -18,8 +19,10 @@ Item {
     property bool isLoadFilament: false
     property bool startLoadUnloadFromUI: false
     property bool isLoadUnloadProcess: bot.process.type == ProcessType.Load ||
-                                       bot.process.type == ProcessType.Unload
-
+                                       bot.process.type == ProcessType.Unload ||
+                                       bot.process.isLoadUnloadWhilePaused
+    property alias waitUntilUnloadedPopup: waitUntilUnloadedPopup
+    property alias closeWaitUntilUnloadedPopup: closeWaitUntilUnloadedPopup
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess && !startLoadUnloadFromUI){
             if(mainSwipeView.currentIndex != 5){
@@ -36,7 +39,8 @@ Item {
             case ProcessType.Unload:
                 isLoadFilament = false
                 break;
-            default:
+            case ProcessType.Print:
+                isLoadFilament = bot.process.isLoad
                 break;
             }
         }
@@ -55,6 +59,26 @@ Item {
             waitUntilUnloadedPopup.open()
             closeWaitUntilUnloadedPopup.start()
         }
+        else if(printPage.isPrintProcess) {
+            // If load/unload completed successfully and the user wants
+            // to go back don't show any popup, just reset the page state
+            // and go back.
+            if(bot.process.stateType == ProcessStateType.Paused) {
+                loadUnloadFilamentProcess.state = "base state"
+                materialSwipeView.swipeToItem(0)
+                // If cancelled out of load/unload while in print process
+                // enable print drawer to set UI back to printing state.
+                setDrawerState(false)
+                activeDrawer = printPage.printingDrawer
+                setDrawerState(true)
+            }
+            else {
+                cancelLoadUnloadPopup.open()
+            }
+        }
+        // If load/unload completed successfully and the user wants
+        // to go back don't show any popup, just reset the page state
+        // and go back.
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(0)

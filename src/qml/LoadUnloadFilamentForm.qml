@@ -48,10 +48,26 @@ Item {
             }
             //The case when loading/unloading is stopped by user
             //in the middle of print process. Then the bot goes to
-            //'Stopping' step and then to 'Paused' step
+            //'Stopping' step and then to 'Paused' step, but to
+            // differentiate successful stopping (i.e. stopping
+            // extrusion) and cancelling, we monitor the
+            // materialChangeCancelled flag. Since the bot goes to
+            // paused state afterwards we also need to monitor
+            // the flag there.
             else if(printPage.isPrintProcess) {
-                isLoadFilament ? state = "loaded_filament" :
-                                 state = "unloaded_filament"
+                if(materialChangeCancelled) {
+                    state = "base state"
+                    materialSwipeView.swipeToItem(0)
+                    // If cancelled out of load/unload while in print process
+                    // enable print drawer to set UI back to printing state.
+                    setDrawerState(false)
+                    activeDrawer = printPage.printingDrawer
+                    setDrawerState(true)
+                }
+                else {
+                    isLoadFilament ? state = "loaded_filament" :
+                                     state = "unloaded_filament"
+                }
                 if(bot.process.errorCode > 0) {
                     errorCode = bot.process.errorCode
                     state = "error"
@@ -62,8 +78,13 @@ Item {
         //itself, in the middle of print process. Then the bot doesn't
         //go to 'Stopping' step, but directly to 'Paused' step.
         case ProcessStateType.Paused:
-            isLoadFilament ? state = "loaded_filament" :
-                             state = "unloaded_filament"
+            if(materialChangeCancelled) {
+                materialChangeCancelled = false
+            }
+            else {
+                isLoadFilament ? state = "loaded_filament" :
+                                 state = "unloaded_filament"
+            }
             break;
         default:
             break;

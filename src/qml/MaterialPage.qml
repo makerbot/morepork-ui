@@ -21,9 +21,11 @@ MaterialPageForm {
     property bool materialChangeCancelled: false
 
     function enableMaterialDrawer() {
-        setDrawerState(false)
-        activeDrawer = materialPage.materialPageDrawer
-        setDrawerState(true)
+        if(activeDrawer != materialPage.materialPageDrawer) {
+            setDrawerState(false)
+            activeDrawer = materialPage.materialPageDrawer
+            setDrawerState(true)
+        }
     }
 
     function canLoadUnloadStart() {
@@ -146,10 +148,31 @@ MaterialPageForm {
         // middle of a print, while the bot is still in 'PrintProcess'
         // don't call cancel() which will end the print process.
         if(printPage.isPrintProcess) {
-            if(bot.process.stateType == ProcessStateType.Extrusion &&
-               isLoadFilament) {
+            // Preheating steps in both load and unload while print paused
+            // can be stopped. But once the unloading starts it can't be
+            // stopped.
+            if(bot.process.stateType == ProcessStateType.Extrusion) {
                 bot.loadFilamentStop()
+                // Bot goes into stopping step and then to paused step
             }
+            else if(bot.process.stateType == ProcessStateType.Preheating) {
+                bot.loadFilamentStop()
+                // This results in the bot going into 'Stopping' step and
+                // then to 'Paused' step as part of the print process, which
+                // is the same as above, so to differentiate successful
+                // completion and cancellation we use a flag which will be
+                // monitered elsewhere.
+                materialChangeCancelled = true
+            }
+            else if(bot.process.stateType == ProcessStateType.UnloadingFilament) {
+                waitUntilUnloadedPopup.open()
+                closeWaitUntilUnloadedPopup.start()
+            }
+            // This is a special case when the user opens the cancel poup while
+            // the process was cancellable and left it open and then the process
+            // ended normally, so now the cancel button isn't even relevant to
+            // current state and it shouldn't actually try cancelling anything
+            // and just reset the page state and go back.
             else if(bot.process.stateType == ProcessStateType.Paused) {
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(0)
