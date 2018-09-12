@@ -79,5 +79,9 @@
         <file>ColorSwatchPageForm.qml</file>
         <file>ColorSelectorBox.qml</file>
         <file>ColorSelectorBoxForm.qml</file>
+        <file>BulletedListItem.qml</file>
+        <file>BulletedListItemForm.qml</file>
+        <file>BusySpinner.qml</file>
+        <file>BusySpinnerForm.qml</file>
     </qresource>
 </RCC>

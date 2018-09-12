@@ -96,13 +96,6 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 25
                 filamentBayID: 1
-                //filamentMaterialPercent: bot.filament1Percent
-                //filamentMaterialColor: bot.filament1Color
-                filamentMaterialPercent: 75 //Temporarily so that
-                filamentMaterialColor: 1    //the page doesn't look empty!
-                filamentMaterialType: "PLA"
-                filamentMaterialColorText: "COLOR"
-                filamentMaterialQuantity: "0.0"
             }
 
             FilamentBay {
@@ -111,13 +104,6 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 225
                 filamentBayID: 2
-                //filamentMaterialPercent: bot.filament2Percent
-                //filamentMaterialColor: bot.filament2Color
-                filamentMaterialPercent: 65 //Temporarily so that
-                filamentMaterialColor: 5    //the page doesn't look empty!
-                filamentMaterialType: "PVA"
-                filamentMaterialColorText: "COLOR"
-                filamentMaterialQuantity: "0.0"
             }
         }
 

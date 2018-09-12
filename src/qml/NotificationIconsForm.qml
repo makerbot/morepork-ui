@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 Item {
     width: 100
@@ -13,14 +13,12 @@ Item {
 
         FilamentIcon {
             id: filament1_icon
-            filamentPercent: bot.filament1Percent
-            filamentColor: bot.filament1Color
+            filamentBayID: 1
         }
 
         FilamentIcon {
             id: filament2_icon
-            filamentPercent: bot.filament2Percent
-            filamentColor: bot.filament2Color
+            filamentBayID: 2
         }
 
         Item {

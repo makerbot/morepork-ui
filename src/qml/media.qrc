@@ -50,7 +50,8 @@
       	<file alias="process_successful.png">images/process_successful.png</file>
 	<file alias="sombrero_icon.png">images/sombrero_icon.png</file>
       	<file alias="usb_icon.png">images/usb_icon.png</file>
-	<file alias="extruder_attached.png">images/extruder_attached.png</file>
+	<file alias="extruder_1_attached.png">images/extruder_1_attached.png</file>
+	<file alias="extruder_2_attached.png">images/extruder_2_attached.png</file>
 	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
 	<file alias="extruder_left.png">images/extruder_left.png</file>
 	<file alias="extruder_right.png">images/extruder_right.png</file>
@@ -89,6 +90,8 @@
 	<file alias="account_auth_complete.png">images/account_auth_complete.png</file>
 	<file alias="add_account_image.png">images/add_account_image.png</file>
 	<file alias="pattern.png">images/pattern.png</file>
+	<file alias="attach_extruder_1.gif">images/attach_extruder_1.gif</file>
+	<file alias="attach_extruder_2.gif">images/attach_extruder_2.gif</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
