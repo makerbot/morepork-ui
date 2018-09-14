@@ -40,14 +40,16 @@ Item {
     Text {
         id: bulletText
         text: "default text"
-        anchors.left: bulletItem.right
-        anchors.leftMargin: 10
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 7
+        anchors.left: parent.left
+        anchors.leftMargin: 36
         color: "#ffffff"
         font.pixelSize: 19
         font.family: "Antennae"
         font.weight: Font.Light
         smooth: false
         antialiasing: false
+        lineHeight: 1.3
     }
 }

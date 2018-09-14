@@ -21,11 +21,9 @@ MaterialPageForm {
     property bool materialChangeCancelled: false
 
     function enableMaterialDrawer() {
-        if(activeDrawer != materialPage.materialPageDrawer) {
-            setDrawerState(false)
-            activeDrawer = materialPage.materialPageDrawer
-            setDrawerState(true)
-        }
+        setDrawerState(false)
+        activeDrawer = materialPage.materialPageDrawer
+        setDrawerState(true)
     }
 
     function canLoadUnloadStart() {

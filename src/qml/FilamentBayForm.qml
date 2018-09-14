@@ -41,7 +41,7 @@ Item {
         }
     }
 
-    property int filamentMaterial: {
+    property int filamentMaterialCode: {
         switch(filamentBayID) {
         case 1:
             bot.spoolAMaterial
@@ -69,8 +69,8 @@ Item {
         }
     }
 
-    property string filamentMaterialText: {
-        switch(filamentMaterial) {
+    property string filamentMaterialName: {
+        switch(filamentMaterialCode) {
         case 0:
             " "
             break;
@@ -166,7 +166,7 @@ Item {
                         if(spoolPresent) {
                             filamentColorText +
                             " " +
-                            filamentMaterialText
+                            filamentMaterialName
                         }
                         else {
                             "NO MATERIAL DETECTED"
