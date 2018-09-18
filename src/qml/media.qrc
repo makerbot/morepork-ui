@@ -29,8 +29,11 @@
       	<file alias="filamentbay_empty.png">images/filamentbay_empty.png</file>
       	<file alias="filamentbay_loaded.png">images/filamentbay_loaded.png</file>
       	<file alias="place_spool_bay1.gif">images/place_spool_bay1.gif</file>
+      	<file alias="place_spool_bay2.gif">images/place_spool_bay2.gif</file>
       	<file alias="insert_filament_bay1.gif">images/insert_filament_bay1.gif</file>
+      	<file alias="insert_filament_bay2.gif">images/insert_filament_bay2.gif</file>
       	<file alias="close_bay1.gif">images/close_bay1.gif</file>
+      	<file alias="close_bay2.gif">images/close_bay2.gif</file>
       	<file alias="clear_excess_material.png">images/clear_excess_material.png</file>
       	<file alias="confirm_extrusion_1.png">images/confirm_extrusion_1.png</file>
       	<file alias="confirm_extrusion_2.png">images/confirm_extrusion_2.png</file>
@@ -94,6 +97,8 @@
 	<file alias="pattern.png">images/pattern.png</file>
 	<file alias="attach_extruder_1.gif">images/attach_extruder_1.gif</file>
 	<file alias="attach_extruder_2.gif">images/attach_extruder_2.gif</file>
+	<file alias="file_no_preview.png">images/file_no_preview.png</file>
+	<file alias="remove_top_lid.gif">images/remove_top_lid.gif</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

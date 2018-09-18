@@ -105,11 +105,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     AnimatedImage {
         id: image
         width: 400
@@ -120,7 +115,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         source: bayID == 1 ?
                     "qrc:/img/place_spool_bay1.gif" :
-                    "qrc:/img/place_spool_bay1.gif"
+                    "qrc:/img/place_spool_bay2.gif"
         cache: false
         // Since this is the base state, settting playing to true
         // makes the gif always keep playing even when this page is
@@ -273,7 +268,7 @@ Item {
                 playing: true
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
-                            "qrc:/img/insert_filament_bay1.gif"
+                            "qrc:/img/insert_filament_bay2.gif"
             }
 
             PropertyChanges {
@@ -588,7 +583,7 @@ Item {
                 playing: true
                 source: bayID == 1 ?
                             "qrc:/img/close_bay1.gif" :
-                            "qrc:/img/close_bay1.gif"
+                            "qrc:/img/close_bay2.gif"
             }
 
             PropertyChanges {

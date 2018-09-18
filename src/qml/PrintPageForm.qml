@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
@@ -14,7 +14,10 @@ Item {
     property string uses_raft
     property string model_mass
     property string support_mass
+    property real modelMaterialRequired
+    property real supportMaterialRequired
     property int num_shells
+    property real layer_height_mm
     property string extruder_temp
     property string chamber_temp
     property string slicer_name
@@ -117,6 +120,9 @@ Item {
                                                        (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
         support_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
                                                          (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+        modelMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
+        supportMaterialRequired = (file.extrusionMassGramsA/1000).toFixed(3)
+        layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
         extruder_temp = file.extruderTempCelciusA == 0 ? file.extruderTempCelciusB + "C" :
                                                          file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
@@ -134,6 +140,8 @@ Item {
         uses_raft = ""
         model_mass = ""
         support_mass = ""
+        modelMaterialRequired = 0.0
+        supportMaterialRequired = 0.0
         num_shells = ""
         extruder_temp = ""
         chamber_temp = ""
@@ -215,8 +223,9 @@ Item {
                     FileButton {
                         id: buttonInternalStorage
                         fileThumbnail.source: "qrc:/img/sombrero_icon.png"
-                        fileThumbnail.width: 96
-                        fileThumbnail.height: 120
+                        fileThumbnail.width: 70
+                        fileThumbnail.height: 53
+                        fileThumbnail.anchors.leftMargin: 60
                         filenameText.text: "INTERNAL STORAGE"
                         filePrintTime.text: "FILES SAVED ON PRINTER"
                         fileMaterial.visible: false
@@ -238,8 +247,6 @@ Item {
                         id: buttonUsbStorage
                         fileThumbnail.source: "qrc:/img/usb_icon.png"
                         fileThumbnail.opacity: usbStorageConnected ? 1 : 0.4
-                        fileThumbnail.width: 96
-                        fileThumbnail.height: 120
                         filenameText.text: "USB"
                         filenameText.opacity: usbStorageConnected ? 1 : 0.4
                         filePrintTime.text: usbStorageConnected ? "EXTERNAL STORAGE" : "PLEASE INSERT A USB DRIVE"
@@ -337,6 +344,10 @@ Item {
                     fileMaterial.text: model.modelData.materialNameA == "" ?
                                            model.modelData.materialNameB :
                                            model.modelData.materialNameB + "+" + model.modelData.materialNameA
+                    materialError.visible: {
+                        (model.modelData.materialNameB != materialPage.bay1.filamentMaterialName) ||
+                        (model.modelData.materialNameA != materialPage.bay2.filamentMaterialName)
+                    }
                     onClicked: {
                         if(model.modelData.isDir) {
                             storage.backStackPush(model.modelData.filePath)
@@ -366,208 +377,14 @@ Item {
             visible: false
 
             function altBack() {
+                startPrintItem.startPrintSwipeView.setCurrentIndex(0)
                 resetPrintFileDetails()
                 setDrawerState(true)
                 currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
             }
 
-            Item {
+            StartPrintPage {
                 id: startPrintItem
-                anchors.fill: parent
-
-                Item {
-                    id: modelItem
-                    width: 212
-                    height: 300
-                    smooth: false
-                    anchors.left: parent.left
-                    anchors.leftMargin: 100
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    Image {
-                        id: back_image
-                        smooth: false
-                        anchors.fill: parent
-                        source: "qrc:/img/back_build_volume.png"
-                    }
-
-                    Image {
-                        id: model_image
-                        smooth: false
-                        width: 320
-                        height: 200
-                        anchors.verticalCenterOffset: 50
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        source: "image://thumbnail/" + fileName
-                    }
-
-                    Image {
-                        id: front_image
-                        smooth: false
-                        anchors.fill: parent
-                        source: "qrc:/img/front_build_volume.png"
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout
-                    width: 400
-                    height: 225
-                    antialiasing: false
-                    smooth: false
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 400
-                    spacing: 10
-
-                    Image {
-                        id: infoIcon
-                        width: sourceSize.width
-                        height: sourceSize.height
-                        antialiasing: false
-                        smooth: false
-                        source: "qrc:/img/info_icon_small.png"
-
-                        MouseArea {
-                            width: 80
-                            height: 80
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            onClicked: printSwipeView.swipeToItem(3)
-                        }
-                    }
-
-                    Item {
-                        id: spacingItem
-                        width: 100
-                        height: 5
-                        antialiasing: false
-                        smooth: false
-                    }
-
-                    Text {
-                        id: printName
-                        text: file_name
-                        smooth: false
-                        antialiasing: false
-                        font.letterSpacing: 3
-                        font.family: "Antennae"
-                        font.weight: Font.Bold
-                        font.pixelSize: 21
-                        color: "#cbcbcb"
-                    }
-
-                    RowLayout {
-                        id: printTimeRowLayout
-                        antialiasing: false
-                        smooth: false
-                        spacing: 10
-
-                        Text {
-                            id: printTimeLabel
-                            text: "PRINT TIME"
-                            smooth: false
-                            antialiasing: false
-                            font.letterSpacing: 3
-                            font.family: "Antennae"
-                            font.weight: Font.Light
-                            font.pixelSize: 18
-                            color: "#ffffff"
-                        }
-
-                        Rectangle {
-                            id: dividerRectangle
-                            width: 1
-                            height: 18
-                            color: "#ffffff"
-                            antialiasing: false
-                            smooth: false
-                        }
-
-                        Text {
-                            id: printTime
-                            text: print_time
-                            smooth: false
-                            antialiasing: false
-                            font.letterSpacing: 3
-                            font.family: "Antennae"
-                            font.weight: Font.Light
-                            font.pixelSize: 18
-                            color: "#ffffff"
-                        }
-                    }
-
-                    Text {
-                        id: readyByLabel
-                        text: "READY BY : " + readyByTime
-                        smooth: false
-                        antialiasing: false
-                        font.letterSpacing: 3
-                        font.family: "Antennae"
-                        font.weight: Font.Light
-                        font.pixelSize: 18
-                        color: "#ffffff"
-                    }
-
-                    RowLayout {
-                        id: materialRowLayout
-                        antialiasing: false
-                        smooth: false
-                        spacing: 10
-
-                        Text {
-                            id: materialLabel
-                            text: "MATERIAL"
-                            smooth: false
-                            antialiasing: false
-                            font.letterSpacing: 3
-                            font.family: "Antennae"
-                            font.weight: Font.Light
-                            font.pixelSize: 18
-                            color: "#ffffff"
-                        }
-
-                        Rectangle {
-                            id: dividerRectangle1
-                            width: 1
-                            height: 18
-                            color: "#ffffff"
-                            antialiasing: false
-                            smooth: false
-                        }
-
-                        Image {
-                            id: lowMaterialAlert
-                            height: 12
-                            width: 12
-                            antialiasing: false
-                            smooth: false
-                            source: "qrc:/img/alert.png"
-                        }
-                    }
-
-                    Item {
-                        id: spacingItem1
-                        width: 200
-                        height: 3
-                        smooth: false
-                        antialiasing: false
-                    }
-
-                    RoundedButton {
-                        buttonWidth: 210
-                        buttonHeight: 50
-                        label: "START PRINT"
-                        button_mouseArea.onClicked: {
-                            storage.backStackClear()
-                            activeDrawer = printPage.printingDrawer
-                            bot.print(fileName)
-                            printFromUI = true
-                            printSwipeView.swipeToItem(0)
-                        }
-                    }
-                }
             }
         }
 

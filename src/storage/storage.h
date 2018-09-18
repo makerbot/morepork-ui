@@ -237,7 +237,7 @@ class MoreporkStorage : public QObject {
   MODEL_PROP(bool, usbStorageConnected, false)
   MODEL_PROP(bool, storageIsEmpty, true)
   MODEL_PROP(PrintFileInfo::StorageSortType, sortType,
-             PrintFileInfo::StorageSortType::Alphabetic)
+             PrintFileInfo::StorageSortType::DateAdded)
 
   public:
     QList<QObject*> print_file_list_;

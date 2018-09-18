@@ -55,16 +55,16 @@ bool MakerbotFileMetaReader::hasJsonToolpath() {
 QImage& MakerbotFileMetaReader::getSmallThumbnail() {
   if(!loaded_small_thumbnail_){
     loaded_small_thumbnail_ = true;
-    if(tiny_thing_->unzipSmallThumbnailFile()) {
+    if(tiny_thing_->unzipSombreroSmallThumbnailFile()) {
       std::string thumb_file_content_str;
-      tiny_thing_->getSmallThumbnailFileContents(&thumb_file_content_str);
+      tiny_thing_->getSombreroSmallThumbnailFileContents(&thumb_file_content_str);
       small_thumbnail_ = QImage::fromData(
       reinterpret_cast<const unsigned char*>(thumb_file_content_str.c_str()),
         thumb_file_content_str.size());
     }
   }
   if(small_thumbnail_.isNull())
-    small_thumbnail_ = QImage(":/img/makerbot_logo_55x40.png");
+    small_thumbnail_ = QImage(":/img/file_no_preview.png");
   return small_thumbnail_;
 }
 
@@ -72,9 +72,9 @@ QImage& MakerbotFileMetaReader::getSmallThumbnail() {
 QImage& MakerbotFileMetaReader::getMediumThumbnail() {
   if(!loaded_medium_thumbnail_){
     loaded_medium_thumbnail_ = true;
-    if(tiny_thing_->unzipMediumThumbnailFile()) {
+    if(tiny_thing_->unzipSombreroMediumThumbnailFile()) {
       std::string thumb_file_content_str;
-      tiny_thing_->getMediumThumbnailFileContents(&thumb_file_content_str);
+      tiny_thing_->getSombreroMediumThumbnailFileContents(&thumb_file_content_str);
       medium_thumbnail_ = QImage::fromData(
         reinterpret_cast<const unsigned char*>(thumb_file_content_str.c_str()),
         thumb_file_content_str.size());
@@ -89,9 +89,9 @@ QImage& MakerbotFileMetaReader::getMediumThumbnail() {
 QImage& MakerbotFileMetaReader::getLargeThumbnail() {
   if(!loaded_large_thumbnail_){
     loaded_large_thumbnail_ = true;
-    if(tiny_thing_->unzipLargeThumbnailFile()) {
+    if(tiny_thing_->unzipSombreroLargeThumbnailFile()) {
       std::string thumb_file_content_str;
-      tiny_thing_->getLargeThumbnailFileContents(&thumb_file_content_str);
+      tiny_thing_->getSombreroLargeThumbnailFileContents(&thumb_file_content_str);
       large_thumbnail_ = QImage::fromData(
         reinterpret_cast<const unsigned char*>(thumb_file_content_str.c_str()),
         thumb_file_content_str.size());

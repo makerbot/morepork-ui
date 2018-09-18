@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessStateTypeEnum 1.0
@@ -243,39 +243,16 @@ Item {
             smooth: false
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
-            Item {
-                id: modelItem
-                width: 212
-                height: 300
+
+            Image {
+                id: model_image2
                 smooth: false
+                sourceSize.width: 212
+                sourceSize.height: 300
                 anchors.left: parent.left
                 anchors.leftMargin: 100
                 anchors.verticalCenter: parent.verticalCenter
-
-                Image {
-                    id: back_image
-                    smooth: false
-                    anchors.fill: parent
-                    source: "qrc:/img/back_build_volume.png"
-                }
-
-                Image {
-                    id: model_image
-                    smooth: false
-                    width: 320
-                    height: 200
-                    anchors.verticalCenterOffset: 50
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    source: "image://thumbnail/" + filePathName
-                }
-
-                Image {
-                    id: front_image
-                    smooth: false
-                    anchors.fill: parent
-                    source: "qrc:/img/front_build_volume.png"
-                }
+                source: "image://thumbnail/" + filePathName
             }
 
             ColumnLayout {

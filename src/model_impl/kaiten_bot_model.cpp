@@ -690,6 +690,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for chamber temps
             UPDATE_INT_PROP(chamberCurrentTemp, kChamberA["current_temperature"])
             UPDATE_INT_PROP(chamberTargetTemp, kChamberA["target_temperature"])
+            UPDATE_INT_PROP(chamberErrorCode, kChamberA["error"])
           }
         }
       }

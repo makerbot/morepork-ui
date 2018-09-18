@@ -6,6 +6,7 @@ Item {
     id: extruderPage
     property alias defaultItem: itemExtruder
     property alias extruderSwipeView: extruderSwipeView
+    property bool isTopLidOpen: bot.chamberErrorCode == 45
     smooth: false
 
     SwipeView {
@@ -39,8 +40,6 @@ Item {
                 filamentPresent: bot.extruderAFilamentPresent
                 extruderUsage: "0H"
                 extruderSerialNo: "000-000"
-                filamentColor: 0
-                filamentColorText: "COLOR"
                 attachButton {
                     button_mouseArea.onClicked: {
                         itemAttachExtruder.extruder = extruderID
@@ -66,8 +65,6 @@ Item {
                 filamentPresent: bot.extruderBFilamentPresent
                 extruderUsage: "0H"
                 extruderSerialNo: "000-000"
-                filamentColor: 0
-                filamentColorText: "COLOR"
                 attachButton {
                     button_mouseArea.onClicked: {
                         itemAttachExtruder.extruder = extruderID

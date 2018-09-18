@@ -13,11 +13,20 @@ Item {
     property int extruderTemperature
     property string extruderUsage
     property string extruderSerialNo
-    property int filamentColor
-    property string filamentColorText: "COLOR"
     property alias extruder_image: extruder_image
     property alias attachButton: attachButton
     property alias detachButton: detachButton
+
+    property bool materialPresent: {
+        switch(extruderID) {
+        case 1:
+            materialPage.bay1.spoolPresent
+            break;
+        case 2:
+            materialPage.bay2.spoolPresent
+            break;
+        }
+    }
 
     Rectangle {
         id: filament_rectangle
@@ -220,15 +229,21 @@ Item {
                 Text {
                     id: filamentMaterial_text
                     text: {
-                        switch(extruderID) {
-                        case 1:
-                            "PLA"
-                            break;
-                        case 2:
-                            "PVA"
-                            break;
+                        if(materialPresent) {
+                            switch(extruderID) {
+                            case 1:
+                                materialPage.bay1.filamentMaterialName
+                                break;
+                            case 2:
+                                materialPage.bay2.filamentMaterialName
+                                break;
+                            }
+                        }
+                        else {
+                            "NO MATERIAL"
                         }
                     }
+                    font.capitalization: Font.AllUppercase
                     antialiasing: false
                     smooth: false
                     color: "#ffffff"
@@ -243,11 +258,22 @@ Item {
                     color: "#ffffff"
                     width: 1
                     height: 18
+                    visible: materialPresent
                 }
 
                 Text {
                     id: filamentMaterialColor_text
-                    text: filamentColorText
+                    text: {
+                        switch(extruderID) {
+                        case 1:
+                            materialPage.bay1.filamentColorName
+                            break;
+                        case 2:
+                            materialPage.bay2.filamentColorName
+                            break;
+                        }
+                    }
+                    font.capitalization: Font.AllUppercase
                     antialiasing: false
                     smooth: false
                     color: "#ffffff"
@@ -255,10 +281,9 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 16
+                    visible: materialPresent
                 }
-
             }
-
 
             RoundedButton {
                 id: materialButton

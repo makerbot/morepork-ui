@@ -1,24 +1,39 @@
 import QtQuick 2.10
+import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.3
 
 Item {
-    width: 100
+    width: 75
     height: 40
     smooth: false
 
-    Row {
+    RowLayout {
         id: rowLayout
         smooth: false
-        spacing: 13
+        spacing: 5
         anchors.fill: parent
 
-        FilamentIcon {
-            id: filament1_icon
-            filamentBayID: 1
-        }
+        Item {
+            id: filamentIconItem
+            width: 35
+            height: 26
+            smooth: false
+            anchors.verticalCenter: parent.verticalCenter
 
-        FilamentIcon {
-            id: filament2_icon
-            filamentBayID: 2
+            FilamentIcon {
+                id: filament1_icon
+                z: 1
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                filamentBayID: 1
+            }
+
+            FilamentIcon {
+                id: filament2_icon
+                anchors.left: parent.left
+                anchors.leftMargin: 20
+                filamentBayID: 2
+            }
         }
 
         Item {

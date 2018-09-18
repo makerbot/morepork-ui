@@ -27,7 +27,21 @@ Item {
         }
     }
 
-    property string filamentColorText: {
+    property bool extruderFilamentPresent: {
+        switch(filamentBayID) {
+        case 1:
+            bot.extruderAFilamentPresent
+            break;
+        case 2:
+            bot.extruderBFilamentPresent
+            break;
+        default:
+            false
+            break;
+        }
+    }
+
+    property string filamentColorName: {
         switch(filamentBayID) {
         case 1:
             bot.spoolAColorName
@@ -55,16 +69,59 @@ Item {
         }
     }
 
-    property real filamentQuantity: {
+    property real filamentLength: {
         switch(filamentBayID) {
         case 1:
-            bot.spoolAAmountRemaining/1000
+            bot.spoolAAmountRemaining/10
             break;
         case 2:
-            bot.spoolBAmountRemaining/1000
+            bot.spoolBAmountRemaining/10
             break;
         default:
             0.0
+            break;
+        }
+    }
+
+    property real filamentVolume: {
+        (3.14159 * Math.pow(0.0875, 2) * filamentLength)
+    }
+
+    property real filamentQuantity: {
+        switch(filamentMaterialCode) {
+        case 0:
+            0
+            break;
+        case 1:
+            //PLA
+            ((filamentVolume * 1.25)/1000).toFixed(3)
+            break;
+        case 2:
+            //TOUGH
+            ((filamentVolume * 1.25)/1000).toFixed(3)
+            break;
+        case 3:
+            //PVA
+            ((filamentVolume * 1.20)/1000).toFixed(3)
+            break;
+        case 4:
+            //PETG
+            ((filamentVolume * 1.27)/1000).toFixed(3)
+            break;
+        case 5:
+            //ABS
+            ((filamentVolume * 1.03)/1000).toFixed(3)
+            break;
+        case 6:
+            //HIPS
+            ((filamentVolume * 1.04)/1000).toFixed(3)
+            break;
+        case 7:
+            //PVA-M
+            ((filamentVolume * 1.22)/1000).toFixed(3)
+            break;
+        default:
+            0
             break;
         }
     }
@@ -78,7 +135,7 @@ Item {
             "PLA"
             break;
         case 2:
-            "Tough"
+            "TOUGH"
             break;
         case 3:
             "PVA"
@@ -111,11 +168,6 @@ Item {
         onTriggered: {
             bot.getSpoolInfo(filamentBayID-1)
         }
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
     }
 
     MaterialIcon {
@@ -164,7 +216,7 @@ Item {
                     color: "#ffffff"
                     text: {
                         if(spoolPresent) {
-                            filamentColorText +
+                            filamentColorName +
                             " " +
                             filamentMaterialName
                         }
@@ -200,7 +252,7 @@ Item {
                     id: material_quantity_text
                     color: "#ffffff"
                     text: spoolPresent ?
-                            Math.round(filamentQuantity) +
+                            filamentQuantity +
                             "KG" + " REMAINING" :
                             " "
                     font.letterSpacing: 4
@@ -231,9 +283,11 @@ Item {
 
                 RoundedButton {
                     id: loadButton
-                    buttonWidth: 120
+                    buttonWidth: extruderFilamentPresent ?
+                                      130 : 120
                     buttonHeight: 50
-                    label: "LOAD"
+                    label: extruderFilamentPresent ?
+                               "PURGE" : "LOAD"
                 }
 
                 RoundedButton {
