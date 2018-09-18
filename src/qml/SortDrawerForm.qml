@@ -74,7 +74,7 @@ Drawer {
             MoreporkButton {
                 id: buttonSortAZ
                 buttonText.text: "A-Z"
-                buttonImage.source: "qrc:/img/check_circle_small.png"
+                buttonImage.source: ""
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
                 height: 80
@@ -87,7 +87,7 @@ Drawer {
             MoreporkButton {
                 id: buttonSortDateAdded
                 buttonText.text: "DATE ADDED"
-                buttonImage.source: ""
+                buttonImage.source: "qrc:/img/check_circle_small.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
                 height: 80

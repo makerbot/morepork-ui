@@ -47,7 +47,7 @@ MoreporkStorage::MoreporkStorage()
   usb_storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_->addPath("/dev/disk/by-path");
   prev_thing_dir_ = "";
-  m_sortType = PrintFileInfo::StorageSortType::Alphabetic;
+  m_sortType = PrintFileInfo::StorageSortType::DateAdded;
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateStorageFileList(const QString)));
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
