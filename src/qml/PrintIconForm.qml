@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import ProcessStateTypeEnum 1.0
 
 Item {
@@ -78,7 +78,9 @@ Item {
                       bot.process.stateType == ProcessStateType.Preheating ||
                       bot.process.stateType == ProcessStateType.Cancelling ||
                       bot.process.stateType == ProcessStateType.CleaningUp ||
-                      bot.process.stateType == ProcessStateType.Done) // Part of cancelling step
+                      bot.process.stateType == ProcessStateType.Done || // Part of cancelling step
+                      bot.process.stateType == ProcessStateType.Failed ||
+                      bot.process.stateType == ProcessStateType.Completed)
 
             RotationAnimator {
                 target: status_image
@@ -86,7 +88,11 @@ Item {
                 to: 0
                 duration: 10000
                 loops: Animation.Infinite
-                running: parent.visible
+                running: (bot.process.stateType == ProcessStateType.Loading ||
+                         bot.process.stateType == ProcessStateType.Preheating ||
+                         bot.process.stateType == ProcessStateType.Cancelling ||
+                         bot.process.stateType == ProcessStateType.CleaningUp ||
+                         bot.process.stateType == ProcessStateType.Done)
             }
         }
 
@@ -109,7 +115,7 @@ Item {
                       bot.process.stateType == ProcessStateType.Done) // Part of cancelling step
 
             RotationAnimator {
-                target: loading_or_paused_image;
+                target: loading_or_paused_image
                 from: 0
                 to: 360
                 duration: 10000
@@ -230,7 +236,7 @@ Item {
             when: bot.process.stateType == ProcessStateType.Paused ||
                   bot.process.stateType == ProcessStateType.Pausing ||
                   bot.process.stateType == ProcessStateType.Resuming ||
-                  bot.process.stateType == ProcessStateType.Prehaeting || // Out of filament
+                  bot.process.stateType == ProcessStateType.Preheating || // Out of filament
                   bot.process.stateType == ProcessStateType.UnloadingFilament // while printing
 
             PropertyChanges {
@@ -291,7 +297,6 @@ Item {
                 height: 59
                 rotation: 0
                 source: "qrc:/img/check_mark.png"
-                visible: true
             }
         },
         State {
@@ -314,7 +319,6 @@ Item {
                 height: 89
                 rotation: 0
                 source: "qrc:/img/exc_mark.png"
-                visible: true
             }
         }
     ]

@@ -74,7 +74,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(bool, isLoad, false)
     MODEL_PROP(bool, isBuildPlateClear, false)
     MODEL_PROP(bool, printFileValid, false)
-    MODEL_PROP(int, currentToolIndex, 0)
+    MODEL_PROP(int, currentToolIndex, -1)
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
     MODEL_PROP(int, elapsedTime, 0)
