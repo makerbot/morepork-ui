@@ -15,6 +15,7 @@ Button {
     property alias fileMaterial: fileMaterial
     property alias filePrintTime: filePrintTime
     property alias fileDesc_rowLayout: fileDesc_rowLayout
+    property alias materialError: materialErrorAlertIcon
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
 
@@ -26,22 +27,17 @@ Button {
         smooth: false
     }
 
-    Item {
-        id: imageItem
-        height: 80
-        width: 110
+    Image {
+        id: fileThumbnail
+        sourceSize.width: 140
+        sourceSize.height: 106
+        asynchronous: true
+        smooth: false
+        antialiasing: false
+        fillMode: Image.PreserveAspectFit
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 35
-
-        Image {
-            id: fileThumbnail
-            anchors.fill: parent
-            asynchronous: true
-            smooth: false
-            antialiasing: false
-            fillMode: Image.PreserveAspectFit
-        }
+        anchors.leftMargin: 25
     }
 
     Item {
@@ -50,7 +46,7 @@ Button {
         height: 50
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 175
+        anchors.leftMargin: 190
 
         Text {
             id: filenameText
@@ -110,6 +106,19 @@ Button {
                 verticalAlignment: Text.Left
                 smooth: false
                 antialiasing: false
+
+                Image {
+                    id: materialErrorAlertIcon
+                    height: 20
+                    anchors.left: parent.right
+                    anchors.leftMargin: 7
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 20
+                    antialiasing: false
+                    smooth: false
+                    source: "qrc:/img/alert.png"
+                    visible: true
+                }
             }
         }
     }

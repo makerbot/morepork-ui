@@ -1,10 +1,11 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 Item {
+    id: materialPage
     property alias bay1: bay1
     property alias bay2: bay2
     property alias defaultItem: itemFilamentBay
@@ -120,13 +121,6 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 25
                 filamentBayID: 1
-                //filamentMaterialPercent: bot.filament1Percent
-                //filamentMaterialColor: bot.filament1Color
-                filamentMaterialPercent: 75 //Temporarily so that
-                filamentMaterialColor: 1    //the page doesn't look empty!
-                filamentMaterialType: "PLA"
-                filamentMaterialColorText: "COLOR"
-                filamentMaterialQuantity: "0.0"
             }
 
             FilamentBay {
@@ -135,13 +129,6 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 225
                 filamentBayID: 2
-                //filamentMaterialPercent: bot.filament2Percent
-                //filamentMaterialColor: bot.filament2Color
-                filamentMaterialPercent: 65 //Temporarily so that
-                filamentMaterialColor: 5    //the page doesn't look empty!
-                filamentMaterialType: "PVA"
-                filamentMaterialColorText: "COLOR"
-                filamentMaterialQuantity: "0.0"
             }
         }
 

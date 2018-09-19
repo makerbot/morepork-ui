@@ -21,18 +21,8 @@ class BotModel : public BaseModel {
         Disconnected,
         TimedOut
     };
-    enum FilamentColor{
-        Unknown,
-        Red,
-        Green,
-        Blue,
-        Yellow,
-        Orange,
-        Violet
-    };
 
     Q_ENUM(ConnectionState)
-    Q_ENUM(FilamentColor)
 
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
@@ -77,10 +67,6 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, updatingExtruderFirmware, false)
     MODEL_PROP(int, extruderFirmwareUpdateProgressA, 0)
     MODEL_PROP(int, extruderFirmwareUpdateProgressB, 0)
-    MODEL_PROP(FilamentColor, filament1Color, Unknown)
-    MODEL_PROP(FilamentColor, filament2Color, Unknown)
-    MODEL_PROP(int, filament1Percent, 0)
-    MODEL_PROP(int, filament2Percent, 0)
     MODEL_PROP(int, extruderACurrentTemp, -999)
     MODEL_PROP(int, extruderATargetTemp, -999)
     MODEL_PROP(bool, extruderAPresent, false)
@@ -91,6 +77,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderBFilamentPresent, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
+    MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)
@@ -99,6 +86,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBFilamentPresent, false)
     MODEL_PROP(bool, filamentBayATagPresent, false)
     MODEL_PROP(bool, filamentBayBTagPresent, false)
+    MODEL_PROP(int, filament1Percent, 0)
+    MODEL_PROP(int, filament2Percent, 0)
 
     MODEL_PROP(int, spoolAOriginalAmount, 0)
     MODEL_PROP(int, spoolBOriginalAmount, 0)
@@ -111,8 +100,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>({0,0,0}))
     MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>({0,0,0}))
     // TODO(shirley): (duplicate with filament1/2Color)
-    MODEL_PROP(QString, spoolAColorName, "Unknown")
-    MODEL_PROP(QString, spoolBColorName, "Unknown")
+    MODEL_PROP(QString, spoolAColorName, "Loading...")
+    MODEL_PROP(QString, spoolBColorName, "Loading...")
 
     // TODO(shirley) Should probably convert to string when mapping of codes to
     // filament type names is available

@@ -205,10 +205,23 @@ Item {
                         }
                         break;
                     case 2:
-                        "EXTRUDER"
+                        switch(extruderPage.extruderSwipeView.currentIndex) {
+                        case 0:
+                            "EXTRUDERS"
+                            break;
+                        case 1:
+                            "ATTACHING EXTRUDERS"
+                            break;
+                        default:
+                            "EXTRUDERS"
+                            break;
+                        }
                         break;
                     case 3:
                         switch(settingsPage.settingsSwipeView.currentIndex) {
+                        case 4:
+                            "CALIBRATION"
+                            break;
                         case 5:
                             "CHOOSE WIFI NETWORK"
                             break;

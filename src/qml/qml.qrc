@@ -79,5 +79,15 @@
         <file>ColorSwatchPageForm.qml</file>
         <file>ColorSelectorBox.qml</file>
         <file>ColorSelectorBoxForm.qml</file>
+        <file>BulletedListItem.qml</file>
+        <file>BulletedListItemForm.qml</file>
+        <file>BusySpinner.qml</file>
+        <file>BusySpinnerForm.qml</file>
+        <file>StartPrintMaterialViewItem.qml</file>
+        <file>StartPrintMaterialViewItemForm.qml</file>
+        <file>StartPrintMaterialIcon.qml</file>
+        <file>StartPrintMaterialIconForm.qml</file>
+        <file>StartPrintPage.qml</file>
+        <file>StartPrintPageForm.qml</file>
     </qresource>
 </RCC>

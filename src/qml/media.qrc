@@ -28,12 +28,17 @@
         <file alias="makerbot_logo_320x200.png">images/makerbot_logo_320x200.png</file>
       	<file alias="filamentbay_empty.png">images/filamentbay_empty.png</file>
       	<file alias="filamentbay_loaded.png">images/filamentbay_loaded.png</file>
-      	<file alias="insert_model_material.png">images/insert_model_material.png</file>
-      	<file alias="insert_support_material.png">images/insert_support_material.png</file>
+      	<file alias="place_spool_bay1.gif">images/place_spool_bay1.gif</file>
+      	<file alias="place_spool_bay2.gif">images/place_spool_bay2.gif</file>
+      	<file alias="insert_filament_bay1.gif">images/insert_filament_bay1.gif</file>
+      	<file alias="insert_filament_bay2.gif">images/insert_filament_bay2.gif</file>
+      	<file alias="close_bay1.gif">images/close_bay1.gif</file>
+      	<file alias="close_bay2.gif">images/close_bay2.gif</file>
       	<file alias="clear_excess_material.png">images/clear_excess_material.png</file>
-      	<file alias="close_bay_door.png">images/close_bay_door.png</file>
-      	<file alias="confirm_extrusion.png">images/confirm_extrusion.png</file>
-      	<file alias="extruder_heating.png">images/extruder_heating.png</file>
+      	<file alias="confirm_extrusion_1.png">images/confirm_extrusion_1.png</file>
+      	<file alias="confirm_extrusion_2.png">images/confirm_extrusion_2.png</file>
+      	<file alias="extruder_1_heating.png">images/extruder_1_heating.png</file>
+      	<file alias="extruder_2_heating.png">images/extruder_2_heating.png</file>
       	<file alias="unload_filament.png">images/unload_filament.png</file>
       	<file alias="change_filament.png">images/change_filament.png</file>
       	<file alias="close.png">images/close.png</file>
@@ -50,7 +55,8 @@
       	<file alias="process_successful.png">images/process_successful.png</file>
 	<file alias="sombrero_icon.png">images/sombrero_icon.png</file>
       	<file alias="usb_icon.png">images/usb_icon.png</file>
-	<file alias="extruder_attached.png">images/extruder_attached.png</file>
+	<file alias="extruder_1_attached.png">images/extruder_1_attached.png</file>
+	<file alias="extruder_2_attached.png">images/extruder_2_attached.png</file>
 	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
 	<file alias="extruder_left.png">images/extruder_left.png</file>
 	<file alias="extruder_right.png">images/extruder_right.png</file>
@@ -89,6 +95,10 @@
 	<file alias="account_auth_complete.png">images/account_auth_complete.png</file>
 	<file alias="add_account_image.png">images/add_account_image.png</file>
 	<file alias="pattern.png">images/pattern.png</file>
+	<file alias="attach_extruder_1.gif">images/attach_extruder_1.gif</file>
+	<file alias="attach_extruder_2.gif">images/attach_extruder_2.gif</file>
+	<file alias="file_no_preview.png">images/file_no_preview.png</file>
+	<file alias="remove_top_lid.gif">images/remove_top_lid.gif</file>
     </qresource>
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>

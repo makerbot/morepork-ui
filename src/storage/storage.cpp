@@ -15,16 +15,29 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
       return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
     else{
       MakerbotFileMetaReader file_meta_reader(kFileInfo);
-      QImage thumbnail = file_meta_reader.getLargeThumbnail();
+      QImage thumbnail;
+      switch(requestedSize.width()) {
+      case 140:
+          thumbnail = file_meta_reader.getSmallThumbnail();
+          break;
+      case 212:
+          thumbnail = file_meta_reader.getMediumThumbnail();
+          break;
+      case 960:
+          thumbnail = file_meta_reader.getLargeThumbnail();
+          break;
+      default:
+          break;
+      }
       if(thumbnail.isNull())
-        return QPixmap::fromImage(QImage(":/img/makerbot_logo_320x200.png"));
+        return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
       else
         return QPixmap::fromImage(thumbnail);
     }
   }
   else
 #endif
-    return QPixmap::fromImage(QImage(":/img/makerbot_logo_320x200.png"));
+    return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
 }
 
 
@@ -34,7 +47,7 @@ MoreporkStorage::MoreporkStorage()
   usb_storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_->addPath("/dev/disk/by-path");
   prev_thing_dir_ = "";
-  m_sortType = PrintFileInfo::StorageSortType::Alphabetic;
+  m_sortType = PrintFileInfo::StorageSortType::DateAdded;
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateStorageFileList(const QString)));
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),

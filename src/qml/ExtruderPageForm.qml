@@ -1,10 +1,12 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
     id: extruderPage
     property alias defaultItem: itemExtruder
+    property alias extruderSwipeView: extruderSwipeView
+    property bool isTopLidOpen: bot.chamberErrorCode == 45
     smooth: false
 
     SwipeView {
@@ -38,8 +40,18 @@ Item {
                 filamentPresent: bot.extruderAFilamentPresent
                 extruderUsage: "0H"
                 extruderSerialNo: "000-000"
-                filamentColor: 0
-                filamentColorText: "COLOR"
+                attachButton {
+                    button_mouseArea.onClicked: {
+                        itemAttachExtruder.extruder = extruderID
+                        extruderSwipeView.swipeToItem(1)
+                    }
+                }
+                detachButton {
+                    button_mouseArea.onClicked: {
+                        itemAttachExtruder.extruder = extruderID
+                        extruderSwipeView.swipeToItem(1)
+                    }
+                }
             }
 
             Extruder {
@@ -53,8 +65,18 @@ Item {
                 filamentPresent: bot.extruderBFilamentPresent
                 extruderUsage: "0H"
                 extruderSerialNo: "000-000"
-                filamentColor: 0
-                filamentColorText: "COLOR"
+                attachButton {
+                    button_mouseArea.onClicked: {
+                        itemAttachExtruder.extruder = extruderID
+                        extruderSwipeView.swipeToItem(1)
+                    }
+                }
+                detachButton {
+                    button_mouseArea.onClicked: {
+                        itemAttachExtruder.extruder = extruderID
+                        extruderSwipeView.swipeToItem(1)
+                    }
+                }
             }
         }
 
@@ -63,73 +85,229 @@ Item {
             id: itemAttachExtruder
             property var backSwiper: extruderSwipeView
             property int backSwipeIndex: 0
-            property alias extruder: baseItem.extruder
+            property int extruder
+            property bool isAttached: {
+                switch(extruder) {
+                case 1:
+                    bot.extruderAPresent
+                    break;
+                case 2:
+                    bot.extruderBPresent
+                    break;
+                default:
+                    false
+                    break;
+                }
+            }
+
             smooth: false
             visible: false
 
-            Image {
+            AnimatedImage {
                 id: image
                 width: sourceSize.width
                 height: sourceSize.height
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 0
                 anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/img/extruder_heating.png"
+                source: switch(itemAttachExtruder.extruder) {
+                        case 1:
+                            "qrc:/img/attach_extruder_1.gif"
+                            break;
+                        case 2:
+                            "qrc:/img/attach_extruder_2.gif"
+                            break;
+                        default:
+                            ""
+                            break;
+                        }
+                playing: extruderSwipeView.currentIndex == 1
+                visible: true
+                cache: false
                 smooth: false
 
                 Item {
                     id: baseItem
                     width: 400
                     height: 420
-                    anchors.left: parent.left
-                    anchors.leftMargin: 400
+                    anchors.left: parent.right
+                    anchors.leftMargin: 0
                     anchors.verticalCenter: image.verticalCenter
                     smooth: false
-                    property int extruder
 
                     Text {
                         id: main_instruction_text
                         color: "#cbcbcb"
-                        text: "ATTACH EXTRUDER " + parent.extruder
+                        text: {
+                            if(itemAttachExtruder.isAttached) {
+                                (itemAttachExtruder.extruder == 1 ? "MODEL" : "SUPPORT") +
+                                " EXTRUDER\nIS ATTACHED"
+                            }
+                            else {
+                                "ATTACH " +
+                                (itemAttachExtruder.extruder == 1 ? "MODEL" : "SUPPORT") +
+                                "\nEXTRUDER TO SLOT " + itemAttachExtruder.extruder
+                            }
+                        }
                         anchors.top: parent.top
-                        anchors.topMargin: 110
-                        font.letterSpacing: 4
+                        anchors.topMargin: 50
+                        font.letterSpacing: 2
                         font.family: "Antennae"
                         font.weight: Font.Bold
-                        font.pixelSize: 19
-                        lineHeight: 1.35
+                        font.pixelSize: 21
+                        lineHeight: 1.2
                         smooth: false
                         antialiasing: false
                     }
 
-                    Text {
-                        id: instruction_description_text
-                        width: 320
-                        height: 105
-                        color: "#cbcbcb"
-                        text: "Open the latch labeled " + parent.extruder
-                            + " and insert a " + (parent.extruder == 1 ? "material" : "support")
-                            + " extruder into the slot. Then close the latch and snap it into place."
-                        anchors.top: parent.top
-                        anchors.topMargin: 155
-                        wrapMode: Text.WordWrap
-                        font.family: "Antennae"
-                        font.weight: Font.Light
-                        font.pixelSize: 17
-                        lineHeight: 1.35
-                        smooth: false
-                        antialiasing: false
+                    ColumnLayout {
+                        id: stepsColumnLayout
+                        width: 380
+                        height: 150
+                        spacing: 0
+                        anchors.top: main_instruction_text.bottom
+                        anchors.topMargin: 25
+
+                        BulletedListItem{
+                            bulletNumber: itemAttachExtruder.isAttached ? "4" : "1"
+                            bulletText: itemAttachExtruder.isAttached ?
+                                          "Close the latch" : "Open the lock"
+                        }
+
+                        BulletedListItem{
+                            bulletNumber: itemAttachExtruder.isAttached ? "5" : "2"
+                            bulletText: itemAttachExtruder.isAttached ?
+                                            "Close the lock" : "Open the handle"
+                        }
+
+                        BulletedListItem{
+                            bulletNumber: itemAttachExtruder.isAttached ? "6" : "3"
+                            bulletText: {
+                                itemAttachExtruder.isAttached ?
+                                        ("Attach swivel clip " +
+                                         itemAttachExtruder.extruder) :
+                                        ("Load " +
+                                        (itemAttachExtruder.extruder == 1 ?
+                                             "Model" : "Support") +
+                                         " Extruder into Slot " +
+                                         itemAttachExtruder.extruder)
+
+                            }
+                        }
                     }
 
                     RoundedButton {
                         id: doneButton
-                        buttonWidth: 100
-                        buttonHeight: 45
-                        label: "DONE"
-                        label_size: 18
-                        anchors.top: parent.top
-                        anchors.topMargin: 250
+                        buttonWidth: {
+                            if(itemAttachExtruder.extruder == 1 &&
+                               itemAttachExtruder.isAttached) {
+                                360
+                            }
+                            else if(itemAttachExtruder.extruder == 2 &&
+                                itemAttachExtruder.isAttached) {
+                                260
+                            }
+                        }
+                        buttonHeight: 44
+                        button_text.font.capitalization: Font.MixedCase
+                        label: {
+                            if(itemAttachExtruder.extruder == 1 &&
+                               itemAttachExtruder.isAttached) {
+                                "NEXT: Attach Support Extruder"
+                            }
+                            else if(itemAttachExtruder.extruder == 2 &&
+                                itemAttachExtruder.isAttached) {
+                                "RUN CALIBRATION"
+                            }
+                            else {
+                                "DEFAULT"
+                            }
+                        }
+                        label_width: {
+                            if(itemAttachExtruder.extruder == 1 &&
+                               itemAttachExtruder.isAttached) {
+                                360
+                            }
+                            else if(itemAttachExtruder.extruder == 2 &&
+                                itemAttachExtruder.isAttached) {
+                                250
+                            }
+                            else {
+                                250
+                            }
+                        }
+                        label_size: {
+                            if(itemAttachExtruder.extruder == 1 &&
+                               itemAttachExtruder.isAttached) {
+                                15
+                            }
+                            else if(itemAttachExtruder.extruder == 2 &&
+                                itemAttachExtruder.isAttached) {
+                                18
+                            }
+                            else {
+                                18
+                            }
+                        }
+                        anchors.top: stepsColumnLayout.bottom
+                        anchors.topMargin: 30
+                        visible: {
+                            itemAttachExtruder.extruder == 1 ?
+                                 bot.extruderAPresent :
+                                 bot.extruderBPresent
+                        }
                         button_mouseArea.onClicked: {
-                            extruderSwipeView.swipeToItem(0)
+                            if(itemAttachExtruder.extruder == 1 &&
+                               itemAttachExtruder.isAttached) {
+                                itemAttachExtruder.extruder = 2
+                            }
+                            else if(itemAttachExtruder.extruder == 2 &&
+                                    itemAttachExtruder.isAttached) {
+                                if(extruderSwipeView.currentIndex != 0) {
+                                    extruderSwipeView.swipeToItem(0)
+                                }
+                                if(mainSwipeView.currentIndex != 3) {
+                                    mainSwipeView.swipeToItem(3)
+                                }
+                                if(settingsPage.settingsSwipeView.currentIndex != 4) {
+                                    settingsPage.settingsSwipeView.swipeToItem(4)
+                                }
+                            }
+                        }
+                    }
+
+                    Item {
+                        id: waitingItem
+                        width: 350
+                        height: 45
+                        anchors.top: stepsColumnLayout.bottom
+                        anchors.topMargin: 30
+                        visible: {
+                            itemAttachExtruder.extruder == 1 ?
+                                 !bot.extruderAPresent :
+                                 !bot.extruderBPresent
+                        }
+
+                        BusySpinner {
+                            id: waitingSpinner
+                            anchors.verticalCenter: parent.verticalCenter
+                            spinnerActive: parent.visible
+                            spinnerSize: 32
+                        }
+
+                        Text {
+                            id: bulletNumber
+                            text: "WAITING FOR EXTRUDER..."
+                            anchors.left: waitingSpinner.right
+                            anchors.leftMargin: 10
+                            font.letterSpacing: 3
+                            font.bold: true
+                            color: "#ffffff"
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: 16
+                            font.family: "Antennae"
+                            smooth: false
+                            antialiasing: false
                         }
                     }
                 }

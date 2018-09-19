@@ -11,10 +11,23 @@ Item {
 
     property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
-    property int targetTempertaure: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
+    property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentPresentSwitch: false
     property bool isExternalLoad: false
     property int bayID: bot.process.currentToolIndex + 1
+    property bool isMaterialPresent: bayID == 1 ? bay1.spoolPresent :
+                                                  bay2.spoolPresent
+
+    onIsMaterialPresentChanged: {
+        overrideInvalidMaterial = false
+    }
+
+    property bool isMaterialValid: true
+    property bool overrideInvalidMaterial: false
+    property int materialCode: bayID == 1 ? bay1.filamentMaterialCode :
+                                            bay2.filamentMaterialCode
+    property string materialName: bayID == 1 ? bay1.filamentMaterialName :
+                                               bay2.filamentMaterialName
     property int errorCode
     signal processDone
     property int currentState: bot.process.stateType
@@ -22,6 +35,7 @@ Item {
         switch(currentState) {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
+            overrideInvalidMaterial = false
             if(bot.process.errorCode > 0) {
                 errorCode = bot.process.errorCode
                 state = "error"
@@ -91,43 +105,75 @@ Item {
         }
     }
 
-    Image {
+    AnimatedImage {
         id: image
-        width: sourceSize.width
-        height: sourceSize.height
-        source: "qrc:/img/insert_model_material.png"
+        width: 400
+        height: 480
+//        width: sourceSize.width
+//        height: sourceSize.height
+        anchors.verticalCenterOffset: -10
+        anchors.verticalCenter: parent.verticalCenter
+        source: bayID == 1 ?
+                    "qrc:/img/place_spool_bay1.gif" :
+                    "qrc:/img/place_spool_bay2.gif"
+        cache: false
+        // Since this is the base state, settting playing to true
+        // makes the gif always keep playing even when this page is
+        // not visible which makes the entire UI lag.
+        playing: materialSwipeView.currentIndex == 1 &&
+                 bot.process.stateType == ProcessStateType.Preheating
 
         Item {
-            id: item2
+            id: contentItem
             width: 400
             height: 420
-            anchors.left: parent.left
-            anchors.leftMargin: 400
+            anchors.left: parent.right
+            anchors.leftMargin: 0
 
             Text {
                 id: main_instruction_text
-                width: 262
-                height: 24
+                width: 375
                 color: "#cbcbcb"
-                text: bayID == 1 ? "INSERT MODEL MATERIAL SPOOL" : "INSERT SUPPORT MATERIAL SPOOL"
+                text: "OPEN BAY " + bayID
+                font.capitalization: Font.AllUppercase
                 anchors.top: parent.top
-                anchors.topMargin: 110
+                anchors.topMargin: 100
                 font.letterSpacing: 4
                 wrapMode: Text.WordWrap
                 font.family: "Antennae"
                 font.weight: Font.Bold
                 font.pixelSize: 20
-                lineHeight: 1.35
+                lineHeight: 1.3
+            }
+
+            ColumnLayout {
+                id: instructionsList
+                width: 300
+                height: 80
+                anchors.top: main_instruction_text.bottom
+                anchors.topMargin: 18
+                visible: true
+
+                BulletedListItem {
+                    bulletNumber: "1"
+                    bulletText: "Open Bay " + bayID
+                }
+
+                BulletedListItem {
+                    bulletNumber: "2"
+                    bulletText: "Place a " +
+                                (bayID == 1 ? "Model " : "Support ") +
+                                "material spool in\nthe bay"
+                }
             }
 
             Text {
                 id: instruction_description_text
                 width: 325
-                height: 105
                 color: "#cbcbcb"
-                text: "Open material bay " + bayID + " and insert the MakerBot Smart Spool. Feed the end of the material into the slot until you feel it being pulled in."
-                anchors.top: parent.top
-                anchors.topMargin: 180
+                text: "\n\n\n"
+                anchors.top: main_instruction_text.bottom
+                anchors.topMargin: 30
                 wrapMode: Text.WordWrap
                 font.family: "Antennae"
                 font.weight: Font.Light
@@ -137,23 +183,26 @@ Item {
 
             RoundedButton {
                 id: acknowledgeButton
-                buttonWidth: 350
+                label_width: 180
+                label: "CONTINUE"
+                buttonWidth: 180
                 buttonHeight: 45
-                anchors.top: parent.top
-                anchors.topMargin: 280
-                visible: false
+                anchors.top: instruction_description_text.bottom
+                anchors.topMargin: 20
+                visible: true
             }
 
             RowLayout {
-                id: rowLayout
-                y: 173
+                id: temperatureDisplay
+                anchors.top: main_instruction_text.bottom
+                anchors.topMargin: 20
                 width: children.width
                 height: 35
                 spacing: 10
                 visible: false
 
                 Text {
-                    id: extruder_current_tempertaure_text
+                    id: extruder_current_temperature_text
                     text: currentTemperature + "C"
                     font.family: "Antennae"
                     color: "#ffffff"
@@ -171,7 +220,7 @@ Item {
 
                 Text {
                     id: extruder_target_temperature_text
-                    text: targetTempertaure + "C"
+                    text: targetTemperature + "C"
                     font.family: "Antennae"
                     color: "#ffffff"
                     font.letterSpacing: 3
@@ -184,29 +233,47 @@ Item {
     states: [
         State {
             name: "feed_filament"
-            when: filamentPresentSwitch && !isExternalLoad &&
+            when: (isMaterialPresent || overrideInvalidMaterial) &&
+                  !isExternalLoad &&
                   bot.process.stateType == ProcessStateType.Preheating &&
-                  bot.process.type == ProcessType.Load
+                  (bot.process.type == ProcessType.Load ||
+                   bot.process.type == ProcessType.Unload ||
+                   bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
-                text: "CLOSE THE BAY DOOR"
+                text: {
+                    if(overrideInvalidMaterial) {
+                        "UNKNOWN MATERIAL"
+                    }
+                    else if(isMaterialValid) {
+                        materialName + " DETECTED"
+                    }
+                }
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Push the door closed until you feel it click sealing the material bay."
+                text: "Push the end of the material into the slot until you feel it being pulled in."
             }
 
             PropertyChanges {
                 target: acknowledgeButton
                 visible: true
-                label: "THE DOOR IS CLOSED"
+                label: "CONTINUE"
             }
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/close_bay_door.png"
+                playing: true
+                source: bayID == 1 ?
+                            "qrc:/img/insert_filament_bay1.gif" :
+                            "qrc:/img/insert_filament_bay2.gif"
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
             }
         },
         State {
@@ -219,7 +286,10 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: bayID == 1 ? "EXTRUDER 1 IS HEATING UP" : "EXTRUDER 2 IS HEATING UP"
+                text: bayID == 1 ?
+                          "EXTRUDER 1 IS\nHEATING UP" :
+                          "EXTRUDER 2 IS\nHEATING UP"
+                anchors.topMargin: 140
             }
 
             PropertyChanges {
@@ -228,13 +298,38 @@ Item {
             }
 
             PropertyChanges {
-                target: rowLayout
+                target: temperatureDisplay
+                visible: true
+            }
+
+            PropertyChanges {
+                target: extruder_current_temperature_text
+                text: currentTemperature + "C"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: extruder_target_temperature_text
+                text: targetTemperature + "C"
                 visible: true
             }
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/extruder_heating.png"
+                playing: false
+                source: bayID == 1 ?
+                            "qrc:/img/extruder_1_heating.png" :
+                            "qrc:/img/extruder_2_heating.png"
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
+            }
+
+            PropertyChanges {
+                target: acknowledgeButton
+                visible: false
             }
         },
         State {
@@ -246,25 +341,37 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: "EXTRUSION CONFIRMATION"
+                anchors.topMargin: 120
             }
 
             PropertyChanges {
                 target: instruction_description_text
                 text: "Look inside of the printer and wait until you see material begin to extrude."
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                buttonWidth: 225
-                buttonHeight: 85
-                anchors.topMargin: 280
+                label_size: 18
+                label_width: 345
+                buttonWidth: 345
+                buttonHeight: 45
+                anchors.topMargin: 20
                 visible: true
                 label: "MATERIAL IS EXTRUDING"
             }
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/confirm_extrusion.png"
+                playing: false
+                source: bayID == 1 ?
+                            "qrc:/img/confirm_extrusion_1.png" :
+                            "qrc:/img/confirm_extrusion_2.png"
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
             }
         },
         State {
@@ -276,17 +383,29 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: "UNLOADING"
+                anchors.topMargin: 120
             }
 
             PropertyChanges {
                 target: instruction_description_text
                 text: "The filament is backing out of the extruder, please wait."
-                anchors.topMargin: 165
+                anchors.topMargin: 30
             }
 
             PropertyChanges {
                 target: image
+                playing: false
                 source: "qrc:/img/clear_excess_material.png"
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
+            }
+
+            PropertyChanges {
+                target: acknowledgeButton
+                visible: false
             }
         },
         State {
@@ -297,17 +416,18 @@ Item {
             //even after the process has completed, until the user presses 'done'.
             PropertyChanges {
                 target: main_instruction_text
-                text: "CLEAR EXCESS MATERIAL"
+                text: "CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN"
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Wait a few moments until the material has cooled and remove the excess from the build chamber.                             (Do not touch the nozzle while it is hot, Red light on extruder)"
+                text: "Wait a few moments until the material has cooled and remove the excess from the build chamber. (Do not touch the nozzle while it is hot, Red light on extruder)"
+                anchors.topMargin: 60
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                anchors.topMargin: 330
+                anchors.topMargin: 20
                 buttonWidth: 100
                 buttonHeight: 50
                 visible: true
@@ -316,7 +436,33 @@ Item {
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/clear_excess_material.png"
+                playing: false
+                source: bayID == 1 ?
+                            "qrc:/img/confirm_extrusion_1.png" :
+                            "qrc:/img/confirm_extrusion_2.png"
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                anchors.topMargin: 12
+                visible: true
+            }
+
+            PropertyChanges {
+                target: extruder_current_temperature_text
+                text: bot.extruderACurrentTemp + "C"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: extruder_target_temperature_text
+                text: bot.extruderBCurrentTemp + "C"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
             }
         },
         State {
@@ -328,26 +474,35 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
+                anchors.topMargin: 120
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Open material bay " + bayID + " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
-                anchors.topMargin: 165
+                text: "Open material bay " +
+                      bayID +
+                      " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
+                anchors.topMargin: 30
             }
 
             PropertyChanges {
                 target: acknowledgeButton
                 buttonWidth: 100
                 buttonHeight: 50
-                anchors.topMargin: 300
+                anchors.topMargin: 30
                 visible: true
                 label: "DONE"
             }
 
             PropertyChanges {
                 target: image
+                playing: false
                 source: "qrc:/img/unload_filament.png"
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
             }
         },
         State {
@@ -380,14 +535,78 @@ Item {
                 target: acknowledgeButton
                 buttonWidth: 100
                 buttonHeight: 50
-                anchors.topMargin: 265
+                anchors.topMargin: 50
                 visible: true
                 label: "DONE"
             }
 
             PropertyChanges {
                 target: image
-                source: "qrc:/img/extruder_heating.png"
+                playing: false
+                source: bayID == 1 ?
+                            "qrc:/img/extruder_1_heating.png" :
+                            "qrc:/img/extruder_2_heating.png"
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
+            }
+        },
+        State {
+            name: "close_bay_door"
+            PropertyChanges {
+                target: main_instruction_text
+                text: "CLOSE BAY " + bayID
+                anchors.topMargin: 175
+            }
+
+            PropertyChanges {
+                target: instruction_description_text
+                text: ""
+                visible: false
+                anchors.topMargin: 60
+            }
+
+            PropertyChanges {
+                target: acknowledgeButton
+                label_width: 175
+                visible: true
+                anchors.topMargin: -50
+                buttonHeight: 50
+                buttonWidth: 175
+                label: "CONTINUE"
+            }
+
+            PropertyChanges {
+                target: image
+                playing: true
+                source: bayID == 1 ?
+                            "qrc:/img/close_bay1.gif" :
+                            "qrc:/img/close_bay2.gif"
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                visible: false
+                anchors.topMargin: 15
+            }
+
+            PropertyChanges {
+                target: extruder_current_temperature_text
+                text: bot.extruderACurrentTemp + "C"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: extruder_target_temperature_text
+                text: bot.extruderBCurrentTemp + "C"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                visible: false
             }
         }
     ]

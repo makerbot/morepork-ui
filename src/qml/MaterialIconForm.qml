@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 Item {
     id: materialIcon
@@ -6,9 +6,40 @@ Item {
     height: 164
     smooth: false
 
-    property int filamentColor
-    property int filamentPercent
-    property alias filamentType: filament_type_text.text
+    property int filamentBayID: 0
+    property string filamentColor: {
+        switch(filamentBayID) {
+        case 1:
+            Qt.rgba(bot.spoolAColorRGB[0]/255,
+                    bot.spoolAColorRGB[1]/255,
+                    bot.spoolAColorRGB[2]/255)
+            break;
+        case 2:
+            Qt.rgba(bot.spoolBColorRGB[0]/255,
+                    bot.spoolBColorRGB[1]/255,
+                    bot.spoolBColorRGB[2]/255)
+            break;
+        default:
+            "#000000"
+            break;
+        }
+    }
+
+    property int filamentPercent: {
+        switch(filamentBayID) {
+        case 1:
+            (bot.spoolAAmountRemaining/
+            bot.spoolAOriginalAmount) * 100
+            break;
+        case 2:
+            (bot.spoolBAmountRemaining/
+            bot.spoolBOriginalAmount) * 100
+            break;
+        default:
+            0
+            break;
+        }
+    }
 
     Rectangle {
         id: base_circle
@@ -20,58 +51,33 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 0
         visible: true
-        border.width: 2
-        border.color: "#484848"
+        border.width: 4
+        border.color: "#c4c4c4"
         property int fillPercent: filamentPercent
-        property string fillColor: {
-            switch(filamentColor) {
-            case 1:
-                "Red"
-                break;
-            case 2:
-                "Green"
-                break;
-            case 3:
-                "Blue"
-                break;
-            case 4:
-                "Yellow"
-                break;
-            case 5:
-                "Orange"
-                break;
-            case 6:
-                "Violet"
-                break;
-            case 0:
-                "transparent"
-                break;
-            }
-        }
+        property string fillColor: filamentColor
+
         onFillPercentChanged: canvas.requestPaint()
         onFillColorChanged: canvas.requestPaint()
-        Text {
-            id: filament_type_text
-            color: "#ffffff"
-            text: "MAT"
-            font.letterSpacing: 4
-            smooth: true
-            antialiasing: true
-            anchors.verticalCenterOffset: 2
-            anchors.horizontalCenterOffset: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-            font.family: "Antenna"
-            font.weight: Font.Bold
-            font.pixelSize: 18
-            visible: true
-        }
+
         Canvas {
             id: canvas
             smooth: true
             antialiasing: true
             rotation: -90
             anchors.fill: parent
+            visible: {
+                switch(filamentBayID) {
+                     case 1:
+                         bot.filamentBayATagPresent
+                         break;
+                     case 2:
+                         bot.filamentBayBTagPresent
+                         break;
+                     default:
+                         false
+                         break;
+                     }
+            }
             onPaint: {
                 var context = getContext("2d");
                 context.reset();
@@ -79,9 +85,9 @@ Item {
                 var centreY = parent.height * 0.5;
                 context.beginPath();
                 //0.06283185 = PI*2/100
-                context.arc(centreX, centreY, parent.width*0.5-13, 0,
+                context.arc(centreX, centreY, parent.width*0.41, 0,
                             parent.fillPercent*0.06283185, false);
-                context.lineWidth = 7;
+                context.lineWidth = 14;
                 context.lineCap = "round";
                 context.strokeStyle = parent.fillColor;
                 context.stroke()
