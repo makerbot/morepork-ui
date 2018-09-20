@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
@@ -14,7 +14,15 @@ Item {
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool filamentPresentSwitch: false
     property bool isExternalLoad: false
-    property int bayID: bot.process.currentToolIndex + 1
+    property int bayID: 0
+    property int currentActiveTool: bot.process.currentToolIndex + 1
+    // Hold onto the current bay ID even after the process completes
+    onCurrentActiveToolChanged: {
+        if(currentActiveTool > 0) {
+            bayID = currentActiveTool
+        }
+    }
+
     property bool isMaterialPresent: bayID == 1 ? bay1.spoolPresent :
                                                   bay2.spoolPresent
 
@@ -355,7 +363,7 @@ Item {
                 label_size: 18
                 label_width: 345
                 buttonWidth: 345
-                buttonHeight: 45
+                buttonHeight: 50
                 anchors.topMargin: 20
                 visible: true
                 label: "MATERIAL IS EXTRUDING"
