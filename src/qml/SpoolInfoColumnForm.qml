@@ -68,13 +68,25 @@ Item {
 
                     Text {
                         property string key: ""
-                        property int secondsSinceJan_1_2000: key ? bot[key] : 0
+                        property int daysSinceJan_1_2000: key ? bot[key] : 0
 
                         text: {
                             var sinceDate = new Date(2000, 0);
-                            var thisDate = new Date(
-                                    sinceDate.getTime() + secondsSinceJan_1_2000);
-                            return thisDate.toLocaleDateString();
+                            sinceDate.setDate(
+                                    sinceDate.getDate() + daysSinceJan_1_2000);
+                            var dateStr = sinceDate.toLocaleDateString();
+
+                            // Assuming we get a format of:
+                            // <Day of the week>, day month year, try to strip
+                            // day of the week from the display string
+                            var idx = dateStr.indexOf(',');
+                            if (idx != -1) {
+                                // (+2 to include the , and the space)
+                                dateStr = dateStr.slice(
+                                        idx + 2, dateStr.length);
+                            }
+
+                            return dateStr;
                         }
                         color: "#ffffff"
                         font.pixelSize: 12
@@ -98,10 +110,12 @@ Item {
                         width: 12
 
                         color: {
-                            var colorStr = "#";
-                            colorStr = colorStr + r.toString(16)
-                                               + g.toString(16)
-                                               + b.toString(16);
+                            function toTwoDigitHex(val) {
+                                return ("00" + val.toString(16)).substr(-2);
+                            }
+                            var colorStr = "#" + toTwoDigitHex(r)
+                                               + toTwoDigitHex(g)
+                                               + toTwoDigitHex(b);
                             return colorStr;
                         }
                     }
