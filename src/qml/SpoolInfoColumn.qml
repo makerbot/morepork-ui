@@ -30,12 +30,12 @@ SpoolInfoColumnForm {
             {
                 key: "AmountRemaining",
                 displayString: "AMOUNT REMAINING",
-                unit: "g"
+                unit: "mm"
             },
             {
                 key: "OriginalAmount",
                 displayString: "ORIGINAL AMOUNT",
-                unit: "g"
+                unit: "mm"
             },
             {
                 key: "FirstLoadDate",
