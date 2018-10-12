@@ -89,5 +89,13 @@
         <file>StartPrintMaterialIconForm.qml</file>
         <file>StartPrintPage.qml</file>
         <file>StartPrintPageForm.qml</file>
+        <file>StartupSplashScreen.qml</file>
+        <file>StartupSplashScreenForm.qml</file>
+        <file>FrePage.qml</file>
+        <file>FrePageForm.qml</file>
+        <file>NamePrinterPage.qml</file>
+        <file>NamePrinterPageForm.qml</file>
+        <file>FirmwareUpdateSuccessfulScreen.qml</file>
+        <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
     </qresource>
 </RCC>

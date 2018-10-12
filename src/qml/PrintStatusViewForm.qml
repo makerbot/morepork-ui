@@ -201,10 +201,13 @@ Item {
                     label: "PRINT AGAIN"
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
+                    disable_button: inFreStep
                     button_mouseArea.onClicked: {
-                        printAgain = true
-                        printPage.getPrintTimes(printPage.lastPrintTimeSec)
-                        printPage.printSwipeView.swipeToItem(2)
+                        if(!disable_button) {
+                            printAgain = true
+                            printPage.getPrintTimes(printPage.lastPrintTimeSec)
+                            printPage.printSwipeView.swipeToItem(2)
+                        }
                     }
                 }
 
@@ -229,6 +232,10 @@ Item {
                         }
                         else if(bot.process.stateType == ProcessStateType.Completed) {
                             bot.done("acknowledge_completed")
+                            if(inFreStep) {
+                                fre.gotoNextStep(currentFreStep)
+                                mainSwipeView.swipeToItem(0)
+                            }
                         }
                         printPage.resetPrintFileDetails()
                     }

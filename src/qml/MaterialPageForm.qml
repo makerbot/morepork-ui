@@ -141,7 +141,21 @@ Item {
             visible: true
 
             function altBack() {
-                exitMaterialChange()
+                if(!inFreStep) {
+                    exitMaterialChange()
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                materialChangeCancelled = true
+                bot.cancel()
+                loadUnloadFilamentProcess.state = "base state"
+                materialSwipeView.swipeToItem(0)
+                setDrawerState(false)
+                mainSwipeView.swipeToItem(0)
             }
 
             LoadUnloadFilament {

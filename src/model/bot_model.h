@@ -15,6 +15,7 @@
 // because this doesn't initialize submodels.
 class BotModel : public BaseModel {
   public:
+    // MOREPORK_QML_ENUM
     enum ConnectionState {
         Connecting,
         Connected,
@@ -50,6 +51,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getSpoolInfo(const int bayIndex);
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
+    Q_INVOKABLE virtual void changeMachineName(QString new_name);
 
   private:
     Q_OBJECT

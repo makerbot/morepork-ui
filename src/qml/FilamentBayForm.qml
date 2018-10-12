@@ -302,7 +302,7 @@ Item {
 
     Switch {
         id: switch1
-        checked: true
+        checked: false
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 700

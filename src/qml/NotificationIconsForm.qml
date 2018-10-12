@@ -19,6 +19,7 @@ Item {
             height: 26
             smooth: false
             anchors.verticalCenter: parent.verticalCenter
+            opacity: isFreComplete || currentFreStep >= 6
 
             FilamentIcon {
                 id: filament1_icon

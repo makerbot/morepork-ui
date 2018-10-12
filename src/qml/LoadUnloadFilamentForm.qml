@@ -9,6 +9,11 @@ Item {
     width: 800
     height: 420
 
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+    }
+
     property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
@@ -96,9 +101,9 @@ Item {
                 }
             }
             break;
-        //The case when loading/unloading completes normally by
-        //itself, in the middle of print process. Then the bot doesn't
-        //go to 'Stopping' step, but directly to 'Paused' step.
+            //The case when loading/unloading completes normally by
+            //itself, in the middle of print process. Then the bot doesn't
+            //go to 'Stopping' step, but directly to 'Paused' step.
         case ProcessStateType.Paused:
             if(materialChangeCancelled) {
                 materialChangeCancelled = false
@@ -113,12 +118,21 @@ Item {
         }
     }
 
-    AnimatedImage {
-        id: image
+    Image {
+        id: static_image
         width: 400
         height: 480
-//        width: sourceSize.width
-//        height: sourceSize.height
+        anchors.verticalCenterOffset: -10
+        anchors.verticalCenter: parent.verticalCenter
+        source: ""
+        cache: false
+        visible: !animated_image.visible
+    }
+
+    AnimatedImage {
+        id: animated_image
+        width: 400
+        height: 480
         anchors.verticalCenterOffset: -10
         anchors.verticalCenter: parent.verticalCenter
         source: bayID == 1 ?
@@ -129,115 +143,121 @@ Item {
         // makes the gif always keep playing even when this page is
         // not visible which makes the entire UI lag.
         playing: materialSwipeView.currentIndex == 1 &&
-                 bot.process.stateType == ProcessStateType.Preheating
+                 (loadUnloadForm.state == "base state" ||
+                  loadUnloadForm.state == "feed_filament" ||
+                  loadUnloadForm.state == "close_bay_door")
+        visible: true
+    }
 
-        Item {
-            id: contentItem
-            width: 400
-            height: 420
-            anchors.left: parent.right
-            anchors.leftMargin: 0
+    Item {
+        id: contentItem
+        x: 400
+        y: -40
+        width: 400
+        height: 420
+        anchors.left: parent.left
+        anchors.leftMargin: 400
 
-            Text {
-                id: main_instruction_text
-                width: 375
-                color: "#cbcbcb"
-                text: "OPEN BAY " + bayID
-                font.capitalization: Font.AllUppercase
-                anchors.top: parent.top
-                anchors.topMargin: 100
-                font.letterSpacing: 4
-                wrapMode: Text.WordWrap
-                font.family: "Antennae"
-                font.weight: Font.Bold
-                font.pixelSize: 20
-                lineHeight: 1.3
+        Text {
+            id: main_instruction_text
+            width: 375
+            color: "#cbcbcb"
+            text: "OPEN BAY " + bayID
+            font.capitalization: Font.AllUppercase
+            anchors.top: parent.top
+            anchors.topMargin: 100
+            font.letterSpacing: 4
+            wrapMode: Text.WordWrap
+            font.family: "Antennae"
+            font.weight: Font.Bold
+            font.pixelSize: 20
+            lineHeight: 1.3
+        }
+
+        ColumnLayout {
+            id: instructionsList
+            width: 300
+            height: 80
+            anchors.top: main_instruction_text.bottom
+            anchors.topMargin: 18
+            visible: true
+
+            BulletedListItem {
+                bulletNumber: "1"
+                bulletText: "Open Bay " + bayID
             }
 
-            ColumnLayout {
-                id: instructionsList
-                width: 300
-                height: 80
-                anchors.top: main_instruction_text.bottom
-                anchors.topMargin: 18
-                visible: true
-
-                BulletedListItem {
-                    bulletNumber: "1"
-                    bulletText: "Open Bay " + bayID
-                }
-
-                BulletedListItem {
-                    bulletNumber: "2"
-                    bulletText: "Place a " +
-                                (bayID == 1 ? "Model " : "Support ") +
-                                "material spool in\nthe bay"
-                }
+            BulletedListItem {
+                bulletNumber: "2"
+                bulletText: "Place a " +
+                            (bayID == 1 ? "Model " : "Support ") +
+                            "material spool in\nthe bay"
             }
+        }
+
+        Text {
+            id: instruction_description_text
+            width: 325
+            color: "#cbcbcb"
+            text: "\n\n\n"
+            anchors.top: main_instruction_text.bottom
+            anchors.topMargin: 30
+            wrapMode: Text.WordWrap
+            font.family: "Antennae"
+            font.weight: Font.Light
+            font.pixelSize: 18
+            lineHeight: 1.35
+        }
+
+        RoundedButton {
+            id: acknowledgeButton
+            label_width: 180
+            label: "CONTINUE"
+            buttonWidth: 180
+            buttonHeight: 50
+            anchors.top: instruction_description_text.bottom
+            anchors.topMargin: 20
+            visible: true
+        }
+
+        RowLayout {
+            id: temperatureDisplay
+            anchors.top: main_instruction_text.bottom
+            anchors.topMargin: 20
+            width: children.width
+            height: 35
+            spacing: 10
+            visible: false
 
             Text {
-                id: instruction_description_text
-                width: 325
-                color: "#cbcbcb"
-                text: "\n\n\n"
-                anchors.top: main_instruction_text.bottom
-                anchors.topMargin: 30
-                wrapMode: Text.WordWrap
+                id: extruder_current_temperature_text
+                text: currentTemperature + "C"
                 font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
                 font.weight: Font.Light
-                font.pixelSize: 18
-                lineHeight: 1.35
+                font.pixelSize: 20
             }
 
-            RoundedButton {
-                id: acknowledgeButton
-                label_width: 180
-                label: "CONTINUE"
-                buttonWidth: 180
-                buttonHeight: 45
-                anchors.top: instruction_description_text.bottom
-                anchors.topMargin: 20
-                visible: true
+            Rectangle {
+                id: divider_rectangle
+                width: 1
+                height: 25
+                color: "#ffffff"
             }
 
-            RowLayout {
-                id: temperatureDisplay
-                anchors.top: main_instruction_text.bottom
-                anchors.topMargin: 20
-                width: children.width
-                height: 35
-                spacing: 10
-                visible: false
-
-                Text {
-                    id: extruder_current_temperature_text
-                    text: currentTemperature + "C"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 20
-                }
-
-                Rectangle {
-                    id: divider_rectangle
-                    width: 1
-                    height: 25
-                    color: "#ffffff"
-                }
-
-                Text {
-                    id: extruder_target_temperature_text
-                    text: targetTemperature + "C"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 20
-                }
+            Text {
+                id: extruder_target_temperature_text
+                text: targetTemperature + "C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
             }
         }
     }
+
     states: [
         State {
             name: "feed_filament"
@@ -272,8 +292,8 @@ Item {
             }
 
             PropertyChanges {
-                target: image
-                playing: true
+                target: animated_image
+                visible: true
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
@@ -323,8 +343,12 @@ Item {
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
@@ -363,15 +387,18 @@ Item {
                 label_size: 18
                 label_width: 345
                 buttonWidth: 345
-                buttonHeight: 50
                 anchors.topMargin: 20
                 visible: true
                 label: "MATERIAL IS EXTRUDING"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/confirm_extrusion_1.png" :
                             "qrc:/img/confirm_extrusion_2.png"
@@ -401,8 +428,12 @@ Item {
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: "qrc:/img/clear_excess_material.png"
             }
 
@@ -436,15 +467,19 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 anchors.topMargin: 20
-                buttonWidth: 100
-                buttonHeight: 50
+                buttonWidth: 175
                 visible: true
-                label: "DONE"
+                label_width: 175
+                label: "CONTINUE"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/confirm_extrusion_1.png" :
                             "qrc:/img/confirm_extrusion_2.png"
@@ -496,15 +531,18 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 buttonWidth: 100
-                buttonHeight: 50
                 anchors.topMargin: 30
                 visible: true
                 label: "DONE"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: "qrc:/img/unload_filament.png"
             }
 
@@ -542,15 +580,18 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 buttonWidth: 100
-                buttonHeight: 50
                 anchors.topMargin: 50
                 visible: true
                 label: "DONE"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
@@ -566,29 +607,51 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: "CLOSE BAY " + bayID
-                anchors.topMargin: 175
+                anchors.topMargin: 165
             }
 
             PropertyChanges {
                 target: instruction_description_text
                 text: ""
-                visible: false
+                visible: true
                 anchors.topMargin: 60
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                label_width: 175
+                label_width: if(bayID == 1 && inFreStep) {
+                                 350
+                             } else {
+                                 100
+                             }
                 visible: true
                 anchors.topMargin: -50
-                buttonHeight: 50
-                buttonWidth: 175
-                label: "CONTINUE"
+                buttonWidth: {
+                    if(bayID == 1 && inFreStep) {
+                        360
+                    } else {
+                        100
+                    }
+                }
+                label_size: {
+                    if(bayID == 1 && inFreStep) {
+                        14
+                    } else {
+                        18
+                    }
+                }
+                label: {
+                    if(bayID == 1 && inFreStep) {
+                        "NEXT: Load Support Material"
+                    } else {
+                        "DONE"
+                    }
+                }
             }
 
             PropertyChanges {
-                target: image
-                playing: true
+                target: animated_image
+                visible: true
                 source: bayID == 1 ?
                             "qrc:/img/close_bay1.gif" :
                             "qrc:/img/close_bay2.gif"
@@ -598,18 +661,6 @@ Item {
                 target: temperatureDisplay
                 visible: false
                 anchors.topMargin: 15
-            }
-
-            PropertyChanges {
-                target: extruder_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: extruder_target_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
-                visible: true
             }
 
             PropertyChanges {

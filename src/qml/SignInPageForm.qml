@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.VirtualKeyboard 2.3
@@ -43,9 +43,12 @@ Item {
             if (prevIndex == itemToDisplayDefaultIndex) {
                 return;
             }
-
             signInSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
+            if(itemToDisplayDefaultIndex == 0) {
+                setCurrentItem(settingsSwipeView.itemAt(7))
+            } else {
+                setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
+            }
             signInSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
         }
 
@@ -56,11 +59,6 @@ Item {
             property int backSwipeIndex: 0
             smooth: false
             visible: true
-            property bool hasAltBack: true
-
-            function altBack() {
-                backToSettings();
-            }
 
             Image {
                 id: addAccountImage

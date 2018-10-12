@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 ToolheadCalibrationForm {
 
@@ -20,6 +20,10 @@ ToolheadCalibrationForm {
             }
             else if(state == "calibration_finished") {
                 processDone()
+                if(inFreStep) {
+                    mainSwipeView.swipeToItem(0)
+                    fre.gotoNextStep(currentFreStep)
+                }
             }
             else {
                 bot.calibrateToolheads(["x","y"])

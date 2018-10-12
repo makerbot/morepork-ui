@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
@@ -14,7 +14,6 @@ Item {
     property alias button2: button2
 
     property bool isFwUpdProcess: bot.process.type == ProcessType.FirmwareUpdate
-
     onIsFwUpdProcessChanged: {
         if(isFwUpdProcess) {
             if(mainSwipeView.currentIndex != 3) {

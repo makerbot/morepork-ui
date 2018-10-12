@@ -55,12 +55,24 @@ MoreporkStorage::MoreporkStorage()
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
   usbStorageConnectedSet(false);
   storageIsEmptySet(true);
+
+  QDir dir(TEST_PRINT_PATH);
+  if (!dir.exists()) {
+      dir.mkpath(".");
+  }
+  if(!QFileInfo::exists(TEST_PRINT_PATH + "/test_print.makerbot") ||
+     !QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").isFile()) {
+      // Tiny test file 74 kb, so okay to do I/O in constructor I guess.
+      QFile::copy(":/test_files/smallcircle.makerbot",
+                  TEST_PRINT_PATH + "/test_print.makerbot");
+  }
 }
 
 
-void MoreporkStorage::updateCurrentThing(){
-  if(QDir(CURRENT_THING_PATH).exists()){
-      QDirIterator current_thing_dir(CURRENT_THING_PATH, QDir::Files |
+void MoreporkStorage::updateCurrentThing(bool is_test_print) {
+  QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
+  if(QDir(dir_path).exists()){
+      QDirIterator current_thing_dir(dir_path, QDir::Files |
                                 QDir::NoDotAndDotDot | QDir::Readable);
       PrintFileInfo* current_thing = nullptr;
       if(current_thing_dir.hasNext()){
@@ -91,7 +103,7 @@ void MoreporkStorage::updateCurrentThing(){
                                 QString::fromStdString(meta_data->slicer_name));
           }
   #else
-          current_thing = new PrintFileInfo(CURRENT_THING_PATH,
+          current_thing = new PrintFileInfo(dir_path,
                               kFileInfo.fileName(),
                               kFileInfo.fileName(),
                               kFileInfo.lastRead(),

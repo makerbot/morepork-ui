@@ -200,8 +200,23 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    mainSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                bot.cancel()
+                mainSwipeView.swipeToItem(0)
+            }
 
             Flickable {
                 id: flickableStorageOpt
@@ -377,10 +392,23 @@ Item {
             visible: false
 
             function altBack() {
+                if(!inFreStep) {
+                    startPrintItem.startPrintSwipeView.setCurrentIndex(0)
+                    resetPrintFileDetails()
+                    setDrawerState(true)
+                    currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
                 startPrintItem.startPrintSwipeView.setCurrentIndex(0)
                 resetPrintFileDetails()
-                setDrawerState(true)
-                currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                setDrawerState(false)
+                printSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
             }
 
             StartPrintPage {

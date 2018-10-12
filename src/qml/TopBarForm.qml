@@ -92,7 +92,9 @@ Item {
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
-            source: "qrc:/img/arrow_19pix.png"
+            source: (inFreStep && (typeof currentItem.skipFreStepAction === "function")) ?
+                        "qrc:/img/skip.png" :
+                        "qrc:/img/arrow_19pix.png"
         }
 
         Text {
@@ -227,6 +229,12 @@ Item {
                             break;
                         case 6:
                             bot.name + " ADVANCED INFO"
+                            break;
+                        case 7:
+                            "SIGN-IN TO MAKERBOT ACCOUNT"
+                            break;
+                        case 10:
+                            "PRINTER NAME"
                             break;
                         default:
                             "SETTINGS"

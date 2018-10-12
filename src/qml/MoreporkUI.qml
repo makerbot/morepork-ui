@@ -1,12 +1,15 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ConnectionStateEnum 1.0
+import FreStepEnum 1.0
 
 ApplicationWindow {
     id: rootAppWindow
     visible: true
     width: 800
     height: 480
+    property alias mainSwipeView: mainSwipeView
     property alias topBar: topBar
     property var currentItem: mainMenu
     property var activeDrawer
@@ -19,6 +22,53 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+
+    property int connectionState: bot.state
+    onConnectionStateChanged: {
+        if(connectionState == ConnectionState.Connected) {
+            fre.initialize()
+        }
+    }
+
+    property bool inFreStep: false
+    property bool isFreComplete: fre.currentFreStep == FreStep.FreComplete
+    property int currentFreStep: fre.currentFreStep
+    onCurrentFreStepChanged: {
+        inFreStep = false
+        switch(currentFreStep) {
+        case FreStep.Welcome:
+            freScreen.state = "base state"
+            break;
+        case FreStep.SetupWifi:
+            freScreen.state = "wifi_setup"
+            break;
+        case FreStep.SoftwareUpdate:
+            freScreen.state = "software_update"
+            break;
+        case FreStep.NamePrinter:
+            freScreen.state = "name_printer"
+            break;
+        case FreStep.LoginMbAccount:
+            freScreen.state = "log_in"
+            break;
+        case FreStep.AttachExtruders:
+            freScreen.state = "attach_extruders"
+            break;
+        case FreStep.LoadMaterial:
+            freScreen.state = "load_material"
+            break;
+        case FreStep.TestPrint:
+            freScreen.state = "test_print"
+            break;
+        case FreStep.SetupComplete:
+            freScreen.state = "setup_complete"
+            break;
+        case FreStep.FreComplete:
+            break;
+        default:
+            break;
+        }
+    }
 
     Timer {
         id: authTimeOut
@@ -84,7 +134,7 @@ ApplicationWindow {
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
     
     onIsfirmwareUpdateAvailableChanged: {
-        if(isfirmwareUpdateAvailable) {
+        if(isfirmwareUpdateAvailable && isFreComplete) {
             if(settingsPage.settingsSwipeView.currentIndex != 3) {
                 firmwareUpdatePopup.open()
             }
@@ -160,6 +210,20 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        StartupSplashScreen {
+            id: startupSplashScreen
+            anchors.fill: parent
+            z: 2
+            visible: connectionState != ConnectionState.Connected
+        }
+
+        FirmwareUpdateSuccessfulScreen {
+            anchors.fill: parent
+            z: 2
+            visible: fre.isFirstBoot &&
+                     connectionState == ConnectionState.Connected
+        }
+
         Drawer {
             id: backSwipe
             width: rootAppWindow.width
@@ -175,17 +239,24 @@ ApplicationWindow {
             }
         }
 
-        TopBarForm{
+        TopBarForm {
             id: topBar
             z: 1
             width: parent.width
             smooth: false
             backButton.visible: false
             imageDrawerArrow.visible: false
+            visible: mainSwipeView.visible
 
             onBackClicked: {
                 goBack()
             }
+        }
+
+        FrePage {
+            id: freScreen
+            visible: connectionState == ConnectionState.Connected &&
+                     !isFreComplete && !inFreStep
         }
 
         SwipeView {
@@ -198,6 +269,8 @@ ApplicationWindow {
             }
             property alias materialPage: materialPage
             smooth: false
+            visible: connectionState == ConnectionState.Connected &&
+                     !freScreen.visible
 
             function swipeToItem(itemToDisplayDefaultIndex) {
                 var prevIndex = mainSwipeView.currentIndex
@@ -325,6 +398,319 @@ ApplicationWindow {
                     id: preheatPage
                     smooth: false
                     anchors.fill: parent
+                }
+            }
+        }
+
+        Popup {
+            id: skipFreStepPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            parent: overlay
+            closePolicy: Popup.CloseOnPressOutside
+            background: Rectangle {
+                id: popupBackgroundDimFre
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+            onOpened: {
+                continue_text.color = "#000000"
+                continue_rectangle.color = "#ffffff"
+            }
+
+            Rectangle {
+                id: basePopupItemFre
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: 220
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    id: horizontal_dividerFre
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Rectangle {
+                    id: vertical_dividerFre
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Item {
+                    id: buttonBarFre
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: skip_rectangle
+                        x: 0
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: skip_text
+                            color: "#ffffff"
+                            text: {
+                                switch(currentFreStep) {
+                                case FreStep.Welcome:
+                                    ""
+                                    break;
+                                case FreStep.SetupWifi:
+                                    "SKIP WIFI"
+                                    break;
+                                case FreStep.SoftwareUpdate:
+                                    "SKIP SOFTWARE UPDATE"
+                                    break;
+                                case FreStep.NamePrinter:
+                                    "SKIP NAMING PRINTER"
+                                    break;
+                                case FreStep.LoginMbAccount:
+                                    "SKIP SIGN-IN"
+                                    break;
+                                case FreStep.AttachExtruders:
+                                case FreStep.LoadMaterial:
+                                    "SKIP PRINTER SETUP"
+                                    break;
+                                case FreStep.TestPrint:
+                                    "SKIP TEST PRINT"
+                                    break;
+                                case FreStep.SetupComplete:
+                                    ""
+                                    break;
+                                case FreStep.FreComplete:
+                                    ""
+                                    break;
+                                default:
+                                    ""
+                                    break;
+                                }
+                            }
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: skip_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                skip_text.color = "#000000"
+                                skip_rectangle.color = "#ffffff"
+                                continue_text.color = "#ffffff"
+                                continue_rectangle.color = "#00000000"
+                            }
+                            onReleased: {
+                                skip_text.color = "#ffffff"
+                                skip_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                skipFreStepPopup.close()
+                                currentItem.skipFreStepAction()
+                                if(currentFreStep == FreStep.AttachExtruders ||
+                                   currentFreStep == FreStep.LoadMaterial ||
+                                   currentFreStep == FreStep.TestPrint) {
+                                    fre.setFreStep(FreStep.FreComplete)
+                                } else {
+                                    fre.gotoNextStep(currentFreStep)
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: continue_rectangle
+                        x: 360
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: continue_text
+                            color: "#ffffff"
+                            text: "CONTINUE"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: continue_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                continue_text.color = "#000000"
+                                continue_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                continue_text.color = "#ffffff"
+                                continue_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                skipFreStepPopup.close()
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayoutFre
+                    width: 590
+                    height: 100
+                    anchors.top: parent.top
+                    anchors.topMargin: 25
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: main_text
+                        color: "#cbcbcb"
+                        text: {
+                            switch(currentFreStep) {
+                            case FreStep.Welcome:
+                                ""
+                                break;
+                            case FreStep.SetupWifi:
+                                "SKIP WIFI SETUP?"
+                                break;
+                            case FreStep.SoftwareUpdate:
+                                "SKIP SOFTWARE UPDATE?"
+                                break;
+                            case FreStep.NamePrinter:
+                                "SKIP NAMING PRINTER?"
+                                break;
+                            case FreStep.LoginMbAccount:
+                                "SKIP ACCOUNT SIGN IN?"
+                                break;
+                            case FreStep.AttachExtruders: {
+                                if(!bot.extruderAPresent ||
+                                   !bot.extruderBPresent) {
+                                    "SKIP ATTACHING EXTRUDERS?"
+                                }
+                                else {
+                                    "SKIP CALIBRATING EXTRUDERS?"
+                                }
+                            }
+                                break;
+                            case FreStep.LoadMaterial:
+                                "SKIP LOADING MATERIAL?"
+                                break;
+                            case FreStep.TestPrint:
+                                "SKIP TEST PRINT?"
+                                break;
+                            case FreStep.SetupComplete:
+                                ""
+                                break;
+                            case FreStep.FreComplete:
+                                ""
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        font.letterSpacing: 3
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 20
+                    }
+
+                    Text {
+                        id: sub_text
+                        color: "#cbcbcb"
+                        text: {
+                            switch(currentFreStep) {
+                            case FreStep.Welcome:
+                                ""
+                                break;
+                            case FreStep.SetupWifi:
+                                "Connecting to Wi-Fi enables remote printing and monitoring from any internet connected device. An Ethernet cable can also be used."
+                                break;
+                            case FreStep.SoftwareUpdate:
+                                "It is recommended to keep your printer up to date for the best experience."
+                                break;
+                            case FreStep.NamePrinter:
+                                "You can name your printer later from the printer settings menu."
+                                break;
+                            case FreStep.LoginMbAccount:
+                                "By signing in, this printer will automatically appear in your list of printers on any signed in device."
+                                break;
+                            case FreStep.AttachExtruders: {
+                                    if(!bot.extruderAPresent ||
+                                       !bot.extruderBPresent) {
+                                        "Extruders are required to use the printer."
+                                    }
+                                    else {
+                                        "For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached."
+                                    }
+                                }
+                                break;
+                            case FreStep.LoadMaterial:
+                                "Printing requires material to be loaded into the extruders."
+                                break;
+                            case FreStep.TestPrint:
+                                "A test print is a small print that ensures the printer is working properly."
+                                break;
+                            case FreStep.SetupComplete:
+                                ""
+                                break;
+                            case FreStep.FreComplete:
+                                ""
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        lineHeight: 1.3
+                    }
                 }
             }
         }

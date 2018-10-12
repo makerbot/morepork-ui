@@ -13,6 +13,17 @@ LoadUnloadFilamentForm {
             else if(state == "close_bay_door" ||
                state == "error") {
                 processDone()
+                if(inFreStep && bayID == 1) {
+                    startLoadUnloadFromUI = true
+                    isLoadFilament = true
+                    bot.loadFilament(1, false, false)
+                    setDrawerState(true)
+                    materialSwipeView.swipeToItem(1)
+                } else if(inFreStep && bayID == 2) {
+                    fre.gotoNextStep(currentFreStep)
+                    mainSwipeView.swipeToItem(0)
+                    inFreStep = false
+                }
             }
             else if(state == "extrusion") {
                 bot.loadFilamentStop()

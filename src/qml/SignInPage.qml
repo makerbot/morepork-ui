@@ -5,7 +5,6 @@ SignInPageForm {
         usernameTextField.clear();
         passwordField.clear();
         showPassword.checked = false;
-        signInSwipeView.swipeToItem(0);
         settingsSwipeView.swipeToItem(0);
     }
 
@@ -46,6 +45,19 @@ SignInPageForm {
         p.setButtonBarVisible(false);
         p.setPopupContents(signInSucceededContents);
         p.open();
+        signInFreStepComplete.start()
+    }
+
+    Timer {
+        id: signInFreStepComplete
+        interval: 500
+        onTriggered: {
+            closePopup()
+            backToSettings()
+            signInSwipeView.swipeToItem(0)
+            mainSwipeView.swipeToItem(0)
+            fre.gotoNextStep(currentFreStep)
+        }
     }
 
     addAccountButton {

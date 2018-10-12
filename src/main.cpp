@@ -27,6 +27,7 @@
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
 #define MOREPORK_LOGGER makeBotLogger()
 #endif
+#include "fre_tracker.h"
 #include "parsed_qml_enums.h"
 #include "storage/storage.h"
 
@@ -47,11 +48,13 @@ int main(int argc, char ** argv) {
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
     UiTranslator ui_trans;
     MoreporkStorage storage;
+    FreTracker fre_tracker;
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("bot", bot.data());
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("cpUiTr", (QObject*)&ui_trans);
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
+    engine.rootContext()->setContextProperty("fre", (QObject*)&fre_tracker);
 
     QScopedPointer<Logger, QScopedPointerDeleteLater> log(MOREPORK_LOGGER);
     engine.rootContext()->setContextProperty("log", log.data());

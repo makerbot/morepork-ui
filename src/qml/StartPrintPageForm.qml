@@ -154,9 +154,9 @@ Item {
                 RoundedButton {
                     anchors.top: materialBay2.bottom
                     anchors.topMargin: 30
-                    buttonWidth: 210
+                    buttonWidth: inFreStep ? 300 : 210
                     buttonHeight: 50
-                    label: "START PRINT"
+                    label: inFreStep ? "START TEST PRINT" : "START PRINT"
                     button_mouseArea.onClicked: {
                         storage.backStackClear()
                         activeDrawer = printPage.printingDrawer

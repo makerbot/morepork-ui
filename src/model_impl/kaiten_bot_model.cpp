@@ -54,6 +54,7 @@ class KaitenBotModel : public BotModel {
     void spoolUpdate(const Json::Value & res, const int bayIndex);
     void zipLogs(QString path);
     void forceSyncFile(QString path);
+    void changeMachineName(QString new_name);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -605,6 +606,20 @@ void KaitenBotModel::zipLogs(QString path) {
       qWarning() << FFL_STRM << e.what();
   }
 }
+
+void KaitenBotModel::changeMachineName(QString new_name) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["machine_name"] = Json::Value(new_name.toStdString());
+        conn->jsonrpc.invoke("change_machine_name", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),

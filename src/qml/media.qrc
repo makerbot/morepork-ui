@@ -99,7 +99,16 @@
 	<file alias="attach_extruder_2.gif">images/attach_extruder_2.gif</file>
 	<file alias="file_no_preview.png">images/file_no_preview.png</file>
 	<file alias="remove_top_lid.gif">images/remove_top_lid.gif</file>
+	<file alias="makerbot_startup_logo.png">images/makerbot_startup_logo.png</file>
+	<file alias="skip.png">images/skip.png</file>
+	<file alias="sombrero_welcome.png">images/sombrero_welcome.png</file>
+	<file alias="name_printer.png">images/name_printer.png</file>
     </qresource>
+    
+    <qresource prefix="/test_files">
+        <file alias="smallcircle.makerbot">test_print/smallcircle.makerbot</file>
+    </qresource>
+    
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
     </qresource>

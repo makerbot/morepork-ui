@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.VirtualKeyboard 2.3
@@ -11,6 +11,7 @@ Item {
     smooth: false
     antialiasing: false
     property alias defaultItem: itemChooseWifi
+    property alias wifiSwipeView: wifiSwipeView
 
     property int wifiError: bot.net.wifiError
     property bool isWifiConnected: bot.net.interface == "wifi"
@@ -31,6 +32,9 @@ Item {
             }
             bot.scanWifi(true)
             passwordField.clear()
+            if(inFreStep) {
+                wifiFreStepComplete.start()
+            }
         }
         else {
             bot.net.setWifiState(WifiState.NotConnected)
@@ -40,6 +44,16 @@ Item {
     onWifiErrorChanged: {
         if(bot.net.wifiError != WifiError.NoError) {
             bot.net.setWifiState(WifiState.NotConnected)
+        }
+    }
+
+    Timer {
+        id: wifiFreStepComplete
+        interval: 500
+        onTriggered: {
+            settingsPage.settingsSwipeView.swipeToItem(0)
+            mainSwipeView.swipeToItem(0)
+            fre.gotoNextStep(currentFreStep)
         }
     }
 
@@ -202,7 +216,6 @@ Item {
                             selectedWifiPath = model.modelData.path
                             selectedWifiName = model.modelData.name
                             wifiPopup.open()
-
                         }
                         else {
                             selectedWifiName = model.modelData.name

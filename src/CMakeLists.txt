@@ -51,6 +51,7 @@ set(SOURCES
     model/process_model.cpp
     model/logger.cpp
     model/network.cpp
+    model/fre_tracker.cpp
     storage/storage.cpp)
 
 # These are not used QtCreator build
@@ -75,6 +76,7 @@ set(MOREPORK_UI_HEADERS
     model/net_model.h
     model/process_model.h
     model/network.h
+    model/fre_tracker.h
     storage/storage.h)
 
 if(NOT ${QT_CREATOR_BUILD})
@@ -134,6 +136,7 @@ target_link_libraries(morepork_ui
 
 if(NOT ${QT_CREATOR_BUILD})
     target_link_libraries(morepork_ui
+        JsonCpp::jsoncpp
         JsonRpc::jsonrpc
         TinyThing::tinything
         Boost::log

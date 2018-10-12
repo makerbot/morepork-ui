@@ -52,6 +52,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(9)
     }
 
+    buttonPrinterName.onClicked: {
+        settingsSwipeView.swipeToItem(10)
+    }
+
     buttonCopyLogs.onClicked: {
         if (buttonCopyLogs.enabled) {
             var now = new Date();
