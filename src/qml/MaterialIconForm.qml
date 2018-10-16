@@ -85,9 +85,9 @@ Item {
                 var centreY = parent.height * 0.5;
                 context.beginPath();
                 //0.06283185 = PI*2/100
-                context.arc(centreX, centreY, parent.width*0.41, 0,
+                context.arc(centreX, centreY, parent.width*0.40, 0,
                             parent.fillPercent*0.06283185, false);
-                context.lineWidth = 14;
+                context.lineWidth = 12;
                 context.lineCap = "round";
                 context.strokeStyle = parent.fillColor;
                 context.stroke()

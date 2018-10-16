@@ -51,9 +51,9 @@ FrePageForm {
                     extruderPage.itemAttachExtruder.extruder = 1
                     extruderPage.extruderSwipeView.swipeToItem(1)
                 } else {
-//                    mainSwipeView.swipeToItem(3)
-//                    settingsPage.settingsSwipeView.swipeToItem(4)
-                    fre.gotoNextStep(currentFreStep)
+                    mainSwipeView.swipeToItem(3)
+                    settingsPage.settingsSwipeView.swipeToItem(4)
+//                    fre.gotoNextStep(currentFreStep)
                 }
             } else if(state == "load_material") {
                 inFreStep = true

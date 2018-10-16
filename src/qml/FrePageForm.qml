@@ -38,31 +38,32 @@ Item {
         Text {
             id: title_text
             color: "#ffffff"
-            text: "WELCOME TO\nYOUR NEW PRINTER"
+            text: "WELCOME"
             font.letterSpacing: 2
             anchors.top: parent.top
             anchors.topMargin: 35
             font.family: "Antennae"
             font.weight: Font.Bold
-            font.pixelSize: 22
-            lineHeight: 1.35
+            font.pixelSize: 28
+            lineHeight: 1.2
         }
 
         Text {
             id: subtitle_text
             color: "#cbcbcb"
-            text: ""
+            text: "Follow these steps to set up your\nMethod Performance 3D Printer."
             anchors.top: title_text.bottom
             anchors.topMargin: 20
             font.family: "Antennae"
             font.weight: Font.Light
             font.pixelSize: 20
+            lineHeight: 1.3
         }
 
         RoundedButton {
             id: continueButton
             anchors.top: subtitle_text.bottom
-            anchors.topMargin: 20
+            anchors.topMargin: 30
             label: "BEGIN SETUP"
             label_width: 210
             buttonHeight: 50
@@ -245,10 +246,11 @@ Item {
                         "CONNECTED TO NETWORK"
                     }
                     else {
-                        "WIFI SETUP"
+                        "WI-FI SETUP"
                     }
                 }
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
@@ -256,19 +258,35 @@ Item {
                 text: {
                     if(bot.net.interface == "ethernet" ||
                        bot.net.interface == "wifi") {
-                        "You already seem to be connected to a network."
+                        "You seem to be connected to a network."
                     }
                     else {
-                        "Connect to Wi-Fi"
+                        "Connect to the internet to enable remote monitoring and\nprinting from any connected device."
                     }
                 }
             }
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
-                buttonWidth: 175
-                label: "CONTINUE"
+                label_width: 300
+                buttonWidth: {
+                    if(bot.net.interface == "ethernet" ||
+                       bot.net.interface == "wifi") {
+                        175
+                    }
+                    else {
+                        300
+                    }
+                }
+                label: {
+                    if(bot.net.interface == "ethernet" ||
+                       bot.net.interface == "wifi") {
+                        "CONTINUE"
+                    }
+                    else {
+                        "CHOOSE NETWORK"
+                    }
+                }
                 anchors.topMargin: 30
             }
 
@@ -312,13 +330,14 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "SOFTWARE UPDATE"
+                text: "PRINTER SOFTWARE UPDATE AVAILABLE"
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Check for software updates"
+                text: "Update the Method’s printer software for the most up to date\nfeatures and quality."
             }
 
             PropertyChanges {
@@ -371,11 +390,12 @@ Item {
                 target: title_text
                 text: "NAME PRINTER"
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Name your printer"
+                text: "Give this printer a name to find it easier."
             }
 
             PropertyChanges {
@@ -428,11 +448,12 @@ Item {
                 target: title_text
                 text: "LOG IN"
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Log-in to your MakerBot account"
+                text: "Log in to add this printer to your MakerBot account."
             }
 
             PropertyChanges {
@@ -502,13 +523,28 @@ Item {
                     }
                 }
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
-                buttonWidth: 175
+                label: {
+                    if(!bot.extruderAPresent || !bot.extruderBPresent) {
+                        "CONTINUE"
+                    }
+                    else {
+                        "CALIBRATE"
+                    }
+                }
+                buttonWidth: {
+                    if(!bot.extruderAPresent || !bot.extruderBPresent) {
+                        175
+                    }
+                    else {
+                        190
+                    }
+                }
                 anchors.topMargin: 30
             }
 
@@ -551,10 +587,10 @@ Item {
                 target: subtitle_text
                 text: {
                     if(!bot.extruderAPresent || !bot.extruderBPresent) {
-                        "Now we will guide you through the process of attaching the extruders."
+                        "Follow the on screen steps to attach each extruder."
                     }
                     else {
-                        "Now we will guide you through the process of calibrating the extruders."
+                        "Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality."
                     }
                 }
             }
@@ -576,6 +612,7 @@ Item {
                 target: title_text
                 text: "LOAD MATERIAL"
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
@@ -623,7 +660,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Now we will guide you to load material into the extruders."
+                text: "Follow the on screen steps to load material into each bay."
             }
         },
         State {
@@ -643,6 +680,7 @@ Item {
                 target: title_text
                 text: "READY TO PRINT"
                 font.pixelSize: 28
+                anchors.topMargin: 25
             }
 
             PropertyChanges {
@@ -690,7 +728,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "You are now ready to start your first print."
+                text: "Start a test print to ensure the printer is set up correctly."
             }
         },
         State {
@@ -704,6 +742,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "YOUR PRINTER IS\nSUCCESSFULLY SET UP"
+                anchors.topMargin: 35
             }
 
             PropertyChanges {

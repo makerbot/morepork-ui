@@ -7,37 +7,38 @@
 
 
 QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
-    QSize *size, const QSize &requestedSize){
+    QSize *size, const QSize &requestedSize) {
 #ifdef HAVE_LIBTINYTHING
   const QFileInfo kFileInfo(kAbsoluteFilePath);
-  if(kFileInfo.exists()){
-    if(kFileInfo.isDir())
-      return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
-    else{
-      MakerbotFileMetaReader file_meta_reader(kFileInfo);
-      QImage thumbnail;
-      switch(requestedSize.width()) {
-      case 140:
-          thumbnail = file_meta_reader.getSmallThumbnail();
-          break;
-      case 212:
-          thumbnail = file_meta_reader.getMediumThumbnail();
-          break;
-      case 960:
-          thumbnail = file_meta_reader.getLargeThumbnail();
-          break;
-      default:
-          break;
+  if(kFileInfo.exists()) {
+      if(kFileInfo.isDir()) {
+          return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
+      } else {
+          MakerbotFileMetaReader file_meta_reader(kFileInfo);
+          QImage thumbnail;
+          switch(requestedSize.width()) {
+              case 140:
+                thumbnail = file_meta_reader.getSmallThumbnail();
+                break;
+              case 212:
+                thumbnail = file_meta_reader.getMediumThumbnail();
+                break;
+              case 960:
+                thumbnail = file_meta_reader.getLargeThumbnail();
+                break;
+              default:
+                break;
+          }
+          if(!thumbnail.isNull()) {
+              return QPixmap::fromImage(thumbnail);
+          }
       }
-      if(thumbnail.isNull())
-        return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
-      else
-        return QPixmap::fromImage(thumbnail);
-    }
   }
   else
 #endif
-    return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
+  {
+      return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
+  }
 }
 
 

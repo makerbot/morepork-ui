@@ -9,11 +9,6 @@ Item {
     width: 800
     height: 420
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
@@ -620,7 +615,7 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 label_width: if(bayID == 1 && inFreStep) {
-                                 350
+                                 375
                              } else {
                                  100
                              }
@@ -628,7 +623,7 @@ Item {
                 anchors.topMargin: -50
                 buttonWidth: {
                     if(bayID == 1 && inFreStep) {
-                        360
+                        375
                     } else {
                         100
                     }

@@ -419,10 +419,6 @@ Item {
                     }
 
                     onPinchUpdated: {
-                        // adjust content pos due to drag
-                        flick.contentX += pinch.previousCenter.x - pinch.center.x
-                        flick.contentY += pinch.previousCenter.y - pinch.center.y
-
                         // resize content
                         flick.resizeContent(initialWidth * pinch.scale, initialHeight * pinch.scale, pinch.center)
                     }

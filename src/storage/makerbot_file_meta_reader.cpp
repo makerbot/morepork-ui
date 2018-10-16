@@ -63,8 +63,9 @@ QImage& MakerbotFileMetaReader::getSmallThumbnail() {
         thumb_file_content_str.size());
     }
   }
-  if(small_thumbnail_.isNull())
-    small_thumbnail_ = QImage(":/img/file_no_preview.png");
+  if(small_thumbnail_.isNull()) {
+    small_thumbnail_ = QImage(":/img/file_no_preview_small.png");
+  }
   return small_thumbnail_;
 }
 
@@ -80,8 +81,9 @@ QImage& MakerbotFileMetaReader::getMediumThumbnail() {
         thumb_file_content_str.size());
     }
   }
-  if(medium_thumbnail_.isNull())
-    medium_thumbnail_ = QImage(":/img/makerbot_logo_110x80.png");
+  if(medium_thumbnail_.isNull()) {
+    medium_thumbnail_ = QImage(":/img/file_no_preview_medium.png");
+  }
   return medium_thumbnail_;
 }
 
@@ -97,8 +99,9 @@ QImage& MakerbotFileMetaReader::getLargeThumbnail() {
         thumb_file_content_str.size());
     }
   }
-  if(large_thumbnail_.isNull())
-    large_thumbnail_ = QImage(":/img/makerbot_logo_320x200.png");
+  if(large_thumbnail_.isNull()) {
+    large_thumbnail_ = QImage(":/img/file_no_preview_medium.png");
+  }
   return large_thumbnail_;
 }
 

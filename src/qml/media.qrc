@@ -103,6 +103,8 @@
 	<file alias="skip.png">images/skip.png</file>
 	<file alias="sombrero_welcome.png">images/sombrero_welcome.png</file>
 	<file alias="name_printer.png">images/name_printer.png</file>
+	<file alias="file_no_preview_small.png">images/file_no_preview_small.png</file>
+	<file alias="file_no_preview_medium.png">images/file_no_preview_medium.png</file>
     </qresource>
     
     <qresource prefix="/test_files">

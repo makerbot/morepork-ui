@@ -284,7 +284,7 @@ Item {
                 RoundedButton {
                     id: loadButton
                     buttonWidth: extruderFilamentPresent ?
-                                      130 : 120
+                                      135 : 120
                     buttonHeight: 50
                     label: extruderFilamentPresent ?
                                "PURGE" : "LOAD"
@@ -292,7 +292,7 @@ Item {
 
                 RoundedButton {
                     id: unloadButton
-                    buttonWidth: 160
+                    buttonWidth: 150
                     buttonHeight: 50
                     label: "UNLOAD"
                 }

@@ -199,6 +199,10 @@ MaterialPageForm {
 
     materialPageDrawer.buttonCancelMaterialChange.onClicked: {
         materialPageDrawer.close()
+        if(inFreStep) {
+            skipFreStepPopup.open()
+            return;
+        }
         exitMaterialChange()
     }
 

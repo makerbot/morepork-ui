@@ -497,7 +497,7 @@ ApplicationWindow {
                                     "SKIP NAMING PRINTER"
                                     break;
                                 case FreStep.LoginMbAccount:
-                                    "SKIP SIGN-IN"
+                                    "SKIP SIGN IN"
                                     break;
                                 case FreStep.AttachExtruders:
                                 case FreStep.LoadMaterial:
@@ -612,7 +612,7 @@ ApplicationWindow {
                                 ""
                                 break;
                             case FreStep.SetupWifi:
-                                "SKIP WIFI SETUP?"
+                                "SKIP WI-FI SETUP?"
                                 break;
                             case FreStep.SoftwareUpdate:
                                 "SKIP SOFTWARE UPDATE?"
@@ -668,7 +668,7 @@ ApplicationWindow {
                                 "Connecting to Wi-Fi enables remote printing and monitoring from any internet connected device. An Ethernet cable can also be used."
                                 break;
                             case FreStep.SoftwareUpdate:
-                                "It is recommended to keep your printer up to date for the best experience."
+                                "It is recommended to keep your printer updated for the latest features and quality."
                                 break;
                             case FreStep.NamePrinter:
                                 "You can name your printer later from the printer settings menu."
