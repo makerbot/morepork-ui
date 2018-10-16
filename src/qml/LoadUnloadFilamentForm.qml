@@ -121,7 +121,8 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         source: ""
         cache: false
-        visible: !animated_image.visible
+        opacity: (animated_image.opacity == 0) ?
+                     1 : 0
     }
 
     AnimatedImage {
@@ -141,7 +142,7 @@ Item {
                  (loadUnloadForm.state == "base state" ||
                   loadUnloadForm.state == "feed_filament" ||
                   loadUnloadForm.state == "close_bay_door")
-        visible: true
+        opacity: 1
     }
 
     Item {
@@ -175,7 +176,7 @@ Item {
             height: 80
             anchors.top: main_instruction_text.bottom
             anchors.topMargin: 18
-            visible: true
+            opacity: 1.0
 
             BulletedListItem {
                 bulletNumber: "1"
@@ -212,7 +213,7 @@ Item {
             buttonHeight: 50
             anchors.top: instruction_description_text.bottom
             anchors.topMargin: 20
-            visible: true
+            opacity: 1
         }
 
         RowLayout {
@@ -260,7 +261,6 @@ Item {
                   !isExternalLoad &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
-                   bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
@@ -282,13 +282,13 @@ Item {
 
             PropertyChanges {
                 target: acknowledgeButton
-                visible: true
+                opacity: 1
                 label: "CONTINUE"
             }
 
             PropertyChanges {
                 target: animated_image
-                visible: true
+                opacity: 1
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
@@ -296,7 +296,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -339,7 +339,7 @@ Item {
 
             PropertyChanges {
                 target: animated_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -351,12 +351,12 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -383,13 +383,13 @@ Item {
                 label_width: 345
                 buttonWidth: 345
                 anchors.topMargin: 20
-                visible: true
+                opacity: 1
                 label: "MATERIAL IS EXTRUDING"
             }
 
             PropertyChanges {
                 target: animated_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -401,7 +401,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -424,7 +424,7 @@ Item {
 
             PropertyChanges {
                 target: animated_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -434,12 +434,12 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -463,14 +463,14 @@ Item {
                 target: acknowledgeButton
                 anchors.topMargin: 20
                 buttonWidth: 175
-                visible: true
+                opacity: 1
                 label_width: 175
                 label: "CONTINUE"
             }
 
             PropertyChanges {
                 target: animated_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -500,7 +500,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -527,13 +527,13 @@ Item {
                 target: acknowledgeButton
                 buttonWidth: 100
                 anchors.topMargin: 30
-                visible: true
+                opacity: 1
                 label: "DONE"
             }
 
             PropertyChanges {
                 target: animated_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -543,7 +543,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -576,13 +576,13 @@ Item {
                 target: acknowledgeButton
                 buttonWidth: 100
                 anchors.topMargin: 50
-                visible: true
+                opacity: 1
                 label: "DONE"
             }
 
             PropertyChanges {
                 target: animated_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -594,7 +594,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -619,7 +619,7 @@ Item {
                              } else {
                                  100
                              }
-                visible: true
+                opacity: 1
                 anchors.topMargin: -50
                 buttonWidth: {
                     if(bayID == 1 && inFreStep) {
@@ -646,7 +646,7 @@ Item {
 
             PropertyChanges {
                 target: animated_image
-                visible: true
+                opacity: 1
                 source: bayID == 1 ?
                             "qrc:/img/close_bay1.gif" :
                             "qrc:/img/close_bay2.gif"
@@ -660,7 +660,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         }
     ]
