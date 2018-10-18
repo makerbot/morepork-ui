@@ -1,6 +1,7 @@
 [Unit]
 Description=Qt UI for Sombrero Printers (with new display)
-ConditionPathExists=/home/use_new_display.blank
+ConditionPathExists=|/home/use_new_display.blank
+ConditionPathExists=|/usr/settings/use_new_display.blank
 StartLimitIntervalSec=10000
 StartLimitBurst=2
 
