@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 ToolheadCalibrationForm {
 
@@ -10,7 +10,11 @@ ToolheadCalibrationForm {
 
     actionButton {
         button_mouseArea.onClicked: {
-            if(state == "remove_build_plate") {
+            if(state == "clean_nozzle") {
+                bot.acknowledgeNozzleCleaned()
+                state = "calibrating"
+            }
+            else if(state == "remove_build_plate") {
                 bot.buildPlateState(false)
                 state = "calibrating"
             }
@@ -22,6 +26,7 @@ ToolheadCalibrationForm {
                 processDone()
             }
             else {
+                // Button action in 'base state'
                 bot.calibrateToolheads(["x","y"])
             }
         }

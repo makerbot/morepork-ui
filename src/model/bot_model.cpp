@@ -60,6 +60,10 @@ void BotModel::calibrateToolheads(QList<QString> axes) {
     }
 }
 
+void BotModel::acknowledgeNozzleCleaned() {
+    qDebug() << FL_STRM << "called";
+}
+
 void BotModel::buildPlateState(bool state) {
     qDebug() << FL_STRM << "called with parameter: " << state;
 }
