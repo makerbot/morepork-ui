@@ -102,8 +102,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>({0,0,0}))
     MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>({0,0,0}))
     // TODO(shirley): (duplicate with filament1/2Color)
-    MODEL_PROP(QString, spoolAColorName, "Loading...")
-    MODEL_PROP(QString, spoolBColorName, "Loading...")
+    MODEL_PROP(QString, spoolAColorName, "Reading Spool...")
+    MODEL_PROP(QString, spoolBColorName, "Reading Spool...")
 
     // TODO(shirley) Should probably convert to string when mapping of codes to
     // filament type names is available

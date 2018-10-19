@@ -163,9 +163,12 @@ Item {
                 isExternalLoad: bayID == 1 ?
                             bay1.switch1.checked :
                             bay2.switch1.checked
-                filamentPresentSwitch: bayID == 1 ?
+                bayFilamentSwitch: bayID == 1 ?
                                     bot.filamentBayAFilamentPresent :
                                     bot.filamentBayBFilamentPresent
+                extruderFilamentSwitch: bayID == 1 ?
+                                    bot.extruderAFilamentPresent :
+                                    bot.extruderBFilamentPresent
                 onProcessDone: {
                     state = "base state"
                     materialSwipeView.swipeToItem(0)

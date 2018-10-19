@@ -12,7 +12,8 @@ Item {
     property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
-    property bool filamentPresentSwitch: false
+    property bool bayFilamentSwitch: false
+    property bool extruderFilamentSwitch: false
     property bool isExternalLoad: false
     property int bayID: 0
     property int currentActiveTool: bot.process.currentToolIndex + 1
@@ -113,6 +114,15 @@ Item {
         }
     }
 
+    LoadingIcon {
+        id: loading_gear
+        anchors.left: parent.left
+        anchors.leftMargin: 70
+        anchors.verticalCenterOffset: -20
+        anchors.verticalCenter: parent.verticalCenter
+        loading: false
+    }
+
     Image {
         id: static_image
         width: 400
@@ -173,27 +183,37 @@ Item {
         ColumnLayout {
             id: instructionsList
             width: 300
-            height: 80
+            height: 200
             anchors.top: main_instruction_text.bottom
             anchors.topMargin: 18
             opacity: 1.0
 
             BulletedListItem {
+                id: bulletItem1
                 bulletNumber: "1"
-                bulletText: "Open Bay " + bayID
+                bulletText: "Press side latch to unlock and\nopen bay " +
+                            bayID
             }
 
             BulletedListItem {
+                id: bulletItem2
                 bulletNumber: "2"
                 bulletText: "Place a " +
                             (bayID == 1 ? "Model " : "Support ") +
                             "material spool in\nthe bay"
             }
+
+            BulletedListItem {
+                id: bulletItem3
+                bulletNumber: "3"
+                bulletText: "Push the end of the material into\nthe slot until you feel it being\npulled in."
+                opacity: 0.3
+            }
         }
 
         Text {
             id: instruction_description_text
-            width: 325
+            width: 350
             color: "#cbcbcb"
             text: "\n\n\n"
             anchors.top: main_instruction_text.bottom
@@ -213,7 +233,7 @@ Item {
             buttonHeight: 50
             anchors.top: instruction_description_text.bottom
             anchors.topMargin: 20
-            opacity: 1
+            opacity: 0
         }
 
         RowLayout {
@@ -258,7 +278,7 @@ Item {
         State {
             name: "feed_filament"
             when: (isMaterialPresent || overrideInvalidMaterial) &&
-                  !isExternalLoad &&
+                  !isExternalLoad && !bayFilamentSwitch &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
@@ -278,11 +298,12 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 text: "Push the end of the material into the slot until you feel it being pulled in."
+                opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                opacity: 1
+                opacity: 0
                 label: "CONTINUE"
             }
 
@@ -296,12 +317,67 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: bulletItem3
+                opacity: 1
+            }
+        },
+        State {
+            name: "pushing_filament"
+            when: ((bayFilamentSwitch && !extruderFilamentSwitch) ||
+                   isExternalLoad) &&
+                   bot.process.stateType == ProcessStateType.Preheating &&
+                   (bot.process.type == ProcessType.Load ||
+                   bot.process.type == ProcessType.Unload ||
+                   bot.process.type == ProcessType.Print)
+
+            PropertyChanges {
+                target: main_instruction_text
+                text: "MATERIAL LOADING"
+                anchors.topMargin: 140
+            }
+
+            PropertyChanges {
+                target: instruction_description_text
+                text: "Helper motors ae pushing material\nup to the extruder. This can take up to\n30 seconds."
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                visible: false
+            }
+
+            PropertyChanges {
+                target: animated_image
                 opacity: 0
+            }
+
+            PropertyChanges {
+                target: static_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: acknowledgeButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: loading_gear
+                loading: true
             }
         },
         State {
             name: "preheating"
-            when: (filamentPresentSwitch || isExternalLoad) &&
+            when: (extruderFilamentSwitch || isExternalLoad) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||

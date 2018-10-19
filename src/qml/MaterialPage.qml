@@ -40,7 +40,7 @@ MaterialPageForm {
     bay1 {
         loadButton {
             button_mouseArea.onClicked: {
-                if(canLoadUnloadStart()) {
+                if(!bay1.loadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = true
                     enableMaterialDrawer()
@@ -64,7 +64,7 @@ MaterialPageForm {
 
         unloadButton {
             button_mouseArea.onClicked: {
-                if(canLoadUnloadStart()) {
+                if(!bay1.unloadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = false
                     enableMaterialDrawer()
@@ -85,14 +85,14 @@ MaterialPageForm {
                     materialSwipeView.swipeToItem(1)
                 }
             }
-            disable_button: !canLoadUnloadStart()
+            disable_button: !canLoadUnloadStart() || !bay1.extruderFilamentPresent
         }
     }
 
     bay2 {
         loadButton {
             button_mouseArea.onClicked: {
-                if(canLoadUnloadStart()) {
+                if(!bay2.loadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = true
                     enableMaterialDrawer()
@@ -114,7 +114,7 @@ MaterialPageForm {
 
         unloadButton {
             button_mouseArea.onClicked: {
-                if(canLoadUnloadStart()) {
+                if(!bay2.unloadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = false
                     enableMaterialDrawer()
@@ -135,7 +135,7 @@ MaterialPageForm {
                     materialSwipeView.swipeToItem(1)
                 }
             }
-            disable_button: !canLoadUnloadStart()
+            disable_button: !canLoadUnloadStart() || !bay2.extruderFilamentPresent
         }
     }
 

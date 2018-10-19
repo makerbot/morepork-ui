@@ -179,6 +179,28 @@ Item {
         antialiasing: false
         filamentBayID: filamentBayBaseItem.filamentBayID
 
+        Text {
+            id: materialType_text
+            color: "#ffffff"
+            text: {
+                if(spoolPresent) {
+                    filamentMaterialName
+                }
+                else {
+                    ""
+                }
+            }
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            font.capitalization: Font.AllUppercase
+            font.letterSpacing: 4
+            font.family: "Antenna"
+            font.weight: Font.Light
+            font.pixelSize: 18
+            smooth: false
+            antialiasing: false
+        }
+
         ColumnLayout {
             id: columnLayout
             width: 360
@@ -212,13 +234,11 @@ Item {
                 antialiasing: false
 
                 Text {
-                    id: material_text
+                    id: materialColor_text
                     color: "#ffffff"
                     text: {
                         if(spoolPresent) {
-                            filamentColorName +
-                            " " +
-                            filamentMaterialName
+                            filamentColorName
                         }
                         else {
                             "NO MATERIAL DETECTED"
@@ -241,6 +261,9 @@ Item {
                 spacing: 10
                 smooth: false
                 antialiasing: false
+                opacity: (spoolPresent &&
+                         filamentColorName != "Reading Spool...") ?
+                             1.0 : 0
 
                 FilamentIcon {
                     id: filament_icon
@@ -298,6 +321,7 @@ Item {
                 }
             }
         }
+
     }
 
     Switch {
