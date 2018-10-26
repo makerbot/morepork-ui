@@ -330,6 +330,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 700
+        visible: false
 
         Text {
             id: text1

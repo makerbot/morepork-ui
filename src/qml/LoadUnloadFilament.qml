@@ -8,10 +8,6 @@ LoadUnloadFilamentForm {
             }
             else if(state == "unloaded_filament" ||
                state == "loaded_filament") {
-                state = "close_bay_door"
-            }
-            else if(state == "close_bay_door" ||
-               state == "error") {
                 processDone()
                 if(inFreStep && bayID == 1) {
                     startLoadUnloadFromUI = true
@@ -24,6 +20,9 @@ LoadUnloadFilamentForm {
                     mainSwipeView.swipeToItem(0)
                     inFreStep = false
                 }
+            }
+            else if(state == "error") {
+                processDone()
             }
             else if(state == "extrusion") {
                 bot.loadFilamentStop()

@@ -24,14 +24,19 @@ Item {
         }
     }
 
-    property bool isMaterialPresent: bayID == 1 ? bay1.spoolPresent :
-                                                  bay2.spoolPresent
+    // This should eventually check for validity in terms of material
+    // type, quantity, spool checksum etc.
+    property bool isMaterialValid: bayID == 1 ?
+                                       bay1.spoolPresent :
+                                       bay2.spoolPresent
 
-    onIsMaterialPresentChanged: {
+    onIsMaterialValidChanged: {
         overrideInvalidMaterial = false
+        if(bot.process.type == ProcessType.Load) {
+            bot.acknowledgeMaterial(true)
+        }
     }
 
-    property bool isMaterialValid: true
     property bool overrideInvalidMaterial: false
     property int materialCode: bayID == 1 ? bay1.filamentMaterialCode :
                                             bay2.filamentMaterialCode
@@ -151,7 +156,8 @@ Item {
         playing: materialSwipeView.currentIndex == 1 &&
                  (loadUnloadForm.state == "base state" ||
                   loadUnloadForm.state == "feed_filament" ||
-                  loadUnloadForm.state == "close_bay_door")
+                  loadUnloadForm.state == "loaded_filament" ||
+                  loadUnloadForm.state == "unloaded_filament")
         opacity: 1
     }
 
@@ -277,7 +283,7 @@ Item {
     states: [
         State {
             name: "feed_filament"
-            when: (isMaterialPresent || overrideInvalidMaterial) &&
+            when: (isMaterialValid || overrideInvalidMaterial) &&
                   !isExternalLoad && !bayFilamentSwitch &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
@@ -337,7 +343,7 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: "MATERIAL LOADING"
-                anchors.topMargin: 140
+                anchors.topMargin: 160
             }
 
             PropertyChanges {
@@ -385,9 +391,9 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: bayID == 1 ?
-                          "EXTRUDER 1 IS\nHEATING UP" :
-                          "EXTRUDER 2 IS\nHEATING UP"
+                text: (targetTemperature > currentTemperature) ?
+                          "EXTRUDER " + bayID + " IS\nHEATING UP" :
+                          "EXTRUDER " + bayID + " IS\nCOOLING DOWN"
                 anchors.topMargin: 140
             }
 
@@ -489,7 +495,7 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: "UNLOADING"
-                anchors.topMargin: 120
+                anchors.topMargin: 165
             }
 
             PropertyChanges {
@@ -505,7 +511,7 @@ Item {
 
             PropertyChanges {
                 target: static_image
-                source: "qrc:/img/clear_excess_material.png"
+                opacity: 0
             }
 
             PropertyChanges {
@@ -516,6 +522,11 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 opacity: 0
+            }
+
+            PropertyChanges {
+                target: loading_gear
+                loading: true
             }
         },
         State {
@@ -531,29 +542,58 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Wait a few moments until the material has cooled and remove the excess from the build chamber. (Do not touch the nozzle while it is hot, Red light on extruder)"
+                text: "Wait a few moments until the material has cooled. Close the build chamber and material drawer."
                 anchors.topMargin: 60
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                anchors.topMargin: 20
-                buttonWidth: 175
                 opacity: 1
-                label_width: 175
-                label: "CONTINUE"
+                anchors.topMargin: 20
+                label_width: {
+                    if(bayID == 1 && inFreStep) {
+                        375
+                    } else {
+                        100
+                    }
+                }
+
+                buttonWidth: {
+                    if(bayID == 1 && inFreStep) {
+                        375
+                    } else {
+                        100
+                    }
+                }
+
+                label_size: {
+                    if(bayID == 1 && inFreStep) {
+                        14
+                    } else {
+                        18
+                    }
+                }
+
+                label: {
+                    if(bayID == 1 && inFreStep) {
+                        "NEXT: Load Support Material"
+                    } else {
+                        "DONE"
+                    }
+                }
             }
 
             PropertyChanges {
                 target: animated_image
-                opacity: 0
+                opacity: 1
+                source: bayID == 1 ?
+                            "qrc:/img/close_bay1.gif" :
+                            "qrc:/img/close_bay2.gif"
             }
 
             PropertyChanges {
                 target: static_image
-                source: bayID == 1 ?
-                            "qrc:/img/confirm_extrusion_1.png" :
-                            "qrc:/img/confirm_extrusion_2.png"
+                opacity: 0
             }
 
             PropertyChanges {
@@ -595,7 +635,7 @@ Item {
                 target: instruction_description_text
                 text: "Open material bay " +
                       bayID +
-                      " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
+                      " and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door."
                 anchors.topMargin: 30
             }
 
@@ -609,12 +649,15 @@ Item {
 
             PropertyChanges {
                 target: animated_image
-                opacity: 0
+                opacity: 1
+                source: bayID == 1 ?
+                            "qrc:/img/close_bay1.gif" :
+                            "qrc:/img/close_bay2.gif"
             }
 
             PropertyChanges {
                 target: static_image
-                source: "qrc:/img/unload_filament.png"
+                opacity: 0
             }
 
             PropertyChanges {
@@ -666,72 +709,6 @@ Item {
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
-            }
-
-            PropertyChanges {
-                target: instructionsList
-                opacity: 0
-            }
-        },
-        State {
-            name: "close_bay_door"
-            PropertyChanges {
-                target: main_instruction_text
-                text: "CLOSE BAY " + bayID
-                anchors.topMargin: 165
-            }
-
-            PropertyChanges {
-                target: instruction_description_text
-                text: ""
-                visible: true
-                anchors.topMargin: 60
-            }
-
-            PropertyChanges {
-                target: acknowledgeButton
-                label_width: if(bayID == 1 && inFreStep) {
-                                 375
-                             } else {
-                                 100
-                             }
-                opacity: 1
-                anchors.topMargin: -50
-                buttonWidth: {
-                    if(bayID == 1 && inFreStep) {
-                        375
-                    } else {
-                        100
-                    }
-                }
-                label_size: {
-                    if(bayID == 1 && inFreStep) {
-                        14
-                    } else {
-                        18
-                    }
-                }
-                label: {
-                    if(bayID == 1 && inFreStep) {
-                        "NEXT: Load Support Material"
-                    } else {
-                        "DONE"
-                    }
-                }
-            }
-
-            PropertyChanges {
-                target: animated_image
-                opacity: 1
-                source: bayID == 1 ?
-                            "qrc:/img/close_bay1.gif" :
-                            "qrc:/img/close_bay2.gif"
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                visible: false
-                anchors.topMargin: 15
             }
 
             PropertyChanges {

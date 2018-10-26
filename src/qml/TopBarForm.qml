@@ -66,7 +66,7 @@ Item {
         height: barHeight
         smooth: false
         anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: 10
         anchors.top: parent.top
         anchors.topMargin: 0
         z: 2
@@ -84,7 +84,8 @@ Item {
 
         Image {
             id: imageBackArrow
-            height: 25
+            height: 38
+            width: 38
             smooth: false
             anchors.verticalCenterOffset: -1
             anchors.verticalCenter: text_back.verticalCenter
@@ -94,7 +95,7 @@ Item {
             fillMode: Image.PreserveAspectFit
             source: (inFreStep && (typeof currentItem.skipFreStepAction === "function")) ?
                         "qrc:/img/skip.png" :
-                        "qrc:/img/arrow_19pix.png"
+                        "qrc:/img/back_button.png"
         }
 
         Text {

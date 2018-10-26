@@ -52,6 +52,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
+    Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
 
   private:
     Q_OBJECT
@@ -90,6 +91,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBTagPresent, false)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
+    MODEL_PROP(bool, topLoadingWarning, false)
+    MODEL_PROP(bool, spoolValidityCheckPending, false)
+    MODEL_PROP(QString, unknownMaterialWarningType, "None")
 
     MODEL_PROP(int, spoolAOriginalAmount, 0)
     MODEL_PROP(int, spoolBOriginalAmount, 0)

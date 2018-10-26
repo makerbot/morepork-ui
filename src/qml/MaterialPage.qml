@@ -26,10 +26,31 @@ MaterialPageForm {
         setDrawerState(true)
     }
 
-    function canLoadUnloadStart() {
-        if(bot.process.type == ProcessType.None ||
-          (printPage.isPrintProcess &&
-           bot.process.stateType == ProcessStateType.Paused)) {
+    function noExtruderPopupCheck(extruderID) {
+        if(extruderID == 1 && !bot.extruderAPresent) {
+            extruderIDnoExtruderPopup = extruderID
+            noExtruderPopup.open()
+        }
+        else if(extruderID == 2 && !bot.extruderBPresent) {
+            extruderIDnoExtruderPopup = extruderID
+            noExtruderPopup.open()
+        }
+    }
+
+    function isExtruderPresent(extruderID) {
+        if(extruderID == 1) {
+            return bot.extruderAPresent
+        } else if(extruderID == 2) {
+            return bot.extruderBPresent
+        } else {
+            return false
+        }
+    }
+
+    function canLoadUnloadStart(extruderID) {
+        if(isExtruderPresent(extruderID) &&
+           (bot.process.type == ProcessType.None ||
+            (printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused))) {
             return true
         }
         else {
@@ -40,6 +61,7 @@ MaterialPageForm {
     bay1 {
         loadButton {
             button_mouseArea.onClicked: {
+                noExtruderPopupCheck(bay1.filamentBayID)
                 if(!bay1.loadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = true
@@ -59,11 +81,12 @@ MaterialPageForm {
                     materialSwipeView.swipeToItem(1)
                 }
             }
-            disable_button: !canLoadUnloadStart()
+            disable_button: !canLoadUnloadStart(bay1.filamentBayID)
         }
 
         unloadButton {
             button_mouseArea.onClicked: {
+                noExtruderPopupCheck(bay1.filamentBayID)
                 if(!bay1.unloadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = false
@@ -85,13 +108,14 @@ MaterialPageForm {
                     materialSwipeView.swipeToItem(1)
                 }
             }
-            disable_button: !canLoadUnloadStart() || !bay1.extruderFilamentPresent
+            disable_button: !canLoadUnloadStart(bay1.filamentBayID) || !bay1.extruderFilamentPresent
         }
     }
 
     bay2 {
         loadButton {
             button_mouseArea.onClicked: {
+                noExtruderPopupCheck(bay2.filamentBayID)
                 if(!bay2.loadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = true
@@ -109,11 +133,12 @@ MaterialPageForm {
                     materialSwipeView.swipeToItem(1)
                 }
             }
-            disable_button: !canLoadUnloadStart()
+            disable_button: !canLoadUnloadStart(bay2.filamentBayID)
         }
 
         unloadButton {
             button_mouseArea.onClicked: {
+                noExtruderPopupCheck(bay2.filamentBayID)
                 if(!bay2.unloadButton.disable_button) {
                     startLoadUnloadFromUI = true
                     isLoadFilament = false
@@ -135,7 +160,7 @@ MaterialPageForm {
                     materialSwipeView.swipeToItem(1)
                 }
             }
-            disable_button: !canLoadUnloadStart() || !bay2.extruderFilamentPresent
+            disable_button: !canLoadUnloadStart(bay2.filamentBayID) || !bay2.extruderFilamentPresent
         }
     }
 
@@ -195,7 +220,33 @@ MaterialPageForm {
         }
     }
 
-    continue_mouseArea.onClicked: cancelLoadUnloadPopup.close()
+    continue_mouseArea.onClicked: {
+        cancelLoadUnloadPopup.close()
+    }
+
+    acknowledge_unk_mat_loading_mouseArea.onClicked: {
+        bot.acknowledgeMaterial(true)
+    }
+
+    cancel_unk_mat_loading_mouseArea.onClicked: {
+        bot.acknowledgeMaterial(false)
+        materialChangeCancelled = true
+        bot.cancel()
+        loadUnloadFilamentProcess.state = "base state"
+        materialSwipeView.swipeToItem(0)
+        setDrawerState(false)
+    }
+
+    attach_extruder_mouseArea_no_extruder_popup.onClicked: {
+        noExtruderPopup.close()
+        mainSwipeView.swipeToItem(2)
+        extruderPage.itemAttachExtruder.extruder = extruderIDnoExtruderPopup
+        extruderPage.extruderSwipeView.swipeToItem(1)
+    }
+
+    cancel_mouseArea_no_extruder_popup.onClicked: {
+        noExtruderPopup.close()
+    }
 
     materialPageDrawer.buttonCancelMaterialChange.onClicked: {
         materialPageDrawer.close()
