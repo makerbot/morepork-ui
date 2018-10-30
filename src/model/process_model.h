@@ -36,7 +36,8 @@ class ProcessModel : public BaseModel {
         Extrusion,
         Stopping,
         UnloadingFilament,
-        Done, // Base Process states
+        Running, // Base Process states
+        Done,
         Cancelling,
         CleaningUp,
         TransferringFirmware, // Firmware update states
@@ -49,10 +50,11 @@ class ProcessModel : public BaseModel {
         LevelingLeft,
         LevelingRight,
         LevelingComplete,
-        CalibratingToolheads, // Toolhead calibration states
+        HeatingNozzle, // Toolhead calibration states
+        CleanNozzle,
+        CalibratingToolheads,
         InstallBuildPlate,
-        RemoveBuildPlate,
-        Running
+        RemoveBuildPlate
     };
 
     Q_ENUM(ProcessType)

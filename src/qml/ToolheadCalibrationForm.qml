@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
@@ -113,11 +113,11 @@ Item {
             anchors.left: parent.right
             anchors.leftMargin: 0
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 30
+            anchors.verticalCenterOffset: 20
 
             Text {
                 id: title
-                width: 252
+                width: 350
                 text: "EXTRUDER CALIBRATION"
                 antialiasing: false
                 smooth: false
@@ -160,15 +160,54 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 0
                 anchors.top: subtitle.bottom
-                anchors.topMargin: 20
+                anchors.topMargin: 25
                 visible: true
+            }
+
+            RowLayout {
+                id: temperatureDisplay
+                anchors.top: subtitle.bottom
+                anchors.topMargin: 25
+                width: children.width
+                height: 35
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                spacing: 10
+                visible: false
+
+                Text {
+                    id: extruder_A_temperature_text
+                    text: bot.extruderACurrentTemp + "C"
+                    font.family: "Antennae"
+                    color: "#ffffff"
+                    font.letterSpacing: 3
+                    font.weight: Font.Light
+                    font.pixelSize: 20
+                }
+
+                Rectangle {
+                    id: divider_rectangle
+                    width: 1
+                    height: 25
+                    color: "#ffffff"
+                }
+
+                Text {
+                    id: extruder_B_temperature_text
+                    text: bot.extruderBCurrentTemp + "C"
+                    font.family: "Antennae"
+                    color: "#ffffff"
+                    font.letterSpacing: 3
+                    font.weight: Font.Light
+                    font.pixelSize: 20
+                }
             }
         }
     }
 
     LoadingIcon {
         id: loadingIcon
-        anchors.verticalCenterOffset: -40
+        anchors.verticalCenterOffset: -30
         anchors.left: parent.left
         anchors.leftMargin: 100
         anchors.verticalCenter: parent.verticalCenter
@@ -212,6 +251,54 @@ Item {
     }
 
     states: [
+        State {
+            name: "heating_nozzle"
+            when: bot.process.type == ProcessType.CalibrationProcess &&
+                  bot.process.stateType == ProcessStateType.HeatingNozzle
+
+            PropertyChanges {
+                target: title
+                text: "PREPARING CALIBRATION"
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "The extruders are heating up. Please wait to clean nozzle."
+            }
+
+            PropertyChanges {
+                target: actionButton
+                visible: false
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                visible: true
+            }
+        },
+
+        State {
+            name: "clean_nozzle"
+            when: bot.process.type == ProcessType.CalibrationProcess &&
+                  bot.process.stateType == ProcessStateType.CleanNozzle
+
+            PropertyChanges {
+                target: title
+                text: "CLEAN EXTRUDER NOZZLES"
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "Use the provided brush to clean the tips of the extruders for the most accurate calibration."
+            }
+
+            PropertyChanges {
+                target: actionButton
+                label_width: 100
+                buttonWidth: 100
+                label: "NEXT"
+            }
+        },
 
         State {
             name: "remove_build_plate"
@@ -262,7 +349,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "INSERT     BUILD PLATE"
+                text: "INSERT\nBUILD PLATE"
             }
 
             PropertyChanges {
@@ -289,7 +376,6 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
-                anchors.verticalCenterOffset: -20
                 visible: true
             }
         },
@@ -363,7 +449,6 @@ Item {
             PropertyChanges {
                 target: loadingIcon
                 visible: true
-                anchors.verticalCenterOffset: "-20"
             }
 
             PropertyChanges {
