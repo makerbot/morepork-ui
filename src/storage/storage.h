@@ -222,6 +222,12 @@ class PrintFileInfo : public QObject {
 
 
 class ThumbnailPixmapProvider : public QQuickImageProvider {
+  enum ThumbnailWidth {
+      Small = 140,
+      Medium = 212,
+      Large = 960
+  };
+
   public:
     ThumbnailPixmapProvider() :
       QQuickImageProvider(QQuickImageProvider::Pixmap) {}

@@ -84,8 +84,8 @@ Item {
 
         Image {
             id: imageBackArrow
-            height: 38
-            width: 38
+            height: sourceSize.height
+            width: sourceSize.width
             smooth: false
             anchors.verticalCenterOffset: -1
             anchors.verticalCenter: text_back.verticalCenter

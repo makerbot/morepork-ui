@@ -17,13 +17,13 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
           MakerbotFileMetaReader file_meta_reader(kFileInfo);
           QImage thumbnail;
           switch(requestedSize.width()) {
-              case 140:
+              case ThumbnailWidth::Small:
                 thumbnail = file_meta_reader.getSmallThumbnail();
                 break;
-              case 212:
+              case ThumbnailWidth::Medium:
                 thumbnail = file_meta_reader.getMediumThumbnail();
                 break;
-              case 960:
+              case ThumbnailWidth::Large:
                 thumbnail = file_meta_reader.getLargeThumbnail();
                 break;
               default:
@@ -59,6 +59,7 @@ MoreporkStorage::MoreporkStorage()
 
   QDir dir(TEST_PRINT_PATH);
   if (!dir.exists()) {
+      // Creates TEST_PRINT_PATH
       dir.mkpath(".");
   }
   if(!QFileInfo::exists(TEST_PRINT_PATH + "/test_print.makerbot") ||
@@ -70,8 +71,8 @@ MoreporkStorage::MoreporkStorage()
 }
 
 
-void MoreporkStorage::updateCurrentThing(bool is_test_print) {
-  QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
+void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
+  const QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
   if(QDir(dir_path).exists()){
       QDirIterator current_thing_dir(dir_path, QDir::Files |
                                 QDir::NoDotAndDotDot | QDir::Readable);

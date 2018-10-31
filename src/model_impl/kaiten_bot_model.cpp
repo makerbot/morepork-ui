@@ -23,7 +23,7 @@ class KaitenBotModel : public BotModel {
     void authRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
     void printFileValidNotif(const Json::Value &info);
-    void unkMatWarningUpdate(const Json::Value &params);
+    void unknownMatWarningUpdate(const Json::Value &params);
     void assistedLevelUpdate(const Json::Value & status);
     void queryStatusUpdate(const Json::Value & info);
     void wifiUpdate(const Json::Value & result);
@@ -245,7 +245,7 @@ class KaitenBotModel : public BotModel {
       public:
         UnknownMaterialNotification(KaitenBotModel * bot) : m_bot(bot) {}
         void invoke(const Json::Value &params) {
-            m_bot->unkMatWarningUpdate(params);
+            m_bot->unknownMatWarningUpdate(params);
         }
       private:
         KaitenBotModel *m_bot;
@@ -269,7 +269,7 @@ void KaitenBotModel::respondAuthRequest(QString response){
     }
 }
 
-void KaitenBotModel::unkMatWarningUpdate(const Json::Value &request){
+void KaitenBotModel::unknownMatWarningUpdate(const Json::Value &request){
     UPDATE_STRING_PROP(unknownMaterialWarningType, request["type"]);
     const Json::Value &kWarningType = request["type"];
         if(kWarningType.isString()) {

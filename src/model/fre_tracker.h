@@ -7,6 +7,10 @@
 #include <QObject>
 
 #include "base_model.h"
+
+#define FRE_TRACKER_PATH std::string("/var/fre/fre_tracker.json")
+#define FIRST_BOOT_FILE_PATH std::string("/home/.first_firmware_boot")
+
 // First Run Experience Tracker
 class FreTracker : public BaseModel {
   public:
@@ -36,10 +40,10 @@ class FreTracker : public BaseModel {
   private:
     Q_OBJECT
 
-    Json::Value freStatus;
-    const std::string fre_tracker_path;
-    const std::string first_boot_path;
-    const std::vector<std::string> step_str =
+    Json::Value fre_status_;
+    const std::string fre_tracker_path_;
+    const std::string first_boot_path_;
+    const std::vector<std::string> step_str_ =
     {
         "welcome",
         "setup_wifi",
@@ -52,7 +56,7 @@ class FreTracker : public BaseModel {
         "setup_complete",
         "fre_complete"
     };
-    std::string next_step;
+    std::string next_step_;
     MODEL_PROP(FreStep, currentFreStep, FreStep::Welcome)
     MODEL_PROP(bool, isFirstBoot, false)
 };

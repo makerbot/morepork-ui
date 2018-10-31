@@ -8,15 +8,15 @@
 #include "fre_tracker.h"
 
 FreTracker::FreTracker() :
-    fre_tracker_path("/var/fre/fre_tracker.json"),
-    first_boot_path("/home/.first_firmware_boot") {
+    fre_tracker_path_(FRE_TRACKER_PATH),
+    first_boot_path_(FIRST_BOOT_FILE_PATH) {
     mkdir("/var/fre", S_IFDIR);
-    std::ifstream fre_str(fre_tracker_path);
+    std::ifstream fre_str(fre_tracker_path_);
     Json::Reader reader;
-    if (!fre_str || !reader.parse(fre_str, freStatus)) {
-        freStatus = Json::Value();
+    if (!fre_str || !reader.parse(fre_str, fre_status_)) {
+        fre_status_ = Json::Value();
     }
-    if (FILE *first_boot_file = fopen(first_boot_path.c_str(), "r")) {
+    if (FILE *first_boot_file = fopen(first_boot_path_.c_str(), "r")) {
         fclose(first_boot_file);
         isFirstBootSet(true);
     } else {
@@ -25,20 +25,20 @@ FreTracker::FreTracker() :
 }
 
 void FreTracker::initialize() {
-    if (!freStatus.isMember("fre_status")) {
+    if (!fre_status_.isMember("fre_status")) {
         currentFreStepSet(FreStep::Welcome);
-        freStatus["fre_status"] = Json::Value();
-        Json::Value &fre_status = freStatus["fre_status"];
+        fre_status_["fre_status"] = Json::Value();
+        Json::Value &fre_status = fre_status_["fre_status"];
         if (!fre_status.isMember("fre_complete")) {
             fre_status["fre_complete"] = Json::Value(false);
         }
         if (!fre_status.isMember("current_step")) {
-            next_step = "welcome";
-            fre_status["current_step"] = Json::Value(next_step);
+            next_step_ = "welcome";
+            fre_status["current_step"] = Json::Value(next_step_);
         }
         logFreStatus();
     } else {
-        Json::Value &fre_status = freStatus["fre_status"];
+        Json::Value &fre_status = fre_status_["fre_status"];
         if (fre_status.isMember("fre_complete")) {
             if (fre_status["fre_complete"].asBool()) {
                 currentFreStepSet(FreStep::FreComplete);
@@ -75,34 +75,33 @@ void FreTracker::initialize() {
 }
 
 void FreTracker::gotoNextStep(uint current_step) {
-    current_step += 1;
-    currentFreStepSet(static_cast<FreStep>(current_step));
-    next_step = step_str[current_step];
+    currentFreStepSet(static_cast<FreStep>(++current_step));
+    next_step_ = step_str_[current_step];
     logFreStatus();
 }
 
 void FreTracker::setFreStep(uint step) {
     currentFreStepSet(static_cast<FreStep>(step));
-    next_step = step_str[step];
+    next_step_ = step_str_[step];
     logFreStatus();
 }
 
 void FreTracker::logFreStatus() {
-    Json::Value &fre_status = freStatus["fre_status"];
-    auto &fre_complete = fre_status["fre_complete"];
-    auto &current_step = fre_status["current_step"];
+    Json::Value &fre_status = fre_status_["fre_status"];
+    Json::Value &fre_complete = fre_status["fre_complete"];
+    Json::Value &current_step = fre_status["current_step"];
 
-    if (next_step == "fre_complete") {
+    if (next_step_ == "fre_complete") {
         fre_complete = Json::Value(true);
     } else {
         fre_complete = Json::Value(false);
     }
 
-    current_step = Json::Value(next_step);
+    current_step = Json::Value(next_step_);
 
-    std::string tmp_path = fre_tracker_path + ".tmp";
+    std::string tmp_path = fre_tracker_path_ + ".tmp";
     std::ofstream tmp_str(tmp_path);
-    tmp_str << freStatus.toStyledString();
+    tmp_str << fre_status_.toStyledString();
 
     // Hack to sync to disk since ofstream lacks flush() &
     // also there's no way to get the file descriptor from it.
@@ -110,12 +109,14 @@ void FreTracker::logFreStatus() {
     int fd = open(tmp_path.c_str(), O_APPEND);
     fsync(fd);
     if (fd) {
-        rename(tmp_path.c_str(), fre_tracker_path.c_str());
+        rename(tmp_path.c_str(), fre_tracker_path_.c_str());
     }
     close(fd);
 }
 
 void FreTracker::acknowledgeFirstBoot() {
-//    remove(first_boot_path.c_str());
+// TODO(praveen): Check if the first boot file is used
+// elsewhere before deleting it
+//  remove(first_boot_path.c_str());
     isFirstBootSet(false);
 }
