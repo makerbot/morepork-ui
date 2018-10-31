@@ -104,6 +104,8 @@
 	<file alias="file_no_preview_small.png">images/file_no_preview_small.png</file>
 	<file alias="file_no_preview_medium.png">images/file_no_preview_medium.png</file>
 	<file alias="back_button.png">images/back_button.png</file>
+	<file alias="rewind_spool_1.gif">images/rewind_spool_1.gif</file>
+	<file alias="rewind_spool_2.gif">images/rewind_spool_2.gif</file>
     </qresource>
     
     <qresource prefix="/test_files">

@@ -488,7 +488,8 @@ Item {
         },
         State {
             name: "unloading_filament"
-            when: bot.process.stateType == ProcessStateType.UnloadingFilament &&
+            when: (bot.process.stateType == ProcessStateType.UnloadingFilament ||
+                   bot.process.stateType == ProcessStateType.CleaningUp) &&
                   (bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
 
@@ -500,7 +501,7 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "The filament is backing out of the extruder, please wait."
+                text: "The material is backing out of the extruder, please wait."
                 anchors.topMargin: 30
             }
 
@@ -651,8 +652,8 @@ Item {
                 target: animated_image
                 opacity: 1
                 source: bayID == 1 ?
-                            "qrc:/img/close_bay1.gif" :
-                            "qrc:/img/close_bay2.gif"
+                            "qrc:/img/rewind_spool_1.gif" :
+                            "qrc:/img/rewind_spool_2.gif"
             }
 
             PropertyChanges {
