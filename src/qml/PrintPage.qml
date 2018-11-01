@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import StorageSortTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
@@ -7,8 +7,12 @@ PrintPageForm {
     buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE") + cpUiTr.emptyStr
 
     printingDrawer.buttonCancelPrint.onClicked: {
-        bot.cancel()
         printingDrawer.close()
+        if(inFreStep) {
+            skipFreStepPopup.open()
+            return;
+        }
+        bot.cancel()
     }
 
     printingDrawer.buttonPausePrint.onClicked: {

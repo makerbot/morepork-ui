@@ -34,12 +34,10 @@
       	<file alias="insert_filament_bay2.gif">images/insert_filament_bay2.gif</file>
       	<file alias="close_bay1.gif">images/close_bay1.gif</file>
       	<file alias="close_bay2.gif">images/close_bay2.gif</file>
-      	<file alias="clear_excess_material.png">images/clear_excess_material.png</file>
       	<file alias="confirm_extrusion_1.png">images/confirm_extrusion_1.png</file>
       	<file alias="confirm_extrusion_2.png">images/confirm_extrusion_2.png</file>
       	<file alias="extruder_1_heating.png">images/extruder_1_heating.png</file>
       	<file alias="extruder_2_heating.png">images/extruder_2_heating.png</file>
-      	<file alias="unload_filament.png">images/unload_filament.png</file>
       	<file alias="change_filament.png">images/change_filament.png</file>
       	<file alias="close.png">images/close.png</file>
       	<file alias="directory_icon.png">images/directory_icon.png</file>
@@ -99,7 +97,21 @@
 	<file alias="attach_extruder_2.gif">images/attach_extruder_2.gif</file>
 	<file alias="file_no_preview.png">images/file_no_preview.png</file>
 	<file alias="remove_top_lid.gif">images/remove_top_lid.gif</file>
+	<file alias="makerbot_startup_logo.png">images/makerbot_startup_logo.png</file>
+	<file alias="skip.png">images/skip.png</file>
+	<file alias="sombrero_welcome.png">images/sombrero_welcome.png</file>
+	<file alias="name_printer.png">images/name_printer.png</file>
+	<file alias="file_no_preview_small.png">images/file_no_preview_small.png</file>
+	<file alias="file_no_preview_medium.png">images/file_no_preview_medium.png</file>
+	<file alias="back_button.png">images/back_button.png</file>
+	<file alias="rewind_spool_1.gif">images/rewind_spool_1.gif</file>
+	<file alias="rewind_spool_2.gif">images/rewind_spool_2.gif</file>
     </qresource>
+    
+    <qresource prefix="/test_files">
+        <file alias="smallcircle.makerbot">test_print/smallcircle.makerbot</file>
+    </qresource>
+    
     <qresource prefix="/vid">
         <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
     </qresource>

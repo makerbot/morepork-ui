@@ -413,7 +413,7 @@ Item {
             PropertyChanges {
                 target: actionButton
                 label_width: 100
-                label: "FINISH"
+                label: "DONE"
                 buttonWidth: 125
             }
         },

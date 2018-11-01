@@ -7,37 +7,38 @@
 
 
 QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
-    QSize *size, const QSize &requestedSize){
+    QSize *size, const QSize &requestedSize) {
 #ifdef HAVE_LIBTINYTHING
   const QFileInfo kFileInfo(kAbsoluteFilePath);
-  if(kFileInfo.exists()){
-    if(kFileInfo.isDir())
-      return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
-    else{
-      MakerbotFileMetaReader file_meta_reader(kFileInfo);
-      QImage thumbnail;
-      switch(requestedSize.width()) {
-      case 140:
-          thumbnail = file_meta_reader.getSmallThumbnail();
-          break;
-      case 212:
-          thumbnail = file_meta_reader.getMediumThumbnail();
-          break;
-      case 960:
-          thumbnail = file_meta_reader.getLargeThumbnail();
-          break;
-      default:
-          break;
+  if(kFileInfo.exists()) {
+      if(kFileInfo.isDir()) {
+          return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
+      } else {
+          MakerbotFileMetaReader file_meta_reader(kFileInfo);
+          QImage thumbnail;
+          switch(requestedSize.width()) {
+              case ThumbnailWidth::Small:
+                thumbnail = file_meta_reader.getSmallThumbnail();
+                break;
+              case ThumbnailWidth::Medium:
+                thumbnail = file_meta_reader.getMediumThumbnail();
+                break;
+              case ThumbnailWidth::Large:
+                thumbnail = file_meta_reader.getLargeThumbnail();
+                break;
+              default:
+                break;
+          }
+          if(!thumbnail.isNull()) {
+              return QPixmap::fromImage(thumbnail);
+          }
       }
-      if(thumbnail.isNull())
-        return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
-      else
-        return QPixmap::fromImage(thumbnail);
-    }
   }
   else
 #endif
-    return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
+  {
+      return QPixmap::fromImage(QImage(":/img/file_no_preview.png"));
+  }
 }
 
 
@@ -55,12 +56,25 @@ MoreporkStorage::MoreporkStorage()
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
   usbStorageConnectedSet(false);
   storageIsEmptySet(true);
+
+  QDir dir(TEST_PRINT_PATH);
+  if (!dir.exists()) {
+      // Creates TEST_PRINT_PATH
+      dir.mkpath(".");
+  }
+  if(!QFileInfo::exists(TEST_PRINT_PATH + "/test_print.makerbot") ||
+     !QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").isFile()) {
+      // Tiny test file 74 kb, so okay to do I/O in constructor I guess.
+      QFile::copy(":/test_files/smallcircle.makerbot",
+                  TEST_PRINT_PATH + "/test_print.makerbot");
+  }
 }
 
 
-void MoreporkStorage::updateCurrentThing(){
-  if(QDir(CURRENT_THING_PATH).exists()){
-      QDirIterator current_thing_dir(CURRENT_THING_PATH, QDir::Files |
+void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
+  const QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
+  if(QDir(dir_path).exists()){
+      QDirIterator current_thing_dir(dir_path, QDir::Files |
                                 QDir::NoDotAndDotDot | QDir::Readable);
       PrintFileInfo* current_thing = nullptr;
       if(current_thing_dir.hasNext()){
@@ -91,7 +105,7 @@ void MoreporkStorage::updateCurrentThing(){
                                 QString::fromStdString(meta_data->slicer_name));
           }
   #else
-          current_thing = new PrintFileInfo(CURRENT_THING_PATH,
+          current_thing = new PrintFileInfo(dir_path,
                               kFileInfo.fileName(),
                               kFileInfo.fileName(),
                               kFileInfo.lastRead(),

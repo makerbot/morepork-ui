@@ -196,30 +196,38 @@ Item {
 
                 RoundedButton {
                     id: print_again_button
-                    buttonWidth: 200
-                    buttonHeight: 45
-                    label: "PRINT AGAIN"
+                    buttonWidth: {
+                        if(inFreStep) {
+                            290
+                        }
+                        else {
+                            200
+                        }
+                    }
+                    buttonHeight: 50
+                    label: {
+                        if(inFreStep) {
+                            "RETRY TEST PRINT"
+                        }
+                        else {
+                            "PRINT AGAIN"
+                        }
+                    }
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
-                        printAgain = true
-                        printPage.getPrintTimes(printPage.lastPrintTimeSec)
-                        printPage.printSwipeView.swipeToItem(2)
+                        if(!disable_button) {
+                            printAgain = true
+                            printPage.getPrintTimes(printPage.lastPrintTimeSec)
+                            printPage.printSwipeView.swipeToItem(2)
+                        }
                     }
-                }
-
-                RoundedButton {
-                    id: start_next_print_button
-                    buttonWidth: 300
-                    buttonHeight: 45
-                    label: "START NEXT PRINT"
-                    visible: bot.process.stateType == ProcessStateType.Completed
                 }
 
                 RoundedButton {
                     id: done_button
                     buttonWidth: 100
-                    buttonHeight: 45
+                    buttonHeight: 50
                     label: "DONE"
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
@@ -229,6 +237,10 @@ Item {
                         }
                         else if(bot.process.stateType == ProcessStateType.Completed) {
                             bot.done("acknowledge_completed")
+                        }
+                        if(inFreStep) {
+                            fre.gotoNextStep(currentFreStep)
+                            mainSwipeView.swipeToItem(0)
                         }
                         printPage.resetPrintFileDetails()
                     }

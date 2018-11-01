@@ -23,6 +23,7 @@ class KaitenBotModel : public BotModel {
     void authRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
     void printFileValidNotif(const Json::Value &info);
+    void unknownMatWarningUpdate(const Json::Value &params);
     void assistedLevelUpdate(const Json::Value & status);
     void queryStatusUpdate(const Json::Value & info);
     void wifiUpdate(const Json::Value & result);
@@ -55,6 +56,8 @@ class KaitenBotModel : public BotModel {
     void spoolUpdate(const Json::Value & res, const int bayIndex);
     void zipLogs(QString path);
     void forceSyncFile(QString path);
+    void changeMachineName(QString new_name);
+    void acknowledgeMaterial(bool response);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -238,6 +241,18 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::vector<std::shared_ptr<SpoolInfoCallback> > m_spoolInfoCb;
+
+    class UnknownMaterialNotification : public JsonRpcNotification {
+      public:
+        UnknownMaterialNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) {
+            m_bot->unknownMatWarningUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<UnknownMaterialNotification> m_matWarningNot;
+
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -252,6 +267,37 @@ void KaitenBotModel::respondAuthRequest(QString response){
         m_authResp->sendResult(json_params);
         m_authResp = nullptr;
         isAuthRequestPendingReset();
+    }
+}
+
+void KaitenBotModel::unknownMatWarningUpdate(const Json::Value &request){
+    UPDATE_STRING_PROP(unknownMaterialWarningType, request["type"]);
+    const Json::Value &kWarningType = request["type"];
+        if(kWarningType.isString()) {
+            const QString kWarningTypeStr = kWarningType.asString().c_str();
+            if(kWarningTypeStr == "top_loading") {
+                topLoadingWarningSet(true);
+            }
+            else if(kWarningTypeStr == "assist_loading") {
+                spoolValidityCheckPendingSet(true);
+            }
+        }
+}
+
+void KaitenBotModel::acknowledgeMaterial(bool response){
+    topLoadingWarningReset();
+    spoolValidityCheckPendingSet(false);
+    if(response) {
+        try{
+            qDebug() << FL_STRM << "called";
+            auto conn = m_conn.data();
+            Json::Value json_params(Json::objectValue);
+            json_params["method"] = Json::Value("acknowledge_material");
+            conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+        }
+        catch(JsonRpcInvalidOutputStream &e){
+            qWarning() << FFL_STRM << e.what();
+        }
     }
 }
 
@@ -620,6 +666,19 @@ void KaitenBotModel::zipLogs(QString path) {
   }
 }
 
+void KaitenBotModel::changeMachineName(QString new_name) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["machine_name"] = Json::Value(new_name.toStdString());
+        conn->jsonrpc.invoke("change_machine_name", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -639,7 +698,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_spoolInfoCb{std::shared_ptr<SpoolInfoCallback>(
                               new SpoolInfoCallback(this, 0)),
                       std::shared_ptr<SpoolInfoCallback>(
-                              new SpoolInfoCallback(this, 1))} {
+                              new SpoolInfoCallback(this, 1))},
+        m_matWarningNot(new UnknownMaterialNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -652,6 +712,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("allow_unknown_firmware", m_allowUnkFw);
     conn->jsonrpc.addMethod("print_file_valid", m_prtFileVld);
     conn->jsonrpc.addMethod("assisted_level_status", m_asstLvlNot);
+    conn->jsonrpc.addMethod("material_warning", m_matWarningNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);

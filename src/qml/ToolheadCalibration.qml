@@ -24,6 +24,10 @@ ToolheadCalibrationForm {
             }
             else if(state == "calibration_finished") {
                 processDone()
+                if(inFreStep) {
+                    mainSwipeView.swipeToItem(0)
+                    fre.gotoNextStep(currentFreStep)
+                }
             }
             else {
                 // Button action in 'base state'

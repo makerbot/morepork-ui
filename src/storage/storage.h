@@ -18,8 +18,10 @@
 #define USB_STORAGE_DEV_BY_PATH QString()
 #define LEGACY_USB_DEV_BY_PATH QString()
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
+#define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_print"
 #else
 // embedded linux path
+#define TEST_PRINT_PATH QString("/home/test_print")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
@@ -220,6 +222,12 @@ class PrintFileInfo : public QObject {
 
 
 class ThumbnailPixmapProvider : public QQuickImageProvider {
+  enum ThumbnailWidth {
+      Small = 140,
+      Medium = 212,
+      Large = 960
+  };
+
   public:
     ThumbnailPixmapProvider() :
       QQuickImageProvider(QQuickImageProvider::Pixmap) {}
@@ -254,7 +262,7 @@ class MoreporkStorage : public QObject {
     QList<QObject*> printFileList() const;
     void printFileListSet(const QList<QObject*> &print_file_list);
     void printFileListReset();
-    Q_INVOKABLE void updateCurrentThing();
+    Q_INVOKABLE void updateCurrentThing(bool is_test_print = false);
     Q_PROPERTY(PrintFileInfo* currentThing
       READ currentThing
       WRITE currentThingSet

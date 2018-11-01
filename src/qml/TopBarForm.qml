@@ -1,4 +1,4 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
@@ -66,7 +66,7 @@ Item {
         height: barHeight
         smooth: false
         anchors.left: parent.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: 10
         anchors.top: parent.top
         anchors.topMargin: 0
         z: 2
@@ -84,7 +84,8 @@ Item {
 
         Image {
             id: imageBackArrow
-            height: 25
+            height: sourceSize.height
+            width: sourceSize.width
             smooth: false
             anchors.verticalCenterOffset: -1
             anchors.verticalCenter: text_back.verticalCenter
@@ -92,7 +93,9 @@ Item {
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
-            source: "qrc:/img/arrow_19pix.png"
+            source: (inFreStep && (typeof currentItem.skipFreStepAction === "function")) ?
+                        "qrc:/img/skip.png" :
+                        "qrc:/img/back_button.png"
         }
 
         Text {
@@ -219,6 +222,9 @@ Item {
                         break;
                     case 3:
                         switch(settingsPage.settingsSwipeView.currentIndex) {
+                        case 2:
+                            "ASSISTED LEVELING"
+                            break;
                         case 4:
                             "CALIBRATION"
                             break;
@@ -227,6 +233,12 @@ Item {
                             break;
                         case 6:
                             bot.name + " ADVANCED INFO"
+                            break;
+                        case 7:
+                            "SIGN-IN TO MAKERBOT ACCOUNT"
+                            break;
+                        case 10:
+                            "PRINTER NAME"
                             break;
                         default:
                             "SETTINGS"

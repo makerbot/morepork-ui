@@ -1,11 +1,12 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import FreStepEnum 1.0
 
 Item {
-    id: settingsPageForm
+    id: settingsPage
     property alias settingsSwipeView: settingsSwipeView
     property alias defaultItem: itemSettings
     property alias buttonChangeLanguage: buttonChangeLanguage
@@ -25,12 +26,15 @@ Item {
     property alias copyLogsFinishedPopup: copyLogsFinishedPopup
     property alias buttonResetToFactory: buttonResetToFactory
     property alias buttonColorSwatch: buttonColorSwatch
+    property alias buttonPrinterName: buttonPrinterName
+    property alias namePrinter: namePrinter
     property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
     property bool isResetting: false
     property bool hasReset: false
     property bool isFactoryResetProcess: bot.process.type == ProcessType.FactoryResetProcess
     property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
                                     bot.process.stateType == ProcessStateType.Done
+    property alias signInPage: signInPage
     property alias wifiPage: wifiPage
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
@@ -45,6 +49,7 @@ Item {
             if(mainSwipeView.currentIndex != 0) {
                 mainSwipeView.swipeToItem(0)
             }
+            fre.setFreStep(FreStep.Welcome)
         }
     }
 
@@ -253,6 +258,17 @@ Item {
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "COLOR SWATCH"
                     }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonPrinterName
+                        buttonImage.anchors.leftMargin: 30
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "PRINTER NAME"
+                    }
                 }
             }
         }
@@ -361,8 +377,24 @@ Item {
             id: firmwareUpdateItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                bot.cancel()
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+            }
 
             FirmwareUpdatePage {
 
@@ -379,15 +411,27 @@ Item {
             visible: false
 
             function altBack() {
-                if(bot.process.type == ProcessType.CalibrationProcess) {
-                    toolheadCalibration.cancelCalibrationPopup.open()
-                }
-                else {
-                    toolheadCalibration.state = "base state"
-                    if(settingsSwipeView.currentIndex != 0) {
-                        settingsSwipeView.swipeToItem(0)
+                if(!inFreStep) {
+                    if(bot.process.type == ProcessType.CalibrationProcess) {
+                        toolheadCalibration.cancelCalibrationPopup.open()
+                    }
+                    else {
+                        toolheadCalibration.state = "base state"
+                        if(settingsSwipeView.currentIndex != 0) {
+                            settingsSwipeView.swipeToItem(0)
+                        }
                     }
                 }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                bot.cancel()
+                toolheadCalibration.state = "base state"
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
             }
 
             ToolheadCalibration {
@@ -406,6 +450,21 @@ Item {
             property int backSwipeIndex: 0
             smooth: false
             visible: false
+            property bool hasAltBack: true
+
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+            }
 
             WiFiPageForm {
                 id: wifiPage
@@ -432,10 +491,26 @@ Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
 
+            function altBack() {
+                if(!inFreStep) {
+                    signInPage.backToSettings()
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                signInPage.backToSettings()
+                mainSwipeView.swipeToItem(0)
+            }
+
             SignInPage {
+                id: signInPage
             }
         }
 
@@ -462,6 +537,34 @@ Item {
 
             ColorSwatchPage {
                 id: colorSwatch
+            }
+        }
+
+        //settingsSwipeView.index = 10
+        Item {
+            id: namePrinterItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+            }
+
+            NamePrinterPage {
+                id: namePrinter
             }
         }
     }

@@ -15,6 +15,7 @@
 // because this doesn't initialize submodels.
 class BotModel : public BaseModel {
   public:
+    // MOREPORK_QML_ENUM
     enum ConnectionState {
         Connecting,
         Connected,
@@ -51,6 +52,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getSpoolInfo(const int bayIndex);
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
+    Q_INVOKABLE virtual void changeMachineName(QString new_name);
+    Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
 
   private:
     Q_OBJECT
@@ -89,6 +92,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBTagPresent, false)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
+    MODEL_PROP(bool, topLoadingWarning, false)
+    MODEL_PROP(bool, spoolValidityCheckPending, false)
+    MODEL_PROP(QString, unknownMaterialWarningType, "None")
 
     MODEL_PROP(int, spoolAOriginalAmount, 0)
     MODEL_PROP(int, spoolBOriginalAmount, 0)
@@ -101,8 +107,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>({0,0,0}))
     MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>({0,0,0}))
     // TODO(shirley): (duplicate with filament1/2Color)
-    MODEL_PROP(QString, spoolAColorName, "Loading...")
-    MODEL_PROP(QString, spoolBColorName, "Loading...")
+    MODEL_PROP(QString, spoolAColorName, "Reading Spool...")
+    MODEL_PROP(QString, spoolBColorName, "Reading Spool...")
 
     // TODO(shirley) Should probably convert to string when mapping of codes to
     // filament type names is available

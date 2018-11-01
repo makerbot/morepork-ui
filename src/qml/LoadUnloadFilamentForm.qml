@@ -12,7 +12,8 @@ Item {
     property alias acknowledgeButton: acknowledgeButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
-    property bool filamentPresentSwitch: false
+    property bool bayFilamentSwitch: false
+    property bool extruderFilamentSwitch: false
     property bool isExternalLoad: false
     property int bayID: 0
     property int currentActiveTool: bot.process.currentToolIndex + 1
@@ -23,14 +24,19 @@ Item {
         }
     }
 
-    property bool isMaterialPresent: bayID == 1 ? bay1.spoolPresent :
-                                                  bay2.spoolPresent
+    // This should eventually check for validity in terms of material
+    // type, quantity, spool checksum etc.
+    property bool isMaterialValid: bayID == 1 ?
+                                       bay1.spoolPresent :
+                                       bay2.spoolPresent
 
-    onIsMaterialPresentChanged: {
+    onIsMaterialValidChanged: {
         overrideInvalidMaterial = false
+        if(bot.process.type == ProcessType.Load) {
+            bot.acknowledgeMaterial(true)
+        }
     }
 
-    property bool isMaterialValid: true
     property bool overrideInvalidMaterial: false
     property int materialCode: bayID == 1 ? bay1.filamentMaterialCode :
                                             bay2.filamentMaterialCode
@@ -96,9 +102,9 @@ Item {
                 }
             }
             break;
-        //The case when loading/unloading completes normally by
-        //itself, in the middle of print process. Then the bot doesn't
-        //go to 'Stopping' step, but directly to 'Paused' step.
+            //The case when loading/unloading completes normally by
+            //itself, in the middle of print process. Then the bot doesn't
+            //go to 'Stopping' step, but directly to 'Paused' step.
         case ProcessStateType.Paused:
             if(materialChangeCancelled) {
                 materialChangeCancelled = false
@@ -113,12 +119,31 @@ Item {
         }
     }
 
-    AnimatedImage {
-        id: image
+    LoadingIcon {
+        id: loading_gear
+        anchors.left: parent.left
+        anchors.leftMargin: 70
+        anchors.verticalCenterOffset: -20
+        anchors.verticalCenter: parent.verticalCenter
+        loading: false
+    }
+
+    Image {
+        id: static_image
         width: 400
         height: 480
-//        width: sourceSize.width
-//        height: sourceSize.height
+        anchors.verticalCenterOffset: -10
+        anchors.verticalCenter: parent.verticalCenter
+        source: ""
+        cache: false
+        opacity: (animated_image.opacity == 0) ?
+                     1 : 0
+    }
+
+    AnimatedImage {
+        id: animated_image
+        width: 400
+        height: 480
         anchors.verticalCenterOffset: -10
         anchors.verticalCenter: parent.verticalCenter
         source: bayID == 1 ?
@@ -129,123 +154,139 @@ Item {
         // makes the gif always keep playing even when this page is
         // not visible which makes the entire UI lag.
         playing: materialSwipeView.currentIndex == 1 &&
-                 bot.process.stateType == ProcessStateType.Preheating
+                 (loadUnloadForm.state == "base state" ||
+                  loadUnloadForm.state == "feed_filament" ||
+                  loadUnloadForm.state == "loaded_filament" ||
+                  loadUnloadForm.state == "unloaded_filament")
+        opacity: 1
+    }
 
-        Item {
-            id: contentItem
-            width: 400
-            height: 420
-            anchors.left: parent.right
-            anchors.leftMargin: 0
+    Item {
+        id: contentItem
+        x: 400
+        y: -40
+        width: 400
+        height: 420
+        anchors.left: parent.left
+        anchors.leftMargin: 400
 
-            Text {
-                id: main_instruction_text
-                width: 375
-                color: "#cbcbcb"
-                text: "OPEN BAY " + bayID
-                font.capitalization: Font.AllUppercase
-                anchors.top: parent.top
-                anchors.topMargin: 100
-                font.letterSpacing: 4
-                wrapMode: Text.WordWrap
-                font.family: "Antennae"
-                font.weight: Font.Bold
-                font.pixelSize: 20
-                lineHeight: 1.3
+        Text {
+            id: main_instruction_text
+            width: 375
+            color: "#cbcbcb"
+            text: "OPEN BAY " + bayID
+            font.capitalization: Font.AllUppercase
+            anchors.top: parent.top
+            anchors.topMargin: 100
+            font.letterSpacing: 4
+            wrapMode: Text.WordWrap
+            font.family: "Antennae"
+            font.weight: Font.Bold
+            font.pixelSize: 20
+            lineHeight: 1.3
+        }
+
+        ColumnLayout {
+            id: instructionsList
+            width: 300
+            height: 200
+            anchors.top: main_instruction_text.bottom
+            anchors.topMargin: 18
+            opacity: 1.0
+
+            BulletedListItem {
+                id: bulletItem1
+                bulletNumber: "1"
+                bulletText: "Press side latch to unlock and\nopen bay " +
+                            bayID
             }
 
-            ColumnLayout {
-                id: instructionsList
-                width: 300
-                height: 80
-                anchors.top: main_instruction_text.bottom
-                anchors.topMargin: 18
-                visible: true
-
-                BulletedListItem {
-                    bulletNumber: "1"
-                    bulletText: "Open Bay " + bayID
-                }
-
-                BulletedListItem {
-                    bulletNumber: "2"
-                    bulletText: "Place a " +
-                                (bayID == 1 ? "Model " : "Support ") +
-                                "material spool in\nthe bay"
-                }
+            BulletedListItem {
+                id: bulletItem2
+                bulletNumber: "2"
+                bulletText: "Place a " +
+                            (bayID == 1 ? "Model " : "Support ") +
+                            "material spool in\nthe bay"
             }
 
+            BulletedListItem {
+                id: bulletItem3
+                bulletNumber: "3"
+                bulletText: "Push the end of the material into\nthe slot until you feel it being\npulled in."
+                opacity: 0.3
+            }
+        }
+
+        Text {
+            id: instruction_description_text
+            width: 350
+            color: "#cbcbcb"
+            text: "\n\n\n"
+            anchors.top: main_instruction_text.bottom
+            anchors.topMargin: 30
+            wrapMode: Text.WordWrap
+            font.family: "Antennae"
+            font.weight: Font.Light
+            font.pixelSize: 18
+            lineHeight: 1.35
+        }
+
+        RoundedButton {
+            id: acknowledgeButton
+            label_width: 180
+            label: "CONTINUE"
+            buttonWidth: 180
+            buttonHeight: 50
+            anchors.top: instruction_description_text.bottom
+            anchors.topMargin: 20
+            opacity: 0
+        }
+
+        RowLayout {
+            id: temperatureDisplay
+            anchors.top: main_instruction_text.bottom
+            anchors.topMargin: 20
+            width: children.width
+            height: 35
+            spacing: 10
+            visible: false
+
             Text {
-                id: instruction_description_text
-                width: 325
-                color: "#cbcbcb"
-                text: "\n\n\n"
-                anchors.top: main_instruction_text.bottom
-                anchors.topMargin: 30
-                wrapMode: Text.WordWrap
+                id: extruder_current_temperature_text
+                text: currentTemperature + "C"
                 font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
                 font.weight: Font.Light
-                font.pixelSize: 18
-                lineHeight: 1.35
+                font.pixelSize: 20
             }
 
-            RoundedButton {
-                id: acknowledgeButton
-                label_width: 180
-                label: "CONTINUE"
-                buttonWidth: 180
-                buttonHeight: 45
-                anchors.top: instruction_description_text.bottom
-                anchors.topMargin: 20
-                visible: true
+            Rectangle {
+                id: divider_rectangle
+                width: 1
+                height: 25
+                color: "#ffffff"
             }
 
-            RowLayout {
-                id: temperatureDisplay
-                anchors.top: main_instruction_text.bottom
-                anchors.topMargin: 20
-                width: children.width
-                height: 35
-                spacing: 10
-                visible: false
-
-                Text {
-                    id: extruder_current_temperature_text
-                    text: currentTemperature + "C"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 20
-                }
-
-                Rectangle {
-                    id: divider_rectangle
-                    width: 1
-                    height: 25
-                    color: "#ffffff"
-                }
-
-                Text {
-                    id: extruder_target_temperature_text
-                    text: targetTemperature + "C"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 20
-                }
+            Text {
+                id: extruder_target_temperature_text
+                text: targetTemperature + "C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
             }
         }
     }
+
     states: [
         State {
             name: "feed_filament"
-            when: (isMaterialPresent || overrideInvalidMaterial) &&
-                  !isExternalLoad &&
+            when: (isMaterialValid || overrideInvalidMaterial) &&
+                  !isExternalLoad && !bayFilamentSwitch &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
-                   bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
@@ -263,17 +304,18 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 text: "Push the end of the material into the slot until you feel it being pulled in."
+                opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                visible: true
+                opacity: 0
                 label: "CONTINUE"
             }
 
             PropertyChanges {
-                target: image
-                playing: true
+                target: animated_image
+                opacity: 1
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
@@ -281,12 +323,67 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: bulletItem3
+                opacity: 1
+            }
+        },
+        State {
+            name: "pushing_filament"
+            when: ((bayFilamentSwitch && !extruderFilamentSwitch) ||
+                   isExternalLoad) &&
+                   bot.process.stateType == ProcessStateType.Preheating &&
+                   (bot.process.type == ProcessType.Load ||
+                   bot.process.type == ProcessType.Unload ||
+                   bot.process.type == ProcessType.Print)
+
+            PropertyChanges {
+                target: main_instruction_text
+                text: "MATERIAL LOADING"
+                anchors.topMargin: 160
+            }
+
+            PropertyChanges {
+                target: instruction_description_text
+                text: "Helper motors ae pushing material\nup to the extruder. This can take up to\n30 seconds."
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
                 visible: false
+            }
+
+            PropertyChanges {
+                target: animated_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: static_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: instructionsList
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: acknowledgeButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: loading_gear
+                loading: true
             }
         },
         State {
             name: "preheating"
-            when: (filamentPresentSwitch || isExternalLoad) &&
+            when: (extruderFilamentSwitch || isExternalLoad) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
@@ -294,9 +391,9 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: bayID == 1 ?
-                          "EXTRUDER 1 IS\nHEATING UP" :
-                          "EXTRUDER 2 IS\nHEATING UP"
+                text: (targetTemperature > currentTemperature) ?
+                          "EXTRUDER " + bayID + " IS\nHEATING UP" :
+                          "EXTRUDER " + bayID + " IS\nCOOLING DOWN"
                 anchors.topMargin: 140
             }
 
@@ -323,8 +420,12 @@ Item {
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
@@ -332,12 +433,12 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -363,15 +464,18 @@ Item {
                 label_size: 18
                 label_width: 345
                 buttonWidth: 345
-                buttonHeight: 50
                 anchors.topMargin: 20
-                visible: true
+                opacity: 1
                 label: "MATERIAL IS EXTRUDING"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/confirm_extrusion_1.png" :
                             "qrc:/img/confirm_extrusion_2.png"
@@ -379,41 +483,51 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
             name: "unloading_filament"
-            when: bot.process.stateType == ProcessStateType.UnloadingFilament &&
+            when: (bot.process.stateType == ProcessStateType.UnloadingFilament ||
+                   bot.process.stateType == ProcessStateType.CleaningUp) &&
                   (bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: main_instruction_text
                 text: "UNLOADING"
-                anchors.topMargin: 120
+                anchors.topMargin: 165
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "The filament is backing out of the extruder, please wait."
+                text: "The material is backing out of the extruder, please wait."
                 anchors.topMargin: 30
             }
 
             PropertyChanges {
-                target: image
-                playing: false
-                source: "qrc:/img/clear_excess_material.png"
+                target: animated_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: static_image
+                opacity: 0
             }
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
-                visible: false
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: loading_gear
+                loading: true
             }
         },
         State {
@@ -429,25 +543,58 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Wait a few moments until the material has cooled and remove the excess from the build chamber. (Do not touch the nozzle while it is hot, Red light on extruder)"
+                text: "Wait a few moments until the material has cooled. Close the build chamber and material drawer."
                 anchors.topMargin: 60
             }
 
             PropertyChanges {
                 target: acknowledgeButton
+                opacity: 1
                 anchors.topMargin: 20
-                buttonWidth: 100
-                buttonHeight: 50
-                visible: true
-                label: "DONE"
+                label_width: {
+                    if(bayID == 1 && inFreStep) {
+                        375
+                    } else {
+                        100
+                    }
+                }
+
+                buttonWidth: {
+                    if(bayID == 1 && inFreStep) {
+                        375
+                    } else {
+                        100
+                    }
+                }
+
+                label_size: {
+                    if(bayID == 1 && inFreStep) {
+                        14
+                    } else {
+                        18
+                    }
+                }
+
+                label: {
+                    if(bayID == 1 && inFreStep) {
+                        "NEXT: Load Support Material"
+                    } else {
+                        "DONE"
+                    }
+                }
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                opacity: 1
                 source: bayID == 1 ?
-                            "qrc:/img/confirm_extrusion_1.png" :
-                            "qrc:/img/confirm_extrusion_2.png"
+                            "qrc:/img/close_bay1.gif" :
+                            "qrc:/img/close_bay2.gif"
+            }
+
+            PropertyChanges {
+                target: static_image
+                opacity: 0
             }
 
             PropertyChanges {
@@ -470,7 +617,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -489,28 +636,34 @@ Item {
                 target: instruction_description_text
                 text: "Open material bay " +
                       bayID +
-                      " and carefully rewind the material onto the spool. Secure the end of the filament in place and store in a cool dry space."
+                      " and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door."
                 anchors.topMargin: 30
             }
 
             PropertyChanges {
                 target: acknowledgeButton
                 buttonWidth: 100
-                buttonHeight: 50
                 anchors.topMargin: 30
-                visible: true
+                opacity: 1
                 label: "DONE"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
-                source: "qrc:/img/unload_filament.png"
+                target: animated_image
+                opacity: 1
+                source: bayID == 1 ?
+                            "qrc:/img/rewind_spool_1.gif" :
+                            "qrc:/img/rewind_spool_2.gif"
+            }
+
+            PropertyChanges {
+                target: static_image
+                opacity: 0
             }
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
+                opacity: 0
             }
         },
         State {
@@ -542,15 +695,18 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 buttonWidth: 100
-                buttonHeight: 50
                 anchors.topMargin: 50
-                visible: true
+                opacity: 1
                 label: "DONE"
             }
 
             PropertyChanges {
-                target: image
-                playing: false
+                target: animated_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: static_image
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
@@ -558,63 +714,7 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                visible: false
-            }
-        },
-        State {
-            name: "close_bay_door"
-            PropertyChanges {
-                target: main_instruction_text
-                text: "CLOSE BAY " + bayID
-                anchors.topMargin: 175
-            }
-
-            PropertyChanges {
-                target: instruction_description_text
-                text: ""
-                visible: false
-                anchors.topMargin: 60
-            }
-
-            PropertyChanges {
-                target: acknowledgeButton
-                label_width: 175
-                visible: true
-                anchors.topMargin: -50
-                buttonHeight: 50
-                buttonWidth: 175
-                label: "CONTINUE"
-            }
-
-            PropertyChanges {
-                target: image
-                playing: true
-                source: bayID == 1 ?
-                            "qrc:/img/close_bay1.gif" :
-                            "qrc:/img/close_bay2.gif"
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                visible: false
-                anchors.topMargin: 15
-            }
-
-            PropertyChanges {
-                target: extruder_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: extruder_target_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: instructionsList
-                visible: false
+                opacity: 0
             }
         }
     ]

@@ -7,6 +7,7 @@ Item {
     property alias defaultItem: itemExtruder
     property alias extruderSwipeView: extruderSwipeView
     property bool isTopLidOpen: bot.chamberErrorCode == 45
+    property alias itemAttachExtruder: itemAttachExtruder
     smooth: false
 
     SwipeView {
@@ -99,9 +100,25 @@ Item {
                     break;
                 }
             }
+            property bool hasAltBack: true
 
             smooth: false
             visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    itemAttachExtruder.skipFreStepAction()
+                }
+
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                extruderSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+            }
 
             AnimatedImage {
                 id: image
@@ -121,7 +138,8 @@ Item {
                             ""
                             break;
                         }
-                playing: extruderSwipeView.currentIndex == 1
+                playing: extruderSwipeView.currentIndex == 1 &&
+                         bot.chamberErrorCode == 45
                 visible: true
                 cache: false
                 smooth: false
@@ -205,7 +223,7 @@ Item {
                             }
                             else if(itemAttachExtruder.extruder == 2 &&
                                 itemAttachExtruder.isAttached) {
-                                260
+                                inFreStep ? 100 : 260
                             }
                         }
                         buttonHeight: 44
@@ -217,7 +235,7 @@ Item {
                             }
                             else if(itemAttachExtruder.extruder == 2 &&
                                 itemAttachExtruder.isAttached) {
-                                "RUN CALIBRATION"
+                                inFreStep ? "DONE" : "RUN CALIBRATION"
                             }
                             else {
                                 "DEFAULT"
@@ -266,11 +284,17 @@ Item {
                                 if(extruderSwipeView.currentIndex != 0) {
                                     extruderSwipeView.swipeToItem(0)
                                 }
-                                if(mainSwipeView.currentIndex != 3) {
-                                    mainSwipeView.swipeToItem(3)
+                                if(!inFreStep) {
+                                    if(mainSwipeView.currentIndex != 3) {
+                                        mainSwipeView.swipeToItem(3)
+                                    }
+                                    if(settingsPage.settingsSwipeView.currentIndex != 4) {
+                                        settingsPage.settingsSwipeView.swipeToItem(4)
+                                    }
                                 }
-                                if(settingsPage.settingsSwipeView.currentIndex != 4) {
-                                    settingsPage.settingsSwipeView.swipeToItem(4)
+                                else {
+                                    mainSwipeView.swipeToItem(0)
+                                    inFreStep = false
                                 }
                             }
                         }
@@ -310,6 +334,55 @@ Item {
                             antialiasing: false
                         }
                     }
+                }
+            }
+
+            Rectangle {
+                id: remove_top_lid_messaging
+                anchors.fill: parent
+                color: "#000000"
+                opacity: bot.chamberErrorCode != 45 ?
+                             1 : 0
+
+                AnimatedImage {
+                    id: remove_top_lid_animation
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    anchors.left: parent.left
+                    anchors.leftMargin: 0
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/img/remove_top_lid.gif"
+                    playing: extruderSwipeView.currentIndex == 1 &&
+                             bot.chamberErrorCode != 45
+                    opacity: parent.opacity
+                    visible: true
+                    cache: false
+                    smooth: false
+                }
+
+                Text {
+                    id: remove_top_lid_main_instruction_text
+                    color: "#cbcbcb"
+                    text: {
+                        if(bot.chamberErrorCode == 48) {
+                            "CLOSE CHAMBER DOOR\nAND REMOVE TOP LID"
+                        } else if(bot.chamberErrorCode == 0) {
+                            "REMOVE TOP LID"
+                        } else {
+                            "???"
+                        }
+                    }
+                    anchors.top: parent.top
+                    anchors.topMargin: 200
+                    anchors.left: remove_top_lid_animation.right
+                    anchors.leftMargin: 50
+                    font.letterSpacing: 2
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 21
+                    lineHeight: 1.2
+                    smooth: false
+                    antialiasing: false
                 }
             }
         }

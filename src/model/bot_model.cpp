@@ -121,6 +121,14 @@ void BotModel::forceSyncFile(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
 
+void BotModel::changeMachineName(QString new_name) {
+    qDebug() << FL_STRM << "called with parameters: " << new_name;
+}
+
+void BotModel::acknowledgeMaterial(bool response) {
+    qDebug() << FL_STRM << "called with parameters: " << response;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

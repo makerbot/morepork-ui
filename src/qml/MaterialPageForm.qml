@@ -6,16 +6,28 @@ import ProcessStateTypeEnum 1.0
 
 Item {
     id: materialPage
+    smooth: false
     property alias bay1: bay1
     property alias bay2: bay2
     property alias defaultItem: itemFilamentBay
     property alias materialSwipeView: materialSwipeView
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
+
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
     property alias cancel_mouseArea: cancel_mouseArea
     property alias cancel_rectangle: cancel_rectangle
     property alias continue_mouseArea: continue_mouseArea
     property alias continue_rectangle: continue_rectangle
+
+    property alias noExtruderPopup: noExtruderPopup
+    property int extruderIDnoExtruderPopup
+    property alias attach_extruder_mouseArea_no_extruder_popup: attach_extruder_mouseArea_no_extruder_popup
+    property alias cancel_mouseArea_no_extruder_popup: cancel_mouseArea_no_extruder_popup
+
+    property alias unknownMaterialWarningPopup: unknownMaterialWarningPopup
+    property alias acknowledge_unk_mat_loading_mouseArea: acknowledge_unk_mat_loading_mouseArea
+    property alias cancel_unk_mat_loading_mouseArea: cancel_unk_mat_loading_mouseArea
+
     property alias materialPageDrawer: materialPageDrawer
     property bool isLoadFilament: false
     property bool startLoadUnloadFromUI: false
@@ -24,6 +36,9 @@ Item {
                                        bot.process.isLoadUnloadWhilePaused
     property alias waitUntilUnloadedPopup: waitUntilUnloadedPopup
     property alias closeWaitUntilUnloadedPopup: closeWaitUntilUnloadedPopup
+    property bool isTopLoading: bot.topLoadingWarning
+    property bool isSpoolValidityCheckPending: bot.spoolValidityCheckPending
+
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess && !startLoadUnloadFromUI){
             if(mainSwipeView.currentIndex != 5){
@@ -50,7 +65,47 @@ Item {
         }
     }
 
-    smooth: false
+    onIsTopLoadingChanged: {
+        if(isTopLoading) {
+            unknownMaterialWarningPopup.open()
+        }
+        else {
+            unknownMaterialWarningPopup.close()
+        }
+    }
+
+    onIsSpoolValidityCheckPendingChanged: {
+        if(isSpoolValidityCheckPending) {
+            checkSpoolValidityTimer.start()
+        }
+        else {
+            unknownMaterialWarningPopup.close()
+        }
+    }
+
+    Timer {
+        id: checkSpoolValidityTimer
+        interval: 500
+        onTriggered: {
+            checkSpoolValidity()
+        }
+    }
+
+    function checkSpoolValidity() {
+        // The case when the bot is already loaded and
+        // we get spool check notification from kaiten.
+        if(bot.process.type == ProcessType.Load) {
+            // if material is valid immediately acknowledge and
+            // continue with loading material
+            if(loadUnloadFilamentProcess.isMaterialValid) {
+                bot.acknowledgeMaterial(true)
+            }
+            // if material not valid open popup
+            else {
+                unknownMaterialWarningPopup.open()
+            }
+        }
+    }
 
     function exitMaterialChange() {
         if(bot.process.type == ProcessType.Load) {
@@ -141,7 +196,21 @@ Item {
             visible: true
 
             function altBack() {
-                exitMaterialChange()
+                if(!inFreStep) {
+                    exitMaterialChange()
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                materialChangeCancelled = true
+                bot.cancel()
+                loadUnloadFilamentProcess.state = "base state"
+                materialSwipeView.swipeToItem(0)
+                setDrawerState(false)
+                mainSwipeView.swipeToItem(0)
             }
 
             LoadUnloadFilament {
@@ -149,9 +218,25 @@ Item {
                 isExternalLoad: bayID == 1 ?
                             bay1.switch1.checked :
                             bay2.switch1.checked
-                filamentPresentSwitch: bayID == 1 ?
+                bayFilamentSwitch: bayID == 1 ?
                                     bot.filamentBayAFilamentPresent :
                                     bot.filamentBayBFilamentPresent
+
+                // Check if user feeds filament into bay slot while
+                // kaiten is waiting for 'continue_loading' process
+                // method to proceed and display material warning popup
+                // in that case.
+                onBayFilamentSwitchChanged: {
+                    if(bot.process.type == ProcessType.Load &&
+                       bayFilamentSwitch &&
+                       isSpoolValidityCheckPending) {
+                        unknownMaterialWarningPopup.open()
+                    }
+                }
+
+                extruderFilamentSwitch: bayID == 1 ?
+                                    bot.extruderAFilamentPresent :
+                                    bot.extruderBFilamentPresent
                 onProcessDone: {
                     state = "base state"
                     materialSwipeView.swipeToItem(0)
@@ -163,6 +248,361 @@ Item {
                         activeDrawer = printPage.printingDrawer
                         setDrawerState(true)
                     }
+                }
+            }
+        }
+    }
+
+    Popup {
+        id: noExtruderPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        parent: overlay
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim_no_extruder_popup
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        Rectangle {
+            id: basePopupItem_no_extruder_popup
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 220
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider_no_extruder_popup
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider_no_extruder_popup
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Item {
+                id: buttonBar_no_extruder_popup
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: cancel_rectangle_no_extruder_popup
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: cancel_text_no_extruder_popup
+                        color: "#ffffff"
+                        text: "CANCEL"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: cancel_mouseArea_no_extruder_popup
+                        anchors.fill: parent
+                        onPressed: {
+                            cancel_text_no_extruder_popup.color = "#000000"
+                            cancel_rectangle_no_extruder_popup.color = "#ffffff"
+                        }
+                        onReleased: {
+                            cancel_text_no_extruder_popup.color = "#ffffff"
+                            cancel_rectangle_no_extruder_popup.color = "#00000000"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: attach_extruder_rectangle_no_extruder_popup
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: attach_extruder_text_no_extruder_popup
+                        color: "#ffffff"
+                        text: "ATTACH EXTRUDER"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: attach_extruder_mouseArea_no_extruder_popup
+                        anchors.fill: parent
+                        onPressed: {
+                            attach_extruder_text_no_extruder_popup.color = "#000000"
+                            attach_extruder_rectangle_no_extruder_popup.color = "#ffffff"
+                        }
+                        onReleased: {
+                            attach_extruder_text_no_extruder_popup.color = "#ffffff"
+                            attach_extruder_rectangle_no_extruder_popup.color = "#00000000"
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout_no_extruder_popup
+                width: 590
+                height: 100
+                anchors.top: parent.top
+                anchors.topMargin: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: title_text_no_extruder_popup
+                    color: "#cbcbcb"
+                    text: "NO EXTRUDER DETECTED"
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_no_extruder_popup
+                    color: "#cbcbcb"
+                    text: {
+                        "Please attach a" +
+                        (extruderIDnoExtruderPopup == 1 ? " Model 1" : " Support 2") +
+                        " Performance extruder into slot" +
+                        (extruderIDnoExtruderPopup == 1 ? " one" : " two")
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: "Antennae"
+                    font.pixelSize: 18
+                    lineHeight: 1.3
+                }
+            }
+        }
+    }
+
+    Popup {
+        id: unknownMaterialWarningPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        parent: overlay
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim_unk_mat_popup
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        Rectangle {
+            id: basePopupItem_unk_mat_popup
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 325
+            radius: 2
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider_unk_mat_popup
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider_unk_mat_popup
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Item {
+                id: buttonBar_unk_mat_popup
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: acknowledge_rectangle_unk_mat_popup
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: acknowledge_text_unk_mat_popup
+                        color: "#ffffff"
+                        text: "ACKNOWLEDGE"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: acknowledge_unk_mat_loading_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            acknowledge_text_unk_mat_popup.color = "#000000"
+                            acknowledge_rectangle_unk_mat_popup.color = "#ffffff"
+                        }
+                        onReleased: {
+                            acknowledge_text_unk_mat_popup.color = "#ffffff"
+                            acknowledge_rectangle_unk_mat_popup.color = "#00000000"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: cancel_rectangle_unk_mat_popup
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: cancel_text_unk_mat_popup
+                        color: "#ffffff"
+                        text: "CANCEL LOADING"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: cancel_unk_mat_loading_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            cancel_text_unk_mat_popup.color = "#000000"
+                            cancel_rectangle_unk_mat_popup.color = "#ffffff"
+                        }
+                        onReleased: {
+                            cancel_text_unk_mat_popup.color = "#ffffff"
+                            cancel_rectangle_unk_mat_popup.color = "#00000000"
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout_unk_mat_popup
+                width: 680
+                height: 200
+                anchors.top: parent.top
+                anchors.topMargin: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: title_text_unk_mat_popup
+                    color: "#cbcbcb"
+                    text: "MAKERBOT PRECISION MATERIALS"
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_unk_mat_popup
+                    color: "#cbcbcb"
+                    text: "No material information detected. Contact support if a MakerBot Smart Spool is not being recognized by the printer. MakerBot materials are tested and optimized for MakerBot 3D printers. Use of third-party materials may void your warranty."
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: "Antennae"
+                    font.pixelSize: 20
+                    lineHeight: 1.3
                 }
             }
         }

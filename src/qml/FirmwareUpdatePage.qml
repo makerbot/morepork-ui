@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 FirmwareUpdatePageForm {
     button1.button_mouseArea.onClicked: {
@@ -7,7 +7,13 @@ FirmwareUpdatePageForm {
             bot.installFirmware()
             break;
         case "no_firmware_update_available":
-            goBack()
+            if(!inFreStep) {
+                goBack()
+            } else {
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+                fre.gotoNextStep(currentFreStep)
+            }
             break;
         case "firmware_update_failed":
             bot.firmwareUpdateCheck(false)
