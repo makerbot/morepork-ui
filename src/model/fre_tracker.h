@@ -8,8 +8,8 @@
 
 #include "base_model.h"
 
-#define FRE_TRACKER_PATH std::string("/var/fre/fre_tracker.json")
-#define FIRST_BOOT_FILE_PATH std::string("/home/.first_firmware_boot")
+#define FRE_TRACKER_PATH ("/var/fre/fre_tracker.json")
+#define FIRST_BOOT_FILE_PATH ("/home/.first_firmware_boot")
 
 // First Run Experience Tracker
 class FreTracker : public BaseModel {
