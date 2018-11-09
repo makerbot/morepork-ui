@@ -129,6 +129,10 @@ void BotModel::acknowledgeMaterial(bool response) {
     qDebug() << FL_STRM << "called with parameters: " << response;
 }
 
+void BotModel::acknowledgeSafeToRemoveUsb() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

@@ -3,8 +3,69 @@ import StorageSortTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 PrintPageForm {
+    property bool startPrintWithUnknownMaterials: false
+    property bool startPrintTopLidOpen: false
+    property bool startPrintBuildDoorOpen: false
     buttonUsbStorage.filenameText.text: qsTr("USB") + cpUiTr.emptyStr
     buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE") + cpUiTr.emptyStr
+
+    function startPrintMaterialCheck() {
+        // Make this accomodate single extruder prints
+        if(materialPage.bay1.filamentMaterialName == "" ||
+           materialPage.bay2.filamentMaterialName == "") {
+            if(materialPage.bay1.filamentMaterialName != "" &&
+                materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) {
+                return false
+            }
+            if(materialPage.bay2.filamentMaterialName != "" &&
+                materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
+                return false
+            }
+            startPrintWithUnknownMaterials = true
+            return false
+        }
+        else if(materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material ||
+                materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+    function startPrintCheck() {
+        if(!startPrintMaterialCheck()) {
+            return false
+        }
+        else if(!startPrintDoorLidCheck()) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+
+    function startPrint() {
+        storage.backStackClear()
+        activeDrawer = printPage.printingDrawer
+        bot.print(fileName)
+        printFromUI = true
+        printSwipeView.swipeToItem(0)
+    }
+
+    function startPrintDoorLidCheck() {
+        if(bot.chamberErrorCode == 45) {
+            startPrintTopLidOpen = true
+            return false
+        }
+        else if(bot.chamberErrorCode == 48) {
+            startPrintBuildDoorOpen = true
+            return false
+        }
+        else {
+            return true
+        }
+    }
 
     printingDrawer.buttonCancelPrint.onClicked: {
         printingDrawer.close()
@@ -12,7 +73,7 @@ PrintPageForm {
             skipFreStepPopup.open()
             return;
         }
-        bot.cancel()
+        cancelPrintPopup.open()
     }
 
     printingDrawer.buttonPausePrint.onClicked: {
@@ -32,6 +93,22 @@ PrintPageForm {
             }
             if(mainSwipeView.currentIndex != 5) {
                 mainSwipeView.swipeToItem(5)
+            }
+            if(settingsPage.settingsSwipeView.currentIndex != 0) {
+                settingsPage.settingsSwipeView.setCurrentIndex(0)
+            }
+            printingDrawer.close()
+        }
+        else if(bot.process.stateType == ProcessStateType.Printing) {
+            bot.pauseResumePrint("suspend")
+            if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
+                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+            }
+            if(mainSwipeView.currentIndex != 5) {
+                mainSwipeView.swipeToItem(5)
+            }
+            if(settingsPage.settingsSwipeView.currentIndex != 0) {
+                settingsPage.settingsSwipeView.setCurrentIndex(0)
             }
             printingDrawer.close()
         }

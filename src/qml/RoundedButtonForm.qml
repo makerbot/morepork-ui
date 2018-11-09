@@ -47,5 +47,6 @@ Rectangle {
         smooth: false
         antialiasing: false
         anchors.fill: parent
+        preventStealing: true
     }
 }

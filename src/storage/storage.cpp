@@ -84,6 +84,14 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
           MakerbotFileMetaReader file_meta_reader(kFileInfo);
           if(file_meta_reader.loadMetadata()){
             auto &meta_data = file_meta_reader.meta_data_;
+            QString material_name_a = QString::fromStdString(meta_data->material[1]);
+            if(material_name_a == "im-pla") {
+                material_name_a = "tough";
+            }
+            QString material_name_b = QString::fromStdString(meta_data->material[0]);
+            if(material_name_b == "im-pla") {
+                material_name_b = "tough";
+            }
             current_thing = new PrintFileInfo(kFileInfo.absolutePath(),
                                 kFileInfo.fileName(),
                                 kFileInfo.completeBaseName(),
@@ -100,8 +108,8 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
                                 meta_data->duration_s,
                                 meta_data->uses_support,
                                 meta_data->uses_raft,
-                                QString::fromStdString(meta_data->material[1]),
-                                QString::fromStdString(meta_data->material[0]),
+                                material_name_a,
+                                material_name_b,
                                 QString::fromStdString(meta_data->slicer_name));
           }
   #else
@@ -160,6 +168,16 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
         MakerbotFileMetaReader file_meta_reader(kFileInfo);
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
+          QString material_name_a = QString::fromStdString(meta_data->material[1]);
+          // not good.
+          if(material_name_a == "im-pla") {
+              material_name_a = "tough";
+          }
+          QString material_name_b = QString::fromStdString(meta_data->material[0]);
+          // not good again.
+          if(material_name_b == "im-pla") {
+              material_name_b = "tough";
+          }
           print_file_list.append(
             new PrintFileInfo(kFileInfo.absolutePath(),
                               kFileInfo.fileName(),
@@ -177,8 +195,8 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
                               meta_data->duration_s,
                               meta_data->uses_support,
                               meta_data->uses_raft,
-                              QString::fromStdString(meta_data->material[1]),
-                              QString::fromStdString(meta_data->material[0]),
+                              material_name_a,
+                              material_name_b,
                               QString::fromStdString(meta_data->slicer_name)));
         }
         else

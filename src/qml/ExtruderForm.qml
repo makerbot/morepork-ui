@@ -1,5 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 
 Item {
     id: extruder
@@ -207,6 +208,8 @@ Item {
                 buttonHeight: 44
                 buttonWidth: 130
                 label_size: 18
+                opacity: bot.process.type == ProcessType.None ?
+                             1.0 : 0.3
             }
 
             RoundedButton {

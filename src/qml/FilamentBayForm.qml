@@ -13,6 +13,22 @@ Item {
     property alias switch1: switch1
 
     property int filamentBayID: 0
+    property bool spoolDetailsReady: false
+
+    property string tagUID: {
+        switch(filamentBayID) {
+        case 1:
+            bot.infoBay1TagUID
+            break;
+        case 2:
+            bot.infoBay2TagUID
+            break;
+        default:
+            "Unknown"
+            break;
+        }
+    }
+
     property bool spoolPresent: {
         switch(filamentBayID) {
         case 1:
@@ -129,7 +145,7 @@ Item {
     property string filamentMaterialName: {
         switch(filamentMaterialCode) {
         case 0:
-            " "
+            ""
             break;
         case 1:
             "PLA"
@@ -158,15 +174,37 @@ Item {
         }
     }
 
-    onSpoolPresentChanged: {
-        getSpoolInfoTimer.restart()
+    onTagUIDChanged: {
+        if(tagUID != "Unknown") {
+            spoolInfoTimer.interval = 2500
+            spoolInfoTimer.start()
+        } else {
+            spoolInfoTimer.interval = 500
+            spoolInfoTimer.start()
+        }
     }
 
     Timer {
-        id: getSpoolInfoTimer
-        interval: 2000
+        id: spoolInfoTimer
         onTriggered: {
             bot.getSpoolInfo(filamentBayID-1)
+            // Replace this arbitrary timer with spool
+            // checksum passed variable and look for it
+            // to change true to set the spoolDetailsReady
+            // variable true.
+            updateSpoolReadyStateTimer.start()
+        }
+    }
+
+    Timer {
+        id: updateSpoolReadyStateTimer
+        interval: 250
+        onTriggered: {
+            if(spoolPresent) {
+                spoolDetailsReady = true
+            } else {
+                spoolDetailsReady = false
+            }
         }
     }
 
@@ -178,6 +216,33 @@ Item {
         smooth: false
         antialiasing: false
         filamentBayID: filamentBayBaseItem.filamentBayID
+
+        Image {
+            id: materialErrorAlertIcon
+            z: 1
+            width: 30
+            height: 30
+            anchors.bottom: materialType_text.top
+            anchors.bottomMargin: 7
+            anchors.horizontalCenter: materialType_text.horizontalCenter
+            antialiasing: false
+            smooth: false
+            source: "qrc:/img/alert.png"
+            visible: {
+                if(filamentBayID == 1 && spoolPresent &&
+                   filamentMaterialName == "PVA") {
+                    true
+                }
+                else if(filamentBayID == 2 && spoolPresent &&
+                        (filamentMaterialName == "PLA" ||
+                        filamentMaterialName == "TOUGH")) {
+                    true
+                }
+                else {
+                    false
+                }
+            }
+        }
 
         Text {
             id: materialType_text
@@ -192,6 +257,8 @@ Item {
             }
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: materialErrorAlertIcon.visible ?
+                                                12 : 0
             font.capitalization: Font.AllUppercase
             font.letterSpacing: 4
             font.family: "Antenna"
@@ -208,6 +275,7 @@ Item {
             anchors.left: parent.left
             anchors.leftMargin: 250
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 5
             spacing: 5
             smooth: false
             antialiasing: false
@@ -257,7 +325,7 @@ Item {
             RowLayout {
                 id: rowLayout2
                 width: 300
-                height: 30
+                height: 31
                 spacing: 10
                 smooth: false
                 antialiasing: false
@@ -321,7 +389,6 @@ Item {
                 }
             }
         }
-
     }
 
     Switch {

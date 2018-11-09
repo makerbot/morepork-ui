@@ -237,6 +237,12 @@ MaterialPageForm {
         setDrawerState(false)
     }
 
+    ok_unk_mat_loading_mouseArea.onClicked: {
+        materialWarningPopup.close()
+        materialSwipeView.swipeToItem(0)
+        setDrawerState(false)
+    }
+
     attach_extruder_mouseArea_no_extruder_popup.onClicked: {
         noExtruderPopup.close()
         mainSwipeView.swipeToItem(2)

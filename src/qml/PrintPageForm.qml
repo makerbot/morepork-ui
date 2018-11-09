@@ -10,6 +10,8 @@ Item {
     property string file_name
     property string print_time
     property string print_material
+    property string print_model_material
+    property string print_support_material
     property string uses_support
     property string uses_raft
     property string model_mass
@@ -112,8 +114,10 @@ Item {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
         file_name = file.fileBaseName
+        print_model_material = file.materialNameB
+        print_support_material = file.materialNameA
         print_material = file.materialNameA == "" ? file.materialNameB :
-                                                    file.materialNameA + "+" + file.materialNameB
+                                                    file.materialNameB + "+" + file.materialNameA
         uses_support = file.usesSupport ? "YES" : "NO"
         uses_raft = file.usesRaft ? "YES" : "NO"
         model_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
@@ -136,6 +140,8 @@ Item {
         file_name = ""
         print_time = ""
         print_material = ""
+        print_model_material = ""
+        print_support_material = ""
         uses_support = ""
         uses_raft = ""
         model_mass = ""
@@ -146,6 +152,7 @@ Item {
         extruder_temp = ""
         chamber_temp = ""
         slicer_name = ""
+        startPrintWithUnknownMaterials = false
     }
 
     // Compute print time, print end time & get them in string format for UI.
@@ -360,8 +367,8 @@ Item {
                                            model.modelData.materialNameB :
                                            model.modelData.materialNameB + "+" + model.modelData.materialNameA
                     materialError.visible: {
-                        (model.modelData.materialNameB != materialPage.bay1.filamentMaterialName) ||
-                        (model.modelData.materialNameA != materialPage.bay2.filamentMaterialName)
+                        ((model.modelData.materialNameB != materialPage.bay1.filamentMaterialName.toLowerCase()) ||
+                         (model.modelData.materialNameA != materialPage.bay2.filamentMaterialName.toLowerCase()))
                     }
                     onClicked: {
                         if(model.modelData.isDir) {

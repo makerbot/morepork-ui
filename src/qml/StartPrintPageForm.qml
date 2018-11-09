@@ -48,13 +48,16 @@ Item {
 
                 Text {
                     id: printName
+                    width: 330
                     text: file_name
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     smooth: false
                     antialiasing: false
                     font.letterSpacing: 3
                     font.family: "Antennae"
                     font.weight: Font.Bold
                     font.pixelSize: 21
+                    lineHeight: 1.1
                     color: "#cbcbcb"
 
                     Image {
@@ -138,7 +141,7 @@ Item {
                 StartPrintMaterialViewItem {
                     id: materialBay1
                     anchors.top: printTimeRowLayout.bottom
-                    anchors.topMargin: 40
+                    anchors.topMargin: 28
                     filamentBayID: 1
                     materialRequired: modelMaterialRequired
                 }
@@ -146,23 +149,24 @@ Item {
                 StartPrintMaterialViewItem {
                     id: materialBay2
                     anchors.top: materialBay1.bottom
-                    anchors.topMargin: 10
+                    anchors.topMargin: 12
                     filamentBayID: 2
                     materialRequired: supportMaterialRequired
                 }
 
                 RoundedButton {
                     anchors.top: materialBay2.bottom
-                    anchors.topMargin: 30
+                    anchors.topMargin: 28
                     buttonWidth: inFreStep ? 300 : 210
                     buttonHeight: 50
                     label: inFreStep ? "START TEST PRINT" : "START PRINT"
                     button_mouseArea.onClicked: {
-                        storage.backStackClear()
-                        activeDrawer = printPage.printingDrawer
-                        bot.print(fileName)
-                        printFromUI = true
-                        printSwipeView.swipeToItem(0)
+                        if(startPrintCheck()){
+                            startPrint()
+                        }
+                        else {
+                            startPrintErrorsPopup.open()
+                        }
                     }
                 }
             }
@@ -406,10 +410,14 @@ Item {
                 anchors.fill: parent
                 contentWidth: 960*0.5
                 contentHeight: 1460*0.5
+                interactive: (flick.contentWidth > 960*0.5 ||
+                              flick.contentHeight > 1460*0.5)
 
                 PinchArea {
                     width: Math.max(flick.contentWidth, flick.width)
                     height: Math.max(flick.contentHeight, flick.height)
+                    anchors.verticalCenterOffset: -25
+                    anchors.verticalCenter: parent.verticalCenter
 
                     property real initialWidth
                     property real initialHeight

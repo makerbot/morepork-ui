@@ -21,19 +21,66 @@ Item {
     onCurrentActiveToolChanged: {
         if(currentActiveTool > 0) {
             bayID = currentActiveTool
+            // Immediately check spool validity if a tool
+            // starts loading. We also check when we get
+            // spool validity check notification and also
+            // when spool a spool is detected and details
+            // fetched.
+            isMaterialMismatch = false
+            isMaterialValid = false
+            materialValidityCheck()
         }
     }
 
-    // This should eventually check for validity in terms of material
-    // type, quantity, spool checksum etc.
-    property bool isMaterialValid: bayID == 1 ?
-                                       bay1.spoolPresent :
-                                       bay2.spoolPresent
+    property bool isMaterialValid: false
 
-    onIsMaterialValidChanged: {
-        overrideInvalidMaterial = false
-        if(bot.process.type == ProcessType.Load) {
-            bot.acknowledgeMaterial(true)
+    property bool isSpoolDetailsReady: bayID == 1 ?
+                                       bay1.spoolDetailsReady :
+                                       bay2.spoolDetailsReady
+
+    onIsSpoolDetailsReadyChanged: {
+        if(isSpoolDetailsReady) {
+            if(bot.process.type == ProcessType.Load) {
+                if(materialValidityCheck()) {
+                    isMaterialValid = true
+                    bot.acknowledgeMaterial(true)
+                } else {
+                    isMaterialValid = false
+                }
+            }
+        }
+    }
+
+    // Also add spool checksum to this whenever thats
+    // ready.
+    function materialValidityCheck() {
+        if(bayID == 1) {
+            if(bay1.spoolPresent &&
+               (bay1.filamentMaterialName == "PLA" ||
+                bay1.filamentMaterialName == "TOUGH")) {
+                return true
+            }
+            else if(bay1.filamentMaterialName == "PVA") {
+                isMaterialMismatch = true
+                return false
+            }
+            else {
+                return false
+            }
+        }
+        else if(bayID == 2) {
+            if(bay2.spoolPresent &&
+               bay2.filamentMaterialName == "PVA") {
+                return true
+            }
+            else if(bay2.filamentMaterialName == "PLA" ||
+                    bay2.filamentMaterialName == "TOUGH") {
+                isMaterialMismatch = true
+                return false
+            }
+            else {
+                return false
+            }
         }
     }
 
@@ -138,6 +185,7 @@ Item {
         cache: false
         opacity: (animated_image.opacity == 0) ?
                      1 : 0
+        smooth: false
     }
 
     AnimatedImage {
@@ -157,8 +205,12 @@ Item {
                  (loadUnloadForm.state == "base state" ||
                   loadUnloadForm.state == "feed_filament" ||
                   loadUnloadForm.state == "loaded_filament" ||
-                  loadUnloadForm.state == "unloaded_filament")
+                  loadUnloadForm.state == "unloaded_filament") &&
+                 (!materialWarningPopup.opened &&
+                  !cancelLoadUnloadPopup.opened &&
+                  !materialPageDrawer.opened)
         opacity: 1
+        smooth: false
     }
 
     Item {
@@ -348,7 +400,7 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Helper motors ae pushing material\nup to the extruder. This can take up to\n30 seconds."
+                text: "Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds."
             }
 
             PropertyChanges {

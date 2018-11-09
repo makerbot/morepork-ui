@@ -69,16 +69,28 @@ Item {
     Image {
         id: materialErrorAlertIcon
         z: 1
-        height: 20
+        width: 30
+        height: 30
         anchors.left: parent.left
-        anchors.leftMargin: 0
+        anchors.leftMargin: -12
         anchors.top: parent.top
-        anchors.topMargin: 0
-        width: 20
+        anchors.topMargin: -12
         antialiasing: false
         smooth: false
         source: "qrc:/img/alert.png"
-        visible: true
+        visible: {
+            if(filamentBayID == 1 &&
+               materialPage.bay1.filamentMaterialName.toLowerCase() == print_model_material) {
+                false
+            }
+            else if(filamentBayID == 2 &&
+                    materialPage.bay2.filamentMaterialName.toLowerCase() == print_support_material) {
+                false
+            }
+            else {
+                true
+            }
+        }
     }
 
     StartPrintMaterialIconForm {
@@ -87,93 +99,87 @@ Item {
         filamentRequired: materialRequired
     }
 
-    ColumnLayout {
-        id: columnLayout
+    Item {
+        id: materialItem
         width: 218
         height: 82
         anchors.left: startPrintMaterialIcon.right
-        anchors.leftMargin: 10
+        anchors.leftMargin: 12
 
-        RowLayout {
-            id: matNameLayout
-            width: children.width
-            spacing: 10
-            visible: true
-
-            Text {
-                id: materialNameText
-                text: isSpoolPresent ?
-                          materialName :
-                          "NO MATERIAL DETECTED"
-                font.capitalization: Font.AllUppercase
-                smooth: false
-                antialiasing: false
-                font.letterSpacing: 3
-                font.family: "Antennae"
-                font.weight: Font.Bold
-                font.pixelSize: 18
-                color: "#cbcbcb"
-            }
-
-            Rectangle {
-                id: divider_rectangle
-                width: 1
-                height: 25
-                color: "#ffffff"
-                visible: isSpoolPresent
-            }
-
-            Text {
-                id: materialColorText
-                text: materialColorName
-                font.capitalization: Font.AllUppercase
-                smooth: false
-                antialiasing: false
-                font.letterSpacing: 3
-                font.family: "Antennae"
-                font.weight: Font.Bold
-                font.pixelSize: 18
-                color: "#cbcbcb"
-                visible: isSpoolPresent
-            }
+        Text {
+            id: materialNameOrBayIDText
+            text: isSpoolPresent ?
+                      materialName :
+                      ("BAY " + filamentBayID)
+            anchors.top: parent.top
+                      anchors.topMargin: 8
+            font.capitalization: Font.AllUppercase
+            smooth: false
+            antialiasing: false
+            font.letterSpacing: 3
+            font.family: "Antennae"
+            font.weight: Font.Bold
+            font.pixelSize: 17
+            color: "#cbcbcb"
         }
 
-        RowLayout {
-            id: matRequiredLayout
-            width: 100
-            height: 25
+        Text {
+            id: materialColorText
+            text: materialColorName
+            anchors.top: materialNameOrBayIDText.bottom
+            anchors.topMargin: 8
+            font.capitalization: Font.AllUppercase
+            smooth: false
+            antialiasing: false
+            font.letterSpacing: 3
+            font.family: "Antennae"
+            font.weight: Font.Bold
+            font.pixelSize: 17
+            color: "#cbcbcb"
             visible: isSpoolPresent
-
-            Text {
-                id: materialRequiredText
-                text: materialRequired + "KG NEEDED"
-                smooth: false
-                antialiasing: false
-                font.letterSpacing: 3
-                font.family: "Antennae"
-                font.weight: Font.Light
-                font.pixelSize: 18
-                color: "#ffffff"
-            }
         }
 
-        RowLayout {
-            id: matAvailableLayout
-            width: 100
-            height: 25
-            visible: isSpoolPresent
+        Text {
+            id: noMaterialText
+            width: 210
+            text: "NO MATERIAL DETECTED"
+            anchors.top: materialNameOrBayIDText.bottom
+            anchors.topMargin: 8
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            font.capitalization: Font.AllUppercase
+            smooth: false
+            antialiasing: false
+            font.letterSpacing: 3
+            font.family: "Antennae"
+            font.weight: Font.Normal
+            font.pixelSize: 18
+            color: "#cbcbcb"
+            lineHeight: 1.3
+            visible: !isSpoolPresent
+        }
 
-            Text {
-                id: materialAvailableText
-                text: materialAvailable + "KG REMAINING"
-                smooth: false
-                antialiasing: false
-                font.letterSpacing: 3
-                font.family: "Antennae"
-                font.weight: Font.Light
-                font.pixelSize: 18
-                color: "#ffffff"
+        Text {
+            id: materialRequiredText
+            text: {
+                if(materialColorName != "Reading Spool...") {
+                    materialRequired +
+                    "KG OF " +
+                    materialAvailable +
+                    "KG NEEDED"
+                } else {
+                    ""
+                }
             }
+            anchors.top: materialColorText.bottom
+            anchors.topMargin: 8
+            smooth: false
+            antialiasing: false
+            font.letterSpacing: 1
+            font.family: "Antennae"
+            font.weight: Font.Light
+            font.pixelSize: 18
+            color: "#ffffff"
+            visible: isSpoolPresent
         }
     }
 }

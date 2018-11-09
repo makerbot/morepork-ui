@@ -98,14 +98,21 @@ Item {
                             "PAUSED"
                             break;
                         case ProcessStateType.Completed:
-                            "PRINT COMPLETE"
+                            fileName_
                             break;
                         case ProcessStateType.Failed:
                             "PRINT FAILED"
                             break;
                         case ProcessStateType.Cancelling:
-                        case ProcessStateType.CleaningUp:
                             "CANCELLING"
+                            break;
+                        case ProcessStateType.CleaningUp:
+                            if(timeLeftString == "0M") {
+                                "FINISHING UP"
+                            }
+                            else {
+                                "CANCELLING"
+                            }
                             break;
                         default:
                             ""
@@ -175,11 +182,17 @@ Item {
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
-                        case ProcessStateType.Paused:
-                            timeLeftString + " REMAINING"
+                        case ProcessStateType.Paused: {
+                            timeLeftString == "0M" ?
+                                        "FINISHING UP" :
+                                        timeLeftString + " REMAINING"
+                        }
                             break;
                         case ProcessStateType.Failed:
                             print_time_ + " PRINT TIME"
+                            break;
+                        case ProcessStateType.Completed:
+                            "PRINT COMPLETE"
                             break;
                         default:
                             ""
