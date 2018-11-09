@@ -1873,6 +1873,26 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                Image {
+                    id: close_popup_start_print_errors_popup
+                    height: sourceSize.height
+                    width: sourceSize.width
+                    anchors.top: parent.top
+                    anchors.topMargin: 10
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    source: "qrc:/img/skip.png"
+                    visible: printPage.startPrintWithUnknownMaterials &&
+                             !printPage.startPrintBuildDoorOpen &&
+                             !printPage.startPrintTopLidOpen
+
+                    MouseArea {
+                        id: closePopup_start_print_errors_popup
+                        anchors.fill: parent
+                        onClicked: startPrintErrorsPopup.close()
+                    }
+                }
+
                 Rectangle {
                     id: horizontal_divider_start_print_errors_popup
                     width: 720
