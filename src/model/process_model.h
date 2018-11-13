@@ -75,6 +75,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(bool, isLoadUnloadWhilePaused, false)
     MODEL_PROP(bool, isLoad, false)
     MODEL_PROP(bool, isBuildPlateClear, false)
+    MODEL_PROP(bool, isProcessCancellable, true)
     MODEL_PROP(bool, printFileValid, false)
     MODEL_PROP(int, currentToolIndex, -1)
     MODEL_PROP(int, printPercentage, 0)

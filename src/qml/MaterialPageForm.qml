@@ -70,6 +70,9 @@ Item {
 
     onIsTopLoadingChanged: {
         if(isTopLoading) {
+            if(cancelLoadUnloadPopup.opened) {
+                cancelLoadUnloadPopup.close()
+            }
             materialWarningPopup.open()
         }
         else {
@@ -123,6 +126,9 @@ Item {
                     bot.loadFilamentStop()
                 }
             }
+            if(cancelLoadUnloadPopup.opened) {
+                cancelLoadUnloadPopup.close()
+            }
             materialWarningPopup.open()
         }
     }
@@ -132,8 +138,13 @@ Item {
             cancelLoadUnloadPopup.open()
         }
         else if(bot.process.type == ProcessType.Unload) {
-            waitUntilUnloadedPopup.open()
-            closeWaitUntilUnloadedPopup.start()
+            if(bot.process.isProcessCancellable) {
+                cancelLoadUnloadPopup.open()
+            }
+            else {
+                waitUntilUnloadedPopup.open()
+                closeWaitUntilUnloadedPopup.start()
+            }
         }
         else if(printPage.isPrintProcess) {
             // If load/unload completed successfully and the user wants
@@ -481,7 +492,7 @@ Item {
             color: "#000000"
             rotation: rootItem.rotation == 180 ? 180 : 0
             width: 720
-            height: isMaterialMismatch ? 250 : 325
+            height: isMaterialMismatch ? 250 : 275
             radius: 10
             border.width: 2
             border.color: "#ffffff"
@@ -637,7 +648,7 @@ Item {
             ColumnLayout {
                 id: columnLayout_mat_warning_popup
                 width: 680
-                height: isMaterialMismatch ? 135 : 200
+                height: isMaterialMismatch ? 135 : 160
                 anchors.top: parent.top
                 anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -645,7 +656,7 @@ Item {
                 Text {
                     id: title_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: isMaterialMismatch ? "MATERIAL MISMATCH" : "MAKERBOT PRECISION MATERIALS"
+                    text: isMaterialMismatch ? "MATERIAL MISMATCH" : "WARRANTY WARNING"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -656,7 +667,7 @@ Item {
                 Text {
                     id: description_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: isMaterialMismatch ? "Currently only Model material is supported in Bay 1 and Support material in Bay 2" : "No material information detected. Contact support if a MakerBot Smart Spool is not being recognized by the printer. MakerBot materials are tested and optimized for MakerBot 3D printers. Use of third-party materials may void your warranty."
+                    text: isMaterialMismatch ? "Currently only Model material is supported in Bay 1 and Support material in Bay 2" : "Use of third-party materials may void your warranty.\nFor additional information, please visit\nMakerBot.com/legal/warranty"
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -664,7 +675,7 @@ Item {
                     wrapMode: Text.WordWrap
                     font.family: "Antennae"
                     font.pixelSize: 20
-                    lineHeight: 1.3
+                    lineHeight: 1.4
                 }
             }
         }
