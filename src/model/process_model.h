@@ -52,6 +52,7 @@ class ProcessModel : public BaseModel {
         LevelingComplete,
         HeatingNozzle, // Toolhead calibration states
         CleanNozzle,
+        CoolingNozzle,
         CalibratingToolheads,
         InstallBuildPlate,
         RemoveBuildPlate

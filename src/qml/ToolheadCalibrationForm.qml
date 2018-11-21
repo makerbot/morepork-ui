@@ -88,8 +88,8 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: text2.bottom
             anchors.topMargin: 25
-            buttonHeight: 50
-            buttonWidth: 80
+            buttonHeight: 60
+            buttonWidth: 90
             label: "OK"
         }
     }
@@ -162,6 +162,7 @@ Item {
                 anchors.top: subtitle.bottom
                 anchors.topMargin: 25
                 visible: true
+                opacity: 1.0
             }
 
             RowLayout {
@@ -268,7 +269,7 @@ Item {
 
             PropertyChanges {
                 target: actionButton
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -297,6 +298,38 @@ Item {
                 label_width: 100
                 buttonWidth: 100
                 label: "NEXT"
+                opacity: 1.0
+            }
+        },
+
+        State {
+            name: "cooling_nozzle"
+            when: bot.process.type == ProcessType.CalibrationProcess &&
+                  bot.process.stateType == ProcessStateType.CoolingNozzle
+
+            PropertyChanges {
+                target: title
+                text: "COOLING EXTRUDER NOZZLES"
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "Calibration will continue after the nozzles cool down."
+            }
+
+            PropertyChanges {
+                target: actionButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                visible: true
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                visible: false
             }
         },
 
@@ -330,6 +363,7 @@ Item {
                 label_width: 400
                 buttonWidth: 400
                 label: "BUILD PLATE IS REMOVED"
+                opacity: 1.0
             }
         },
         State {
@@ -362,6 +396,7 @@ Item {
                 label_width: 400
                 label: "BUILD PLATE IS INSTALLED"
                 buttonWidth: 410
+                opacity: 1.0
             }
         },
         State {
@@ -415,6 +450,7 @@ Item {
                 label_width: 100
                 label: "DONE"
                 buttonWidth: 125
+                opacity: 1.0
             }
         },
 
@@ -438,6 +474,7 @@ Item {
                 visible: false
             }
         },
+
         State {
             name: "cancelling"
 
