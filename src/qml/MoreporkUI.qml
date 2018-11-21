@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 import ConnectionStateEnum 1.0
 import FreStepEnum 1.0
 
@@ -199,6 +200,10 @@ ApplicationWindow {
             activeDrawer.interactive = false
             topBar.drawerDownClicked.disconnect(activeDrawer.open)
         }
+    }
+
+    function isProcessRunning() {
+        return (bot.process.type != ProcessType.None)
     }
 
     Item {
@@ -2113,10 +2118,10 @@ ApplicationWindow {
                     width: 590
                     height: {
                         (printPage.startPrintBuildDoorOpen ||
-                         printPage.startPrintTopLidOpen) ? 100 : 180
+                         printPage.startPrintTopLidOpen) ? 100 : 170
                     }
                     anchors.top: parent.top
-                    anchors.topMargin: 25
+                    anchors.topMargin: 30
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Text {
@@ -2157,17 +2162,26 @@ ApplicationWindow {
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 "Be sure <b>" +
                                  printPage.print_model_material.toUpperCase() +
-                                 "</b> is in <b>Model Extruder 1</b> and <b>" +
-                                 printPage.print_support_material.toUpperCase() +
-                                 "</b> is in <b>Support Extruder 2</b>.\nThis printer is optimized for genuine MakerBot materials."
+                                 "</b> is in <b>Model Extruder 1</b>" +
+                                 ((printPage.print_support_material != "") ?
+                                            " and <b>" + printPage.print_support_material.toUpperCase() + "</b> is in <b>Support Extruder 2</b>." :
+                                            ".") +
+                                  "\nThis printer is optimized for genuine MakerBot materials."
+                            }
+                            else if(printPage.print_support_material == "" &&
+                                    materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material) {
+                                "This print requires <b>" +
+                                printPage.print_model_material.toUpperCase() +
+                                "</b> in <b>Model Extruder 1</b>." +
+                                "\nLoad the correct material to start the print or export the file again with these material settings."
                             }
                             else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
                                     materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
                                 "This print requires <b>" +
                                 printPage.print_model_material.toUpperCase() +
-                                "</b> and <b>" +
+                                "</b> in <b>Model Extruder 1</b> and <b>" +
                                 printPage.print_support_material.toUpperCase() +
-                                "</b>.\nLoad the correct materials to start the print or export the file again with these material settings."
+                                "</b> in <b>Support Extruder 2</b>.\nLoad the correct materials to start the print or export the file again with these material settings."
                             }
                         }
                         horizontalAlignment: Text.AlignHCenter

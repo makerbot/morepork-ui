@@ -125,6 +125,7 @@ Item {
                         id: buttonAssistedLeveling
                         buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
                         buttonText.text: "ASSISTED LEVELING"
+                        opacity: !isProcessRunning() ? 1 : 0.3
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -145,6 +146,7 @@ Item {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
                         buttonText.text: "CALIBRATE TOOLHEADS"
+                        opacity: !isProcessRunning() ? 1 : 0.3
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -227,7 +229,7 @@ Item {
                     }
 
                     MenuButton {
-                        property bool enabled: (bot.process.type === ProcessType.None &&
+                        property bool enabled: (!isProcessRunning() &&
                                                 storage.usbStorageConnected)
                         id: buttonCopyLogs
 
@@ -245,7 +247,7 @@ Item {
                         buttonImage.anchors.leftMargin: 30
                         buttonImage.source: "qrc:/img/alert.png"
                         buttonText.text: "RESET TO FACTORY"
-                        opacity: bot.process.type == ProcessType.None ? 1 : 0.3
+                        opacity: !isProcessRunning() ? 1 : 0.3
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;

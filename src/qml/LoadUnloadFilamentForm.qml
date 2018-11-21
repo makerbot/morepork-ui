@@ -514,11 +514,12 @@ Item {
             PropertyChanges {
                 target: acknowledgeButton
                 label_size: 18
-                label_width: 345
-                buttonWidth: 345
+                label_width: 350
+                buttonWidth: 350
+                buttonHeight: 80
                 anchors.topMargin: 20
                 opacity: 1
-                label: "MATERIAL IS EXTRUDING"
+                label: "CONFIRM\nMATERIAL EXTRUSION"
             }
 
             PropertyChanges {

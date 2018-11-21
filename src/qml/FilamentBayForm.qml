@@ -169,7 +169,7 @@ Item {
             "PVA-M"
             break;
         default:
-            "Unknown Material"
+            ""
             break;
         }
     }

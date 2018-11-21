@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
@@ -9,7 +9,9 @@ SettingsPageForm {
     }
 
     buttonAssistedLeveling.onClicked: {
-        settingsSwipeView.swipeToItem(2)
+        if(!isProcessRunning()) {
+            settingsSwipeView.swipeToItem(2)
+        }
     }
 
     buttonFirmwareUpdate.onClicked: {
@@ -18,7 +20,9 @@ SettingsPageForm {
     }
 
     buttonCalibrateToolhead.onClicked: {
-        settingsSwipeView.swipeToItem(4)
+        if(!isProcessRunning()) {
+            settingsSwipeView.swipeToItem(4)
+        }
     }
 
     buttonWiFi.onClicked: {
@@ -91,7 +95,7 @@ SettingsPageForm {
     }
 
     buttonResetToFactory.onClicked: {
-        if(bot.process.type == ProcessType.None) {
+        if(!isProcessRunning()) {
             resetFactoryConfirmPopup.open()
         }
     }

@@ -10,26 +10,43 @@ PrintPageForm {
     buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE") + cpUiTr.emptyStr
 
     function startPrintMaterialCheck() {
-        // Make this accomodate single extruder prints
-        if(materialPage.bay1.filamentMaterialName == "" ||
-           materialPage.bay2.filamentMaterialName == "") {
-            if(materialPage.bay1.filamentMaterialName != "" &&
-                materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) {
+        // Single extruder prints
+        if(print_support_material == "" && print_model_material != "") {
+            if(materialPage.bay1.filamentMaterialName.toLowerCase() == "") {
+                startPrintWithUnknownMaterials = true
                 return false
             }
-            if(materialPage.bay2.filamentMaterialName != "" &&
-                materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
+            else if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
+                    print_model_material) {
                 return false
             }
-            startPrintWithUnknownMaterials = true
-            return false
+            else {
+                return true
+            }
         }
-        else if(materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material ||
-                materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
-            return false
-        }
-        else {
-            return true
+
+        // Dual extruder prints
+        if(print_support_material != "" && print_model_material != "") {
+            if(materialPage.bay1.filamentMaterialName == "" ||
+               materialPage.bay2.filamentMaterialName == "") {
+                if(materialPage.bay1.filamentMaterialName != "" &&
+                    materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) {
+                    return false
+                }
+                if(materialPage.bay2.filamentMaterialName != "" &&
+                    materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
+                    return false
+                }
+                startPrintWithUnknownMaterials = true
+                return false
+            }
+            else if(materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material ||
+                    materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
+                return false
+            }
+            else {
+                return true
+            }
         }
     }
 

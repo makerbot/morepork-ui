@@ -152,6 +152,7 @@ Item {
                     anchors.topMargin: 12
                     filamentBayID: 2
                     materialRequired: supportMaterialRequired
+                    visible: print_support_material != ""
                 }
 
                 RoundedButton {
