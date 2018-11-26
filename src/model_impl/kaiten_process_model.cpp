@@ -124,6 +124,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::HeatingNozzle);
         else if (kStepStr == "clean_nozzle")
             stateTypeSet(ProcessStateType::CleanNozzle);
+        else if (kStepStr == "cooling_nozzle")
+            stateTypeSet(ProcessStateType::CoolingNozzle);
         else if (kStepStr == "homing_xy" ||
                  kStepStr == "homing_z"  ||
                  kStepStr == "nozzle_offset_cal" ||
