@@ -69,7 +69,7 @@ Item {
                 id: columnLayout_page0
                 width: 400
                 height: bot.process.stateType == ProcessStateType.Completed ? 245 :
-                            bot.process.stateType == ProcessStateType.Failed ? 210 : 100
+                            bot.process.stateType == ProcessStateType.Failed ? 210 : 110
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400

@@ -378,7 +378,12 @@ Item {
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
                             setDrawerState(false)
-                            printSwipeView.swipeToItem(2)
+                            if(!startPrintMaterialCheck() && !startPrintWithUnknownMaterials) {
+                                startPrintErrorsPopup.open()
+                            }
+                            else {
+                                printSwipeView.swipeToItem(2)
+                            }
                         }
                     }
 
