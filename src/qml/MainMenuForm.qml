@@ -28,13 +28,13 @@ Item {
                     "PRINTING"
                     break;
                 case ProcessStateType.Pausing:
-                    "PRINT PAUSING"
+                    "PAUSING"
                     break;
                 case ProcessStateType.Paused:
-                    "PRINT PAUSED"
+                    "PAUSED"
                     break;
                 case ProcessStateType.Resuming:
-                    "PRINT RESUMING"
+                    "RESUMING"
                     break;
                 case ProcessStateType.Completed:
                     "PRINT COMPLETE"

@@ -48,5 +48,6 @@ Rectangle {
         antialiasing: false
         anchors.fill: parent
         preventStealing: true
+        enabled: !disable_button
     }
 }

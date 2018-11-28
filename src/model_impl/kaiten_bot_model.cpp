@@ -820,24 +820,38 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           }
         }
       }
-    }
+      // Update disabled errors (door or lid for now) for the UI
+      // to not complain before starting a print
+      const Json::Value &kDisabledErrors = info["disabled_errors"];
+      if(kDisabledErrors.isArray() && kDisabledErrors.size() > 0){
+        for(const Json::Value error : kDisabledErrors){
+          if(error.asString() == "door_interlock_triggered" ||
+             error.asString() == "lid_interlock_triggered"){
+            doorLidErrorDisabledSet(true);
+          }
+        }
+      }
+      else {
+        doorLidErrorDisabledReset();
+      }
 
-    // TODO(chris): This bit is a mess...
-    const Json::Value & version_dict = info["firmware_version"];
-    const Json::Value & version_major = version_dict["major"];
-    const Json::Value & version_minor = version_dict["minor"];
-    const Json::Value & version_bugfix = version_dict["bugfix"];
-    const Json::Value & version_build = version_dict["build"];
-    if (version_major.isInt() && version_minor.isInt() &&
-            version_bugfix.isInt() && version_build.isInt()) {
-        std::stringstream version;
-        version << version_major.asInt() << "."
-                << version_minor.asInt() << "."
-                << version_bugfix.asInt() << "."
-                << version_build.asInt();
-        versionSet(version.str().c_str());
-    } else {
-        versionReset();
+      // TODO(chris): This bit is a mess...
+      const Json::Value & version_dict = info["firmware_version"];
+      const Json::Value & version_major = version_dict["major"];
+      const Json::Value & version_minor = version_dict["minor"];
+      const Json::Value & version_bugfix = version_dict["bugfix"];
+      const Json::Value & version_build = version_dict["build"];
+      if (version_major.isInt() && version_minor.isInt() &&
+              version_bugfix.isInt() && version_build.isInt()) {
+          std::stringstream version;
+          version << version_major.asInt() << "."
+                  << version_minor.asInt() << "."
+                  << version_bugfix.asInt() << "."
+                  << version_build.asInt();
+          versionSet(version.str().c_str());
+      } else {
+          versionReset();
+      }
     }
 }
 

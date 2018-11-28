@@ -97,6 +97,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, spoolValidityCheckPending, false)
     MODEL_PROP(QString, unknownMaterialWarningType, "None")
     MODEL_PROP(bool, safeToRemoveUsb, false)
+    MODEL_PROP(bool, doorLidErrorDisabled, false)
 
     MODEL_PROP(int, spoolAOriginalAmount, 0)
     MODEL_PROP(int, spoolBOriginalAmount, 0)

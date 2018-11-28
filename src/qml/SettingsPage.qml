@@ -9,9 +9,7 @@ SettingsPageForm {
     }
 
     buttonAssistedLeveling.onClicked: {
-        if(!isProcessRunning()) {
-            settingsSwipeView.swipeToItem(2)
-        }
+        settingsSwipeView.swipeToItem(2)
     }
 
     buttonFirmwareUpdate.onClicked: {
@@ -20,9 +18,7 @@ SettingsPageForm {
     }
 
     buttonCalibrateToolhead.onClicked: {
-        if(!isProcessRunning()) {
-            settingsSwipeView.swipeToItem(4)
-        }
+        settingsSwipeView.swipeToItem(4)
     }
 
     buttonWiFi.onClicked: {
@@ -95,9 +91,7 @@ SettingsPageForm {
     }
 
     buttonResetToFactory.onClicked: {
-        if(!isProcessRunning()) {
-            resetFactoryConfirmPopup.open()
-        }
+        resetFactoryConfirmPopup.open()
     }
 
     buttonEnglish.onClicked: {

@@ -5,9 +5,7 @@ FirmwareUpdatePageForm {
     button1.button_mouseArea.onClicked: {
         switch(state) {
         case "firmware_update_available": {
-            if(!isProcessRunning()) {
-                bot.installFirmware()
-            }
+            bot.installFirmware()
         }
             break;
         case "no_firmware_update_available":

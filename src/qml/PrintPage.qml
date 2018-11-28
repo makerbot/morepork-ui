@@ -71,11 +71,11 @@ PrintPageForm {
     }
 
     function startPrintDoorLidCheck() {
-        if(bot.chamberErrorCode == 45) {
+        if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 45) {
             startPrintTopLidOpen = true
             return false
         }
-        else if(bot.chamberErrorCode == 48) {
+        else if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 48) {
             startPrintBuildDoorOpen = true
             return false
         }

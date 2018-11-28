@@ -168,7 +168,7 @@ Item {
                 buttonHeight: 50
                 label: "INSTALL UPDATE"
                 visible: true
-                opacity: !isProcessRunning() ? 1 : 0.3
+                disable_button: isProcessRunning()
             }
 
             PropertyChanges {

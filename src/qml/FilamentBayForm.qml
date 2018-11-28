@@ -105,9 +105,6 @@ Item {
 
     property real filamentQuantity: {
         switch(filamentMaterialCode) {
-        case 0:
-            0
-            break;
         case 1:
             //PLA
             ((filamentVolume * 1.25)/1000).toFixed(3)
@@ -136,6 +133,7 @@ Item {
             //PVA-M
             ((filamentVolume * 1.22)/1000).toFixed(3)
             break;
+        case 0:
         default:
             0
             break;
@@ -144,9 +142,6 @@ Item {
 
     property string filamentMaterialName: {
         switch(filamentMaterialCode) {
-        case 0:
-            ""
-            break;
         case 1:
             "PLA"
             break;
@@ -168,6 +163,7 @@ Item {
         case 7:
             "PVA-M"
             break;
+        case 0:
         default:
             ""
             break;

@@ -50,10 +50,8 @@ Item {
                 }
                 detachButton {
                     button_mouseArea.onClicked: {
-                        if(bot.process.type == ProcessType.None) {
-                            itemAttachExtruder.extruder = extruderID
-                            extruderSwipeView.swipeToItem(1)
-                        }
+                        itemAttachExtruder.extruder = extruderID
+                        extruderSwipeView.swipeToItem(1)
                     }
                 }
             }
@@ -77,10 +75,8 @@ Item {
                 }
                 detachButton {
                     button_mouseArea.onClicked: {
-                        if(bot.process.type == ProcessType.None) {
-                            itemAttachExtruder.extruder = extruderID
-                            extruderSwipeView.swipeToItem(1)
-                        }
+                        itemAttachExtruder.extruder = extruderID
+                        extruderSwipeView.swipeToItem(1)
                     }
                 }
             }

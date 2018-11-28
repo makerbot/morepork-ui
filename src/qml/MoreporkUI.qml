@@ -2191,7 +2191,7 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap
                         font.family: "Antennae"
                         font.pixelSize: 20
-                        lineHeight: 1.3
+                        lineHeight: 1.35
                     }
                 }
             }
