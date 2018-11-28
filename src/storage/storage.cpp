@@ -169,7 +169,7 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
           QString material_name_a = QString::fromStdString(meta_data->material[1]);
-          TODO(praveen): Make this less hacky
+          // TODO(praveen): Make this less hacky
           // not good.
           if(material_name_a == "im-pla") {
               material_name_a = "tough";
