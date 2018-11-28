@@ -117,7 +117,6 @@ Button {
                     antialiasing: false
                     smooth: false
                     source: "qrc:/img/alert.png"
-                    visible: true
                 }
             }
         }

@@ -168,6 +168,7 @@ Item {
                 buttonHeight: 50
                 label: "INSTALL UPDATE"
                 visible: true
+                disable_button: isProcessRunning()
             }
 
             PropertyChanges {

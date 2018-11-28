@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import QtQuick.Controls 2.2
 
 Button {
@@ -12,6 +12,8 @@ Button {
     property alias buttonImage: buttonImage
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
+    enabled: true
+    opacity: enabled ? 1.0 : 0.3
 
     background: Rectangle {
         opacity: menuButton.down ? 1 : 0

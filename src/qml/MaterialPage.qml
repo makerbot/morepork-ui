@@ -213,6 +213,19 @@ MaterialPageForm {
             materialSwipeView.swipeToItem(0)
             setDrawerState(false)
         }
+        else if(bot.process.type == ProcessType.Unload) {
+            if(bot.process.isProcessCancellable) {
+                materialChangeCancelled = true
+                bot.cancel()
+                loadUnloadFilamentProcess.state = "base state"
+                materialSwipeView.swipeToItem(0)
+                setDrawerState(false)
+            }
+            else {
+                waitUntilUnloadedPopup.open()
+                closeWaitUntilUnloadedPopup.start()
+            }
+        }
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(0)
@@ -233,6 +246,12 @@ MaterialPageForm {
         materialChangeCancelled = true
         bot.cancel()
         loadUnloadFilamentProcess.state = "base state"
+        materialSwipeView.swipeToItem(0)
+        setDrawerState(false)
+    }
+
+    ok_unk_mat_loading_mouseArea.onClicked: {
+        materialWarningPopup.close()
         materialSwipeView.swipeToItem(0)
         setDrawerState(false)
     }

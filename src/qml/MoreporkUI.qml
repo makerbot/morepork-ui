@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 import ConnectionStateEnum 1.0
 import FreStepEnum 1.0
 
@@ -22,6 +23,13 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+
+    property bool safeToRemoveUsb: bot.safeToRemoveUsb
+    onSafeToRemoveUsbChanged: {
+        if(safeToRemoveUsb) {
+            safeToRemoveUsbPopup.open()
+        }
+    }
 
     property int connectionState: bot.state
     onConnectionStateChanged: {
@@ -192,6 +200,10 @@ ApplicationWindow {
             activeDrawer.interactive = false
             topBar.drawerDownClicked.disconnect(activeDrawer.open)
         }
+    }
+
+    function isProcessRunning() {
+        return (bot.process.type != ProcessType.None)
     }
 
     Item {
@@ -973,7 +985,6 @@ ApplicationWindow {
             }
         }
 
-
         Popup {
             id: firmwareUpdatePopup
             width: 800
@@ -1514,6 +1525,673 @@ ApplicationWindow {
                         font.family: "Antennae"
                         font.weight: Font.Bold
                         font.pixelSize: 20
+                    }
+                }
+            }
+        }
+
+        Popup {
+            id: cancelPrintPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            parent: overlay
+            closePolicy: Popup.CloseOnPressOutside
+            background: Rectangle {
+                id: popupBackgroundDim_cancel_print_popup
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+
+            Rectangle {
+                id: basePopupItem_cancel_print_popup
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: 220
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    id: horizontal_divider_cancel_print_popup
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Rectangle {
+                    id: vertical_divider_cancel_print_popup
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Item {
+                    id: buttonBar_cancel_print_popup
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: cancel_rectangle_cancel_print_popup
+                        x: 0
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: cancel_text_cancel_print_popup
+                            color: "#ffffff"
+                            text: "CANCEL PRINT"
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: cancel_mouseArea_cancel_print_popup
+                            anchors.fill: parent
+                            onPressed: {
+                                cancel_text_cancel_print_popup.color = "#000000"
+                                cancel_rectangle_cancel_print_popup.color = "#ffffff"
+                            }
+                            onReleased: {
+                                cancel_text_cancel_print_popup.color = "#ffffff"
+                                cancel_rectangle_cancel_print_popup.color = "#00000000"
+                            }
+                            onClicked: {
+                                bot.cancel()
+                                cancelPrintPopup.close()
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: continue_rectangle_cancel_print_popup
+                        x: 360
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: continue_text_cancel_print_popup
+                            color: "#ffffff"
+                            text: "CONTINUE PRINT"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: continue_mouseArea_cancel_print_popup
+                            anchors.fill: parent
+                            onPressed: {
+                                continue_text_cancel_print_popup.color = "#000000"
+                                continue_rectangle_cancel_print_popup.color = "#ffffff"
+                            }
+                            onReleased: {
+                                continue_text_cancel_print_popup.color = "#ffffff"
+                                continue_rectangle_cancel_print_popup.color = "#00000000"
+                            }
+                            onClicked: {
+                                cancelPrintPopup.close()
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayout_cancel_print_popup
+                    width: 590
+                    height: 100
+                    anchors.top: parent.top
+                    anchors.topMargin: 25
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: cancel_title_text_cancel_print_popup
+                        color: "#cbcbcb"
+                        text: "CANCEL PRINT"
+                        font.letterSpacing: 3
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 20
+                    }
+
+                    Text {
+                        id: cancel_description_text_cancel_print_popup
+                        color: "#cbcbcb"
+                        text: "Are you sure?"
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        lineHeight: 1.3
+                    }
+                }
+            }
+        }
+
+        Popup {
+            id: safeToRemoveUsbPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            parent: overlay
+            closePolicy: Popup.CloseOnPressOutside
+            background: Rectangle {
+                id: popupBackgroundDim_remove_usb_popup
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+
+            Rectangle {
+                id: basePopupItem_remove_usb_popup
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: 220
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    id: horizontal_divider_remove_usb_popup
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Item {
+                    id: buttonBar_remove_usb_popup
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: ok_rectangle_remove_usb_popup
+                        x: 0
+                        y: 0
+                        width: 720
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: ok_text_remove_usb_popup
+                            color: "#ffffff"
+                            text: "OK"
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: ok_mouseArea_remove_usb_popup
+                            anchors.fill: parent
+                            onPressed: {
+                                ok_text_remove_usb_popup.color = "#000000"
+                                ok_rectangle_remove_usb_popup.color = "#ffffff"
+                            }
+                            onReleased: {
+                                ok_text_remove_usb_popup.color = "#ffffff"
+                                ok_rectangle_remove_usb_popup.color = "#00000000"
+                            }
+                            onClicked: {
+                                bot.acknowledgeSafeToRemoveUsb()
+                                safeToRemoveUsbPopup.close()
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayout_remove_usb_popup
+                    width: 590
+                    height: 100
+                    anchors.top: parent.top
+                    anchors.topMargin: 25
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: remove_usb_text_remove_usb_popup
+                        color: "#cbcbcb"
+                        text: "YOU CAN NOW SAFELY REMOVE THE USB"
+                        font.letterSpacing: 3
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 20
+                    }
+                }
+            }
+        }
+
+        Popup {
+            id: startPrintErrorsPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            parent: overlay
+            closePolicy: Popup.CloseOnPressOutside
+            background: Rectangle {
+                id: popupBackgroundDim_start_print_errors_popup
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+            onOpened: {
+                if(!printPage.startPrintBuildDoorOpen && !printPage.startPrintTopLidOpen) {
+                    right_text_start_print_errors_popup.color = "#000000"
+                    right_rectangle_start_print_errors_popup.color = "#ffffff"
+                }
+            }
+
+            onClosed: {
+                printPage.startPrintBuildDoorOpen = false
+                printPage.startPrintTopLidOpen = false
+                printPage.startPrintWithUnknownMaterials = false
+            }
+
+            Rectangle {
+                id: basePopupItem_start_print_errors_popup
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: {
+                    (printPage.startPrintTopLidOpen ||
+                     printPage.startPrintBuildDoorOpen) ? 220 : 300
+                }
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Image {
+                    id: close_popup_start_print_errors_popup
+                    height: sourceSize.height
+                    width: sourceSize.width
+                    anchors.top: parent.top
+                    anchors.topMargin: 10
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    source: "qrc:/img/skip.png"
+                    visible: printPage.startPrintWithUnknownMaterials &&
+                             !printPage.startPrintBuildDoorOpen &&
+                             !printPage.startPrintTopLidOpen
+
+                    MouseArea {
+                        id: closePopup_start_print_errors_popup
+                        anchors.fill: parent
+                        onClicked: startPrintErrorsPopup.close()
+                    }
+                }
+
+                Rectangle {
+                    id: horizontal_divider_start_print_errors_popup
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Rectangle {
+                    id: vertical_divider_start_print_errors_popup
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: {
+                        (!printPage.startPrintBuildDoorOpen &&
+                         !printPage.startPrintTopLidOpen)
+                    }
+                }
+
+                Item {
+                    id: buttonBar_start_print_errors_popup
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: full_rectangle_start_print_errors_popup
+                        x: 0
+                        y: 0
+                        width: 720
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+                        visible: {
+                            (printPage.startPrintBuildDoorOpen ||
+                             printPage.startPrintTopLidOpen)
+                        }
+
+                        Text {
+                            id: full_text_start_print_errors_popup
+                            color: "#ffffff"
+                            text: {
+                                "OK"
+                            }
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: full_mouseArea_start_print_errors_popup
+                            anchors.fill: parent
+                            onPressed: {
+                                full_text_start_print_errors_popup.color = "#000000"
+                                full_rectangle_start_print_errors_popup.color = "#ffffff"
+                            }
+                            onReleased: {
+                                full_text_start_print_errors_popup.color = "#ffffff"
+                                full_rectangle_start_print_errors_popup.color = "#00000000"
+                            }
+                            onClicked: {
+                                startPrintErrorsPopup.close()
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: left_rectangle_start_print_errors_popup
+                        x: 0
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+                        visible: {
+                            (!printPage.startPrintBuildDoorOpen &&
+                             !printPage.startPrintTopLidOpen)
+                        }
+
+                        Text {
+                            id: left_text_start_print_errors_popup
+                            color: "#ffffff"
+                            text: {
+                                if(printPage.startPrintWithUnknownMaterials) {
+                                    "START ANYWAY"
+                                }
+                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
+                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                    "OK"
+                                }
+                            }
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: left_mouseArea_start_print_errors_popup
+                            anchors.fill: parent
+                            onPressed: {
+                                left_text_start_print_errors_popup.color = "#000000"
+                                left_rectangle_start_print_errors_popup.color = "#ffffff"
+                                right_text_start_print_errors_popup.color = "#ffffff"
+                                right_rectangle_start_print_errors_popup.color = "#00000000"
+                            }
+                            onReleased: {
+                                left_text_start_print_errors_popup.color = "#ffffff"
+                                left_rectangle_start_print_errors_popup.color = "#00000000"
+                            }
+                            onClicked: {
+                                startPrintErrorsPopup.close()
+                                if(printPage.startPrintWithUnknownMaterials) {
+                                    if(printPage.startPrintDoorLidCheck()) {
+                                        printPage.startPrint()
+                                    }
+                                    else {
+                                        startPrintErrorsPopup.open()
+                                    }
+                                }
+                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
+                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                    startPrintErrorsPopup.close()
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: right_rectangle_start_print_errors_popup
+                        x: 360
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+                        visible: {
+                            (!printPage.startPrintBuildDoorOpen &&
+                             !printPage.startPrintTopLidOpen)
+                        }
+
+                        Text {
+                            id: right_text_start_print_errors_popup
+                            color: "#ffffff"
+                            text: {
+                                if(printPage.startPrintWithUnknownMaterials) {
+                                    "CHANGE MATERIAL"
+                                }
+                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
+                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                    "CHANGE MATERIAL"
+                                }
+                            }
+
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: right_mouseArea_start_print_errors_popup
+                            anchors.fill: parent
+                            onPressed: {
+                                right_text_start_print_errors_popup.color = "#000000"
+                                right_rectangle_start_print_errors_popup.color = "#ffffff"
+                            }
+                            onReleased: {
+                                right_text_start_print_errors_popup.color = "#ffffff"
+                                right_rectangle_start_print_errors_popup.color = "#00000000"
+                            }
+                            onClicked: {
+                                startPrintErrorsPopup.close()
+                                if(printPage.startPrintWithUnknownMaterials) {
+                                    printPage.resetPrintFileDetails()
+                                    if(printPage.printSwipeView.currentIndex != 0) {
+                                        printPage.printSwipeView.setCurrentIndex(0)
+                                    }
+                                    mainSwipeView.swipeToItem(5)
+                                }
+                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
+                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                    printPage.resetPrintFileDetails()
+                                    if(printPage.printSwipeView.currentIndex != 0) {
+                                        printPage.printSwipeView.setCurrentIndex(0)
+                                    }
+                                    mainSwipeView.swipeToItem(5)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ColumnLayout {
+                    id: columnLayout_start_print_errors_popup
+                    width: 590
+                    height: {
+                        (printPage.startPrintBuildDoorOpen ||
+                         printPage.startPrintTopLidOpen) ? 100 : 170
+                    }
+                    anchors.top: parent.top
+                    anchors.topMargin: 30
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Text {
+                        id: main_text_start_print_errors_popup
+                        color: "#cbcbcb"
+                        text: {
+                            if(printPage.startPrintTopLidOpen) {
+                                "CLOSE THE TOP LID"
+                            }
+                            else if(printPage.startPrintBuildDoorOpen) {
+                                "CLOSE BUILD CHAMBER DOOR"
+                            }
+                            else if(printPage.startPrintWithUnknownMaterials) {
+                                "UNKNOWN MATERIAL DETECTED"
+                            }
+                            else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
+                                    materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                "MATERIAL MISMATCH WARNING"
+                            }
+                        }
+                        font.letterSpacing: 3
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 20
+                    }
+
+                    Text {
+                        id: sub_text_start_print_errors_popup
+                        color: "#cbcbcb"
+                        text: {
+                            if(printPage.startPrintTopLidOpen) {
+                                "Put the top lid back on the printer to start the print."
+                            }
+                            else if(printPage.startPrintBuildDoorOpen) {
+                                "Close the build chamber door to start the print."
+                            }
+                            else if(printPage.startPrintWithUnknownMaterials) {
+                                "Be sure <b>" +
+                                 printPage.print_model_material.toUpperCase() +
+                                 "</b> is in <b>Model Extruder 1</b>" +
+                                 ((printPage.print_support_material != "") ?
+                                            " and <b>" + printPage.print_support_material.toUpperCase() + "</b> is in <b>Support Extruder 2</b>." :
+                                            ".") +
+                                  "\nThis printer is optimized for genuine MakerBot materials."
+                            }
+                            else if(printPage.print_support_material == "" &&
+                                    materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material) {
+                                "This print requires <b>" +
+                                printPage.print_model_material.toUpperCase() +
+                                "</b> in <b>Model Extruder 1</b>." +
+                                "\nLoad the correct material to start the print or export the file again with these material settings."
+                            }
+                            else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
+                                    materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                "This print requires <b>" +
+                                printPage.print_model_material.toUpperCase() +
+                                "</b> in <b>Model Extruder 1</b> and <b>" +
+                                printPage.print_support_material.toUpperCase() +
+                                "</b> in <b>Support Extruder 2</b>.\nLoad the correct materials to start the print or export the file again with these material settings."
+                            }
+                        }
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 20
+                        lineHeight: 1.35
                     }
                 }
             }

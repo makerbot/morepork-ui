@@ -69,7 +69,7 @@ Item {
                 id: columnLayout_page0
                 width: 400
                 height: bot.process.stateType == ProcessStateType.Completed ? 245 :
-                            bot.process.stateType == ProcessStateType.Failed ? 210 : 100
+                            bot.process.stateType == ProcessStateType.Failed ? 210 : 110
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -98,14 +98,21 @@ Item {
                             "PAUSED"
                             break;
                         case ProcessStateType.Completed:
-                            "PRINT COMPLETE"
+                            fileName_
                             break;
                         case ProcessStateType.Failed:
                             "PRINT FAILED"
                             break;
                         case ProcessStateType.Cancelling:
-                        case ProcessStateType.CleaningUp:
                             "CANCELLING"
+                            break;
+                        case ProcessStateType.CleaningUp:
+                            if(timeLeftString == "0M") {
+                                "FINISHING UP"
+                            }
+                            else {
+                                "CANCELLING"
+                            }
                             break;
                         default:
                             ""
@@ -126,8 +133,12 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            bot.extruderATargetTemp > 0 ? "HEATING UP EXTRUDER..." :
-                                                          "HEATING UP CHAMBER..."
+                            (bot.process.stepStr == "transfer" ||
+                             bot.process.stepStr == "waiting_for_file") ?
+                                        ("TRANSFERRING PRINT FILE") :
+                                        (bot.extruderATargetTemp > 0 ?
+                                            "HEATING UP EXTRUDER..." :
+                                            "HEATING UP CHAMBER...")
                             break;
                         case ProcessStateType.Printing:
                             fileName_
@@ -168,18 +179,28 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            bot.extruderATargetTemp > 0 ?
-                                (bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C") :
-                                (bot.chamberCurrentTemp + " C" + " | " + bot.chamberTargetTemp + " C")
+                            (bot.process.stepStr == "transfer" ||
+                             bot.process.stepStr == "waiting_for_file") ?
+                                (bot.process.printPercentage + "%") :
+                                (bot.extruderATargetTemp > 0 ?
+                                    (bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C\n" +
+                                     bot.extruderBCurrentTemp + " C" + " | " + bot.extruderBTargetTemp + " C") :
+                                    (bot.chamberCurrentTemp + " C" + " | " + bot.chamberTargetTemp + " C"))
                             break;
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
-                        case ProcessStateType.Paused:
-                            timeLeftString + " REMAINING"
+                        case ProcessStateType.Paused: {
+                            timeLeftString == "0M" ?
+                                        "FINISHING UP" :
+                                        timeLeftString + " REMAINING"
+                        }
                             break;
                         case ProcessStateType.Failed:
                             print_time_ + " PRINT TIME"
+                            break;
+                        case ProcessStateType.Completed:
+                            "PRINT COMPLETE"
                             break;
                         default:
                             ""
@@ -192,6 +213,7 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Light
                     font.pixelSize: 18
+                    lineHeight: 1.35
                 }
 
                 RoundedButton {

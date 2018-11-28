@@ -1,7 +1,8 @@
-import QtQuick 2.7
+import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     property alias mainMenuIcon_info: mainMenuIcon_info
@@ -19,7 +20,37 @@ Item {
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/print_icon.png"
         imageVisible: !(bot.process.type == ProcessType.Print)
-        textIconDesc.text: "PRINT"
+        textIconDesc.text: {
+            if(bot.process.type == ProcessType.Print) {
+                switch(bot.process.stateType) {
+                case ProcessStateType.Loading:
+                case ProcessStateType.Printing:
+                    "PRINTING"
+                    break;
+                case ProcessStateType.Pausing:
+                    "PAUSING"
+                    break;
+                case ProcessStateType.Paused:
+                    "PAUSED"
+                    break;
+                case ProcessStateType.Resuming:
+                    "RESUMING"
+                    break;
+                case ProcessStateType.Completed:
+                    "PRINT COMPLETE"
+                    break;
+                case ProcessStateType.Failed:
+                    "PRINT FAILED"
+                    break;
+                default:
+                    "PRINT"
+                    break;
+                }
+            }
+            else {
+                "PRINT"
+            }
+        }
 
         PrintIcon {
             smooth: false
@@ -130,5 +161,6 @@ Item {
         anchors.horizontalCenter: mainMenuIcon_settings.horizontalCenter
         image.source: "qrc:/img/preheat_icon.png"
         textIconDesc.text: "PREHEAT"
+        isDisabled: !bot.process.type == ProcessType.None
     }
 }

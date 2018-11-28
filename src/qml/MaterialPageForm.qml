@@ -24,9 +24,10 @@ Item {
     property alias attach_extruder_mouseArea_no_extruder_popup: attach_extruder_mouseArea_no_extruder_popup
     property alias cancel_mouseArea_no_extruder_popup: cancel_mouseArea_no_extruder_popup
 
-    property alias unknownMaterialWarningPopup: unknownMaterialWarningPopup
-    property alias acknowledge_unk_mat_loading_mouseArea: acknowledge_unk_mat_loading_mouseArea
-    property alias cancel_unk_mat_loading_mouseArea: cancel_unk_mat_loading_mouseArea
+    property alias materialWarningPopup: materialWarningPopup
+    property alias acknowledge_unk_mat_loading_mouseArea: acknowledge_mat_warning_mouseArea
+    property alias cancel_unk_mat_loading_mouseArea: cancel_mat_warning_mouseArea
+    property alias ok_unk_mat_loading_mouseArea: ok_mat_warning_mouseArea
 
     property alias materialPageDrawer: materialPageDrawer
     property bool isLoadFilament: false
@@ -38,6 +39,8 @@ Item {
     property alias closeWaitUntilUnloadedPopup: closeWaitUntilUnloadedPopup
     property bool isTopLoading: bot.topLoadingWarning
     property bool isSpoolValidityCheckPending: bot.spoolValidityCheckPending
+
+    property bool isMaterialMismatch: false
 
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess && !startLoadUnloadFromUI){
@@ -67,10 +70,13 @@ Item {
 
     onIsTopLoadingChanged: {
         if(isTopLoading) {
-            unknownMaterialWarningPopup.open()
+            if(cancelLoadUnloadPopup.opened) {
+                cancelLoadUnloadPopup.close()
+            }
+            materialWarningPopup.open()
         }
         else {
-            unknownMaterialWarningPopup.close()
+            materialWarningPopup.close()
         }
     }
 
@@ -79,7 +85,7 @@ Item {
             checkSpoolValidityTimer.start()
         }
         else {
-            unknownMaterialWarningPopup.close()
+            materialWarningPopup.close()
         }
     }
 
@@ -97,13 +103,33 @@ Item {
         if(bot.process.type == ProcessType.Load) {
             // if material is valid immediately acknowledge and
             // continue with loading material
-            if(loadUnloadFilamentProcess.isMaterialValid) {
+            if(loadUnloadFilamentProcess.materialValidityCheck()) {
                 bot.acknowledgeMaterial(true)
             }
             // if material not valid open popup
             else {
-                unknownMaterialWarningPopup.open()
+                materialWarningPopup.open()
             }
+        }
+    }
+
+    onIsMaterialMismatchChanged: {
+        if(isMaterialMismatch) {
+            if(bot.process.type == ProcessType.Load) {
+                bot.acknowledgeMaterial(false)
+                bot.cancel()
+                materialChangeCancelled = true
+                loadUnloadFilamentProcess.state = "base state"
+            }
+            else if(printPage.isPrintProcess) {
+                if(bot.process.stateType == ProcessStateType.Preheating) {
+                    bot.loadFilamentStop()
+                }
+            }
+            if(cancelLoadUnloadPopup.opened) {
+                cancelLoadUnloadPopup.close()
+            }
+            materialWarningPopup.open()
         }
     }
 
@@ -112,8 +138,13 @@ Item {
             cancelLoadUnloadPopup.open()
         }
         else if(bot.process.type == ProcessType.Unload) {
-            waitUntilUnloadedPopup.open()
-            closeWaitUntilUnloadedPopup.start()
+            if(bot.process.isProcessCancellable) {
+                cancelLoadUnloadPopup.open()
+            }
+            else {
+                waitUntilUnloadedPopup.open()
+                closeWaitUntilUnloadedPopup.start()
+            }
         }
         else if(printPage.isPrintProcess) {
             // If load/unload completed successfully and the user wants
@@ -223,14 +254,14 @@ Item {
                                     bot.filamentBayBFilamentPresent
 
                 // Check if user feeds filament into bay slot while
-                // kaiten is waiting for 'continue_loading' process
+                // kaiten is waiting for 'acknowledge_material' process
                 // method to proceed and display material warning popup
                 // in that case.
                 onBayFilamentSwitchChanged: {
                     if(bot.process.type == ProcessType.Load &&
                        bayFilamentSwitch &&
                        isSpoolValidityCheckPending) {
-                        unknownMaterialWarningPopup.open()
+                        materialWarningPopup.open()
                     }
                 }
 
@@ -434,7 +465,7 @@ Item {
     }
 
     Popup {
-        id: unknownMaterialWarningPopup
+        id: materialWarningPopup
         width: 800
         height: 480
         modal: true
@@ -443,7 +474,7 @@ Item {
         parent: overlay
         closePolicy: Popup.CloseOnPressOutside
         background: Rectangle {
-            id: popupBackgroundDim_unk_mat_popup
+            id: popupBackgroundDim_mat_warning_popup
             color: "#000000"
             rotation: rootItem.rotation == 180 ? 180 : 0
             opacity: 0.5
@@ -457,19 +488,19 @@ Item {
         }
 
         Rectangle {
-            id: basePopupItem_unk_mat_popup
+            id: basePopupItem_mat_warning_popup
             color: "#000000"
             rotation: rootItem.rotation == 180 ? 180 : 0
             width: 720
-            height: 325
-            radius: 2
+            height: isMaterialMismatch ? 250 : 275
+            radius: 10
             border.width: 2
             border.color: "#ffffff"
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
 
             Rectangle {
-                id: horizontal_divider_unk_mat_popup
+                id: horizontal_divider_mat_warning_popup
                 width: 720
                 height: 2
                 color: "#ffffff"
@@ -478,7 +509,7 @@ Item {
             }
 
             Rectangle {
-                id: vertical_divider_unk_mat_popup
+                id: vertical_divider_mat_warning_popup
                 x: 359
                 y: 328
                 width: 2
@@ -488,26 +519,67 @@ Item {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
                 anchors.horizontalCenter: parent.horizontalCenter
+                visible: !isMaterialMismatch
             }
 
             Item {
-                id: buttonBar_unk_mat_popup
+                id: buttonBar_mat_warning_popup
                 width: 720
                 height: 72
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
 
                 Rectangle {
-                    id: acknowledge_rectangle_unk_mat_popup
+                    id: ok_rectangle_mat_warning_popup
+                    x: 0
+                    y: 0
+                    width: 720
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+                    visible: isMaterialMismatch
+
+                    Text {
+                        id: ok_text_mat_warning_popup
+                        color: "#ffffff"
+                        text: "OK"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: ok_mat_warning_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            ok_text_mat_warning_popup.color = "#000000"
+                            ok_rectangle_mat_warning_popup.color = "#ffffff"
+                        }
+                        onReleased: {
+                            ok_text_mat_warning_popup.color = "#ffffff"
+                            ok_rectangle_mat_warning_popup.color = "#00000000"
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: acknowledge_rectangle_mat_warning_popup
                     x: 0
                     y: 0
                     width: 360
                     height: 72
                     color: "#00000000"
                     radius: 10
+                    visible: !isMaterialMismatch
 
                     Text {
-                        id: acknowledge_text_unk_mat_popup
+                        id: acknowledge_text_mat_warning_popup
                         color: "#ffffff"
                         text: "ACKNOWLEDGE"
                         Layout.fillHeight: false
@@ -522,30 +594,31 @@ Item {
                     }
 
                     MouseArea {
-                        id: acknowledge_unk_mat_loading_mouseArea
+                        id: acknowledge_mat_warning_mouseArea
                         anchors.fill: parent
                         onPressed: {
-                            acknowledge_text_unk_mat_popup.color = "#000000"
-                            acknowledge_rectangle_unk_mat_popup.color = "#ffffff"
+                            acknowledge_text_mat_warning_popup.color = "#000000"
+                            acknowledge_rectangle_mat_warning_popup.color = "#ffffff"
                         }
                         onReleased: {
-                            acknowledge_text_unk_mat_popup.color = "#ffffff"
-                            acknowledge_rectangle_unk_mat_popup.color = "#00000000"
+                            acknowledge_text_mat_warning_popup.color = "#ffffff"
+                            acknowledge_rectangle_mat_warning_popup.color = "#00000000"
                         }
                     }
                 }
 
                 Rectangle {
-                    id: cancel_rectangle_unk_mat_popup
+                    id: cancel_rectangle_mat_warning_popup
                     x: 360
                     y: 0
                     width: 360
                     height: 72
                     color: "#00000000"
                     radius: 10
+                    visible: !isMaterialMismatch
 
                     Text {
-                        id: cancel_text_unk_mat_popup
+                        id: cancel_text_mat_warning_popup
                         color: "#ffffff"
                         text: "CANCEL LOADING"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -558,32 +631,32 @@ Item {
                     }
 
                     MouseArea {
-                        id: cancel_unk_mat_loading_mouseArea
+                        id: cancel_mat_warning_mouseArea
                         anchors.fill: parent
                         onPressed: {
-                            cancel_text_unk_mat_popup.color = "#000000"
-                            cancel_rectangle_unk_mat_popup.color = "#ffffff"
+                            cancel_text_mat_warning_popup.color = "#000000"
+                            cancel_rectangle_mat_warning_popup.color = "#ffffff"
                         }
                         onReleased: {
-                            cancel_text_unk_mat_popup.color = "#ffffff"
-                            cancel_rectangle_unk_mat_popup.color = "#00000000"
+                            cancel_text_mat_warning_popup.color = "#ffffff"
+                            cancel_rectangle_mat_warning_popup.color = "#00000000"
                         }
                     }
                 }
             }
 
             ColumnLayout {
-                id: columnLayout_unk_mat_popup
+                id: columnLayout_mat_warning_popup
                 width: 680
-                height: 200
+                height: isMaterialMismatch ? 135 : 160
                 anchors.top: parent.top
-                anchors.topMargin: 25
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
-                    id: title_text_unk_mat_popup
+                    id: title_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: "MAKERBOT PRECISION MATERIALS"
+                    text: isMaterialMismatch ? "MATERIAL MISMATCH" : "WARRANTY WARNING"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -592,9 +665,9 @@ Item {
                 }
 
                 Text {
-                    id: description_text_unk_mat_popup
+                    id: description_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: "No material information detected. Contact support if a MakerBot Smart Spool is not being recognized by the printer. MakerBot materials are tested and optimized for MakerBot 3D printers. Use of third-party materials may void your warranty."
+                    text: isMaterialMismatch ? "Currently only Model material is supported in Bay 1 and Support material in Bay 2" : "Use of third-party materials may void your warranty.\nFor additional information, please visit\nMakerBot.com/legal/warranty"
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -602,7 +675,7 @@ Item {
                     wrapMode: Text.WordWrap
                     font.family: "Antennae"
                     font.pixelSize: 20
-                    lineHeight: 1.3
+                    lineHeight: 1.4
                 }
             }
         }

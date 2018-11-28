@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
@@ -91,9 +91,7 @@ SettingsPageForm {
     }
 
     buttonResetToFactory.onClicked: {
-        if(bot.process.type == ProcessType.None) {
-            resetFactoryConfirmPopup.open()
-        }
+        resetFactoryConfirmPopup.open()
     }
 
     buttonEnglish.onClicked: {

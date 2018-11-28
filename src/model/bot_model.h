@@ -54,6 +54,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
     Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
+    Q_INVOKABLE virtual void acknowledgeSafeToRemoveUsb();
 
   private:
     Q_OBJECT
@@ -95,6 +96,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, topLoadingWarning, false)
     MODEL_PROP(bool, spoolValidityCheckPending, false)
     MODEL_PROP(QString, unknownMaterialWarningType, "None")
+    MODEL_PROP(bool, safeToRemoveUsb, false)
+    MODEL_PROP(bool, doorLidErrorDisabled, false)
 
     MODEL_PROP(int, spoolAOriginalAmount, 0)
     MODEL_PROP(int, spoolBOriginalAmount, 0)

@@ -115,12 +115,13 @@ Drawer {
 
             MoreporkButton {
                 id: buttonChangeFilament
-                buttonText.text: qsTr("CHANGE FILAMENT") + cpUiTr.emptyStr
+                buttonText.text: qsTr("CHANGE MATERIAL") + cpUiTr.emptyStr
                 buttonImage.source: "qrc:/img/change_filament.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
                 height: 80
-                disableButton: bot.process.stateType != ProcessStateType.Paused
+                disableButton: !(bot.process.stateType == ProcessStateType.Printing ||
+                               bot.process.stateType == ProcessStateType.Paused)
             }
 
             Rectangle {

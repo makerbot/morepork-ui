@@ -1,10 +1,12 @@
 import QtQuick 2.10
+import ProcessTypeEnum 1.0
 
 FirmwareUpdatePageForm {
     button1.button_mouseArea.onClicked: {
         switch(state) {
-        case "firmware_update_available":
+        case "firmware_update_available": {
             bot.installFirmware()
+        }
             break;
         case "no_firmware_update_available":
             if(!inFreStep) {

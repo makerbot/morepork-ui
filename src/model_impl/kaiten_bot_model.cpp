@@ -24,6 +24,7 @@ class KaitenBotModel : public BotModel {
     void firmwareUpdateNotif(const Json::Value & firmware_info);
     void printFileValidNotif(const Json::Value &info);
     void unknownMatWarningUpdate(const Json::Value &params);
+    void usbCopyCompleteUpdate();
     void assistedLevelUpdate(const Json::Value & status);
     void queryStatusUpdate(const Json::Value & info);
     void wifiUpdate(const Json::Value & result);
@@ -58,6 +59,7 @@ class KaitenBotModel : public BotModel {
     void forceSyncFile(QString path);
     void changeMachineName(QString new_name);
     void acknowledgeMaterial(bool response);
+    void acknowledgeSafeToRemoveUsb();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -253,6 +255,17 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<UnknownMaterialNotification> m_matWarningNot;
 
+    class UsbCopyCompleteNotification : public JsonRpcNotification {
+      public:
+        UsbCopyCompleteNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) {
+            m_bot->usbCopyCompleteUpdate();
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<UsbCopyCompleteNotification> m_usbCopyCompleteNot;
+
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -286,7 +299,7 @@ void KaitenBotModel::unknownMatWarningUpdate(const Json::Value &request){
 
 void KaitenBotModel::acknowledgeMaterial(bool response){
     topLoadingWarningReset();
-    spoolValidityCheckPendingSet(false);
+    spoolValidityCheckPendingReset();
     if(response) {
         try{
             qDebug() << FL_STRM << "called";
@@ -299,6 +312,14 @@ void KaitenBotModel::acknowledgeMaterial(bool response){
             qWarning() << FFL_STRM << e.what();
         }
     }
+}
+
+void KaitenBotModel::usbCopyCompleteUpdate(){
+    safeToRemoveUsbSet(true);
+}
+
+void KaitenBotModel::acknowledgeSafeToRemoveUsb() {
+    safeToRemoveUsbReset();
 }
 
 void KaitenBotModel::cancel(){
@@ -699,7 +720,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
                               new SpoolInfoCallback(this, 0)),
                       std::shared_ptr<SpoolInfoCallback>(
                               new SpoolInfoCallback(this, 1))},
-        m_matWarningNot(new UnknownMaterialNotification(this)) {
+        m_matWarningNot(new UnknownMaterialNotification(this)),
+        m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -713,6 +735,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("print_file_valid", m_prtFileVld);
     conn->jsonrpc.addMethod("assisted_level_status", m_asstLvlNot);
     conn->jsonrpc.addMethod("material_warning", m_matWarningNot);
+    conn->jsonrpc.addMethod("usb_copy_complete", m_usbCopyCompleteNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -797,24 +820,38 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           }
         }
       }
-    }
+      // Update disabled errors (door or lid for now) for the UI
+      // to not complain before starting a print
+      const Json::Value &kDisabledErrors = info["disabled_errors"];
+      if(kDisabledErrors.isArray() && kDisabledErrors.size() > 0){
+        for(const Json::Value error : kDisabledErrors){
+          if(error.asString() == "door_interlock_triggered" ||
+             error.asString() == "lid_interlock_triggered"){
+            doorLidErrorDisabledSet(true);
+          }
+        }
+      }
+      else {
+        doorLidErrorDisabledReset();
+      }
 
-    // TODO(chris): This bit is a mess...
-    const Json::Value & version_dict = info["firmware_version"];
-    const Json::Value & version_major = version_dict["major"];
-    const Json::Value & version_minor = version_dict["minor"];
-    const Json::Value & version_bugfix = version_dict["bugfix"];
-    const Json::Value & version_build = version_dict["build"];
-    if (version_major.isInt() && version_minor.isInt() &&
-            version_bugfix.isInt() && version_build.isInt()) {
-        std::stringstream version;
-        version << version_major.asInt() << "."
-                << version_minor.asInt() << "."
-                << version_bugfix.asInt() << "."
-                << version_build.asInt();
-        versionSet(version.str().c_str());
-    } else {
-        versionReset();
+      // TODO(chris): This bit is a mess...
+      const Json::Value & version_dict = info["firmware_version"];
+      const Json::Value & version_major = version_dict["major"];
+      const Json::Value & version_minor = version_dict["minor"];
+      const Json::Value & version_bugfix = version_dict["bugfix"];
+      const Json::Value & version_build = version_dict["build"];
+      if (version_major.isInt() && version_minor.isInt() &&
+              version_bugfix.isInt() && version_build.isInt()) {
+          std::stringstream version;
+          version << version_major.asInt() << "."
+                  << version_minor.asInt() << "."
+                  << version_bugfix.asInt() << "."
+                  << version_build.asInt();
+          versionSet(version.str().c_str());
+      } else {
+          versionReset();
+      }
     }
 }
 
