@@ -209,6 +209,7 @@ Item {
                 passwordField.clear()
                 showPassword.checked = false
                 signInSwipeView.swipeToItem(1)
+                usernameTextField.forceActiveFocus()
             }
 
             Item {
@@ -283,6 +284,7 @@ Item {
                     CheckBox {
                         id: showPassword
                         checked: false
+                        onPressed: passwordField.forceActiveFocus()
                     }
 
                     Text {

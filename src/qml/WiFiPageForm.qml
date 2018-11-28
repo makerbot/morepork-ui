@@ -229,6 +229,7 @@ Item {
                             }
                             else if(!selectedWifiSaved) {
                                 wifiSwipeView.swipeToItem(1)
+                                passwordField.forceActiveFocus()
                             }
                         }
                     }
@@ -344,6 +345,7 @@ Item {
                     CheckBox {
                         id: showPassword
                         checked: false
+                        onPressed: passwordField.forceActiveFocus()
                         indicator: Rectangle {
                                 implicitWidth: 26
                                 implicitHeight: 26

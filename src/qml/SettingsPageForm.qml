@@ -243,7 +243,7 @@ Item {
                         id: buttonResetToFactory
                         buttonImage.anchors.leftMargin: 30
                         buttonImage.source: "qrc:/img/alert.png"
-                        buttonText.text: "RESET TO FACTORY"
+                        buttonText.text: "RESTORE FACTORY SETTINGS"
                         enabled: !isProcessRunning()
                     }
 
@@ -680,7 +680,7 @@ Item {
                     Text {
                         id: yes_text
                         color: "#ffffff"
-                        text: "YES"
+                        text: "RESET TO FACTORY"
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -722,7 +722,7 @@ Item {
                     Text {
                         id: no_text
                         color: "#ffffff"
-                        text: "NO"
+                        text: "CANCEL"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -781,7 +781,7 @@ Item {
                 Text {
                     id: description_text
                     color: "#cbcbcb"
-                    text: hasReset ? "" : isResetting ? "Please wait." : "Are you sure?"
+                    text: hasReset ? "" : isResetting ? "Please wait." : "This will erase all history, preferences and account information."
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
@@ -803,24 +803,25 @@ Item {
                         id: clearCalibrationSettings
                         checked: false
                         visible: !isResetting && !hasReset
-                        indicator: Rectangle {
-                                implicitWidth: 26
-                                implicitHeight: 26
-                                x: clearCalibrationSettings.leftPadding
-                                y: parent.height / 2 - height / 2
-                                radius: 3
-                                border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
+                        indicator:
+                        Rectangle {
+                            implicitWidth: 26
+                            implicitHeight: 26
+                            x: clearCalibrationSettings.leftPadding
+                            y: parent.height / 2 - height / 2
+                            radius: 3
+                            border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
 
-                                Rectangle {
-                                    width: 14
-                                    height: 14
-                                    x: 6
-                                    y: 6
-                                    radius: 2
-                                    color: clearCalibrationSettings.down ? otherBlue : lightBlue
-                                    visible: clearCalibrationSettings.checked
-                                }
+                            Rectangle {
+                                width: 14
+                                height: 14
+                                x: 6
+                                y: 6
+                                radius: 2
+                                color: clearCalibrationSettings.down ? otherBlue : lightBlue
+                                visible: clearCalibrationSettings.checked
                             }
+                        }
                     }
 
                     Text {
@@ -839,60 +840,59 @@ Item {
                         running: isResetting && !hasReset
                         visible: isResetting && !hasReset
 
-                        contentItem: Item {
-                                implicitWidth: 64
-                                implicitHeight: 64
+                        contentItem:
+                        Item {
+                            implicitWidth: 64
+                            implicitHeight: 64
 
-                                Item {
-                                    id: item
-                                    x: parent.width / 2 - 32
-                                    y: parent.height / 2 - 32
-                                    width: 64
-                                    height: 64
-                                    opacity: busyIndicator.running ? 1 : 0
+                            Item {
+                                id: item
+                                x: parent.width / 2 - 32
+                                y: parent.height / 2 - 32
+                                width: 64
+                                height: 64
+                                opacity: busyIndicator.running ? 1 : 0
 
-                                    Behavior on opacity {
-                                        OpacityAnimator {
-                                            duration: 250
-                                        }
+                                Behavior on opacity {
+                                    OpacityAnimator {
+                                        duration: 250
                                     }
+                                }
 
-                                    RotationAnimator {
-                                        target: item
-                                        running: busyIndicator.visible && busyIndicator.running
-                                        from: 0
-                                        to: 360
-                                        loops: Animation.Infinite
-                                        duration: 1500
-                                    }
+                                RotationAnimator {
+                                    target: item
+                                    running: busyIndicator.visible && busyIndicator.running
+                                    from: 0
+                                    to: 360
+                                    loops: Animation.Infinite
+                                    duration: 1500
+                                }
 
-                                    Repeater {
-                                        id: repeater
-                                        model: 6
+                                Repeater {
+                                    id: repeater
+                                    model: 6
 
-                                        Rectangle {
-                                            x: item.width / 2 - width / 2
-                                            y: item.height / 2 - height / 2
-                                            implicitWidth: 2
-                                            implicitHeight: 16
-                                            radius: 0
-                                            color: "#ffffff"
-                                            transform: [
-                                                Translate {
-                                                    y: -Math.min(item.width, item.height) * 0.5 + 5
-                                                },
-                                                Rotation {
-                                                    angle: index / repeater.count * 360
-                                                    origin.x: 1
-                                                    origin.y: 8
-                                                }
-                                            ]
-                                        }
+                                    Rectangle {
+                                        x: item.width / 2 - width / 2
+                                        y: item.height / 2 - height / 2
+                                        implicitWidth: 2
+                                        implicitHeight: 16
+                                        radius: 0
+                                        color: "#ffffff"
+                                        transform: [
+                                            Translate {
+                                                y: -Math.min(item.width, item.height) * 0.5 + 5
+                                            },
+                                            Rotation {
+                                                angle: index / repeater.count * 360
+                                                origin.x: 1
+                                                origin.y: 8
+                                            }
+                                        ]
                                     }
                                 }
                             }
-
-
+                        }
                     }
                 }
             }

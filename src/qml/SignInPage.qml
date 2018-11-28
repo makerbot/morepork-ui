@@ -62,7 +62,8 @@ SignInPageForm {
 
     addAccountButton {
         button_mouseArea.onClicked: {
-            signInSwipeView.swipeToItem(1);
+            signInSwipeView.swipeToItem(1)
+            usernameTextField.forceActiveFocus()
         }
     }
 
@@ -74,8 +75,9 @@ SignInPageForm {
 
     enteredUsernameButton {
         button_mouseArea.onClicked: {
-            username = usernameTextField.text;
-            signInSwipeView.swipeToItem(2);
+            username = usernameTextField.text
+            signInSwipeView.swipeToItem(2)
+            passwordField.forceActiveFocus()
         }
     }
 

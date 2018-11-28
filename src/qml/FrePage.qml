@@ -40,6 +40,7 @@ FrePageForm {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)
                 settingsPage.settingsSwipeView.swipeToItem(10)
+                settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "log_in") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)

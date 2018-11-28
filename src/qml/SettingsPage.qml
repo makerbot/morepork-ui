@@ -54,6 +54,7 @@ SettingsPageForm {
 
     buttonPrinterName.onClicked: {
         settingsSwipeView.swipeToItem(10)
+        namePrinter.nameField.forceActiveFocus()
     }
 
     buttonCopyLogs.onClicked: {

@@ -10,6 +10,7 @@ Item {
     antialiasing: false
     property alias defaultItem: itemNamePrinter
     property alias namePrinterSwipeView: namePrinterSwipeView
+    property alias nameField: nameField
 
     SwipeView {
         id: namePrinterSwipeView
@@ -17,15 +18,6 @@ Item {
         currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         interactive: false
-
-        onCurrentIndexChanged: {
-            if(currentIndex == 0) {
-                if(settingsSwipeView.currentIndex == 10) {
-                    nameField.
-                    nameField.forceActiveFocus()
-                }
-            }
-        }
 
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = namePrinterSwipeView.currentIndex
@@ -93,6 +85,7 @@ Item {
                     font.pointSize: 14
                     placeholderText: "My Method Printer"
                     echoMode: TextField.Normal
+                    focus: true
                 }
 
                 RoundedButton {
@@ -117,7 +110,7 @@ Item {
                 antialiasing: false
                 visible: Qt.inputMethod.visible
                 x: -30
-                y: parent.height - inputPanel.height
+                y: parent.height - inputPanel.height + 22
                 width: 860
                 height: inputPanel.height
                 InputPanel {
@@ -126,7 +119,6 @@ Item {
                     antialiasing: false
                     smooth: false
                     anchors.fill: parent
-                    active: true
                 }
             }
         }
@@ -136,8 +128,14 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: namePrinterSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                namePrinterSwipeView.swipeToItem(0)
+                namePrinter.nameField.forceActiveFocus()
+            }
 
             Image {
                 id: name_printer_image
@@ -213,8 +211,6 @@ Item {
                     }
                 }
             }
-
-
         }
     }
 }
