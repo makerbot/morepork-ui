@@ -24,7 +24,12 @@ FrePageForm {
             if(state == "wifi_setup") {
                 if(bot.net.interface == "ethernet" ||
                    bot.net.interface == "wifi") {
-                    fre.gotoNextStep(currentFreStep)
+                    if(isfirmwareUpdateAvailable) {
+                        fre.gotoNextStep(currentFreStep)
+                    }
+                    else {
+                        fre.setFreStep(FreStep.NamePrinter)
+                    }
                 }
                 else {
                     inFreStep = true
@@ -66,7 +71,17 @@ FrePageForm {
                 fre.setFreStep(FreStep.FreComplete)
             } else {
                 // At base state screen
-                fre.gotoNextStep(currentFreStep)
+                if(bot.net.interface != "ethernet" &&
+                   bot.net.interface != "wifi") {
+                    // Goto Wifi Setup step
+                    fre.gotoNextStep(currentFreStep)
+                }
+                else if(isfirmwareUpdateAvailable) {
+                    fre.setFreStep(FreStep.SoftwareUpdate)
+                }
+                else {
+                    fre.setFreStep(FreStep.NamePrinter)
+                }
             }
         }
     }

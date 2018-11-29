@@ -35,6 +35,10 @@ ApplicationWindow {
     onConnectionStateChanged: {
         if(connectionState == ConnectionState.Connected) {
             fre.initialize()
+            if(bot.net.interface == "ethernet" ||
+               bot.net.interface == "wifi") {
+                bot.firmwareUpdateCheck(false)
+            }
         }
     }
 

@@ -630,7 +630,7 @@ Item {
 
                 label: {
                     if(bayID == 1 && inFreStep) {
-                        "NEXT: Load Support Material"
+                        "NEXT: LOAD SUPPORT MATERIAL"
                     } else {
                         "DONE"
                     }

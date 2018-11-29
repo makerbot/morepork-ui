@@ -44,9 +44,12 @@ Rectangle {
 
     MouseArea {
         id: button_mouseArea
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        width: parent.width
+        height: parent.height + 30
         smooth: false
         antialiasing: false
-        anchors.fill: parent
         preventStealing: true
         enabled: !disable_button
     }
