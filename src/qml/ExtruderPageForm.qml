@@ -298,8 +298,8 @@ Item {
                                     if(mainSwipeView.currentIndex != 3) {
                                         mainSwipeView.swipeToItem(3)
                                     }
-                                    if(settingsPage.settingsSwipeView.currentIndex != 4) {
-                                        settingsPage.settingsSwipeView.swipeToItem(4)
+                                    if(settingsPage.settingsSwipeView.currentIndex != 6) {
+                                        settingsPage.settingsSwipeView.swipeToItem(6)
                                     }
                                 }
                                 else {

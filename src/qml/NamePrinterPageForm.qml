@@ -23,7 +23,11 @@ Item {
             var prevIndex = namePrinterSwipeView.currentIndex
             namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             if(itemToDisplayDefaultIndex == 0) {
-                setCurrentItem(settingsSwipeView.itemAt(10))
+                // When we swipe to the 0th index of this page set
+                // the current item as the settings page item that
+                // holds this page since we want the back button to
+                // use the settings items altBack()
+                setCurrentItem(settingsSwipeView.itemAt(2))
             } else {
                 setCurrentItem(namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex))
             }
@@ -119,6 +123,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     anchors.fill: parent
+                    active: true
                 }
             }
         }

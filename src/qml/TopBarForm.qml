@@ -222,23 +222,43 @@ Item {
                         break;
                     case 3:
                         switch(settingsPage.settingsSwipeView.currentIndex) {
+                        case 1:
+                            bot.name + " INFO"
+                            break;
                         case 2:
-                            "ASSISTED LEVELING"
+                            "CHANGE PRINTER NAME"
                             break;
-                        case 4:
-                            "CALIBRATION"
-                            break;
-                        case 5:
+                        case 3:
                             "CHOOSE WIFI NETWORK"
                             break;
+                        case 4:
+                            "AUTHORIZE MAKERBOT ACCOUNT"
+                            break;
+                        case 5:
+                            "SOFTWARE UPDATE"
+                            break;
                         case 6:
-                            bot.name + " ADVANCED INFO"
+                            "CALIBRATE EXTRUDERS"
                             break;
                         case 7:
-                            "SIGN-IN TO MAKERBOT ACCOUNT"
+                            "TIME AND DATE"
                             break;
-                        case 10:
-                            "PRINTER NAME"
+                        case 8:
+                            switch(settingsPage.advancedSettingsPage.
+                                   advancedSettingsSwipeView.currentIndex) {
+                            case 1:
+                                bot.name + " SENSOR INFO"
+                                break;
+                            case 2:
+                                "PREHEAT"
+                                break;
+                            case 3:
+                                "ASSISTED LEVELING"
+                                break;
+                            default:
+                                "ADVANCED"
+                                break;
+                            }
                             break;
                         default:
                             "SETTINGS"
@@ -252,7 +272,7 @@ Item {
                         "MATERIAL"
                         break;
                     case 6:
-                        "PREHEAT"
+                        "ADVANCED"
                         break;
                     default:
                         bot.name

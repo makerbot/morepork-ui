@@ -51,7 +51,7 @@ Item {
 
     Timer {
         id: wifiFreStepComplete
-        interval: 1000
+        interval: 2000
         onTriggered: {
             settingsPage.settingsSwipeView.swipeToItem(0)
             mainSwipeView.swipeToItem(0)

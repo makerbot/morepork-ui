@@ -35,21 +35,23 @@ FrePageForm {
                     inFreStep = true
                     bot.toggleWifi(true)
                     mainSwipeView.swipeToItem(3)
-                    settingsPage.settingsSwipeView.swipeToItem(5)
+                    settingsPage.settingsSwipeView.swipeToItem(3)
                 }
             } else if(state == "software_update") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(3)
+                settingsPage.settingsSwipeView.swipeToItem(5)
             } else if(state == "name_printer") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(10)
+                settingsPage.settingsSwipeView.swipeToItem(2)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "log_in") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(7)
+                settingsPage.settingsSwipeView.swipeToItem(4)
+                settingsPage.signInPage.signInSwipeView.swipeToItem(1)
+                settingsPage.signInPage.usernameTextField.forceActiveFocus()
             } else if(state == "attach_extruders") {
                 inFreStep = true
                 if(!bot.extruderAPresent || !bot.extruderBPresent) {
@@ -58,8 +60,7 @@ FrePageForm {
                     extruderPage.extruderSwipeView.swipeToItem(1)
                 } else {
                     mainSwipeView.swipeToItem(3)
-                    settingsPage.settingsSwipeView.swipeToItem(4)
-//                    fre.gotoNextStep(currentFreStep)
+                    settingsPage.settingsSwipeView.swipeToItem(6)
                 }
             } else if(state == "load_material") {
                 inFreStep = true

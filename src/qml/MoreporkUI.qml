@@ -334,7 +334,7 @@ ApplicationWindow {
                         mainSwipeView.swipeToItem(5)
                     }
 
-                    mainMenuIcon_preheat.mouseArea.onClicked: {
+                    mainMenuIcon_advanced.mouseArea.onClicked: {
                         mainSwipeView.swipeToItem(6)
                     }
                 }
@@ -407,13 +407,19 @@ ApplicationWindow {
             // mainSwipeView.index = 6
             Item {
                 property int defaultIndex: 6
-                property alias defaultItem: preheatPage.defaultItem
+                property alias defaultItem: advancedPage.defaultItem
+                property bool hasAltBack: true
                 smooth: false
                 visible: false
-                PreheatPage {
-                    id: preheatPage
-                    smooth: false
-                    anchors.fill: parent
+
+                function altBack() {
+                    mainSwipeView.swipeToItem(0)
+                }
+
+                AdvancedSettingsPage {
+                    id: advancedPage
+                    anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
+
                 }
             }
         }
