@@ -19,8 +19,8 @@ Item {
             if(mainSwipeView.currentIndex != 3) {
                 mainSwipeView.swipeToItem(3)
             }
-            if(settingsSwipeView.currentIndex != 3) {
-                settingsSwipeView.swipeToItem(3)
+            if(settingsSwipeView.currentIndex != 5) {
+                settingsSwipeView.swipeToItem(5)
             }
         }
     }

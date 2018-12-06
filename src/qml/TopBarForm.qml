@@ -244,8 +244,7 @@ Item {
                             "TIME AND DATE"
                             break;
                         case 8:
-                            switch(settingsPage.advancedSettingsPage.
-                                   advancedSettingsSwipeView.currentIndex) {
+                            switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
                             case 1:
                                 bot.name + " SENSOR INFO"
                                 break;
@@ -272,7 +271,20 @@ Item {
                         "MATERIAL"
                         break;
                     case 6:
-                        "ADVANCED"
+                        switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
+                        case 1:
+                            bot.name + " SENSOR INFO"
+                            break;
+                        case 2:
+                            "PREHEAT"
+                            break;
+                        case 3:
+                            "ASSISTED LEVELING"
+                            break;
+                        default:
+                            "ADVANCED"
+                            break;
+                        }
                         break;
                     default:
                         bot.name
