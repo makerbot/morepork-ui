@@ -6,7 +6,7 @@ import ProcessStateTypeEnum 1.0
 
 Item {
     property alias mainMenuIcon_info: mainMenuIcon_info
-    property alias mainMenuIcon_preheat: mainMenuIcon_preheat
+    property alias mainMenuIcon_advanced: mainMenuIcon_advanced
     property alias mainMenuIcon_material: mainMenuIcon_material
     property alias mainMenuIcon_print: mainMenuIcon_print
     property alias mainMenuIcon_extruder: mainMenuIcon_extruder
@@ -155,12 +155,11 @@ Item {
     }
 
     MainMenuIcon {
-        id: mainMenuIcon_preheat
+        id: mainMenuIcon_advanced
         y: 220
         smooth: false
         anchors.horizontalCenter: mainMenuIcon_settings.horizontalCenter
-        image.source: "qrc:/img/preheat_icon.png"
-        textIconDesc.text: "PREHEAT"
-        isDisabled: !bot.process.type == ProcessType.None
+        image.source: "qrc:/img/advanced_icon.png"
+        textIconDesc.text: "ADVANCED"
     }
 }

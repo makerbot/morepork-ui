@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.VirtualKeyboard 2.3
 import WifiStateEnum 1.0
 import WifiErrorEnum 1.0
+import FreStepEnum 1.0
 
 Item {
     width: 800
@@ -34,6 +35,7 @@ Item {
             passwordField.clear()
             if(inFreStep) {
                 wifiFreStepComplete.start()
+                bot.firmwareUpdateCheck(false)
             }
         }
         else {
@@ -49,11 +51,16 @@ Item {
 
     Timer {
         id: wifiFreStepComplete
-        interval: 500
+        interval: 2000
         onTriggered: {
             settingsPage.settingsSwipeView.swipeToItem(0)
             mainSwipeView.swipeToItem(0)
-            fre.gotoNextStep(currentFreStep)
+            if(isfirmwareUpdateAvailable) {
+                fre.gotoNextStep(currentFreStep)
+            }
+            else {
+                fre.setFreStep(FreStep.NamePrinter)
+            }
         }
     }
 
@@ -229,6 +236,7 @@ Item {
                             }
                             else if(!selectedWifiSaved) {
                                 wifiSwipeView.swipeToItem(1)
+                                passwordField.forceActiveFocus()
                             }
                         }
                     }
@@ -344,6 +352,7 @@ Item {
                     CheckBox {
                         id: showPassword
                         checked: false
+                        onPressed: passwordField.forceActiveFocus()
                         indicator: Rectangle {
                                 implicitWidth: 26
                                 implicitHeight: 26

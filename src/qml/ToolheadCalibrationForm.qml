@@ -103,7 +103,7 @@ Item {
         anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/img/calib_extruder.png"
-        visible: true
+        opacity: 1.0
 
         Item {
             id: mainItem
@@ -346,6 +346,7 @@ Item {
             PropertyChanges {
                 target: header_image
                 source: "qrc:/img/calib_remove_build_plate.png"
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -379,6 +380,7 @@ Item {
             PropertyChanges {
                 target: header_image
                 source: "qrc:/img/calib_insert_build_plate.png"
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -406,7 +408,7 @@ Item {
 
             PropertyChanges {
                 target: header_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -433,6 +435,7 @@ Item {
             PropertyChanges {
                 target: header_image
                 source: "qrc:/img/calib_successful.png"
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -466,7 +469,7 @@ Item {
 
             PropertyChanges {
                 target: header_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -480,7 +483,7 @@ Item {
 
             PropertyChanges {
                 target: header_image
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {

@@ -227,12 +227,21 @@ Item {
                                 inFreStep ? 100 : 260
                             }
                         }
-                        buttonHeight: 44
+                        buttonHeight: {
+                            if(itemAttachExtruder.extruder == 1 &&
+                               itemAttachExtruder.isAttached) {
+                                60
+                            }
+                            else if(itemAttachExtruder.extruder == 2 &&
+                                itemAttachExtruder.isAttached) {
+                                44
+                            }
+                        }
                         button_text.font.capitalization: Font.MixedCase
                         label: {
                             if(itemAttachExtruder.extruder == 1 &&
                                itemAttachExtruder.isAttached) {
-                                "NEXT: Attach Support Extruder"
+                                "NEXT: ATTACH SUPPORT EXTRUDER"
                             }
                             else if(itemAttachExtruder.extruder == 2 &&
                                 itemAttachExtruder.isAttached) {
@@ -289,8 +298,8 @@ Item {
                                     if(mainSwipeView.currentIndex != 3) {
                                         mainSwipeView.swipeToItem(3)
                                     }
-                                    if(settingsPage.settingsSwipeView.currentIndex != 4) {
-                                        settingsPage.settingsSwipeView.swipeToItem(4)
+                                    if(settingsPage.settingsSwipeView.currentIndex != 6) {
+                                        settingsPage.settingsSwipeView.swipeToItem(6)
                                     }
                                 }
                                 else {

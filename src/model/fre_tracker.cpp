@@ -117,6 +117,6 @@ void FreTracker::logFreStatus() {
 void FreTracker::acknowledgeFirstBoot() {
 // TODO(praveen): Check if the first boot file is used
 // elsewhere before deleting it
-//  remove(first_boot_path.c_str());
+    remove(first_boot_path_.c_str());
     isFirstBootSet(false);
 }

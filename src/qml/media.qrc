@@ -6,7 +6,7 @@
         <file alias="settings_icon.png">images/settings_icon.png</file>
         <file alias="info_icon.png">images/info_icon.png</file>
         <file alias="material_icon.png">images/material_icon.png</file>
-        <file alias="preheat_icon.png">images/preheat_icon.png</file>
+        <file alias="advanced_icon.png">images/advanced_icon.png</file>
       	<file alias="cancel.png">images/cancel.png</file>
         <file alias="check_mark.png">images/check_mark.png</file>
         <file alias="loading_rings.png">images/loading_rings.png</file>
@@ -73,11 +73,17 @@
 	<file alias="build_plate_leveled.png">images/ast_lvl_build_plate_leveled.png</file>
 	<file alias="refresh.png">images/refresh.png</file>
 	<file alias="refresh_black.png">images/refresh_black.png</file>
+	<file alias="icon_printer_info.png">images/icon_printer_info.png</file>
 	<file alias="icon_advanced_info.png">images/icon_advanced_info.png</file>
 	<file alias="icon_assisted_leveling.png">images/icon_assisted_leveling.png</file>
 	<file alias="icon_calibrate_toolhead.png">images/icon_calibrate_toolhead.png</file>
 	<file alias="icon_change_language.png">images/icon_change_language.png</file>
 	<file alias="icon_software_update.png">images/icon_software_update.png</file>
+	<file alias="icon_time_and_date.png">images/icon_time_and_date.png</file>
+	<file alias="icon_deauthorize_accounts.png">images/icon_deauthorize_accounts.png</file>
+	<file alias="icon_preheat.png">images/icon_preheat.png</file>
+	<file alias="icon_name_printer.png">images/icon_name_printer.png</file>
+	<file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
 	<file alias="calib_extruder.png">images/calib_extruder.png</file>
 	<file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
 	<file alias="calib_remove_build_plate.png">images/calib_remove_build_plate.png</file>
@@ -97,7 +103,7 @@
 	<file alias="attach_extruder_2.gif">images/attach_extruder_2.gif</file>
 	<file alias="file_no_preview.png">images/file_no_preview.png</file>
 	<file alias="remove_top_lid.gif">images/remove_top_lid.gif</file>
-	<file alias="makerbot_startup_logo.png">images/makerbot_startup_logo.png</file>
+	<file alias="makerbot_startup_splash.png">images/makerbot_startup_splash.png</file>
 	<file alias="skip.png">images/skip.png</file>
 	<file alias="sombrero_welcome.png">images/sombrero_welcome.png</file>
 	<file alias="name_printer.png">images/name_printer.png</file>

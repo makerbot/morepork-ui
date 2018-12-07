@@ -1,15 +1,16 @@
-import QtQuick 2.7
+import QtQuick 2.10
 
 SignInPageForm {
     function backToSettings() {
-        usernameTextField.clear();
-        passwordField.clear();
-        showPassword.checked = false;
-        settingsSwipeView.swipeToItem(0);
+        usernameTextField.clear()
+        passwordField.clear()
+        showPassword.checked = false
+        signInSwipeView.swipeToItem(0)
+        settingsSwipeView.swipeToItem(0)
     }
 
     function closePopup() {
-        signInPagePopup.close();
+        signInPagePopup.close()
     }
 
     function showAuthorizingPopup() {
@@ -45,43 +46,59 @@ SignInPageForm {
         p.setButtonBarVisible(false);
         p.setPopupContents(signInSucceededContents);
         p.open();
-        signInFreStepComplete.start()
+        if(inFreStep) {
+            signInFreStepComplete.start()
+        } else {
+            closeAuthCompletePopupTimer.start()
+        }
     }
 
     Timer {
         id: signInFreStepComplete
-        interval: 500
+        interval: 3000
         onTriggered: {
             closePopup()
             backToSettings()
-            signInSwipeView.swipeToItem(0)
             mainSwipeView.swipeToItem(0)
             fre.gotoNextStep(currentFreStep)
         }
     }
 
+    Timer {
+        id: closeAuthCompletePopupTimer
+        interval: 3000
+        onTriggered: {
+            closePopup()
+            backToSettings()
+        }
+    }
+
     addAccountButton {
         button_mouseArea.onClicked: {
-            signInSwipeView.swipeToItem(1);
+            signInSwipeView.swipeToItem(1)
+            usernameTextField.forceActiveFocus()
         }
     }
 
     noAccountButton {
         onClicked: {
-            showNoAccountPopup();
+            showNoAccountPopup()
+            usernameTextField.forceActiveFocus()
         }
     }
 
     enteredUsernameButton {
         button_mouseArea.onClicked: {
-            username = usernameTextField.text;
-            signInSwipeView.swipeToItem(2);
+            username = usernameTextField.text
+            signInSwipeView.swipeToItem(2)
+            passwordField.forceActiveFocus()
         }
     }
 
     forgotPasswordButton {
         onClicked: {
-            showResetPasswordPopup();
+            showResetPasswordPopup()
+            passwordField.forceActiveFocus()
         }
     }
 

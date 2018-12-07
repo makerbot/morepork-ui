@@ -4,6 +4,11 @@ import QtQuick.Layouts 1.3
 import QtQuick.VirtualKeyboard 2.3
 
 Item {
+    width: 800
+    height: 440
+    smooth: false
+    antialiasing: false
+    property alias defaultItem: authorizeAccountView
     property alias signInSwipeView: signInSwipeView
 
     property alias addAccountButton: addAccountButton
@@ -26,11 +31,6 @@ Item {
 
     property string username: ""
 
-    width: 800
-    height: 440
-    smooth: false
-    antialiasing: false
-
     SwipeView {
         id: signInSwipeView
         smooth: false
@@ -43,9 +43,18 @@ Item {
             if (prevIndex == itemToDisplayDefaultIndex) {
                 return;
             }
+            // Skip showing the first page when we swipe through to
+            // the second page while in the fre.
+            if(itemToDisplayDefaultIndex == 1 && inFreStep) {
+                authorizeAccountView.visible = false
+            }
             signInSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             if(itemToDisplayDefaultIndex == 0) {
-                setCurrentItem(settingsSwipeView.itemAt(7))
+                // When we swipe to the 0th index of this page set
+                // the current item as the settings page item that
+                // holds this page since we want the back button to
+                // use the settings items altBack()
+                setCurrentItem(settingsSwipeView.itemAt(4))
             } else {
                 setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
             }
@@ -62,51 +71,70 @@ Item {
 
             Image {
                 id: addAccountImage
+                anchors.verticalCenterOffset: -24
+                anchors.verticalCenter: parent.verticalCenter
                 source: "qrc:/img/add_account_image.png"
-                anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.leftMargin: 50
-            }
 
-            Item {
-                id: text
-                width: 400
-                height: 250
-                visible: true
-                anchors.left: addAccountImage.right
-                anchors.leftMargin: 100
-                anchors.top: addAccountImage.top
-
-                TitleText {
-                    id: title
-                    width: 252
-                    text: "AUTHORIZE MAKERBOT ACCOUNT"
-                    anchors.top: parent.top
-                    anchors.topMargin: 0
-                    anchors.left: parent.left
-                    anchors.leftMargin: 0
-                }
-
-                BodyText {
-                    id: body
-                    width: 350
-                    anchors.top: title.bottom
-                    anchors.topMargin: 20
-                    anchors.left: parent.left
-                    anchors.leftMargin: 0
-                    text: "Sign in with your MakerBot Account to add this printer to your printer list. If you do not have a MakerBot Account, please visit MakerBot.com to create an account."
-                }
-
-                RoundedButton {
-                    id: addAccountButton
-                    label: "Add Account"
-                    buttonWidth: 260
-                    buttonHeight: 50
-                    anchors.left: parent.left
-                    anchors.leftMargin: 0
-                    anchors.top: body.bottom
-                    anchors.topMargin: 20
+                Item {
+                    id: mainItem
+                    width: 400
+                    height: 300
+                    anchors.verticalCenterOffset: 15
+                    anchors.verticalCenter: parent.verticalCenter
                     visible: true
+                    anchors.left: addAccountImage.right
+                    anchors.leftMargin: 100
+
+                    Text {
+                        id: title
+                        width: 375
+                        text: "AUTHORIZE MAKERBOT ACCOUNT"
+                        antialiasing: false
+                        smooth: false
+                        font.letterSpacing: 3
+                        wrapMode: Text.WordWrap
+                        anchors.top: parent.top
+                        anchors.topMargin: 0
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        color: "#e6e6e6"
+                        font.family: "Antennae"
+                        font.pixelSize: 26
+                        font.weight: Font.Bold
+                        lineHeight: 1.2
+                        visible: true
+                    }
+
+                    Text {
+                        id: subtitle
+                        width: 350
+                        wrapMode: Text.WordWrap
+                        anchors.top: title.bottom
+                        anchors.topMargin: 20
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        color: "#e6e6e6"
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        font.weight: Font.Light
+                        text: "Sign in with your MakerBot Account to add this printer to your printer list. If you do not have a MakerBot Account, please visit MakerBot.com to create an account."
+                        lineHeight: 1.2
+                        visible: true
+                    }
+
+                    RoundedButton {
+                        id: addAccountButton
+                        label: "ADD ACCOUNT"
+                        buttonWidth: 260
+                        buttonHeight: 50
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
+                        anchors.top: subtitle.bottom
+                        anchors.topMargin: 25
+                        visible: true
+                    }
                 }
             }
         }
@@ -170,13 +198,14 @@ Item {
                     label: "NEXT"
                     buttonWidth: 160
                     buttonHeight: 50
+                    disable_button: usernameTextField.text == ""
                 }
 
                 Button {
                     id: noAccountButton
                     anchors.left: usernameTextField.left
                     anchors.top: usernameTextField.bottom
-                    anchors.topMargin: 15
+                    anchors.topMargin: 20
                     padding: 0
 
                     contentItem: Text {
@@ -209,6 +238,7 @@ Item {
                 passwordField.clear()
                 showPassword.checked = false
                 signInSwipeView.swipeToItem(1)
+                usernameTextField.forceActiveFocus()
             }
 
             Item {
@@ -283,6 +313,7 @@ Item {
                     CheckBox {
                         id: showPassword
                         checked: false
+                        onPressed: passwordField.forceActiveFocus()
                     }
 
                     Text {
@@ -321,6 +352,8 @@ Item {
 
     ModalPopup {
         id: signInPagePopup
+        height: 275
+        closePolicy: Popup.NoAutoClose
     }
 
     Item {
@@ -338,20 +371,32 @@ Item {
             antialiasing: false
             smooth: false
             anchors.fill: parent
+            active: true
         }
     }
 
     Component {
         id: noAccountContents
+
         Item {
             anchors.fill: parent
-
-            TitleText {
+            Text {
                 id: noAccountText
-                text: "PLEASE VISIT MAKERBOT.COM TO CREATE AN ACCOUNT"
-                horizontalAlignment: Text.AlignHCenter
+                width: 600
+                text: "PLEASE VISIT MAKERBOT.COM TO\nCREATE AN ACCOUNT."
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                antialiasing: false
+                smooth: false
+                font.letterSpacing: 3
+                wrapMode: Text.WordWrap
+                color: "#e6e6e6"
+                font.family: "Antennae"
+                font.pixelSize: 24
+                font.weight: Font.Bold
+                lineHeight: 1.4
+                visible: true
             }
         }
     }
@@ -361,13 +406,23 @@ Item {
 
         Item {
             anchors.fill: parent
-
-            TitleText {
+            Text {
                 id: resetPasswordText
+                width: 600
                 text: "VISIT MAKERBOT.COM TO RESET YOUR PASSWORD"
-                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
+                horizontalAlignment: Text.AlignHCenter
+                antialiasing: false
+                smooth: false
+                font.letterSpacing: 3
+                wrapMode: Text.WordWrap
+                color: "#e6e6e6"
+                font.family: "Antennae"
+                font.pixelSize: 24
+                font.weight: Font.Bold
+                lineHeight: 1.4
+                visible: true
             }
         }
     }
@@ -375,30 +430,34 @@ Item {
     Component {
         id: authorizingContents
 
-        // nested items; sorta dumb looking, but necessary (probably)...
         Item {
             anchors.fill: parent
+            Text {
+                id: authorizingText
+                text: "AUTHORIZING ACCOUNT"
+                anchors.top: parent.top
+                anchors.topMargin: 60
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                antialiasing: false
+                smooth: false
+                font.letterSpacing: 3
+                wrapMode: Text.WordWrap
+                color: "#e6e6e6"
+                font.family: "Antennae"
+                font.pixelSize: 24
+                font.weight: Font.Bold
+                lineHeight: 1.2
+                visible: true
+            }
 
-            Item {
-                anchors.centerIn: parent
-                height: authorizingText.height + authorizingImage.height
-                width: parent.width
-                anchors.verticalCenter: parent.verticalCenter
-
-                Image {
-                    id: authorizingImage
-                    anchors.centerIn: parent
-                    source: "qrc:/img/loading.png"
-                }
-
-                TitleText {
-                    id: authorizingText
-                    text: "AUTHORIZING ACCOUNT"
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.bottom: authorizingImage.top
-                    anchors.bottomMargin: 25
-                    anchors.horizontalCenter: authorizingImage.horizontalCenter
-                }
+            BusySpinner {
+                id: authorizingWaitingSpinner
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: authorizingText.bottom
+                anchors.topMargin: 40
+                spinnerActive: true
+                spinnerSize: 64
             }
         }
     }
@@ -408,26 +467,41 @@ Item {
 
         Item {
             anchors.fill: parent
+            Text {
+                id: signInFailedText
+                width: 600
+                text: "AUTHENTICATION ERROR"
+                anchors.top: parent.top
+                anchors.topMargin: 60
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                antialiasing: false
+                smooth: false
+                font.letterSpacing: 3
+                wrapMode: Text.WordWrap
+                color: "#e6e6e6"
+                font.family: "Antennae"
+                font.pixelSize: 24
+                font.weight: Font.Bold
+                lineHeight: 1.2
+                visible: true
+            }
 
-            Item {
-                anchors.centerIn: parent
-                height: signInFailedTitle.height + signInFailedBody.height
-                width: parent.width
-
-                TitleText {
-                    id: signInFailedTitle
-                    text: "THERE WAS A PROBLEM AUTHENTICATING YOUR ACCOUNT"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                BodyText {
-                    id: signInFailedBody
-                    text: "The username or password you provided was invalid. Please try again."
-                    anchors.top: signInFailedTitle.bottom
-                    anchors.horizontalCenter: signInFailedTitle.horizontalCenter
-                }
+            Text {
+                id: signInFailedBody
+                color: "#cbcbcb"
+                text: "The username or password did not match. Please try again."
+                anchors.top: signInFailedText.bottom
+                anchors.topMargin: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: "Antennae"
+                font.pixelSize: 20
+                lineHeight: 1.3
+                visible: true
             }
         }
     }
@@ -437,11 +511,6 @@ Item {
 
         Item {
             anchors.fill: parent
-
-            Component.onDestruction: {
-                backToSettings();
-            }
-
             Image {
                 id: authCompleteImage
                 anchors.verticalCenter: parent.verticalCenter
@@ -449,21 +518,40 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 50
             }
-
-            TitleText {
+            Text {
                 id: signInSucceededTitle
                 text: "AUTHENTICATION\nCOMPLETE"
                 anchors.left: authCompleteImage.right
-                anchors.leftMargin: 80
+                anchors.leftMargin: 70
                 anchors.top: authCompleteImage.top
+                anchors.topMargin: 15
+                antialiasing: false
+                smooth: false
+                font.letterSpacing: 3
+                wrapMode: Text.WordWrap
+                color: "#e6e6e6"
+                font.family: "Antennae"
+                font.pixelSize: 24
+                font.weight: Font.Bold
+                lineHeight: 1.4
+                visible: true
             }
 
-            BodyText {
+            Text {
                 id: signInSucceededBody
+                color: "#cbcbcb"
                 text: "<b>" + username + "</b><br>is now authenticated to this printer."
                 anchors.left: authCompleteImage.right
-                anchors.leftMargin: 80
+                anchors.leftMargin: 70
                 anchors.bottom: authCompleteImage.bottom
+                anchors.bottomMargin: 10
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: "Antennae"
+                font.pixelSize: 20
+                font.letterSpacing: 1
+                lineHeight: 1.3
+                visible: true
             }
         }
     }

@@ -19,8 +19,8 @@ Item {
             if(mainSwipeView.currentIndex != 3) {
                 mainSwipeView.swipeToItem(3)
             }
-            if(settingsSwipeView.currentIndex != 3) {
-                settingsSwipeView.swipeToItem(3)
+            if(settingsSwipeView.currentIndex != 5) {
+                settingsSwipeView.swipeToItem(5)
             }
         }
     }
@@ -201,13 +201,13 @@ Item {
             PropertyChanges {
                 target: main_status_text
                 text: "SOFTWARE IS UP TO DATE"
-                anchors.topMargin: 25
+                anchors.topMargin: 35
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: "No update is required at this time."
-                anchors.topMargin: 100
+                anchors.topMargin: 85
             }
 
             PropertyChanges {
@@ -217,11 +217,11 @@ Item {
 
             PropertyChanges {
                 target: button1
-                buttonWidth: 75
+                buttonWidth: 100
                 buttonHeight: 50
                 label: "OK"
                 visible: true
-                anchors.topMargin: 180
+                anchors.topMargin: 160
             }
 
             PropertyChanges {

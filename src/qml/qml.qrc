@@ -97,5 +97,7 @@
         <file>NamePrinterPageForm.qml</file>
         <file>FirmwareUpdateSuccessfulScreen.qml</file>
         <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
+        <file>AdvancedSettingsPage.qml</file>
+        <file>AdvancedSettingsPageForm.qml</file>
     </qresource>
 </RCC>

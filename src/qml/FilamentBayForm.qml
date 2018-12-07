@@ -304,6 +304,9 @@ Item {
                         if(spoolPresent) {
                             filamentColorName
                         }
+                        else if(extruderFilamentPresent) {
+                            "UNKNOWN MATERIAL"
+                        }
                         else {
                             "NO MATERIAL DETECTED"
                         }

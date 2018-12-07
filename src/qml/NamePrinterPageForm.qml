@@ -10,6 +10,7 @@ Item {
     antialiasing: false
     property alias defaultItem: itemNamePrinter
     property alias namePrinterSwipeView: namePrinterSwipeView
+    property alias nameField: nameField
 
     SwipeView {
         id: namePrinterSwipeView
@@ -18,20 +19,15 @@ Item {
         anchors.fill: parent
         interactive: false
 
-        onCurrentIndexChanged: {
-            if(currentIndex == 0) {
-                if(settingsSwipeView.currentIndex == 10) {
-                    nameField.
-                    nameField.forceActiveFocus()
-                }
-            }
-        }
-
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = namePrinterSwipeView.currentIndex
             namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             if(itemToDisplayDefaultIndex == 0) {
-                setCurrentItem(settingsSwipeView.itemAt(10))
+                // When we swipe to the 0th index of this page set
+                // the current item as the settings page item that
+                // holds this page since we want the back button to
+                // use the settings items altBack()
+                setCurrentItem(settingsSwipeView.itemAt(2))
             } else {
                 setCurrentItem(namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex))
             }
@@ -93,6 +89,7 @@ Item {
                     font.pointSize: 14
                     placeholderText: "My Method Printer"
                     echoMode: TextField.Normal
+                    focus: true
                 }
 
                 RoundedButton {
@@ -117,7 +114,7 @@ Item {
                 antialiasing: false
                 visible: Qt.inputMethod.visible
                 x: -30
-                y: parent.height - inputPanel.height
+                y: parent.height - inputPanel.height + 22
                 width: 860
                 height: inputPanel.height
                 InputPanel {
@@ -136,8 +133,14 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: namePrinterSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                namePrinterSwipeView.swipeToItem(0)
+                namePrinter.nameField.forceActiveFocus()
+            }
 
             Image {
                 id: name_printer_image
@@ -213,8 +216,6 @@ Item {
                     }
                 }
             }
-
-
         }
     }
 }
