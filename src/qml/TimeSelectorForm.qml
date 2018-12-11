@@ -19,7 +19,7 @@ Item {
         var current_time = new Date(bot.systemTime)
         var current_hour = current_time.getHours()
         var current_minute = current_time.getMinutes()
-        meridianTumbler.currentIndex = ((current_hour > 12) ? 1 : 0)
+        meridianTumbler.currentIndex = ((current_hour >= 12) ? 1 : 0)
         current_hour %= 12
         current_hour = (current_hour == 0 ? 12 : current_hour)
         hoursTumbler.currentIndex = current_hour - 1
@@ -34,12 +34,25 @@ Item {
     function setTime() {
         var current_time = bot.systemTime
         var current_date = current_time.split(' ')
+
         var set_hour = hoursTumbler.currentIndex + 1
         if(meridianTumbler.currentIndex == 1 && set_hour != 12) {
             set_hour = set_hour + 12
         }
+        else if(meridianTumbler.currentIndex == 0 && set_hour == 12) {
+            set_hour = "00"
+        }
+
+        if(set_hour.toString().length < 2) {
+            set_hour = "0" + set_hour
+        }
         var set_minute = minutesTumbler.currentIndex
+        if(set_minute.toString().length < 2) {
+            set_minute = "0" + set_minute
+        }
+
         current_time = current_date[0] + " " + set_hour + ":" + set_minute + ":" + "00"
+
         bot.setSystemTime(current_time)
     }
 
