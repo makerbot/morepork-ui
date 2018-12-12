@@ -28,7 +28,9 @@ Item {
             // fetched.
             isMaterialMismatch = false
             isMaterialValid = false
-            materialValidityCheck()
+            if(bot.process.type == ProcessType.Load) {
+                materialValidityCheck()
+            }
         }
     }
 
