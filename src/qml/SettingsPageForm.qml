@@ -28,6 +28,7 @@ Item {
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
 
     property alias buttonTimeAndDate: buttonTimeAndDate
+    property alias setTimePage: setTimePage
 
     property alias buttonAdvancedSettings: buttonAdvancedSettings
 
@@ -189,7 +190,7 @@ Item {
                     MenuButton {
                         id: buttonTimeAndDate
                         buttonImage.source: "qrc:/img/icon_time_and_date.png"
-                        buttonText.text: "TIME AND DATE"
+                        buttonText.text: "TIME"
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -388,7 +389,10 @@ Item {
             smooth: false
             visible: false
 
+            TimeSelector {
+                id: setTimePage
 
+            }
         }
 
         //settingsSwipeView.index = 8

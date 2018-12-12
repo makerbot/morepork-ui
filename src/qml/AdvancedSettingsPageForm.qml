@@ -516,25 +516,24 @@ Item {
                         id: clearCalibrationSettings
                         checked: false
                         visible: !isResetting && !hasReset
-                        indicator:
-                        Rectangle {
-                            implicitWidth: 26
-                            implicitHeight: 26
-                            x: clearCalibrationSettings.leftPadding
-                            y: parent.height / 2 - height / 2
-                            radius: 3
-                            border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
+                        indicator: Rectangle {
+                                implicitWidth: 26
+                                implicitHeight: 26
+                                x: parent.width / 2 - width / 2
+                                y: parent.height / 2 - height / 2
+                                radius: 3
+                                border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
 
-                            Rectangle {
-                                width: 14
-                                height: 14
-                                x: 6
-                                y: 6
-                                radius: 2
-                                color: clearCalibrationSettings.down ? otherBlue : lightBlue
-                                visible: clearCalibrationSettings.checked
+                                Rectangle {
+                                    width: 14
+                                    height: 14
+                                    x: 6
+                                    y: 6
+                                    radius: 2
+                                    color: clearCalibrationSettings.down ? otherBlue : lightBlue
+                                    visible: clearCalibrationSettings.checked
+                                }
                             }
-                        }
                     }
 
                     Text {

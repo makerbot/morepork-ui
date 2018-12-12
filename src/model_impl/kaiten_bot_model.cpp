@@ -20,6 +20,7 @@ class KaitenBotModel : public BotModel {
     KaitenBotModel(const char * socketpath);
     void sysInfoUpdate(const Json::Value & info);
     void netUpdate(const Json::Value & info);
+    void systemTimeUpdate(const Json::Value & time_update);
     void authRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
     void printFileValidNotif(const Json::Value &info);
@@ -60,6 +61,8 @@ class KaitenBotModel : public BotModel {
     void changeMachineName(QString new_name);
     void acknowledgeMaterial(bool response);
     void acknowledgeSafeToRemoveUsb();
+    void getSystemTime();
+    void setSystemTime(QString new_time);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -266,6 +269,16 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<UsbCopyCompleteNotification> m_usbCopyCompleteNot;
 
+    class SystemTimeNotification : public JsonRpcNotification {
+      public:
+        SystemTimeNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) {
+            m_bot->systemTimeUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<SystemTimeNotification> m_sysTimeNot;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -320,6 +333,10 @@ void KaitenBotModel::usbCopyCompleteUpdate(){
 
 void KaitenBotModel::acknowledgeSafeToRemoveUsb() {
     safeToRemoveUsbReset();
+}
+
+void KaitenBotModel::systemTimeUpdate(const Json::Value &time_update) {
+    UPDATE_STRING_PROP(systemTime, time_update["system_time"]);
 }
 
 void KaitenBotModel::cancel(){
@@ -700,6 +717,33 @@ void KaitenBotModel::changeMachineName(QString new_name) {
     }
 }
 
+void KaitenBotModel::getSystemTime() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["notify"] = Json::Value(true);
+        conn->jsonrpc.invoke("check_notify_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::setSystemTime(QString new_time) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["date_time"] = Json::Value(new_time.toStdString());
+        conn->jsonrpc.invoke("set_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -721,7 +765,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
                       std::shared_ptr<SpoolInfoCallback>(
                               new SpoolInfoCallback(this, 1))},
         m_matWarningNot(new UnknownMaterialNotification(this)),
-        m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)) {
+        m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)),
+        m_sysTimeNot(new SystemTimeNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -736,6 +781,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("assisted_level_status", m_asstLvlNot);
     conn->jsonrpc.addMethod("material_warning", m_matWarningNot);
     conn->jsonrpc.addMethod("usb_copy_complete", m_usbCopyCompleteNot);
+    conn->jsonrpc.addMethod("system_time_notification", m_sysTimeNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -1051,6 +1097,11 @@ void KaitenBotModel::connected() {
     m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
     // TODO: Wait for callbacks before setting state to connected
     m_conn->jsonrpc.invoke("register_lcd", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+
+    Json::Value json_params(Json::objectValue);
+    json_params["notify"] = Json::Value(true);
+    m_conn->jsonrpc.invoke("check_notify_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+
     stateSet(ConnectionState::Connected);
 }
 
