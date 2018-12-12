@@ -55,6 +55,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
     Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
     Q_INVOKABLE virtual void acknowledgeSafeToRemoveUsb();
+    Q_INVOKABLE virtual void getSystemTime();
+    Q_INVOKABLE virtual void setSystemTime(QString new_time);
 
   private:
     Q_OBJECT
@@ -68,6 +70,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, firmwareUpdateReleaseNotes, "Unknown")
     MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QString, username, "Unknown")
+    MODEL_PROP(QString, systemTime, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)
     MODEL_PROP(bool, updatingExtruderFirmware, false)
     MODEL_PROP(int, extruderFirmwareUpdateProgressA, 0)

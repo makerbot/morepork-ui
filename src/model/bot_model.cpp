@@ -133,6 +133,14 @@ void BotModel::acknowledgeSafeToRemoveUsb() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::getSystemTime() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::setSystemTime(QString new_time) {
+    qDebug() << FL_STRM << "called with parameters" << new_time;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

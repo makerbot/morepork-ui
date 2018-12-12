@@ -241,7 +241,7 @@ Item {
                             "CALIBRATE EXTRUDERS"
                             break;
                         case 7:
-                            "TIME AND DATE"
+                            "SET CURRENT TIME"
                             break;
                         case 8:
                             switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
