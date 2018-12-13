@@ -31,6 +31,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(4)
     }
 
+    buttonDeauthorizeAccounts.onClicked: {
+        deauthorizeAccountsPopup.open()
+    }
+
     buttonFirmwareUpdate.onClicked: {
         bot.firmwareUpdateCheck(false)
         settingsSwipeView.swipeToItem(5)

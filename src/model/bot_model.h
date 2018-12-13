@@ -57,6 +57,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void acknowledgeSafeToRemoveUsb();
     Q_INVOKABLE virtual void getSystemTime();
     Q_INVOKABLE virtual void setSystemTime(QString new_time);
+    Q_INVOKABLE virtual void deauthorizeAllAccounts();
 
   private:
     Q_OBJECT

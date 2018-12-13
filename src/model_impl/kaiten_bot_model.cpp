@@ -63,6 +63,7 @@ class KaitenBotModel : public BotModel {
     void acknowledgeSafeToRemoveUsb();
     void getSystemTime();
     void setSystemTime(QString new_time);
+    void deauthorizeAllAccounts();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -737,6 +738,17 @@ void KaitenBotModel::setSystemTime(QString new_time) {
         Json::Value json_params(Json::objectValue);
         json_params["date_time"] = Json::Value(new_time.toStdString());
         conn->jsonrpc.invoke("set_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::deauthorizeAllAccounts() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("clear_authorized", Json::Value(), std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

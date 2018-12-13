@@ -141,6 +141,10 @@ void BotModel::setSystemTime(QString new_time) {
     qDebug() << FL_STRM << "called with parameters" << new_time;
 }
 
+void BotModel::deauthorizeAllAccounts() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
