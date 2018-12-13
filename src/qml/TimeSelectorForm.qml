@@ -232,8 +232,15 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         label: "DONE"
         opacity: {
-            button_mouseArea.enabled ? 1.0 : 0
+            button_mouseArea.enabled ? 1.0 : 0.1
         }
+
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: 200
+            }
+        }
+
         button_mouseArea {
             onClicked: {
                 setTime()

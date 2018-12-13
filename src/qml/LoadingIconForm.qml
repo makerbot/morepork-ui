@@ -1,7 +1,6 @@
 import QtQuick 2.10
 
 Rectangle {
-    property alias loading: loading_icon.visible
     id: loading_icon
     width: 250
     height: 250
@@ -12,6 +11,8 @@ Rectangle {
     antialiasing: true
     smooth: true
     visible: true
+
+    property alias loading: loading_icon.visible
 
     Image {
         id: inner_image
