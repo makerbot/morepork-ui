@@ -145,6 +145,10 @@ void BotModel::deauthorizeAllAccounts() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::preheatChamber(int chamber_temperature) {
+    qDebug() << FL_STRM << "called with parameters" << chamber_temperature;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

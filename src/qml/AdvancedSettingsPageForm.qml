@@ -132,6 +132,7 @@ Item {
                         id: buttonPreheat
                         buttonImage.source: "qrc:/img/icon_preheat.png"
                         buttonText.text: "PREHEAT"
+                        enabled: !isProcessRunning()
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -216,7 +217,9 @@ Item {
             smooth: false
             visible: false
 
+            PreheatPage {
 
+            }
         }
 
         //advancedSettingsSwipeView.index = 3

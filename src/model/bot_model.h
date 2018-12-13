@@ -58,6 +58,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getSystemTime();
     Q_INVOKABLE virtual void setSystemTime(QString new_time);
     Q_INVOKABLE virtual void deauthorizeAllAccounts();
+    Q_INVOKABLE virtual void preheatChamber(int chamber_temperature);
 
   private:
     Q_OBJECT

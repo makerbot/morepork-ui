@@ -101,5 +101,7 @@
         <file>AdvancedSettingsPageForm.qml</file>
         <file>TimeSelector.qml</file>
         <file>TimeSelectorForm.qml</file>
+        <file>SlidingSwitch.qml</file>
+        <file>SlidingSwitchForm.qml</file>
     </qresource>
 </RCC>

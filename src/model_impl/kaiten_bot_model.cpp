@@ -64,6 +64,7 @@ class KaitenBotModel : public BotModel {
     void getSystemTime();
     void setSystemTime(QString new_time);
     void deauthorizeAllAccounts();
+    void preheatChamber(int chamber_temperature);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -749,6 +750,25 @@ void KaitenBotModel::deauthorizeAllAccounts() {
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         conn->jsonrpc.invoke("clear_authorized", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::preheatChamber(int chamber_temperature) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        Json::Value temperature_list(Json::arrayValue);
+
+        temperature_list[0] = 25;
+        temperature_list[1] = 25;
+        temperature_list[2] = chamber_temperature;
+
+        json_params["temperature_settings"] = Json::Value(temperature_list);
+        conn->jsonrpc.invoke("preheat", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

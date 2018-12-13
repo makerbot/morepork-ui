@@ -106,27 +106,9 @@ Item {
                         id: buttonWiFi
                         buttonImage.source: "qrc:/img/icon_wifi.png"
                         buttonText.text: "WiFi"
-                        Switch {
-                            id: switchWifi
-                            indicator: Rectangle {
-                                    implicitWidth: 68
-                                    implicitHeight: 35
-                                    x: switchWifi.leftPadding
-                                    y: parent.height / 2 - height / 2
-                                    radius: 17
-                                    color: switchWifi.checked ? lightBlue : "#ffffff"
-                                    border.color: switchWifi.checked ? "#3183af" : "#cccccc"
 
-                                    Rectangle {
-                                        x: switchWifi.checked ? parent.width - width - 3 : 3
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        width: 32
-                                        height: 32
-                                        radius: 16
-                                        color: switchWifi.down ? "#cccccc" : "#ffffff"
-                                        border.color: switchWifi.checked ? lightBlue : "#999999"
-                                    }
-                                }
+                        SlidingSwitch {
+                            id: switchWifi
                             checked: bot.net.wifiEnabled
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
