@@ -263,6 +263,11 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "EXTRUDERS\nHEATING UP"
                 font.pixelSize: 22
@@ -300,6 +305,11 @@ Item {
             PropertyChanges {
                 target: header_image
                 source: "qrc:/img/calib_scrub_nozzles.png"
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: mainItem
                 opacity: 1
             }
 
@@ -344,6 +354,11 @@ Item {
             PropertyChanges {
                 target: header_image
                 opacity: 0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
             }
 
             PropertyChanges {
@@ -393,6 +408,11 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "REMOVE BUILD PLATE"
                 font.pixelSize: 22
@@ -434,6 +454,11 @@ Item {
                 target: header_image
                 source: "qrc:/img/calib_insert_build_plate.png"
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
             }
 
             PropertyChanges {
@@ -480,10 +505,15 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "CALIBRATING"
                 font.pixelSize: 22
-                anchors.topMargin: 20
+                anchors.topMargin: 40
                 opacity: 1
             }
 
@@ -519,6 +549,11 @@ Item {
                 target: header_image
                 source: "qrc:/img/calib_extruders.png"
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
             }
 
             PropertyChanges {
@@ -561,6 +596,11 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: header_image
                 opacity: 0
             }
@@ -590,9 +630,14 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "CANCELLING"
-                anchors.topMargin: 20
+                anchors.topMargin: 40
                 font.pixelSize: 22
                 opacity: 1.0
             }
@@ -612,7 +657,6 @@ Item {
             PropertyChanges {
                 target: actionButton
                 opacity: 0
-
             }
         }
     ]
