@@ -37,6 +37,8 @@ Item {
 
     property alias buttonColorSwatch: buttonColorSwatch
 
+    property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
+
     property alias spoolInfoPage: spoolInfoPage
 
     Timer {
@@ -192,6 +194,16 @@ Item {
                     Item { width: parent.width; height: 1; smooth: false;
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
+
+                    MenuButton {
+                        id: buttonRaiseLowerBuildPlate
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "RAISE/LOWER BUILD PLATE"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
                 }
             }
         }
@@ -280,6 +292,19 @@ Item {
 
             ColorSwatchPage {
                 id: colorSwatch
+            }
+        }
+
+        //advancedSettingsSwipeView.index = 6
+        Item {
+            id: raiseLowerBuildPlateItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            RaiseLowerBuildPlateItem {
+                id: raiseLowerBuildPlate
             }
         }
     }

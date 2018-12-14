@@ -62,4 +62,9 @@ AdvancedSettingsPageForm {
     buttonColorSwatch.onClicked: {
         advancedSettingsSwipeView.swipeToItem(5)
     }
+
+    buttonRaiseLowerBuildPlate.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(6)
+
+    }
 }

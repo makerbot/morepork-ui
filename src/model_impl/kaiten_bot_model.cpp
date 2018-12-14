@@ -64,7 +64,8 @@ class KaitenBotModel : public BotModel {
     void getSystemTime();
     void setSystemTime(QString new_time);
     void deauthorizeAllAccounts();
-    void preheatChamber(int chamber_temperature);
+    void preheatChamber(const int chamber_temperature);
+    void moveAxis(QString axis, QString distance, QString speed);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -756,7 +757,7 @@ void KaitenBotModel::deauthorizeAllAccounts() {
     }
 }
 
-void KaitenBotModel::preheatChamber(int chamber_temperature) {
+void KaitenBotModel::preheatChamber(const int chamber_temperature) {
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
@@ -769,6 +770,29 @@ void KaitenBotModel::preheatChamber(int chamber_temperature) {
 
         json_params["temperature_settings"] = Json::Value(temperature_list);
         conn->jsonrpc.invoke("preheat", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::moveAxis(QString axis, QString distance, QString speed) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        // json_params["axis"] = Json::Value(axis);
+        // json_params["point_mm"] = Json::Value(distance);
+        // json_params["mm_per_second"] = Json::Value(speed);
+        // json_params["relative"] = Json::Value(true);
+
+        json_params["axis"] = Json::Value(axis.toInt());
+        json_params["point_mm"] = Json::Value(distance.toInt());
+        json_params["mm_per_second"] = Json::Value(speed.toInt());
+        json_params["relative"] = Json::Value(true);
+
+        conn->jsonrpc.invoke("move_axis", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
