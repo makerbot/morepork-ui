@@ -764,8 +764,8 @@ void KaitenBotModel::preheatChamber(const int chamber_temperature) {
         Json::Value json_params(Json::objectValue);
         Json::Value temperature_list(Json::arrayValue);
 
-        temperature_list[0] = 25;
-        temperature_list[1] = 25;
+        temperature_list[0] = 0;
+        temperature_list[1] = 0;
         temperature_list[2] = chamber_temperature;
 
         json_params["temperature_settings"] = Json::Value(temperature_list);
