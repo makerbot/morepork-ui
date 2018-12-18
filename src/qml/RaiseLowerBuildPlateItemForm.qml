@@ -52,7 +52,7 @@ Item {
             font.pointSize: 20
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
-            model: ["1","2","3","5","10","15","25","50","100"]
+            model: [1,2,3,5,10,15,25,50,100]
         }
 
         Rectangle {
@@ -69,7 +69,7 @@ Item {
             font.pointSize: 20
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
-            model: ["5","10","15","20"]
+            model: [5,10,15,20]
         }
     }
 
@@ -102,7 +102,8 @@ Item {
 
             button_mouseArea {
                 onClicked: {
-                    bot.moveAxis("2", "5", "5")
+                    bot.moveAxis("z", -distanceTumbler.model[distanceTumbler.currentIndex],
+                                       speedTumbler.model[speedTumbler.currentIndex])
                 }
                 enabled: {
                     !distanceTumbler.moving && !speedTumbler.moving
@@ -130,7 +131,8 @@ Item {
 
             button_mouseArea {
                 onClicked: {
-                    bot.moveAxis("2", "-" + distanceTumbler.currentItem, speedTumbler.currentItem)
+                    bot.moveAxis("z", distanceTumbler.model[distanceTumbler.currentIndex],
+                                      speedTumbler.model[speedTumbler.currentIndex])
                 }
                 enabled: {
                     !distanceTumbler.moving && !speedTumbler.moving

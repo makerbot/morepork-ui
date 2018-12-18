@@ -149,7 +149,7 @@ void BotModel::preheatChamber(int chamber_temperature) {
     qDebug() << FL_STRM << "called with parameters" << chamber_temperature;
 }
 
-void BotModel::moveAxis(QString axis, QString distance, QString speed) {
+void BotModel::moveAxis(QString axis, float distance, float speed) {
     qDebug() << FL_STRM << "called with parameters" << axis << distance << speed;
 }
 
