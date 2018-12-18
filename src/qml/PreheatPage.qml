@@ -4,10 +4,6 @@ import ProcessStateTypeEnum 1.0
 
 PreheatPageForm {
 
-    buttonAutoChamberPreheat.onClicked: {
-        switchAutoChamberPreheat.checked = !switchAutoChamberPreheat.checked
-    }
-
     buttonStartStopPreheat.onClicked: {
         if(bot.process.type == ProcessType.None) {
             if(bot.chamberTargetTemp > 0) {

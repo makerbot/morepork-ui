@@ -5,9 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
     smooth: false
     anchors.fill: parent
-    property alias buttonAutoChamberPreheat: buttonAutoChamberPreheat
     property alias buttonStartStopPreheat: buttonStartStopPreheat
-    property alias switchAutoChamberPreheat: switchAutoChamberPreheat
 
     Flickable {
         id: flickablePreheat
@@ -24,33 +22,6 @@ Item {
             anchors.left: parent.left
             anchors.top: parent.top
             spacing: 0
-
-            MenuButton {
-                id: buttonAutoChamberPreheat
-                buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                buttonText.text: "AUTO CHAMBER PREHEAT"
-
-                SlidingSwitch {
-                    id: switchAutoChamberPreheat
-                    checked: false
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin: 50
-
-                    onClicked: {
-                        if(switchAutoChamberPreheat.checked) {
-
-                        }
-                        else if(!switchAutoChamberPreheat.checked) {
-
-                        }
-                    }
-                }
-            }
-
-            Item { width: parent.width; height: 1; smooth: false;
-                Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-            }
 
             MenuButton {
                 id: buttonStartStopPreheat
