@@ -112,7 +112,8 @@ Item {
                 id: inputPanelContainer
                 smooth: false
                 antialiasing: false
-                visible: Qt.inputMethod.visible
+                visible: settingsSwipeView.currentIndex == 2 &&
+                         namePrinterSwipeView.currentIndex == 0
                 x: -30
                 y: parent.height - inputPanel.height + 22
                 width: 860

@@ -22,6 +22,7 @@ Item {
     property alias signInPage: signInPage
 
     property alias buttonDeauthorizeAccounts: buttonDeauthorizeAccounts
+    property alias deauthorizeAccountsPopup: deauthorizeAccountsPopup
 
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
 
@@ -105,27 +106,9 @@ Item {
                         id: buttonWiFi
                         buttonImage.source: "qrc:/img/icon_wifi.png"
                         buttonText.text: "WiFi"
-                        Switch {
-                            id: switchWifi
-                            indicator: Rectangle {
-                                    implicitWidth: 68
-                                    implicitHeight: 35
-                                    x: switchWifi.leftPadding
-                                    y: parent.height / 2 - height / 2
-                                    radius: 17
-                                    color: switchWifi.checked ? lightBlue : "#ffffff"
-                                    border.color: switchWifi.checked ? "#3183af" : "#cccccc"
 
-                                    Rectangle {
-                                        x: switchWifi.checked ? parent.width - width - 3 : 3
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        width: 32
-                                        height: 32
-                                        radius: 16
-                                        color: switchWifi.down ? "#cccccc" : "#ffffff"
-                                        border.color: switchWifi.checked ? lightBlue : "#999999"
-                                    }
-                                }
+                        SlidingSwitch {
+                            id: switchWifi
                             checked: bot.net.wifiEnabled
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
@@ -405,6 +388,215 @@ Item {
 
             AdvancedSettingsPage {
                 id: advancedSettingsPage
+            }
+        }
+    }
+
+    Timer {
+        id: closeDeauthorizeAccountsPopupTimer
+        interval: 1500
+        onTriggered: deauthorizeAccountsPopup.close()
+    }
+
+    Popup {
+        id: deauthorizeAccountsPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        parent: overlay
+        closePolicy: Popup.NoAutoClose
+        background: Rectangle {
+            id: popupBackgroundDim_deauth_accounts
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        onClosed: {
+            clearingAccounts = false
+        }
+
+        property bool clearingAccounts: false
+
+        Rectangle {
+            id: basePopupItem_deauth_accounts
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 265
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider_deauth_accounts
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+                visible: !deauthorizeAccountsPopup.clearingAccounts
+            }
+
+            Rectangle {
+                id: vertical_divider_deauth_accounts
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: !deauthorizeAccountsPopup.clearingAccounts
+            }
+
+            Item {
+                id: buttonBar_deauth_accounts
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                visible: !deauthorizeAccountsPopup.clearingAccounts
+
+                Rectangle {
+                    id: remove_accounts_rectangle_deauth_accounts
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: remove_accounts_text_deauth_accounts
+                        color: "#ffffff"
+                        text: "REMOVE ACCOUNTS"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: remove_accounts_mouseArea_deauth_accounts
+                        anchors.fill: parent
+                        onPressed: {
+                            remove_accounts_text_deauth_accounts.color = "#000000"
+                            remove_accounts_rectangle_deauth_accounts.color = "#ffffff"
+                        }
+                        onReleased: {
+                            remove_accounts_text_deauth_accounts.color = "#ffffff"
+                            remove_accounts_rectangle_deauth_accounts.color = "#00000000"
+                        }
+                        onClicked: {
+                            bot.deauthorizeAllAccounts()
+                            deauthorizeAccountsPopup.clearingAccounts = true
+                            closeDeauthorizeAccountsPopupTimer.start()
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: cancel_rectangle_deauth_accounts
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: cancel_text_deauth_accounts
+                        color: "#ffffff"
+                        text: "CANCEL"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: cancel_mouseArea_deauth_accounts
+                        anchors.fill: parent
+                        onPressed: {
+                            cancel_text_deauth_accounts.color = "#000000"
+                            cancel_rectangle_deauth_accounts.color = "#ffffff"
+                        }
+                        onReleased: {
+                            cancel_text_deauth_accounts.color = "#ffffff"
+                            cancel_rectangle_deauth_accounts.color = "#00000000"
+                        }
+                        onClicked: {
+                            deauthorizeAccountsPopup.close()
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout_deauth_accounts
+                width: 590
+                height: 160
+                spacing: 0
+                anchors.top: parent.top
+                anchors.topMargin: deauthorizeAccountsPopup.clearingAccounts ? 50 : 25
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text_deauth_accounts
+                    color: "#cbcbcb"
+                    text: deauthorizeAccountsPopup.clearingAccounts ? "ALL ACCOUNTS DEAUTHORIZED" : "DEAUTHORIZE ACCOUNTS"
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Item {
+                    id: emptyItem_deauth_accounts
+                    width: 10
+                    height: 5
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: !deauthorizeAccountsPopup.clearingAccounts
+                }
+
+                Text {
+                    id: description_text_deauth_accounts
+                    color: "#cbcbcb"
+                    text: "Deauthorize all accounts currently connected to this printer? You will have to reauthorize any account you wish to connect in the future."
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: "Antennae"
+                    font.pixelSize: 18
+                    lineHeight: 1.3
+                    visible: !deauthorizeAccountsPopup.clearingAccounts
+                }
             }
         }
     }

@@ -133,12 +133,15 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            (bot.process.stepStr == "transfer" ||
-                             bot.process.stepStr == "waiting_for_file") ?
-                                        ("TRANSFERRING PRINT FILE") :
-                                        (bot.extruderATargetTemp > 0 ?
-                                            "HEATING UP EXTRUDER..." :
-                                            "HEATING UP CHAMBER...")
+                            if(bot.process.stepStr == "waiting_for_file") {
+                                "WAITING FOR PRINT FILE"
+                            } else if(bot.process.stepStr == "transfer") {
+                                "TRANSFERRING PRINT FILE"
+                            } else if(bot.extruderATargetTemp > 0) {
+                                "HEATING UP EXTRUDER"
+                            } else {
+                                "HEATING UP CHAMBER"
+                            }
                             break;
                         case ProcessStateType.Printing:
                             fileName_
@@ -179,13 +182,16 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            (bot.process.stepStr == "transfer" ||
-                             bot.process.stepStr == "waiting_for_file") ?
-                                (bot.process.printPercentage + "%") :
-                                (bot.extruderATargetTemp > 0 ?
-                                    (bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C\n" +
-                                     bot.extruderBCurrentTemp + " C" + " | " + bot.extruderBTargetTemp + " C") :
-                                    (bot.chamberCurrentTemp + " C" + " | " + bot.chamberTargetTemp + " C"))
+                            if(bot.process.stepStr == "waiting_for_file") {
+                                ""
+                            } else if(bot.process.stepStr == "transfer") {
+                                bot.process.printPercentage + "%"
+                            } else if(bot.extruderATargetTemp > 0) {
+                                (bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C\n" +
+                                 bot.extruderBCurrentTemp + " C" + " | " + bot.extruderBTargetTemp + " C")
+                            } else {
+                                (bot.chamberCurrentTemp + " C" + " | " + bot.chamberTargetTemp + " C")
+                            }
                             break;
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
@@ -213,7 +219,7 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Light
                     font.pixelSize: 18
-                    lineHeight: 1.35
+                    lineHeight: 1.4
                 }
 
                 RoundedButton {

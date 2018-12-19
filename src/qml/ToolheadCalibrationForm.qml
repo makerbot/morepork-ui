@@ -102,106 +102,141 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/calib_extruder.png"
+        source: "qrc:/img/calib_extruders.png"
+        opacity: 1.0
+    }
+
+    Item {
+        id: mainItem
+        width: 400
+        height: 250
+        visible: true
+        anchors.left: parent.left
+        anchors.leftMargin: header_image.width
+        anchors.verticalCenter: parent.verticalCenter
         opacity: 1.0
 
-        Item {
-            id: mainItem
-            width: 400
-            height: 250
-            visible: true
-            anchors.left: parent.right
+        Text {
+            id: title
+            width: 350
+            text: "EXTRUDER CALIBRATION"
+            antialiasing: false
+            smooth: false
+            font.letterSpacing: 3
+            wrapMode: Text.WordWrap
+            anchors.top: parent.top
+            anchors.topMargin: 0
+            anchors.left: parent.left
             anchors.leftMargin: 0
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 20
+            color: "#e6e6e6"
+            font.family: "Antennae"
+            font.pixelSize: 26
+            font.weight: Font.Bold
+            lineHeight: 1.2
+            opacity: 1.0
+        }
+
+        Text {
+            id: subtitle
+            width: 350
+            wrapMode: Text.WordWrap
+            anchors.top: title.bottom
+            anchors.topMargin: 20
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            color: "#e6e6e6"
+            font.family: "Antennae"
+            font.pixelSize: 18
+            font.weight: Font.Light
+            text: "Use this process anytime an extruder (new or used) is attached to the printer."
+            lineHeight: 1.2
+            opacity: 1.0
+        }
+
+        RoundedButton {
+            id: actionButton
+            label: "BEGIN CALIBRATION"
+            buttonWidth: 310
+            buttonHeight: 50
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: subtitle.bottom
+            anchors.topMargin: 25
+            opacity: 1.0
+        }
+
+        RowLayout {
+            id: temperatureDisplay
+            anchors.top: subtitle.bottom
+            anchors.topMargin: 25
+            width: children.width
+            height: 35
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            spacing: 10
+            opacity: 0
 
             Text {
-                id: title
-                width: 350
-                text: "EXTRUDER CALIBRATION"
-                antialiasing: false
-                smooth: false
+                id: extruder_A_current_temperature_text
+                text: bot.extruderACurrentTemp + "C"
+                font.family: "Antennae"
+                color: "#ffffff"
                 font.letterSpacing: 3
-                wrapMode: Text.WordWrap
-                anchors.top: parent.top
-                anchors.topMargin: 0
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                color: "#e6e6e6"
-                font.family: "Antennae"
-                font.pixelSize: 26
-                font.weight: Font.Bold
-                lineHeight: 1.2
-                visible: true
+                font.weight: Font.Light
+                font.pixelSize: 20
+            }
+
+            Rectangle {
+                id: divider_rectangle1
+                width: 1
+                height: 25
+                color: "#ffffff"
             }
 
             Text {
-                id: subtitle
-                width: 350
-                wrapMode: Text.WordWrap
-                anchors.top: title.bottom
-                anchors.topMargin: 20
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                color: "#e6e6e6"
+                id: extruder_A_target_temperature_text
+                text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
+                           "50C" :
+                           (bot.extruderATargetTemp + "C")
                 font.family: "Antennae"
-                font.pixelSize: 18
+                color: "#ffffff"
+                font.letterSpacing: 3
                 font.weight: Font.Light
-                text: "Use this process anytime an extruder (new or used) is attached to the printer."
-                lineHeight: 1.2
-                visible: true
+                font.pixelSize: 20
             }
 
-            RoundedButton {
-                id: actionButton
-                label: "BEGIN CALIBRATION"
-                buttonWidth: 310
-                buttonHeight: 50
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                anchors.top: subtitle.bottom
-                anchors.topMargin: 25
-                visible: true
-                opacity: 1.0
+            Rectangle {
+                width: 10
+                color: "#000000"
             }
 
-            RowLayout {
-                id: temperatureDisplay
-                anchors.top: subtitle.bottom
-                anchors.topMargin: 25
-                width: children.width
-                height: 35
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                spacing: 10
-                visible: false
+            Text {
+                id: extruder_B_current_temperature_text
+                text: bot.extruderBCurrentTemp + "C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
+            }
 
-                Text {
-                    id: extruder_A_temperature_text
-                    text: bot.extruderACurrentTemp + "C"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 20
-                }
+            Rectangle {
+                id: divider_rectangle2
+                width: 1
+                height: 25
+                color: "#ffffff"
+            }
 
-                Rectangle {
-                    id: divider_rectangle
-                    width: 1
-                    height: 25
-                    color: "#ffffff"
-                }
-
-                Text {
-                    id: extruder_B_temperature_text
-                    text: bot.extruderBCurrentTemp + "C"
-                    font.family: "Antennae"
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.weight: Font.Light
-                    font.pixelSize: 20
-                }
+            Text {
+                id: extruder_B_target_temperature_text
+                text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
+                          "50C" :
+                          (bot.extruderBTargetTemp + "C")
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
             }
         }
     }
@@ -210,45 +245,10 @@ Item {
         id: loadingIcon
         anchors.verticalCenterOffset: -30
         anchors.left: parent.left
-        anchors.leftMargin: 100
+        anchors.leftMargin: 80
         anchors.verticalCenter: parent.verticalCenter
-        loading: visible
-        visible: false
-
-        Text {
-            id: processText
-            width: 275
-            text: "CALIBRATING"
-            wrapMode: Text.WordWrap
-            anchors.left: parent.right
-            anchors.leftMargin: 75
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -35
-            color: "#e6e6e6"
-            font.family: "Antennae"
-            font.pixelSize: 22
-            font.weight: Font.Bold
-            lineHeight: 1.2
-            font.letterSpacing: 3
-            visible: parent.visible
-        }
-
-        Text {
-            id: processDescText
-            width: 275
-            text: "Please wait while the printer performs the calibration process."
-            wrapMode: Text.WordWrap
-            anchors.left: parent.right
-            anchors.leftMargin: 75
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 35
-            color: "#e6e6e6"
-            font.family: "Antennae"
-            font.pixelSize: 18
-            font.weight: Font.Light
-            lineHeight: 1.2
-            visible: parent.visible
-        }
+        opacity: 0
+        visible: true
     }
 
     states: [
@@ -258,13 +258,27 @@ Item {
                   bot.process.stateType == ProcessStateType.HeatingNozzle
 
             PropertyChanges {
+                target: header_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
-                text: "PREPARING CALIBRATION"
+                text: "EXTRUDERS\nHEATING UP"
+                font.pixelSize: 22
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "The extruders are heating up. Please wait to clean nozzle."
+                text: "The extruders are heating up. Please wait to clean nozzles."
+                font.pixelSize: 18
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -274,7 +288,12 @@ Item {
 
             PropertyChanges {
                 target: temperatureDisplay
-                visible: true
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                opacity: 1.0
             }
         },
 
@@ -284,13 +303,28 @@ Item {
                   bot.process.stateType == ProcessStateType.CleanNozzle
 
             PropertyChanges {
+                target: header_image
+                source: "qrc:/img/calib_scrub_nozzles.png"
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "CLEAN EXTRUDER NOZZLES"
+                font.pixelSize: 22
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
                 text: "Use the provided brush to clean the tips of the extruders for the most accurate calibration."
+                font.pixelSize: 18
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -300,6 +334,16 @@ Item {
                 label: "NEXT"
                 opacity: 1.0
             }
+
+            PropertyChanges {
+                target: loadingIcon
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
+            }
         },
 
         State {
@@ -308,13 +352,27 @@ Item {
                   bot.process.stateType == ProcessStateType.CoolingNozzle
 
             PropertyChanges {
+                target: header_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "COOLING EXTRUDER NOZZLES"
+                font.pixelSize: 22
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
                 text: "Calibration will continue after the nozzles cool down."
+                font.pixelSize: 18
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -324,12 +382,12 @@ Item {
 
             PropertyChanges {
                 target: temperatureDisplay
-                visible: true
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: loadingIcon
-                visible: false
+                opacity: 1.0
             }
         },
 
@@ -340,7 +398,7 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -350,13 +408,22 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "REMOVE BUILD PLATE"
+                font.pixelSize: 22
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
                 text: "This part of the process is performed with the build plate removed."
+                font.pixelSize: 18
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -366,7 +433,13 @@ Item {
                 label: "BUILD PLATE IS REMOVED"
                 opacity: 1.0
             }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
+            }
         },
+
         State {
             name: "install_build_plate"
             when: bot.process.type == ProcessType.CalibrationProcess &&
@@ -374,7 +447,7 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
@@ -384,13 +457,23 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
                 target: title
                 text: "INSERT\nBUILD PLATE"
+                font.pixelSize: 22
+                anchors.topMargin: 20
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
                 text: "This part of the process is performed with the build plate installed."
+                font.pixelSize: 18
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -399,6 +482,11 @@ Item {
                 label: "BUILD PLATE IS INSTALLED"
                 buttonWidth: 410
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
             }
         },
         State {
@@ -413,7 +501,37 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
-                visible: true
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: title
+                text: "CALIBRATING"
+                font.pixelSize: 22
+                anchors.topMargin: 40
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "Please wait while the printer calibrates."
+                font.pixelSize: 18
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: actionButton
+                opacity: 0
             }
         },
         State {
@@ -424,28 +542,33 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
-                visible: false
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                visible: false
+                opacity: 0
             }
 
             PropertyChanges {
                 target: header_image
-                source: "qrc:/img/calib_successful.png"
+                source: "qrc:/img/calib_extruders.png"
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
             }
 
             PropertyChanges {
                 target: title
                 text: "CALIBRATION SUCCESSFUL"
+                anchors.topMargin: 0
+                font.pixelSize: 22
+                opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
                 text: "This pair of extruders are now calibrated and can now be used for printing."
+                font.pixelSize: 18
+                opacity: 1.0
             }
 
             PropertyChanges {
@@ -454,6 +577,11 @@ Item {
                 label: "DONE"
                 buttonWidth: 125
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
             }
         },
 
@@ -468,13 +596,23 @@ Item {
             }
 
             PropertyChanges {
+                target: mainItem
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: header_image
                 opacity: 0
             }
 
             PropertyChanges {
                 target: loadingIcon
-                visible: false
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
             }
         },
 
@@ -488,17 +626,37 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
-                visible: true
+                opacity: 1.0
             }
 
             PropertyChanges {
-                target: processText
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: title
                 text: "CANCELLING"
+                anchors.topMargin: 40
+                font.pixelSize: 22
+                opacity: 1.0
             }
 
             PropertyChanges {
-                target: processDescText
+                target: subtitle
                 text: "Please wait."
+                font.pixelSize: 18
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: actionButton
+                opacity: 0
             }
         }
     ]

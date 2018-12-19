@@ -389,7 +389,8 @@ Item {
                 id: inputPanelContainer
                 smooth: false
                 antialiasing: false
-                visible: Qt.inputMethod.visible
+                visible: settingsSwipeView.currentIndex == 3 &&
+                         wifiSwipeView.currentIndex == 1
                 x: -30
                 y: parent.height - inputPanel.height
                 width: 860

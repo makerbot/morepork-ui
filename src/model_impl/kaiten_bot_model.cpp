@@ -63,6 +63,9 @@ class KaitenBotModel : public BotModel {
     void acknowledgeSafeToRemoveUsb();
     void getSystemTime();
     void setSystemTime(QString new_time);
+    void deauthorizeAllAccounts();
+    void preheatChamber(const int chamber_temperature);
+    void moveAxis(QString axis, float distance, float speed);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -737,6 +740,59 @@ void KaitenBotModel::setSystemTime(QString new_time) {
         Json::Value json_params(Json::objectValue);
         json_params["date_time"] = Json::Value(new_time.toStdString());
         conn->jsonrpc.invoke("set_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::deauthorizeAllAccounts() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("clear_authorized", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::preheatChamber(const int chamber_temperature) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        Json::Value temperature_list(Json::arrayValue);
+
+        temperature_list[0] = 0;
+        temperature_list[1] = 0;
+        temperature_list[2] = chamber_temperature;
+
+        json_params["temperature_settings"] = Json::Value(temperature_list);
+        conn->jsonrpc.invoke("preheat", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::moveAxis(QString axis, float distance, float speed) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        Json::Value mach_params(Json::objectValue);
+
+        mach_params["axis"] = Json::Value(axis.toStdString());
+        mach_params["point_mm"] = Json::Value(distance);
+        mach_params["mm_per_second"] = Json::Value(speed);
+        mach_params["relative"] = Json::Value(true);
+        json_params["machine_func"] = Json::Value("move_axis");
+        json_params["params"] = std::move(mach_params);
+        json_params["ignore_tool_errors"] = Json::Value(true);
+
+        conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

@@ -12,7 +12,7 @@ ToolheadCalibrationForm {
         button_mouseArea.onClicked: {
             if(state == "clean_nozzle") {
                 bot.acknowledgeNozzleCleaned()
-                state = "calibrating"
+                state = "cooling_nozzle"
             }
             else if(state == "remove_build_plate") {
                 bot.buildPlateState(false)

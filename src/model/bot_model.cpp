@@ -141,6 +141,19 @@ void BotModel::setSystemTime(QString new_time) {
     qDebug() << FL_STRM << "called with parameters" << new_time;
 }
 
+void BotModel::deauthorizeAllAccounts() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::preheatChamber(int chamber_temperature) {
+    qDebug() << FL_STRM << "called with parameters" << chamber_temperature;
+}
+
+void BotModel::moveAxis(QString axis, float distance, float speed) {
+    qDebug() << FL_STRM << "called with parameters" << axis << distance << speed;
+}
+
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

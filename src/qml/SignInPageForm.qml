@@ -360,7 +360,9 @@ Item {
         id: inputPanelContainer
         smooth: false
         antialiasing: false
-        visible: Qt.inputMethod.visible
+        visible: settingsSwipeView.currentIndex == 4 &&
+                 (signInSwipeView.currentIndex == 1 ||
+                  signInSwipeView.currentIndex == 2)
         x: -30
         y: inputPanel && parent ? parent.height - inputPanel.height : 0
         z: 1
