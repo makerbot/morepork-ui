@@ -29,6 +29,17 @@ if(${MBCMakeTools_FOUND})
     set(QT_CREATOR_BUILD false)
 else()
     message(STATUS "Performing QtCreator build")
+    #TODO(sam) temporarily checking if the artifact files exist. this should
+    # be a call to a script that performs the artifact pull or at the very least
+    # build and execute the morepork-ui-artifactory project right here.
+    file(GLOB ARTIFACTS_LIST "${CMAKE_CURRENT_LIST_DIR}/morepork-ui-artifactory/artifacts/json-cpp-develop*"
+                             "${CMAKE_CURRENT_LIST_DIR}/morepork-ui-artifactory/artifacts/libtinything-develop*"
+                             "${CMAKE_CURRENT_LIST_DIR}/morepork-ui-artifactory/artifacts/MBCoreUtils-develop*")
+    list(LENGTH ARTIFACTS_LIST ARTIFACTS_LIST_LENGTH)
+    if (NOT ${ARTIFACTS_LIST_LENGTH} EQUAL 3)
+        message(STATUS "ARTIFACTS_LIST: ${ARTIFACTS_LIST}")
+        message(FATAL_ERROR "You don't have the necessary artifacts. You must build and run morepork-ui/morepork-ui-artifactory before building morepork-ui.")
+    endif()
     set(QT_CREATOR_BUILD true)
 endif()
 
