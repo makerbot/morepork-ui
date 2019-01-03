@@ -8,7 +8,7 @@
 
 #include "base_model.h"
 
-#define FRE_TRACKER_PATH ("/var/fre/fre_tracker.json")
+#define FRE_TRACKER_FILE_PATH ("/var/fre/fre_tracker.json")
 #define FIRST_BOOT_FILE_PATH ("/home/.first_firmware_boot")
 
 // First Run Experience Tracker
@@ -41,8 +41,8 @@ class FreTracker : public BaseModel {
     Q_OBJECT
 
     Json::Value fre_status_;
-    const std::string fre_tracker_path_;
-    const std::string first_boot_path_;
+    const std::string fre_tracker_file_path_;
+    const std::string first_boot_file_path_;
     const std::vector<std::string> step_str_ =
     {
         "welcome",

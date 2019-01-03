@@ -8,33 +8,55 @@
 #include "fre_tracker.h"
 
 FreTracker::FreTracker() :
-    fre_tracker_path_(FRE_TRACKER_PATH),
-    first_boot_path_(FIRST_BOOT_FILE_PATH) {
+    fre_tracker_file_path_(FRE_TRACKER_FILE_PATH),
+    first_boot_file_path_(FIRST_BOOT_FILE_PATH) {
     mkdir("/var/fre", S_IFDIR);
-    std::ifstream fre_str(fre_tracker_path_);
+    std::ifstream fre_strm(fre_tracker_file_path_);
     Json::Reader reader;
-    if (!fre_str || !reader.parse(fre_str, fre_status_)) {
+    if (!fre_strm || !reader.parse(fre_strm, fre_status_)) {
+        // Either /var/fre/fre_tracker.json does not exist or the json reader
+        // can't properly read it
         fre_status_ = Json::Value();
     }
-    if (FILE *first_boot_file = fopen(first_boot_path_.c_str(), "r")) {
+    if (FILE *first_boot_file = fopen(first_boot_file_path_.c_str(), "r")) {
         fclose(first_boot_file);
         isFirstBootSet(true);
     } else {
+        // The file /home/.first_firmware_boot does not exist
         isFirstBootSet(false);
     }
 }
 
+/*
+We know if we have to move through the First Run Experience (FRE) if either the
+/var/fre/fre_tracker.json file does not exist or the
+["fre_status"]["current_step"] is not equal to "fre_completed".
+
+Write the following JSON structure to /var/fre/fre_tracker.json:
+
+{
+   "fre_status" : {
+      "current_step" : "fre_complete",
+      "fre_complete" : true
+   }
+}
+
+TODO(dev) get rid of the fre_complete boolean. it's redundant.
+*/
 void FreTracker::initialize() {
     if (!fre_status_.isMember("fre_status")) {
+        // create root "fre_status" string
         currentFreStepSet(FreStep::Welcome);
         fre_status_["fre_status"] = Json::Value();
         Json::Value &fre_status = fre_status_["fre_status"];
-        if (!fre_status.isMember("fre_complete")) {
-            fre_status["fre_complete"] = Json::Value(false);
-        }
+        // create ["fre_status"]["current_step"] if it doesn't exist
         if (!fre_status.isMember("current_step")) {
             next_step_ = "welcome";
-            fre_status["current_step"] = Json::Value(next_step_);
+            fre_status["current_step"] = Json::Value(next_step_);  
+        }
+        // create ["fre_status"]["fre_complete"] if it doesn't exist
+        if (!fre_status.isMember("fre_complete")) {
+            fre_status["fre_complete"] = Json::Value(false);
         }
         logFreStatus();
     } else {
@@ -88,7 +110,7 @@ void FreTracker::setFreStep(uint step) {
 
 void FreTracker::logFreStatus() {
     Json::Value &fre_status = fre_status_["fre_status"];
-    Json::Value &fre_complete = fre_status["fre_complete"];
+    // Json::Value &fre_complete = fre_status["fre_complete"];
     Json::Value &current_step = fre_status["current_step"];
 
     if (next_step_ == "fre_complete") {
@@ -99,7 +121,7 @@ void FreTracker::logFreStatus() {
 
     current_step = Json::Value(next_step_);
 
-    std::string tmp_path = fre_tracker_path_ + ".tmp";
+    std::string tmp_path = fre_tracker_file_path_ + ".tmp";
     std::ofstream tmp_str(tmp_path);
     tmp_str << fre_status_.toStyledString();
 
@@ -109,7 +131,7 @@ void FreTracker::logFreStatus() {
     int fd = open(tmp_path.c_str(), O_APPEND);
     fsync(fd);
     if (fd) {
-        rename(tmp_path.c_str(), fre_tracker_path_.c_str());
+        rename(tmp_path.c_str(), fre_tracker_file_path_.c_str());
     }
     close(fd);
 }
@@ -117,6 +139,6 @@ void FreTracker::logFreStatus() {
 void FreTracker::acknowledgeFirstBoot() {
 // TODO(praveen): Check if the first boot file is used
 // elsewhere before deleting it
-    remove(first_boot_path_.c_str());
+    remove(first_boot_file_path_.c_str());
     isFirstBootSet(false);
 }
