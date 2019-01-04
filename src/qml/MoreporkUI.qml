@@ -115,12 +115,14 @@ ApplicationWindow {
         }
     }
 
-    onInstallUnsignedFwRequest: {
+    onInstallUnsignedFwRequestChanged: {
         if(installUnsignedFwRequest) {
             // Open popup
+            installUnsignedFwPopup.open()
         }
         else {
             // Close popup
+            installUnsignedFwPopup.close()
         }
 
     }
@@ -1038,7 +1040,7 @@ ApplicationWindow {
             }
 
             Rectangle {
-                id: basePopupItem
+                id: installUnsignedFwBasePopupItem
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
                 width: 740
@@ -1050,7 +1052,7 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Item {
-                    id: columnLayout
+                    id: installUnsignedFwColumnLayout
                     width: 600
                     height: 300
                     anchors.top: parent.top
@@ -1087,7 +1089,7 @@ ApplicationWindow {
                 }
 
                 Rectangle {
-                    id: horizontal_divider
+                    id: install_unsigned_fw_horizontal_divider
                     width: parent.width
                     height: 2
                     color: "#ffffff"
@@ -1097,7 +1099,7 @@ ApplicationWindow {
                 }
 
                 Rectangle {
-                    id: vertical_divider
+                    id: install_unsigned_fw_vertical_divider
                     x: 359
                     y: 328
                     width: 2
@@ -1111,7 +1113,7 @@ ApplicationWindow {
                 }
 
                 Item {
-                    id: item1
+                    id: install_unsigned_fw_item1
                     width: parent.width
                     height: 72
                     anchors.bottom: parent.bottom
