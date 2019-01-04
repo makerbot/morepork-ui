@@ -75,6 +75,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, username, "Unknown")
     MODEL_PROP(QString, systemTime, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)
+    MODEL_PROP(bool, isInstallUnsignedFwRequestPending, false)
     MODEL_PROP(bool, updatingExtruderFirmware, false)
     MODEL_PROP(int, extruderFirmwareUpdateProgressA, 0)
     MODEL_PROP(int, extruderFirmwareUpdateProgressB, 0)
