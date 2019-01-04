@@ -1016,7 +1016,7 @@ ApplicationWindow {
             closePolicy: Popup.CloseOnPressOutside
             parent: overlay
             background: Rectangle {
-                id: popupBackgroundDim
+                id: installUnsignedFwPopupBackgroundDim
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
                 opacity: 0.5
