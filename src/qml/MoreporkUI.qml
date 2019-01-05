@@ -1078,7 +1078,7 @@ ApplicationWindow {
                         text: "You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?"
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.topMargin: 17
-                        anchors.top: install_unsigned_fw_image.bottom
+                        anchors.top: install_unsigned_fw_header_text.bottom
                         horizontalAlignment: Text.AlignLeft
                         font.weight: Font.Light
                         font.family: "Antennae"
