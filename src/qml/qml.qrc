@@ -105,5 +105,7 @@
         <file>SlidingSwitchForm.qml</file>
         <file>RaiseLowerBuildPlateItem.qml</file>
         <file>RaiseLowerBuildPlateItemForm.qml</file>
+        <file>DayOneUpdateScreen.qml</file>
+        <file>DayOneUpdateScreenForm.qml</file>
     </qresource>
 </RCC>

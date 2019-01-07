@@ -226,18 +226,24 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        DayOneUpdateScreen {
+            id: dayOneUpdateScreen
+            anchors.fill: parent
+            z: 2
+            visible: true
+        }
+
         StartupSplashScreen {
             id: startupSplashScreen
             anchors.fill: parent
             z: 2
-            visible: connectionState != ConnectionState.Connected
+            visible: false
         }
 
         FirmwareUpdateSuccessfulScreen {
             anchors.fill: parent
             z: 2
-            visible: fre.isFirstBoot &&
-                     connectionState == ConnectionState.Connected
+            visible: false
         }
 
         Drawer {
@@ -271,8 +277,7 @@ ApplicationWindow {
 
         FrePage {
             id: freScreen
-            visible: connectionState == ConnectionState.Connected &&
-                     !isFreComplete && !inFreStep
+            visible: false
         }
 
         SwipeView {
@@ -285,8 +290,7 @@ ApplicationWindow {
             }
             property alias materialPage: materialPage
             smooth: false
-            visible: connectionState == ConnectionState.Connected &&
-                     !freScreen.visible
+            visible: false
 
             function swipeToItem(itemToDisplayDefaultIndex) {
                 var prevIndex = mainSwipeView.currentIndex

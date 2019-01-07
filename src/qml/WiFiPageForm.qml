@@ -22,6 +22,9 @@ Item {
     property bool selectedWifiSaved: false
     property bool isForgetEnabled: false
 
+    property string lightBlue: "#3183af"
+    property string otherBlue: "#45a2d3"
+
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
             bot.net.setWifiState(WifiState.Connected)
