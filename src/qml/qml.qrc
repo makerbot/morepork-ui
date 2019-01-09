@@ -105,5 +105,23 @@
         <file>SlidingSwitchForm.qml</file>
         <file>RaiseLowerBuildPlateItem.qml</file>
         <file>RaiseLowerBuildPlateItemForm.qml</file>
+        <file>AdvancedInfoElement.qml</file>
+        <file>AdvancedInfoElementForm.qml</file>
+        <file>AdvancedInfoToolheadElement.qml</file>
+        <file>AdvancedInfoToolheadElementForm.qml</file>
+        <file>AdvancedInfoToolheadsItem.qml</file>
+        <file>AdvancedInfoToolheadsItemForm.qml</file>
+        <file>AdvancedInfoFilamentBayElement.qml</file>
+        <file>AdvancedInfoFilamentBayElementForm.qml</file>
+        <file>AdvancedInfoFilamentBaysItem.qml</file>
+        <file>AdvancedInfoFilamentBaysItemForm.qml</file>
+        <file>AdvancedInfoChamberItem.qml</file>
+        <file>AdvancedInfoChamberItemForm.qml</file>
+        <file>AdvancedInfoMiscItem.qml</file>
+        <file>AdvancedInfoMiscItemForm.qml</file>
+        <file>AdvancedInfoMotionStatusElement.qml</file>
+        <file>AdvancedInfoMotionStatusElementForm.qml</file>
+        <file>AdvancedInfoMotionStatusItem.qml</file>
+        <file>AdvancedInfoMotionStatusItemForm.qml</file>
     </qresource>
 </RCC>
