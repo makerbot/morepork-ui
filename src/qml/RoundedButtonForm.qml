@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 Rectangle {
     property alias button_rectangle: button_rectangle
@@ -10,11 +10,14 @@ Rectangle {
     property int label_size: 20
     property int label_width: 300
     property bool disable_button: false
+    property bool is_button_transparent: true
+    property string button_pressed_color: "#ffffff"
+    property string button_not_pressed_color: "#000000"
 
     id: button_rectangle
     width: 200
     height: 40
-    color: "#00000000"
+    color: is_button_transparent ? "#00000000" : button_not_pressed_color
     radius: 8
     smooth: false
     antialiasing: false
