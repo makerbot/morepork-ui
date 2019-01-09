@@ -34,6 +34,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
+    Q_INVOKABLE virtual void respondInstallUnsignedFwRequest(QString response);
     Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
     Q_INVOKABLE virtual void installFirmware();
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> axes);

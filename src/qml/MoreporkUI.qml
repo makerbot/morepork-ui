@@ -1031,12 +1031,10 @@ ApplicationWindow {
                 NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
             }
             onOpened: {
-                install_unsigned_fw_rectangle.color = "#ffffff"
-                install_unsigned_fw_text.color = "#000000"
-                installUnsignedFw = false
+                cancel_rectangle.color = "#ffffff"
+                cancel_text.color = "#000000"
             }
             onClosed: {
-                installUnsignedFw = false
             }
 
             Rectangle {
@@ -1076,6 +1074,9 @@ ApplicationWindow {
                         id: install_unsigned_fw_description_text1
                         color: "#cbcbcb"
                         text: "You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?"
+                        // To specify a WordWrap property, the width must be defined
+                        width: parent.width
+                        wrapMode: Text.WordWrap
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.topMargin: 17
                         anchors.top: install_unsigned_fw_header_text.bottom
@@ -1148,18 +1149,15 @@ ApplicationWindow {
                             id: install_mouseArea
                             anchors.fill: parent
                             onPressed: {
-                                dismiss_text.color = "#000000"
-                                dismiss_rectangle.color = "#ffffff"
-                                install_text.color = "#ffffff"
-                                install_rectangle.color = "#00000000"
+                                install_text.color = "#00000000"
+                                install_rectangle.color = "#ffffff"
                             }
                             onReleased: {
                                 install_text.color = "#ffffff"
                                 install_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                bot.respondAuthRequest("allow")
-                                installUnsignedFw = true
+                                bot.respondInstallUnsignedFwRequest("allow")
                                 installUnsignedFwPopup.close()
                             }
                         }
@@ -1199,8 +1197,7 @@ ApplicationWindow {
                                 cancel_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                bot.respondAuthRequest("rejected")
-                                installUnsignedFw = false
+                                bot.respondInstallUnsignedFwRequest("rejected")
                                 installUnsignedFwPopup.close()
                             }
                         }
