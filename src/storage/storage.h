@@ -10,27 +10,28 @@
 #include <QStack>
 #include <QDateTime>
 #include "model/base_model.h"
+#include "storage/progress_copy.h"
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
+#define DISK_FW_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
-#define USB_STORAGE_PATH QString()
+#define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/firmware_zips"
 #define USB_STORAGE_DEV_BY_PATH QString()
-#define LEGACY_USB_DEV_BY_PATH QString()
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_print"
 #else
 // embedded linux path
+#define DISK_FW_PATH QString("/home/firmware")
 #define TEST_PRINT_PATH QString("/home/test_print")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define USB_STORAGE_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
-// TODO(chris): Remove this when we no longer need to support rev B boards
-#define LEGACY_USB_DEV_BY_PATH \
-QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
+
+constexpr std::array<int, 1> kValidMachinePid = {14};
 
 class PrintFileInfo : public QObject {
   Q_OBJECT
@@ -99,9 +100,9 @@ class PrintFileInfo : public QObject {
                   const QString &slicer_name = "null",
                   QObject *parent = 0) :
                   QObject(parent),
-                  file_path_(file_path),
-                  file_name_(file_name),
-                  file_base_name_(file_base_name),
+                  file_path_(file_path), // absolute_path_ absolute file path only
+                  file_name_(file_name), // file name, no path
+                  file_base_name_(file_base_name), // file name no path or ext
                   file_last_read_(file_last_read),
                   is_dir_(is_dir),
                   extrusion_mass_grams_a_(extrusion_mass_grams_a),
@@ -231,7 +232,7 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
   public:
     ThumbnailPixmapProvider() :
       QQuickImageProvider(QQuickImageProvider::Pixmap) {}
-    QPixmap requestPixmap(const QString &kAbsoluteFilePath, QSize *size,
+    QPixmap requestPixmap(const QString &absolute_file_path, QSize *size,
       const QSize &requestedSize);
 };
 
@@ -242,17 +243,23 @@ class MoreporkStorage : public QObject {
   QFileSystemWatcher *usb_storage_watcher_;
   QStack<QString> back_dir_stack_;
   QString prev_thing_dir_;
+  QPointer<QThread> copy_thread_;
+  QPointer<ProgressCopy> prog_copy_;
   MODEL_PROP(bool, usbStorageConnected, false)
   MODEL_PROP(bool, storageIsEmpty, true)
+  MODEL_PROP(bool, fileIsCopying, false)
   MODEL_PROP(PrintFileInfo::StorageSortType, sortType,
              PrintFileInfo::StorageSortType::DateAdded)
+  bool firmwareIsValid(const QString file_path);
 
   public:
     QList<QObject*> print_file_list_;
     PrintFileInfo* current_thing_;
     MoreporkStorage();
     Q_PROPERTY(const QString usbStoragePath CONSTANT MEMBER usbStoragePath);
-    Q_INVOKABLE void updateStorageFileList(const QString kDirectory);
+    Q_INVOKABLE void updateFirmwareFileList(const QString directory_path);
+    Q_INVOKABLE void copyFirmwareToDisk(const QString file_path);
+    Q_INVOKABLE void updateStorageFileList(const QString directory);
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList
@@ -273,6 +280,7 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
+    Q_INVOKABLE void cancelCopy();
 
   private:
     const QString usbStoragePath;
@@ -280,10 +288,11 @@ class MoreporkStorage : public QObject {
   private slots:
     void updateUsbStorageConnected();
     void newSortType();
+    void copyIsFinished();
 
   signals:
     void printFileListChanged();
+    void cancelCopyThread();
 };
 
 #endif //__MOREPORK_STORAGE_H__
-

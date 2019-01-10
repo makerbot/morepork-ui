@@ -89,6 +89,13 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
     }
+    UsbFirmwarePage {
+        id: usbFirmwareList
+        anchors.verticalCenterOffset: 30
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: false
+    }
 
     Image {
         id: header_image
@@ -206,6 +213,11 @@ Item {
                 target: mainItem
                 visible: true
             }
+
+            PropertyChanges {
+                target: usbFirmwareList
+                visible: false
+            }
         },
         State {
             name: "download_to_usb_stick"
@@ -242,6 +254,11 @@ Item {
                 target: mainItem
                 visible: true
             }
+
+            PropertyChanges {
+                target: usbFirmwareList
+                visible: false
+            }
         },
         State {
             name: "connect_to_wifi"
@@ -264,6 +281,11 @@ Item {
             PropertyChanges {
                 target: imageBackArrow
                 visible: true
+            }
+
+            PropertyChanges {
+                target: usbFirmwareList
+                visible: false
             }
         },
         State {
@@ -288,6 +310,59 @@ Item {
             PropertyChanges {
                 target: imageBackArrow
                 visible: false
+            }
+
+            PropertyChanges {
+                target: usbFirmwareList
+                visible: false
+            }
+        },
+        State {
+            name: "usb_fw_file_list"
+            PropertyChanges {
+                target: title
+                text: "DOWNLOAD TO\nUSB STICK"
+                anchors.topMargin: 40
+                visible: false
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                visible: false
+            }
+
+            PropertyChanges {
+                target: button2
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: button1
+                opacity: 0.0
+                buttonWidth: 220
+                label: "CHOOSE FILE"
+            }
+
+            PropertyChanges {
+                target: imageBackArrow
+                visible: true
+            }
+
+            PropertyChanges {
+                target: mainItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: usbFirmwareList
+                visible: true
+            }
+
+            PropertyChanges {
+                target: header_image
+                opacity: 0
+                visible: true
             }
         }
     ]

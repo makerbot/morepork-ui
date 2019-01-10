@@ -91,4 +91,10 @@ if( !!(exp) ) ; else{                                                           
   exit_function;                                                                                           \
 }
 
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+#define MP_QINFO(msg) qInfo() << FL_STRM << msg;
+#else
+#define MP_QINFO(msg) (void)0;
+#endif
+
 #endif // __ERROR_UTILS_H__

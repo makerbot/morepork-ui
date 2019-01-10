@@ -1,4 +1,7 @@
 #include <algorithm>
+#include <fstream>
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/reader.h>
 #include "storage/storage.h"
 #include "error_utils.h"
 #ifdef HAVE_LIBTINYTHING
@@ -6,15 +9,15 @@
 #endif
 
 
-QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
+QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &absolute_file_path,
     QSize *size, const QSize &requestedSize) {
 #ifdef HAVE_LIBTINYTHING
-  const QFileInfo kFileInfo(kAbsoluteFilePath);
-  if(kFileInfo.exists()) {
-      if(kFileInfo.isDir()) {
+  const QFileInfo file_info(absolute_file_path);
+  if(file_info.exists()) {
+      if(file_info.isDir()) {
           return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
       } else {
-          MakerbotFileMetaReader file_meta_reader(kFileInfo);
+          MakerbotFileMetaReader file_meta_reader(file_info);
           QImage thumbnail;
           switch(requestedSize.width()) {
               case ThumbnailWidth::Small:
@@ -42,8 +45,8 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
 }
 
 
-MoreporkStorage::MoreporkStorage()
-    : usbStoragePath(USB_STORAGE_PATH) {
+MoreporkStorage::MoreporkStorage() :
+    usbStoragePath(USB_STORAGE_PATH) {
   storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_->addPath("/dev/disk/by-path");
@@ -51,10 +54,12 @@ MoreporkStorage::MoreporkStorage()
   m_sortType = PrintFileInfo::StorageSortType::DateAdded;
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateStorageFileList(const QString)));
+  connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
+          this, SLOT(updateFirmwareFileList(const QString)));
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
-  usbStorageConnectedSet(false);
+  usbStorageConnectedSet(true);
   storageIsEmptySet(true);
 
   QDir dir(TEST_PRINT_PATH);
@@ -71,6 +76,132 @@ MoreporkStorage::MoreporkStorage()
 }
 
 
+// Check if the firmware zip contains a manifest.json file and there exists a
+// PID key within that file with a valid value.
+bool MoreporkStorage::firmwareIsValid(const QString file_path) {
+  const QString kUnzippedManifestFilePath = DISK_FW_PATH + "/manifest.json";
+  bool fw_is_valid = false;
+
+  if (QFileInfo(file_path).exists()) {
+    // remove a manifest.json file if one already exists
+    if(QFileInfo(kUnzippedManifestFilePath).exists()) {
+      QString cmd = "rm -f " + kUnzippedManifestFilePath;
+      const int ret_val = system(cmd.toStdString().c_str());
+    }
+    QString cmd = "unzip " + file_path +
+                  " manifest.json -d " + DISK_FW_PATH;
+    const int ret_val = system(cmd.toStdString().c_str());
+    if (QFileInfo(kUnzippedManifestFilePath).exists()) {
+      std::ifstream manifest_file_strm(kUnzippedManifestFilePath.toStdString());
+      Json::Reader json_reader;
+      Json::Value root_jval;
+      if (manifest_file_strm &&
+          json_reader.parse(manifest_file_strm, root_jval)) {
+        if (root_jval.isMember("supported_machines")) {
+          const Json::Value &supported_mach = root_jval["supported_machines"];
+          if (supported_mach.isArray()) {
+            for (int i = 0; i < supported_mach.size(); ++i) {
+              const Json::Value &sm = supported_mach[i];
+              if (sm.isMember("pid")) {
+                const Json::Value &pid_jval = sm["pid"];
+                if (pid_jval.isNumeric()) {
+                  const int manifest_pid = pid_jval.asInt();
+                  for (auto pid : kValidMachinePid) {
+                    if (fw_is_valid = pid == manifest_pid) {
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      QString cmd = "rm -f " + kUnzippedManifestFilePath;
+      const int ret_val = system(cmd.toStdString().c_str());
+    }
+  }
+  return fw_is_valid;
+}
+
+
+void MoreporkStorage::copyFirmwareToDisk(const QString file_path) {
+  if (QFileInfo(file_path).exists()) {
+    // deleteLater() will destroy the objects pointed to by copy_thread_ and
+    // prog_copy_ and isNull() returns true after this happens
+    if (!copy_thread_.isNull() || !prog_copy_.isNull()) {
+      return;
+    }
+    copy_thread_ = new QThread;
+    prog_copy_ = new ProgressCopy(file_path,
+      DISK_FW_PATH + "/" + QFileInfo(file_path).fileName());
+    prog_copy_->moveToThread(copy_thread_);
+    connect(copy_thread_, SIGNAL(started()), prog_copy_, SLOT(process()));
+    connect(prog_copy_, SIGNAL(finished()), copy_thread_, SLOT(quit()));
+    connect(prog_copy_, SIGNAL(finished()), prog_copy_, SLOT(deleteLater()));
+    connect(copy_thread_, SIGNAL(finished()),
+            copy_thread_, SLOT(deleteLater()));
+    connect(this, SIGNAL(cancelCopyThread()), copy_thread_, SLOT(cancel()));
+    connect(prog_copy_, SIGNAL(finished()), this, SLOT(copyIsFinished()));
+    fileIsCopyingSet(true);
+    copy_thread_->start();
+  }
+}
+
+
+void MoreporkStorage::cancelCopy() {
+  emit cancelCopyThread();
+}
+
+
+void MoreporkStorage::copyIsFinished() {
+  fileIsCopyingSet(false);
+}
+
+
+void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
+  QString fw_file_dir;
+  if (directory_path == "?root_usb?")
+    fw_file_dir = USB_STORAGE_PATH;
+  else
+    fw_file_dir = directory_path;
+  if (QFileInfo(prev_thing_dir_).exists())
+    storage_watcher_->removePath(prev_thing_dir_);
+  prev_thing_dir_ = fw_file_dir;
+  storage_watcher_->addPath(fw_file_dir);
+  if (QDir(fw_file_dir).exists()) {
+    QDirIterator it(fw_file_dir, QDir::Dirs | QDir::Files |
+      QDir::NoDotAndDotDot | QDir::Readable);
+    QList<QObject*> fw_file_list;
+    while (it.hasNext()) {
+      const QFileInfo file_info = QFileInfo(it.next());
+      if (file_info.suffix() == "zip" &&
+          firmwareIsValid(file_info.absoluteFilePath()) || file_info.isDir()) {
+        fw_file_list.append(
+          new PrintFileInfo(file_info.absolutePath(),
+                            file_info.fileName(),
+                            file_info.completeBaseName(),
+                            file_info.lastRead(),
+                            file_info.isDir()));
+      }
+    }
+    if(fw_file_list.empty())
+      printFileListReset();
+    else {
+      std::sort(fw_file_list.begin(), fw_file_list.end(),
+                PrintFileInfo::accessDateGreaterThan);
+      foreach (auto obj, fw_file_list) {
+        MP_QINFO(static_cast<PrintFileInfo*>(obj)->fileBaseName())
+      }
+      printFileListSet(fw_file_list);
+      storageIsEmptySet(false);
+    }
+  }
+  else
+    printFileListReset();
+}
+
+
 void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
   const QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
   if(QDir(dir_path).exists()){
@@ -78,10 +209,10 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
                                 QDir::NoDotAndDotDot | QDir::Readable);
       PrintFileInfo* current_thing = nullptr;
       if(current_thing_dir.hasNext()){
-        const QFileInfo kFileInfo = QFileInfo(current_thing_dir.next());
-        if(kFileInfo.suffix() == "makerbot"){
+        const QFileInfo file_info = QFileInfo(current_thing_dir.next());
+        if(file_info.suffix() == "makerbot"){
   #ifdef HAVE_LIBTINYTHING
-          MakerbotFileMetaReader file_meta_reader(kFileInfo);
+          MakerbotFileMetaReader file_meta_reader(file_info);
           if(file_meta_reader.loadMetadata()){
             auto &meta_data = file_meta_reader.meta_data_;
             QString material_name_a = QString::fromStdString(meta_data->material[1]);
@@ -92,11 +223,11 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
             if(material_name_b == "im-pla") {
                 material_name_b = "tough";
             }
-            current_thing = new PrintFileInfo(kFileInfo.absolutePath(),
-                                kFileInfo.fileName(),
-                                kFileInfo.completeBaseName(),
-                                kFileInfo.lastRead(),
-                                kFileInfo.isDir(),
+            current_thing = new PrintFileInfo(file_info.absolutePath(),
+                                file_info.fileName(),
+                                file_info.completeBaseName(),
+                                file_info.lastRead(),
+                                file_info.isDir(),
                                 meta_data->extrusion_mass_g[1],
                                 meta_data->extrusion_mass_g[0],
                                 meta_data->extruder_temperature[1],
@@ -114,10 +245,10 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
           }
   #else
           current_thing = new PrintFileInfo(dir_path,
-                              kFileInfo.fileName(),
-                              kFileInfo.fileName(),
-                              kFileInfo.lastRead(),
-                              kFileInfo.isDir());
+                              file_info.fileName(),
+                              file_info.fileName(),
+                              file_info.lastRead(),
+                              file_info.isDir());
   #endif
         }
       }
@@ -145,14 +276,14 @@ void MoreporkStorage::currentThingReset(){
 }
 
 
-void MoreporkStorage::updateStorageFileList(const QString kDirectory){
+void MoreporkStorage::updateStorageFileList(const QString directory){
   QString things_dir;
-  if(kDirectory == "?root_internal?")
+  if(directory == "?root_internal?")
     things_dir = INTERNAL_STORAGE_PATH;
-  else if(kDirectory == "?root_usb?")
+  else if(directory == "?root_usb?")
     things_dir = USB_STORAGE_PATH;
   else
-    things_dir = kDirectory;
+    things_dir = directory;
   if(QFileInfo(prev_thing_dir_).exists())
     storage_watcher_->removePath(prev_thing_dir_);
   prev_thing_dir_ = things_dir;
@@ -162,10 +293,10 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
       QDir::NoDotAndDotDot | QDir::Readable);
     QList<QObject*> print_file_list;
     while(it.hasNext()){
-      const QFileInfo kFileInfo = QFileInfo(it.next());
-      if(kFileInfo.suffix() == "makerbot" || kFileInfo.isDir()){
+      const QFileInfo file_info = QFileInfo(it.next());
+      if(file_info.suffix() == "makerbot" || file_info.isDir()){
 #ifdef HAVE_LIBTINYTHING
-        MakerbotFileMetaReader file_meta_reader(kFileInfo);
+        MakerbotFileMetaReader file_meta_reader(file_info);
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
           QString material_name_a = QString::fromStdString(meta_data->material[1]);
@@ -180,11 +311,11 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
               material_name_b = "tough";
           }
           print_file_list.append(
-            new PrintFileInfo(kFileInfo.absolutePath(),
-                              kFileInfo.fileName(),
-                              kFileInfo.completeBaseName(), // For .makerbot's look until last '.'
-                              kFileInfo.lastRead(),
-                              kFileInfo.isDir(),
+            new PrintFileInfo(file_info.absolutePath(),
+                              file_info.fileName(),
+                              file_info.completeBaseName(), // For .makerbot's look until last '.'
+                              file_info.lastRead(),
+                              file_info.isDir(),
                               meta_data->extrusion_mass_g[1],
                               meta_data->extrusion_mass_g[0],
                               meta_data->extruder_temperature[1],
@@ -203,18 +334,18 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
         else
           print_file_list.append(
             new PrintFileInfo(things_dir,
-                              kFileInfo.fileName(),
-                              kFileInfo.fileName(), // For dirs get the complete name including
+                              file_info.fileName(),
+                              file_info.fileName(), // For dirs get the complete name including
                                                     // after the '.', because they're part of the name
-                              kFileInfo.lastRead(),
-                              kFileInfo.isDir()));
+                              file_info.lastRead(),
+                              file_info.isDir()));
 #else
         print_file_list.append(
           new PrintFileInfo(things_dir,
-                            kFileInfo.fileName(),
-                            kFileInfo.fileName(), // If tinything library is unavailable, get everything
-                            kFileInfo.lastRead(),
-                            kFileInfo.isDir()));
+                            file_info.fileName(),
+                            file_info.fileName(), // If tinything library is unavailable, get everything
+                            file_info.lastRead(),
+                            file_info.isDir()));
 #endif
       }
     }
@@ -249,11 +380,11 @@ void MoreporkStorage::newSortType(){
 
 
 void MoreporkStorage::updateUsbStorageConnected(){
-  const bool kUsbStorConnected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
-  const bool kUsbLegacyConnected = QFileInfo(LEGACY_USB_DEV_BY_PATH).exists();
-  usbStorageConnectedSet(kUsbStorConnected || kUsbLegacyConnected);
-  if(prev_thing_dir_.left(USB_STORAGE_PATH.size()) == USB_STORAGE_PATH &&
-     !kUsbStorConnected)
+  const bool usb_stor_connected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
+  usbStorageConnectedSet(usb_stor_connected);
+  const QString usb_storage_path = USB_STORAGE_PATH;
+  if(prev_thing_dir_.left(usb_storage_path.size()) == usb_storage_path &&
+     !usb_stor_connected)
       backStackClear();
 }
 
@@ -291,9 +422,9 @@ void MoreporkStorage::printFileListReset(){
 }
 
 
-void MoreporkStorage::backStackPush(const QString kDirPath){
-  if(QFileInfo(kDirPath).isDir())
-    back_dir_stack_.push(kDirPath);
+void MoreporkStorage::backStackPush(const QString directory_path){
+  if(QFileInfo(directory_path).isDir())
+    back_dir_stack_.push(directory_path);
 }
 
 
@@ -305,4 +436,3 @@ QString MoreporkStorage::backStackPop(){
 void MoreporkStorage::backStackClear(){
   back_dir_stack_.clear();
 }
-

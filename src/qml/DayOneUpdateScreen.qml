@@ -9,7 +9,8 @@ DayOneUpdateScreenForm {
                 bot.installFirmware()
             }
             else if(state == "download_to_usb_stick") {
-                // open file picker
+                storage.updateFirmwareFileList("?root_usb?")
+                state = "usb_fw_file_list"
             }
             else {
                 // base state

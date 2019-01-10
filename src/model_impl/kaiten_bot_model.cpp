@@ -41,6 +41,7 @@ class KaitenBotModel : public BotModel {
     void respondAuthRequest(QString response);
     void firmwareUpdateCheck(bool dont_force_check);
     void installFirmware();
+    void installFirmwareFromDisk(const QString file_name);
     void calibrateToolheads(QList<QString> axes);
     void acknowledgeNozzleCleaned();
     void buildPlateState(bool state);
@@ -486,6 +487,21 @@ void KaitenBotModel::installFirmware(){
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         conn->jsonrpc.invoke("download_and_install_firmware", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::installFirmwareFromDisk(const QString file_name){
+    try{
+        qDebug() << FL_STRM << "file_name: " << file_name;
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["filepath"] = Json::Value(file_name.toStdString());
+        json_params["transfer_wait"] = Json::Value(false);
+        conn->jsonrpc.invoke("brooklyn_upload", json_params,
+            std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

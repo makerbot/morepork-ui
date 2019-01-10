@@ -107,5 +107,7 @@
         <file>RaiseLowerBuildPlateItemForm.qml</file>
         <file>DayOneUpdateScreen.qml</file>
         <file>DayOneUpdateScreenForm.qml</file>
+        <file>UsbFirmwarePageForm.qml</file>
+        <file>UsbFirmwarePage.qml</file>
     </qresource>
 </RCC>
