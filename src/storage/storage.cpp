@@ -142,7 +142,7 @@ void MoreporkStorage::copyFirmwareToDisk(const QString file_path) {
     }
     copy_thread_ = new QThread;
     prog_copy_ = new ProgressCopy(file_path,
-      DISK_FW_PATH + "/firmware.zip");
+      DISK_FW_PATH + "/" + DEFAULT_FW_FILE_NAME);
     prog_copy_->moveToThread(copy_thread_);
     connect(prog_copy_, SIGNAL(progressChanged(double)),
             this, SLOT(setFileCopyProgress(double)));

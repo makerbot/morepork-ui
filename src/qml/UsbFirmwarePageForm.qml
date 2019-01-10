@@ -141,9 +141,7 @@ Item {
                     else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                         getFwFileDetails(model.modelData)
                         storage.copyFirmwareToDisk(model.modelData.filePath + "/" + model.modelData.fileName)
-                        // brooklyn_upload is chrooted to /home for security reasons so
-                        // don't pass file as /home/firmware/firmware.zip
-                        startFirmwareUpdate("firmware/" + model.modelData.fileName)
+                        startFirmwareUpdate()
                     }
                 }
 

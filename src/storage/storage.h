@@ -12,6 +12,7 @@
 #include "model/base_model.h"
 #include "storage/progress_copy.h"
 
+#define DEFAULT_FW_FILE_NAME QString("firmware.zip")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define DISK_FW_PATH QString("/home/")+qgetenv("USER")+"/firmware"
