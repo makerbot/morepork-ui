@@ -248,6 +248,8 @@ class MoreporkStorage : public QObject {
   MODEL_PROP(bool, usbStorageConnected, false)
   MODEL_PROP(bool, storageIsEmpty, true)
   MODEL_PROP(bool, fileIsCopying, false)
+  MODEL_PROP(double, fileCopyProgress, 0)
+  MODEL_PROP(bool, fileCopySucceeded, false)
   MODEL_PROP(PrintFileInfo::StorageSortType, sortType,
              PrintFileInfo::StorageSortType::DateAdded)
   bool firmwareIsValid(const QString file_path);
@@ -288,7 +290,8 @@ class MoreporkStorage : public QObject {
   private slots:
     void updateUsbStorageConnected();
     void newSortType();
-    void copyIsFinished();
+    void setFileCopyProgress(double progress);
+    void setFileCopySucceeded(bool success);
 
   signals:
     void printFileListChanged();

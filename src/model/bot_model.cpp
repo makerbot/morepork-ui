@@ -52,6 +52,10 @@ void BotModel::installFirmware() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::installFirmwareFromDisk(const QString file_name) {
+    qDebug() << FL_STRM << "called with parameter: " << file_name;
+}
+
 void BotModel::calibrateToolheads(QList<QString> axes) {
     qDebug() << FL_STRM << "called";
     qDebug() << "Axes Requested:";

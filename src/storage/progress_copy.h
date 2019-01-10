@@ -11,18 +11,20 @@ class ProgressCopy : public QObject {
   Q_OBJECT
   Q_PROPERTY(double progress READ progress
              WRITE setProgress NOTIFY progressChanged)
-  bool is_cancelled_;
+  bool is_cancelled_, dont_copy_if_dst_exists_;
   double copy_progress_;
-  QFile src_file_path_, dst_file_path_;
+  QFile src_qfile_, dst_qfile_;
   uint64_t src_file_size_, num_byte_writen_, buffer_size_;
   std::vector<char> copy_buffer_;
 
   public:
     ProgressCopy(const QString src_file_path = "",
                  const QString dst_file_path = "",
-                 const uint64_t buffer_size = 1024 * 1024) :
-                 src_file_path_(src_file_path),
-                 dst_file_path_(dst_file_path),
+                 const bool dont_copy_if_dst_exists = false,
+                 const uint64_t buffer_size = 65536) :
+                 src_qfile_(src_file_path),
+                 dst_qfile_(dst_file_path),
+                 dont_copy_if_dst_exists_(dont_copy_if_dst_exists),
                  buffer_size_(buffer_size),
                  is_cancelled_(false),
                  copy_progress_(0.0),
@@ -30,8 +32,8 @@ class ProgressCopy : public QObject {
 
     void setSrcDstFiles(const QString src_file_path,
                         const QString dst_file_path) {
-      src_file_path_ = src_file_path;
-      dst_file_path_ = dst_file_path;
+      src_qfile_.setFileName(src_file_path);
+      dst_qfile_.setFileName(dst_file_path);
     }
 
     void setCopyBufferSize(const uint64_t buffer_size) {
@@ -45,27 +47,31 @@ class ProgressCopy : public QObject {
     void setProgress(double p) {
       if (p != copy_progress_) {
         copy_progress_ = p;
-        emit progressChanged();
+        emit progressChanged(copy_progress_);
       }
     }
 
   public slots:
     void process() {
-      if (!src_file_path_.open(QIODevice::ReadOnly)) {
-        qDebug() << "could not open source file, aborting";
-        emit finished();
+      if (dont_copy_if_dst_exists_ && QFileInfo(src_qfile_).exists()) {
+        emit finished(true); // TODO(sam) do a binary comparison?
         return;
       }
-      src_file_size_ = src_file_path_.size();
-      if (!dst_file_path_.open(QIODevice::WriteOnly)) {
+      if (!src_qfile_.open(QIODevice::ReadOnly)) {
+        qDebug() << "could not open source file, aborting";
+        emit finished(false);
+        return;
+      }
+      src_file_size_ = src_qfile_.size();
+      if (!dst_qfile_.open(QIODevice::WriteOnly)) {
         qDebug() << "could not open destination file, aborting";
         // maybe check for overwriting and ask to proceed
-        emit finished();
+        emit finished(false);
         return;
       }
-      if (!dst_file_path_.resize(src_file_size_)) {
+      if (!dst_qfile_.resize(src_file_size_)) {
         MP_QINFO("could not resize destination file, aborting")
-        emit finished();
+        emit finished(false);
         return;
       }
       copy_buffer_.resize(buffer_size_);
@@ -78,22 +84,23 @@ class ProgressCopy : public QObject {
           uint64_t num_byte_remaining = src_file_size_ - num_byte_writen_;
           uint64_t num_byte_to_write = num_byte_remaining > buffer_size_ ?
                                        buffer_size_ : num_byte_remaining;
-          src_file_path_.read(copy_buffer_.data(), num_byte_to_write);
-          dst_file_path_.write(copy_buffer_.data(), num_byte_to_write);
+          src_qfile_.read(copy_buffer_.data(), num_byte_to_write);
+          dst_qfile_.write(copy_buffer_.data(), num_byte_to_write);
           num_byte_writen_ += num_byte_to_write;
-          src_file_path_.seek(num_byte_writen_);
-          dst_file_path_.seek(num_byte_writen_);
-          setProgress((double)num_byte_writen_ / src_file_size_);
+          src_qfile_.seek(num_byte_writen_);
+          dst_qfile_.seek(num_byte_writen_);
+          setProgress(static_cast<double>(num_byte_writen_) / src_file_size_);
+          // std::this_thread::sleep_for(std::chrono::milliseconds(10));
           QMetaObject::invokeMethod(this, "iterate", Qt::QueuedConnection);
         } else {
-          emit finished();
+          emit finished(true);
           return;
         }
       } else {
-        if (!dst_file_path_.remove()) {
+        if (!dst_qfile_.remove()) {
           MP_QINFO("failed to delete destination file")
         }
-        emit finished();
+        emit finished(false);
       }
     }
 
@@ -102,9 +109,9 @@ class ProgressCopy : public QObject {
     }
 
   signals:
-    void finished();
+    void finished(bool);
     void error(QString err);
-    void progressChanged();
+    void progressChanged(double);
 };
 
 #endif // __PROGRESS_COPY__

@@ -59,8 +59,15 @@ MoreporkStorage::MoreporkStorage() :
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
   usbStorageConnectedSet(true);
+#else
+  usbStorageConnectedSet(false);
+#endif
   storageIsEmptySet(true);
+  fileIsCopyingSet(false);
+  fileCopySucceededSet(false);
+  fileCopyProgressSet(0);
 
   QDir dir(TEST_PRINT_PATH);
   if (!dir.exists()) {
@@ -129,6 +136,7 @@ void MoreporkStorage::copyFirmwareToDisk(const QString file_path) {
   if (QFileInfo(file_path).exists()) {
     // deleteLater() will destroy the objects pointed to by copy_thread_ and
     // prog_copy_ and isNull() returns true after this happens
+    fileCopySucceededSet(false);
     if (!copy_thread_.isNull() || !prog_copy_.isNull()) {
       return;
     }
@@ -136,13 +144,16 @@ void MoreporkStorage::copyFirmwareToDisk(const QString file_path) {
     prog_copy_ = new ProgressCopy(file_path,
       DISK_FW_PATH + "/" + QFileInfo(file_path).fileName());
     prog_copy_->moveToThread(copy_thread_);
+    connect(prog_copy_, SIGNAL(progressChanged(double)),
+            this, SLOT(setFileCopyProgress(double)));
+    connect(this, SIGNAL(cancelCopyThread()), prog_copy_, SLOT(cancel()));
     connect(copy_thread_, SIGNAL(started()), prog_copy_, SLOT(process()));
-    connect(prog_copy_, SIGNAL(finished()), copy_thread_, SLOT(quit()));
-    connect(prog_copy_, SIGNAL(finished()), prog_copy_, SLOT(deleteLater()));
+    connect(prog_copy_, SIGNAL(finished(bool)),
+            this, SLOT(setFileCopySucceeded(bool)));
+    connect(prog_copy_, SIGNAL(finished(bool)), copy_thread_, SLOT(quit()));
+    connect(prog_copy_, SIGNAL(finished(bool)), prog_copy_, SLOT(deleteLater()));
     connect(copy_thread_, SIGNAL(finished()),
             copy_thread_, SLOT(deleteLater()));
-    connect(this, SIGNAL(cancelCopyThread()), copy_thread_, SLOT(cancel()));
-    connect(prog_copy_, SIGNAL(finished()), this, SLOT(copyIsFinished()));
     fileIsCopyingSet(true);
     copy_thread_->start();
   }
@@ -154,7 +165,13 @@ void MoreporkStorage::cancelCopy() {
 }
 
 
-void MoreporkStorage::copyIsFinished() {
+void MoreporkStorage::setFileCopyProgress(double progress) {
+  fileCopyProgressSet(progress);
+}
+
+
+void MoreporkStorage::setFileCopySucceeded(bool success) {
+  fileCopySucceededSet(success);
   fileIsCopyingSet(false);
 }
 
@@ -211,7 +228,7 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
       if(current_thing_dir.hasNext()){
         const QFileInfo file_info = QFileInfo(current_thing_dir.next());
         if(file_info.suffix() == "makerbot"){
-  #ifdef HAVE_LIBTINYTHING
+#ifdef HAVE_LIBTINYTHING
           MakerbotFileMetaReader file_meta_reader(file_info);
           if(file_meta_reader.loadMetadata()){
             auto &meta_data = file_meta_reader.meta_data_;
@@ -243,13 +260,13 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
                                 material_name_b,
                                 QString::fromStdString(meta_data->slicer_name));
           }
-  #else
+#else
           current_thing = new PrintFileInfo(dir_path,
                               file_info.fileName(),
                               file_info.fileName(),
                               file_info.lastRead(),
                               file_info.isDir());
-  #endif
+#endif
         }
       }
       if(current_thing != nullptr)

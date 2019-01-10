@@ -36,6 +36,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
     Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
     Q_INVOKABLE virtual void installFirmware();
+    Q_INVOKABLE virtual void installFirmwareFromDisk(const QString file_name);
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> axes);
     Q_INVOKABLE virtual void acknowledgeNozzleCleaned();
     Q_INVOKABLE virtual void buildPlateState(bool state);
