@@ -1,49 +1,81 @@
 import QtQuick 2.10
+import ProcessTypeEnum 1.0
 import WifiStateEnum 1.0
 
 DayOneUpdateScreenForm {
     button1 {
         button_mouseArea.onClicked: {
-            if(state == "update_now") {
-                bot.firmwareUpdateCheck(false)
-                bot.installFirmware()
-            }
-            else if(state == "download_to_usb_stick") {
+            if(state == "download_to_usb_stick") {
                 storage.updateFirmwareFileList("?root_usb?")
                 state = "usb_fw_file_list"
             }
+            else if(state == "connect_to_wifi") {
+
+            }
+            else if(state == "updating_firmware") {
+
+            }
+            else if(state == "usb_fw_file_list") {
+
+            }
             else {
                 // base state
-                state = "connect_to_wifi"
-                if(!bot.net.wifiEnabled) {
-                    bot.toggleWifi(true)
+                if(bot.net.interface == "ethernet" || bot.net.interface == "wifi") {
+                    if(bot.process.type == ProcessType.None) {
+                        bot.installFirmware()
+                        state = "updating_firmware"
+                    }
+                    else if(bot.process.type == ProcessType.FirmwareUpdate) {
+                        state = "updating_firmware"
+                    }
                 }
-                bot.net.setWifiState(WifiState.Searching)
-                bot.scanWifi(true)
             }
         }
         disable_button: {
-            if(state == "download_to_usb_stick" &&
-               !storage.usbStorageConnected) {
-                true
+            if(state == "download_to_usb_stick") {
+               if(storage.usbStorageConnected) {
+                   false
+               }
+               else {
+                   true
+               }
+            }
+            else if(state == "connect_to_wifi") {
+
+            }
+            else if(state == "updating_firmware") {
+
+            }
+            else if(state == "usb_fw_file_list") {
+
             }
             else {
-                false
+                // base state
+                if(isfirmwareUpdateAvailable &&
+                   (bot.net.interface == "ethernet" || bot.net.interface == "wifi")) {
+                    false
+                }
+                else if(isFirmwareUpdateProcess) {
+                    false
+                }
+                else {
+                    true
+                }
             }
         }
     }
 
     button2.button_mouseArea.onClicked: {
-        if(state == "update_now") {
-            bot.disconnectWifi("")
-            state = "connect_to_wifi"
-            bot.scanWifi(true)
-        }
-        else {
-            // base state
-            state = "download_to_usb_stick"
-        }
+        state = "download_to_usb_stick"
+    }
 
+    button3.button_mouseArea.onClicked: {
+        state = "connect_to_wifi"
+        if(!bot.net.wifiEnabled) {
+            bot.toggleWifi(true)
+        }
+        bot.net.setWifiState(WifiState.Searching)
+        bot.scanWifi(true)
     }
 
     mouseArea_backArrow.onClicked: {

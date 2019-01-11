@@ -146,7 +146,7 @@ ApplicationWindow {
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
     
     onIsfirmwareUpdateAvailableChanged: {
-        if(isfirmwareUpdateAvailable && isFreComplete) {
+        if(isfirmwareUpdateAvailable && isFreComplete && !dayOneUpdateScreen.visible) {
             if(settingsPage.settingsSwipeView.currentIndex != 3) {
                 firmwareUpdatePopup.open()
             }

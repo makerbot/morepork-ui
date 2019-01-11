@@ -4,6 +4,7 @@
 #include <jsoncpp/json/reader.h>
 #include "storage/storage.h"
 #include "error_utils.h"
+#include "logging.h"
 #ifdef HAVE_LIBTINYTHING
 #include "storage/makerbot_file_meta_reader.h"
 #endif
@@ -171,6 +172,7 @@ void MoreporkStorage::setFileCopyProgress(double progress) {
 
 
 void MoreporkStorage::setFileCopySucceeded(bool success) {
+  LOG(info) << "Copy Succeeded " << (success ? "true" : "false");
   fileCopySucceededSet(success);
   fileIsCopyingSet(false);
 }

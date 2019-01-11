@@ -11,7 +11,7 @@ Item {
     property string fileBaseName
 
     width: 800
-    height: 480
+    height: 440
 
     function getFwFileDetails(file) {
         fileName = file.filePath + "/" + file.fileName
@@ -131,8 +131,14 @@ Item {
                 FileButton {
                 smooth: false
                 antialiasing: false
+                fileThumbnail.source: model.modelData.isDir ?
+                                          "qrc:/img/directory_icon.png" :
+                                          "qrc:/img/sombrero_icon.png"
+                fileThumbnail.width: model.modelData.isDir ? 140 : 70
+                fileThumbnail.height: model.modelData.isDir ? 106 : 53
+                fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 25 : 60
                 filenameText.text: model.modelData.fileBaseName
-                fileDesc_rowLayout.visible: !model.modelData.isDir
+                fileDesc_rowLayout.visible: false
                 onClicked: {
                     if(model.modelData.isDir) {
                         storage.backStackPush(model.modelData.filePath)

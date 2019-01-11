@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     id: dayOneUpdateScreen
@@ -11,8 +12,20 @@ Item {
     antialiasing: false
     property alias button1: button1
     property alias button2: button2
+    property alias button3: button3
     property alias mouseArea_backArrow: mouseArea_backArrow
     property alias wifiPageDayOneUpdate: wifiPageDayOneUpdate
+
+    property bool isFirmwareUpdateProcess: bot.process.type == ProcessType.FirmwareUpdate
+
+    onIsFirmwareUpdateProcessChanged: {
+        if(isFirmwareUpdateProcess) {
+            state = "updating_firmware"
+        }
+        else {
+            state = "base state"
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -89,9 +102,10 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
     }
+
     UsbFirmwarePage {
         id: usbFirmwareList
-        anchors.verticalCenterOffset: 30
+        anchors.verticalCenterOffset: 20
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         visible: false
@@ -111,10 +125,11 @@ Item {
     Item {
         id: mainItem
         width: 400
-        height: 380
+        height: 450
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 0
         anchors.left: parent.left
         anchors.leftMargin: header_image.width
-        anchors.verticalCenter: parent.verticalCenter
         visible: true
 
         Text {
@@ -126,7 +141,7 @@ Item {
             font.letterSpacing: 3
             wrapMode: Text.WordWrap
             anchors.top: parent.top
-            anchors.topMargin: 20
+            anchors.topMargin: 10
             anchors.left: parent.left
             anchors.leftMargin: 0
             color: "#e6e6e6"
@@ -156,14 +171,30 @@ Item {
 
         RoundedButton {
             id: button1
-            label: "UPDATE VIA WI-FI"
-            buttonWidth: 292
+            label_width: 325
+            label: {
+                if(isFirmwareUpdateProcess) {
+                    "INSTALLING..."
+                }
+                else if(isfirmwareUpdateAvailable &&
+                        (bot.net.interface == "ethernet" || bot.net.interface == "wifi")) {
+                    "UPDATE VIA NETWORK"
+                }
+                else if(!isfirmwareUpdateAvailable &&
+                        (bot.net.interface == "ethernet" || bot.net.interface == "wifi")) {
+                    "CONNECTING..."
+                }
+                else {
+                    "UPDATE VIA NETWORK"
+                }
+            }
+            buttonWidth: 360
             buttonHeight: 50
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: subtitle.bottom
             anchors.topMargin: 25
-            opacity: 1.0
+//            opacity: disable_button ? 0.3 : 1.0
         }
 
         RoundedButton {
@@ -176,49 +207,39 @@ Item {
             anchors.leftMargin: 0
             anchors.top: button1.bottom
             anchors.topMargin: 20
-            opacity: 1.0
+            opacity: disable_button ? 0.3 : 1.0
+            disable_button: {
+                if(isFirmwareUpdateProcess &&
+                    bot.process.stateType > ProcessStateType.TransferringFirmware) {
+                    true
+                }
+                else {
+                    false
+                }
+            }
+        }
+
+        RoundedButton {
+            id: button3
+            anchors.topMargin: 20
+            buttonHeight: 50
+            anchors.top: button2.bottom
+            opacity: disable_button ? 0.3 : 1.0
+            label: "WI-FI SETUP"
+            buttonWidth: 360
+            label_width: 325
+            disable_button: {
+                if(isFirmwareUpdateProcess &&
+                    bot.process.stateType > ProcessStateType.TransferringFirmware) {
+                    true
+                }
+                else {
+                    false
+                }
+            }
         }
     }
     states: [
-        State {
-            name: "update_now"
-            when: (bot.net.interface == "ethernet" || bot.net.interface == "wifi") &&
-                  bot.process.type == ProcessType.None
-
-            PropertyChanges {
-                target: subtitle
-                text: "A critical update is required to\nimprove machine reliability and\nprint quality."
-            }
-
-            PropertyChanges {
-                target: button2
-                label: "CHOOSE WIFI NETWORK"
-                buttonWidth: 350
-                opacity: bot.net.interface == "wifi" ? 1.0 : 0
-            }
-
-            PropertyChanges {
-                target: button1
-                label: "UPDATE NOW"
-                buttonWidth: 220
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: title
-                anchors.topMargin: 60
-            }
-
-            PropertyChanges {
-                target: mainItem
-                visible: true
-            }
-
-            PropertyChanges {
-                target: usbFirmwareList
-                visible: false
-            }
-        },
         State {
             name: "download_to_usb_stick"
 
@@ -234,15 +255,20 @@ Item {
             }
 
             PropertyChanges {
+                target: button1
+                buttonWidth: 220
+                label: "CHOOSE FILE"
+                opacity: !storage.usbStorageConnected ? 0.3 : 1.0
+            }
+
+            PropertyChanges {
                 target: button2
                 opacity: 0
             }
 
             PropertyChanges {
-                target: button1
-                buttonWidth: 220
-                label: "CHOOSE FILE"
-                opacity: !storage.usbStorageConnected ? 0.3 : 1.0
+                target: button3
+                opacity: 0
             }
 
             PropertyChanges {
@@ -290,7 +316,6 @@ Item {
         },
         State {
             name: "updating_firmware"
-            when: bot.process.type == ProcessType.FirmwareUpdate
 
             PropertyChanges {
                 target: header_image
@@ -309,7 +334,7 @@ Item {
 
             PropertyChanges {
                 target: imageBackArrow
-                visible: false
+                visible: true
             }
 
             PropertyChanges {
