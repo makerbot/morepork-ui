@@ -32,6 +32,14 @@ class ProgressCopy : public QObject {
 
     void setSrcDstFiles(const QString src_file_path,
                         const QString dst_file_path) {
+      is_cancelled_ = false;
+      copy_progress_ = 0.0;
+      num_byte_writen_ = 0;
+      // You cannot call setFileName() if the QFile is "open"
+      // There is nothing stating that close cannot be called on a
+      // file that is not open.
+      src_qfile_.close();
+      dst_qfile_.close();
       src_qfile_.setFileName(src_file_path);
       dst_qfile_.setFileName(dst_file_path);
     }
@@ -53,6 +61,9 @@ class ProgressCopy : public QObject {
 
   public slots:
     void process() {
+      is_cancelled_ = false;
+      copy_progress_ = 0.0;
+      num_byte_writen_ = 0;
       if (dont_copy_if_dst_exists_ && QFileInfo(src_qfile_).exists()) {
         emit finished(true); // TODO(sam) do a binary comparison?
         return;
