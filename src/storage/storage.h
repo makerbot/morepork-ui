@@ -244,7 +244,6 @@ class MoreporkStorage : public QObject {
   QFileSystemWatcher *usb_storage_watcher_;
   QStack<QString> back_dir_stack_;
   QString prev_thing_dir_;
-  QPointer<QThread> copy_thread_;
   QPointer<ProgressCopy> prog_copy_;
   MODEL_PROP(bool, usbStorageConnected, false)
   MODEL_PROP(bool, storageIsEmpty, true)

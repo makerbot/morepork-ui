@@ -53,6 +53,7 @@ MoreporkStorage::MoreporkStorage() :
   usb_storage_watcher_->addPath("/dev/disk/by-path");
   prev_thing_dir_ = "";
   m_sortType = PrintFileInfo::StorageSortType::DateAdded;
+
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateStorageFileList(const QString)));
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
@@ -60,6 +61,14 @@ MoreporkStorage::MoreporkStorage() :
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
+
+  prog_copy_ = new ProgressCopy();
+  connect(prog_copy_, SIGNAL(progressChanged(double)),
+          this, SLOT(setFileCopyProgress(double)));
+  connect(this, SIGNAL(cancelCopyThread()), prog_copy_, SLOT(cancel()));
+  connect(prog_copy_, SIGNAL(finished(bool)),
+          this, SLOT(setFileCopySucceeded(bool)));
+
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
   usbStorageConnectedSet(true);
 #else
@@ -135,44 +144,30 @@ bool MoreporkStorage::firmwareIsValid(const QString file_path) {
 
 void MoreporkStorage::copyFirmwareToDisk(const QString file_path) {
   if (QFileInfo(file_path).exists()) {
-    // deleteLater() will destroy the objects pointed to by copy_thread_ and
-    // prog_copy_ and isNull() returns true after this happens
     fileCopySucceededSet(false);
-    if (!copy_thread_.isNull() || !prog_copy_.isNull()) {
-      return;
-    }
-    copy_thread_ = new QThread;
-    prog_copy_ = new ProgressCopy(file_path,
-      DISK_FW_PATH + "/" + DEFAULT_FW_FILE_NAME);
-    prog_copy_->moveToThread(copy_thread_);
-    connect(prog_copy_, SIGNAL(progressChanged(double)),
-            this, SLOT(setFileCopyProgress(double)));
-    connect(this, SIGNAL(cancelCopyThread()), prog_copy_, SLOT(cancel()));
-    connect(copy_thread_, SIGNAL(started()), prog_copy_, SLOT(process()));
-    connect(prog_copy_, SIGNAL(finished(bool)),
-            this, SLOT(setFileCopySucceeded(bool)));
-    connect(prog_copy_, SIGNAL(finished(bool)), copy_thread_, SLOT(quit()));
-    connect(prog_copy_, SIGNAL(finished(bool)), prog_copy_, SLOT(deleteLater()));
-    connect(copy_thread_, SIGNAL(finished()),
-            copy_thread_, SLOT(deleteLater()));
+    prog_copy_->setSrcDstFiles(file_path,
+                               DISK_FW_PATH + "/" + DEFAULT_FW_FILE_NAME);
     fileIsCopyingSet(true);
-    copy_thread_->start();
+    prog_copy_->process();
   }
 }
 
 
+// Q_INVOKABLE called from UI
 void MoreporkStorage::cancelCopy() {
   emit cancelCopyThread();
 }
 
 
+// called by SIGNAL emitted from prog_copy_
 void MoreporkStorage::setFileCopyProgress(double progress) {
   fileCopyProgressSet(progress);
 }
 
 
+// called by SIGNAL emitted from prog_copy_
 void MoreporkStorage::setFileCopySucceeded(bool success) {
-  LOG(info) << "Copy Succeeded " << (success ? "true" : "false");
+  // tell UI if file copy was success. UI logic will handle brooklyn_upload call
   fileCopySucceededSet(success);
   fileIsCopyingSet(false);
 }
