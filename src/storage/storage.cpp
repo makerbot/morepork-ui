@@ -395,11 +395,16 @@ void MoreporkStorage::newSortType(){
 
 void MoreporkStorage::updateUsbStorageConnected(){
   const bool usb_stor_connected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
+  if(!usb_stor_connected) {
+    prog_copy_->cancel(); // cancel copy if one is ongoing
+    printFileListReset();
+  }
   usbStorageConnectedSet(usb_stor_connected);
   const QString usb_storage_path = USB_STORAGE_PATH;
   if(prev_thing_dir_.left(usb_storage_path.size()) == usb_storage_path &&
-     !usb_stor_connected)
-      backStackClear();
+     !usb_stor_connected) {
+    backStackClear();
+  }
 }
 
 
