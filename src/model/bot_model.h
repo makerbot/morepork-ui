@@ -34,6 +34,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
+    Q_INVOKABLE virtual void respondInstallUnsignedFwRequest(QString response);
     Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
     Q_INVOKABLE virtual void installFirmware();
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> axes);
@@ -75,6 +76,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, username, "Unknown")
     MODEL_PROP(QString, systemTime, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)
+    MODEL_PROP(bool, isInstallUnsignedFwRequestPending, false)
     MODEL_PROP(bool, updatingExtruderFirmware, false)
     MODEL_PROP(int, extruderFirmwareUpdateProgressA, 0)
     MODEL_PROP(int, extruderFirmwareUpdateProgressB, 0)

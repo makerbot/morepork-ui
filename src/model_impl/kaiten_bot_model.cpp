@@ -22,6 +22,7 @@ class KaitenBotModel : public BotModel {
     void netUpdate(const Json::Value & info);
     void systemTimeUpdate(const Json::Value & time_update);
     void authRequestUpdate(const Json::Value &request);
+    void installUnsignedFwRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
     void printFileValidNotif(const Json::Value &info);
     void unknownMatWarningUpdate(const Json::Value &params);
@@ -38,7 +39,9 @@ class KaitenBotModel : public BotModel {
     void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
     void assistedLevel();
     std::shared_ptr<JsonRpcMethod::Response> m_authResp;
+    std::shared_ptr<JsonRpcMethod::Response> m_installUnsignedFwResp;
     void respondAuthRequest(QString response);
+    void respondInstallUnsignedFwRequest(QString response);
     void firmwareUpdateCheck(bool dont_force_check);
     void installFirmware();
     void calibrateToolheads(QList<QString> axes);
@@ -71,6 +74,8 @@ class KaitenBotModel : public BotModel {
     void connected();
     void disconnected();
     void timeout();
+
+    std::shared_ptr<JsonRpcMethod::Response> m_unsignedFwResp;
 
     class SystemNotification : public JsonRpcNotification {
       public:
@@ -150,9 +155,17 @@ class KaitenBotModel : public BotModel {
       public:
         AllowUnknownFirmware(KaitenBotModel * bot) : m_bot(bot) {}
         void invoke(const Json::Value &params, std::shared_ptr<Response> response) {
-            Json::Value json_params(Json::objectValue);
-            json_params = Json::Value("allow");
-            response->sendResult(json_params);
+            // If we don't have a popup in progress, show the popup
+            if(!m_bot->m_installUnsignedFwResp) {
+                m_bot->installUnsignedFwRequestUpdate(params);
+                m_bot->m_installUnsignedFwResp = response;
+            }
+            // If we do have a popup in progress, don't show the popup
+            else {
+                Json::Value json_params(Json::objectValue);
+                json_params = Json::Value("rejected");
+                response->sendResult(json_params);
+            }
         }
       private:
         KaitenBotModel *m_bot;
@@ -289,6 +302,10 @@ void KaitenBotModel::authRequestUpdate(const Json::Value &request){
     UPDATE_STRING_PROP(username, request["username"]);
 }
 
+void KaitenBotModel::installUnsignedFwRequestUpdate(const Json::Value &request){
+    isInstallUnsignedFwRequestPendingSet(true);
+}
+
 void KaitenBotModel::respondAuthRequest(QString response){
     if(m_authResp) {
         Json::Value json_params(Json::objectValue);
@@ -296,6 +313,16 @@ void KaitenBotModel::respondAuthRequest(QString response){
         m_authResp->sendResult(json_params);
         m_authResp = nullptr;
         isAuthRequestPendingReset();
+    }
+}
+
+void KaitenBotModel::respondInstallUnsignedFwRequest(QString response){
+    if(m_installUnsignedFwResp) {
+        Json::Value json_params(Json::objectValue);
+        json_params = Json::Value(response.toStdString());
+        m_installUnsignedFwResp->sendResult(json_params);
+        m_installUnsignedFwResp = nullptr;
+        isInstallUnsignedFwRequestPendingReset();
     }
 }
 
