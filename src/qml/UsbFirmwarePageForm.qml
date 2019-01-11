@@ -25,77 +25,25 @@ Item {
 
     Text {
         color: "#ffffff"
+        width: 800
         font.family: "Antennae"
         font.weight: Font.Light
         text: "Copying firmware file to disk... " + (storage.fileCopyProgress * 100.0).toFixed(1) + "%"
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -20
+        horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pointSize: 20
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 15
+        font.pointSize: 18
         visible: storage.fileIsCopying
     }
 
-    BusyIndicator {
+    BusySpinner {
         id: copyBusyIndicator
-        running: true
-        visible: storage.fileIsCopying
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -20
+        anchors.verticalCenterOffset: -35
         anchors.horizontalCenter: parent.horizontalCenter
-
-
-        contentItem: Item {
-            implicitWidth: 64
-            implicitHeight: 64
-
-            Item {
-                id: item
-                x: parent.width / 2 - 32
-                y: parent.height / 2 - 32
-                width: 64
-                height: 64
-                opacity: copyBusyIndicator.running ? 1 : 0
-
-                Behavior on opacity {
-                    OpacityAnimator {
-                        duration: 250
-                    }
-                }
-
-                RotationAnimator {
-                    target: item
-                    running: copyBusyIndicator.visible && copyBusyIndicator.running
-                    from: 0
-                    to: 360
-                    loops: Animation.Infinite
-                    duration: 1500
-                }
-
-                Repeater {
-                    id: repeater
-                    model: 6
-
-                    Rectangle {
-                        x: item.width / 2 - width / 2
-                        y: item.height / 2 - height / 2
-                        implicitWidth: 2
-                        implicitHeight: 16
-                        radius: 0
-                        color: "#ffffff"
-                        transform: [
-                            Translate {
-                                y: -Math.min(item.width, item.height) * 0.5 + 5
-                            },
-                            Rotation {
-                                angle: index / repeater.count * 360
-                                origin.x: 1
-                                origin.y: 8
-                            }
-                        ]
-                    }
-                }
-            }
-        }
+        spinnerActive: storage.fileIsCopying
+        spinnerSize: 36
     }
 
     Text {

@@ -371,7 +371,9 @@ Item {
 
             PropertyChanges {
                 target: imageBackArrow
-                visible: true
+                visible: {
+                    storage.fileIsCopying ? false : true
+                }
             }
 
             PropertyChanges {
