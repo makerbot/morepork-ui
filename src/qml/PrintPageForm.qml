@@ -253,7 +253,7 @@ Item {
                         fileMaterial.visible: false
                         onClicked: {
                             browsingUsbStorage = false
-                            storage.updateStorageFileList("?root_internal?")
+                            storage.updatePrintFileList("?root_internal?")
                             activeDrawer = printPage.sortingDrawer
                             setDrawerState(true)
                             printSwipeView.swipeToItem(1)
@@ -277,7 +277,7 @@ Item {
                         onClicked: {
                             if(usbStorageConnected) {
                                 browsingUsbStorage = true
-                                storage.updateStorageFileList("?root_usb?")
+                                storage.updatePrintFileList("?root_usb?")
                                 activeDrawer = printPage.sortingDrawer
                                 setDrawerState(true)
                                 printSwipeView.swipeToItem(1)
@@ -318,7 +318,7 @@ Item {
             function altBack() {
                 var backDir = storage.backStackPop()
                 if(backDir !== "") {
-                    storage.updateStorageFileList(backDir)
+                    storage.updatePrintFileList(backDir)
                 }
                 else {
                     setDrawerState(false)
@@ -345,7 +345,7 @@ Item {
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
                 visible: !storage.storageIsEmpty
-                model: storage.printFileList
+                model: storage.fileList
                 delegate:
                     FileButton {
                     property int printTimeSecRaw: model.modelData.timeEstimateSec
@@ -373,7 +373,7 @@ Item {
                     onClicked: {
                         if(model.modelData.isDir) {
                             storage.backStackPush(model.modelData.filePath)
-                            storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
+                            storage.updatePrintFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)

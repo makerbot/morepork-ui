@@ -63,7 +63,7 @@ int main(int argc, char ** argv) {
             new Network(engine.networkAccessManager()));
     engine.rootContext()->setContextProperty("network", network.data());
 
-    qmlRegisterType<PrintFileInfo>("PrintFileObject", 1, 0, "PrintFileInfo");
+    qmlRegisterType<MoreporkFileInfo>("PrintFileObject", 1, 0, "MoreporkFileInfo");
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
     engine.load(MOREPORK_UI_QML_MAIN);
 

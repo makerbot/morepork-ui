@@ -74,7 +74,7 @@ Item {
             orientation: ListView.Vertical
             flickableDirection: Flickable.VerticalFlick
             visible: !storage.storageIsEmpty && !storage.fileIsCopying
-            model: storage.printFileList
+            model: storage.fileList
             delegate:
                 FileButton {
                 smooth: false
