@@ -27,6 +27,16 @@ Item {
         }
     }
 
+    property bool isUsbStorageConnected: storage.usbStorageConnected
+
+    onIsUsbStorageConnectedChanged: {
+        if(state == "usb_fw_file_list" &&
+           !isUsbStorageConnected &&
+           bot.process.type == ProcessType.None) {
+            state = "download_to_usb_stick"
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "#000000"
