@@ -1,5 +1,6 @@
 import QtQuick 2.10
 import FreStepEnum 1.0
+import WifiStateEnum 1.0
 
 FrePageForm {
     function startTestPrint() {
@@ -34,6 +35,8 @@ FrePageForm {
                 else {
                     inFreStep = true
                     bot.toggleWifi(true)
+                    bot.net.setWifiState(WifiState.Searching)
+                    bot.scanWifi(true)
                     mainSwipeView.swipeToItem(3)
                     settingsPage.settingsSwipeView.swipeToItem(3)
                 }
