@@ -15,6 +15,7 @@ ApplicationWindow {
     property var currentItem: mainMenu
     property var activeDrawer
     property bool authRequest: bot.isAuthRequestPending
+    property bool installUnsignedFwRequest: bot.isInstallUnsignedFwRequestPending
     property bool updatingExtruderFirmware: bot.updatingExtruderFirmware
     property int extruderFirmwareUpdateProgressA: bot.extruderFirmwareUpdateProgressA
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
@@ -112,6 +113,18 @@ ApplicationWindow {
             authTimeOut.interval = 1500
             authTimeOut.start()
         }
+    }
+
+    onInstallUnsignedFwRequestChanged: {
+        if(installUnsignedFwRequest) {
+            // Open popup
+            installUnsignedFwPopup.open()
+        }
+        else {
+            // Close popup
+            installUnsignedFwPopup.close()
+        }
+
     }
 
     onUpdatingExtruderFirmwareChanged: {
@@ -992,6 +1005,204 @@ ApplicationWindow {
                                     bot.respondAuthRequest("rejected")
                                     authenticatePrinterPopup.close()
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Popup {
+            id: installUnsignedFwPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            closePolicy: Popup.CloseOnPressOutside
+            parent: overlay
+            background: Rectangle {
+                id: installUnsignedFwPopupBackgroundDim
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+            }
+            exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            }
+            onOpened: {
+                cancel_rectangle.color = "#ffffff"
+                cancel_text.color = "#000000"
+            }
+            onClosed: {
+            }
+
+            Rectangle {
+                id: installUnsignedFwBasePopupItem
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 740
+                height: 410
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Item {
+                    id: installUnsignedFwColumnLayout
+                    width: 600
+                    height: 300
+                    anchors.top: parent.top
+                    anchors.topMargin: 35
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    // Title of Popup
+                    Text {
+                        id: install_unsigned_fw_header_text
+                        color: "#cbcbcb"
+                        text: "UNKNOWN FIRMWARE"
+                        anchors.top: parent.top
+                        anchors.topMargin: 0
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        font.letterSpacing: 5
+                        font.family: "Antennae"
+                        font.weight: Font.Bold
+                        font.pixelSize: 22
+                    }
+                    // Main question that appears in the popup
+                    Text {
+                        id: install_unsigned_fw_description_text1
+                        color: "#cbcbcb"
+                        text: "You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?"
+                        // To specify a WordWrap property, the width must be defined
+                        width: parent.width
+                        wrapMode: Text.WordWrap
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.topMargin: 17
+                        anchors.top: install_unsigned_fw_header_text.bottom
+                        horizontalAlignment: Text.AlignLeft
+                        font.weight: Font.Light
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        font.letterSpacing: 3
+                        font.capitalization: Font.MixedCase
+                    }
+                }
+
+                Rectangle {
+                    id: install_unsigned_fw_horizontal_divider
+                    width: parent.width
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                    visible: true
+                }
+
+                Rectangle {
+                    id: install_unsigned_fw_vertical_divider
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    visible: true
+                }
+
+                Item {
+                    id: install_unsigned_fw_item1
+                    width: parent.width
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    visible: true
+
+                    Rectangle {
+                        id: install_rectangle
+                        x: 0
+                        y: 0
+                        width: parent.width * 0.5
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: install_text
+                            color: "#ffffff"
+                            text: "INSTALL"
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: install_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                install_text.color = "#00000000"
+                                install_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                install_text.color = "#ffffff"
+                                install_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                bot.respondInstallUnsignedFwRequest("allow")
+                                installUnsignedFwPopup.close()
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: cancel_rectangle
+                        x: parent.width * 0.5
+                        y: 0
+                        width: parent.width * 0.5
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: cancel_text
+                            color: "#ffffff"
+                            text: "CANCEL"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: cancel_mouseArea
+                            anchors.fill: parent
+                            onPressed: {
+                                cancel_text.color = "#000000"
+                                cancel_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                cancel_text.color = "#ffffff"
+                                cancel_rectangle.color = "#00000000"
+                            }
+                            onClicked: {
+                                bot.respondInstallUnsignedFwRequest("rejected")
+                                installUnsignedFwPopup.close()
                             }
                         }
                     }

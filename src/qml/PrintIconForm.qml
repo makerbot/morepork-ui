@@ -173,6 +173,9 @@ Item {
             visible: false
             border.width: 3
             border.color: "#484848"
+            opacity: (bot.process.stateType == ProcessStateType.Paused ||
+                      bot.process.stateType == ProcessStateType.Printing) ?
+                         1 : 0.3
 
             Image {
                 id: action_image
