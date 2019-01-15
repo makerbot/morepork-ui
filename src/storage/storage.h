@@ -254,24 +254,14 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
 
 class MoreporkStorage : public QObject {
   Q_OBJECT
-  QFileSystemWatcher *storage_watcher_;
-  QFileSystemWatcher *usb_storage_watcher_;
-  QStack<QString> back_dir_stack_;
-  QString prev_thing_dir_;
-  QPointer<ProgressCopy> prog_copy_;
-  MODEL_PROP(bool, usbStorageConnected, false)
-  MODEL_PROP(bool, storageIsEmpty, true)
-  MODEL_PROP(bool, fileIsCopying, false)
-  MODEL_PROP(double, fileCopyProgress, 0)
-  MODEL_PROP(bool, fileCopySucceeded, false)
-  MODEL_PROP(MoreporkFileInfo::StorageSortType, sortType,
-             MoreporkFileInfo::StorageSortType::DateAdded)
-  bool firmwareIsValid(const QString file_path);
-  MoreporkFileInfo* parseMakerbotFile(const QFileInfo &file_info,
-                                      const QString default_file_path,
-                                      const bool return_null_on_parse_fail);
 
   public:
+    //MOREPORK_QML_ENUM
+    enum StorageFileType {
+      Print,
+      Firmware
+    };
+    Q_ENUM(StorageFileType)
     QList<QObject*> file_list_;
     MoreporkFileInfo* current_thing_;
     MoreporkStorage();
@@ -300,9 +290,29 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
     Q_INVOKABLE void cancelCopy();
+    Q_INVOKABLE bool firmwareIsValid(const QString file_path);
+    Q_INVOKABLE void setStorageFileType(
+    const MoreporkStorage::StorageFileType type);
 
   private:
+    QFileSystemWatcher *storage_watcher_;
+    QFileSystemWatcher *usb_storage_watcher_;
+    QStack<QString> back_dir_stack_;
+    QString prev_thing_dir_;
+    QPointer<ProgressCopy> prog_copy_;
     const QString usbStoragePath;
+    MODEL_PROP(bool, usbStorageConnected, false)
+    MODEL_PROP(bool, storageIsEmpty, true)
+    MODEL_PROP(bool, fileIsCopying, false)
+    MODEL_PROP(double, fileCopyProgress, 0)
+    MODEL_PROP(bool, fileCopySucceeded, false)
+    MODEL_PROP(MoreporkFileInfo::StorageSortType, sortType,
+               MoreporkFileInfo::StorageSortType::DateAdded)
+    MODEL_PROP(MoreporkStorage::StorageFileType, storageFileType,
+               MoreporkStorage::StorageFileType::Print)
+    MoreporkFileInfo* parseMakerbotFile(const QFileInfo &file_info,
+                                        const QString default_file_path,
+                                        const bool return_null_on_parse_fail);
 
   private slots:
     void updateUsbStorageConnected();

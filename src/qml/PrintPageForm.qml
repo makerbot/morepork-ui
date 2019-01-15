@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import StorageFileTypeEnum 1.0
 
 Item {
     smooth: false
@@ -277,6 +278,7 @@ Item {
                         onClicked: {
                             if(usbStorageConnected) {
                                 browsingUsbStorage = true
+                                storage.setStorageFileType(StorageFileTypeEnum.Print)
                                 storage.updatePrintFileList("?root_usb?")
                                 activeDrawer = printPage.sortingDrawer
                                 setDrawerState(true)

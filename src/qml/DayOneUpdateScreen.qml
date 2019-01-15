@@ -1,11 +1,13 @@
 import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import WifiStateEnum 1.0
+import StorageFileTypeEnum 1.0
 
 DayOneUpdateScreenForm {
     button1 {
         button_mouseArea.onClicked: {
             if(state == "download_to_usb_stick") {
+                storage.setStorageFileType(StorageFileType.Firmware)
                 storage.updateFirmwareFileList("?root_usb?")
                 state = "usb_fw_file_list"
             }
@@ -31,6 +33,7 @@ DayOneUpdateScreenForm {
                 }
             }
         }
+
         disable_button: {
             if(state == "download_to_usb_stick") {
                if(storage.usbStorageConnected) {
@@ -41,13 +44,13 @@ DayOneUpdateScreenForm {
                }
             }
             else if(state == "connect_to_wifi") {
-
+                false
             }
             else if(state == "updating_firmware") {
-
+                false
             }
             else if(state == "usb_fw_file_list") {
-
+                false
             }
             else {
                 // base state

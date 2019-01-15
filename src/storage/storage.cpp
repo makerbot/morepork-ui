@@ -79,6 +79,7 @@ MoreporkStorage::MoreporkStorage() :
   fileIsCopyingSet(false);
   fileCopySucceededSet(false);
   fileCopyProgressSet(0);
+  storageFileTypeSet(MoreporkStorage::StorageFileType::Print);
 
   QDir dir(TEST_PRINT_PATH);
   if (!dir.exists()) {
@@ -91,6 +92,12 @@ MoreporkStorage::MoreporkStorage() :
     QFile::copy(":/test_files/smallcircle.makerbot",
                 TEST_PRINT_PATH + "/test_print.makerbot");
   }
+}
+
+
+void MoreporkStorage::setStorageFileType(
+    const MoreporkStorage::StorageFileType type) {
+  storageFileTypeSet(type);
 }
 
 
@@ -175,6 +182,11 @@ void MoreporkStorage::setFileCopySucceeded(bool success) {
 
 
 void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
+  if (m_storageFileType != MoreporkStorage::StorageFileType::Firmware) {
+    fileListReset();
+    return;
+  }
+
   QString fw_file_dir;
   if (directory_path == "?root_usb?")
     fw_file_dir = USB_STORAGE_PATH;
@@ -194,8 +206,7 @@ void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
 
     while (it.hasNext()) {
       const QFileInfo file_info = QFileInfo(it.next());
-      if (file_info.suffix() == "zip" &&
-          firmwareIsValid(file_info.absoluteFilePath()) || file_info.isDir()) {
+      if (file_info.suffix() == "zip" || file_info.isDir()) {
         fw_file_list.append(
           new MoreporkFileInfo(file_info.absolutePath(),
                                file_info.fileName(),
@@ -318,6 +329,11 @@ void MoreporkStorage::currentThingReset() {
 
 
 void MoreporkStorage::updatePrintFileList(const QString directory) {
+  if(m_storageFileType != MoreporkStorage::StorageFileType::Print) {
+    fileListReset();
+    return;
+  }
+
   QString things_dir;
   if (directory == "?root_internal?")
     things_dir = INTERNAL_STORAGE_PATH;
@@ -371,15 +387,14 @@ void MoreporkStorage::newSortType() {
 
 
 void MoreporkStorage::updateUsbStorageConnected() {
-  const bool usb_stor_connected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
-  if (!usb_stor_connected) {
+  usbStorageConnectedSet(QFileInfo(USB_STORAGE_DEV_BY_PATH).exists());
+  if (!m_usbStorageConnected) {
     prog_copy_->cancel(); // cancel copy if one is ongoing
     fileListReset();
   }
-  usbStorageConnectedSet(usb_stor_connected);
   const QString usb_storage_path = USB_STORAGE_PATH;
   if (prev_thing_dir_.left(usb_storage_path.size()) == usb_storage_path &&
-     !usb_stor_connected) {
+     !m_usbStorageConnected) {
     backStackClear();
   }
 }

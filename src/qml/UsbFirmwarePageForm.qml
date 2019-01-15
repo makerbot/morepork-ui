@@ -93,9 +93,11 @@ Item {
                         storage.updateFirmwareFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                     }
                     else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
-                        getFwFileDetails(model.modelData)
-                        storage.copyFirmwareToDisk(model.modelData.filePath + "/" + model.modelData.fileName)
-                        startFirmwareUpdate()
+                        if(storage.firmwareIsValid(model.modelData.filePath + "/" + model.modelData.fileName)) {
+                            getFwFileDetails(model.modelData)
+                            storage.copyFirmwareToDisk(model.modelData.filePath + "/" + model.modelData.fileName)
+                            startFirmwareUpdate()
+                        }
                     }
                 }
 
