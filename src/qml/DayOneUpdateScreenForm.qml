@@ -64,11 +64,12 @@ Item {
 
             MouseArea {
                 id: mouseArea_backArrow
-                anchors.rightMargin: 10
-                anchors.leftMargin: 10
-                anchors.bottomMargin: 10
-                anchors.topMargin: 10
-                anchors.fill: parent
+                width: 80
+                height: 60
+                anchors.verticalCenterOffset: 10
+                anchors.horizontalCenterOffset: 30
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
