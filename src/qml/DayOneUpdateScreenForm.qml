@@ -62,6 +62,7 @@ Item {
     property bool isCancelUpdateProcess: false
     property bool isEthernetConnected: false
     property bool setDownloadFailed: false
+    property bool setFirmwareFileCorrupted: false
 
     Timer {
         id: checkForUpdatesTimer
@@ -84,6 +85,17 @@ Item {
     onIsFirmwareDownloadFailedChanged: {
         if(isFirmwareDownloadFailed) {
             setDownloadFailed = true
+            if(!dayOneUpdatePagePopup.opened) {
+                dayOneUpdatePagePopup.open()
+            }
+        }
+    }
+
+    property bool isFirmwareFileCorrupted: bot.process.errorCode == 1031
+
+    onIsFirmwareFileCorruptedChanged: {
+        if(isFirmwareFileCorrupted) {
+            setFirmwareFileCorrupted = true
             if(!dayOneUpdatePagePopup.opened) {
                 dayOneUpdatePagePopup.open()
             }
@@ -506,7 +518,10 @@ Item {
         }
 
         onOpened: {
-            if(!isEthernetConnected && !isCancelUpdateProcess && !setDownloadFailed) {
+            if(!isEthernetConnected &&
+               !isCancelUpdateProcess &&
+               !setDownloadFailed &&
+               !setFirmwareFileCorrupted) {
                 checkForUpdatesTimer.start()
             }
         }
@@ -515,6 +530,7 @@ Item {
             isEthernetConnected = false
             isCancelUpdateProcess = false
             setDownloadFailed = false
+            setFirmwareFileCorrupted = false
         }
 
         Rectangle {
@@ -530,6 +546,9 @@ Item {
                     250
                 }
                 else if(setDownloadFailed) {
+                    250
+                }
+                else if(setFirmwareFileCorrupted) {
                     250
                 }
                 else {
@@ -686,6 +705,9 @@ Item {
                             if(setDownloadFailed) {
                                 "OK"
                             }
+                            else if(setFirmwareFileCorrupted) {
+                                "OK"
+                            }
                             else {
                                 "CANCEL"
                             }
@@ -748,6 +770,9 @@ Item {
                         else if(setDownloadFailed) {
                             "FIRMWARE DOWNLOAD ERROR"
                         }
+                        else if(setFirmwareFileCorrupted) {
+                            "FIRMWARE FILE CORRUPTED"
+                        }
                         else {
                             "CHECKING CONNECTION"
                         }
@@ -773,6 +798,9 @@ Item {
                         }
                         else if(setDownloadFailed) {
                             "Could not download firmware. Please try again. If the problem continues, contact support."
+                        }
+                        else if(setFirmwareFileCorrupted) {
+                            "Please try downloading it again."
                         }
                         else if(isCancelUpdateProcess) {
                             "This will cancel the current update process. An update is still required. You can choose a different method for updating firmware."
@@ -805,6 +833,9 @@ Item {
                             true
                         }
                         else if(setDownloadFailed) {
+                            false
+                        }
+                        else if(setFirmwareFileCorrupted) {
                             false
                         }
                         else if(isCancelUpdateProcess) {
