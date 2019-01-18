@@ -15,15 +15,37 @@ Item {
     property alias button3: button3
     property alias mouseArea_backArrow: mouseArea_backArrow
     property alias wifiPageDayOneUpdate: wifiPageDayOneUpdate
+    property alias dayOneUpdatePagePopup: dayOneUpdatePagePopup
 
     property bool isFirmwareUpdateProcess: bot.process.type == ProcessType.FirmwareUpdate
 
     onIsFirmwareUpdateProcessChanged: {
         if(isFirmwareUpdateProcess) {
+            dayOneUpdatePagePopup.close()
             state = "updating_firmware"
         }
         else {
-            state = "base state"
+            state = "update_now"
+        }
+    }
+
+    property bool isInterfaceTypeEthernet: bot.net.interface == "ethernet"
+
+    onIsInterfaceTypeEthernetChanged: {
+        if(!isInterfaceTypeEthernet) {
+            if(dayOneUpdatePagePopup.opened) {
+                dayOneUpdatePagePopup.close()
+            }
+        }
+    }
+
+    property bool isInterfaceTypeWifi: bot.net.interface == "wifi"
+
+    onIsInterfaceTypeWifiChanged: {
+        if(isInterfaceTypeWifi) {
+            if(state == "connect_to_wifi") {
+                dayOneUpdatePagePopup.open()
+            }
         }
     }
 
@@ -34,6 +56,25 @@ Item {
            !isUsbStorageConnected &&
            bot.process.type == ProcessType.None) {
             state = "download_to_usb_stick"
+        }
+    }
+
+    property bool isCancelUpdateProcess: false
+    property bool isEthernetConnected: false
+
+    Timer {
+        id: checkForUpdatesTimer
+        interval: 3000
+        onTriggered: {
+            if(isfirmwareUpdateAvailable) {
+                checkForUpdatesTimer.stop()
+                dayOneUpdatePagePopup.close()
+                bot.installFirmware()
+            }
+            else {
+                bot.firmwareUpdateCheck(false)
+                checkForUpdatesTimer.restart()
+            }
         }
     }
 
@@ -146,13 +187,13 @@ Item {
         Text {
             id: title
             width: 350
-            text: "NEW FIRMWARE\nUPDATE REQUIRED"
+            text: "WELCOME"
             antialiasing: false
             smooth: false
             font.letterSpacing: 3
             wrapMode: Text.WordWrap
             anchors.top: parent.top
-            anchors.topMargin: 10
+            anchors.topMargin: 90
             anchors.left: parent.left
             anchors.leftMargin: 0
             color: "#e6e6e6"
@@ -175,7 +216,7 @@ Item {
             font.family: "Antennae"
             font.pixelSize: 18
             font.weight: Font.Light
-            text: "A critical update is required to\nimprove machine reliability and\nprint quality. Connect via ethernet,\nWi-Fi or by installing and\nconnecting with MakerBot Print."
+            text: "Follow these steps to set up your\nMethod Performance 3D Printer."
             lineHeight: 1.2
             opacity: 1.0
         }
@@ -183,34 +224,18 @@ Item {
         RoundedButton {
             id: button1
             label_width: 325
-            label: {
-                if(isFirmwareUpdateProcess) {
-                    "INSTALLING..."
-                }
-                else if(isfirmwareUpdateAvailable &&
-                        (bot.net.interface == "ethernet" || bot.net.interface == "wifi")) {
-                    "UPDATE VIA NETWORK"
-                }
-                else if(!isfirmwareUpdateAvailable &&
-                        (bot.net.interface == "ethernet" || bot.net.interface == "wifi")) {
-                    "CONNECTING..."
-                }
-                else {
-                    "UPDATE VIA NETWORK"
-                }
-            }
-            buttonWidth: 360
+            label: "BEGIN SETUP"
+            buttonWidth: 220
             buttonHeight: 50
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: subtitle.bottom
             anchors.topMargin: 25
-//            opacity: disable_button ? 0.3 : 1.0
         }
 
         RoundedButton {
             id: button2
-            label: "UPDATE VIA USB STICK"
+            label: "UPDATE VIA WI-FI"
             label_width: 325
             buttonWidth: 360
             buttonHeight: 50
@@ -218,16 +243,7 @@ Item {
             anchors.leftMargin: 0
             anchors.top: button1.bottom
             anchors.topMargin: 20
-            opacity: disable_button ? 0.3 : 1.0
-            disable_button: {
-                if(isFirmwareUpdateProcess &&
-                    bot.process.stateType > ProcessStateType.TransferringFirmware) {
-                    true
-                }
-                else {
-                    false
-                }
-            }
+            opacity: 0
         }
 
         RoundedButton {
@@ -235,22 +251,63 @@ Item {
             anchors.topMargin: 20
             buttonHeight: 50
             anchors.top: button2.bottom
-            opacity: disable_button ? 0.3 : 1.0
-            label: "WI-FI SETUP"
+            label: "UPDATE VIA USB STICK"
             buttonWidth: 360
             label_width: 325
-            disable_button: {
-                if(isFirmwareUpdateProcess &&
-                    bot.process.stateType > ProcessStateType.TransferringFirmware) {
-                    true
-                }
-                else {
-                    false
-                }
-            }
+            opacity: 0
         }
     }
     states: [
+        State {
+            name: "update_now"
+
+            PropertyChanges {
+                target: title
+                text: "NEW FIRMWARE\nUPDATE REQUIRED"
+                anchors.topMargin: 10
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "A critical update is required to\nimprove machine reliability and\nprint quality. Connect via ethernet,\nWi-Fi or by installing and\nconnecting with MakerBot Print."
+            }
+
+            PropertyChanges {
+                target: button1
+                opacity: 1.0
+                buttonWidth: 360
+                label: "UPDATE VIA ETHERNET"
+            }
+
+            PropertyChanges {
+                target: button2
+                opacity: 1.0
+                buttonWidth: 360
+                label: "UPDATE VIA WI-FI"
+            }
+
+            PropertyChanges {
+                target: button3
+                opacity: 1.0
+                buttonWidth: 360
+                label: "UPDATE VIA USB STICK"
+            }
+
+            PropertyChanges {
+                target: imageBackArrow
+                visible: false
+            }
+
+            PropertyChanges {
+                target: mainItem
+                visible: true
+            }
+
+            PropertyChanges {
+                target: usbFirmwareList
+                visible: false
+            }
+        },
         State {
             name: "download_to_usb_stick"
 
@@ -345,7 +402,15 @@ Item {
 
             PropertyChanges {
                 target: imageBackArrow
-                visible: true
+                visible: {
+                    if(bot.process.type == ProcessType.FirmwareUpdate &&
+                       bot.process.stateType > ProcessStateType.TransferringFirmware) {
+                        false
+                    }
+                    else {
+                        true
+                    }
+                }
             }
 
             PropertyChanges {
@@ -404,4 +469,298 @@ Item {
             }
         }
     ]
+
+    Popup {
+        id: dayOneUpdatePagePopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        parent: overlay
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim_dayOneUpdatePopup
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+
+        onOpened: {
+            if(!isEthernetConnected && !isCancelUpdateProcess) {
+                checkForUpdatesTimer.start()
+            }
+        }
+
+        onClosed: {
+            isEthernetConnected = false
+            isCancelUpdateProcess = false
+        }
+
+        Rectangle {
+            id: basePopupItem_dayOneUpdatePopup
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: {
+                if(isEthernetConnected) {
+                    300
+                }
+                else if(isCancelUpdateProcess) {
+                    250
+                }
+                else {
+                    320
+                }
+            }
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider_dayOneUpdatePopup
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                visible: isCancelUpdateProcess
+            }
+
+            Item {
+                id: buttonBar_dayOneUpdatePopup
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: left_rectangle_dayOneUpdatePopup
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+                    visible: isCancelUpdateProcess
+
+                    Text {
+                        id: left_text_dayOneUpdatePopup
+                        color: "#ffffff"
+                        text: "CANCEL UPDATE"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: left_mouseArea_dayOneUpdatePopup
+                        anchors.fill: parent
+                        onPressed: {
+                            left_rectangle_dayOneUpdatePopup.color = "#ffffff"
+                            left_text_dayOneUpdatePopup.color = "#000000"
+                        }
+                        onReleased: {
+                            left_rectangle_dayOneUpdatePopup.color = "#00000000"
+                            left_text_dayOneUpdatePopup.color = "#ffffff"
+                        }
+                        onClicked: {
+                            bot.cancel()
+                            dayOneUpdatePagePopup.close()
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: right_rectangle_dayOneUpdatePopup
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+                    visible: isCancelUpdateProcess
+
+                    Text {
+                        id: right_text_dayOneUpdatePopup
+                        color: "#ffffff"
+                        text: "CONTINUE"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: right_mouseArea_dayOneUpdatePopup
+                        anchors.fill: parent
+                        onPressed: {
+                            right_rectangle_dayOneUpdatePopup.color = "#ffffff"
+                            right_text_dayOneUpdatePopup.color = "#000000"
+                        }
+                        onReleased: {
+                            right_rectangle_dayOneUpdatePopup.color = "#00000000"
+                            right_text_dayOneUpdatePopup.color = "#ffffff"
+                        }
+                        onClicked: {
+                            dayOneUpdatePagePopup.close()
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: full_button_rectangle_dayOneUpdatePopup
+                    x: 0
+                    y: 0
+                    width: 720
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+                    visible: !isCancelUpdateProcess
+
+                    Text {
+                        id: full_button_text_dayOneUpdatePopup
+                        color: "#ffffff"
+                        text: "CANCEL"
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: full_button_mouseArea_dayOneUpdatePopup
+                        anchors.fill: parent
+                        onPressed: {
+                            full_button_rectangle_dayOneUpdatePopup.color = "#ffffff"
+                            full_button_text_dayOneUpdatePopup.color = "#000000"
+                        }
+                        onReleased: {
+                            full_button_rectangle_dayOneUpdatePopup.color = "#00000000"
+                            full_button_text_dayOneUpdatePopup.color = "#ffffff"
+                        }
+                        onClicked: {
+                            if(isEthernetConnected) {
+                                dayOneUpdatePagePopup.close()
+                            }
+                            else {
+                                if(checkForUpdatesTimer.running) {
+                                    checkForUpdatesTimer.stop()
+                                }
+                                dayOneUpdatePagePopup.close()
+                            }
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout_dayOneUpdatePopup
+                width: 590
+                height: 175
+                anchors.top: parent.top
+                anchors.topMargin: isEthernetConnected ? 20 : 45
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: header_text_dayOneUpdatePopup
+                    color: "#cbcbcb"
+                    text: {
+                        if(isEthernetConnected) {
+                            "DISCONNECT THE ETHERNET CABLE TO\nSET UP WI-FI"
+                        }
+                        else if(isCancelUpdateProcess) {
+                            "CANCEL UPDATE PROCESS?"
+                        }
+                        else {
+                            "CHECKING CONNECTION"
+                        }
+                    }
+                    horizontalAlignment: isEthernetConnected ?
+                                             Text.AlignHCenter : Text.AlignLeft
+                    font.capitalization: Font.AllUppercase
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: "Antennae"
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                    lineHeight: isEthernetConnected ?
+                                    1.3 : 1.0
+                }
+
+                Text {
+                    id: sub_text
+                    color: "#cbcbcb"
+                    text: {
+                        if(isEthernetConnected) {
+                            ""
+                        }
+                        else if(isCancelUpdateProcess) {
+                            "This will cancel the current update process. An update is still required. You can choose a different method for updating firmware."
+                        }
+                        else {
+                            if(isInterfaceTypeWifi) {
+                                "Looking for latest firmware."
+                            }
+                            else {
+                                "Be sure the ethernet cable is attached and connected to an\nonline router."
+                            }
+                        }
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: "Antennae"
+                    font.pixelSize: 18
+                    lineHeight: 1.3
+                    visible: !isEthernetConnected
+                }
+
+                BusySpinner {
+                    id: busyIndicator_dayOneUpdatePopup
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    spinnerActive: isEthernetConnected || !isCancelUpdateProcess
+                    spinnerSize: 48
+                }
+            }
+        }
+    }
 }

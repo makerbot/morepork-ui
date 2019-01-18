@@ -1,12 +1,22 @@
 import QtQuick 2.10
 import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
 import StorageFileTypeEnum 1.0
 
 DayOneUpdateScreenForm {
     button1 {
         button_mouseArea.onClicked: {
-            if(state == "download_to_usb_stick") {
+            if(state == "update_now") {
+                if(bot.net.interface == "ethernet" && isfirmwareUpdateAvailable) {
+                    bot.installFirmware()
+                    state = "updating_firmware"
+                }
+                else {
+                    dayOneUpdatePagePopup.open()
+                }
+            }
+            else if(state == "download_to_usb_stick") {
                 storage.setStorageFileType(StorageFileType.Firmware)
                 storage.updateFirmwareFileList("?root_usb?")
                 state = "usb_fw_file_list"
@@ -22,15 +32,7 @@ DayOneUpdateScreenForm {
             }
             else {
                 // base state
-                if(bot.net.interface == "ethernet" || bot.net.interface == "wifi") {
-                    if(bot.process.type == ProcessType.None) {
-                        bot.installFirmware()
-                        state = "updating_firmware"
-                    }
-                    else if(bot.process.type == ProcessType.FirmwareUpdate) {
-                        state = "updating_firmware"
-                    }
-                }
+                state = "update_now"
             }
         }
 
@@ -44,45 +46,88 @@ DayOneUpdateScreenForm {
                }
             }
             else if(state == "connect_to_wifi") {
-                false
+                true
             }
             else if(state == "updating_firmware") {
-                false
+                true
             }
             else if(state == "usb_fw_file_list") {
+                true
+            }
+            else if(state == "update_now") {
                 false
             }
             else {
                 // base state
-                if(isfirmwareUpdateAvailable &&
-                   (bot.net.interface == "ethernet" || bot.net.interface == "wifi")) {
-                    false
-                }
-                else if(isFirmwareUpdateProcess) {
-                    false
-                }
-                else {
-                    true
-                }
+                false
             }
         }
     }
 
-    button2.button_mouseArea.onClicked: {
-        state = "download_to_usb_stick"
+    button2 {
+        // Wi-Fi Button
+        button_mouseArea.onClicked: {
+            if(bot.net.interface == "ethernet") {
+                // If ethernet is connected prompt to unplug
+                // through the popup.
+                isEthernetConnected = true
+                dayOneUpdatePagePopup.open()
+            }
+            else {
+                state = "connect_to_wifi"
+                if(!bot.net.wifiEnabled) {
+                    bot.toggleWifi(true)
+                }
+                bot.net.setWifiState(WifiState.Searching)
+                bot.scanWifi(true)
+            }
+        }
+
+        disable_button: {
+            if(state == "update_now") {
+                false
+            }
+            else {
+                true
+            }
+        }
     }
 
-    button3.button_mouseArea.onClicked: {
-        state = "connect_to_wifi"
-        if(!bot.net.wifiEnabled) {
-            bot.toggleWifi(true)
+    button3 {
+        button_mouseArea.onClicked: {
+            state = "download_to_usb_stick"
         }
-        bot.net.setWifiState(WifiState.Searching)
-        bot.scanWifi(true)
+
+        disable_button: {
+            if(state == "update_now") {
+                false
+            }
+            else {
+                true
+            }
+        }
     }
 
     mouseArea_backArrow.onClicked: {
-        state = "base state"
+        if(state == "usb_fw_file_list") {
+            state = "download_to_usb_stick"
+        }
+        else if(state == "download_to_usb_stick") {
+            state = "update_now"
+        }
+        else if(state == "updating_firmware") {
+            if(bot.process.type == ProcessType.FirmwareUpdate &&
+               bot.process.stateType <= ProcessStateType.TransferringFirmware) {
+                isCancelUpdateProcess = true
+                dayOneUpdatePagePopup.open()
+            }
+            else if(bot.process.type == ProcessType.None) {
+                state = "update_now"
+            }
+        }
+        else if(state == "connect_to_wifi") {
+            state = "update_now"
+        }
         if(wifiPageDayOneUpdate.wifiSwipeView.currentIndex != 0) {
             wifiPageDayOneUpdate.wifiSwipeView.swipeToItem(0)
         }
