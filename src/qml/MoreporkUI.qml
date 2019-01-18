@@ -239,18 +239,18 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        StartupSplashScreen {
+            id: startupSplashScreen
+            anchors.fill: parent
+            z: 3
+            visible: connectionState != ConnectionState.Connected
+        }
+
         DayOneUpdateScreen {
             id: dayOneUpdateScreen
             anchors.fill: parent
             z: 2
             visible: true
-        }
-
-        StartupSplashScreen {
-            id: startupSplashScreen
-            anchors.fill: parent
-            z: 2
-            visible: false
         }
 
         FirmwareUpdateSuccessfulScreen {
