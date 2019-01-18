@@ -61,6 +61,7 @@ Item {
 
     property bool isCancelUpdateProcess: false
     property bool isEthernetConnected: false
+    property bool setDownloadFailed: false
 
     Timer {
         id: checkForUpdatesTimer
@@ -74,6 +75,17 @@ Item {
             else {
                 bot.firmwareUpdateCheck(false)
                 checkForUpdatesTimer.restart()
+            }
+        }
+    }
+
+    property bool isFirmwareDownloadFailed: bot.process.errorCode == 1054
+
+    onIsFirmwareDownloadFailedChanged: {
+        if(isFirmwareDownloadFailed) {
+            setDownloadFailed = true
+            if(!dayOneUpdatePagePopup.opened) {
+                dayOneUpdatePagePopup.open()
             }
         }
     }
@@ -494,7 +506,7 @@ Item {
         }
 
         onOpened: {
-            if(!isEthernetConnected && !isCancelUpdateProcess) {
+            if(!isEthernetConnected && !isCancelUpdateProcess && !setDownloadFailed) {
                 checkForUpdatesTimer.start()
             }
         }
@@ -502,6 +514,7 @@ Item {
         onClosed: {
             isEthernetConnected = false
             isCancelUpdateProcess = false
+            setDownloadFailed = false
         }
 
         Rectangle {
@@ -514,6 +527,9 @@ Item {
                     300
                 }
                 else if(isCancelUpdateProcess) {
+                    250
+                }
+                else if(setDownloadFailed) {
                     250
                 }
                 else {
@@ -536,7 +552,7 @@ Item {
             }
 
             Rectangle {
-                id: vertical_divider
+                id: vertical_divider_dayOneUpdatePopup
                 x: 359
                 y: 328
                 width: 2
@@ -546,7 +562,14 @@ Item {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: isCancelUpdateProcess
+                visible: {
+                    if(isCancelUpdateProcess) {
+                        true
+                    }
+                    else {
+                        false
+                    }
+                }
             }
 
             Item {
@@ -564,7 +587,7 @@ Item {
                     height: 72
                     color: "#00000000"
                     radius: 10
-                    visible: isCancelUpdateProcess
+                    visible: vertical_divider_dayOneUpdatePopup.visible
 
                     Text {
                         id: left_text_dayOneUpdatePopup
@@ -607,7 +630,7 @@ Item {
                     height: 72
                     color: "#00000000"
                     radius: 10
-                    visible: isCancelUpdateProcess
+                    visible: vertical_divider_dayOneUpdatePopup.visible
 
                     Text {
                         id: right_text_dayOneUpdatePopup
@@ -647,12 +670,26 @@ Item {
                     height: 72
                     color: "#00000000"
                     radius: 10
-                    visible: !isCancelUpdateProcess
+                    visible: {
+                        if(isCancelUpdateProcess) {
+                            false
+                        }
+                        else {
+                            true
+                        }
+                    }
 
                     Text {
                         id: full_button_text_dayOneUpdatePopup
                         color: "#ffffff"
-                        text: "CANCEL"
+                        text: {
+                            if(setDownloadFailed) {
+                                "OK"
+                            }
+                            else {
+                                "CANCEL"
+                            }
+                        }
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -708,6 +745,9 @@ Item {
                         else if(isCancelUpdateProcess) {
                             "CANCEL UPDATE PROCESS?"
                         }
+                        else if(setDownloadFailed) {
+                            "FIRMWARE DOWNLOAD ERROR"
+                        }
                         else {
                             "CHECKING CONNECTION"
                         }
@@ -730,6 +770,9 @@ Item {
                     text: {
                         if(isEthernetConnected) {
                             ""
+                        }
+                        else if(setDownloadFailed) {
+                            "Could not download firmware. Please try again. If the problem continues, contact support."
                         }
                         else if(isCancelUpdateProcess) {
                             "This will cancel the current update process. An update is still required. You can choose a different method for updating firmware."
@@ -757,7 +800,20 @@ Item {
                 BusySpinner {
                     id: busyIndicator_dayOneUpdatePopup
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    spinnerActive: isEthernetConnected || !isCancelUpdateProcess
+                    spinnerActive: {
+                        if(isEthernetConnected) {
+                            true
+                        }
+                        else if(setDownloadFailed) {
+                            false
+                        }
+                        else if(isCancelUpdateProcess) {
+                            false
+                        }
+                        else {
+                            true
+                        }
+                    }
                     spinnerSize: 48
                 }
             }
