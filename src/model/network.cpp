@@ -16,7 +16,7 @@ void Network::GetMakerBotToken(QString username, QString password) {
 
     // TODO(shirley): move these to a config
     QNetworkRequest req(QStringLiteral(
-            "https://staging.thingiverse.com/login/oauth/access_token"));
+            "https://www.thingiverse.com/login/oauth/access_token"));
     req.setHeader(
             QNetworkRequest::ContentTypeHeader,
             QStringLiteral("application/x-www-form-urlencoded"));
