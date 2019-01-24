@@ -28,6 +28,10 @@ void Network::GetMakerBotToken(QString username, QString password) {
             "&password=%2"
             "&grant_type=password");
 
+    // Url encode username and password
+    username = QUrl::toPercentEncoding(username).constData();
+    password = QUrl::toPercentEncoding(password).constData();
+
     m_reply = m_nam->post(req, data.arg(username, password).toUtf8());
 
     connect(
