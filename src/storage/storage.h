@@ -10,9 +10,12 @@
 #include <QStack>
 #include <QDateTime>
 #include "model/base_model.h"
+#include "storage/progress_copy.h"
 
+#define DEFAULT_FW_FILE_NAME QString("firmware.zip")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
+#define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString()
 #define USB_STORAGE_DEV_BY_PATH QString()
@@ -21,6 +24,7 @@
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_print"
 #else
 // embedded linux path
+#define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define TEST_PRINT_PATH QString("/home/test_print")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define INTERNAL_STORAGE_PATH QString("/home/things")
@@ -31,6 +35,8 @@ QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 #define LEGACY_USB_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
+
+constexpr std::array<int, 1> kValidMachinePid = {14};
 
 class PrintFileInfo : public QObject {
   Q_OBJECT
@@ -238,21 +244,21 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
 
 class MoreporkStorage : public QObject {
   Q_OBJECT
-  QFileSystemWatcher *storage_watcher_;
-  QFileSystemWatcher *usb_storage_watcher_;
-  QStack<QString> back_dir_stack_;
-  QString prev_thing_dir_;
-  MODEL_PROP(bool, usbStorageConnected, false)
-  MODEL_PROP(bool, storageIsEmpty, true)
-  MODEL_PROP(PrintFileInfo::StorageSortType, sortType,
-             PrintFileInfo::StorageSortType::DateAdded)
-
   public:
+    // MOREPORK_QML_ENUM
+    enum StorageFileType {
+      Print,
+      Firmware
+    };
+    Q_ENUM(StorageFileType)
+
     QList<QObject*> print_file_list_;
     PrintFileInfo* current_thing_;
     MoreporkStorage();
     Q_PROPERTY(const QString usbStoragePath CONSTANT MEMBER usbStoragePath);
-    Q_INVOKABLE void updateStorageFileList(const QString kDirectory);
+    Q_INVOKABLE void updateFirmwareFileList(const QString directory_path);
+    Q_INVOKABLE void copyFirmwareToDisk(const QString file_path);
+    Q_INVOKABLE void updatePrintFileList(const QString kDirectory);
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
       READ printFileList
@@ -274,15 +280,38 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
 
+    Q_INVOKABLE void cancelCopy();
+    Q_INVOKABLE bool firmwareIsValid(const QString file_path);
+    Q_INVOKABLE void setStorageFileType(
+            const MoreporkStorage::StorageFileType type);
+
   private:
+    QFileSystemWatcher *storage_watcher_;
+    QFileSystemWatcher *usb_storage_watcher_;
+    QStack<QString> back_dir_stack_;
+    QString prev_thing_dir_;
+    QPointer<ProgressCopy> prog_copy_;
     const QString usbStoragePath;
+
+    MODEL_PROP(bool, usbStorageConnected, false)
+    MODEL_PROP(bool, storageIsEmpty, true)
+    MODEL_PROP(bool, fileIsCopying, false)
+    MODEL_PROP(double, fileCopyProgress, 0)
+    MODEL_PROP(bool, fileCopySucceeded, false)
+    MODEL_PROP(PrintFileInfo::StorageSortType, sortType,
+               PrintFileInfo::StorageSortType::DateAdded)
+    MODEL_PROP(MoreporkStorage::StorageFileType, storageFileType,
+               MoreporkStorage::StorageFileType::Print)
 
   private slots:
     void updateUsbStorageConnected();
     void newSortType();
+    void setFileCopyProgress(double progress);
+    void setFileCopySucceeded(bool success);
 
   signals:
     void printFileListChanged();
+    void cancelCopyThread();
 };
 
 #endif //__MOREPORK_STORAGE_H__

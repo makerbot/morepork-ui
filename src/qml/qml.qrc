@@ -123,5 +123,7 @@
         <file>AdvancedInfoMotionStatusElementForm.qml</file>
         <file>AdvancedInfoMotionStatusItem.qml</file>
         <file>AdvancedInfoMotionStatusItemForm.qml</file>
+        <file>FirmwareFileListUsb.qml</file>
+        <file>FirmwareFileListUsbForm.qml</file>
     </qresource>
 </RCC>

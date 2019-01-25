@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import StorageFileTypeEnum 1.0
 
 Item {
     smooth: false
@@ -253,7 +254,8 @@ Item {
                         fileMaterial.visible: false
                         onClicked: {
                             browsingUsbStorage = false
-                            storage.updateStorageFileList("?root_internal?")
+                            storage.setStorageFileType(StorageFileType.Print)
+                            storage.updatePrintFileList("?root_internal?")
                             activeDrawer = printPage.sortingDrawer
                             setDrawerState(true)
                             printSwipeView.swipeToItem(1)
@@ -277,7 +279,8 @@ Item {
                         onClicked: {
                             if(usbStorageConnected) {
                                 browsingUsbStorage = true
-                                storage.updateStorageFileList("?root_usb?")
+                                storage.setStorageFileType(StorageFileType.Print)
+                                storage.updatePrintFileList("?root_usb?")
                                 activeDrawer = printPage.sortingDrawer
                                 setDrawerState(true)
                                 printSwipeView.swipeToItem(1)
@@ -318,7 +321,7 @@ Item {
             function altBack() {
                 var backDir = storage.backStackPop()
                 if(backDir !== "") {
-                    storage.updateStorageFileList(backDir)
+                    storage.updatePrintFileList(backDir)
                 }
                 else {
                     setDrawerState(false)
@@ -373,7 +376,7 @@ Item {
                     onClicked: {
                         if(model.modelData.isDir) {
                             storage.backStackPush(model.modelData.filePath)
-                            storage.updateStorageFileList(model.modelData.filePath + "/" + model.modelData.fileName)
+                            storage.updatePrintFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)

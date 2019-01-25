@@ -1042,7 +1042,7 @@ ApplicationWindow {
                 color: "#000000"
                 rotation: rootItem.rotation == 180 ? 180 : 0
                 width: 740
-                height: 410
+                height: 250
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
@@ -1080,7 +1080,7 @@ ApplicationWindow {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.topMargin: 17
                         anchors.top: install_unsigned_fw_header_text.bottom
-                        horizontalAlignment: Text.AlignLeft
+                        horizontalAlignment: Text.AlignHCenter
                         font.weight: Font.Light
                         font.family: "Antennae"
                         font.pixelSize: 18
@@ -1149,8 +1149,10 @@ ApplicationWindow {
                             id: install_mouseArea
                             anchors.fill: parent
                             onPressed: {
-                                install_text.color = "#00000000"
+                                install_text.color = "#000000"
                                 install_rectangle.color = "#ffffff"
+                                cancel_text.color = "#ffffff"
+                                cancel_rectangle.color = "#00000000"
                             }
                             onReleased: {
                                 install_text.color = "#ffffff"

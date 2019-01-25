@@ -304,7 +304,21 @@ Item {
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(0)
+                    if(firmwareUpdatePage.state == "install_from_usb") {
+                        firmwareUpdatePage.state = "no_firmware_update_available"
+                    }
+                    else if (firmwareUpdatePage.state == "select_firmware_file") {
+                        var backDir = storage.backStackPop()
+                        if(backDir !== "") {
+                            storage.updateFirmwareFileList(backDir)
+                        }
+                        else {
+                            firmwareUpdatePage.state = "install_from_usb"
+                        }
+                    }
+                    else {
+                        settingsSwipeView.swipeToItem(0)
+                    }
                 }
                 else {
                     skipFreStepPopup.open()
@@ -318,6 +332,7 @@ Item {
             }
 
             FirmwareUpdatePage {
+                id: firmwareUpdatePage
 
             }
         }

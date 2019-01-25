@@ -77,7 +77,8 @@ set(MOREPORK_UI_HEADERS
     model/process_model.h
     model/network.h
     model/fre_tracker.h
-    storage/storage.h)
+    storage/storage.h
+    storage/progress_copy.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})

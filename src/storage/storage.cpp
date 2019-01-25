@@ -1,6 +1,10 @@
 #include <algorithm>
+#include <fstream>
+#include <jsoncpp/json/value.h>
+#include <jsoncpp/json/reader.h>
 #include "storage/storage.h"
 #include "error_utils.h"
+#include "logging.h"
 #ifdef HAVE_LIBTINYTHING
 #include "storage/makerbot_file_meta_reader.h"
 #endif
@@ -50,12 +54,30 @@ MoreporkStorage::MoreporkStorage()
   prev_thing_dir_ = "";
   m_sortType = PrintFileInfo::StorageSortType::DateAdded;
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
-          this, SLOT(updateStorageFileList(const QString)));
+          this, SLOT(updatePrintFileList(const QString)));
+  connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
+          this, SLOT(updateFirmwareFileList(const QString)));
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
+
+  prog_copy_ = new ProgressCopy();
+  connect(prog_copy_, SIGNAL(progressChanged(double)),
+           this, SLOT(setFileCopyProgress(double)));
+  connect(this, SIGNAL(cancelCopyThread()), prog_copy_, SLOT(cancel()));
+  connect(prog_copy_, SIGNAL(finished(bool)),
+          this, SLOT(setFileCopySucceeded(bool)));
+
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+  usbStorageConnectedSet(true);
+#else
   usbStorageConnectedSet(false);
+#endif
   storageIsEmptySet(true);
+  fileIsCopyingSet(false);
+  fileCopySucceededSet(false);
+  fileCopyProgressSet(0);
+  storageFileTypeSet(MoreporkStorage::StorageFileType::Print);
 
   QDir dir(TEST_PRINT_PATH);
   if (!dir.exists()) {
@@ -69,6 +91,146 @@ MoreporkStorage::MoreporkStorage()
                   TEST_PRINT_PATH + "/test_print.makerbot");
   }
 }
+
+
+void MoreporkStorage::setStorageFileType(
+    const MoreporkStorage::StorageFileType type) {
+  storageFileTypeSet(type);
+}
+
+
+// Check if the firmware zip contains a manifest.json file and there exists a
+// PID key within that file with a valid value.
+bool MoreporkStorage::firmwareIsValid(const QString file_path) {
+  const QString kUnzippedManifestFilePath = FIRMWARE_FOLDER_PATH + "/manifest.json";
+  bool fw_is_valid = false;
+
+  if (QFileInfo(file_path).exists()) {
+    // remove a manifest.json file if one already exists
+    if (QFileInfo(kUnzippedManifestFilePath).exists()) {
+      QString cmd = "rm -f " + kUnzippedManifestFilePath;
+      const int ret_val = system(cmd.toStdString().c_str());
+    }
+    QString cmd = "unzip " + file_path +
+                  " manifest.json -d " + FIRMWARE_FOLDER_PATH;
+    const int ret_val = system(cmd.toStdString().c_str());
+    if (QFileInfo(kUnzippedManifestFilePath).exists()) {
+      std::ifstream manifest_file_strm(kUnzippedManifestFilePath.toStdString());
+      Json::Reader json_reader;
+      Json::Value root_jval;
+      if (manifest_file_strm &&
+          json_reader.parse(manifest_file_strm, root_jval)) {
+        if (root_jval.isMember("supported_machines")) {
+          const Json::Value &supported_mach = root_jval["supported_machines"];
+          if (supported_mach.isArray()) {
+            for (int i = 0; i < supported_mach.size(); ++i) {
+              const Json::Value &sm = supported_mach[i];
+              if (sm.isMember("pid")) {
+                const Json::Value &pid_jval = sm["pid"];
+                if (pid_jval.isNumeric()) {
+                  const int manifest_pid = pid_jval.asInt();
+                  for (auto pid : kValidMachinePid) {
+                    if (fw_is_valid = pid == manifest_pid) {
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      QString cmd = "rm -f " + kUnzippedManifestFilePath;
+      const int ret_val = system(cmd.toStdString().c_str());
+    }
+  }
+  return fw_is_valid;
+}
+
+
+void MoreporkStorage::copyFirmwareToDisk(const QString file_path) {
+  if (QFileInfo(file_path).exists()) {
+    fileCopySucceededSet(false);
+    prog_copy_->setSrcDstFiles(file_path,
+                               FIRMWARE_FOLDER_PATH + "/" + DEFAULT_FW_FILE_NAME);
+    fileIsCopyingSet(true);
+    prog_copy_->process();
+  }
+}
+
+
+// Q_INVOKABLE called from UI
+void MoreporkStorage::cancelCopy() {
+  emit cancelCopyThread();
+}
+
+
+// called by SIGNAL emitted from prog_copy_
+void MoreporkStorage::setFileCopyProgress(double progress) {
+  fileCopyProgressSet(progress);
+}
+
+
+// called by SIGNAL emitted from prog_copy_
+void MoreporkStorage::setFileCopySucceeded(bool success) {
+  // tell UI if file copy was success. UI logic will handle brooklyn_upload call
+  fileCopySucceededSet(success);
+  fileIsCopyingSet(false);
+}
+
+
+void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
+  if (m_storageFileType != MoreporkStorage::StorageFileType::Firmware) {
+    printFileListReset();
+    return;
+  }
+
+  QString fw_file_dir;
+  if (directory_path == "?root_usb?")
+    fw_file_dir = USB_STORAGE_PATH;
+  else
+    fw_file_dir = directory_path;
+
+  if (QFileInfo(prev_thing_dir_).exists())
+    storage_watcher_->removePath(prev_thing_dir_);
+
+  prev_thing_dir_ = fw_file_dir;
+  storage_watcher_->addPath(fw_file_dir);
+
+  if (QDir(fw_file_dir).exists()) {
+    QDirIterator it(fw_file_dir, QDir::Dirs | QDir::Files |
+      QDir::NoDotAndDotDot | QDir::Readable);
+    QList<QObject*> fw_file_list;
+
+    while (it.hasNext()) {
+      const QFileInfo file_info = QFileInfo(it.next());
+      if (file_info.suffix() == "zip" || file_info.isDir()) {
+        fw_file_list.append(
+          new PrintFileInfo(file_info.absolutePath(),
+                               file_info.fileName(),
+                               file_info.completeBaseName(),
+                               file_info.lastRead(),
+                               file_info.isDir()));
+      }
+    }
+
+    if (fw_file_list.empty()) {
+      printFileListReset();
+    } else {
+      std::sort(fw_file_list.begin(), fw_file_list.end(),
+                PrintFileInfo::accessDateGreaterThan);
+//      foreach (auto obj, fw_file_list) {
+//        MP_QINFO(static_cast<MoreporkFileInfo*>(obj)->fileBaseName())
+//      }
+      printFileListSet(fw_file_list);
+      storageIsEmptySet(false);
+    }
+  } else {
+    printFileListReset();
+  }
+}
+
+
 
 
 void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
@@ -145,7 +307,12 @@ void MoreporkStorage::currentThingReset(){
 }
 
 
-void MoreporkStorage::updateStorageFileList(const QString kDirectory){
+void MoreporkStorage::updatePrintFileList(const QString kDirectory){
+  if(m_storageFileType != MoreporkStorage::StorageFileType::Print) {
+    printFileListReset();
+    return;
+  }
+
   QString things_dir;
   if(kDirectory == "?root_internal?")
     things_dir = INTERNAL_STORAGE_PATH;
@@ -244,7 +411,7 @@ void MoreporkStorage::updateStorageFileList(const QString kDirectory){
 
 void MoreporkStorage::newSortType(){
   if(prev_thing_dir_ != "")
-    updateStorageFileList(prev_thing_dir_);
+    updatePrintFileList(prev_thing_dir_);
 }
 
 
@@ -252,6 +419,10 @@ void MoreporkStorage::updateUsbStorageConnected(){
   const bool kUsbStorConnected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
   const bool kUsbLegacyConnected = QFileInfo(LEGACY_USB_DEV_BY_PATH).exists();
   usbStorageConnectedSet(kUsbStorConnected || kUsbLegacyConnected);
+  if (!kUsbStorConnected) {
+      prog_copy_->cancel(); // cancel copy if one is ongoing
+      printFileListReset();
+  }
   if(prev_thing_dir_.left(USB_STORAGE_PATH.size()) == USB_STORAGE_PATH &&
      !kUsbStorConnected)
       backStackClear();

@@ -25,6 +25,28 @@ Item {
         }
     }
 
+    property bool isUsbStorageConnected: storage.usbStorageConnected
+
+    onIsUsbStorageConnectedChanged: {
+        if(state == "select_firmware_file" &&
+           !isUsbStorageConnected &&
+           bot.process.type == ProcessType.None) {
+            state = "install_from_usb"
+        }
+    }
+
+    Rectangle {
+        color: "#000000"
+        anchors.fill: parent
+    }
+
+    FirmwareFileListUsb {
+        id: firmwareFileListUsb
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: false
+    }
+
     LoadingIcon {
         id: loading_icon
         anchors.left: parent.left
@@ -120,6 +142,7 @@ Item {
 
         RoundedButton {
             id: button2
+            buttonHeight: 50
             visible: false
             anchors.top: parent.top
             anchors.topMargin: 0
@@ -165,7 +188,6 @@ Item {
                 target: button1
                 anchors.topMargin: 275
                 buttonWidth: 265
-                buttonHeight: 50
                 label: "INSTALL UPDATE"
                 visible: true
                 disable_button: isProcessRunning()
@@ -179,6 +201,11 @@ Item {
             PropertyChanges {
                 target: columnLayout
                 height: 335
+            }
+
+            PropertyChanges {
+                target: firmwareFileListUsb
+                visible: false
             }
         },
         State {
@@ -218,7 +245,6 @@ Item {
             PropertyChanges {
                 target: button1
                 buttonWidth: 100
-                buttonHeight: 50
                 label: "OK"
                 visible: true
                 anchors.topMargin: 160
@@ -226,12 +252,22 @@ Item {
 
             PropertyChanges {
                 target: button2
-                visible: false
+                anchors.topMargin: 230
+                label: "UPDATE VIA USB STICK"
+                buttonWidth: 360
+                label_width: 325
+                visible: true
             }
 
             PropertyChanges {
                 target: columnLayout
                 height: 250
+                anchors.verticalCenterOffset: -55
+            }
+
+            PropertyChanges {
+                target: firmwareFileListUsb
+                visible: false
             }
         },
         State {
@@ -271,7 +307,6 @@ Item {
                 target: button1
                 label: "TRY AGAIN"
                 buttonWidth: 175
-                buttonHeight: 50
                 visible: true
                 anchors.topMargin: 200
             }
@@ -280,7 +315,6 @@ Item {
                 target: button2
                 label: "BACK TO MENU"
                 buttonWidth: 240
-                buttonHeight: 50
                 visible: true
                 anchors.topMargin: 265
             }
@@ -288,6 +322,11 @@ Item {
             PropertyChanges {
                 target: columnLayout
                 height: 290
+            }
+
+            PropertyChanges {
+                target: firmwareFileListUsb
+                visible: false
             }
         },
         State {
@@ -297,6 +336,7 @@ Item {
             PropertyChanges {
                 target: loading_icon
                 loading: true
+                visible: true
             }
 
             PropertyChanges {
@@ -334,8 +374,8 @@ Item {
                 text: {
                     switch(bot.process.stateType)
                     {
-                    // Since 'transfer' step also maps to
-                    // 'loading' state in print process
+                        // Since 'transfer' step also maps to
+                        // 'loading' state in print process
                     case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
                         "TRANSFERRING... " + bot.process.printPercentage + "%"
@@ -372,6 +412,91 @@ Item {
             PropertyChanges {
                 target: columnLayout
                 height: 150
+            }
+
+            PropertyChanges {
+                target: firmwareFileListUsb
+                visible: false
+            }
+        },
+        State {
+            name: "install_from_usb"
+            PropertyChanges {
+                target: loading_icon
+                loading: false
+            }
+
+            PropertyChanges {
+                target: image
+                width: sourceSize.width
+                height: sourceSize.height
+                source: "qrc:/img/firmware_update_available.png"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: main_status_text
+                text: "DOWNLOAD TO\nUSB STICK"
+                anchors.topMargin: 20
+            }
+
+            PropertyChanges {
+                target: sub_status_text
+                text: "Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                anchors.topMargin: 100
+            }
+
+            PropertyChanges {
+                target: release_notes_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: button1
+                buttonWidth: 220
+                label: "CHOOSE FILE"
+                visible: true
+                anchors.topMargin: 260
+                disable_button: !storage.usbStorageConnected
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+
+            PropertyChanges {
+                target: columnLayout
+                height: 320
+            }
+
+            PropertyChanges {
+                target: firmwareFileListUsb
+                visible: false
+            }
+        },
+        State {
+            name: "select_firmware_file"
+            PropertyChanges {
+                target: loading_icon
+                visible: false
+                loading: false
+            }
+
+            PropertyChanges {
+                target: image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: columnLayout
+                height: 290
+                visible: false
+            }
+
+            PropertyChanges {
+                target: firmwareFileListUsb
+                visible: true
             }
         }
     ]
