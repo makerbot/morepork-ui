@@ -61,6 +61,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void deauthorizeAllAccounts();
     Q_INVOKABLE virtual void preheatChamber(const int chamber_temperature);
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
+    Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
 
   private:
     Q_OBJECT
@@ -99,6 +100,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBFilamentPresent, false)
     MODEL_PROP(bool, filamentBayATagPresent, false)
     MODEL_PROP(bool, filamentBayBTagPresent, false)
+    MODEL_PROP(QString, filamentBayATagUID, "Unknown")
+    MODEL_PROP(QString, filamentBayBTagUID, "Unknown")
+    MODEL_PROP(bool, filamentBayATagVerified, false)
+    MODEL_PROP(bool, filamentBayBTagVerified, false)
+    MODEL_PROP(bool, filamentBayATagVerificationDone, false)
+    MODEL_PROP(bool, filamentBayBTagVerificationDone, false)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
     MODEL_PROP(bool, topLoadingWarning, false)
@@ -157,6 +164,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, infoBay1FilamentPresent, false)
     MODEL_PROP(bool, infoBay1TagPresent, -999)
     MODEL_PROP(QString, infoBay1TagUID, "Unknown")
+    MODEL_PROP(bool, infoBay1TagVerified, false)
+    MODEL_PROP(bool, infoBay1VerificationDone, false)
     MODEL_PROP(int, infoBay1Error, -999)
     // Bay 2
     MODEL_PROP(int, infoBay2Temp, -999)
@@ -164,6 +173,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, infoBay2FilamentPresent, false)
     MODEL_PROP(bool, infoBay2TagPresent, -999)
     MODEL_PROP(QString, infoBay2TagUID, "Unknown")
+    MODEL_PROP(bool, infoBay2TagVerified, false)
+    MODEL_PROP(bool, infoBay2VerificationDone, false)
     MODEL_PROP(int, infoBay2Error, -999)
     // Motion Status
     // Axis Enabled

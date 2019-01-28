@@ -69,6 +69,7 @@ class KaitenBotModel : public BotModel {
     void deauthorizeAllAccounts();
     void preheatChamber(const int chamber_temperature);
     void moveAxis(QString axis, float distance, float speed);
+    void resetSpoolProperties(const int bayID);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -930,10 +931,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(filamentBayATemp, kBay["temperature"]);
             UPDATE_INT_PROP(filamentBayAHumidity, kBay["humidity"]);
             filamentBayAFilamentPresentSet(kBay["filament_present"].asBool());
+
             filamentBayATagPresentSet(kBay["tag_present"].asBool());
+            infoBay1TagPresentSet(kBay["tag_present"].asBool());
+
             if (kBay.isMember("tag_uid")) {
+                UPDATE_STRING_PROP(filamentBayATagUID, kBay["tag_uid"]);
                 UPDATE_STRING_PROP(infoBay1TagUID, kBay["tag_uid"]);
             }
+
+            filamentBayATagVerifiedSet(kBay["tag_verified"].asBool());
+            infoBay1TagVerifiedSet(kBay["tag_verified"].asBool());
+
+            filamentBayBTagVerificationDoneSet(kBay["verification_done"].asBool());
+            infoBay1VerificationDoneSet(kBay["verification_done"].asBool());
           }
         }
         if(kFilamentBay.size() > 1){
@@ -942,10 +953,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(filamentBayBTemp, kBay["temperature"]);
             UPDATE_INT_PROP(filamentBayBHumidity, kBay["humidity"]);
             filamentBayBFilamentPresentSet(kBay["filament_present"].asBool());
+
             filamentBayBTagPresentSet(kBay["tag_present"].asBool());
+            infoBay2TagPresentSet(kBay["tag_present"].asBool());
+
             if (kBay.isMember("tag_uid")) {
+                UPDATE_STRING_PROP(filamentBayBTagUID, kBay["tag_uid"]);
                 UPDATE_STRING_PROP(infoBay2TagUID, kBay["tag_uid"]);
             }
+
+            filamentBayBTagVerifiedSet(kBay["tag_verified"].asBool());
+            infoBay2TagVerifiedSet(kBay["tag_verified"].asBool());
+
+            filamentBayBTagVerificationDoneSet(kBay["verification_done"].asBool());
+            infoBay2VerificationDoneSet(kBay["verification_done"].asBool());
           }
         }
       }
@@ -1029,7 +1050,6 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
             UPDATE_INT_PROP(spoolAChecksum, res["checksum"]);
             UPDATE_INT_LIST_PROP(spoolAColorRGB, res["material_color_rgb"]);
             UPDATE_STRING_PROP(spoolAColorName, res["material_color_name"]);
-            UPDATE_INT_PROP(spoolAChecksum, res["checksum"]);
 
             UPDATE_INT_PROP(spoolAAmountRemaining, res["amount_remaining"]);
             UPDATE_INT_PROP(spoolAFirstLoadDate, res["first_load_date"]);
@@ -1045,15 +1065,54 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
             UPDATE_INT_PROP(spoolBManufacturingDate, res["manufacturing_date"]);
             UPDATE_STRING_PROP(spoolBSupplierCode, res["supplier_code"]);
             UPDATE_INT_PROP(spoolBMaterial, res["material_type"]);
+            UPDATE_INT_PROP(spoolBChecksum, res["checksum"]);
             UPDATE_INT_LIST_PROP(spoolBColorRGB, res["material_color_rgb"]);
             UPDATE_STRING_PROP(spoolBColorName, res["material_color_name"]);
-            UPDATE_INT_PROP(spoolBChecksum, res["checksum"]);
 
             UPDATE_INT_PROP(spoolBAmountRemaining, res["amount_remaining"]);
             UPDATE_INT_PROP(spoolBFirstLoadDate, res["first_load_date"]);
             UPDATE_INT_PROP(spoolBMaxHumidity, res["max_humidity"]);
             UPDATE_INT_PROP(spoolBMaxTemperature, res["max_temperature"]);
             UPDATE_INT_PROP(spoolBSchemaVersion, res["rw_version"]);
+            break;
+        }
+    }
+}
+
+void KaitenBotModel::resetSpoolProperties(const int bayID) {
+    switch(bayID) {
+        case 1: {
+            spoolAOriginalAmountReset();
+            spoolAVersionReset();
+            spoolAManufacturingLotCodeReset();
+            spoolAManufacturingDateReset();
+            spoolASupplierCodeReset();
+            spoolAMaterialReset();
+            spoolAChecksumReset();
+            spoolAColorRGBReset();
+            spoolAColorNameReset();
+            spoolAAmountRemainingReset();
+            spoolAFirstLoadDateReset();
+            spoolAMaxHumidityReset();
+            spoolAMaxTemperatureReset();
+            spoolASchemaVersionReset();
+            break;
+        }
+        case 2: {
+            spoolBOriginalAmountReset();
+            spoolBVersionReset();
+            spoolBManufacturingLotCodeReset();
+            spoolBManufacturingDateReset();
+            spoolBSupplierCodeReset();
+            spoolBMaterialReset();
+            spoolBChecksumReset();
+            spoolBColorRGBReset();
+            spoolBColorNameReset();
+            spoolBAmountRemainingReset();
+            spoolBFirstLoadDateReset();
+            spoolBMaxHumidityReset();
+            spoolBMaxTemperatureReset();
+            spoolBSchemaVersionReset();
             break;
         }
     }
@@ -1079,17 +1138,56 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
             if(kBayA.isObject()){
                 UPDATE_INT_PROP(infoBay1Temp, kBayA["temperature"]);
                 UPDATE_INT_PROP(infoBay1Humidity, kBayA["humidity"]);
+
+                filamentBayAFilamentPresentSet(kBayA["filament_present"].asBool());
                 infoBay1FilamentPresentSet(kBayA["filament_present"].asBool());
+
+                filamentBayATagPresentSet(kBayA["tag_present"].asBool());
                 infoBay1TagPresentSet(kBayA["tag_present"].asBool());
-                UPDATE_STRING_PROP(infoBay1TagUID, kBayA["tag_uid"]);
+
+                if(!kBayA["tag_present"].asBool()) {
+                    filamentBayATagUIDReset();
+                    infoBay1TagUIDReset();
+                }
+                else {
+                    UPDATE_STRING_PROP(filamentBayATagUID, kBayA["tag_uid"]);
+                    UPDATE_STRING_PROP(infoBay1TagUID, kBayA["tag_uid"]);
+                }
+
+                filamentBayATagVerifiedSet(kBayA["tag_verified"].asBool());
+                infoBay1TagVerifiedSet(kBayA["tag_verified"].asBool());
+
+                filamentBayATagVerificationDoneSet(kBayA["verification_done"].asBool());
+                infoBay1VerificationDoneSet(kBayA["verification_done"].asBool());
+
                 UPDATE_INT_PROP(infoBay1Error, kBayA["error"]);
             }
+
             if(kBayB.isObject()){
                 UPDATE_INT_PROP(infoBay2Temp, kBayB["temperature"]);
                 UPDATE_INT_PROP(infoBay2Humidity, kBayB["humidity"]);
+
+                filamentBayBFilamentPresentSet(kBayB["filament_present"].asBool());
                 infoBay2FilamentPresentSet(kBayB["filament_present"].asBool());
+
+                filamentBayBTagPresentSet(kBayB["tag_present"].asBool());
                 infoBay2TagPresentSet(kBayB["tag_present"].asBool());
-                UPDATE_STRING_PROP(infoBay2TagUID, kBayB["tag_uid"]);
+
+                if(!kBayB["tag_present"].asBool()) {
+                    filamentBayBTagUIDReset();
+                    infoBay2TagUIDReset();
+                }
+                else {
+                    UPDATE_STRING_PROP(filamentBayBTagUID, kBayB["tag_uid"]);
+                    UPDATE_STRING_PROP(infoBay2TagUID, kBayB["tag_uid"]);
+                }
+
+                filamentBayBTagVerifiedSet(kBayB["tag_verified"].asBool());
+                infoBay2TagVerifiedSet(kBayB["tag_verified"].asBool());
+
+                filamentBayBTagVerificationDoneSet(kBayB["verification_done"].asBool());
+                infoBay2VerificationDoneSet(kBayB["verification_done"].asBool());
+
                 UPDATE_INT_PROP(infoBay2Error, kBayB["error"]);
             }
         }

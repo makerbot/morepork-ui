@@ -6,6 +6,7 @@ Item {
 
     property alias label: label.text
     property alias value: value.text
+    property alias value_element: value
     property alias value_anchors: value.anchors
 
     Text {

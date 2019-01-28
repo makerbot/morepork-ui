@@ -18,13 +18,41 @@ Item {
     property string tagUID: {
         switch(filamentBayID) {
         case 1:
-            bot.infoBay1TagUID
+            bot.filamentBayATagUID
             break;
         case 2:
-            bot.infoBay2TagUID
+            bot.filamentBayBTagUID
             break;
         default:
             "Unknown"
+            break;
+        }
+    }
+
+    property bool tagVerified: {
+        switch(filamentBayID) {
+        case 1:
+            bot.filamentBayATagVerified
+            break;
+        case 2:
+            bot.filamentBayBTagVerified
+            break;
+        default:
+            false
+            break;
+        }
+    }
+
+    property bool tagVerificationDone: {
+        switch(filamentBayID) {
+        case 1:
+            bot.filamentBayATagVerificationDone
+            break;
+        case 2:
+            bot.filamentBayBTagVerificationDone
+            break;
+        default:
+            false
             break;
         }
     }
@@ -40,6 +68,13 @@ Item {
         default:
             false
             break;
+        }
+    }
+
+    onSpoolPresentChanged: {
+        spoolDetailsReady = false
+        if(!spoolPresent) {
+            bot.resetSpoolProperties(filamentBayID)
         }
     }
 
@@ -170,28 +205,22 @@ Item {
         }
     }
 
-    onTagUIDChanged: {
-        if(tagUID != "Unknown") {
-            spoolInfoTimer.interval = 2500
-            spoolInfoTimer.start()
-        } else {
-            spoolInfoTimer.interval = 500
-            spoolInfoTimer.start()
-        }
-    }
-
-    Timer {
-        id: spoolInfoTimer
-        onTriggered: {
+    onTagVerificationDoneChanged: {
+        // TODO: praveen
+        // Add (tag_verified == true) condition
+        // when the tags actually get verified.
+        if(tagVerificationDone && tagUID != "Unknown") {
             bot.getSpoolInfo(filamentBayID-1)
-            // Replace this arbitrary timer with spool
-            // checksum passed variable and look for it
-            // to change true to set the spoolDetailsReady
-            // variable true.
             updateSpoolReadyStateTimer.start()
         }
     }
 
+    // Approx. time for get_spool_info(idx) to return
+    // and the properties to be updated. This is very
+    // critical as reducing can break the load process
+    // which needs the details fetched from the nfc
+    // tag to proceed. Never hurts to be on a slightly
+    // higher side here.
     Timer {
         id: updateSpoolReadyStateTimer
         interval: 250

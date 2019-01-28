@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 800
-    height: 260
+    height: 300
 
     ColumnLayout {
         anchors.bottomMargin: 30
@@ -34,6 +34,8 @@ Item {
                 filamentPresentProperty.value: bot.infoBay1FilamentPresent
                 tagPresentProperty.value: bot.infoBay1TagPresent
                 tagUidProperty.value: bot.infoBay1TagUID
+                tagVerifiedProperty.value: bot.infoBay1TagVerified
+                verificationDoneProperty.value: bot.infoBay1VerificationDone
                 errorCodeProperty.value: bot.infoBay1Error
             }
 
@@ -45,6 +47,8 @@ Item {
                 filamentPresentProperty.value: bot.infoBay2FilamentPresent
                 tagPresentProperty.value: bot.infoBay2TagPresent
                 tagUidProperty.value: bot.infoBay2TagUID
+                tagVerifiedProperty.value: bot.infoBay2TagVerified
+                verificationDoneProperty.value: bot.infoBay2VerificationDone
                 errorCodeProperty.value: bot.infoBay2Error
             }
         }

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: 180
+    height: 230
 
     property alias filamentBayLabelProperty: filamentBayLabelProperty
     property alias temperatureProperty: temperatureProperty
@@ -12,6 +12,8 @@ Item {
     property alias filamentPresentProperty: filamentPresentProperty
     property alias tagPresentProperty: tagPresentProperty
     property alias tagUidProperty: tagUidProperty
+    property alias tagVerifiedProperty: tagVerifiedProperty
+    property alias verificationDoneProperty: verificationDoneProperty
     property alias errorCodeProperty: errorCodeProperty
 
     ColumnLayout {
@@ -60,6 +62,30 @@ Item {
             id: tagUidProperty
             label: "TAG UID"
             value_anchors.leftMargin: value == "Unknown" ? 25 : -50
+        }
+
+        AdvancedInfoElement {
+            id: tagVerifiedProperty
+            label: "TAG VERIFIED"
+            value_element.visible: {
+                !waitingSpinner.spinnerActive
+            }
+            BusySpinner {
+                id: waitingSpinner
+                anchors.right: parent.right
+                anchors.rightMargin: 135
+                anchors.verticalCenter: parent.verticalCenter
+                spinnerActive: {
+                    tagPresentProperty.value == "true" &&
+                    verificationDoneProperty.value == "false"
+                }
+                spinnerSize: 24
+            }
+        }
+
+        AdvancedInfoElement {
+            id: verificationDoneProperty
+            label: "VERIFICATION DONE"
         }
 
         AdvancedInfoElement {
