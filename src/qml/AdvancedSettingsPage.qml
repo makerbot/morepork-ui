@@ -4,6 +4,7 @@ import ProcessStateTypeEnum 1.0
 
 AdvancedSettingsPageForm {
     buttonAdvancedInfo.onClicked: {
+        bot.query_status()
         advancedSettingsSwipeView.swipeToItem(1)
     }
 
