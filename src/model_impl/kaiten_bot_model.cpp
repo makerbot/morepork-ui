@@ -943,7 +943,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             filamentBayATagVerifiedSet(kBay["tag_verified"].asBool());
             infoBay1TagVerifiedSet(kBay["tag_verified"].asBool());
 
-            filamentBayBTagVerificationDoneSet(kBay["verification_done"].asBool());
+            filamentBayATagVerificationDoneSet(kBay["verification_done"].asBool());
             infoBay1VerificationDoneSet(kBay["verification_done"].asBool());
           }
         }
@@ -1056,6 +1056,7 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
             UPDATE_INT_PROP(spoolAMaxHumidity, res["max_humidity"]);
             UPDATE_INT_PROP(spoolAMaxTemperature, res["max_temperature"]);
             UPDATE_INT_PROP(spoolASchemaVersion, res["rw_version"]);
+            spoolADetailsReadySet(true);
             break;
         }
         case 1: {
@@ -1074,6 +1075,7 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
             UPDATE_INT_PROP(spoolBMaxHumidity, res["max_humidity"]);
             UPDATE_INT_PROP(spoolBMaxTemperature, res["max_temperature"]);
             UPDATE_INT_PROP(spoolBSchemaVersion, res["rw_version"]);
+            spoolBDetailsReadySet(true);
             break;
         }
     }
@@ -1082,6 +1084,7 @@ void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
 void KaitenBotModel::resetSpoolProperties(const int bayID) {
     switch(bayID) {
         case 1: {
+            spoolADetailsReadyReset();
             spoolAOriginalAmountReset();
             spoolAVersionReset();
             spoolAManufacturingLotCodeReset();
@@ -1099,6 +1102,7 @@ void KaitenBotModel::resetSpoolProperties(const int bayID) {
             break;
         }
         case 2: {
+            spoolBDetailsReadyReset();
             spoolBOriginalAmountReset();
             spoolBVersionReset();
             spoolBManufacturingLotCodeReset();

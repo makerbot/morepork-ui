@@ -148,6 +148,10 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, spoolASchemaVersion, 0)
     MODEL_PROP(int, spoolBSchemaVersion, 0)
 
+    MODEL_PROP(bool, spoolADetailsReady, false)
+    MODEL_PROP(bool, spoolBDetailsReady, false)
+
+
     // Advanced Info Properties
     // Chamber
     MODEL_PROP(int, infoChamberCurrentTemp, -999)

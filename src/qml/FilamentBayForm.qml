@@ -13,7 +13,19 @@ Item {
     property alias switch1: switch1
 
     property int filamentBayID: 0
-    property bool spoolDetailsReady: false
+    property bool spoolDetailsReady: {
+        switch(filamentBayID) {
+        case 1:
+            bot.spoolADetailsReady
+            break;
+        case 2:
+            bot.spoolBDetailsReady
+            break;
+        default:
+            false
+            break;
+        }
+    }
 
     property string tagUID: {
         switch(filamentBayID) {
@@ -71,11 +83,8 @@ Item {
         }
     }
 
-    onSpoolPresentChanged: {
-        spoolDetailsReady = false
-        if(!spoolPresent) {
-            bot.resetSpoolProperties(filamentBayID)
-        }
+    onTagUIDChanged: {
+        bot.resetSpoolProperties(filamentBayID)
     }
 
     property bool extruderFilamentPresent: {
@@ -208,28 +217,18 @@ Item {
     onTagVerificationDoneChanged: {
         // TODO: praveen
         // Add (tag_verified == true) condition
-        // when the tags actually get verified.
+        // when we have tags that actually pass
+        // verification.
         if(tagVerificationDone && tagUID != "Unknown") {
-            bot.getSpoolInfo(filamentBayID-1)
-            updateSpoolReadyStateTimer.start()
+            getSpoolInfoTimer.start()
         }
     }
 
-    // Approx. time for get_spool_info(idx) to return
-    // and the properties to be updated. This is very
-    // critical as reducing can break the load process
-    // which needs the details fetched from the nfc
-    // tag to proceed. Never hurts to be on a slightly
-    // higher side here.
     Timer {
-        id: updateSpoolReadyStateTimer
-        interval: 250
+        id: getSpoolInfoTimer
+        interval: 1000
         onTriggered: {
-            if(spoolPresent) {
-                spoolDetailsReady = true
-            } else {
-                spoolDetailsReady = false
-            }
+            bot.getSpoolInfo(filamentBayID-1)
         }
     }
 
