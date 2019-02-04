@@ -583,7 +583,17 @@ ApplicationWindow {
                                    currentFreStep == FreStep.LoadMaterial ||
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
-                                } else {
+                                }
+                                else if(currentFreStep == FreStep.NamePrinter) {
+                                    if(bot.net.interface == "ethernet" ||
+                                       bot.net.interface == "wifi") {
+                                        fre.setFreStep(FreStep.LoginMbAccount)
+                                    }
+                                    else {
+                                        fre.setFreStep(FreStep.AttachExtruders)
+                                    }
+                                }
+                                else {
                                     fre.gotoNextStep(currentFreStep)
                                 }
                             }

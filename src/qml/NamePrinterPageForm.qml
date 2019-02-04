@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.VirtualKeyboard 2.3
+import FreStepEnum 1.0
 
 Item {
     width: 800
@@ -212,7 +213,15 @@ Item {
                         settingsSwipeView.swipeToItem(0)
                         if(inFreStep) {
                             mainSwipeView.swipeToItem(0)
-                            fre.gotoNextStep(currentFreStep)
+                            // Skip login to MakerBot account if there
+                            // is no network connection available.
+                            if(bot.net.interface == "ethernet" ||
+                               bot.net.interface == "wifi") {
+                                fre.gotoNextStep(currentFreStep)
+                            }
+                            else {
+                                fre.setFreStep(FreStep.AttachExtruders)
+                            }
                         }
                     }
                 }
