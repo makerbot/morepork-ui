@@ -13,18 +13,58 @@ Item {
     property alias switch1: switch1
 
     property int filamentBayID: 0
-    property bool spoolDetailsReady: false
+    property bool spoolDetailsReady: {
+        switch(filamentBayID) {
+        case 1:
+            bot.spoolADetailsReady
+            break;
+        case 2:
+            bot.spoolBDetailsReady
+            break;
+        default:
+            false
+            break;
+        }
+    }
 
     property string tagUID: {
         switch(filamentBayID) {
         case 1:
-            bot.infoBay1TagUID
+            bot.filamentBayATagUID
             break;
         case 2:
-            bot.infoBay2TagUID
+            bot.filamentBayBTagUID
             break;
         default:
             "Unknown"
+            break;
+        }
+    }
+
+    property bool tagVerified: {
+        switch(filamentBayID) {
+        case 1:
+            bot.filamentBayATagVerified
+            break;
+        case 2:
+            bot.filamentBayBTagVerified
+            break;
+        default:
+            false
+            break;
+        }
+    }
+
+    property bool tagVerificationDone: {
+        switch(filamentBayID) {
+        case 1:
+            bot.filamentBayATagVerificationDone
+            break;
+        case 2:
+            bot.filamentBayBTagVerificationDone
+            break;
+        default:
+            false
             break;
         }
     }
@@ -41,6 +81,10 @@ Item {
             false
             break;
         }
+    }
+
+    onTagUIDChanged: {
+        bot.resetSpoolProperties(filamentBayID)
     }
 
     property bool extruderFilamentPresent: {
@@ -170,37 +214,21 @@ Item {
         }
     }
 
-    onTagUIDChanged: {
-        if(tagUID != "Unknown") {
-            spoolInfoTimer.interval = 2500
-            spoolInfoTimer.start()
-        } else {
-            spoolInfoTimer.interval = 500
-            spoolInfoTimer.start()
+    onTagVerificationDoneChanged: {
+        // TODO: praveen
+        // Add (tag_verified == true) condition
+        // when we have tags that actually pass
+        // verification.
+        if(tagVerificationDone && tagUID != "Unknown") {
+            getSpoolInfoTimer.start()
         }
     }
 
     Timer {
-        id: spoolInfoTimer
+        id: getSpoolInfoTimer
+        interval: 1000
         onTriggered: {
             bot.getSpoolInfo(filamentBayID-1)
-            // Replace this arbitrary timer with spool
-            // checksum passed variable and look for it
-            // to change true to set the spoolDetailsReady
-            // variable true.
-            updateSpoolReadyStateTimer.start()
-        }
-    }
-
-    Timer {
-        id: updateSpoolReadyStateTimer
-        interval: 250
-        onTriggered: {
-            if(spoolPresent) {
-                spoolDetailsReady = true
-            } else {
-                spoolDetailsReady = false
-            }
         }
     }
 

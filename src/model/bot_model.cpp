@@ -161,6 +161,9 @@ void BotModel::moveAxis(QString axis, float distance, float speed) {
     qDebug() << FL_STRM << "called with parameters" << axis << distance << speed;
 }
 
+void BotModel::resetSpoolProperties(const int bayID) {
+    qDebug() << FL_STRM << "called with parameter" << bayID;
+}
 
 class DummyBotModel : public BotModel {
   public:

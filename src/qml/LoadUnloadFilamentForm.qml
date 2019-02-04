@@ -51,6 +51,9 @@ Item {
                 }
             }
         }
+        else {
+            bot.acknowledgeMaterial(false)
+        }
     }
 
     // Also add spool checksum to this whenever thats
