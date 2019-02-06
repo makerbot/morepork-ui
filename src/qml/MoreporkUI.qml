@@ -27,7 +27,7 @@ ApplicationWindow {
 
     property bool safeToRemoveUsb: bot.safeToRemoveUsb
     onSafeToRemoveUsbChanged: {
-        if(safeToRemoveUsb) {
+        if(safeToRemoveUsb && isFreComplete) {
             safeToRemoveUsbPopup.open()
         }
     }
