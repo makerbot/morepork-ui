@@ -249,6 +249,7 @@ Item {
                         "WI-FI SETUP"
                     }
                 }
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -331,6 +332,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "PRINTER SOFTWARE UPDATE AVAILABLE"
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -389,6 +391,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "NAME PRINTER"
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -447,6 +450,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "LOG IN"
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -522,6 +526,7 @@ Item {
                         "CALIBRATE EXTRUDERS"
                     }
                 }
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -611,6 +616,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "LOAD MATERIAL"
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -679,6 +685,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "READY TO PRINT"
+                lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
             }
@@ -742,6 +749,8 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: "YOUR PRINTER IS\nSUCCESSFULLY SET UP"
+                lineHeight: 1.4
+                font.pixelSize: 25
                 anchors.topMargin: 35
             }
 

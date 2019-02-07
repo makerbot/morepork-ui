@@ -84,10 +84,13 @@ MoreporkStorage::MoreporkStorage()
       // Creates TEST_PRINT_PATH
       dir.mkpath(".");
   }
-  if(!QFileInfo::exists(TEST_PRINT_PATH + "/test_print.makerbot") ||
-     !QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").isFile()) {
+  if(!QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").exists() ||
+     !QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").isFile() ||
+     (QFile(TEST_PRINT_PATH + "/test_print.makerbot").size() !=
+      QFile(":/test_files/test_print.makerbot").size())) {
+      QFile::remove(TEST_PRINT_PATH + "/test_print.makerbot");
       // Tiny test file 74 kb, so okay to do I/O in constructor I guess.
-      QFile::copy(":/test_files/smallcircle.makerbot",
+      QFile::copy(":/test_files/test_print.makerbot",
                   TEST_PRINT_PATH + "/test_print.makerbot");
   }
 }

@@ -115,10 +115,7 @@
     </qresource>
     
     <qresource prefix="/test_files">
-        <file alias="smallcircle.makerbot">test_print/smallcircle.makerbot</file>
+        <file alias="test_print.makerbot">test_print/test_print.makerbot</file>
     </qresource>
-    
-    <qresource prefix="/vid">
-        <file alias="filament_installation.m4v">videos/filament_installation.m4v</file>
-    </qresource>
+
 </RCC>

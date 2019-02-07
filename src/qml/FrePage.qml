@@ -21,6 +21,15 @@ FrePageForm {
     }
 
     continueButton {
+        disable_button: {
+            if(state == "load_material") {
+                isProcessRunning()
+            }
+            else {
+                false
+            }
+        }
+
         button_mouseArea.onClicked: {
             if(state == "wifi_setup") {
                 if(bot.net.interface == "ethernet" ||
@@ -71,7 +80,7 @@ FrePageForm {
             } else if(state == "test_print") {
                 inFreStep = true
                 startTestPrint()
-            } else if(state == "successfully_setup") {
+            } else if(state == "setup_complete") {
                 fre.setFreStep(FreStep.FreComplete)
             } else {
                 // At base state screen
