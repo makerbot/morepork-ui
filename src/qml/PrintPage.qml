@@ -3,6 +3,8 @@ import StorageSortTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 PrintPageForm {
+    property bool startPrintWithInsufficientModelMaterial: false
+    property bool startPrintWithInsufficientSupportMaterial: false
     property bool startPrintWithUnknownMaterials: false
     property bool startPrintTopLidOpen: false
     property bool startPrintBuildDoorOpen: false
@@ -18,6 +20,10 @@ PrintPageForm {
             }
             else if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
                     print_model_material) {
+                return false
+            }
+            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
+                startPrintWithInsufficientModelMaterial = true
                 return false
             }
             else {
@@ -42,6 +48,16 @@ PrintPageForm {
             }
             else if(materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material ||
                     materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
+                return false
+            }
+            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired ||
+                    materialPage.bay2.filamentQuantity < supportMaterialRequired) {
+                if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
+                    startPrintWithInsufficientModelMaterial = true
+                }
+                if(materialPage.bay2.filamentQuantity < supportMaterialRequired) {
+                    startPrintWithInsufficientSupportMaterial = true
+                }
                 return false
             }
             else {
