@@ -46,6 +46,7 @@ class KaitenBotModel : public BotModel {
     void installFirmware();
     void installFirmwareFromPath(const QString file_path);
     void calibrateToolheads(QList<QString> axes);
+    void doNozzleCleaning(bool do_clean);
     void acknowledgeNozzleCleaned();
     void buildPlateState(bool state);
     void acknowledge_level();
@@ -552,6 +553,20 @@ void KaitenBotModel::calibrateToolheads(QList<QString> axes){
         qWarning() << FFL_STRM << e.what();
     }
 }
+
+void KaitenBotModel::doNozzleCleaning(bool do_clean){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = do_clean ? Json::Value("do_cleaning") : Json::Value("skip_cleaning");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 
 void KaitenBotModel::acknowledgeNozzleCleaned(){
     try{

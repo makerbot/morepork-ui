@@ -10,7 +10,10 @@ ToolheadCalibrationForm {
 
     actionButton {
         button_mouseArea.onClicked: {
-            if(state == "clean_nozzle") {
+            if(state == "check_nozzle_clean") {
+                bot.doNozzleCleaning(true)
+            }
+            else if(state == "clean_nozzle") {
                 bot.acknowledgeNozzleCleaned()
                 state = "cooling_nozzle"
             }
@@ -32,6 +35,14 @@ ToolheadCalibrationForm {
             else {
                 // Button action in 'base state'
                 bot.calibrateToolheads(["x","y"])
+            }
+        }
+    }
+
+    actionButton2 {
+        button_mouseArea.onClicked: {
+            if(state == "check_nozzle_clean") {
+                bot.doNozzleCleaning(false)
             }
         }
     }
