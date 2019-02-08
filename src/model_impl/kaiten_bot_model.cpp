@@ -59,6 +59,7 @@ class KaitenBotModel : public BotModel {
     void forgetWifi(QString path);
     void addMakerbotAccount(QString username, QString makerbot_token);
     void getSpoolInfo(const int bayIndex);
+    void updateSpoolInfo(const int bayIndex);
     void spoolUpdate(const Json::Value & res, const int bayIndex);
     void zipLogs(QString path);
     void forceSyncFile(QString path);
@@ -733,6 +734,23 @@ void KaitenBotModel::getSpoolInfo(const int bayIndex){
       qWarning() << FFL_STRM << e.what();
   }
 }
+
+void KaitenBotModel::updateSpoolInfo(const int bayIndex){
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["bay_index"] = Json::Value(bayIndex);
+      conn->jsonrpc.invoke(
+              "update_spool_info",
+              json_params,
+              m_spoolInfoCb[bayIndex]);
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
+
 
 void KaitenBotModel::zipLogs(QString path) {
   try{

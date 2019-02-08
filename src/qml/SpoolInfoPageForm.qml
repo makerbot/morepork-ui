@@ -30,7 +30,9 @@ Item {
         }
 
         button_mouseArea.onClicked: {
+            bot.updateSpoolInfo(0)
             bot.getSpoolInfo(0)
+            bot.updateSpoolInfo(1)
             bot.getSpoolInfo(1)
         }
 

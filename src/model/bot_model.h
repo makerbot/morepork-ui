@@ -52,6 +52,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void forgetWifi(QString path);
     Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
     Q_INVOKABLE virtual void getSpoolInfo(const int bayIndex);
+    Q_INVOKABLE virtual void updateSpoolInfo(const int bayIndex);
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
