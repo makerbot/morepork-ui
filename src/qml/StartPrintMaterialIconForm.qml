@@ -14,11 +14,11 @@ Item {
         switch(filamentBayID) {
         case 1:
             (filamentRequired/
-            bot.spoolAOriginalAmount) * 100
+            materialPage.bay1.filamentQuantity) * 100
             break;
         case 2:
             (filamentRequired/
-            bot.spoolBOriginalAmount) * 100
+            materialPage.bay2.filamentQuantity) * 100
             break;
         default:
             0
@@ -31,12 +31,14 @@ Item {
         case 1:
             Qt.rgba(bot.spoolAColorRGB[0]/255,
                     bot.spoolAColorRGB[1]/255,
-                    bot.spoolAColorRGB[2]/255)
+                    bot.spoolAColorRGB[2]/255,
+                    0.5)
             break;
         case 2:
             Qt.rgba(bot.spoolBColorRGB[0]/255,
                     bot.spoolBColorRGB[1]/255,
-                    bot.spoolBColorRGB[2]/255)
+                    bot.spoolBColorRGB[2]/255,
+                    0.5)
             break;
         default:
             "#000000"
@@ -50,13 +52,13 @@ Item {
             Qt.rgba(bot.spoolAColorRGB[0]/255,
                     bot.spoolAColorRGB[1]/255,
                     bot.spoolAColorRGB[2]/255,
-                    0.5)
+                    1)
             break;
         case 2:
             Qt.rgba(bot.spoolBColorRGB[0]/255,
                     bot.spoolBColorRGB[1]/255,
                     bot.spoolBColorRGB[2]/255,
-                    0.5)
+                    1)
             break;
         default:
             "#000000"
