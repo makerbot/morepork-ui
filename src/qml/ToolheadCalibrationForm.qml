@@ -12,6 +12,7 @@ Item {
     antialiasing: false
     property alias buttonOk: buttonOk
     property alias actionButton: actionButton
+    property alias actionButton2: actionButton2
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     property alias continueButton: continue_mouseArea
     property alias stopButton: stop_mouseArea
@@ -165,6 +166,18 @@ Item {
             opacity: 1.0
         }
 
+        RoundedButton {
+            id: actionButton2
+            label: "SKIP"
+            buttonWidth: 120
+            buttonHeight: 50
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: actionButton.bottom
+            anchors.topMargin: 15
+            opacity: 0.0
+        }
+
         RowLayout {
             id: temperatureDisplay
             anchors.top: subtitle.bottom
@@ -253,6 +266,64 @@ Item {
 
     states: [
         State {
+            name: "check_nozzle_clean"
+            when: bot.process.type == ProcessType.CalibrationProcess &&
+                  bot.process.stateType == ProcessStateType.CheckNozzleClean
+
+            PropertyChanges {
+                target: header_image
+                source: "qrc:/img/calib_check_nozzles_clean.png"
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: title
+                text: "CHECK EXTRUDER NOZZLES"
+                anchors.topMargin: -20
+                font.pixelSize: 22
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "If there is material on the tips of the extruders, use the steel brush to clean them in the next steps."
+                font.pixelSize: 18
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: actionButton
+                label_width: 300
+                buttonWidth: 300
+                label: "CLEAN EXTRUDERS"
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: actionButton2
+                label: "SKIP"
+                buttonWidth: 120
+                buttonHeight: 50
+                opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: 0
+            }
+        },
+
+        State {
             name: "heating_nozzle"
             when: bot.process.type == ProcessType.CalibrationProcess &&
                   bot.process.stateType == ProcessStateType.HeatingNozzle
@@ -283,6 +354,11 @@ Item {
 
             PropertyChanges {
                 target: actionButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: actionButton2
                 opacity: 0
             }
 
@@ -336,6 +412,11 @@ Item {
             }
 
             PropertyChanges {
+                target: actionButton2
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: loadingIcon
                 opacity: 0
             }
@@ -377,6 +458,11 @@ Item {
 
             PropertyChanges {
                 target: actionButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: actionButton2
                 opacity: 0
             }
 
@@ -435,6 +521,11 @@ Item {
             }
 
             PropertyChanges {
+                target: actionButton2
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: temperatureDisplay
                 opacity: 0
             }
@@ -482,6 +573,11 @@ Item {
                 label: "BUILD PLATE IS INSTALLED"
                 buttonWidth: 410
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: actionButton2
+                opacity: 0
             }
 
             PropertyChanges {
@@ -533,6 +629,11 @@ Item {
                 target: actionButton
                 opacity: 0
             }
+
+            PropertyChanges {
+                target: actionButton2
+                opacity: 0
+            }
         },
         State {
             name: "calibration_finished"
@@ -562,6 +663,11 @@ Item {
                 anchors.topMargin: 0
                 font.pixelSize: 22
                 opacity: 1.0
+            }
+
+            PropertyChanges {
+                target: actionButton2
+                opacity: 0
             }
 
             PropertyChanges {
@@ -656,6 +762,11 @@ Item {
 
             PropertyChanges {
                 target: actionButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: actionButton2
                 opacity: 0
             }
         }

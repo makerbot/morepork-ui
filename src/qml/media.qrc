@@ -87,6 +87,7 @@
 	<file alias="calib_extruders.png">images/calib_extruders.png</file>
 	<file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
 	<file alias="calib_remove_build_plate.png">images/calib_remove_build_plate.png</file>
+	<file alias="calib_check_nozzles_clean.png">images/calib_check_nozzles_clean.png</file>
 	<file alias="calib_scrub_nozzles.png">images/calib_scrub_nozzles.png</file>
 	<file alias="icon_wifi.png">images/icon_wifi.png</file>
 	<file alias="lock_icon.png">images/lock_icon.png</file>

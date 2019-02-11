@@ -39,6 +39,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void installFirmware();
     Q_INVOKABLE virtual void installFirmwareFromPath(const QString file_path);
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> axes);
+    Q_INVOKABLE virtual void doNozzleCleaning(bool clean);
     Q_INVOKABLE virtual void acknowledgeNozzleCleaned();
     Q_INVOKABLE virtual void buildPlateState(bool state);
     Q_INVOKABLE virtual void acknowledge_level();

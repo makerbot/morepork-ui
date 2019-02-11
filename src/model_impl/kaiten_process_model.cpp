@@ -120,6 +120,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::LevelingComplete);
         // Toolhead Calibration States
         // see morepork-kaiten/kaiten/src/kaiten/processes/nozzlecalibrationprocess.py
+        else if (kStepStr == "check_if_nozzle_clean")
+            stateTypeSet(ProcessStateType::CheckNozzleClean);
         else if (kStepStr == "heating_nozzle")
             stateTypeSet(ProcessStateType::HeatingNozzle);
         else if (kStepStr == "clean_nozzle")
