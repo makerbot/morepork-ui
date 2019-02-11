@@ -20,6 +20,7 @@ Item {
         buttonWidth: 120
         buttonHeight: 120
         button_text.visible: false
+        enabled: (bot.spoolAUpdateFinished && bot.spoolBUpdateFinished)
         Image {
             id: img
             anchors.verticalCenter: parent.verticalCenter

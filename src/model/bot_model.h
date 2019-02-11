@@ -153,6 +153,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, spoolADetailsReady, false)
     MODEL_PROP(bool, spoolBDetailsReady, false)
 
+    MODEL_PROP(bool, spoolAUpdateFinished, true)
+    MODEL_PROP(bool, spoolBUpdateFinished, true)
 
     // Advanced Info Properties
     // Chamber
