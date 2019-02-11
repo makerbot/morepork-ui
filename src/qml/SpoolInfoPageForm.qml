@@ -20,6 +20,7 @@ Item {
         buttonWidth: 120
         buttonHeight: 120
         button_text.visible: false
+        enabled: (bot.spoolAUpdateFinished && bot.spoolBUpdateFinished)
         Image {
             id: img
             anchors.verticalCenter: parent.verticalCenter
@@ -30,7 +31,9 @@ Item {
         }
 
         button_mouseArea.onClicked: {
+            bot.updateSpoolInfo(0)
             bot.getSpoolInfo(0)
+            bot.updateSpoolInfo(1)
             bot.getSpoolInfo(1)
         }
 

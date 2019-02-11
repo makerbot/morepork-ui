@@ -59,6 +59,7 @@ class KaitenBotModel : public BotModel {
     void forgetWifi(QString path);
     void addMakerbotAccount(QString username, QString makerbot_token);
     void getSpoolInfo(const int bayIndex);
+    void updateSpoolInfo(const int bayIndex);
     void spoolUpdate(const Json::Value & res, const int bayIndex);
     void zipLogs(QString path);
     void forceSyncFile(QString path);
@@ -264,6 +265,21 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::vector<std::shared_ptr<SpoolInfoCallback> > m_spoolInfoCb;
+
+    class UpdateSpoolInfoCallback : public JsonRpcCallback {
+      public:
+        UpdateSpoolInfoCallback(KaitenBotModel * bot, const int bayIndex)
+                : m_bot(bot),
+                  m_index(bayIndex) {}
+        void response(const Json::Value & resp) override {
+            m_index ? m_bot->spoolBUpdateFinishedSet(true) :
+                      m_bot->spoolAUpdateFinishedSet(true);
+        }
+      private:
+        const int m_index;
+        KaitenBotModel *m_bot;
+    };
+    std::vector<std::shared_ptr<UpdateSpoolInfoCallback> > m_updateSpoolInfoCb;
 
     class UnknownMaterialNotification : public JsonRpcNotification {
       public:
@@ -734,6 +750,25 @@ void KaitenBotModel::getSpoolInfo(const int bayIndex){
   }
 }
 
+void KaitenBotModel::updateSpoolInfo(const int bayIndex){
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["bay_index"] = Json::Value(bayIndex);
+      bayIndex ? spoolBUpdateFinishedSet(false) : spoolAUpdateFinishedSet(false);
+      conn->jsonrpc.invoke(
+              "update_spool_info",
+              json_params,
+              m_updateSpoolInfoCb[bayIndex]);
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+      bayIndex ? spoolBUpdateFinishedSet(true) : spoolAUpdateFinishedSet(true);
+  }
+}
+
+
 void KaitenBotModel::zipLogs(QString path) {
   try{
       qDebug() << FL_STRM << "called";
@@ -863,6 +898,10 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
                               new SpoolInfoCallback(this, 0)),
                       std::shared_ptr<SpoolInfoCallback>(
                               new SpoolInfoCallback(this, 1))},
+        m_updateSpoolInfoCb{std::shared_ptr<UpdateSpoolInfoCallback>(
+                              new UpdateSpoolInfoCallback(this, 0)),
+                      std::shared_ptr<UpdateSpoolInfoCallback>(
+                              new UpdateSpoolInfoCallback(this, 1))},
         m_matWarningNot(new UnknownMaterialNotification(this)),
         m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)),
         m_sysTimeNot(new SystemTimeNotification(this)) {
@@ -1114,6 +1153,7 @@ void KaitenBotModel::resetSpoolProperties(const int bayID) {
             spoolAMaxHumidityReset();
             spoolAMaxTemperatureReset();
             spoolASchemaVersionReset();
+            spoolAUpdateFinishedReset();
             break;
         }
         case 2: {
@@ -1132,6 +1172,7 @@ void KaitenBotModel::resetSpoolProperties(const int bayID) {
             spoolBMaxHumidityReset();
             spoolBMaxTemperatureReset();
             spoolBSchemaVersionReset();
+            spoolBUpdateFinishedReset();
             break;
         }
     }
