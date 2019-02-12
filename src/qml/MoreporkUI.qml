@@ -178,6 +178,9 @@ ApplicationWindow {
         if(isBuildPlateClear) {
             buildPlateClearPopup.open()
         }
+        else {
+            buildPlateClearPopup.close()
+        }
     }
 
     function setDrawerState(state) {
