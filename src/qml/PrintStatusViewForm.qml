@@ -224,25 +224,18 @@ Item {
 
                 RoundedButton {
                     id: print_again_button
-                    buttonWidth: {
-                        if(inFreStep) {
-                            290
-                        }
-                        else {
-                            200
-                        }
-                    }
+                    buttonWidth: 290
                     buttonHeight: 50
-                    label: {
+                    label: "RETRY TEST PRINT"
+                    visible: {
                         if(inFreStep) {
-                            "RETRY TEST PRINT"
+                            bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed
                         }
                         else {
-                            "PRINT AGAIN"
+                            false
                         }
                     }
-                    visible: bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
                         if(!disable_button) {
                             printAgain = true
