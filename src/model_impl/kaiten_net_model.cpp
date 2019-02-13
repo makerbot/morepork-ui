@@ -5,6 +5,7 @@
 #include "impl_util.h"
 
 #include "get_mac_addr_qt.h"
+#include "logging.h"
 
 void KaitenNetModel::sysInfoUpdate(const Json::Value &info) {
     UPDATE_STRING_PROP(ipAddr, info["ip"]);
@@ -48,17 +49,16 @@ void KaitenNetModel::netUpdate(const Json::Value &state) {
 
 void KaitenNetModel::wifiUpdate(const Json::Value &result) {
     wifiErrorSet(WifiError::NoError);
-    const Json::Value &kWifiList = result["result"];
-    const Json::Value &kError = result["error"];
+    const Json::Value &wifiList = result["result"];
+    const Json::Value &error = result["error"];
 
     // wifi_scan() part
-    if(kWifiList.isArray() && kWifiList.size() > 0) {
-
+    if (wifiList.isArray() && wifiList.size() > 0) {
         QList<QObject*> wifi_list;
         wifi_list.clear();
 
-        for(Json::Value ap : kWifiList) {
-            if(ap.isObject()) {
+        for (Json::Value ap : wifiList) {
+            if (ap.isObject()) {
                 QString name = ap["name"].asString().c_str();
                 QString password = ap["password"].asString().c_str();
                 bool password_req = (password == "none" ? false : true);
@@ -70,7 +70,7 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
             }
         }
 
-        if(wifi_list.empty()) {
+        if (wifi_list.empty()) {
             wifiStateSet(WifiState::NoWifiFound);
             WiFiListReset();
         } else {
@@ -80,15 +80,19 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
     }
 
     // wifi_connect(...) part
-    if(kError.isObject()) {
-        const Json::Value &kMessage = kError["message"];
-        if(kMessage.isString()) {
-            const QString kErrStr = kMessage.asString().c_str();
-            if(kErrStr == "invalid wifi password") {
+    if (error.isObject()) {
+        const Json::Value &kMessage = error["message"];
+        if (kMessage.isString()) {
+            const QString errStr = kMessage.asString().c_str();
+            if (errStr == "invalid wifi password") {
                 wifiErrorSet(WifiError::InvalidPassword);
-            }
-            else if(kErrStr == "wifi error") {
+            } else if (errStr == "wifi error") {
                 wifiErrorSet(WifiError::ConnectFailed);
+            } else if (errStr == "dbus method error") {
+                wifiErrorSet(WifiError::ScanFailed);
+            } else {
+                wifiErrorSet(WifiError::UnknownError);
+                LOG(error) << result.toStyledString();
             }
         }
     }

@@ -46,6 +46,7 @@ Item {
     onWifiErrorChanged: {
         if(bot.net.wifiError != WifiError.NoError) {
             bot.net.setWifiState(WifiState.NotConnected)
+            log.data("error changed");
         }
     }
 
@@ -100,12 +101,13 @@ Item {
                 text: {
                     if(!bot.net.wifiEnabled) {
                         "Turn on WiFi and try again."
-                    }
-                    else if(bot.net.wifiState == WifiState.Searching) {
+                    } else if (bot.net.wifiState == WifiState.Searching) {
                         "Searching..."
-                    }
-                    else if(bot.net.wifiState == WifiState.NoWifiFound) {
+                    } else if (bot.net.wifiState == WifiState.NoWifiFound) {
                         "No wireless networks found."
+                    } else if (bot.net.wifiState == WifiState.NotConnected &&
+                            bot.net.wifiError != WifiError.NoError) {
+                        "Search for wireless networks failed."
                     }
                 }
                 anchors.verticalCenter: parent.verticalCenter
@@ -594,7 +596,7 @@ Item {
                              (bot.net.wifiState == WifiState.Connecting ||
                              bot.net.wifiState == WifiState.NotConnected ||
                              bot.net.wifiError == wifiError.ConnectFailed ||
-                             bot.net.wifiError == wifiError.InvalidPAssword)
+                             bot.net.wifiError == wifiError.InvalidPassword)
 
                     Text {
                         id: full_button_text
