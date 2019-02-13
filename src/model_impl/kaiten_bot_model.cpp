@@ -38,6 +38,8 @@ class KaitenBotModel : public BotModel {
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
     void assistedLevel();
+    void continue_leveling();
+    void acknowledge_level();
     std::shared_ptr<JsonRpcMethod::Response> m_authResp;
     std::shared_ptr<JsonRpcMethod::Response> m_installUnsignedFwResp;
     void respondAuthRequest(QString response);
@@ -49,7 +51,6 @@ class KaitenBotModel : public BotModel {
     void doNozzleCleaning(bool do_clean);
     void acknowledgeNozzleCleaned();
     void buildPlateState(bool state);
-    void acknowledge_level();
     void query_status();
     void resetToFactory(bool clearCalibration);
     void buildPlateCleared();
@@ -514,6 +515,32 @@ void KaitenBotModel::assistedLevel(){
     }
 }
 
+void KaitenBotModel::acknowledge_level(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("acknowledge_level");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::continue_leveling(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("continue_process");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 void KaitenBotModel::firmwareUpdateCheck(bool dont_force_check){
     try{
         qDebug() << FL_STRM << "called";
@@ -603,19 +630,6 @@ void KaitenBotModel::buildPlateState(bool state){
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["method"] = state ? Json::Value("build_plate_installed") : Json::Value("build_plate_removed");
-        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
-    }
-    catch(JsonRpcInvalidOutputStream &e){
-        qWarning() << FFL_STRM << e.what();
-    }
-}
-
-void KaitenBotModel::acknowledge_level(){
-    try{
-        qDebug() << FL_STRM << "called";
-        auto conn = m_conn.data();
-        Json::Value json_params(Json::objectValue);
-        json_params["method"] = Json::Value("acknowledge_level");
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
