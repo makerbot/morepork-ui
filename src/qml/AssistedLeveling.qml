@@ -5,7 +5,13 @@ AssistedLevelingForm {
     startDoneButton {
         button_mouseArea.onClicked: {
             if(!startDoneButton.disable_button) {
-                if(state == "leveling_complete" ||
+                if(state == "buildplate_instructions") {
+                    bot.continue_leveling()
+                }
+                else if(state == "leveling_complete") {
+                    state = "leveling_successful"
+                }
+                else if(state == "leveling_successful" ||
                    state == "leveling_failed") {
                     processDone()
                 }
@@ -27,25 +33,20 @@ AssistedLevelingForm {
                 (currentHES > targetHESLower) ? false : true
             }
             else {
-                // Button is always enabled in other states(unlock_knob &
-                // lock_knob) for the user to click and move to the next
-                // screen, since there is no way we can verify that the
-                // knobs are loosened or tightened.
+                // Button is always enabled in other states
+                // for the user to click and move to the next
+                // screen.
                 false
             }
         }
         button_mouseArea.onClicked: {
             // UI states to move into dependng on the current
             // state when acknowledge button is clicked.
-            if(state == "unlock_knob") {
-                state = "leveling"
+            if(state == "leveling_instructions") {
+                bot.continue_leveling()
+                state = "checking_level"
             }
             else if(state == "leveling") {
-                if(!acknowledgeLevelButton.disable_button) {
-                    state = "lock_knob"
-                }
-            }
-            else if(state == "lock_knob") {
                 if(!acknowledgeLevelButton.disable_button) {
                     bot.acknowledge_level()
                 }

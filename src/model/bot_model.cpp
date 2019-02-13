@@ -40,6 +40,14 @@ void BotModel::assistedLevel() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::continue_leveling() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::acknowledge_level() {
+    qDebug() << FL_STRM << "called";
+}
+
 void BotModel::respondAuthRequest(QString response) {
     qDebug() << FL_STRM << "called with response: " << response;
 }
@@ -78,10 +86,6 @@ void BotModel::acknowledgeNozzleCleaned() {
 
 void BotModel::buildPlateState(bool state) {
     qDebug() << FL_STRM << "called with parameter: " << state;
-}
-
-void BotModel::acknowledge_level() {
-    qDebug() << FL_STRM << "called";
 }
 
 void BotModel::query_status() {

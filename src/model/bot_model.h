@@ -33,6 +33,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
     Q_INVOKABLE virtual void assistedLevel();
+    Q_INVOKABLE virtual void acknowledge_level();
+    Q_INVOKABLE virtual void continue_leveling();
     Q_INVOKABLE virtual void respondAuthRequest(QString response);
     Q_INVOKABLE virtual void respondInstallUnsignedFwRequest(QString response);
     Q_INVOKABLE virtual void firmwareUpdateCheck(bool dont_force_check);
@@ -42,7 +44,6 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void doNozzleCleaning(bool clean);
     Q_INVOKABLE virtual void acknowledgeNozzleCleaned();
     Q_INVOKABLE virtual void buildPlateState(bool state);
-    Q_INVOKABLE virtual void acknowledge_level();
     Q_INVOKABLE virtual void query_status();
     Q_INVOKABLE virtual void resetToFactory(bool clearCalibration);
     Q_INVOKABLE virtual void buildPlateCleared();

@@ -27,12 +27,17 @@ Item {
             switch(currentState) {
                 case ProcessStateType.LevelingLeft:
                 case ProcessStateType.LevelingRight:
-                    state = "unlock_knob"
+                    state = "leveling"
                     break;
                 case ProcessStateType.LevelingComplete:
                     if(state != "leveling_failed" &&
                        state != "cancelling") {
-                        state = "leveling_complete"
+                        if(inFreStep) {
+                            state = "leveling_successful"
+                        }
+                        else {
+                            state = "leveling_complete"
+                        }
                     }
                     break;
                 case ProcessStateType.Cancelling:
@@ -53,6 +58,11 @@ Item {
         if(bot.process.type == ProcessType.AssistedLeveling) {
             state = "leveling_failed"
         }
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
     }
 
     Image {
@@ -77,8 +87,8 @@ Item {
 
             Text {
                 id: title
-                width: 252
-                text: "LEVEL         BUILD PLATE"
+                width: 360
+                text: "BUILD PLATFORM\nLEVELING"
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 anchors.top: parent.top
@@ -87,7 +97,7 @@ Item {
                 anchors.leftMargin: 0
                 color: "#e6e6e6"
                 font.family: "Antennae"
-                font.pixelSize: 30
+                font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.3
                 visible: true
@@ -95,7 +105,7 @@ Item {
 
             Text {
                 id: subtitle
-                width: 350
+                width: 375
                 wrapMode: Text.WordWrap
                 anchors.top: title.bottom
                 anchors.topMargin: 20
@@ -105,20 +115,20 @@ Item {
                 font.family: "Antennae"
                 font.pixelSize: 18
                 font.weight: Font.Light
-                text: "Assisted leveling will check your build plate and prompt you to make any adjustments"
+                text: "Assisted leveling will check your build platform and prompt you to make any adjustments."
                 lineHeight: 1.2
                 visible: true
             }
 
             RoundedButton {
                 id: startDoneButton
-                label: "BEGIN LEVELING"
+                label: "START LEVELING"
                 buttonWidth: 260
                 buttonHeight: 50
                 anchors.left: parent.left
                 anchors.leftMargin: 0
                 anchors.top: subtitle.bottom
-                anchors.topMargin: 20
+                anchors.topMargin: 30
                 visible: true
             }
         }
@@ -136,19 +146,35 @@ Item {
         Text {
             id: processText
             width: 275
-            text: "DEFAULT"
-            wrapMode: Text.WordWrap
+            text: "PROCESS"
+            anchors.top: parent.top
+            anchors.topMargin: 50
             anchors.left: parent.right
             anchors.leftMargin: 75
-            anchors.verticalCenter: parent.verticalCenter
+            wrapMode: Text.WordWrap
             color: "#e6e6e6"
             font.family: "Antennae"
             font.pixelSize: 22
             font.weight: Font.Bold
-            lineHeight: 1.3
+            lineHeight: 1.2
             font.letterSpacing: 3
         }
 
+        Text {
+            id: processDescriptionText
+            width: 350
+            wrapMode: Text.WordWrap
+            color: "#e6e6e6"
+            font.family: "Antennae"
+            font.pixelSize: 18
+            font.weight: Font.Light
+            text: "PROCESS DESCRIPTION"
+            anchors.top: processText.bottom
+            anchors.topMargin: 25
+            anchors.left: parent.right
+            anchors.leftMargin: 75
+            lineHeight: 1.2
+        }
     }
 
     Image {
@@ -163,10 +189,12 @@ Item {
         Text {
             id: leveling_instruction
             text: "Text"
-            anchors.top: parent.bottom
-            anchors.topMargin: 20
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 120
+            lineHeight: 1.3
+            horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            color: "#e6e6e6"
+            color: "#ffffff"
             font.family: "Antennae"
             font.pixelSize: 18
             font.weight: Font.Light
@@ -252,7 +280,6 @@ Item {
             label: "NEXT STEP"
             visible: false
         }
-
     }
     states: [
         State {
@@ -262,7 +289,8 @@ Item {
 
             PropertyChanges {
                 target: header_image
-                source: "qrc:/img/build_plate_open_door.png"
+                anchors.leftMargin: 0
+                source: "qrc:/img/remove_build_plate.png"
                 visible: true
             }
 
@@ -273,24 +301,20 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "OPEN DOOR"
+                text: "OPEN DOOR AND\nREMOVE BUILD PLATE"
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "In order for your device to correctly level the build plate you must open the door."
+                text: "The extruders need to hit precise points under the build plate."
             }
 
             PropertyChanges {
                 target: startDoneButton
-                disable_button: true
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: mainItem
-                anchors.verticalCenterOffset: 30
-                anchors.leftMargin: -100
+                buttonWidth: 120
+                label: "NEXT"
+                disable_button: false
+                opacity: 1
             }
 
             PropertyChanges {
@@ -300,12 +324,15 @@ Item {
         },
 
         State {
-            name: "loading_state"
+            name: "checking_level"
             when: bot.process.type == ProcessType.AssistedLeveling &&
                   (bot.process.stateType == ProcessStateType.Loading ||
-                   bot.process.stateType == ProcessStateType.CheckFirstPoint ||
+                   bot.process.stateType == ProcessStateType.CheckingLevelness ||
                    bot.process.stateType == ProcessStateType.CheckLeftLevel ||
-                   bot.process.stateType == ProcessStateType.CheckRightLevel)
+                   bot.process.stateType == ProcessStateType.CheckRightLevel ||
+                   bot.process.stateType == ProcessStateType.Running ||
+                   (bot.process.stateType == ProcessStateType.CleaningUp &&
+                    state != "cancelling"))
 
             PropertyChanges {
                 target: header_image
@@ -318,41 +345,47 @@ Item {
             }
 
             PropertyChanges {
+                target: levelingDirections
+                visible: false
+            }
+
+            PropertyChanges {
                 target: processText
                 text: {
                     switch(bot.process.stateType) {
-                    case ProcessStateType.Loading:
-                        "HOMING TO CENTER POINT"
-                        break;
-                    case ProcessStateType.CheckFirstPoint:
-                        "CHECKING THE CENTER POINT"
-                        break;
                     case ProcessStateType.CheckLeftLevel:
-                        "CHECKING THE LEFT POINT"
+                        "MOVING TO THE\nLEFT LEVELING POINT"
                         break;
                     case ProcessStateType.CheckRightLevel:
-                        "CHECKING THE RIGHT POINT"
+                        "MOVING TO THE\nRIGHT LEVELING POINT"
                         break;
                     default:
-                        "DEFAULT TEXT"
+                        "CHECKING\nLEVELNESS"
                         break;
                     }
                 }
             }
 
             PropertyChanges {
-                target: levelingDirections
-                visible: false
+                target: processDescriptionText
+                text: {
+                    switch(bot.process.stateType) {
+                    case ProcessStateType.CheckLeftLevel:
+                    case ProcessStateType.CheckRightLevel:
+                        "The system is moving into position."
+                        break;
+                    default:
+                        "The extruders are checking the levelness of the build platform."
+                        break;
+                    }
+                }
             }
         },
 
         State {
-            name: "unlock_knob"
-            // To get into this UI state, the switch case
-            // at the top of file is used instead of the
-            // usual 'when' condition, as we need the UI to
-            // be held at this state and move forward only
-            // after user input.
+            name: "leveling_instructions"
+            when: bot.process.type == ProcessType.AssistedLeveling &&
+                  bot.process.stateType == ProcessStateType.LevelingInstructions
 
             PropertyChanges {
                 target: header_image
@@ -361,38 +394,21 @@ Item {
 
             PropertyChanges {
                 target: levelingDirections
-                anchors.verticalCenterOffset: -100
-                source: {
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.LevelingLeft:
-                        "qrc:/img/build_plate_left_lock_unlock.png"
-                        break;
-                    case ProcessStateType.LevelingRight:
-                        "qrc:/img/build_plate_right_lock_unlock.png"
-                        break;
-                    }
-                }
+                source: "qrc:/img/assisted_level_instructions.png"
+                anchors.verticalCenterOffset: -50
                 visible: true
             }
 
             PropertyChanges {
                 target: leveling_instruction
-                text: {
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.LevelingLeft:
-                        "Loosen front left lock."
-                        break;
-                    case ProcessStateType.LevelingRight:
-                        "Loosen front right lock."
-                        break;
-                    }
-                }
-                anchors.topMargin: 35
+                text: "Locate the two leveling hex screws under the part of the build platform.\nPushing up with too much force on the hex key\ncould cause false readings."
+                anchors.bottomMargin: 100
                 visible: true
             }
 
             PropertyChanges {
                 target: acknowledgeLevelButton
+                anchors.topMargin: -80
                 visible: true
             }
 
@@ -426,18 +442,29 @@ Item {
 
             PropertyChanges {
                 target: levelingDirections
-                anchors.verticalCenterOffset: -140
+                anchors.verticalCenterOffset: -50
                 source: {
                     if(currentHES >= targetHESLower && currentHES <= targetHESUpper) {
                         "qrc:/img/build_plate_leveled.png"
                     }
-                    else{
+                    else {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            "qrc:/img/build_plate_left_adjust.png"
+                            if(currentHES < targetHESLower) {
+                                "qrc:/img/build_plate_left_adjust_tighten.png"
+                            }
+                            else if(currentHES > targetHESUpper) {
+                                "qrc:/img/build_plate_left_adjust_loosen.png"
+                            }
                             break;
                         case ProcessStateType.LevelingRight:
-                            "qrc:/img/build_plate_right_adjust.png"
+                            if(currentHES < targetHESLower) {
+                                "qrc:/img/build_plate_right_adjust_tighten.png"
+                            }
+                            else if(currentHES > targetHESUpper) {
+                                "qrc:/img/build_plate_right_adjust_loosen.png"
+                            }
+                            break;
                         }
                     }
                 }
@@ -447,17 +474,19 @@ Item {
             PropertyChanges {
                 target: leveling_instruction
                 text: {
-                    if(currentHES < targetHESLower) {
-                        "Twist clockwise to bring the build plate back to leveled range"
-                    }
-                    else if(currentHES > targetHESUpper) {
-                        "Twist counter clockwise to bring the build plate back to leveled range "
-                    }
-                    else if((currentHES < targetHESUpper && currentHES > targetHESLower)) {
+                    switch(bot.process.stateType) {
+                    case ProcessStateType.LevelingLeft:
+                        "Adjust front left height"
+                        break;
+                    case ProcessStateType.LevelingRight:
+                        "Adjust front right height"
+                        break;
+                    default:
                         ""
+                        break;
                     }
                 }
-                anchors.topMargin: 10
+                anchors.bottomMargin: 250
                 visible: true
             }
 
@@ -465,19 +494,20 @@ Item {
                 target: level
                 visible: true
                 anchors.horizontalCenterOffset:
-                    currentHES - (targetHESLower + targetHESUpper)/2
-                source:
+                    (targetHESLower + targetHESUpper)*0.5 - currentHES
+                source: {
                     if(currentHES <= targetHESUpper && currentHES >= targetHESLower) {
                         "qrc:/img/build_plate_level.png"
                     }
                     else {
                         "qrc:/img/build_plate_not_level.png"
                     }
+                }
             }
 
             PropertyChanges {
                 target: acknowledgeLevelButton
-                anchors.topMargin: 160
+                anchors.topMargin: -80
                 visible: true
             }
 
@@ -488,7 +518,11 @@ Item {
 
             PropertyChanges {
                 target: low
-                opacity: currentHES <= targetHESLower ? 1 : 0.2
+                opacity: {
+                    (currentHES >= targetHESLower &&
+                     ok.opacity != 1) ?
+                        1 : 0.2
+                }
             }
 
             PropertyChanges {
@@ -499,7 +533,11 @@ Item {
 
             PropertyChanges {
                 target: high
-                opacity: currentHES >= targetHESUpper ? 1 : 0.2
+                opacity: {
+                    (currentHES <= targetHESUpper &&
+                     ok.opacity != 1) ?
+                        1 : 0.2
+                }
             }
 
             PropertyChanges {
@@ -508,66 +546,6 @@ Item {
             }
         },
 
-        State {
-            name: "lock_knob"
-            // To get into this UI state, the user has to
-            // press the 'acknowledgeLevelButton' while in
-            // the 'leveling' state. The behavior is defined
-            // in the onClicked action of the button.
-
-            PropertyChanges {
-                target: header_image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: levelingDirections
-                anchors.verticalCenterOffset: -100
-                source: {
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.LevelingLeft:
-                        "qrc:/img/build_plate_left_lock_unlock.png"
-                        break;
-                    case ProcessStateType.LevelingRight:
-                        "qrc:/img/build_plate_right_lock_unlock.png"
-                        break;
-                    }
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: leveling_instruction
-                text: {
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.LevelingLeft:
-                        "Tighten front left lock."
-                        break;
-                    case ProcessStateType.LevelingRight:
-                        "Tighten front right lock."
-                        break;
-                    }
-                }
-                anchors.topMargin: 35
-                visible: true
-
-            }
-
-            PropertyChanges {
-                target: acknowledgeLevelButton
-                visible: true
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                visible: false
-            }
-
-            PropertyChanges {
-                target: rangeIndicator
-                visible: false
-            }
-        },
         State {
             name: "leveling_complete"
             // To get into this UI state, the switch case
@@ -579,8 +557,8 @@ Item {
             PropertyChanges {
                 target: header_image
                 visible: true
-                anchors.leftMargin: 60
-                source: "qrc:/img/process_successful.png"
+                anchors.leftMargin: 0
+                source: "qrc:/img/insert_build_plate.png"
             }
 
             PropertyChanges {
@@ -591,20 +569,66 @@ Item {
             PropertyChanges {
                 target: title
                 width: 390
-                text: "ASSISTED LEVELING COMPLETE"
-                anchors.topMargin: 55
+                text: "INSERT BUILD PLATE\nAND CLOSE DOOR"
+                anchors.topMargin: 0
                 font.pixelSize: 25
             }
 
             PropertyChanges {
                 target: subtitle
-                text: ""
+                text: "To finish leveling please insert the build\nplate back into the printer and close the\nbuild chamber door."
             }
 
             PropertyChanges {
                 target: startDoneButton
-                anchors.topMargin: -10
-                buttonWidth: 100
+                buttonWidth: 180
+                label: "CONTINUE"
+                opacity: 1
+                disable_button: false
+            }
+
+            PropertyChanges {
+                target: levelingDirections
+                visible: false
+            }
+        },
+
+        State {
+            name: "leveling_successful"
+            // To get into this UI state, the switch case
+            // at the top of file is used instead of the
+            // usual 'when' condition, as we need the UI to
+            // be held at this state and move forward only
+            // after user input.
+
+            PropertyChanges {
+                target: header_image
+                visible: true
+                anchors.leftMargin: 0
+                source: "qrc:/img/sombrero_welcome.png"
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: title
+                width: 390
+                text: "BUILD PLATFORM\nIS LEVEL"
+                anchors.topMargin: 0
+                font.pixelSize: 25
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: "Sensors indicate the build platform\nis level."
+            }
+
+            PropertyChanges {
+                target: startDoneButton
+                buttonWidth: 120
                 label: "DONE"
                 opacity: 1
                 disable_button: false
@@ -615,6 +639,7 @@ Item {
                 visible: false
             }
         },
+
         State {
             name: "leveling_failed"
             PropertyChanges {
@@ -645,7 +670,7 @@ Item {
             PropertyChanges {
                 target: startDoneButton
                 disable_button: false
-                buttonWidth: 100
+                buttonWidth: 120
                 anchors.topMargin: "-10"
                 label: "DONE"
                 opacity: 1
@@ -688,6 +713,11 @@ Item {
             PropertyChanges {
                 target: levelingDirections
                 visible: false
+            }
+
+            PropertyChanges {
+                target: processDescriptionText
+                text: "Please wait"
             }
         }
     ]

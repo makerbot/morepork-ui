@@ -43,8 +43,9 @@ class ProcessModel : public BaseModel {
         TransferringFirmware, // Firmware update states
         VerifyingFirmware,
         InstallingFirmware,
-        CheckFirstPoint, // Assisted leveling states
-        BuildPlateInstructions,
+        BuildPlateInstructions, // Assisted leveling states
+        LevelingInstructions,
+        CheckingLevelness,
         CheckLeftLevel,
         CheckRightLevel,
         LevelingLeft,
