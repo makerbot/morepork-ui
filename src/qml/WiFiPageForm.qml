@@ -100,12 +100,13 @@ Item {
                 text: {
                     if(!bot.net.wifiEnabled) {
                         "Turn on WiFi and try again."
-                    }
-                    else if(bot.net.wifiState == WifiState.Searching) {
+                    } else if (bot.net.wifiState == WifiState.Searching) {
                         "Searching..."
-                    }
-                    else if(bot.net.wifiState == WifiState.NoWifiFound) {
+                    } else if (bot.net.wifiState == WifiState.NoWifiFound) {
                         "No wireless networks found."
+                    } else if (bot.net.wifiState == WifiState.NotConnected &&
+                            bot.net.wifiError != WifiError.NoError) {
+                        "Search for wireless networks failed."
                     }
                 }
                 anchors.verticalCenter: parent.verticalCenter
@@ -113,7 +114,10 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: 20
                 visible: bot.net.wifiState == WifiState.Searching ||
-                         bot.net.wifiState == WifiState.NoWifiFound
+                         bot.net.wifiState == WifiState.NoWifiFound ||
+                         (bot.net.wifiState == WifiState.NotConnected &&
+                                (bot.net.wifiError == WifiError.ScanFailed ||
+                                 bot.net.wifiError == WifiError.UnknownError))
             }
 
             // When the bot is already connected to the wifi and
@@ -594,7 +598,7 @@ Item {
                              (bot.net.wifiState == WifiState.Connecting ||
                              bot.net.wifiState == WifiState.NotConnected ||
                              bot.net.wifiError == wifiError.ConnectFailed ||
-                             bot.net.wifiError == wifiError.InvalidPAssword)
+                             bot.net.wifiError == wifiError.InvalidPassword)
 
                     Text {
                         id: full_button_text
