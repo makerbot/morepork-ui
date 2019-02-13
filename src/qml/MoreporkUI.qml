@@ -61,6 +61,9 @@ ApplicationWindow {
         case FreStep.NamePrinter:
             freScreen.state = "name_printer"
             break;
+        case FreStep.SetTimeDate:
+            freScreen.state = "set_time_date"
+            break;
         case FreStep.LoginMbAccount:
             freScreen.state = "log_in"
             break;
@@ -534,6 +537,9 @@ ApplicationWindow {
                                 case FreStep.NamePrinter:
                                     "SKIP NAMING PRINTER"
                                     break;
+                                case FreStep.SetTimeDate:
+                                    "SKIP SETTING TIME"
+                                    break;
                                 case FreStep.LoginMbAccount:
                                     "SKIP SIGN IN"
                                     break;
@@ -587,7 +593,7 @@ ApplicationWindow {
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
                                 }
-                                else if(currentFreStep == FreStep.NamePrinter) {
+                                else if(currentFreStep == FreStep.SetTimeDate) {
                                     if(bot.net.interface == "ethernet" ||
                                        bot.net.interface == "wifi") {
                                         fre.setFreStep(FreStep.LoginMbAccount)
@@ -668,6 +674,9 @@ ApplicationWindow {
                             case FreStep.NamePrinter:
                                 "SKIP NAMING PRINTER?"
                                 break;
+                            case FreStep.SetTimeDate:
+                                "SKIP SETTING TIME?"
+                                break;
                             case FreStep.LoginMbAccount:
                                 "SKIP ACCOUNT SIGN IN?"
                                 break;
@@ -720,6 +729,9 @@ ApplicationWindow {
                                 break;
                             case FreStep.NamePrinter:
                                 "You can name your printer later from the printer settings menu."
+                                break;
+                            case FreStep.SetTimeDate:
+                                "You can set the time later from the printer settings menu."
                                 break;
                             case FreStep.LoginMbAccount:
                                 "By signing in, this printer will automatically appear in your list of printers on any signed in device."
