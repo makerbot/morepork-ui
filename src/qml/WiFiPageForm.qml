@@ -22,6 +22,16 @@ Item {
     property bool selectedWifiSaved: false
     property bool isForgetEnabled: false
 
+    RefreshButton {
+        visible: (wifiSwipeView.currentIndex === 0)
+        enabled: (bot.net.wifiState !== WifiState.Searching);
+
+        button_mouseArea.onClicked: {
+            bot.scanWifi(true)
+            bot.net.setWifiState(WifiState.Searching);
+        }
+    }
+
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
             bot.net.setWifiState(WifiState.Connected)
