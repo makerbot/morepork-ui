@@ -1014,6 +1014,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
             filamentBayATagVerificationDoneSet(kBay["verification_done"].asBool());
             infoBay1VerificationDoneSet(kBay["verification_done"].asBool());
+
+            UPDATE_INT_PROP(spoolAAmountRemaining, kBay["filament_amount_remaining"]);
+
           }
         }
         if(kFilamentBay.size() > 1){
@@ -1036,6 +1039,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
             filamentBayBTagVerificationDoneSet(kBay["verification_done"].asBool());
             infoBay2VerificationDoneSet(kBay["verification_done"].asBool());
+
+            UPDATE_INT_PROP(spoolBAmountRemaining, kBay["filament_amount_remaining"]);
+
           }
         }
       }
