@@ -60,11 +60,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Image {
         id: header_image
         width: sourceSize.width
@@ -145,7 +140,7 @@ Item {
 
         Text {
             id: processText
-            width: 275
+            width: 325
             text: "PROCESS"
             anchors.top: parent.top
             anchors.topMargin: 50
@@ -174,6 +169,77 @@ Item {
             anchors.left: parent.right
             anchors.leftMargin: 75
             lineHeight: 1.2
+        }
+
+        RowLayout {
+            id: temperatureDisplay
+            width: children.width
+            height: 35
+            anchors.left: parent.right
+            anchors.leftMargin: 75
+            anchors.top: processDescriptionText.bottom
+            anchors.topMargin: 25
+            spacing: 10
+            opacity: 0
+
+            Text {
+                id: extruder_A_current_temperature_text
+                text: bot.extruderACurrentTemp + "C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
+            }
+
+            Rectangle {
+                id: divider_rectangle1
+                width: 1
+                height: 25
+                color: "#ffffff"
+            }
+
+            Text {
+                id: extruder_A_target_temperature_text
+                text: "50C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
+            }
+
+            Rectangle {
+                width: 10
+                color: "#000000"
+            }
+
+            Text {
+                id: extruder_B_current_temperature_text
+                text: bot.extruderBCurrentTemp + "C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
+            }
+
+            Rectangle {
+                id: divider_rectangle2
+                width: 1
+                height: 25
+                color: "#ffffff"
+            }
+
+            Text {
+                id: extruder_B_target_temperature_text
+                text: "50C"
+                font.family: "Antennae"
+                color: "#ffffff"
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 20
+            }
         }
     }
 
@@ -360,7 +426,12 @@ Item {
                         "MOVING TO THE\nRIGHT LEVELING POINT"
                         break;
                     default:
-                        "CHECKING\nLEVELNESS"
+                        if(bot.process.stepStr == "cooling") {
+                            "COOLING EXTRUDER\nNOZZLES"
+                        }
+                        else {
+                            "CHECKING\nLEVELNESS"
+                        }
                         break;
                     }
                 }
@@ -375,9 +446,22 @@ Item {
                         "The system is moving into position."
                         break;
                     default:
-                        "The extruders are checking the levelness of the build platform."
+                        if(bot.process.stepStr == "cooling") {
+                            "Leveling will continue after the nozzles cool down"
+                        }
+                        else {
+                            "The extruders are checking the levelness of the build platform."
+                        }
                         break;
                     }
+                }
+            }
+
+            PropertyChanges {
+                target: temperatureDisplay
+                opacity: {
+                    bot.process.stepStr == "cooling" ?
+                             1 : 0
                 }
             }
         },
