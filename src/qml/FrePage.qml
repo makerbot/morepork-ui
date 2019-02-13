@@ -58,6 +58,10 @@ FrePageForm {
                 mainSwipeView.swipeToItem(3)
                 settingsPage.settingsSwipeView.swipeToItem(2)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
+            } else if(state == "set_time_date") {
+                inFreStep = true
+                mainSwipeView.swipeToItem(3)
+                settingsPage.settingsSwipeView.swipeToItem(7)
             } else if(state == "log_in") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)

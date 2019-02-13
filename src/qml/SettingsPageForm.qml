@@ -384,8 +384,23 @@ Item {
             id: timeAndDateItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+            }
 
             TimeSelector {
                 id: setTimePage

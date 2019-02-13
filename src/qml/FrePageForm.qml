@@ -435,6 +435,65 @@ Item {
             }
         },
         State {
+            name: "set_time_date"
+
+            PropertyChanges {
+                target: bot_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: instructions_item
+                anchors.leftMargin: 50
+            }
+
+            PropertyChanges {
+                target: title_text
+                text: "SET TIME AND DATE"
+                lineHeight: 1.2
+                font.pixelSize: 28
+                anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: subtitle_text
+                text: "Give this printer a time and date."
+            }
+
+            PropertyChanges {
+                target: continueButton
+                label_width: 175
+                buttonWidth: 175
+                label: "CONTINUE"
+                anchors.topMargin: 30
+            }
+
+            PropertyChanges {
+                target: rectangle2
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle3
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle4
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle5
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+        },
+        State {
             name: "log_in"
 
             PropertyChanges {
