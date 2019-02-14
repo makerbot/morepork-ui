@@ -217,6 +217,7 @@ Popup {
             height: showButtonBar ?
                             basePopupItem.height - buttonBar.height :
                             basePopupItem.height
+            anchors.top: parent.top
         }
     }
 }

@@ -74,6 +74,7 @@ class KaitenBotModel : public BotModel {
     void preheatChamber(const int chamber_temperature);
     void moveAxis(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bayID);
+    void shutdown();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1398,6 +1399,10 @@ void KaitenBotModel::forceSyncFile(QString path) {
     }
     fsync(fd);
     close(fd);
+}
+
+void KaitenBotModel::shutdown() {
+    system("poweroff");
 }
 
 BotModel * makeKaitenBotModel(const char * socketpath) {
