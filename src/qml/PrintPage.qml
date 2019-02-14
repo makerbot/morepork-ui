@@ -110,40 +110,44 @@ PrintPageForm {
     }
 
     printingDrawer.buttonPausePrint.onClicked: {
-        if(bot.process.stateType == ProcessStateType.Printing) {
-            bot.pauseResumePrint("suspend")
+        if(!printingDrawer.buttonPausePrint.disableButton) {
+            if(bot.process.stateType == ProcessStateType.Printing) {
+                bot.pauseResumePrint("suspend")
+            }
+            else if(bot.process.stateType == ProcessStateType.Paused) {
+                bot.pauseResumePrint("resume")
+            }
+            printingDrawer.close()
         }
-        else if(bot.process.stateType == ProcessStateType.Paused) {
-            bot.pauseResumePrint("resume")
-        }
-        printingDrawer.close()
     }
 
     printingDrawer.buttonChangeFilament.onClicked: {
-        if(bot.process.stateType == ProcessStateType.Paused) {
-            if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
-                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+        if(!printingDrawer.buttonChangeFilament.disableButton) {
+            if(bot.process.stateType == ProcessStateType.Paused) {
+                if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
+                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+                }
+                if(mainSwipeView.currentIndex != 5) {
+                    mainSwipeView.swipeToItem(5)
+                }
+                if(settingsPage.settingsSwipeView.currentIndex != 0) {
+                    settingsPage.settingsSwipeView.setCurrentIndex(0)
+                }
+                printingDrawer.close()
             }
-            if(mainSwipeView.currentIndex != 5) {
-                mainSwipeView.swipeToItem(5)
+            else if(bot.process.stateType == ProcessStateType.Printing) {
+                bot.pauseResumePrint("suspend")
+                if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
+                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+                }
+                if(mainSwipeView.currentIndex != 5) {
+                    mainSwipeView.swipeToItem(5)
+                }
+                if(settingsPage.settingsSwipeView.currentIndex != 0) {
+                    settingsPage.settingsSwipeView.setCurrentIndex(0)
+                }
+                printingDrawer.close()
             }
-            if(settingsPage.settingsSwipeView.currentIndex != 0) {
-                settingsPage.settingsSwipeView.setCurrentIndex(0)
-            }
-            printingDrawer.close()
-        }
-        else if(bot.process.stateType == ProcessStateType.Printing) {
-            bot.pauseResumePrint("suspend")
-            if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
-                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
-            }
-            if(mainSwipeView.currentIndex != 5) {
-                mainSwipeView.swipeToItem(5)
-            }
-            if(settingsPage.settingsSwipeView.currentIndex != 0) {
-                settingsPage.settingsSwipeView.setCurrentIndex(0)
-            }
-            printingDrawer.close()
         }
     }
 

@@ -121,7 +121,8 @@ Drawer {
                 buttonPressColor: "#0a0a0a"
                 height: 80
                 disableButton: !(bot.process.stateType == ProcessStateType.Printing ||
-                               bot.process.stateType == ProcessStateType.Paused)
+                                 bot.process.stateType == ProcessStateType.Paused) ||
+                               inFreStep
             }
 
             Rectangle {

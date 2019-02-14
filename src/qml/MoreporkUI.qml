@@ -749,7 +749,7 @@ ApplicationWindow {
                                 "Extruders are required to use the printer."
                                 break;
                             case FreStep.LevelBuildPlate:
-                                "For best print quality and dimensional accuracy, the build p;ate should be leveled."
+                                "For best print quality and dimensional accuracy, the build plate should be leveled."
                                 break;
                             case FreStep.CalibrateExtruders:
                                 "For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached."
