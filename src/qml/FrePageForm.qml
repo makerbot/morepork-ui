@@ -577,14 +577,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: {
-                    if(!bot.extruderAPresent || !bot.extruderBPresent) {
-                        "ATTACH EXTRUDERS"
-                    }
-                    else {
-                        "CALIBRATE EXTRUDERS"
-                    }
-                }
+                text: "ATTACH EXTRUDERS"
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -593,22 +586,8 @@ Item {
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: {
-                    if(!bot.extruderAPresent || !bot.extruderBPresent) {
-                        "CONTINUE"
-                    }
-                    else {
-                        "CALIBRATE"
-                    }
-                }
-                buttonWidth: {
-                    if(!bot.extruderAPresent || !bot.extruderBPresent) {
-                        175
-                    }
-                    else {
-                        190
-                    }
-                }
+                label: "CONTINUE"
+                buttonWidth: 190
                 anchors.topMargin: 30
             }
 
@@ -649,14 +628,145 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: {
-                    if(!bot.extruderAPresent || !bot.extruderBPresent) {
-                        "Follow the on screen steps to attach each extruder."
-                    }
-                    else {
-                        "Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality."
-                    }
-                }
+                text: "Follow the on screen steps to attach each extruder."
+            }
+        },
+        State {
+            name: "level_build_plate"
+
+            PropertyChanges {
+                target: bot_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: instructions_item
+                anchors.leftMargin: 50
+            }
+
+            PropertyChanges {
+                target: title_text
+                text: "LEVEL BUILD PLATFORM"
+                lineHeight: 1.2
+                font.pixelSize: 28
+                anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: continueButton
+                label_width: 175
+                label: "CONTINUE"
+                buttonWidth: 190
+                anchors.topMargin: 30
+            }
+
+            PropertyChanges {
+                target: rectangle2
+                color: "#ffffff"
+            }
+
+            PropertyChanges {
+                target: rectangle3
+                color: "#ffffff"
+            }
+
+            PropertyChanges {
+                target: rectangle4
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle5
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.499
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.637
+            }
+
+            PropertyChanges {
+                target: subtitle_text
+                text: "Follow the on-screen steps to level the build plate."
+            }
+        },
+        State {
+            name: "calibrate_extruders"
+
+            PropertyChanges {
+                target: bot_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: instructions_item
+                anchors.leftMargin: 50
+            }
+
+            PropertyChanges {
+                target: title_text
+                text: "CALIBRATE EXTRUDERS"
+                lineHeight: 1.2
+                font.pixelSize: 28
+                anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: continueButton
+                label_width: 175
+                label: "CONTINUE"
+                buttonWidth: 190
+                anchors.topMargin: 30
+            }
+
+            PropertyChanges {
+                target: rectangle2
+                color: "#ffffff"
+            }
+
+            PropertyChanges {
+                target: rectangle3
+                color: "#ffffff"
+            }
+
+            PropertyChanges {
+                target: rectangle4
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle5
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.499
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.637
+            }
+
+            PropertyChanges {
+                target: subtitle_text
+                text: "Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality."
             }
         },
         State {

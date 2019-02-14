@@ -1,7 +1,6 @@
-import QtQuick 2.4
+import QtQuick 2.10
 
 AssistedLevelingForm {
-
     startDoneButton {
         button_mouseArea.onClicked: {
             if(!startDoneButton.disable_button) {
@@ -14,6 +13,10 @@ AssistedLevelingForm {
                 else if(state == "leveling_successful" ||
                    state == "leveling_failed") {
                     processDone()
+                    if(inFreStep) {
+                        mainSwipeView.swipeToItem(0)
+                        fre.gotoNextStep(currentFreStep)
+                    }
                 }
                 else {
                     bot.assistedLevel()

@@ -62,6 +62,10 @@ void FreTracker::initialize() {
                     currentFreStepSet(FreStep::LoginMbAccount);
                 } else if (step == "attach_extruders") {
                     currentFreStepSet(FreStep::AttachExtruders);
+                } else if (step == "level_build_plate") {
+                    currentFreStepSet(FreStep::LevelBuildPlate);
+                } else if (step == "calibrate_extruders") {
+                    currentFreStepSet(FreStep::CalibrateExtruders);
                 } else if (step == "load_material") {
                     currentFreStepSet(FreStep::LoadMaterial);
                 } else if (step == "test_print") {

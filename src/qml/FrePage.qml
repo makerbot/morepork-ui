@@ -22,7 +22,8 @@ FrePageForm {
 
     continueButton {
         disable_button: {
-            if(state == "load_material") {
+            if(state == "load_material" ||
+               state == "calibrate_extruders") {
                 isProcessRunning()
             }
             else {
@@ -70,14 +71,17 @@ FrePageForm {
                 settingsPage.signInPage.usernameTextField.forceActiveFocus()
             } else if(state == "attach_extruders") {
                 inFreStep = true
-                if(!bot.extruderAPresent || !bot.extruderBPresent) {
-                    mainSwipeView.swipeToItem(2)
-                    extruderPage.itemAttachExtruder.extruder = 1
-                    extruderPage.extruderSwipeView.swipeToItem(1)
-                } else {
-                    mainSwipeView.swipeToItem(3)
-                    settingsPage.settingsSwipeView.swipeToItem(6)
-                }
+                mainSwipeView.swipeToItem(2)
+                extruderPage.itemAttachExtruder.extruder = 1
+                extruderPage.extruderSwipeView.swipeToItem(1)
+            } else if(state == "level_build_plate") {
+                inFreStep = true
+                mainSwipeView.swipeToItem(6)
+                advancedPage.advancedSettingsSwipeView.swipeToItem(3)
+            } else if(state == "calibrate_extruders") {
+                inFreStep = true
+                mainSwipeView.swipeToItem(3)
+                settingsPage.settingsSwipeView.swipeToItem(6)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad()

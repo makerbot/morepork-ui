@@ -224,7 +224,7 @@ Item {
                             }
                             else if(itemAttachExtruder.extruder == 2 &&
                                 itemAttachExtruder.isAttached) {
-                                inFreStep ? 100 : 260
+                                inFreStep ? 120 : 260
                             }
                         }
                         buttonHeight: {
@@ -234,7 +234,7 @@ Item {
                             }
                             else if(itemAttachExtruder.extruder == 2 &&
                                 itemAttachExtruder.isAttached) {
-                                44
+                                50
                             }
                         }
                         button_text.font.capitalization: Font.MixedCase
@@ -304,7 +304,7 @@ Item {
                                 }
                                 else {
                                     mainSwipeView.swipeToItem(0)
-                                    inFreStep = false
+                                    fre.gotoNextStep(currentFreStep)
                                 }
                             }
                         }

@@ -245,13 +245,27 @@ Item {
             visible: false
 
             function altBack() {
-                if(bot.process.type == ProcessType.AssistedLeveling) {
-                    assistedLevel.cancelAssistedLevelingPopup.open()
+                if(!inFreStep) {
+                    if(bot.process.type == ProcessType.AssistedLeveling) {
+                        assistedLevel.cancelAssistedLevelingPopup.open()
+                    }
+                    else {
+                        assistedLevel.state = "base state"
+                        if(advancedSettingsSwipeView.currentIndex != 0) {
+                            advancedSettingsSwipeView.swipeToItem(0)
+                        }
+                    }
                 }
                 else {
-                    assistedLevel.state = "base state"
-                    advancedSettingsSwipeView.swipeToItem(0)
+                    skipFreStepPopup.open()
                 }
+            }
+
+            function skipFreStepAction() {
+                bot.cancel()
+                assistedLevel.state = "cancelling"
+                advancedSettingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
             }
 
             AssistedLeveling {
