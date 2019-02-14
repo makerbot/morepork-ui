@@ -22,6 +22,8 @@ class FreTracker : public BaseModel {
         NamePrinter,
         LoginMbAccount,
         AttachExtruders,
+        LevelBuildPlate,
+        CalibrateExtruders,
         LoadMaterial,
         TestPrint,
         SetupComplete,
