@@ -217,8 +217,10 @@ Item {
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
                 visible: bot.net.wifiState == WifiState.Connected ||
-                         bot.net.wifiState == WifiState.NotConnected ||
-                         isWifiConnected
+                         isWifiConnected ||
+                         (bot.net.wifiState == WifiState.NotConnected &&
+                                bot.net.wifiError != WifiError.ScanFailed &&
+                                bot.net.wifiError != WifiError.UnknownError)
                 model: bot.net.WiFiList
 
                 delegate:
