@@ -20,6 +20,7 @@ class FreTracker : public BaseModel {
         SetupWifi,
         SoftwareUpdate,
         NamePrinter,
+        SetTimeDate,
         LoginMbAccount,
         AttachExtruders,
         LevelBuildPlate,

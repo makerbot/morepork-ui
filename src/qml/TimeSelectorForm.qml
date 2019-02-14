@@ -244,7 +244,14 @@ Item {
         button_mouseArea {
             onClicked: {
                 setTime()
-                settingsSwipeView.swipeToItem(0)
+                if(inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                    mainSwipeView.swipeToItem(0)
+                    fre.gotoNextStep(currentFreStep)
+                }
+                else {
+                    settingsSwipeView.swipeToItem(0)
+                }
             }
             enabled: {
                 !hoursTumbler.moving && !minutesTumbler.moving && !meridianTumbler.moving

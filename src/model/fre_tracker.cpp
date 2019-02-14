@@ -54,8 +54,10 @@ void FreTracker::initialize() {
                     currentFreStepSet(FreStep::SetupWifi);
                 } else if (step == "software_update") {
                     currentFreStepSet(FreStep::SoftwareUpdate);
-                } else if (step == "name_prnter") {
+                } else if (step == "name_printer") {
                     currentFreStepSet(FreStep::NamePrinter);
+                } else if (step == "set_time_date") {
+                    currentFreStepSet(FreStep::SetTimeDate);
                 } else if (step == "login_mb_account") {
                     currentFreStepSet(FreStep::LoginMbAccount);
                 } else if (step == "attach_extruders") {
