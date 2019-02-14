@@ -20,6 +20,7 @@ Item {
             bot.updateSpoolInfo(1)
             bot.getSpoolInfo(1)
         }
+        busy: !enabled
     }
 
     RowLayout {

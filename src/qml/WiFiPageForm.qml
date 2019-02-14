@@ -30,6 +30,8 @@ Item {
             bot.scanWifi(true)
             bot.net.setWifiState(WifiState.Searching);
         }
+
+        busy: bot.net.wifiState === WifiState.Searching
     }
 
     onIsWifiConnectedChanged: {

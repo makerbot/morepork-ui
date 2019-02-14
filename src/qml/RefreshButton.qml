@@ -1,6 +1,8 @@
 import QtQuick 2.10
 
 RoundedButton {
+    property bool busy: false
+
     id: roundedButton
     z: 1
     anchors.bottom: parent.bottom
@@ -22,6 +24,16 @@ RoundedButton {
         source: "qrc:/img/refresh.png"
         width: sourceSize.width/1.6
         height: sourceSize.height/1.6
+        opacity: ((roundedButton.enabled && !roundedButton.busy) ? 1.0 : 0.5)
+
+        RotationAnimator {
+            target: refresh_image
+            running: roundedButton.busy
+            from: 0
+            to: 360
+            loops: Animation.Infinite
+            duration: 2000
+        }
     }
 
     button_mouseArea.onPressed: {
