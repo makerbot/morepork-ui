@@ -213,15 +213,7 @@ Item {
                         settingsSwipeView.swipeToItem(0)
                         if(inFreStep) {
                             mainSwipeView.swipeToItem(0)
-                            // Skip login to MakerBot account if there
-                            // is no network connection available.
-                            if(bot.net.interface == "ethernet" ||
-                               bot.net.interface == "wifi") {
-                                fre.gotoNextStep(currentFreStep)
-                            }
-                            else {
-                                fre.setFreStep(FreStep.AttachExtruders)
-                            }
+                            fre.gotoNextStep(currentFreStep)
                         }
                     }
                 }

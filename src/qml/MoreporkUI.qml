@@ -70,6 +70,12 @@ ApplicationWindow {
         case FreStep.AttachExtruders:
             freScreen.state = "attach_extruders"
             break;
+        case FreStep.LevelBuildPlate:
+            freScreen.state = "level_build_plate"
+            break;
+        case FreStep.CalibrateExtruders:
+            freScreen.state = "calibrate_extruders"
+            break;
         case FreStep.LoadMaterial:
             freScreen.state = "load_material"
             break;
@@ -544,6 +550,8 @@ ApplicationWindow {
                                     "SKIP SIGN IN"
                                     break;
                                 case FreStep.AttachExtruders:
+                                case FreStep.LevelBuildPlate:
+                                case FreStep.CalibrateExtruders:
                                 case FreStep.LoadMaterial:
                                     "SKIP PRINTER SETUP"
                                     break;
@@ -589,6 +597,8 @@ ApplicationWindow {
                                 skipFreStepPopup.close()
                                 currentItem.skipFreStepAction()
                                 if(currentFreStep == FreStep.AttachExtruders ||
+                                   currentFreStep == FreStep.LevelBuildPlate ||
+                                   currentFreStep == FreStep.CalibrateExtruders ||
                                    currentFreStep == FreStep.LoadMaterial ||
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
@@ -596,7 +606,7 @@ ApplicationWindow {
                                 else if(currentFreStep == FreStep.SetTimeDate) {
                                     if(bot.net.interface == "ethernet" ||
                                        bot.net.interface == "wifi") {
-                                        fre.setFreStep(FreStep.LoginMbAccount)
+                                        fre.gotoNextStep(currentFreStep)
                                     }
                                     else {
                                         fre.setFreStep(FreStep.AttachExtruders)
@@ -680,15 +690,14 @@ ApplicationWindow {
                             case FreStep.LoginMbAccount:
                                 "SKIP ACCOUNT SIGN IN?"
                                 break;
-                            case FreStep.AttachExtruders: {
-                                if(!bot.extruderAPresent ||
-                                   !bot.extruderBPresent) {
-                                    "SKIP ATTACHING EXTRUDERS?"
-                                }
-                                else {
-                                    "SKIP CALIBRATING EXTRUDERS?"
-                                }
-                            }
+                            case FreStep.AttachExtruders:
+                                "SKIP ATTACHING EXTRUDERS?"
+                                break;
+                            case FreStep.LevelBuildPlate:
+                                "SKIP LEVELING BUILD PLATE?"
+                                break;
+                            case FreStep.CalibrateExtruders:
+                                "SKIP CALIBRATING EXTRUDERS?"
                                 break;
                             case FreStep.LoadMaterial:
                                 "SKIP LOADING MATERIAL?"
@@ -736,15 +745,14 @@ ApplicationWindow {
                             case FreStep.LoginMbAccount:
                                 "By signing in, this printer will automatically appear in your list of printers on any signed in device."
                                 break;
-                            case FreStep.AttachExtruders: {
-                                    if(!bot.extruderAPresent ||
-                                       !bot.extruderBPresent) {
-                                        "Extruders are required to use the printer."
-                                    }
-                                    else {
-                                        "For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached."
-                                    }
-                                }
+                            case FreStep.AttachExtruders:
+                                "Extruders are required to use the printer."
+                                break;
+                            case FreStep.LevelBuildPlate:
+                                "For best print quality and dimensional accuracy, the build p;ate should be leveled."
+                                break;
+                            case FreStep.CalibrateExtruders:
+                                "For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached."
                                 break;
                             case FreStep.LoadMaterial:
                                 "Printing requires material to be loaded into the extruders."

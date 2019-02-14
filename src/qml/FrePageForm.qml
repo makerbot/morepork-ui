@@ -632,7 +632,7 @@ Item {
             }
         },
         State {
-            name: "assisted_level"
+            name: "level_build_plate"
 
             PropertyChanges {
                 target: bot_image

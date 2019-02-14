@@ -304,7 +304,7 @@ Item {
                                 }
                                 else {
                                     mainSwipeView.swipeToItem(0)
-                                    inFreStep = false
+                                    fre.gotoNextStep(currentFreStep)
                                 }
                             }
                         }

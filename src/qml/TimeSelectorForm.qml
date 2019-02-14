@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import FreStepEnum 1.0
 
 Item {
     anchors.fill: parent
@@ -247,7 +248,13 @@ Item {
                 if(inFreStep) {
                     settingsSwipeView.swipeToItem(0)
                     mainSwipeView.swipeToItem(0)
-                    fre.gotoNextStep(currentFreStep)
+                    if(bot.net.interface == "ethernet" ||
+                       bot.net.interface == "wifi") {
+                        fre.gotoNextStep(currentFreStep)
+                    }
+                    else {
+                        fre.setFreStep(FreStep.AttachExtruders)
+                    }
                 }
                 else {
                     settingsSwipeView.swipeToItem(0)
