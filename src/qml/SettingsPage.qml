@@ -53,4 +53,20 @@ SettingsPageForm {
     buttonAdvancedSettings.onClicked: {
         settingsSwipeView.swipeToItem(8)
     }
+
+    buttonShutdown.onClicked: {
+        shutdownPopup.left_text.text = "CANCEL"
+        shutdownPopup.right_text.text = "SHUT DOWN"
+        shutdownPopup.showButtonBar = true
+        shutdownPopup.showTwoButtons = true
+        shutdownPopup.open();
+    }
+
+    shutdownPopup.left_mouseArea.onClicked: {
+        shutdownPopup.close();
+    }
+
+    shutdownPopup.right_mouseArea.onClicked: {
+        bot.shutdown();
+    }
 }

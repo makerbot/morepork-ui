@@ -177,6 +177,10 @@ void BotModel::resetSpoolProperties(const int bayID) {
     qDebug() << FL_STRM << "called with parameter" << bayID;
 }
 
+void BotModel::shutdown() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

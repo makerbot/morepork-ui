@@ -33,6 +33,9 @@ Item {
 
     property alias buttonAdvancedSettings: buttonAdvancedSettings
 
+    property alias buttonShutdown: buttonShutdown
+    property alias shutdownPopup: shutdownPopup
+
     property alias wifiPage: wifiPage
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
@@ -184,6 +187,16 @@ Item {
                         id: buttonAdvancedSettings
                         buttonImage.source: "qrc:/img/icon_preheat.png"
                         buttonText.text: "ADVANCED"
+                    }
+
+                    Item { width: parent.width; height: 1; smooth: false;
+                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    }
+
+                    MenuButton {
+                        id: buttonShutdown
+                        buttonImage.source: "qrc:/img/icon_power.png"
+                        buttonText.text: "SHUT DOWN"
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -426,6 +439,27 @@ Item {
         id: closeDeauthorizeAccountsPopupTimer
         interval: 1500
         onTriggered: deauthorizeAccountsPopup.close()
+    }
+
+    ModalPopup {
+        id: shutdownPopup
+        visible: false
+        popup_contents.contentItem: Item {
+            anchors.fill: parent
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+                TitleText {
+                    text: "SHUT DOWN PRINTER"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                BodyText{
+                    text: "Are you sure you want to shut down the printer?"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        }
     }
 
     Popup {
