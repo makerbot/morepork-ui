@@ -112,7 +112,7 @@ Item {
                 text: {
                     if(!bot.net.wifiEnabled) {
                         "Turn on WiFi and try again."
-                    } else if (bot.net.wifiState == WifiState.Searching) {
+                    } else if ((wifiList.count == 0) && (bot.net.wifiState == WifiState.Searching)) {
                         "Searching..."
                     } else if (bot.net.wifiState == WifiState.NoWifiFound) {
                         "No wireless networks found."
@@ -125,7 +125,7 @@ Item {
                 anchors.verticalCenterOffset: -20
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: 20
-                visible: bot.net.wifiState == WifiState.Searching ||
+                visible: (wifiList.count == 0 && bot.net.wifiState == WifiState.Searching) ||
                          bot.net.wifiState == WifiState.NoWifiFound ||
                          (bot.net.wifiState == WifiState.NotConnected &&
                                 (bot.net.wifiError == WifiError.ScanFailed ||
@@ -222,7 +222,8 @@ Item {
                          isWifiConnected ||
                          (bot.net.wifiState == WifiState.NotConnected &&
                                 bot.net.wifiError != WifiError.ScanFailed &&
-                                bot.net.wifiError != WifiError.UnknownError)
+                                bot.net.wifiError != WifiError.UnknownError) ||
+                         (bot.net.wifiState === WifiState.Searching && count != 0)
                 model: bot.net.WiFiList
 
                 delegate:
