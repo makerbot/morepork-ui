@@ -60,7 +60,9 @@ class NetModel : public BaseModel {
     enum WifiError {
         NoError,
         InvalidPassword,
-        ConnectFailed
+        ConnectFailed,
+        ScanFailed,
+        UnknownError
     };
 
     Q_ENUM(WifiState)

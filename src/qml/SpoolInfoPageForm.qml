@@ -9,46 +9,23 @@ Item {
     property bool initialized: false
 
     id: spoolInfo
-    anchors.fill: parent
-    anchors.leftMargin: 40
-    anchors.rightMargin: 40
+    width: 800
+    height: 440
 
-    RoundedButton {
-        id: roundedButton
-        x: 600
-        y: 288
-        buttonWidth: 120
-        buttonHeight: 120
-        button_text.visible: false
+    RefreshButton {
         enabled: (bot.spoolAUpdateFinished && bot.spoolBUpdateFinished)
-        Image {
-            id: img
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-            source: "qrc:/img/refresh.png"
-            width: sourceSize.width
-            height: sourceSize.height
-        }
-
         button_mouseArea.onClicked: {
             bot.updateSpoolInfo(0)
             bot.getSpoolInfo(0)
             bot.updateSpoolInfo(1)
             bot.getSpoolInfo(1)
         }
-
-        button_mouseArea.onPressed: {
-            img.source = "qrc:/img/refresh_black.png"
-        }
-
-        button_mouseArea.onReleased: {
-            img.source = "qrc:/img/refresh.png"
-        }
-
+        busy: !enabled
     }
 
     RowLayout {
         anchors.fill: parent
+        anchors.leftMargin: 40
 
         SpoolInfoColumn {
             id: spoolAInfo
