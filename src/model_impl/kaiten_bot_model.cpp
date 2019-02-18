@@ -1348,7 +1348,18 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                UPDATE_INT_PROP(infoToolheadAActiveFanRPM, kToolheadA["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadAGradientFanRPM, kToolheadA["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadAHESValue, kToolheadA["hes_value"]);
-               UPDATE_INT_PROP(infoToolheadAError, kToolheadA["error"]);
+
+               const Json::Value &kErrList = kToolheadA["error"];
+               if(kErrList.isArray() && kErrList.size() > 0) {
+                  QString errStr;
+                  for (const Json::Value err : kErrList) {
+                    errStr.append(err.asString().c_str());
+                    errStr.append(" ");
+                  }
+                  infoToolheadAErrorSet(errStr);
+               } else {
+                  infoToolheadAErrorReset();
+               }
             }
 
             if(kToolheadB.isObject()){
@@ -1361,8 +1372,18 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                UPDATE_INT_PROP(infoToolheadBActiveFanRPM, kToolheadB["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadBGradientFanRPM, kToolheadB["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadBHESValue, kToolheadB["hes_value"]);
-               UPDATE_INT_PROP(infoToolheadBError, kToolheadB["error"]);
 
+               const Json::Value &kErrList = kToolheadB["error"];
+               if(kErrList.isArray() && kErrList.size() > 0) {
+                  QString errStr;
+                  for (const Json::Value err : kErrList) {
+                    errStr.append(err.asString().c_str());
+                    errStr.append(" ");
+                  }
+                  infoToolheadBErrorSet(errStr);
+               } else {
+                  infoToolheadBErrorReset();
+               }
             }
         }
     }
