@@ -93,6 +93,8 @@ MoreporkStorage::MoreporkStorage()
       QFile::copy(":/test_files/test_print.makerbot",
                   TEST_PRINT_PATH + "/test_print.makerbot");
   }
+
+  updateUsbStorageConnected();
 }
 
 
