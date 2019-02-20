@@ -1678,7 +1678,7 @@ ApplicationWindow {
                                          !extruderAToolTypeCorrect
             property bool supportExtWrong: extruderBPresent &&
                                          !extruderBToolTypeCorrect
-            id: wrongExtruderAPopup
+            id: wrongExtruderPopup
             visible: modelExtWrong || supportExtWrong
             disableUserClose: true
             popup_contents.contentItem: Item {
@@ -1694,17 +1694,13 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                     BodyText{
-                        property bool modelExtWrong: extruderAPresent &&
-                                                     !extruderAToolTypeCorrect
-                        property bool supportExtWrong: extruderBPresent &&
-                                                       !extruderBToolTypeCorrect
                         text: {
-                            if (modelExtWrong) {
+                            if (wrongExtruderPopup.modelExtWrong) {
                                 "Please insert a Model 1 Performance Extruder "+
                                 "into slot 1\nto continue attaching the "+
                                 "extruders."
                             }
-                            else if (supportExtWrong) {
+                            else if (wrongExtruderPopup.supportExtWrong) {
                                 "Please insert a Support 2 Performance Extruder "+
                                 "into slot 2\nto continue attaching the "+
                                 "extruders. Currently only model\nand support "+
