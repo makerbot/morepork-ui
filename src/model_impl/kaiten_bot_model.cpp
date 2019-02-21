@@ -975,6 +975,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder A temps
             UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
             UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
+            extruderAToolTypeCorrectSet(kExtruderA["tool_type_correct"].asBool());
             extruderAPresentSet(kExtruderA["tool_present"].asBool());
             extruderAFilamentPresentSet(kExtruderA["filament_presence"].asBool());
             updating_extruder_firmware |=
@@ -986,6 +987,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder B temps
             UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
             UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
+            extruderBToolTypeCorrectSet(kExtruderB["tool_type_correct"].asBool());
             extruderBPresentSet(kExtruderB["tool_present"].asBool());
             extruderBFilamentPresentSet(kExtruderB["filament_presence"].asBool());
             updating_extruder_firmware |=
@@ -1348,7 +1350,18 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                UPDATE_INT_PROP(infoToolheadAActiveFanRPM, kToolheadA["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadAGradientFanRPM, kToolheadA["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadAHESValue, kToolheadA["hes_value"]);
-               UPDATE_INT_PROP(infoToolheadAError, kToolheadA["error"]);
+
+               const Json::Value &kErrList = kToolheadA["error"];
+               if(kErrList.isArray() && kErrList.size() > 0) {
+                  QString errStr;
+                  for (const Json::Value err : kErrList) {
+                    errStr.append(err.asString().c_str());
+                    errStr.append(" ");
+                  }
+                  infoToolheadAErrorSet(errStr);
+               } else {
+                  infoToolheadAErrorReset();
+               }
             }
 
             if(kToolheadB.isObject()){
@@ -1361,8 +1374,18 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                UPDATE_INT_PROP(infoToolheadBActiveFanRPM, kToolheadB["active_fan_rpm"]);
                UPDATE_INT_PROP(infoToolheadBGradientFanRPM, kToolheadB["gradient_fan_rpm"]);
                UPDATE_FLOAT_PROP(infoToolheadBHESValue, kToolheadB["hes_value"]);
-               UPDATE_INT_PROP(infoToolheadBError, kToolheadB["error"]);
 
+               const Json::Value &kErrList = kToolheadB["error"];
+               if(kErrList.isArray() && kErrList.size() > 0) {
+                  QString errStr;
+                  for (const Json::Value err : kErrList) {
+                    errStr.append(err.asString().c_str());
+                    errStr.append(" ");
+                  }
+                  infoToolheadBErrorSet(errStr);
+               } else {
+                  infoToolheadBErrorReset();
+               }
             }
         }
     }

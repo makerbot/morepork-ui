@@ -88,10 +88,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, extruderFirmwareUpdateProgressB, 0)
     MODEL_PROP(int, extruderACurrentTemp, -999)
     MODEL_PROP(int, extruderATargetTemp, -999)
+    MODEL_PROP(bool, extruderAToolTypeCorrect, false)
     MODEL_PROP(bool, extruderAPresent, false)
     MODEL_PROP(bool, extruderAFilamentPresent, false)
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
+    MODEL_PROP(bool, extruderBToolTypeCorrect, false)
     MODEL_PROP(bool, extruderBPresent, false)
     MODEL_PROP(bool, extruderBFilamentPresent, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
@@ -223,7 +225,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoToolheadAActiveFanRPM, -999)
     MODEL_PROP(int, infoToolheadAGradientFanRPM, -999)
     MODEL_PROP(float, infoToolheadAHESValue, -999.999)
-    MODEL_PROP(int, infoToolheadAError, -0)
+    MODEL_PROP(QString, infoToolheadAError, "0")
 
     // Toolhead B/2
     MODEL_PROP(bool, infoToolheadBAttached, false)
@@ -235,7 +237,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoToolheadBActiveFanRPM, -999)
     MODEL_PROP(int, infoToolheadBGradientFanRPM, -999)
     MODEL_PROP(float, infoToolheadBHESValue, -999.999)
-    MODEL_PROP(int, infoToolheadBError, -0)
+    MODEL_PROP(QString, infoToolheadBError, "0")
 
     // Misc.
     MODEL_PROP(bool, infoDoorActivated, false)

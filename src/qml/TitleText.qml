@@ -5,7 +5,7 @@ Text {
     wrapMode: Text.WordWrap
     color: "#e6e6e6"
     font.family: "Antennae"
-    font.pixelSize: 30
+    font.pixelSize: 20
     font.weight: Font.Bold
     lineHeight: 1.3
 }

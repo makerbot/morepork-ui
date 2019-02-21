@@ -19,6 +19,10 @@ ApplicationWindow {
     property bool updatingExtruderFirmware: bot.updatingExtruderFirmware
     property int extruderFirmwareUpdateProgressA: bot.extruderFirmwareUpdateProgressA
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
+    property bool extruderAToolTypeCorrect: bot.extruderAToolTypeCorrect
+    property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
+    property bool extruderAPresent: bot.extruderAPresent
+    property bool extruderBPresent: bot.extruderBPresent
     property bool skipAuthentication: false
     property bool isAuthenticated: false
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
@@ -164,7 +168,7 @@ ApplicationWindow {
             updatedExtruderFirmwareB = true
         }
     }
-        
+
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
     
     onIsfirmwareUpdateAvailableChanged: {
@@ -1664,6 +1668,49 @@ ApplicationWindow {
                         font.family: "Antennae"
                         font.pixelSize: 18
                         lineHeight: 1.3
+                    }
+                }
+            }
+        }
+
+        ModalPopup {
+            property bool modelExtWrong: extruderAPresent &&
+                                         !extruderAToolTypeCorrect
+            property bool supportExtWrong: extruderBPresent &&
+                                         !extruderBToolTypeCorrect
+            id: wrongExtruderPopup
+            visible: modelExtWrong || supportExtWrong
+            disableUserClose: true
+            popup_contents.contentItem: Item {
+                anchors.fill: parent
+                ColumnLayout {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 150
+
+                    TitleText {
+                        text: "WRONG EXTRUDER TYPE DETECTED"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                    BodyText{
+                        text: {
+                            if (wrongExtruderPopup.modelExtWrong) {
+                                "Please insert a Model 1 Performance Extruder "+
+                                "into slot 1\nto continue attaching the "+
+                                "extruders."
+                            }
+                            else if (wrongExtruderPopup.supportExtWrong) {
+                                "Please insert a Support 2 Performance Extruder "+
+                                "into slot 2\nto continue attaching the "+
+                                "extruders. Currently only model\nand support "+
+                                "printing is supported."
+                            }
+                        }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                 }
             }
