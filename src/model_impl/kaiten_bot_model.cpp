@@ -975,6 +975,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder A temps
             UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
             UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
+            extruderAToolTypeCorrectSet(kExtruderA["tool_type_correct"].asBool());
             extruderAPresentSet(kExtruderA["tool_present"].asBool());
             extruderAFilamentPresentSet(kExtruderA["filament_presence"].asBool());
             updating_extruder_firmware |=
@@ -986,6 +987,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             // Update GUI variables for extruder B temps
             UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
             UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
+            extruderBToolTypeCorrectSet(kExtruderB["tool_type_correct"].asBool());
             extruderBPresentSet(kExtruderB["tool_present"].asBool());
             extruderBFilamentPresentSet(kExtruderB["filament_presence"].asBool());
             updating_extruder_firmware |=

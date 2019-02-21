@@ -6,5 +6,5 @@ Text {
     font.family: "Antennae"
     font.pixelSize: 18
     font.weight: Font.Light
-    lineHeight: 1.2
+    lineHeight: 1.3
 }
