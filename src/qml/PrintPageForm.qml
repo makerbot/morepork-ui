@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import StorageFileTypeEnum 1.0
+import ErrorTypeEnum 1.0
 
 Item {
     smooth: false
@@ -46,6 +47,10 @@ Item {
            browsingUsbStorage) {
             setDrawerState(false)
             printSwipeView.swipeToItem(0)
+            if(safeToRemoveUsbPopup.opened) {
+                bot.acknowledgeSafeToRemoveUsb()
+                safeToRemoveUsbPopup.close()
+            }
         }
     }
 
@@ -294,10 +299,10 @@ Item {
                 }
             }
 
-            PrintStatusViewForm{
+            PrintStatusViewForm {
                 id: printStatusView
                 smooth: false
-                visible: isPrintProcess
+                visible: isPrintProcess && !errorScreen.visible
                 fileName_: file_name
                 filePathName: fileName
                 support_mass_: support_mass
@@ -305,6 +310,16 @@ Item {
                 uses_support_: uses_support
                 uses_raft_: uses_raft
                 print_time_: print_time
+            }
+
+            ErrorScreen {
+                id: errorScreen
+                visible: {
+                    isPrintProcess &&
+                    (bot.process.stateType == ProcessStateType.Pausing ||
+                     bot.process.stateType == ProcessStateType.Paused) &&
+                    bot.process.errorType != ErrorType.NoError
+                }
             }
         }
 

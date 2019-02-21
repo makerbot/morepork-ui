@@ -126,5 +126,7 @@
         <file>FirmwareFileListUsb.qml</file>
         <file>FirmwareFileListUsbForm.qml</file>
         <file>RefreshButton.qml</file>
+        <file>ErrorScreen.qml</file>
+        <file>ErrorScreenForm.qml</file>
     </qresource>
 </RCC>

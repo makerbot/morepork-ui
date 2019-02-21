@@ -59,9 +59,25 @@ class ProcessModel : public BaseModel {
         InstallBuildPlate,
         RemoveBuildPlate
     };
+    //MOREPORK_QML_ENUM
+    enum ErrorType {
+        NoError,
+        NotConnected,
+        LidNotPlaced,
+        DoorNotClosed,
+        HeaterOverTemp,
+        NoFilamentAtExtruder,
+        FilamentJam,
+        DrawerOutOfFilament,
+        HeaterNotReachingTemp,
+        BadHESCalibrationFail,
+        ExtruderOutOfFilament,
+        OtherError
+    };
 
     Q_ENUM(ProcessType)
     Q_ENUM(ProcessStateType)
+    Q_ENUM(ErrorType)
 
   private:
     Q_OBJECT
@@ -85,6 +101,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, timeRemaining, 0)
     MODEL_PROP(int, elapsedTime, 0)
     MODEL_PROP(int, errorCode, 0)
+    MODEL_PROP(ErrorType, errorType, NoError)
     MODEL_PROP(int, targetHesUpper, 3800)
     MODEL_PROP(int, targetHesLower, 3400)
     MODEL_PROP(int, currentHes, 3600)
