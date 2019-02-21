@@ -36,7 +36,7 @@ Item {
 
             Extruder {
                 id: extruder1
-                extruderIdx: 1
+                extruderID: 1
                 extruderSerialNo: "000-000"
             }
 

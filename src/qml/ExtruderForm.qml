@@ -31,7 +31,7 @@ Item {
     property bool filamentPresent: { bot["extruder%1FilamentPresent".arg(idxAsAxis)] }
     property int extruderTemperature: { bot["extruder%1CurrentTemp".arg(idxAsAxis)] }
     property string extruderUsage: {
-        bot["extruder%1Present".arg(idxAsAxis)].reduce(
+        bot["extruder%1ExtrusionDistance".arg(idxAsAxis)].reduce(
             function(sum, num) {
                 return sum + num;
             });
