@@ -181,6 +181,10 @@ void BotModel::shutdown() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::getToolStats(const int index) {
+    qDebug() << FL_STRM << "called with parameter: " << index;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
