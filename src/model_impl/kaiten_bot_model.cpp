@@ -75,6 +75,8 @@ class KaitenBotModel : public BotModel {
     void moveAxis(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bayID);
     void shutdown();
+    void getToolStats(const int index);
+    void toolStatsUpdate(const Json::Value & res, const int index);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -283,6 +285,21 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::vector<std::shared_ptr<UpdateSpoolInfoCallback> > m_updateSpoolInfoCb;
+
+    class ToolStatsCallback : public JsonRpcCallback {
+      public:
+        ToolStatsCallback(KaitenBotModel * bot, const int index)
+                : m_bot(bot),
+                  m_index(index) {}
+        void response(const Json::Value & resp) override {
+            m_bot->toolStatsUpdate(resp, m_index);
+        }
+      private:
+        const int m_index;
+        KaitenBotModel *m_bot;
+    };
+    std::vector<std::shared_ptr<ToolStatsCallback> > m_toolStatsCb;
+
 
     class UnknownMaterialNotification : public JsonRpcNotification {
       public:
@@ -798,6 +815,21 @@ void KaitenBotModel::updateSpoolInfo(const int bayIndex){
   }
 }
 
+void KaitenBotModel::getToolStats(const int index){
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["index"] = Json::Value(index);
+      conn->jsonrpc.invoke(
+              "get_tool_usage_stats_sombrero",
+              json_params,
+              m_toolStatsCb[index]);
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
 
 void KaitenBotModel::zipLogs(QString path) {
   try{
@@ -932,6 +964,10 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
                               new UpdateSpoolInfoCallback(this, 0)),
                       std::shared_ptr<UpdateSpoolInfoCallback>(
                               new UpdateSpoolInfoCallback(this, 1))},
+        m_toolStatsCb{std::shared_ptr<ToolStatsCallback>(
+                              new ToolStatsCallback(this, 0)),
+                      std::shared_ptr<ToolStatsCallback>(
+                              new ToolStatsCallback(this, 1))},
         m_matWarningNot(new UnknownMaterialNotification(this)),
         m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)),
         m_sysTimeNot(new SystemTimeNotification(this)) {
@@ -1125,6 +1161,26 @@ void KaitenBotModel::assistedLevelUpdate(const Json::Value &status) {
 
 void KaitenBotModel::wifiUpdate(const Json::Value &result) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->wifiUpdate(result);
+}
+
+void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index) {
+    const Json::Value & res = result["result"];
+
+    // :(
+    switch(index) {
+        case 0: {
+            UPDATE_INT_PROP(extruderAShortRetractCount, res["short_retract_count"]);
+            UPDATE_INT_PROP(extruderALongRetractCount, res["long_retract_count"]);
+            UPDATE_INT_LIST_PROP(extruderAExtrusionDistance, res["extrusion_distance_mm"]);
+            break;
+        }
+        case 1: {
+            UPDATE_INT_PROP(extruderBShortRetractCount, res["short_retract_count"]);
+            UPDATE_INT_PROP(extruderBLongRetractCount, res["long_retract_count"]);
+            UPDATE_INT_LIST_PROP(extruderBExtrusionDistance, res["extrusion_distance_mm"]);
+            break;
+        }
+    }
 }
 
 void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {

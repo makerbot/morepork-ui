@@ -8,15 +8,34 @@ Item {
     height: 420
     smooth: false
     antialiasing: false
-    property bool extruderPresent
-    property bool filamentPresent
     property int extruderID
-    property int extruderTemperature
-    property string extruderUsage
     property string extruderSerialNo
     property alias extruder_image: extruder_image
     property alias attachButton: attachButton
     property alias detachButton: detachButton
+
+    property string idxAsAxis: {
+        switch (extruderID) {
+            case 1:
+                "A";
+                break;
+            case 2:
+                "B";
+                break;
+            default:
+                "A";
+        }
+    }
+
+    property bool extruderPresent: { bot["extruder%1Present".arg(idxAsAxis)] }
+    property bool filamentPresent: { bot["extruder%1FilamentPresent".arg(idxAsAxis)] }
+    property int extruderTemperature: { bot["extruder%1CurrentTemp".arg(idxAsAxis)] }
+    property string extruderUsage: {
+        bot["extruder%1Present".arg(idxAsAxis)].reduce(
+            function(sum, num) {
+                return sum + num;
+            });
+    }
 
     property bool materialPresent: {
         switch(extruderID) {
@@ -185,7 +204,7 @@ Item {
 
                     Text {
                         id: usage_text
-                        text: extruderUsage
+                        text: extruderUsage + "mm"
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignRight
                         antialiasing: false
@@ -209,6 +228,11 @@ Item {
                 buttonWidth: 130
                 label_size: 18
                 disable_button: isProcessRunning()
+
+                button_mouseArea.onClicked: {
+                    itemAttachExtruder.extruder = extruderID
+                    extruderSwipeView.swipeToItem(1)
+                }
             }
 
             RoundedButton {
@@ -220,6 +244,11 @@ Item {
                 label: "ATTACH"
                 label_size: 18
                 visible: !extruderPresent
+
+                button_mouseArea.onClicked: {
+                    itemAttachExtruder.extruder = extruderID
+                    extruderSwipeView.swipeToItem(1)
+                }
             }
 
             RowLayout {

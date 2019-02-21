@@ -67,6 +67,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
     Q_INVOKABLE virtual void shutdown();
+    Q_INVOKABLE virtual void getToolStats(const int index);
 
   private:
     Q_OBJECT
@@ -238,6 +239,16 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoToolheadBGradientFanRPM, -999)
     MODEL_PROP(float, infoToolheadBHESValue, -999.999)
     MODEL_PROP(QString, infoToolheadBError, "0")
+
+    // Extruder A Stats
+    MODEL_PROP(int, extruderAShortRetractCount, 0)
+    MODEL_PROP(int, extruderALongRetractCount, 0)
+    MODEL_PROP(QList<int>, extruderAExtrusionDistance, QList<int>{0})
+
+    // Extruder B Stats
+    MODEL_PROP(int, extruderBShortRetractCount, 0)
+    MODEL_PROP(int, extruderBLongRetractCount, 0)
+    MODEL_PROP(QList<int>, extruderBExtrusionDistance, QList<int>{0})
 
     // Misc.
     MODEL_PROP(bool, infoDoorActivated, false)
