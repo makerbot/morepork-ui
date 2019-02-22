@@ -663,13 +663,13 @@ Item {
 
             PropertyChanges {
                 target: extruder_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
+                text: currentTemperature + "C"
                 visible: true
             }
 
             PropertyChanges {
                 target: extruder_target_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
+                text: targetTemperature + "C"
                 visible: true
             }
 
