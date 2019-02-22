@@ -37,23 +37,7 @@ Item {
             Extruder {
                 id: extruder1
                 extruderID: 1
-                extruderPresent: bot.extruderAPresent
-                extruderTemperature: bot.extruderACurrentTemp
-                filamentPresent: bot.extruderAFilamentPresent
-                extruderUsage: "0H"
                 extruderSerialNo: "000-000"
-                attachButton {
-                    button_mouseArea.onClicked: {
-                        itemAttachExtruder.extruder = extruderID
-                        extruderSwipeView.swipeToItem(1)
-                    }
-                }
-                detachButton {
-                    button_mouseArea.onClicked: {
-                        itemAttachExtruder.extruder = extruderID
-                        extruderSwipeView.swipeToItem(1)
-                    }
-                }
             }
 
             Extruder {
@@ -62,23 +46,7 @@ Item {
                 anchors.leftMargin: 0
                 extruder_image.anchors.leftMargin: 30
                 extruderID: 2
-                extruderPresent: bot.extruderBPresent
-                extruderTemperature: bot.extruderBCurrentTemp
-                filamentPresent: bot.extruderBFilamentPresent
-                extruderUsage: "0H"
                 extruderSerialNo: "000-000"
-                attachButton {
-                    button_mouseArea.onClicked: {
-                        itemAttachExtruder.extruder = extruderID
-                        extruderSwipeView.swipeToItem(1)
-                    }
-                }
-                detachButton {
-                    button_mouseArea.onClicked: {
-                        itemAttachExtruder.extruder = extruderID
-                        extruderSwipeView.swipeToItem(1)
-                    }
-                }
             }
         }
 
