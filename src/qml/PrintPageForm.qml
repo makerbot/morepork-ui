@@ -42,11 +42,12 @@ Item {
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(!storage.usbStorageConnected &&
-           printSwipeView.currentIndex != 0 &&
-           browsingUsbStorage) {
-            setDrawerState(false)
-            printSwipeView.swipeToItem(0)
+        if(!storage.usbStorageConnected) {
+            if(printSwipeView.currentIndex != 0 &&
+                    browsingUsbStorage) {
+                setDrawerState(false)
+                printSwipeView.swipeToItem(0)
+            }
             if(safeToRemoveUsbPopup.opened) {
                 bot.acknowledgeSafeToRemoveUsb()
                 safeToRemoveUsbPopup.close()
@@ -302,6 +303,8 @@ Item {
             PrintStatusViewForm {
                 id: printStatusView
                 smooth: false
+                // The error scrren visibility controls the
+                // normal print status view screen visibility.
                 visible: isPrintProcess && !errorScreen.visible
                 fileName_: file_name
                 filePathName: fileName
@@ -317,7 +320,11 @@ Item {
                 visible: {
                     isPrintProcess &&
                     (bot.process.stateType == ProcessStateType.Pausing ||
-                     bot.process.stateType == ProcessStateType.Paused) &&
+                     bot.process.stateType == ProcessStateType.Paused ||
+                     // Out of filament while printing, which should
+                     // still show the error handling screen.
+                     bot.process.stateType == ProcessStateType.UnloadingFilament ||
+                     bot.process.stateType == ProcessStateType.Preheating) &&
                     bot.process.errorType != ErrorType.NoError
                 }
             }

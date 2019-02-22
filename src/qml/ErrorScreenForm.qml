@@ -26,6 +26,21 @@ Item {
                 state = "door_open_error"
             }
             break;
+        case ErrorType.FilamentJam:
+            if(bot.process.type == ProcessType.Print) {
+                state = "filament_jam_error"
+            }
+            break;
+        case ErrorType.DrawerOutOfFilament:
+            if(bot.process.type == ProcessType.Print) {
+                state = "filament_bay_oof_error"
+            }
+            break;
+        case ErrorType.ExtruderOutOfFilament:
+            if(bot.process.type == ProcessType.Print) {
+                state = "extruder_oof_error_state1"
+            }
+            break;
         default:
             state = "base state"
             break;
@@ -57,7 +72,7 @@ Item {
             height: 350
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: errorImage.right
-            anchors.leftMargin: 30
+            anchors.leftMargin: 0
 
             Image {
                 id: errorIcon
@@ -88,7 +103,7 @@ Item {
                 id: errorMessageDescription
                 text: "Error description"
                 anchors.top: errorMessageTitle.bottom
-                anchors.topMargin: 30
+                anchors.topMargin: 20
                 font.family: "Antennae"
                 font.pixelSize: 18
                 lineHeight: 1.2
@@ -100,7 +115,7 @@ Item {
             RoundedButton {
                 id: button1
                 anchors.top: errorMessageDescription.bottom
-                anchors.topMargin: 30
+                anchors.topMargin: 20
                 label: "BUTTON 1"
                 label_width: 250
                 label_size: 22
@@ -123,6 +138,11 @@ Item {
     states: [
         State {
             name: "door_open_error"
+
+            PropertyChanges {
+                target: errorIcon
+                visible: true
+            }
 
             PropertyChanges {
                 target: errorImage
@@ -154,8 +174,13 @@ Item {
             name: "lid_open_error"
 
             PropertyChanges {
+                target: errorIcon
+                visible: true
+            }
+
+            PropertyChanges {
                 target: errorImage
-                source: "qrc:/img/error_close_door.png"
+                source: "qrc:/img/error_close_lid.png"
             }
 
             PropertyChanges {
@@ -182,6 +207,13 @@ Item {
             name: "filament_jam_error"
 
             PropertyChanges {
+                target: errorImage
+                source: bot.extruderAJammed ?
+                            "qrc:/img/error_filament_jam_1.png" :
+                            "qrc:/img/error_filament_jam_2.png"
+            }
+
+            PropertyChanges {
                 target: errorIcon
                 visible: false
             }
@@ -189,11 +221,194 @@ Item {
             PropertyChanges {
                 target: errorMessageTitle
                 text: "MATERIAL JAM\nDETECTED"
-                anchors.topMargin: 40
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: (bot.extruderAJammed ?
+                           "Model Extruder 1" :
+                           "Support Extruder 2") +
+                      " seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it."
+            }
+
+            PropertyChanges {
+                target: button1
+                buttonWidth: 340
+                label_width: 300
+                label: {
+                    "PURGE EXTRUDER " +
+                       (bot.extruderAJammed ? "1" : "2")
+                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: true
+                buttonWidth: 340
+                label_width: 320
+                label: {
+                    "UNLOAD EXTRUDER " +
+                    (bot.extruderAJammed ? "1" : "2")
+                }
+            }
+        },
+        State {
+            name: "filament_bay_oof_error"
+
+            PropertyChanges {
+                target: errorImage
+                source: bot.filamentBayAOOF ?
+                            "qrc:/img/error_oof_bay1.png" :
+                            "qrc:/img/error_oof_bay1.png"
+            }
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: {
+                    "PRINT PAUSING\nOUT OF " +
+                    (bot.filamentBayAOOF ?
+                         "MODEL" :
+                         "SUPPORT") +
+                    "\nMATERIAL"
+                }
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: {
+                    "The printer has run out of " +
+                        (bot.filamentBayAOOF ?
+                             printPage.print_model_material.toUpperCase() :
+                             printPage.print_model_material.toUpperCase()) +
+                        ". Open\nmaterial bay " +
+                        (bot.filamentBayAOOF ? "1" : "2") +
+                        " and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds."
+                }
+            }
+
+            PropertyChanges {
+                target: button1
+                buttonWidth: 280
+                label_width: 280
+                label: {
+                    "LOAD MATERIAL"
+                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
+            name: "extruder_oof_error_state1"
+            PropertyChanges {
+                target: errorImage
+                source: bot.extruderAOOF ?
+                            "qrc:/img/error_oof_extruder1.png" :
+                            "qrc:/img/error_oof_extruder2.png"
+            }
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: {
+                    "PRINT PAUSED\nOUT OF " +
+                    (bot.extruderAOOF ?
+                                "MODEL" :
+                                "SUPPORT") +
+                     "\nMATERIAL"
+                }
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: {
+                    "Remove the lid and swivel clip then\ngently pull out the remaining" +
+                    (bot.extruderAOOF ?
+                          "model" :
+                          "support") +
+                    "\nmaterial from " +
+                    (bot.extruderAOOF ?
+                          "Model Extruder 1" :
+                          "Support Extruder 2")
+
+                }
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 200
+                buttonWidth: 200
+                label: {
+                    "CONTINUE"
+                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
+            name: "extruder_oof_error_state2"
+            PropertyChanges {
+                target: errorImage
+                source: bot.extruderAOOF ?
+                            "qrc:/img/error_oof_bay1.png" :
+                            "qrc:/img/error_oof_bay1.png"
+            }
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: {
+                    "REMOVE EMPTY\nSPOOL"
+                }
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: {
+                    "Open material bay " +
+                     (bot.extruderAOOF ?
+                                "1" : "2") +
+                      " and remove the\nempty material spool."
+                }
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 280
+                buttonWidth: 280
+                label: {
+                    "LOAD MATERIAL"
+                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
             }
         }
     ]
-
-
-
 }

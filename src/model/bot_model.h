@@ -67,6 +67,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
     Q_INVOKABLE virtual void shutdown();
+    Q_INVOKABLE virtual void tryClearToolheadErrors(int tool_index, QList<int>errors);
+
 
   private:
     Q_OBJECT
@@ -91,11 +93,17 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderAToolTypeCorrect, false)
     MODEL_PROP(bool, extruderAPresent, false)
     MODEL_PROP(bool, extruderAFilamentPresent, false)
+    MODEL_PROP(QString, extruderAErrorCode, 0)
+    MODEL_PROP(bool, extruderAJammed, false)
+    MODEL_PROP(bool, extruderAOOF, false)
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)
     MODEL_PROP(bool, extruderBPresent, false)
     MODEL_PROP(bool, extruderBFilamentPresent, false)
+    MODEL_PROP(QString, extruderBErrorCode, 0)
+    MODEL_PROP(bool, extruderBJammed, false)
+    MODEL_PROP(bool, extruderBOOF, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
     MODEL_PROP(int, chamberErrorCode, 0)
@@ -115,6 +123,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBTagVerificationDone, false)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
+    MODEL_PROP(bool, filamentBayAOOF, false)
+    MODEL_PROP(bool, filamentBayBOOF, false)
     MODEL_PROP(bool, topLoadingWarning, false)
     MODEL_PROP(bool, spoolValidityCheckPending, false)
     MODEL_PROP(QString, unknownMaterialWarningType, "None")

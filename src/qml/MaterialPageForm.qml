@@ -43,7 +43,13 @@ Item {
     property bool isMaterialMismatch: false
 
     onIsLoadUnloadProcessChanged: {
-        if(isLoadUnloadProcess && !startLoadUnloadFromUI){
+        if(isLoadUnloadProcess &&
+           !startLoadUnloadFromUI &&
+           // Both of these happen mid-print when out of filament
+           // at extruder/bay, during which we should remain in
+           // print page and not move to material page.
+           (bot.process.stepStr != "preheating_unloading" ||
+            bot.process.stepStr != "preheating_loading")) {
             if(mainSwipeView.currentIndex != 5){
                 mainSwipeView.swipeToItem(5)
             }
@@ -278,6 +284,9 @@ Item {
                     if(printPage.isPrintProcess) {
                         activeDrawer = printPage.printingDrawer
                         setDrawerState(true)
+                        // Go to print page directly after loading or
+                        // unloading during a print.
+                        mainSwipeView.swipeToItem(1)
                     }
                 }
             }

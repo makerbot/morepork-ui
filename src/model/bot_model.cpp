@@ -181,6 +181,14 @@ void BotModel::shutdown() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::tryClearToolheadErrors(int tool_index, QList<int>errors) {
+    qDebug() << FL_STRM << "called with parameters" << tool_index << endl;
+    for(int e : errors) {
+        qDebug() << "Error " << e;
+    }
+}
+
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

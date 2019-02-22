@@ -164,9 +164,10 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
 
     const Json::Value &error = proc["error"];
-    if (error.isObject()) {
+    UPDATE_INT_PROP(errorCode, error["code"]);
+
+    if (error.isObject() && error["code"].isInt()) {
         const int err = error["code"].asInt();
-        errorCodeSet(err);
         switch(err) {
             case 0:
             errorTypeSet(ErrorType::NoError);
@@ -205,9 +206,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             errorTypeSet(ErrorType::OtherError);
             break;
         }
-        // UPDATE_INT_PROP(errorCode, error["code"]);
     } else {
-        errorCodeReset();
+        errorTypeReset();
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
