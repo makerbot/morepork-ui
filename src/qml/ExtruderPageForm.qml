@@ -354,18 +354,17 @@ Item {
                 opacity: bot.chamberErrorCode != 45 ?
                              1 : 0
 
-                AnimatedImage {
+                Image {
                     id: remove_top_lid_animation
                     width: sourceSize.width
                     height: sourceSize.height
                     anchors.left: parent.left
                     anchors.leftMargin: 0
                     anchors.verticalCenter: parent.verticalCenter
-                    source: "qrc:/img/remove_top_lid.gif"
-                    playing: extruderSwipeView.currentIndex == 1 &&
-                             bot.chamberErrorCode != 45
+                    source: "qrc:/img/remove_top_lid.png"
                     opacity: parent.opacity
-                    visible: true
+                    visible: extruderSwipeView.currentIndex == 1 &&
+                             bot.chamberErrorCode != 45
                     cache: false
                     smooth: false
                 }
