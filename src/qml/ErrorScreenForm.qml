@@ -47,11 +47,6 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Item {
         id: mainItem
         anchors.fill: parent
@@ -325,7 +320,7 @@ Item {
             PropertyChanges {
                 target: errorMessageTitle
                 text: {
-                    "PRINT PAUSED\nOUT OF " +
+                    "PRINT PAUSING\nOUT OF " +
                     (bot.extruderAOOF ?
                                 "MODEL" :
                                 "SUPPORT") +
@@ -337,15 +332,15 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    "Remove the lid and swivel clip then\ngently pull out the remaining" +
+                    "Remove the lid and swivel clip then\ngently pull out the remaining " +
                     (bot.extruderAOOF ?
                           "model" :
                           "support") +
                     "\nmaterial from " +
                     (bot.extruderAOOF ?
-                          "Model Extruder 1" :
-                          "Support Extruder 2")
-
+                          "Model Extruder 1." :
+                          "Support Extruder 2.") +
+                    " This\nprocess can take up to 60 seconds."
                 }
             }
 
@@ -383,7 +378,7 @@ Item {
                 text: {
                     "REMOVE EMPTY\nSPOOL"
                 }
-                anchors.topMargin: 0
+                anchors.topMargin: 50
             }
 
             PropertyChanges {

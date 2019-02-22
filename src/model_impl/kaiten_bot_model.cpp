@@ -79,7 +79,6 @@ class KaitenBotModel : public BotModel {
     bool checkToolJammed(const Json::Value errList);
     bool checkBayOOF(const Json::Value errList);
     bool checkExtruderOOF(const Json::Value errList);
-    void tryClearToolheadErrors(int tool_index, QList<int> errors);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -912,26 +911,6 @@ void KaitenBotModel::moveAxis(QString axis, float distance, float speed) {
     }
 }
 
-void KaitenBotModel::tryClearToolheadErrors(int tool_index, QList<int>errors) {
-    try{
-        qDebug() << FL_STRM << "called";
-        auto conn = m_conn.data();
-        Json::Value json_params(Json::objectValue);
-        Json::Value error_list(Json::arrayValue);
-
-        for(int e : errors) {
-            error_list.append(e);
-        }
-
-        json_params["index"] = Json::Value(tool_index);
-        json_params["errors"] = Json::Value(error_list);
-        conn->jsonrpc.invoke("try_clear_toolhead_errors", json_params, std::weak_ptr<JsonRpcCallback>());
-    }
-    catch(JsonRpcInvalidOutputStream &e){
-        qWarning() << FFL_STRM << e.what();
-    }
-}
-
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -1015,6 +994,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                  auto e = err.asString().c_str();
                  errStr.append(e);
                  errStr.append(" ");
+                 // TODO(praveen)
+                 // The error and it's source is present in the error
+                 // dict so this is not the best way to do this.
                  checkToolJammed(kErrList) ?
                     extruderAJammedSet(true) :
                     extruderAJammedReset();
@@ -1049,6 +1031,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                  auto e = err.asString().c_str();
                  errStr.append(e);
                  errStr.append(" ");
+                 // TODO(praveen)
+                 // The error and it's source is present in the error
+                 // dict so this is not the best way to do this.
                  checkToolJammed(kErrList) ?
                     extruderBJammedSet(true) :
                     extruderBJammedReset();

@@ -67,8 +67,6 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
     Q_INVOKABLE virtual void shutdown();
-    Q_INVOKABLE virtual void tryClearToolheadErrors(int tool_index, QList<int>errors);
-
 
   private:
     Q_OBJECT

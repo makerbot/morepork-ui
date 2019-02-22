@@ -11,16 +11,6 @@ ErrorScreenForm {
         }
     }
 
-    function tryClearErrors(errors) {
-        if(bot.extruderAJammed ||
-           bot.filamentBayAOOF ||
-           bot.extruderAOOF) {
-            bot.tryClearToolheadErrors(0, errors)
-        } else {
-            bot.tryClearToolheadErrors(1, errors)
-        }
-    }
-
     function loadPurgeFromErrorScreen() {
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true

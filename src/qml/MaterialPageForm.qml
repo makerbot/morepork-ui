@@ -45,11 +45,10 @@ Item {
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess &&
            !startLoadUnloadFromUI &&
-           // Both of these happen mid-print when out of filament
-           // at extruder/bay, during which we should remain in
-           // print page and not move to material page.
-           (bot.process.stepStr != "preheating_unloading" ||
-            bot.process.stepStr != "preheating_loading")) {
+           // Error 1041 OOF at extruder was triggering
+           // the UI to move to material page for some
+           // reason, quick hack to fix this.
+           (bot.process.errorCode != 1041)) {
             if(mainSwipeView.currentIndex != 5){
                 mainSwipeView.swipeToItem(5)
             }
