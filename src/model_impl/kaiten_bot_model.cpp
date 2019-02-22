@@ -4,6 +4,7 @@
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include <memory>
 #include <sstream>
@@ -75,6 +76,9 @@ class KaitenBotModel : public BotModel {
     void moveAxis(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bayID);
     void shutdown();
+    bool checkToolJammed(const Json::Value errList);
+    bool checkBayOOF(const Json::Value errList);
+    bool checkExtruderOOF(const Json::Value errList);
     void getToolStats(const int index);
     void toolStatsUpdate(const Json::Value & res, const int index);
 
@@ -1018,6 +1022,31 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 kExtruderA["updating_extruder_firmware"].asBool();
             UPDATE_INT_PROP(extruderFirmwareUpdateProgressA,
                             kExtruderA["extruder_firmware_update_progress"])
+
+            const Json::Value &kErrList = kExtruderA["error"];
+            if(kErrList.isArray() && kErrList.size() > 0) {
+               QString errStr;
+               for (const Json::Value err : kErrList) {
+                 auto e = err.asString().c_str();
+                 errStr.append(e);
+                 errStr.append(" ");
+                 // TODO(praveen)
+                 // The error and it's source is present in the error
+                 // dict so this is not the best way to do this.
+                 checkToolJammed(kErrList) ?
+                    extruderAJammedSet(true) :
+                    extruderAJammedReset();
+                 checkBayOOF(kErrList) ?
+                    filamentBayAOOFSet(true) :
+                    filamentBayAOOFReset();
+                 checkExtruderOOF(kErrList) ?
+                    extruderAOOFSet(true) :
+                    extruderAOOFReset();
+               }
+               extruderAErrorCodeSet(errStr);
+            } else {
+               extruderAErrorCodeReset();
+            }
           }
           if(kExtruderB.isObject()){
             // Update GUI variables for extruder B temps
@@ -1030,6 +1059,31 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 kExtruderB["updating_extruder_firmware"].asBool();
             UPDATE_INT_PROP(extruderFirmwareUpdateProgressB,
                             kExtruderB["extruder_firmware_update_progress"])
+
+            const Json::Value &kErrList = kExtruderB["error"];
+            if(kErrList.isArray() && kErrList.size() > 0) {
+               QString errStr;
+               for (const Json::Value err : kErrList) {
+                 auto e = err.asString().c_str();
+                 errStr.append(e);
+                 errStr.append(" ");
+                 // TODO(praveen)
+                 // The error and it's source is present in the error
+                 // dict so this is not the best way to do this.
+                 checkToolJammed(kErrList) ?
+                    extruderBJammedSet(true) :
+                    extruderBJammedReset();
+                 checkBayOOF(kErrList) ?
+                    filamentBayBOOFSet(true) :
+                    filamentBayBOOFReset();
+                 checkExtruderOOF(kErrList) ?
+                    extruderBOOFSet(true) :
+                    extruderBOOFReset();
+               }
+               extruderBErrorCodeSet(errStr);
+            } else {
+               extruderBErrorCodeReset();
+            }
           }
           updatingExtruderFirmwareSet(updating_extruder_firmware);
         }
@@ -1132,6 +1186,28 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       }
     }
 }
+
+bool KaitenBotModel::checkToolJammed(const Json::Value errList) {
+    std::any_of(
+        errList.begin(),
+        errList.end(),
+        [](Json::Value e){return (e.asString().c_str() == "81");});
+}
+
+bool KaitenBotModel::checkBayOOF(const Json::Value errList) {
+    std::any_of(
+        errList.begin(),
+        errList.end(),
+        [](Json::Value e){return (e.asString().c_str() == "83");});
+}
+
+bool KaitenBotModel::checkExtruderOOF(const Json::Value errList) {
+    std::any_of(
+        errList.begin(),
+        errList.end(),
+        [](Json::Value e){return (e.asString().c_str() == "1041");});
+}
+
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);

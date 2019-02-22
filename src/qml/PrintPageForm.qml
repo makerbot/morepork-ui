@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import StorageFileTypeEnum 1.0
+import ErrorTypeEnum 1.0
 
 Item {
     smooth: false
@@ -41,11 +42,16 @@ Item {
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(!storage.usbStorageConnected &&
-           printSwipeView.currentIndex != 0 &&
-           browsingUsbStorage) {
-            setDrawerState(false)
-            printSwipeView.swipeToItem(0)
+        if(!storage.usbStorageConnected) {
+            if(printSwipeView.currentIndex != 0 &&
+                    browsingUsbStorage) {
+                setDrawerState(false)
+                printSwipeView.swipeToItem(0)
+            }
+            if(safeToRemoveUsbPopup.opened) {
+                bot.acknowledgeSafeToRemoveUsb()
+                safeToRemoveUsbPopup.close()
+            }
         }
     }
 
@@ -294,10 +300,12 @@ Item {
                 }
             }
 
-            PrintStatusViewForm{
+            PrintStatusViewForm {
                 id: printStatusView
                 smooth: false
-                visible: isPrintProcess
+                // The error scrren visibility controls the
+                // normal print status view screen visibility.
+                visible: isPrintProcess && !errorScreen.visible
                 fileName_: file_name
                 filePathName: fileName
                 support_mass_: support_mass
@@ -305,6 +313,20 @@ Item {
                 uses_support_: uses_support
                 uses_raft_: uses_raft
                 print_time_: print_time
+            }
+
+            ErrorScreen {
+                id: errorScreen
+                visible: {
+                    isPrintProcess &&
+                    (bot.process.stateType == ProcessStateType.Pausing ||
+                     bot.process.stateType == ProcessStateType.Paused ||
+                     // Out of filament while printing, which should
+                     // still show the error handling screen.
+                     bot.process.stateType == ProcessStateType.UnloadingFilament ||
+                     bot.process.stateType == ProcessStateType.Preheating) &&
+                    bot.process.errorType != ErrorType.NoError
+                }
             }
         }
 

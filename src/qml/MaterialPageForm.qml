@@ -43,7 +43,12 @@ Item {
     property bool isMaterialMismatch: false
 
     onIsLoadUnloadProcessChanged: {
-        if(isLoadUnloadProcess && !startLoadUnloadFromUI){
+        if(isLoadUnloadProcess &&
+           !startLoadUnloadFromUI &&
+           // Error 1041 OOF at extruder was triggering
+           // the UI to move to material page for some
+           // reason, quick hack to fix this.
+           (bot.process.errorCode != 1041)) {
             if(mainSwipeView.currentIndex != 5){
                 mainSwipeView.swipeToItem(5)
             }
@@ -278,6 +283,9 @@ Item {
                     if(printPage.isPrintProcess) {
                         activeDrawer = printPage.printingDrawer
                         setDrawerState(true)
+                        // Go to print page directly after loading or
+                        // unloading during a print.
+                        mainSwipeView.swipeToItem(1)
                     }
                 }
             }

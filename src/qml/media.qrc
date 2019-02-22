@@ -116,6 +116,14 @@
 	<file alias="back_button.png">images/back_button.png</file>
 	<file alias="rewind_spool_1.gif">images/rewind_spool_1.gif</file>
 	<file alias="rewind_spool_2.gif">images/rewind_spool_2.gif</file>
+	<file alias="error_close_door.png">images/error_close_door.png</file>
+	<file alias="error_close_lid.png">images/error_close_lid.png</file>
+	<file alias="error_oof_bay1.png">images/error_oof_bay1.png</file>
+	<file alias="error_oof_bay2.png">images/error_oof_bay2.png</file>
+	<file alias="error_filament_jam_1.png">images/error_filament_jam_1.png</file>
+	<file alias="error_filament_jam_2.png">images/error_filament_jam_2.png</file>
+	<file alias="error_oof_extruder1.png">images/error_oof_extruder1.png</file>
+	<file alias="error_oof_extruder2.png">images/error_oof_extruder2.png</file>
     </qresource>
     
     <qresource prefix="/test_files">

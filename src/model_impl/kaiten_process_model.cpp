@@ -164,10 +164,50 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
 
     const Json::Value &error = proc["error"];
-    if (error.isObject()) {
-        UPDATE_INT_PROP(errorCode, error["code"]);
+    UPDATE_INT_PROP(errorCode, error["code"]);
+
+    if (error.isObject() && error["code"].isInt()) {
+        const int err = error["code"].asInt();
+        switch(err) {
+            case 0:
+            errorTypeSet(ErrorType::NoError);
+            break;
+            case 13:
+            errorTypeSet(ErrorType::NotConnected);
+            break;
+            case 45:
+            errorTypeSet(ErrorType::LidNotPlaced);
+            break;
+            case 48:
+            errorTypeSet(ErrorType::DoorNotClosed);
+            break;
+            case 74:
+            errorTypeSet(ErrorType::HeaterOverTemp);
+            break;
+            case 80:
+            errorTypeSet(ErrorType::NoFilamentAtExtruder);
+            break;
+            case 81:
+            errorTypeSet(ErrorType::FilamentJam);
+            break;
+            case 83:
+            errorTypeSet(ErrorType::DrawerOutOfFilament);
+            break;
+            case 1001:
+            errorTypeSet(ErrorType::HeaterNotReachingTemp);
+            break;
+            case 1032:
+            errorTypeSet(ErrorType::BadHESCalibrationFail);
+            break;
+            case 1041:
+            errorTypeSet(ErrorType::ExtruderOutOfFilament);
+            break;
+            default:
+            errorTypeSet(ErrorType::OtherError);
+            break;
+        }
     } else {
-        errorCodeReset();
+        errorTypeReset();
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
