@@ -29,7 +29,12 @@ Item {
             isMaterialMismatch = false
             isMaterialValid = false
             if(bot.process.type == ProcessType.Load) {
-                materialValidityCheck()
+                if(materialValidityCheck()) {
+                    isMaterialValid = true
+                    if(materialWarningPopup.opened) {
+                        materialWarningPopup.close()
+                    }
+                }
             }
         }
     }
@@ -52,7 +57,7 @@ Item {
             }
         }
         else {
-            bot.acknowledgeMaterial(false)
+            materialWarningPopup.close()
         }
     }
 
