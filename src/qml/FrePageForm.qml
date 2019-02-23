@@ -449,7 +449,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "SET TIME AND DATE"
+                text: "SET THE PRINTER'S CLOCK"
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -457,7 +457,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Give this printer a time and date."
+                text: "Input your local time for more accurate print estimates."
             }
 
             PropertyChanges {
@@ -925,7 +925,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: ""
+                text: "Download MakerBot Print to\nprepare your own files for\nthis printer."
                 anchors.topMargin: 20
             }
 
