@@ -109,7 +109,11 @@ Item {
             // if material is valid immediately acknowledge and
             // continue with loading material
             if(loadUnloadFilamentProcess.materialValidityCheck()) {
+                loadUnloadFilamentProcess.isMaterialValid = true
                 bot.acknowledgeMaterial(true)
+                if(materialWarningPopup.opened) {
+                    materialWarningPopup.close()
+                }
             }
             // if material not valid open popup
             else {
@@ -119,21 +123,10 @@ Item {
     }
 
     onIsMaterialMismatchChanged: {
-        if(isMaterialMismatch) {
-            if(bot.process.type == ProcessType.Load) {
-                bot.acknowledgeMaterial(false)
-                bot.cancel()
-                materialChangeCancelled = true
-                loadUnloadFilamentProcess.state = "base state"
-            }
-            else if(printPage.isPrintProcess) {
-                if(bot.process.stateType == ProcessStateType.Preheating) {
-                    bot.loadFilamentStop()
-                }
-            }
-            if(cancelLoadUnloadPopup.opened) {
-                cancelLoadUnloadPopup.close()
-            }
+        if(cancelLoadUnloadPopup.opened) {
+            cancelLoadUnloadPopup.close()
+        }
+        if(isMaterialMismatch && bot.process.type == ProcessType.Load) {
             materialWarningPopup.open()
         }
     }
@@ -265,7 +258,8 @@ Item {
                 onBayFilamentSwitchChanged: {
                     if(bot.process.type == ProcessType.Load &&
                        bayFilamentSwitch &&
-                       isSpoolValidityCheckPending) {
+                       isSpoolValidityCheckPending &&
+                       !isMaterialMismatch) {
                         materialWarningPopup.open()
                     }
                 }
@@ -495,6 +489,10 @@ Item {
                 NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
         }
 
+        onClosed: {
+            isMaterialMismatch = false
+        }
+
         Rectangle {
             id: basePopupItem_mat_warning_popup
             color: "#000000"
@@ -514,6 +512,7 @@ Item {
                 color: "#ffffff"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 72
+                visible: !isMaterialMismatch
             }
 
             Rectangle {
@@ -545,7 +544,7 @@ Item {
                     height: 72
                     color: "#00000000"
                     radius: 10
-                    visible: isMaterialMismatch
+                    visible: false
 
                     Text {
                         id: ok_text_mat_warning_popup
@@ -658,13 +657,17 @@ Item {
                 width: 680
                 height: isMaterialMismatch ? 135 : 160
                 anchors.top: parent.top
-                anchors.topMargin: 35
+                anchors.topMargin: isMaterialMismatch ? 60 : 35
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
                     id: title_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: isMaterialMismatch ? "MATERIAL MISMATCH" : "WARRANTY WARNING"
+                    text: isMaterialMismatch ?
+                              (loadUnloadFilamentProcess.currentActiveTool == 1 ?
+                                  "MODEL MATERIAL REQUIRED" :
+                                  "SUPPORT MATERIAL REQUIRED") :
+                              "WARRANTY WARNING"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -675,7 +678,11 @@ Item {
                 Text {
                     id: description_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: isMaterialMismatch ? "Currently only Model material is supported in Bay 1 and Support material in Bay 2" : "Use of third-party materials may void your warranty.\nFor additional information, please visit\nMakerBot.com/legal/warranty"
+                    text: isMaterialMismatch ?
+                              (loadUnloadFilamentProcess.currentActiveTool == 1 ?
+                                  "Only model material such as PLA and Tough are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue." :
+                                  "Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.") :
+                              "Use of third-party materials may void your warranty.\nFor additional information, please visit\nMakerBot.com/legal/warranty"
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
