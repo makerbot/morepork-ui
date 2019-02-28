@@ -189,9 +189,10 @@ Item {
                         id: buttonColorSwatch
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "COLOR SWATCH"
+                        visible: false
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
+                    Item { width: parent.width; height: 1; smooth: false; visible: false
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
