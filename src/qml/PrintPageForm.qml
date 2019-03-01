@@ -258,6 +258,7 @@ Item {
                         filenameText.text: "INTERNAL STORAGE"
                         filePrintTime.text: "FILES SAVED ON PRINTER"
                         fileMaterial.visible: false
+                        visible: false
                         onClicked: {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
@@ -268,7 +269,7 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false
+                    Item { width: parent.width; height: 1; smooth: false; visible: false
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
