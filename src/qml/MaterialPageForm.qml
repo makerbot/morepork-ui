@@ -498,7 +498,7 @@ Item {
             color: "#000000"
             rotation: rootItem.rotation == 180 ? 180 : 0
             width: 720
-            height: isMaterialMismatch ? 250 : 275
+            height: isMaterialMismatch ? 250 : 325
             radius: 10
             border.width: 2
             border.color: "#ffffff"
@@ -655,7 +655,7 @@ Item {
             ColumnLayout {
                 id: columnLayout_mat_warning_popup
                 width: 680
-                height: isMaterialMismatch ? 135 : 160
+                height: isMaterialMismatch ? 135 : 210
                 anchors.top: parent.top
                 anchors.topMargin: isMaterialMismatch ? 60 : 35
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -667,7 +667,7 @@ Item {
                               (loadUnloadFilamentProcess.currentActiveTool == 1 ?
                                   "MODEL MATERIAL REQUIRED" :
                                   "SUPPORT MATERIAL REQUIRED") :
-                              "WARRANTY WARNING"
+                                  "UNKNOWN MATERIAL WARNING"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -682,7 +682,12 @@ Item {
                               (loadUnloadFilamentProcess.currentActiveTool == 1 ?
                                   "Only model material such as PLA and Tough are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue." :
                                   "Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.") :
-                              "Use of third-party materials may void your warranty.\nFor additional information, please visit\nMakerBot.com/legal/warranty"
+                                  "The limited warranty included with this 3D printer does\n" +
+                                  "not apply to damage caused by the use of materials\n" +
+                                  "not certified or approved by MakerBot. For additional\n" +
+                                  "information, please visit MakerBot.com/legal/warranty.\n" +
+                                  "Custom settings in MakerBot Print software are\n" +
+                                  "required to configure and use this material."
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
