@@ -35,6 +35,15 @@ Item {
         }
     }
 
+    property int errorCode
+    property int currentState: bot.process.stateType
+    onCurrentStateChanged: {
+        if(bot.process.errorCode > 0) {
+            errorCode = bot.process.errorCode
+            state = "firmware_update_failed"
+        }
+    }
+
     Rectangle {
         color: "#000000"
         anchors.fill: parent
@@ -288,7 +297,7 @@ Item {
 
             PropertyChanges {
                 target: main_status_text
-                text: "SOFTWARE DOWNLOAD FAILED"
+                text: "SOFTWARE UPDATE FAILED"
                 anchors.topMargin: 20
             }
 
@@ -305,19 +314,12 @@ Item {
 
             PropertyChanges {
                 target: button1
-                label: "TRY AGAIN"
+                label: "OK"
                 buttonWidth: 175
                 visible: true
                 anchors.topMargin: 200
             }
 
-            PropertyChanges {
-                target: button2
-                label: "BACK TO MENU"
-                buttonWidth: 240
-                visible: true
-                anchors.topMargin: 265
-            }
 
             PropertyChanges {
                 target: columnLayout

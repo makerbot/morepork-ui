@@ -20,6 +20,7 @@ FirmwareUpdatePageForm {
             break;
         case "firmware_update_failed":
             bot.firmwareUpdateCheck(false)
+            goBack()
             break;
         case "install_from_usb":
             storage.setStorageFileType(StorageFileType.Firmware)

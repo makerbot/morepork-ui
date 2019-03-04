@@ -329,6 +329,10 @@ Item {
                             firmwareUpdatePage.state = "install_from_usb"
                         }
                     }
+                    else if (firmwareUpdatePage.state == "firmware_update_failed") {
+                        firmwareUpdatePage.state = "no_firmware_update_available"
+                        settingsSwipeView.swipeToItem(0)
+                    }
                     else {
                         settingsSwipeView.swipeToItem(0)
                     }
