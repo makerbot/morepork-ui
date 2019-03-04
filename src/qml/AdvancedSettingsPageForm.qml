@@ -46,8 +46,15 @@ Item {
         interval: 2500
         onTriggered: {
             resetFactoryConfirmPopup.close()
-            if(settingsSwipeView.currentIndex != 0) {
-                settingsSwipeView.swipeToItem(0)
+            // Reset all screen positions
+            if(settingsPage.settingsSwipeView.currentIndex != 0) {
+                settingsPage.settingsSwipeView.swipeToItem(0)
+            }
+            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != 0) {
+                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(0)
+            }
+            if(advancedPage.advancedSettingsSwipeView.currentIndex != 0) {
+                advancedPage.advancedSettingsSwipeView.swipeToItem(0)
             }
             if(mainSwipeView.currentIndex != 0) {
                 mainSwipeView.swipeToItem(0)
@@ -179,10 +186,9 @@ Item {
                         id: buttonSpoolInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "SPOOL INFO"
-                        visible: false
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; visible: false;
+                    Item { width: parent.width; height: 1; smooth: false;
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
@@ -190,10 +196,9 @@ Item {
                         id: buttonColorSwatch
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "COLOR SWATCH"
-                        visible: false
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; visible: false
+                    Item { width: parent.width; height: 1; smooth: false;
                         Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 

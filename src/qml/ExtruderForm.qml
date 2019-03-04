@@ -32,13 +32,27 @@ Item {
     property int extruderTemperature:  bot["extruder%1CurrentTemp".arg(idxAsAxis)]
     property string extruderUsage: bot["extruder%1ExtrusionDistance".arg(idxAsAxis)]
 
-    property bool materialPresent: {
+    property bool spoolPresent: {
         switch(extruderID) {
         case 1:
             materialPage.bay1.spoolPresent
             break;
         case 2:
             materialPage.bay2.spoolPresent
+            break;
+        }
+    }
+
+    property bool extruderFilamentPresent: {
+        switch(extruderID) {
+        case 1:
+            bot.extruderAFilamentPresent
+            break;
+        case 2:
+            bot.extruderBFilamentPresent
+            break;
+        default:
+            false
             break;
         }
     }
@@ -102,17 +116,16 @@ Item {
                 color: "#ffffff"
                 font.family: "Antenna"
                 font.weight: Font.Bold
-                font.pixelSize: 35
+                font.pixelSize: 36
             }
 
             Text {
                 id: extruderType_text
                 width: 180
                 anchors.top: extruderID_text.bottom
-                anchors.topMargin: 12
+                anchors.topMargin: 15
                 text: {
-                    if(extruderPresent)
-                    {
+                    if(extruderPresent) {
                         switch(extruderID) {
                         case 1:
                             "MATERIAL EXTRUDER"
@@ -126,7 +139,7 @@ Item {
                         "NO EXTRUDER DETECTED"
                     }
                 }
-                lineHeight: 1.2
+                lineHeight: 1.6
                 wrapMode: Text.WordWrap
                 font.letterSpacing: 3
                 antialiasing: false
@@ -140,9 +153,9 @@ Item {
             Item {
                 id: extruderStats
                 anchors.top: extruderType_text.bottom
-                width: 160
+                width: 135
                 height: 45
-                anchors.topMargin: 12
+                anchors.topMargin: 15
                 opacity: !extruderPresent ? 0.4 : 1
 
                 ColumnLayout {
@@ -224,52 +237,47 @@ Item {
                 anchors.top: extruderStats.bottom
                 anchors.topMargin: 15
                 label: "DETACH"
-                visible: extruderPresent
-                buttonHeight: 44
+                visible: false
+                buttonHeight: 46
                 buttonWidth: 130
                 label_size: 18
                 disable_button: isProcessRunning()
-
-                button_mouseArea.onClicked: {
-                    itemAttachExtruder.extruder = extruderID
-                    extruderSwipeView.swipeToItem(1)
-                }
             }
 
             RoundedButton {
                 id: attachButton
                 anchors.bottom: materialButton.top
                 anchors.bottomMargin: 20
-                buttonHeight: 44
+                buttonHeight: 46
                 buttonWidth: 130
                 label: "ATTACH"
                 label_size: 18
                 visible: !extruderPresent
-
-                button_mouseArea.onClicked: {
-                    itemAttachExtruder.extruder = extruderID
-                    extruderSwipeView.swipeToItem(1)
-                }
             }
 
             RowLayout {
                 id: extruderDetails
                 anchors.bottom: materialButton.top
-                anchors.bottomMargin: 20
+                anchors.bottomMargin: 35
                 spacing: 10
                 visible: extruderPresent
                 Text {
                     id: filamentMaterial_text
                     text: {
-                        if(materialPresent) {
+                        if(spoolPresent) {
                             switch(extruderID) {
                             case 1:
-                                materialPage.bay1.filamentMaterialName
+                                materialPage.bay1.filamentMaterialName + "\n" +
+                                materialPage.bay1.filamentColorName
                                 break;
                             case 2:
-                                materialPage.bay2.filamentMaterialName
+                                materialPage.bay2.filamentMaterialName + "\n" +
+                                materialPage.bay2.filamentColorName
                                 break;
                             }
+                        }
+                        else if(extruderFilamentPresent) {
+                            "UNKNOWN\nMATERIAL"
                         }
                         else {
                             "NO MATERIAL"
@@ -283,46 +291,16 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 16
-                }
-
-                Rectangle {
-                    id: divider
-                    color: "#ffffff"
-                    width: 1
-                    height: 18
-                    visible: materialPresent
-                }
-
-                Text {
-                    id: filamentMaterialColor_text
-                    text: {
-                        switch(extruderID) {
-                        case 1:
-                            materialPage.bay1.filamentColorName
-                            break;
-                        case 2:
-                            materialPage.bay2.filamentColorName
-                            break;
-                        }
-                    }
-                    font.capitalization: Font.AllUppercase
-                    antialiasing: false
-                    smooth: false
-                    color: "#ffffff"
-                    font.letterSpacing: 3
-                    font.family: "Antenna"
-                    font.weight: Font.Bold
-                    font.pixelSize: 16
-                    visible: materialPresent
+                    lineHeight: 1.6
                 }
             }
 
             RoundedButton {
                 id: materialButton
                 anchors.top: extruderStats.bottom
-                anchors.topMargin: 115
-                buttonHeight: 44
-                buttonWidth: 160
+                anchors.topMargin: 130
+                buttonHeight: 46
+                buttonWidth: 165
                 label: "MATERIAL"
                 label_size: 18
                 disable_button: !extruderPresent
