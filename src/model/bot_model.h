@@ -122,8 +122,6 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, filamentBayBTagVerificationDone, false)
     MODEL_PROP(int, filament1Percent, 0)
     MODEL_PROP(int, filament2Percent, 0)
-    MODEL_PROP(bool, filamentBayAOOF, false)
-    MODEL_PROP(bool, filamentBayBOOF, false)
     MODEL_PROP(bool, topLoadingWarning, false)
     MODEL_PROP(bool, spoolValidityCheckPending, false)
     MODEL_PROP(QString, unknownMaterialWarningType, "None")

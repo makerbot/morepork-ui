@@ -76,9 +76,7 @@ class KaitenBotModel : public BotModel {
     void moveAxis(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bayID);
     void shutdown();
-    bool checkToolJammed(const Json::Value errList);
-    bool checkBayOOF(const Json::Value errList);
-    bool checkExtruderOOF(const Json::Value errList);
+    bool checkError(const Json::Value error_list, const int error_code);
     void getToolStats(const int index);
     void toolStatsUpdate(const Json::Value & res, const int index);
 
@@ -1011,80 +1009,40 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           const Json::Value & kExtruderA = kExtruder[0], // Left Extruder
                             & kExtruderB = kExtruder[1]; // Right Extruder
           bool updating_extruder_firmware = false;
-          if(kExtruderA.isObject()){
-            // Update GUI variables for extruder A temps
-            UPDATE_INT_PROP(extruderACurrentTemp, kExtruderA["current_temperature"])
-            UPDATE_INT_PROP(extruderATargetTemp, kExtruderA["target_temperature"])
-            extruderAToolTypeCorrectSet(kExtruderA["tool_type_correct"].asBool());
-            extruderAPresentSet(kExtruderA["tool_present"].asBool());
-            extruderAFilamentPresentSet(kExtruderA["filament_presence"].asBool());
-            updating_extruder_firmware |=
-                kExtruderA["updating_extruder_firmware"].asBool();
-            UPDATE_INT_PROP(extruderFirmwareUpdateProgressA,
-                            kExtruderA["extruder_firmware_update_progress"])
-
-            const Json::Value &kErrList = kExtruderA["error"];
-            if(kErrList.isArray() && kErrList.size() > 0) {
-               QString errStr;
-               for (const Json::Value err : kErrList) {
-                 auto e = err.asString().c_str();
-                 errStr.append(e);
-                 errStr.append(" ");
-                 // TODO(praveen)
-                 // The error and it's source is present in the error
-                 // dict so this is not the best way to do this.
-                 checkToolJammed(kErrList) ?
-                    extruderAJammedSet(true) :
-                    extruderAJammedReset();
-                 checkBayOOF(kErrList) ?
-                    filamentBayAOOFSet(true) :
-                    filamentBayAOOFReset();
-                 checkExtruderOOF(kErrList) ?
-                    extruderAOOFSet(true) :
-                    extruderAOOFReset();
-               }
-               extruderAErrorCodeSet(errStr);
-            } else {
-               extruderAErrorCodeReset();
-            }
+#define EXTRUDER_VAR_UPDATE(EXT_SYM) \
+          if(kExtruder ## EXT_SYM.isObject()){ \
+            /* Update GUI variables for extruder temps */ \
+            UPDATE_INT_PROP(extruder ## EXT_SYM ## CurrentTemp, kExtruder ## EXT_SYM["current_temperature"]) \
+            UPDATE_INT_PROP(extruder ## EXT_SYM ## TargetTemp, kExtruder ## EXT_SYM["target_temperature"]) \
+            extruder ## EXT_SYM ## ToolTypeCorrectSet(kExtruder ## EXT_SYM["tool_type_correct"].asBool()); \
+            extruder ## EXT_SYM ## PresentSet(kExtruder ## EXT_SYM["tool_present"].asBool()); \
+            extruder ## EXT_SYM ## FilamentPresentSet(kExtruder ## EXT_SYM["filament_presence"].asBool()); \
+            updating_extruder_firmware |= \
+                kExtruder ## EXT_SYM["updating_extruder_firmware"].asBool(); \
+            UPDATE_INT_PROP(extruderFirmwareUpdateProgress ## EXT_SYM, \
+                            kExtruder ## EXT_SYM["extruder_firmware_update_progress"]) \
+ \
+            const Json::Value &kErrList = kExtruder ## EXT_SYM["error"]; \
+            /* TODO(praveen) */ \
+            /* The error and it's source are present in the error */ \
+            /* dict so this is not the best way to do this. */ \
+            extruder ## EXT_SYM ## OOFSet(checkError(kErrList, 80)); \
+            extruder ## EXT_SYM ## JammedSet(checkError(kErrList, 81)); \
+            if(kErrList.isArray() && kErrList.size() > 0) { \
+              QString errStr; \
+              for (const Json::Value err : kErrList) { \
+                auto e = err.asString().c_str(); \
+                errStr.append(e); \
+                errStr.append(" "); \
+              } \
+              extruder ## EXT_SYM ## ErrorCodeSet(errStr); \
+            } else { \
+              extruder ## EXT_SYM ## ErrorCodeReset(); \
+            } \
           }
-          if(kExtruderB.isObject()){
-            // Update GUI variables for extruder B temps
-            UPDATE_INT_PROP(extruderBCurrentTemp, kExtruderB["current_temperature"])
-            UPDATE_INT_PROP(extruderBTargetTemp, kExtruderB["target_temperature"])
-            extruderBToolTypeCorrectSet(kExtruderB["tool_type_correct"].asBool());
-            extruderBPresentSet(kExtruderB["tool_present"].asBool());
-            extruderBFilamentPresentSet(kExtruderB["filament_presence"].asBool());
-            updating_extruder_firmware |=
-                kExtruderB["updating_extruder_firmware"].asBool();
-            UPDATE_INT_PROP(extruderFirmwareUpdateProgressB,
-                            kExtruderB["extruder_firmware_update_progress"])
-
-            const Json::Value &kErrList = kExtruderB["error"];
-            if(kErrList.isArray() && kErrList.size() > 0) {
-               QString errStr;
-               for (const Json::Value err : kErrList) {
-                 auto e = err.asString().c_str();
-                 errStr.append(e);
-                 errStr.append(" ");
-                 // TODO(praveen)
-                 // The error and it's source is present in the error
-                 // dict so this is not the best way to do this.
-                 checkToolJammed(kErrList) ?
-                    extruderBJammedSet(true) :
-                    extruderBJammedReset();
-                 checkBayOOF(kErrList) ?
-                    filamentBayBOOFSet(true) :
-                    filamentBayBOOFReset();
-                 checkExtruderOOF(kErrList) ?
-                    extruderBOOFSet(true) :
-                    extruderBOOFReset();
-               }
-               extruderBErrorCodeSet(errStr);
-            } else {
-               extruderBErrorCodeReset();
-            }
-          }
+          EXTRUDER_VAR_UPDATE(A)
+          EXTRUDER_VAR_UPDATE(B)
+#undef EXTRUDER_VAR_UPDATE
           updatingExtruderFirmwareSet(updating_extruder_firmware);
         }
         const Json::Value & kChamber = kToolheads["chamber"];
@@ -1101,56 +1059,36 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       // Update filament bay status variables
       const Json::Value &kFilamentBay = info["filamentbays"];
       if(kFilamentBay.isArray()){
-        if(kFilamentBay.size() > 0){
-          const Json::Value &kBay = kFilamentBay[0];
-          if(kBay.isObject()){
-            UPDATE_INT_PROP(filamentBayATemp, kBay["temperature"]);
-            UPDATE_INT_PROP(filamentBayAHumidity, kBay["humidity"]);
-            filamentBayAFilamentPresentSet(kBay["filament_present"].asBool());
-
-            filamentBayATagPresentSet(kBay["tag_present"].asBool());
-            infoBay1TagPresentSet(kBay["tag_present"].asBool());
-
-            if (kBay.isMember("tag_uid")) {
-                UPDATE_STRING_PROP(filamentBayATagUID, kBay["tag_uid"]);
-                UPDATE_STRING_PROP(infoBay1TagUID, kBay["tag_uid"]);
-            }
-
-            filamentBayATagVerifiedSet(kBay["tag_verified"].asBool());
-            infoBay1TagVerifiedSet(kBay["tag_verified"].asBool());
-
-            filamentBayATagVerificationDoneSet(kBay["verification_done"].asBool());
-            infoBay1VerificationDoneSet(kBay["verification_done"].asBool());
-
-            UPDATE_INT_PROP(spoolAAmountRemaining, kBay["filament_amount_remaining"]);
-
-          }
+#define FILA_BAY_VAR_UPDATE(BAY_IDX, BAY_SYM, BAY_NUM) \
+        if(kFilamentBay.size() > BAY_IDX){ \
+          const Json::Value &kBay = kFilamentBay[BAY_IDX]; \
+          if(kBay.isObject()){ \
+            UPDATE_INT_PROP(filamentBay ## BAY_SYM ## Temp, kBay["temperature"]); \
+            UPDATE_INT_PROP(filamentBay ## BAY_SYM ## Humidity, kBay["humidity"]); \
+            filamentBay ## BAY_SYM ## FilamentPresentSet(kBay["filament_present"].asBool()); \
+ \
+            filamentBay ## BAY_SYM ## TagPresentSet(kBay["tag_present"].asBool()); \
+            /* TODO(dev): using numbers and letters for extruder symbols */ \
+            infoBay ## BAY_NUM ## TagPresentSet(kBay["tag_present"].asBool()); \
+ \
+            if (kBay.isMember("tag_uid")) { \
+                UPDATE_STRING_PROP(filamentBay ## BAY_SYM ## TagUID, kBay["tag_uid"]); \
+                UPDATE_STRING_PROP(infoBay ## BAY_NUM ## TagUID, kBay["tag_uid"]); \
+            } \
+ \
+            filamentBay ## BAY_SYM ## TagVerifiedSet(kBay["tag_verified"].asBool()); \
+            infoBay ## BAY_NUM ## TagVerifiedSet(kBay["tag_verified"].asBool()); \
+ \
+            filamentBay ## BAY_SYM ## TagVerificationDoneSet(kBay["verification_done"].asBool()); \
+            infoBay ## BAY_NUM ## VerificationDoneSet(kBay["verification_done"].asBool()); \
+ \
+            UPDATE_INT_PROP(spool ## BAY_SYM ## AmountRemaining, kBay["filament_amount_remaining"]); \
+ \
+          } \
         }
-        if(kFilamentBay.size() > 1){
-          const Json::Value &kBay = kFilamentBay[1];
-          if(kBay.isObject()){
-            UPDATE_INT_PROP(filamentBayBTemp, kBay["temperature"]);
-            UPDATE_INT_PROP(filamentBayBHumidity, kBay["humidity"]);
-            filamentBayBFilamentPresentSet(kBay["filament_present"].asBool());
-
-            filamentBayBTagPresentSet(kBay["tag_present"].asBool());
-            infoBay2TagPresentSet(kBay["tag_present"].asBool());
-
-            if (kBay.isMember("tag_uid")) {
-                UPDATE_STRING_PROP(filamentBayBTagUID, kBay["tag_uid"]);
-                UPDATE_STRING_PROP(infoBay2TagUID, kBay["tag_uid"]);
-            }
-
-            filamentBayBTagVerifiedSet(kBay["tag_verified"].asBool());
-            infoBay2TagVerifiedSet(kBay["tag_verified"].asBool());
-
-            filamentBayBTagVerificationDoneSet(kBay["verification_done"].asBool());
-            infoBay2VerificationDoneSet(kBay["verification_done"].asBool());
-
-            UPDATE_INT_PROP(spoolBAmountRemaining, kBay["filament_amount_remaining"]);
-
-          }
-        }
+        FILA_BAY_VAR_UPDATE(0, A, 1)
+        FILA_BAY_VAR_UPDATE(1, B, 2)
+#undef FILA_BAY_VAR_UPDATE
       }
       // Update disabled errors (door or lid for now) for the UI
       // to not complain before starting a print
@@ -1187,27 +1125,18 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     }
 }
 
-bool KaitenBotModel::checkToolJammed(const Json::Value errList) {
-    std::any_of(
-        errList.begin(),
-        errList.end(),
-        [](Json::Value e){return (e.asString().c_str() == "81");});
+bool KaitenBotModel::checkError(const Json::Value error_list,
+                                const int error_code) {
+  if(error_list.isArray() && error_list.size() > 0) {
+    for(size_t i = 0; i < error_list.size(); ++i) {
+      const Json::Value & err = error_list[i];
+      if(err.asInt() == error_code) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
-
-bool KaitenBotModel::checkBayOOF(const Json::Value errList) {
-    std::any_of(
-        errList.begin(),
-        errList.end(),
-        [](Json::Value e){return (e.asString().c_str() == "83");});
-}
-
-bool KaitenBotModel::checkExtruderOOF(const Json::Value errList) {
-    std::any_of(
-        errList.begin(),
-        errList.end(),
-        [](Json::Value e){return (e.asString().c_str() == "1041");});
-}
-
 
 void KaitenBotModel::netUpdate(const Json::Value &state) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->netUpdate(state);
