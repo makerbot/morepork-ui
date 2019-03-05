@@ -19,7 +19,7 @@ ErrorScreenForm {
         // if load/unload happens while in print process
         // i.e. while print paused, set whilePrinting to true
         if(bot.extruderAJammed ||
-           bot.filamentBayAOOF ||
+           bot.process.filamentBayAOOF ||
            bot.extruderAOOF) {
             bot.loadFilament(0, false, true)
         } else {

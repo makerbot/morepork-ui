@@ -253,9 +253,9 @@ Item {
 
             PropertyChanges {
                 target: errorImage
-                source: bot.filamentBayAOOF ?
+                source: bot.process.filamentBayAOOF ?
                             "qrc:/img/error_oof_bay1.png" :
-                            "qrc:/img/error_oof_bay1.png"
+                            "qrc:/img/error_oof_bay2.png"
             }
 
             PropertyChanges {
@@ -267,7 +267,7 @@ Item {
                 target: errorMessageTitle
                 text: {
                     "PRINT PAUSING\nOUT OF " +
-                    (bot.filamentBayAOOF ?
+                    (bot.process.filamentBayAOOF ?
                          "MODEL" :
                          "SUPPORT") +
                     "\nMATERIAL"
@@ -279,11 +279,11 @@ Item {
                 target: errorMessageDescription
                 text: {
                     "The printer has run out of " +
-                        (bot.filamentBayAOOF ?
+                        (bot.process.filamentBayAOOF ?
                              printPage.print_model_material.toUpperCase() :
-                             printPage.print_model_material.toUpperCase()) +
+                             printPage.print_support_material.toUpperCase()) +
                         ". Open\nmaterial bay " +
-                        (bot.filamentBayAOOF ? "1" : "2") +
+                        (bot.process.filamentBayAOOF ? "1" : "2") +
                         " and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds."
                 }
             }

@@ -166,8 +166,20 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     const Json::Value &error = proc["error"];
     UPDATE_INT_PROP(errorCode, error["code"]);
 
+    bool bay_out_of_filament_a = false,
+         bay_out_of_filament_b = false;
     if (error.isObject() && error["code"].isInt()) {
         const int err = error["code"].asInt();
+
+        int error_source_idx = 0;
+        const Json::Value & error_source_jv = error["source"];
+        if(error_source_jv.isObject()) {
+          const Json::Value & error_source_idx_jv = error_source_jv["index"];
+          if(error_source_idx_jv.isNumeric()) {
+            error_source_idx = error_source_idx_jv.asInt();
+          }
+        }
+
         switch(err) {
             case 0:
             errorTypeSet(ErrorType::NoError);
@@ -192,6 +204,11 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             break;
             case 83:
             errorTypeSet(ErrorType::DrawerOutOfFilament);
+            if(error_source_idx == 0) {
+                bay_out_of_filament_a = true;
+            } else if(error_source_idx == 1) {
+                bay_out_of_filament_b = true;
+            }
             break;
             case 1001:
             errorTypeSet(ErrorType::HeaterNotReachingTemp);
@@ -209,6 +226,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     } else {
         errorTypeReset();
     }
+    filamentBayAOOFSet(bay_out_of_filament_a);
+    filamentBayBOOFSet(bay_out_of_filament_b);
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
 
