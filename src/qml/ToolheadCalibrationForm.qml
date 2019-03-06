@@ -95,6 +95,21 @@ Item {
         }
     }
 
+    AnimatedImage {
+        id: animated_image
+        width: 400
+        height: 480
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -20
+        anchors.left: parent.left
+        anchors.leftMargin: 0
+        source: ""
+        cache: false
+        playing: false
+        opacity: 0
+        smooth: false
+    }
+
     Image {
         id: header_image
         width: sourceSize.width
@@ -271,6 +286,12 @@ Item {
                   bot.process.stateType == ProcessStateType.CheckNozzleClean
 
             PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: header_image
                 source: "qrc:/img/calib_check_nozzles_clean.png"
                 opacity: 1
@@ -329,6 +350,12 @@ Item {
                   bot.process.stateType == ProcessStateType.HeatingNozzle
 
             PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: header_image
                 opacity: 0
             }
@@ -380,7 +407,13 @@ Item {
 
             PropertyChanges {
                 target: header_image
-                source: "qrc:/img/calib_scrub_nozzles.png"
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: animated_image
+                source: "qrc:/img/calib_scrub_nozzles.gif"
+                playing: true
                 opacity: 1
             }
 
@@ -431,6 +464,12 @@ Item {
             name: "cooling_nozzle"
             when: bot.process.type == ProcessType.CalibrationProcess &&
                   bot.process.stateType == ProcessStateType.CoolingNozzle
+
+            PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
 
             PropertyChanges {
                 target: header_image
@@ -484,6 +523,12 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: animated_image
+                source: ""
                 opacity: 0
             }
 
@@ -542,6 +587,12 @@ Item {
             }
 
             PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: header_image
                 source: "qrc:/img/calib_insert_build_plate.png"
                 opacity: 1.0
@@ -589,6 +640,12 @@ Item {
             name: "calibrating"
             when: bot.process.type == ProcessType.CalibrationProcess &&
                   bot.process.stateType == ProcessStateType.CalibratingToolheads
+
+            PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
 
             PropertyChanges {
                 target: header_image
@@ -643,6 +700,12 @@ Item {
 
             PropertyChanges {
                 target: loadingIcon
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: animated_image
+                source: ""
                 opacity: 0
             }
 
@@ -707,6 +770,12 @@ Item {
             }
 
             PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: header_image
                 opacity: 0
             }
@@ -724,6 +793,12 @@ Item {
 
         State {
             name: "cancelling"
+
+            PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
 
             PropertyChanges {
                 target: header_image
