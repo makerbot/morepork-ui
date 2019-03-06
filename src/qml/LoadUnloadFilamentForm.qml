@@ -10,6 +10,7 @@ Item {
     height: 420
 
     property alias acknowledgeButton: acknowledgeButton
+    property alias retryButton: retryButton
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool bayFilamentSwitch: false
@@ -304,6 +305,20 @@ Item {
             opacity: 0
         }
 
+        RoundedButton {
+            id: retryButton
+            label_width: 100
+            label: "RETRY"
+            label_size: acknowledgeButton.label_size
+            buttonWidth: acknowledgeButton.buttonWidth
+            buttonHeight: acknowledgeButton.buttonHeight
+            anchors.left: (inFreStep && bayID == 1) ? acknowledgeButton.left: acknowledgeButton.right
+            anchors.top: (inFreStep && bayID == 1) ? acknowledgeButton.bottom: acknowledgeButton.top
+            anchors.leftMargin: (inFreStep && bayID == 1) ? 0 : 20
+            anchors.topMargin: (inFreStep && bayID == 1) ? 10 : 0
+            opacity: 0
+        }
+
         RowLayout {
             id: temperatureDisplay
             anchors.top: main_instruction_text.bottom
@@ -376,6 +391,11 @@ Item {
             }
 
             PropertyChanges {
+                target: retryButton
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: animated_image
                 opacity: 1
                 source: bayID == 1 ?
@@ -435,6 +455,11 @@ Item {
 
             PropertyChanges {
                 target: acknowledgeButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: retryButton
                 opacity: 0
             }
 
@@ -502,6 +527,11 @@ Item {
                 target: acknowledgeButton
                 opacity: 0
             }
+
+            PropertyChanges {
+                target: retryButton
+                opacity: 0
+            }
         },
         State {
             name: "extrusion"
@@ -530,6 +560,11 @@ Item {
                 anchors.topMargin: 20
                 opacity: 1
                 label: "CONFIRM\nMATERIAL EXTRUSION"
+            }
+
+            PropertyChanges {
+                target: retryButton
+                opacity: 0
             }
 
             PropertyChanges {
@@ -589,6 +624,11 @@ Item {
             }
 
             PropertyChanges {
+                target: retryButton
+                opacity: 0
+            }
+
+            PropertyChanges {
                 target: loading_gear
                 loading: true
             }
@@ -626,7 +666,7 @@ Item {
                     if(bayID == 1 && inFreStep) {
                         375
                     } else {
-                        100
+                        120
                     }
                 }
 
@@ -645,6 +685,12 @@ Item {
                         "DONE"
                     }
                 }
+
+            }
+
+            PropertyChanges {
+                target: retryButton
+                opacity: 1
             }
 
             PropertyChanges {
@@ -705,10 +751,15 @@ Item {
 
             PropertyChanges {
                 target: acknowledgeButton
-                buttonWidth: 100
+                buttonWidth: 120
                 anchors.topMargin: 30
                 opacity: 1
                 label: "DONE"
+            }
+
+            PropertyChanges {
+                target: retryButton
+                opacity: 1
             }
 
             PropertyChanges {
@@ -757,10 +808,15 @@ Item {
 
             PropertyChanges {
                 target: acknowledgeButton
-                buttonWidth: 100
+                buttonWidth: 120
                 anchors.topMargin: 50
                 opacity: 1
                 label: "DONE"
+            }
+
+            PropertyChanges {
+                target: retryButton
+                opacity: 1
             }
 
             PropertyChanges {
