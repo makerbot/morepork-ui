@@ -6,6 +6,7 @@ StartLimitIntervalSec=10000
 StartLimitBurst=2
 
 [Service]
+Nice=10
 Environment=QT_QPA_EGLFS_INTEGRATION=none
 Type=simple
 ExecStart=/usr/bin/morepork_ui --rotate_display_180
