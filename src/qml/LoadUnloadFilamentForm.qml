@@ -307,8 +307,7 @@ Item {
 
         RoundedButton {
             id: retryButton
-            label_width: 100
-            label: "RETRY"
+            label: inFreStep ? "RETRY LOADING" : "RETRY"
             label_size: acknowledgeButton.label_size
             buttonWidth: acknowledgeButton.buttonWidth
             buttonHeight: acknowledgeButton.buttonHeight
