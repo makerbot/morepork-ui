@@ -260,8 +260,7 @@ Item {
                             bot.done("acknowledge_completed")
                         }
                         if(inFreStep) {
-                            fre.gotoNextStep(currentFreStep)
-                            mainSwipeView.swipeToItem(0)
+                            printPage.printSwipeView.swipeToItem(4)
                         }
                         printPage.resetPrintFileDetails()
                     }
