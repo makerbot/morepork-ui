@@ -517,24 +517,24 @@ Item {
                         }
 
                         label_size: {
-                            if(itemAttachExtruder.extruder == 1 &&
-                               itemAttachExtruder.isAttached) {
-                                16
-                            }
-                            else if(itemAttachExtruder.extruder == 2 &&
-                                itemAttachExtruder.isAttached) {
-                                18
+                            if (itemAttachExtruder.isAttached) {
+                                if (itemAttachExtruder.extruder == 1 &&
+                                        (inFreStep || !bot.extruderBPresent)) {
+                                    16
+                                } else {
+                                    18
+                                }
                             }
                         }
 
                         buttonWidth: {
-                            if(itemAttachExtruder.extruder == 1 &&
-                               itemAttachExtruder.isAttached) {
-                                380
-                            }
-                            else if(itemAttachExtruder.extruder == 2 &&
-                                itemAttachExtruder.isAttached) {
-                                125
+                            if (itemAttachExtruder.isAttached) {
+                                if (itemAttachExtruder.extruder == 1 &&
+                                        (inFreStep || !bot.extruderBPresent)) {
+                                    380
+                                } else {
+                                    125
+                                }
                             }
                         }
 
