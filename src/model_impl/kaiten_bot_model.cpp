@@ -81,6 +81,7 @@ class KaitenBotModel : public BotModel {
     bool checkExtruderOOF(const Json::Value errList);
     void getToolStats(const int index);
     void toolStatsUpdate(const Json::Value & res, const int index);
+    void setTimeZone(const QString time_zone);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -304,7 +305,6 @@ class KaitenBotModel : public BotModel {
     };
     std::vector<std::shared_ptr<ToolStatsCallback> > m_toolStatsCb;
 
-
     class UnknownMaterialNotification : public JsonRpcNotification {
       public:
         UnknownMaterialNotification(KaitenBotModel * bot) : m_bot(bot) {}
@@ -409,6 +409,7 @@ void KaitenBotModel::acknowledgeSafeToRemoveUsb() {
 
 void KaitenBotModel::systemTimeUpdate(const Json::Value &time_update) {
     UPDATE_STRING_PROP(systemTime, time_update["system_time"]);
+    UPDATE_STRING_PROP(timeZone, time_update["time_zone"]);
 }
 
 void KaitenBotModel::cancel(){
@@ -884,6 +885,20 @@ void KaitenBotModel::setSystemTime(QString new_time) {
         Json::Value json_params(Json::objectValue);
         json_params["date_time"] = Json::Value(new_time.toStdString());
         conn->jsonrpc.invoke("set_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::setTimeZone(QString time_zone) {
+    timeZoneSet(time_zone);
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["new_tz"] = Json::Value(time_zone.toStdString());
+        conn->jsonrpc.invoke("set_tz", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

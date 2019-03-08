@@ -97,7 +97,7 @@ Item {
                     mainSwipeView
                 }
                 else if(mainSwipeView.currentIndex == 3) {
-                    settingsSwipeView
+                    settingsPage.settingsSwipeView
                 }
             }
             property int backSwipeIndex: 0
