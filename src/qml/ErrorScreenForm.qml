@@ -41,6 +41,9 @@ Item {
                 state = "extruder_oof_error_state1"
             }
             break;
+        case ErrorType.NoToolConnected:
+            state = "no_tool_connected"
+            break;
         default:
             state = "base state"
             break;
@@ -404,6 +407,51 @@ Item {
                 target: button2
                 visible: false
             }
+        },
+
+        State {
+            name: "no_tool_connected"
+            PropertyChanges {
+                target: errorImage
+                source: bot.process.errorSource?
+                            "qrc:/img/error_filament_jam_2.png" :
+                            "qrc:/img/error_filament_jam_1.png"
+            }
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: {
+                    "PRINT PAUSED.\nEXTRUDER " +
+                    (bot.process.errorSource + 1) +
+                     "\nDISCONNECTED."
+                }
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "Ensure the extruder is attached and\npress the button below to continue."
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 340
+                buttonWidth: 340
+                label: {
+                    "ATTACH EXTRUDER " + (bot.process.errorSource + 1)
+                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
         }
+
     ]
 }

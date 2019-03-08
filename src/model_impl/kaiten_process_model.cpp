@@ -173,55 +173,59 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
 
         int error_source_idx = 0;
         const Json::Value & error_source_jv = error["source"];
-        if(error_source_jv.isObject()) {
-          const Json::Value & error_source_idx_jv = error_source_jv["index"];
-          if(error_source_idx_jv.isNumeric()) {
-            error_source_idx = error_source_idx_jv.asInt();
-          }
+        if (error_source_jv.isObject()) {
+            const Json::Value & error_source_idx_jv = error_source_jv["index"];
+            if (error_source_idx_jv.isNumeric()) {
+                error_source_idx = error_source_idx_jv.asInt();
+                UPDATE_INT_PROP(errorSource, error_source_idx);
+            }
         }
 
         switch(err) {
             case 0:
-            errorTypeSet(ErrorType::NoError);
-            break;
+                errorTypeSet(ErrorType::NoError);
+                break;
             case 13:
-            errorTypeSet(ErrorType::NotConnected);
-            break;
+                errorTypeSet(ErrorType::NotConnected);
+                break;
             case 45:
-            errorTypeSet(ErrorType::LidNotPlaced);
-            break;
+                errorTypeSet(ErrorType::LidNotPlaced);
+                break;
             case 48:
-            errorTypeSet(ErrorType::DoorNotClosed);
-            break;
+                errorTypeSet(ErrorType::DoorNotClosed);
+                break;
+            case 54:
+                errorTypeSet(ErrorType::NoToolConnected);
+                break;
             case 74:
-            errorTypeSet(ErrorType::HeaterOverTemp);
-            break;
+                errorTypeSet(ErrorType::HeaterOverTemp);
+                break;
             case 80:
-            errorTypeSet(ErrorType::NoFilamentAtExtruder);
-            break;
+                errorTypeSet(ErrorType::NoFilamentAtExtruder);
+                break;
             case 81:
-            errorTypeSet(ErrorType::FilamentJam);
-            break;
+                errorTypeSet(ErrorType::FilamentJam);
+                break;
             case 83:
-            errorTypeSet(ErrorType::DrawerOutOfFilament);
-            if(error_source_idx == 0) {
-                bay_out_of_filament_a = true;
-            } else if(error_source_idx == 1) {
-                bay_out_of_filament_b = true;
-            }
-            break;
+                errorTypeSet(ErrorType::DrawerOutOfFilament);
+                if(error_source_idx == 0) {
+                    bay_out_of_filament_a = true;
+                } else if(error_source_idx == 1) {
+                    bay_out_of_filament_b = true;
+                }
+                break;
             case 1001:
-            errorTypeSet(ErrorType::HeaterNotReachingTemp);
-            break;
+                errorTypeSet(ErrorType::HeaterNotReachingTemp);
+                break;
             case 1032:
-            errorTypeSet(ErrorType::BadHESCalibrationFail);
-            break;
+                errorTypeSet(ErrorType::BadHESCalibrationFail);
+                break;
             case 1041:
-            errorTypeSet(ErrorType::ExtruderOutOfFilament);
-            break;
+                errorTypeSet(ErrorType::ExtruderOutOfFilament);
+                break;
             default:
-            errorTypeSet(ErrorType::OtherError);
-            break;
+                errorTypeSet(ErrorType::OtherError);
+                break;
         }
     } else {
         errorTypeReset();

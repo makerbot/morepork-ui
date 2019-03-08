@@ -200,11 +200,14 @@ Item {
                             125
                         }
                         else if(itemAttachExtruder.state == "close_top_lid") {
-                            if(itemAttachExtruder.extruder == 2) {
-                                inFreStep ? 125 : 275
+                            if (inFreStep) {
+                                125
+                            } else if (bot.process.type == ProcessType.None) {
+                                275
+                            } else if (bot.process.type == ProcessType.Print) {
+                                225
                             }
-                        }
-                        else {
+                        } else {
                             125
                         }
                     }
@@ -219,12 +222,16 @@ Item {
                             "NEXT"
                         }
                         else if(itemAttachExtruder.state == "close_top_lid") {
-                            if(itemAttachExtruder.extruder == 2) {
-                                inFreStep ? "DONE" : "RUN CALIBRATION"
+                            if (inFreStep) {
+                                "DONE"
+                            } else if (bot.process.type == ProcessType.None) {
+                                "RUN CALIBRATION"
+                            } else if (bot.process.type == ProcessType.Print) {
+                                "RESUME PRINT"
                             }
                         }
                         else {
-                            "DEFAULT"
+                            "DONE"
                         }
                     }
                     disable_button: {
@@ -489,23 +496,23 @@ Item {
                     PropertyChanges {
                         target: attach_extruder_next_button
                         label: {
-                            if(itemAttachExtruder.extruder == 1 &&
-                               itemAttachExtruder.isAttached) {
-                                "NEXT: Attach Support Extruder"
-                            }
-                            else if(itemAttachExtruder.extruder == 2 &&
-                                itemAttachExtruder.isAttached) {
-                                "NEXT"
+                            if (itemAttachExtruder.isAttached) {
+                                if (itemAttachExtruder.extruder == 1 &&
+                                        (inFreStep || !bot.extruderBPresent)) {
+                                    "NEXT: Attach Support Extruder"
+                                } else {
+                                    "NEXT"
+                                }
                             }
                         }
                         label_width: {
-                            if(itemAttachExtruder.extruder == 1 &&
-                               itemAttachExtruder.isAttached) {
-                                360
-                            }
-                            else if(itemAttachExtruder.extruder == 2 &&
-                                itemAttachExtruder.isAttached) {
-                                125
+                            if (itemAttachExtruder.isAttached) {
+                                if (itemAttachExtruder.extruder == 1 &&
+                                        (inFreStep || !bot.extruderBPresent)) {
+                                    360
+                                } else {
+                                    125
+                                }
                             }
                         }
 
