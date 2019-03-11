@@ -58,6 +58,16 @@ MaterialPageForm {
         }
     }
 
+    function resetStatesAfterLoadWhilePaused() {
+        loadUnloadFilamentProcess.state = "base state"
+        materialSwipeView.swipeToItem(0)
+        // If cancelled out of load/unload while in print process
+        // enable print drawer to set UI back to printing state.
+        setDrawerState(false)
+        activeDrawer = printPage.printingDrawer
+        setDrawerState(true)
+    }
+
     bay1 {
         loadButton {
             button_mouseArea.onClicked: {
@@ -197,13 +207,9 @@ MaterialPageForm {
             // current state and it shouldn't actually try cancelling anything
             // and just reset the page state and go back.
             else if(bot.process.stateType == ProcessStateType.Paused) {
-                loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(0)
-                // If cancelled out of load/unload while in print process
-                // enable print drawer to set UI back to printing state.
-                setDrawerState(false)
-                activeDrawer = printPage.printingDrawer
-                setDrawerState(true)
+                resetStatesAfterLoadWhilePaused()
+                // Goto the print page
+                mainSwipeView.swipeToItem(1)
             }
         }
         else if(bot.process.type == ProcessType.Load) {
@@ -269,11 +275,20 @@ MaterialPageForm {
 
     materialPageDrawer.buttonCancelMaterialChange.onClicked: {
         materialPageDrawer.close()
-        if(inFreStep) {
-            skipFreStepPopup.open()
-            return;
+        if(!inFreStep) {
+            exitMaterialChange()
         }
-        exitMaterialChange()
+        else {
+            if(bot.process.tyep == ProcessType.Load ||
+               bot.process.type == ProcessType.Unload) {
+                skipFreStepPopup.open()
+            }
+            else {
+                if(bot.process.type == ProcessType.Print) {
+                    cancelLoadUnloadPopup.open()
+                }
+            }
+        }
     }
 
     materialPageDrawer.buttonResume.onClicked: {
