@@ -40,6 +40,7 @@ Item {
     property bool printFromUI: false
     property bool printAgain: false
     property alias printStatusView: printStatusView
+    property alias reviewTestPrint: reviewTestPrint
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -229,6 +230,7 @@ Item {
             }
 
             function skipFreStepAction() {
+                printStatusView.testPrintComplete = false
                 bot.cancel()
                 mainSwipeView.swipeToItem(0)
             }
@@ -329,6 +331,11 @@ Item {
                      bot.process.stateType == ProcessStateType.Preheating) &&
                     bot.process.errorType != ErrorType.NoError
                 }
+            }
+
+            ReviewTestPrintPage {
+                id: reviewTestPrint
+                visible: inFreStep && printStatusView.testPrintComplete
             }
         }
 
@@ -541,93 +548,6 @@ Item {
                     id: printInfo_slicerName
                     labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
                     dataText: slicer_name
-                }
-            }
-        }
-        // printSwipeView.index = 4
-        Item {
-            id: itemReviewTestPrint
-            visible: false
-            property bool hasAltBack: true
-
-            Image {
-                id: image
-                width: parent.width * 0.75
-                height: parent.height * 0.75
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                source: "qrc:/img/calib_verification.png"
-            }
-
-            function altBack() {
-                if(inFreStep) {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                startPrintItem.startPrintSwipeView.setCurrentIndex(0)
-                resetPrintFileDetails()
-                setDrawerState(false)
-                printSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
-            }
-
-            ColumnLayout {
-                id: columnLayout
-                anchors.fill: parent
-
-                Text {
-                    id: text1
-                    width: 500
-                    color: "#cbcbcb"
-                    text: "The support material should be centered inside the outer space and easily\nseparated when the raft is removed. If not, run the extruder calibration again.\nFor more detailed info visit Makerbot.com/Calibration"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    font.family: "Antennae"
-                    font.pixelSize: 20
-                    lineHeight: 1.5
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 100
-                }
-
-                Item {
-                    id: buttons_item
-                    anchors.fill: parent
-
-                    RoundedButton {
-                        id: calibrate_button
-                        buttonWidth: 280
-                        buttonHeight: 50
-                        label: "CALIBRATE AGAIN"
-                        visible: true
-                        anchors.left: parent.left
-                        anchors.leftMargin: 155
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 32
-                        button_mouseArea.onClicked: {
-                            fre.setFreStep(FreStep.CalibrateExtruders)
-                            mainSwipeView.swipeToItem(0)
-                        }
-                    }
-                    RoundedButton {
-                        id: continue_button
-                        buttonWidth: 170
-                        buttonHeight: 50
-                        label: "CONTINUE"
-                        visible: true
-                        anchors.right: parent.right
-                        anchors.rightMargin: 155
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 32
-                        button_mouseArea.onClicked: {
-                            fre.gotoNextStep(currentFreStep)
-                            mainSwipeView.swipeToItem(0)
-                        }
-                    }
                 }
             }
         }

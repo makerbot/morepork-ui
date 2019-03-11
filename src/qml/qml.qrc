@@ -128,5 +128,7 @@
         <file>RefreshButton.qml</file>
         <file>ErrorScreen.qml</file>
         <file>ErrorScreenForm.qml</file>
+        <file>ReviewTestPrintPage.qml</file>
+        <file>ReviewTestPrintPageForm.qml</file>
     </qresource>
 </RCC>
