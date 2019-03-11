@@ -82,9 +82,7 @@ PrintPageForm {
     }
 
     function startPrintFilamentCheck() {
-        // Checking for BayOOF, even though, for now, this isn't reported until a print starts
-        if(!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent ||
-           bot.filamentBayAOOF || bot.filamentBayBOOF) {
+        if(!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent) {
             startPrintNoFilament = true
             if(bot.process.stateType == ProcessStateType.Failed) {
                 bot.done("acknowledge_failure")
