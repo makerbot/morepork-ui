@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import FreStepEnum 1.0
 
 Item {
     id: materialPage
@@ -229,7 +230,15 @@ Item {
                     exitMaterialChange()
                 }
                 else {
-                    skipFreStepPopup.open()
+                    if(bot.process.tyep == ProcessType.Load ||
+                       bot.process.type == ProcessType.Unload) {
+                        skipFreStepPopup.open()
+                    }
+                    else {
+                        if(bot.process.type == ProcessType.Print) {
+                            cancelLoadUnloadPopup.open()
+                        }
+                    }
                 }
             }
 
