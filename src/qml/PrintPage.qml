@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import StorageSortTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import FreStepEnum 1.0
 
 PrintPageForm {
     property bool startPrintWithInsufficientModelMaterial: false
@@ -182,4 +183,17 @@ PrintPageForm {
     sortingDrawer.buttonClose.onClicked: {
         sortingDrawer.close()
     }
+
+    reviewTestPrint.continueButton.button_mouseArea.onClicked: {
+        fre.gotoNextStep(currentFreStep)
+        mainSwipeView.swipeToItem(0)
+        printStatusView.testPrintComplete = false
+    }
+
+    reviewTestPrint.calibrateButton.button_mouseArea.onClicked: {
+        fre.setFreStep(FreStep.CalibrateExtruders)
+        mainSwipeView.swipeToItem(0)
+        printStatusView.testPrintComplete = false
+    }
+
 }

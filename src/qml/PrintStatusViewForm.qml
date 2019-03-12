@@ -23,6 +23,7 @@ Item {
     property string timeLeftString: "99:99"
     property string doneByMeridianString
     property alias printStatusSwipeView: printStatusSwipeView
+    property bool testPrintComplete: false
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -260,8 +261,7 @@ Item {
                             bot.done("acknowledge_completed")
                         }
                         if(inFreStep) {
-                            fre.gotoNextStep(currentFreStep)
-                            mainSwipeView.swipeToItem(0)
+                            testPrintComplete = true
                         }
                         printPage.resetPrintFileDetails()
                     }
