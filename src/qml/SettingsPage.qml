@@ -44,9 +44,8 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(6)
     }
 
-    buttonTimeAndDate.onClicked: {
+    buttonTime.onClicked: {
         bot.getSystemTime()
-        setTimePage.timeReadyTimer.start()
         settingsSwipeView.swipeToItem(7)
     }
 

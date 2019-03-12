@@ -128,5 +128,13 @@
         <file>RefreshButton.qml</file>
         <file>ErrorScreen.qml</file>
         <file>ErrorScreenForm.qml</file>
+        <file>TimePage.qml</file>
+        <file>TimePageForm.qml</file>
+        <file>TimeZoneButton.qml</file>
+        <file>TimeZoneButtonForm.qml</file>
+        <file>TimeZoneSelector.qml</file>
+        <file>TimeZoneSelectorForm.qml</file>
+        <file>TimeZoneLocationSeparator.qml</file>
+        <file>TimeZoneLocationSeparatorForm.qml</file>
     </qresource>
 </RCC>
