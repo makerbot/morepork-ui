@@ -61,6 +61,7 @@ FrePageForm {
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "set_time_date") {
                 inFreStep = true
+                bot.getSystemTime()
                 mainSwipeView.swipeToItem(3)
                 settingsPage.settingsSwipeView.swipeToItem(7)
             } else if(state == "log_in") {
@@ -73,6 +74,7 @@ FrePageForm {
                 inFreStep = true
                 mainSwipeView.swipeToItem(2)
                 extruderPage.itemAttachExtruder.extruder = 1
+                extruderPage.itemAttachExtruder.state = "base state"
                 extruderPage.extruderSwipeView.swipeToItem(1)
             } else if(state == "level_build_plate") {
                 inFreStep = true

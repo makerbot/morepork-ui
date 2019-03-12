@@ -37,4 +37,16 @@ LoadUnloadFilamentForm {
             }
         }
     }
+
+    retryButton {
+        button_mouseArea.onClicked: {
+            if ((state == "loaded_filament") ||
+                    (state == "error" && bot.process.type == ProcessType.Load)) {
+                bot.loadFilament(bayID - 1, false, false);
+            } else if ((state == "unloaded_filament") ||
+                    (state == "error" && bot.process.type == ProcessType.Unload)) {
+                bot.unloadFilament(bayID - 1, false, false);
+            }
+        }
+    }
 }

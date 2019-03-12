@@ -68,6 +68,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
     Q_INVOKABLE virtual void shutdown();
     Q_INVOKABLE virtual void getToolStats(const int index);
+    Q_INVOKABLE virtual void setTimeZone(const QString time_zone);
 
   private:
     Q_OBJECT
@@ -82,6 +83,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QString, username, "Unknown")
     MODEL_PROP(QString, systemTime, "Unknown")
+    MODEL_PROP(QString, timeZone, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)
     MODEL_PROP(bool, isInstallUnsignedFwRequestPending, false)
     MODEL_PROP(bool, updatingExtruderFirmware, false)
