@@ -254,6 +254,10 @@ MaterialPageForm {
         loadUnloadFilamentProcess.state = "base state"
         materialSwipeView.swipeToItem(0)
         setDrawerState(false)
+        if(inFreStep) {
+            mainSwipeView.swipeToItem(0)
+            inFreStep = false
+        }
     }
 
     ok_unk_mat_loading_mouseArea.onClicked: {
@@ -279,7 +283,7 @@ MaterialPageForm {
             exitMaterialChange()
         }
         else {
-            if(bot.process.tyep == ProcessType.Load ||
+            if(bot.process.type == ProcessType.Load ||
                bot.process.type == ProcessType.Unload) {
                 skipFreStepPopup.open()
             }
