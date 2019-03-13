@@ -13,9 +13,9 @@
 // (dump everything into qtcreator console if qtcreator build)
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 #define LOG(level) \
-    qInfo() << "[" << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "] "
+    qInfo() << "[" << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "]\n"
 #define TELEM(level) \
-    qInfo() << "[" << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "] "\
+    qInfo() << "[" << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "]\n"\
             << "[TELEM] "
 #else
 
@@ -26,7 +26,7 @@
 
 #define LOG(level) \
     BOOST_LOG_SEV(Logging::GeneralLog(), boost::log::trivial::level) << "["\
-    << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "] "
+    << __FILENAME__ << ":" << __LINE__ << ":" << __func__ << "]\n"
 #define TELEM(level) \
     BOOST_LOG_SEV(Logging::TelemetryLog(), boost::log::trivial::level)
 
