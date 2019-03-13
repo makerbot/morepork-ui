@@ -281,7 +281,6 @@ Item {
                 id: bulletItem3
                 bulletNumber: "3"
                 bulletText: "Push the end of the material into\nthe slot until you feel it being\npulled in."
-                opacity: 0.3
             }
         }
 
@@ -409,11 +408,6 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: bulletItem3
                 opacity: 1
             }
         },
