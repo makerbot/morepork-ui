@@ -241,7 +241,14 @@ Item {
                             "CALIBRATE EXTRUDERS"
                             break;
                         case 7:
-                            "SET CURRENT TIME"
+                            switch(settingsPage.timePage.timeSwipeView.currentIndex) {
+                            case 0:
+                                "SET TIME ZONE"
+                                break;
+                            case 1:
+                                "SET CURRENT TIME"
+                                break;
+                            }
                             break;
                         case 8:
                             switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {

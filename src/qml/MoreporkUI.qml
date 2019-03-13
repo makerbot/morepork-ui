@@ -2302,7 +2302,10 @@ ApplicationWindow {
                             id: left_text_start_print_errors_popup
                             color: "#ffffff"
                             text: {
-                                if(printPage.startPrintWithUnknownMaterials) {
+                                if(printPage.startPrintNoFilament) {
+                                    "CANCEL"
+                                }
+                                else if(printPage.startPrintWithUnknownMaterials) {
                                     "START ANYWAY"
                                 }
                                 else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
@@ -2340,7 +2343,10 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 startPrintErrorsPopup.close()
-                                if(printPage.startPrintWithUnknownMaterials ||
+                                if(printPage.startPrintNoFilament) {
+                                    // Do Nothing
+                                }
+                                else if(printPage.startPrintWithUnknownMaterials ||
                                    printPage.startPrintWithInsufficientModelMaterial ||
                                    printPage.startPrintWithInsufficientSupportMaterial) {
                                     if(printPage.startPrintDoorLidCheck()) {
@@ -2375,9 +2381,12 @@ ApplicationWindow {
                             id: right_text_start_print_errors_popup
                             color: "#ffffff"
                             text: {
-                                if(printPage.startPrintWithUnknownMaterials ||
-                                   printPage.startPrintWithInsufficientModelMaterial ||
-                                   printPage.startPrintWithInsufficientSupportMaterial) {
+                                if(printPage.startPrintNoFilament) {
+                                    "LOAD MATERIAL"
+                                }
+                                else if(printPage.startPrintWithUnknownMaterials ||
+                                        printPage.startPrintWithInsufficientModelMaterial ||
+                                        printPage.startPrintWithInsufficientSupportMaterial) {
                                     "CHANGE MATERIAL"
                                 }
                                 else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
@@ -2408,7 +2417,15 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 startPrintErrorsPopup.close()
-                                if(printPage.startPrintWithUnknownMaterials ||
+                                // TODO - there is a bunch of duplicate code here
+                                if(printPage.startPrintNoFilament) {
+                                    printPage.resetPrintFileDetails()
+                                    if(printPage.printSwipeView.currentIndex != 0) {
+                                        printPage.printSwipeView.setCurrentIndex(0)
+                                    }
+                                    mainSwipeView.swipeToItem(5)
+                                }
+                                else if(printPage.startPrintWithUnknownMaterials ||
                                    printPage.startPrintWithInsufficientModelMaterial ||
                                    printPage.startPrintWithInsufficientSupportMaterial) {
                                     printPage.resetPrintFileDetails()
@@ -2451,6 +2468,9 @@ ApplicationWindow {
                             else if(printPage.startPrintBuildDoorOpen) {
                                 "CLOSE BUILD CHAMBER DOOR"
                             }
+                            else if(printPage.startPrintNoFilament) {
+                                "NO MATERIAL DETECTED"
+                            }
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 "UNKNOWN MATERIAL DETECTED"
                             }
@@ -2479,6 +2499,10 @@ ApplicationWindow {
                             }
                             else if(printPage.startPrintBuildDoorOpen) {
                                 "Close the build chamber door to start the print."
+                            }
+                            else if(printPage.startPrintNoFilament) {
+                                "There is no material detected in at least one of the extruders.\n" +
+                                "Please load material to start a print."
                             }
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 "Be sure <b>" +

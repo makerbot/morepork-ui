@@ -6,20 +6,30 @@ import FreStepEnum 1.0
 Item {
     anchors.fill: parent
 
-    property alias timeReadyTimer: timeReadyTimer
+    property alias setTimeButton: setTimeButton
+    property alias meridianTumbler: meridianTumbler
+    property alias hoursTumbler: hoursTumbler
+    property alias minutesTumbler: minutesTumbler
 
-    Timer {
-        id: timeReadyTimer
-        interval: 1000
-        onTriggered: {
-            formatTime()
-        }
+    property string systemTime: bot.systemTime
+    onSystemTimeChanged: {
+        formatTime()
     }
 
     function formatTime() {
-        var current_time = new Date(bot.systemTime)
-        var current_hour = current_time.getHours()
-        var current_minute = current_time.getMinutes()
+        // 2018-09-10 18:04:16
+        var time_elements = systemTime.split(" ")
+        var date_element = time_elements[0] // 2018-09-10
+        var time_element = time_elements[1] // 18:04:16
+        var time_split = time_element.split(":")
+        var current_hour = time_split[0] // 18
+        var current_minute = time_split[1] // 04
+        var current_second = time_split[2] // 16
+        var date_split = date_element.split("-")
+        var current_year = date_split[0] // 2018
+        var current_month = date_split[1] // 09
+        var current_day = date_split[2] //10
+
         meridianTumbler.currentIndex = ((current_hour >= 12) ? 1 : 0)
         current_hour %= 12
         current_hour = (current_hour == 0 ? 12 : current_hour)
@@ -229,7 +239,7 @@ Item {
         buttonHeight: 50
         buttonWidth: 120
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: 50
         anchors.horizontalCenter: parent.horizontalCenter
         label: "DONE"
         opacity: {
@@ -238,7 +248,7 @@ Item {
 
         Behavior on opacity {
             OpacityAnimator {
-                duration: 200
+                duration: 100
             }
         }
 
@@ -246,6 +256,7 @@ Item {
             onClicked: {
                 setTime()
                 if(inFreStep) {
+                    timeSwipeView.swipeToItem(0)
                     settingsSwipeView.swipeToItem(0)
                     mainSwipeView.swipeToItem(0)
                     if(bot.net.interface == "ethernet" ||
@@ -257,6 +268,7 @@ Item {
                     }
                 }
                 else {
+                    timeSwipeView.swipeToItem(0)
                     settingsSwipeView.swipeToItem(0)
                 }
             }

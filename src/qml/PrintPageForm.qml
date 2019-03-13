@@ -5,6 +5,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import StorageFileTypeEnum 1.0
 import ErrorTypeEnum 1.0
+import FreStepEnum 1.0
 
 Item {
     smooth: false
@@ -39,6 +40,7 @@ Item {
     property bool printFromUI: false
     property bool printAgain: false
     property alias printStatusView: printStatusView
+    property alias reviewTestPrint: reviewTestPrint
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -228,6 +230,7 @@ Item {
             }
 
             function skipFreStepAction() {
+                printStatusView.testPrintComplete = false
                 bot.cancel()
                 mainSwipeView.swipeToItem(0)
             }
@@ -328,6 +331,11 @@ Item {
                      bot.process.stateType == ProcessStateType.Preheating) &&
                     bot.process.errorType != ErrorType.NoError
                 }
+            }
+
+            ReviewTestPrintPage {
+                id: reviewTestPrint
+                visible: inFreStep && printStatusView.testPrintComplete
             }
         }
 

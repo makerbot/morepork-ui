@@ -185,6 +185,10 @@ void BotModel::getToolStats(const int index) {
     qDebug() << FL_STRM << "called with parameter: " << index;
 }
 
+void BotModel::setTimeZone(const QString time_zone) {
+    qDebug() << FL_STRM << "called with parameter: " << time_zone;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

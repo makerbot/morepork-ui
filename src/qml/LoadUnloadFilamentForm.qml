@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import FreStepEnum 1.0
 
 Item {
     id: loadUnloadForm
@@ -149,6 +150,10 @@ Item {
                     setDrawerState(false)
                     activeDrawer = printPage.printingDrawer
                     setDrawerState(true)
+                    if(inFreStep &&
+                       bot.process.type == ProcessType.Print) {
+                        mainSwipeView.swipeToItem(1)
+                    }
                 }
                 else {
                     isLoadFilament ? state = "loaded_filament" :
@@ -307,14 +312,14 @@ Item {
 
         RoundedButton {
             id: retryButton
-            label: inFreStep ? "RETRY LOADING" : "RETRY"
-            label_size: acknowledgeButton.label_size
-            buttonWidth: acknowledgeButton.buttonWidth
-            buttonHeight: acknowledgeButton.buttonHeight
-            anchors.left: (inFreStep && bayID == 1) ? acknowledgeButton.left: acknowledgeButton.right
-            anchors.top: (inFreStep && bayID == 1) ? acknowledgeButton.bottom: acknowledgeButton.top
-            anchors.leftMargin: (inFreStep && bayID == 1) ? 0 : 20
-            anchors.topMargin: (inFreStep && bayID == 1) ? 10 : 0
+            label: "RETRY"
+            label_size: 18
+            buttonWidth: 150
+            buttonHeight: 50
+            anchors.left: acknowledgeButton.left
+            anchors.top: acknowledgeButton.bottom
+            anchors.leftMargin: 0
+            anchors.topMargin: 15
             opacity: 0
         }
 
@@ -654,41 +659,96 @@ Item {
                 opacity: 1
                 anchors.topMargin: 20
                 label_width: {
-                    if(bayID == 1 && inFreStep) {
-                        375
-                    } else {
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            100
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            if(bayID == 1) {
+                                375
+                            } else if(bayID == 2) {
+                                100
+                            }
+                        }
+                    }
+                    else {
                         100
                     }
                 }
 
                 buttonWidth: {
-                    if(bayID == 1 && inFreStep) {
-                        375
-                    } else {
-                        120
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            100
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            if(bayID == 1) {
+                                375
+                            } else if(bayID == 2) {
+                                100
+                            }
+                        }
+                    }
+                    else {
+                        100
                     }
                 }
 
                 label_size: {
-                    if(bayID == 1 && inFreStep) {
-                        14
-                    } else {
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            18
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            if(bayID == 1) {
+                               14
+                            } else if(bayID == 2) {
+                                18
+                            }
+                        }
+                    }
+                    else {
                         18
                     }
                 }
 
                 label: {
-                    if(bayID == 1 && inFreStep) {
-                        "NEXT: LOAD SUPPORT MATERIAL"
-                    } else {
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            "DONE"
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            if(bayID == 1) {
+                                "NEXT: LOAD SUPPORT MATERIAL"
+                            } else if(bayID == 2) {
+                                "DONE"
+                            }
+                        }
+                    }
+                    else {
                         "DONE"
                     }
                 }
-
             }
 
             PropertyChanges {
                 target: retryButton
+                label: {
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            "RETRY PURGE"
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            "RETRY LOAD"
+                        }
+                    }
+                    else {
+                        "RETRY LOAD"
+                    }
+                }
+                label_size: 18
+                buttonWidth: 200
+                buttonHeight: 50
                 opacity: 1
             }
 
@@ -758,6 +818,23 @@ Item {
 
             PropertyChanges {
                 target: retryButton
+                label: {
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            "RETRY UNLOAD"
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            "RETRY UNLOAD"
+                        }
+                    }
+                    else {
+                        "RETRY UNLOAD"
+                    }
+                }
+                label_size: 18
+                label_width: 225
+                buttonWidth: 225
+                buttonHeight: 50
                 opacity: 1
             }
 
@@ -789,15 +866,16 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 width: 300
-                text: switch(bot.process.type)
-                      {
+                text: {
+                    switch(bot.process.type) {
                       case ProcessType.Load:
                           "FILAMENT LOADING FAILED"
                           break;
                       case ProcessType.Unload:
                           "FILAMENT UNLOADING FAILED"
                           break;
-                      }
+                    }
+                }
             }
 
             PropertyChanges {
@@ -815,6 +893,23 @@ Item {
 
             PropertyChanges {
                 target: retryButton
+                label: {
+                    if(inFreStep) {
+                        if(bot.process.type == ProcessType.Print) {
+                            isLoadFilament ? "RETRY LOAD" : "RETRY UNLOAD"
+                        }
+                        else if(bot.process.type == ProcessType.None) {
+                            isLoadFilament ? "RETRY LOAD" : "RETRY UNLOAD"
+                        }
+                    }
+                    else {
+                        isLoadFilament ? "RETRY LOAD" : "RETRY UNLOAD"
+                    }
+                }
+                label_size: 18
+                label_width: 225
+                buttonWidth: 225
+                buttonHeight: 50
                 opacity: 1
             }
 

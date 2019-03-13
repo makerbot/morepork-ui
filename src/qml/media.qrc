@@ -127,6 +127,7 @@
 	<file alias="error_filament_jam_2.png">images/error_filament_jam_2.png</file>
 	<file alias="error_oof_extruder1.png">images/error_oof_extruder1.png</file>
 	<file alias="error_oof_extruder2.png">images/error_oof_extruder2.png</file>
+    <file alias="calib_verification.png">images/calib_verification.png</file>
     </qresource>
     
     <qresource prefix="/test_files">
