@@ -8,6 +8,7 @@
 
 #include "ui_translator.h"
 #include "logger.h"
+#include "logging.h"
 #include "network.h"
 
 // TODO: We should probably be able to set this up so that
@@ -31,8 +32,17 @@
 #include "parsed_qml_enums.h"
 #include "storage/storage.h"
 
+void msgHandler(QtMsgType type,
+                const QMessageLogContext & context,
+                const QString &msg) {
+    LOG(info) << msg.toStdString();
+}
+
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+#ifndef MOREPORK_UI_QT_CREATOR_BUILD
+    qInstallMessageHandler(msgHandler);
+#endif
     QGuiApplication qapp(argc, argv);
     // This includes objects of classes defined in parsed_qml_enums.h
     // so QML can use cpp defined enumerations with namespaces
