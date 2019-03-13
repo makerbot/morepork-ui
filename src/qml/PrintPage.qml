@@ -9,6 +9,7 @@ PrintPageForm {
     property bool startPrintWithUnknownMaterials: false
     property bool startPrintTopLidOpen: false
     property bool startPrintBuildDoorOpen: false
+    property bool startPrintNoFilament: false
     buttonUsbStorage.filenameText.text: qsTr("USB") + cpUiTr.emptyStr
     buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE") + cpUiTr.emptyStr
 
@@ -67,26 +68,6 @@ PrintPageForm {
         }
     }
 
-    function startPrintCheck() {
-        if(!startPrintMaterialCheck()) {
-            return false
-        }
-        else if(!startPrintDoorLidCheck()) {
-            return false
-        }
-        else {
-            return true
-        }
-    }
-
-    function startPrint() {
-        storage.backStackClear()
-        activeDrawer = printPage.printingDrawer
-        bot.print(fileName)
-        printFromUI = true
-        printSwipeView.swipeToItem(0)
-    }
-
     function startPrintDoorLidCheck() {
         if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 45) {
             startPrintTopLidOpen = true
@@ -99,6 +80,35 @@ PrintPageForm {
         else {
             return true
         }
+    }
+
+    function startPrintFilamentCheck() {
+        if(!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent) {
+            startPrintNoFilament = true
+            if(bot.process.stateType == ProcessStateType.Failed) {
+                bot.done("acknowledge_failure")
+            }
+            return false
+        }
+        startPrintNoFilament = false
+        return true
+    }
+
+    function startPrintCheck() {
+        if(startPrintDoorLidCheck() &&
+           startPrintFilamentCheck() &&
+           startPrintMaterialCheck()) {
+            return true
+        }
+        return false
+    }
+
+    function startPrint() {
+        storage.backStackClear()
+        activeDrawer = printPage.printingDrawer
+        bot.print(fileName)
+        printFromUI = true
+        printSwipeView.swipeToItem(0)
     }
 
     printingDrawer.buttonCancelPrint.onClicked: {
