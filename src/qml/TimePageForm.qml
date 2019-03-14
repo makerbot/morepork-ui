@@ -22,7 +22,15 @@ Item {
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = timeSwipeView.currentIndex
             timeSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(timeSwipeView.itemAt(itemToDisplayDefaultIndex))
+            if(itemToDisplayDefaultIndex == 0) {
+                // When we swipe to the 0th index of this page set
+                // the current item as the settings page item that
+                // holds this page since we want the back button to
+                // use the settings item's altBack()
+                setCurrentItem(settingsSwipeView.itemAt(7))
+            } else {
+                setCurrentItem(timeSwipeView.itemAt(itemToDisplayDefaultIndex))
+            }
             timeSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
             timeSwipeView.itemAt(prevIndex).visible = false
         }
