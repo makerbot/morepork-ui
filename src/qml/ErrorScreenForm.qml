@@ -12,17 +12,21 @@ Item {
 
     property alias button1: button1
     property alias button2: button2
-    property int errorCode: bot.process.errorType
+    property int errorType: bot.process.errorType
 
-    onErrorCodeChanged: {
-        switch(errorCode) {
+    signal errorAcknowledged
+
+    onErrorTypeChanged: {
+        switch(errorType) {
         case ErrorType.LidNotPlaced:
-            if(bot.process.type == ProcessType.Print) {
+            if (bot.process.type == ProcessType.Print) {
+                state = "print_lid_open_error"
+            } else {
                 state = "lid_open_error"
             }
             break;
         case ErrorType.DoorNotClosed:
-            if(bot.process.type == ProcessType.Print) {
+            if (bot.process.type == ProcessType.Print) {
                 state = "door_open_error"
             }
             break;
@@ -180,17 +184,36 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
+                text: "PROCESS FAILED.\nCLOSE THE\nTOP LID."
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "Put the lid back on the printer\nand try again."
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+
+            PropertyChanges {
+                target: button1
+                label: "TRY AGAIN"
+            }
+        },
+        State {
+            name: "print_lid_open_error"
+            extend: "lid_open_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
                 text: "PRINT PAUSED.\nCLOSE THE\nTOP LID."
             }
 
             PropertyChanges {
                 target: errorMessageDescription
                 text: "Put the lid back on the printer\nto continue printing."
-            }
-
-            PropertyChanges {
-                target: button2
-                visible: false
             }
 
             PropertyChanges {

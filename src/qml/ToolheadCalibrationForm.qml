@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import ErrorTypeEnum 1.0
 
 Item {
     id: calibrationPage
@@ -17,12 +18,13 @@ Item {
     property alias continueButton: continue_mouseArea
     property alias stopButton: stop_mouseArea
     signal processDone
+    signal processFailed(int errType)
     property int errorCode
-    property bool hasFailed: bot.process.errorCode !== 0
+    property bool hasFailed: bot.process.errorType !== ErrorType.NoError
     onHasFailedChanged: {
         if(bot.process.type == ProcessType.CalibrationProcess) {
             errorCode = bot.process.errorCode
-            state = "failed"
+            processFailed(bot.process.errorType);
         }
     }
 
@@ -34,7 +36,7 @@ Item {
                 state = "cancelling"
                 break;
             case ProcessStateType.CleaningUp:
-               if(state != "cancelling" && state != "failed") {
+               if (!bot.process.cancelled) {
                    state = "calibration_finished"
                }
                break;
@@ -43,7 +45,7 @@ Item {
             }
         }
         else if(bot.process.type == ProcessType.None) {
-            if(state == "cancelling") {
+            if(state == "cancelling" && bot.process.errorCode === 0) {
                 calibrateToolheadsItem.altBack()
             }
         }
