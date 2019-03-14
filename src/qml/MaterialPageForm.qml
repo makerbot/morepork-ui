@@ -230,8 +230,9 @@ Item {
                     exitMaterialChange()
                 }
                 else {
-                    if(bot.process.tyep == ProcessType.Load ||
-                       bot.process.type == ProcessType.Unload) {
+                    if(bot.process.type == ProcessType.Load ||
+                       bot.process.type == ProcessType.Unload ||
+                       bot.process.type == ProcessType.None) {
                         skipFreStepPopup.open()
                     }
                     else {
