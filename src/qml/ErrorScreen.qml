@@ -41,18 +41,21 @@ ErrorScreenForm {
 
     button1 {
         disable_button: {
-            if(state == "lid_open_error" ||
+            if (state == "print_lid_open_error" ||
                state == "door_open_error" ||
                state == "filament_jam_error" ||
                state == "filament_bay_oof_error" ||
                state == "extruder_oof_error_state1") {
                 bot.process.stateType != ProcessStateType.Paused
+            } else {
+                false
             }
         }
 
         button_mouseArea {
             onClicked: {
-                if(state == "lid_open_error" || state == "door_open_error") {
+                if(state == "print_lid_open_error" ||
+                        state == "door_open_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         bot.pauseResumePrint("resume")
                     }
@@ -92,14 +95,17 @@ ErrorScreenForm {
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
                 }
+                errorAcknowledged();
             }
         }
     }
 
     button2 {
         disable_button: {
-            if(state == "filament_jam_error") {
+            if (state == "filament_jam_error") {
                 bot.process.stateType != ProcessStateType.Paused
+            } else {
+                false
             }
         }
 
@@ -115,6 +121,7 @@ ErrorScreenForm {
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
                 }
+                errorAcknowledged()
             }
         }
     }

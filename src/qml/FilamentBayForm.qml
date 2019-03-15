@@ -226,8 +226,9 @@ Item {
 
     Timer {
         id: getSpoolInfoTimer
-        interval: 3000
+        interval: 1000
         onTriggered: {
+            bot.updateSpoolInfo(filamentBayID-1)
             bot.getSpoolInfo(filamentBayID-1)
         }
     }

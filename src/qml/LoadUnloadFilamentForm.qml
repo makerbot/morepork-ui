@@ -101,6 +101,18 @@ Item {
                                             bay2.filamentMaterialCode
     property string materialName: bayID == 1 ? bay1.filamentMaterialName :
                                                bay2.filamentMaterialName
+
+    function delayedEnableRetryButton() {
+        // Immediately starting the load/unload process
+        // after it completes, presumably while kaiten is
+        // still not fully finished cleaning up, causes it
+        // to not start properly, so disabling the retry
+        // button and then enabling after a few seconds is
+        // a quick hacky fix for this before launch.
+        retryButton.disable_button = true
+        enableRetryButton.start()
+    }
+
     property int errorCode
     signal processDone
     property int currentState: bot.process.stateType
@@ -108,6 +120,7 @@ Item {
         switch(currentState) {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
+            delayedEnableRetryButton()
             overrideInvalidMaterial = false
             if(bot.process.errorCode > 0) {
                 errorCode = bot.process.errorCode
@@ -142,6 +155,7 @@ Item {
             // paused state afterwards we also need to monitor
             // the flag there.
             else if(printPage.isPrintProcess) {
+                delayedEnableRetryButton()
                 if(materialChangeCancelled) {
                     state = "base state"
                     materialSwipeView.swipeToItem(0)
@@ -179,6 +193,14 @@ Item {
             break;
         default:
             break;
+        }
+    }
+
+    Timer {
+        id: enableRetryButton
+        interval: 3000
+        onTriggered: {
+            retryButton.disable_button = false
         }
     }
 
@@ -281,7 +303,6 @@ Item {
                 id: bulletItem3
                 bulletNumber: "3"
                 bulletText: "Push the end of the material into\nthe slot until you feel it being\npulled in."
-                opacity: 0.3
             }
         }
 
@@ -320,7 +341,7 @@ Item {
             anchors.top: acknowledgeButton.bottom
             anchors.leftMargin: 0
             anchors.topMargin: 15
-            opacity: 0
+            visible: false
         }
 
         RowLayout {
@@ -396,7 +417,7 @@ Item {
 
             PropertyChanges {
                 target: retryButton
-                opacity: 0
+                visible: false
             }
 
             PropertyChanges {
@@ -409,11 +430,6 @@ Item {
 
             PropertyChanges {
                 target: instructionsList
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: bulletItem3
                 opacity: 1
             }
         },
@@ -464,7 +480,7 @@ Item {
 
             PropertyChanges {
                 target: retryButton
-                opacity: 0
+                visible: false
             }
 
             PropertyChanges {
@@ -534,7 +550,7 @@ Item {
 
             PropertyChanges {
                 target: retryButton
-                opacity: 0
+                visible: false
             }
         },
         State {
@@ -568,7 +584,7 @@ Item {
 
             PropertyChanges {
                 target: retryButton
-                opacity: 0
+                visible: false
             }
 
             PropertyChanges {
@@ -629,7 +645,7 @@ Item {
 
             PropertyChanges {
                 target: retryButton
-                opacity: 0
+                visible: false
             }
 
             PropertyChanges {
@@ -736,20 +752,20 @@ Item {
                 label: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
-                            "RETRY PURGE"
+                            "RETRY PURGING"
                         }
                         else if(bot.process.type == ProcessType.None) {
-                            "RETRY LOAD"
+                            "RETRY LOADING"
                         }
                     }
                     else {
-                        "RETRY LOAD"
+                        "RETRY LOADING"
                     }
                 }
                 label_size: 18
-                buttonWidth: 200
+                buttonWidth: 260
                 buttonHeight: 50
-                opacity: 1
+                visible: true
             }
 
             PropertyChanges {
@@ -821,21 +837,21 @@ Item {
                 label: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
-                            "RETRY UNLOAD"
+                            "RETRY UNLOADING"
                         }
                         else if(bot.process.type == ProcessType.None) {
-                            "RETRY UNLOAD"
+                            "RETRY UNLOADING"
                         }
                     }
                     else {
-                        "RETRY UNLOAD"
+                        "RETRY UNLOADING"
                     }
                 }
                 label_size: 18
-                label_width: 225
-                buttonWidth: 225
+                label_width: 260
+                buttonWidth: 260
                 buttonHeight: 50
-                opacity: 1
+                visible: true
             }
 
             PropertyChanges {
@@ -896,21 +912,21 @@ Item {
                 label: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
-                            isLoadFilament ? "RETRY LOAD" : "RETRY UNLOAD"
+                            isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
                         }
                         else if(bot.process.type == ProcessType.None) {
-                            isLoadFilament ? "RETRY LOAD" : "RETRY UNLOAD"
+                            isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
                         }
                     }
                     else {
-                        isLoadFilament ? "RETRY LOAD" : "RETRY UNLOAD"
+                        isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
                     }
                 }
                 label_size: 18
-                label_width: 225
-                buttonWidth: 225
+                label_width: 260
+                buttonWidth: 260
                 buttonHeight: 50
-                opacity: 1
+                visible: true
             }
 
             PropertyChanges {

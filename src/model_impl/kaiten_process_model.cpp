@@ -246,6 +246,15 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         isProcessCancellableReset();
     }
 
+    const Json::Value &cancelled = proc["cancelled"];
+    if(!cancelled.empty()) {
+        cancelledSet(proc["cancelled"].asBool());
+    }
+    else {
+        cancelledReset();
+    }
+
+
     UPDATE_INT_PROP(timeRemaining, proc["time_remaining"]);
     UPDATE_INT_PROP(elapsedTime, proc["elapsed_time"]);
     activeSet(true);

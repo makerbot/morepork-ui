@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
+import ErrorTypeEnum 1.0
 
 Item {
     id: settingsPage
@@ -365,11 +366,11 @@ Item {
 
             function altBack() {
                 if(!inFreStep) {
-                    if(bot.process.type == ProcessType.CalibrationProcess) {
+                    if(bot.process.type === ProcessType.CalibrationProcess &&
+                          bot.process.isProcessCancellable) {
                         toolheadCalibration.cancelCalibrationPopup.open()
-                    }
-                    else {
-                        toolheadCalibration.state = "base state"
+                    } else {
+                        calibErrorScreen.acknowledgeError()
                         if(settingsSwipeView.currentIndex != 0) {
                             settingsSwipeView.swipeToItem(0)
                         }
@@ -393,6 +394,34 @@ Item {
                     state = "base state"
                     settingsSwipeView.swipeToItem(0)
                 }
+
+                onProcessFailed: {
+                    // sorry....
+                    if (errType === ErrorType.LidNotPlaced) {
+                        visible = false
+                        calibErrorScreen.errorType = errType
+                        calibErrorScreen.visible = true
+                    } else {
+                        state = "failed"
+                        visible = true
+                    }
+                }
+            }
+
+            ErrorScreen {
+                id: calibErrorScreen
+                visible: false
+
+                function acknowledgeError() {
+                    toolheadCalibration.state = "base state"
+                    toolheadCalibration.visible = true
+                    visible = false
+                }
+
+                onErrorAcknowledged: {
+                    acknowledgeError()
+                }
+
             }
         }
 
