@@ -50,13 +50,14 @@ Button {
 
         Text {
             id: filenameText
+            width: 525
             text: "Filename Text"
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Bold
             font.pointSize: 14
             color: "#ffffff"
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
             smooth: false
