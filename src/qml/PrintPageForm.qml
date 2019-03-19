@@ -327,6 +327,7 @@ Item {
                     isPrintProcess &&
                     (bot.process.stateType == ProcessStateType.Pausing ||
                      bot.process.stateType == ProcessStateType.Paused ||
+                     bot.process.stateType == ProcessStateType.Failed ||
                      // Out of filament while printing, which should
                      // still show the error handling screen.
                      bot.process.stateType == ProcessStateType.UnloadingFilament ||

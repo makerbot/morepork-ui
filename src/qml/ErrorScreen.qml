@@ -49,11 +49,12 @@ ErrorScreenForm {
     button1 {
         disable_button: {
             if (state == "print_lid_open_error" ||
-               state == "door_open_error" ||
+               state == "print_door_open_error" ||
                state == "filament_jam_error" ||
                state == "filament_bay_oof_error" ||
                state == "extruder_oof_error_state1") {
-                bot.process.stateType != ProcessStateType.Paused
+                bot.process.stateType != ProcessStateType.Paused &&
+                bot.process.stateType != ProcessStateType.Failed
             }
             else if (state == "calibration_failed") {
                 bot.process.type != ProcessType.None
@@ -66,9 +67,11 @@ ErrorScreenForm {
         button_mouseArea {
             onClicked: {
                 if(state == "print_lid_open_error" ||
-                        state == "door_open_error") {
+                        state == "print_door_open_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         bot.pauseResumePrint("resume")
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        bot.done("acknowledge_failure")
                     }
                 }
                 else if(state == "filament_jam_error") {

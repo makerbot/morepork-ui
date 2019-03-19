@@ -65,7 +65,7 @@ Item {
                 break;
             case ErrorType.DoorNotClosed:
                 if (lastReportedProcessType == ProcessType.Print) {
-                    state = "door_open_error"
+                    state = "print_door_open_error"
                 }
                 break;
             case ErrorType.FilamentJam:
@@ -216,12 +216,12 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR."
+                text: "PROCESS FAILED.\nCLOSE BUILD\nCHAMBER DOOR."
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "Close the build chamber door to\ncontinue printing."
+                text: "Close the build chamber door and\ntry again."
             }
 
             PropertyChanges {
@@ -231,9 +231,9 @@ Item {
 
             PropertyChanges {
                 target: button1
-                label_width: 250
-                buttonWidth: 250
-                label: "RESUME PRINT"
+                label_width: 200
+                buttonWidth: 200
+                label: "TRY AGAIN"
             }
         },
 
@@ -272,25 +272,90 @@ Item {
                 label: "TRY AGAIN"
             }
         },
+
         State {
-            name: "print_lid_open_error"
-            extend: "lid_open_error"
+            name: "print_door_open_error"
+            extend: "door_open_error"
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "PRINT PAUSED.\nCLOSE THE\nTOP LID."
+                text: {
+                    if(bot.process.stateType == ProcessStateType.Pausing ||
+                       bot.process.stateTyep == ProcessStateType.Paused) {
+                        "PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR."
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        "PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR."
+                    }
+                }
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "Put the lid back on the printer\nto continue printing."
+                text: {
+                    if(bot.process.stateType == ProcessStateType.Pausing ||
+                       bot.process.stateTyep == ProcessStateType.Paused) {
+                        "Close the build chamber door to\ncontinue printing."
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        "Close the build chamber door and\nrestart print."
+                    }
+                }
             }
 
             PropertyChanges {
                 target: button1
                 label_width: 260
                 buttonWidth: 260
-                label: "RESUME PRINT"
+                label: {
+                    if(bot.process.stateType == ProcessStateType.Pausing ||
+                       bot.process.stateTyep == ProcessStateType.Paused) {
+                        "RESUME PRINT"
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        "CONTINUE"
+                    }
+                }
+            }
+        },
+
+        State {
+            name: "print_lid_open_error"
+            extend: "lid_open_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: {
+                    if(bot.process.stateType == ProcessStateType.Pausing ||
+                       bot.process.stateTyep == ProcessStateType.Paused) {
+                        "PRINT PAUSED.\nCLOSE THE\nTOP LID."
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        "PRINT FAILED.\nCLOSE THE\nTOP LID."
+                    }
+                }
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: {
+                    if(bot.process.stateType == ProcessStateType.Pausing ||
+                       bot.process.stateTyep == ProcessStateType.Paused) {
+                        "Put the lid back on the printer\nto continue printing."
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        "Put the lid back on the printer and\nrestart print."
+                    }
+                }
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 260
+                buttonWidth: 260
+                label: {
+                    if(bot.process.stateType == ProcessStateType.Pausing ||
+                       bot.process.stateTyep == ProcessStateType.Paused) {
+                        "RESUME PRINT"
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        "CONTINUE"
+                    }
+                }
             }
         },
 
@@ -662,6 +727,11 @@ Item {
                 target: button1
                 label: "CONTINUE"
             }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: -20
+            }
         },
 
         State {
@@ -682,6 +752,11 @@ Item {
                 target: button1
                 label: "CONTINUE"
             }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: -30
+            }
         },
 
         State {
@@ -701,6 +776,11 @@ Item {
             PropertyChanges {
                 target: button1
                 label: "CONTINUE"
+            }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: -40
             }
         }
     ]
