@@ -375,7 +375,10 @@ Item {
                     }
                 }
                 else {
-                    skipFreStepPopup.open()
+                    if(calibrateErrorScreen.lastReportedErrorType ==
+                                                        ErrorType.NoError) {
+                        skipFreStepPopup.open()
+                    }
                 }
             }
 

@@ -71,7 +71,9 @@ ErrorScreenForm {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         bot.pauseResumePrint("resume")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        bot.done("acknowledge_failure")
+                        if(!inFreStep) {
+                            bot.done("acknowledge_failure")
+                        }
                     }
                 }
                 else if(state == "filament_jam_error") {

@@ -332,7 +332,7 @@ Item {
                      // still show the error handling screen.
                      bot.process.stateType == ProcessStateType.UnloadingFilament ||
                      bot.process.stateType == ProcessStateType.Preheating) &&
-                    bot.process.errorType != ErrorType.NoError
+                    lastReportedErrorType != ErrorType.NoError
                 }
             }
 

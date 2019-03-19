@@ -707,6 +707,11 @@ Item {
                 target: button1
                 label: "TRY AGAIN"
             }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: -20
+            }
         },
 
         State {

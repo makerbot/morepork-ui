@@ -36,6 +36,9 @@ Item {
         }
         else if(bot.process.type == ProcessType.None) {
             if(state == "cancelling") {
+                if(inFreStep) {
+                    state = "base state"
+                }
                 calibrateToolheadsItem.altBack()
             }
         }
