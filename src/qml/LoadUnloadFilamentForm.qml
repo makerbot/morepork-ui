@@ -10,8 +10,10 @@ Item {
     width: 800
     height: 420
 
+    property alias snipMaterial: snipMaterial
     property alias acknowledgeButton: acknowledgeButton
     property alias retryButton: retryButton
+    property bool snipMaterialAlertAcknowledged: false
     property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool bayFilamentSwitch: false
@@ -120,6 +122,7 @@ Item {
         switch(currentState) {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
+            snipMaterialAlertAcknowledged = false
             delayedEnableRetryButton()
             overrideInvalidMaterial = false
             if(bot.process.errorCode > 0) {
@@ -211,6 +214,13 @@ Item {
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
         loading: false
+    }
+
+    SnipMaterialScreen {
+        id: snipMaterial
+        z: 1
+        anchors.verticalCenterOffset: -20
+        visible: !snipMaterialAlertAcknowledged
     }
 
     Image {
@@ -392,6 +402,11 @@ Item {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
+                target: snipMaterial
+                visible: !snipMaterialAlertAcknowledged
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: {
                     if(overrideInvalidMaterial) {
@@ -441,6 +456,11 @@ Item {
                    (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
+
+            PropertyChanges {
+                target: snipMaterial
+                visible: !snipMaterialAlertAcknowledged
+            }
 
             PropertyChanges {
                 target: main_instruction_text
@@ -495,6 +515,11 @@ Item {
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
+
+            PropertyChanges {
+                target: snipMaterial
+                visible: false
+            }
 
             PropertyChanges {
                 target: main_instruction_text
@@ -560,6 +585,11 @@ Item {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
+                target: snipMaterial
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: "EXTRUSION CONFIRMATION"
                 anchors.topMargin: 120
@@ -612,6 +642,11 @@ Item {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
+                target: snipMaterial
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: "UNLOADING"
                 anchors.topMargin: 165
@@ -659,6 +694,12 @@ Item {
             //instead the switch case above is used to get into this state,
             //since we need the UI to be held at this screen
             //even after the process has completed, until the user presses 'done'.
+
+            PropertyChanges {
+                target: snipMaterial
+                visible: false
+            }
+
             PropertyChanges {
                 target: main_instruction_text
                 text: "CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN"
@@ -810,6 +851,12 @@ Item {
             //instead the switch case above is used to get into this state,
             //since we need the UI to be held at this screen
             //even after the process has completed, until the user presses 'done'.
+
+            PropertyChanges {
+                target: snipMaterial
+                visible: false
+            }
+
             PropertyChanges {
                 target: main_instruction_text
                 text: "REWIND SPOOL"
@@ -878,6 +925,11 @@ Item {
             //instead the switch case above is used to get into this state,
             //since we need the UI to be held at this screen
             //even after the process has completed, until the user presses 'done'.
+
+            PropertyChanges {
+                target: snipMaterial
+                visible: false
+            }
 
             PropertyChanges {
                 target: main_instruction_text

@@ -138,5 +138,7 @@
         <file>TimeZoneSelectorForm.qml</file>
         <file>TimeZoneLocationSeparator.qml</file>
         <file>TimeZoneLocationSeparatorForm.qml</file>
+        <file>SnipMaterialScreen.qml</file>
+        <file>SnipMaterialScreenForm.qml</file>
     </qresource>
 </RCC>

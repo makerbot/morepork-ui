@@ -4,6 +4,11 @@ import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 
 LoadUnloadFilamentForm {
+
+    snipMaterial.continueButton.button_mouseArea.onClicked: {
+        snipMaterialAlertAcknowledged = true
+    }
+
     acknowledgeButton {
         button_mouseArea.onClicked: {
             if(state == "feed_filament") {
