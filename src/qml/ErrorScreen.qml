@@ -94,6 +94,13 @@ ErrorScreenForm {
                         materialPage.loadUnloadFilamentProcess.state = "preheating"
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
+                } else if (state == "no_tool_connected") {
+                    resetSwipeViews()
+                    mainSwipeView.swipeToItem(2)
+                    // sigh
+                    extruderPage.itemAttachExtruder.extruder = bot.process.errorSource + 1
+                    extruderPage.itemAttachExtruder.state = "base state"
+                    extruderPage.extruderSwipeView.swipeToItem(1)
                 }
                 errorAcknowledged();
             }
