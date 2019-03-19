@@ -24,6 +24,8 @@ Item {
     property string doneByMeridianString
     property alias printStatusSwipeView: printStatusSwipeView
     property bool testPrintComplete: false
+    property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
+    property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -630,7 +632,7 @@ Item {
                         Text {
                             id: extruder1_life_text
                             color: "#ffffff"
-                            text: bot.extruderAExtrusionDistance +"mm"
+                            text: extruderAExtrusionDistance +"mm"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -642,7 +644,7 @@ Item {
                         Text {
                             id: extruder2_life_text
                             color: "#ffffff"
-                            text: bot.extruderBExtrusionDistance +"mm"
+                            text: extruderBExtrusionDistance +"mm"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
