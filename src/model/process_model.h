@@ -63,6 +63,7 @@ class ProcessModel : public BaseModel {
     enum ErrorType {
         NoError,
         NotConnected,
+        NoToolConnected,
         LidNotPlaced,
         DoorNotClosed,
         HeaterOverTemp,
@@ -100,6 +101,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, printPercentage, 0)
     MODEL_PROP(int, timeRemaining, 0)
     MODEL_PROP(int, elapsedTime, 0)
+    MODEL_PROP(int, errorSource, 0)
     MODEL_PROP(int, errorCode, 0)
     MODEL_PROP(ErrorType, errorType, NoError)
     MODEL_PROP(int, targetHesUpper, 3800)

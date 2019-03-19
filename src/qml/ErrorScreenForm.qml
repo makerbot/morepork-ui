@@ -83,6 +83,9 @@ Item {
                     state = "extruder_oof_error_state1"
                 }
                 break;
+            case ErrorType.NoToolConnected:
+                state = "no_tool_connected"
+                break;
             case ErrorType.BadHESCalibrationFail:
                 if(lastReportedProcessType == ProcessType.CalibrationProcess) {
                     state = "calibration_failed"
@@ -107,7 +110,6 @@ Item {
                 break;
             }
         }
-
     }
 
     Rectangle {
@@ -229,6 +231,8 @@ Item {
 
             PropertyChanges {
                 target: button1
+                label_width: 250
+                buttonWidth: 250
                 label: "RESUME PRINT"
             }
         },
@@ -306,8 +310,6 @@ Item {
 
             PropertyChanges {
                 target: button1
-                label_width: 260
-                buttonWidth: 260
                 label: "TRY AGAIN"
             }
         },
@@ -521,13 +523,57 @@ Item {
         },
 
         State {
+            name: "no_tool_connected"
+            PropertyChanges {
+                target: errorImage
+                source: bot.process.errorSource?
+                            "qrc:/img/error_filament_jam_2.png" :
+                            "qrc:/img/error_filament_jam_1.png"
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: {
+                    "PRINT PAUSED.\nEXTRUDER " +
+                    (bot.process.errorSource + 1) +
+                     "\nDISCONNECTED."
+                }
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "Ensure the extruder is attached and\npress the button below to continue."
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 340
+                buttonWidth: 340
+                label: {
+                    "ATTACH EXTRUDER " + (bot.process.errorSource + 1)
+                }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
             name: "generic_error"
 
             PropertyChanges {
                 target: errorImage
-                anchors.verticalCenterOffset: -20
-                anchors.leftMargin: 75
+                anchors.verticalCenterOffset: -30
+                anchors.leftMargin: 100
                 source: "qrc:/img/error.png"
+            }
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
             }
 
             PropertyChanges {
@@ -563,7 +609,8 @@ Item {
 
             PropertyChanges {
                 target: errorMessageContainer
-                anchors.leftMargin: 150
+                anchors.leftMargin: 120
+                anchors.verticalCenter: errorImage.verticalCenter
             }
         },
 
@@ -585,11 +632,6 @@ Item {
                 target: button1
                 label: "TRY AGAIN"
             }
-
-            PropertyChanges {
-                target: button2
-                visible: false
-            }
         },
 
         State {
@@ -609,11 +651,6 @@ Item {
             PropertyChanges {
                 target: button1
                 label: "CONTINUE"
-            }
-
-            PropertyChanges {
-                target: button2
-                visible: false
             }
         },
 
@@ -635,11 +672,6 @@ Item {
                 target: button1
                 label: "CONTINUE"
             }
-
-            PropertyChanges {
-                target: button2
-                visible: false
-            }
         },
 
         State {
@@ -659,11 +691,6 @@ Item {
             PropertyChanges {
                 target: button1
                 label: "CONTINUE"
-            }
-
-            PropertyChanges {
-                target: button2
-                visible: false
             }
         }
     ]
