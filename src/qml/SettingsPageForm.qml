@@ -28,6 +28,7 @@ Item {
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
 
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
+    property alias calibrateErrorScreen: calibrateErrorScreen
 
     property alias buttonTime: buttonTime
     property alias timePage: timePage
@@ -367,13 +368,10 @@ Item {
             function altBack() {
                 if(!inFreStep) {
                     if(bot.process.type === ProcessType.CalibrationProcess &&
-                          bot.process.isProcessCancellable) {
+                       bot.process.isProcessCancellable) {
                         toolheadCalibration.cancelCalibrationPopup.open()
-                    } else {
-                        calibErrorScreen.acknowledgeError()
-                        if(settingsSwipeView.currentIndex != 0) {
-                            settingsSwipeView.swipeToItem(0)
-                        }
+                    } else if(bot.process.type == ProcessType.None) {
+                        toolheadCalibration.resetStates()
                     }
                 }
                 else {
@@ -390,38 +388,30 @@ Item {
 
             ToolheadCalibration {
                 id: toolheadCalibration
+                visible: !calibrateErrorScreen.visible
                 onProcessDone: {
-                    state = "base state"
-                    settingsSwipeView.swipeToItem(0)
+                    resetStates()
                 }
 
-                onProcessFailed: {
-                    // sorry....
-                    if (errType === ErrorType.LidNotPlaced) {
-                        visible = false
-                        calibErrorScreen.errorType = errType
-                        calibErrorScreen.visible = true
-                    } else {
-                        state = "failed"
-                        visible = true
+                function resetStates() {
+                    state = "base state"
+                    // Dont go back if an error happened
+                    if(calibrateErrorScreen.lastReportedErrorType ==
+                                                        ErrorType.NoError) {
+                        if(settingsSwipeView.currentIndex != 0) {
+                            settingsSwipeView.swipeToItem(0)
+                        }
                     }
                 }
             }
 
             ErrorScreen {
-                id: calibErrorScreen
-                visible: false
-
-                function acknowledgeError() {
-                    toolheadCalibration.state = "base state"
-                    toolheadCalibration.visible = true
-                    visible = false
+                id: calibrateErrorScreen
+                isActive: bot.process.type == ProcessType.CalibrationProcess
+                visible: {
+                    lastReportedProcessType == ProcessType.CalibrationProcess &&
+                    lastReportedErrorType != ErrorType.NoError
                 }
-
-                onErrorAcknowledged: {
-                    acknowledgeError()
-                }
-
             }
         }
 

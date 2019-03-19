@@ -11,22 +11,12 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
-    property alias buttonOk: buttonOk
     property alias actionButton: actionButton
     property alias actionButton2: actionButton2
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     property alias continueButton: continue_mouseArea
     property alias stopButton: stop_mouseArea
     signal processDone
-    signal processFailed(int errType)
-    property int errorCode
-    property bool hasFailed: bot.process.errorType !== ErrorType.NoError
-    onHasFailedChanged: {
-        if(bot.process.type == ProcessType.CalibrationProcess) {
-            errorCode = bot.process.errorCode
-            processFailed(bot.process.errorType);
-        }
-    }
 
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
@@ -45,55 +35,9 @@ Item {
             }
         }
         else if(bot.process.type == ProcessType.None) {
-            if(state == "cancelling" && bot.process.errorCode === 0) {
+            if(state == "cancelling") {
                 calibrateToolheadsItem.altBack()
             }
-        }
-    }
-
-    Image {
-        id: error_image
-        width: sourceSize.width
-        height: sourceSize.height
-        anchors.top: parent.top
-        anchors.topMargin: 30
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: false
-        source: "qrc:/img/error.png"
-
-        Text {
-            id: text1
-            text: "CALIBRATION FAILED"
-            anchors.top: parent.bottom
-            anchors.topMargin: 15
-            anchors.horizontalCenter: parent.horizontalCenter
-            color: "#ffffff"
-            font.letterSpacing: 2
-            font.family: "Antennae"
-            font.pixelSize: 24
-            font.weight: Font.Light
-        }
-
-        Text {
-            id: text2
-            text: "Error " + errorCode
-            anchors.top: text1.bottom
-            anchors.topMargin: 15
-            anchors.horizontalCenter: parent.horizontalCenter
-            color: "#ffffff"
-            font.family: "Antennae"
-            font.pixelSize: 24
-            font.weight: Font.Light
-        }
-
-        RoundedButton {
-            id: buttonOk
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: text2.bottom
-            anchors.topMargin: 25
-            buttonHeight: 60
-            buttonWidth: 90
-            label: "OK"
         }
     }
 
@@ -748,43 +692,6 @@ Item {
                 label: "DONE"
                 buttonWidth: 125
                 opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
-            }
-        },
-
-        State {
-            name: "failed"
-            // See switch case at top of the file for
-            // the logic to get into this state.
-
-            PropertyChanges {
-                target: error_image
-                visible: true
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: animated_image
-                source: ""
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: header_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 0
             }
 
             PropertyChanges {

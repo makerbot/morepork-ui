@@ -2,6 +2,7 @@ import QtQuick 2.10
 import StorageSortTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
+import ErrorTypeEnum 1.0
 
 PrintPageForm {
     property bool startPrintWithInsufficientModelMaterial: false
@@ -104,11 +105,18 @@ PrintPageForm {
     }
 
     function startPrint() {
+        clearErrors()
         storage.backStackClear()
         activeDrawer = printPage.printingDrawer
         bot.print(fileName)
         printFromUI = true
         printSwipeView.swipeToItem(0)
+    }
+
+    function clearErrors() {
+        if(printErrorScreen.lastReportedErrorType != ErrorType.NoError) {
+            printErrorScreen.acknowledgeError()
+        }
     }
 
     printingDrawer.buttonCancelPrint.onClicked: {
@@ -122,6 +130,7 @@ PrintPageForm {
 
     printingDrawer.buttonPausePrint.onClicked: {
         if(!printingDrawer.buttonPausePrint.disableButton) {
+            clearErrors()
             if(bot.process.stateType == ProcessStateType.Printing) {
                 bot.pauseResumePrint("suspend")
             }

@@ -27,16 +27,15 @@
 #define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/MoreporkUI.qml"
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
 #define MOREPORK_LOGGER makeBotLogger()
-#endif
-#include "fre_tracker.h"
-#include "parsed_qml_enums.h"
-#include "storage/storage.h"
-
 void msgHandler(QtMsgType type,
                 const QMessageLogContext & context,
                 const QString &msg) {
     LOG(info) << msg.toStdString();
 }
+#endif
+#include "fre_tracker.h"
+#include "parsed_qml_enums.h"
+#include "storage/storage.h"
 
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));

@@ -1,7 +1,14 @@
 import QtQuick 2.10
+import ErrorTypeEnum 1.0
+import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 ErrorScreenForm {
+    function acknowledgeError() {
+        lastReportedErrorCode = 0
+        lastReportedErrorType = ErrorType.NoError
+    }
+
     function resetSwipeViews() {
         if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
             printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -47,7 +54,11 @@ ErrorScreenForm {
                state == "filament_bay_oof_error" ||
                state == "extruder_oof_error_state1") {
                 bot.process.stateType != ProcessStateType.Paused
-            } else {
+            }
+            else if (state == "calibration_failed") {
+                bot.process.type != ProcessType.None
+            }
+            else {
                 false
             }
         }
@@ -95,7 +106,22 @@ ErrorScreenForm {
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
                 }
-                errorAcknowledged();
+                else if(state == "generic_error") {
+                    // just clear the error
+                }
+                else if(state == "calibration_failed") {
+                    // just clear the error
+                }
+                else if(state == "heater_not_reaching_temp") {
+                    // just clear the error
+                }
+                else if(state == "heater_over_temp") {
+                    // just clear the error
+                }
+                else if(state == "toolhead_disconnect") {
+                    // just clear the error
+                }
+                acknowledgeError()
             }
         }
     }
@@ -121,7 +147,7 @@ ErrorScreenForm {
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
                 }
-                errorAcknowledged()
+                acknowledgeError()
             }
         }
     }

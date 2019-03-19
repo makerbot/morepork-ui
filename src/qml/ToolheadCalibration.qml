@@ -1,13 +1,6 @@
 import QtQuick 2.10
 
 ToolheadCalibrationForm {
-
-    buttonOk {
-        button_mouseArea.onClicked: {
-            state = "base state"
-        }
-    }
-
     actionButton {
         button_mouseArea.onClicked: {
             if(state == "check_nozzle_clean") {

@@ -41,6 +41,7 @@ Item {
     property bool printAgain: false
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
+    property alias printErrorScreen: errorScreen
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -321,6 +322,7 @@ Item {
 
             ErrorScreen {
                 id: errorScreen
+                isActive: bot.process.type == ProcessType.Print
                 visible: {
                     isPrintProcess &&
                     (bot.process.stateType == ProcessStateType.Pausing ||

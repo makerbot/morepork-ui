@@ -10,45 +10,109 @@ Item {
     height: 440
     smooth: false
 
+    // Qt JS engine updates the dependency graph
+    // for all components in the DOM even when they
+    // aren't rendered at all, which causes resued
+    // components to maintain their state everywhere,
+    // which can in theory slow things down and also
+    // make them hold residual states uneccessarily.
+    // isActive flag is used because of this.
+    property bool isActive: false
     property alias button1: button1
     property alias button2: button2
+    property int processType: bot.process.type
     property int errorType: bot.process.errorType
+    property int errorCode: bot.process.errorCode
 
-    signal errorAcknowledged
+    // Simple process and error latching mechanism
+    // since some processes end immediately upon
+    // erroring, then clear the error code and just
+    // go away as if nothing happened and some do not.
+    // This ensures consistent behavior for error
+    // handling all processes. Also this will have to
+    // modified if we get a series of non-zero error
+    // codes before a process ends as this will only
+    // hold the last reported one in that case.
+    property int lastReportedProcessType
+    property int lastReportedErrorType
+    property int lastReportedErrorCode
+
+    onProcessTypeChanged: {
+        if(isActive && processType > 0) {
+            lastReportedProcessType = processType
+            // Clear out errors when the
+            // process itself changes.
+            acknowledgeError()
+        }
+    }
+
+    onErrorCodeChanged: {
+        if(isActive && errorCode > 0) {
+            lastReportedErrorCode = errorCode
+        }
+    }
 
     onErrorTypeChanged: {
-        switch(errorType) {
-        case ErrorType.LidNotPlaced:
-            if (bot.process.type == ProcessType.Print) {
-                state = "print_lid_open_error"
-            } else {
-                state = "lid_open_error"
+        if(isActive && errorType > 0) {
+            lastReportedErrorType = errorType
+            switch(lastReportedErrorType) {
+            case ErrorType.LidNotPlaced:
+                if (lastReportedProcessType == ProcessType.Print) {
+                    state = "print_lid_open_error"
+                } else if(lastReportedProcessType == ProcessType.CalibrationProcess) {
+                    state = "calibration_lid_open_error"
+                }
+                break;
+            case ErrorType.DoorNotClosed:
+                if (lastReportedProcessType == ProcessType.Print) {
+                    state = "door_open_error"
+                }
+                break;
+            case ErrorType.FilamentJam:
+                if(lastReportedProcessType == ProcessType.Print) {
+                    state = "filament_jam_error"
+                }
+                break;
+            case ErrorType.DrawerOutOfFilament:
+                if(lastReportedProcessType == ProcessType.Print) {
+                    state = "filament_bay_oof_error"
+                }
+                break;
+            case ErrorType.ExtruderOutOfFilament:
+                if(lastReportedProcessType == ProcessType.Print) {
+                    state = "extruder_oof_error_state1"
+                }
+                break;
+            case ErrorType.BadHESCalibrationFail:
+                if(lastReportedProcessType == ProcessType.CalibrationProcess) {
+                    state = "calibration_failed"
+                } else if(lastReportedProcessType == ProcessType.AssistedLeveling) {
+                    // Add screen
+                }
+                break;
+            case ErrorType.HeaterNotReachingTemp:
+                state = "heater_not_reaching_temp"
+                break;
+            case ErrorType.HeaterOverTemp:
+                state = "heater_over_temp"
+                break;
+            case ErrorType.NotConnected:
+                state = "toolhead_disconnect"
+                break;
+            case ErrorType.OtherError:
+                state = "generic_error"
+                break;
+            default:
+                state = "base state"
+                break;
             }
-            break;
-        case ErrorType.DoorNotClosed:
-            if (bot.process.type == ProcessType.Print) {
-                state = "door_open_error"
-            }
-            break;
-        case ErrorType.FilamentJam:
-            if(bot.process.type == ProcessType.Print) {
-                state = "filament_jam_error"
-            }
-            break;
-        case ErrorType.DrawerOutOfFilament:
-            if(bot.process.type == ProcessType.Print) {
-                state = "filament_bay_oof_error"
-            }
-            break;
-        case ErrorType.ExtruderOutOfFilament:
-            if(bot.process.type == ProcessType.Print) {
-                state = "extruder_oof_error_state1"
-            }
-            break;
-        default:
-            state = "base state"
-            break;
         }
+
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
     }
 
     Item {
@@ -116,9 +180,9 @@ Item {
                 anchors.top: errorMessageDescription.bottom
                 anchors.topMargin: 20
                 label: "BUTTON 1"
-                label_width: 250
+                label_width: 200
                 label_size: 22
-                buttonWidth: 260
+                buttonWidth: 200
                 buttonHeight: 50
             }
 
@@ -129,7 +193,7 @@ Item {
                 label: "BUTTON 2"
                 label_width: 200
                 label_size: 22
-                buttonWidth: 260
+                buttonWidth: 200
                 buttonHeight: 50
             }
         }
@@ -199,6 +263,8 @@ Item {
 
             PropertyChanges {
                 target: button1
+                label_width: 200
+                buttonWidth: 200
                 label: "TRY AGAIN"
             }
         },
@@ -218,9 +284,34 @@ Item {
 
             PropertyChanges {
                 target: button1
+                label_width: 260
+                buttonWidth: 260
                 label: "RESUME PRINT"
             }
         },
+
+        State {
+            name: "calibration_lid_open_error"
+            extend: "lid_open_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: "CALIBRATION FAILED.\nCLOSE THE\nTOP LID."
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "Put the lid back on the printer\nand retry calibrating"
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 260
+                buttonWidth: 260
+                label: "TRY AGAIN"
+            }
+        },
+
         State {
             name: "filament_jam_error"
 
@@ -421,6 +512,153 @@ Item {
                 label: {
                     "LOAD MATERIAL"
                 }
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
+            name: "generic_error"
+
+            PropertyChanges {
+                target: errorImage
+                anchors.verticalCenterOffset: -20
+                anchors.leftMargin: 75
+                source: "qrc:/img/error.png"
+            }
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: "ERROR"
+                anchors.topMargin: 50
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: {
+                    "Error " + errorCode +
+                    "\nVisit MakerBot.com/support\nfor more info."
+                }
+            }
+
+            PropertyChanges {
+                target: button1
+                label_width: 200
+                buttonWidth: 200
+                label: "TRY AGAIN"
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.leftMargin: 150
+            }
+        },
+
+        State {
+            name: "calibration_failed"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: "CALIBRATION\nERROR"
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error " + lastReportedErrorCode
+            }
+
+            PropertyChanges {
+                target: button1
+                label: "TRY AGAIN"
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
+            name: "heater_not_reaching_temp"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: "HEATING ERROR"
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError " + lastReportedErrorCode
+            }
+
+            PropertyChanges {
+                target: button1
+                label: "CONTINUE"
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
+            name: "heater_over_temp"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: "HEATER\nTEMPERATURE\nERROR"
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError " + lastReportedErrorCode
+            }
+
+            PropertyChanges {
+                target: button1
+                label: "CONTINUE"
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
+            }
+        },
+
+        State {
+            name: "toolhead_disconnect"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: "CARRIAGE\nCOMMUNICATION\nERROR"
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: "The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact MakerBot\nsupport. Error " + lastReportedErrorCode
+            }
+
+            PropertyChanges {
+                target: button1
+                label: "CONTINUE"
             }
 
             PropertyChanges {
