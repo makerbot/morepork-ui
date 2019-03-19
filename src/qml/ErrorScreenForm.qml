@@ -524,11 +524,22 @@ Item {
 
         State {
             name: "no_tool_connected"
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
             PropertyChanges {
                 target: errorImage
                 source: bot.process.errorSource?
                             "qrc:/img/error_filament_jam_2.png" :
                             "qrc:/img/error_filament_jam_1.png"
+            }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: 40
             }
 
             PropertyChanges {
@@ -566,7 +577,7 @@ Item {
 
             PropertyChanges {
                 target: errorImage
-                anchors.verticalCenterOffset: -30
+                anchors.verticalCenterOffset: -25
                 anchors.leftMargin: 100
                 source: "qrc:/img/error.png"
             }
@@ -599,7 +610,7 @@ Item {
                 target: button1
                 label_width: 200
                 buttonWidth: 200
-                label: "TRY AGAIN"
+                label: "CONTINUE"
             }
 
             PropertyChanges {
@@ -610,7 +621,6 @@ Item {
             PropertyChanges {
                 target: errorMessageContainer
                 anchors.leftMargin: 120
-                anchors.verticalCenter: errorImage.verticalCenter
             }
         },
 
