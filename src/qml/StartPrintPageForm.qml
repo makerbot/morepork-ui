@@ -235,6 +235,7 @@ Item {
                     height: 100
                     smooth: false
                     spacing: 30
+                    anchors.top: divider_item1.bottom
 
                     ColumnLayout {
                         id: columnLayout1
@@ -254,6 +255,7 @@ Item {
                             font.family: "Antenna"
                             font.weight: Font.Light
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -267,6 +269,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -280,6 +283,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -293,6 +297,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -340,6 +345,7 @@ Item {
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -352,6 +358,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -364,6 +371,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -376,6 +384,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {

@@ -477,7 +477,7 @@ Item {
             ColumnLayout {
                 id: layout
                 width: 600
-                height: 350
+                spacing: 10
                 anchors.left: parent.left
                 anchors.leftMargin: 65
                 anchors.top: parent.top
@@ -506,12 +506,14 @@ Item {
                     id: printInfo_usesSupport
                     labelText: qsTr("Supports") + cpUiTr.emptyStr
                     dataText: uses_support
+                    visible: false
                 }
 
                 InfoItem {
                     id: printInfo_usesRaft
                     labelText: qsTr("Rafts") + cpUiTr.emptyStr
                     dataText: uses_raft
+                    visible: false
                 }
 
                 InfoItem {
@@ -530,6 +532,7 @@ Item {
                     id: printInfo_Shells
                     labelText: qsTr("Shells") + cpUiTr.emptyStr
                     dataText: num_shells
+                    visible: false
                 }
 
                 InfoItem {
@@ -548,6 +551,7 @@ Item {
                     id: printInfo_slicerName
                     labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
                     dataText: slicer_name
+                    visible: false
                 }
             }
         }
