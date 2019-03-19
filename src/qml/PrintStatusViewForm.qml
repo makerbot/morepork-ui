@@ -24,7 +24,6 @@ Item {
     property string doneByMeridianString
     property alias printStatusSwipeView: printStatusSwipeView
     property bool testPrintComplete: false
-    property string extruderUsage: bot["extruder%1ExtrusionDistance".arg(idxAsAxis)]
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
