@@ -41,6 +41,7 @@ Item {
     property bool printAgain: false
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
+    property alias printErrorScreen: errorScreen
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -323,15 +324,17 @@ Item {
 
             ErrorScreen {
                 id: errorScreen
+                isActive: bot.process.type == ProcessType.Print
                 visible: {
                     isPrintProcess &&
                     (bot.process.stateType == ProcessStateType.Pausing ||
                      bot.process.stateType == ProcessStateType.Paused ||
+                     bot.process.stateType == ProcessStateType.Failed ||
                      // Out of filament while printing, which should
                      // still show the error handling screen.
                      bot.process.stateType == ProcessStateType.UnloadingFilament ||
                      bot.process.stateType == ProcessStateType.Preheating) &&
-                    bot.process.errorType != ErrorType.NoError
+                    lastReportedErrorType != ErrorType.NoError
                 }
             }
 
