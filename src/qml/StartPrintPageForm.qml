@@ -390,25 +390,27 @@ Item {
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: model_mass + " PLA"
+                            text: model_mass + " " + print_model_material
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            font.capitalization: Font.AllUppercase
                         }
 
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: support_mass + " PVA"
+                            text: support_mass + " " + print_support_material
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            font.capitalization: Font.AllUppercase
                         }
                     }
                 }
