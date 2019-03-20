@@ -1,6 +1,7 @@
 # Stuff that the morepork build system creates
 /_build*/
 /artifacts/
+/hook_settings.pyc
 
 # Stuff that Qt Creator creates
 /CMakeLists.txt.user

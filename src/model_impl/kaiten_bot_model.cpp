@@ -9,6 +9,8 @@
 #include <memory>
 #include <sstream>
 
+#include <QJSEngine>
+
 #include "impl_util.h"
 #include "kaiten_net_model.h"
 #include "kaiten_process_model.h"
@@ -335,6 +337,18 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<SystemTimeNotification> m_sysTimeNot;
+
+    class SetTimeZoneCallback : public JsonRpcCallback {
+      public:
+        SetTimeZoneCallback() {}
+        void response(const Json::Value & resp) override {
+            // Just update the time zone directly here
+            QJSEngine().evaluate("Date.timeZoneUpdated()");
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<SetTimeZoneCallback> m_stzCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -896,7 +910,7 @@ void KaitenBotModel::setTimeZone(QString time_zone) {
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["new_tz"] = Json::Value(time_zone.toStdString());
-        conn->jsonrpc.invoke("set_tz", json_params, std::weak_ptr<JsonRpcCallback>());
+        conn->jsonrpc.invoke("set_tz", json_params, m_stzCb);
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -987,7 +1001,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
                               new ToolStatsCallback(this, 1))},
         m_matWarningNot(new UnknownMaterialNotification(this)),
         m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)),
-        m_sysTimeNot(new SystemTimeNotification(this)) {
+        m_sysTimeNot(new SystemTimeNotification(this)),
+        m_stzCb(new SetTimeZoneCallback()) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 

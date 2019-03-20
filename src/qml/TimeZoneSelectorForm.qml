@@ -59,7 +59,7 @@ Item {
             TimeZoneButton {
                 id: buttonTimeZone_MST
                 timeZoneCode: "MST"
-                timeZoneName: "MOUNTAIN STNADARD TIME"
+                timeZoneName: "MOUNTAIN STANDARD TIME"
                 timeZoneGMTReference: "GMT-7:00"
                 timeZonePathName: "US/Mountain"
             }
