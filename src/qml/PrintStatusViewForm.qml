@@ -15,6 +15,8 @@ Item {
     property string uses_support_
     property string uses_raft_
     property string print_time_
+    property string print_model_material_
+    property string print_support_material_
     property string printerName: bot.name
     property int timeLeftSeconds: bot.process.timeRemaining
     property int timeLeftMinutes: timeLeftSeconds/60
@@ -24,6 +26,8 @@ Item {
     property string doneByMeridianString
     property alias printStatusSwipeView: printStatusSwipeView
     property bool testPrintComplete: false
+    property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
+    property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -323,6 +327,7 @@ Item {
                     height: 100
                     smooth: false
                     spacing: 65
+                    anchors.top: divider_item1.bottom
 
                     ColumnLayout {
                         id: columnLayout1
@@ -342,6 +347,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -355,6 +361,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -368,6 +375,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -414,6 +422,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -426,6 +435,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -438,30 +448,33 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: model_mass_ + " PLA"
+                            text: model_mass_ + " " + print_model_material_
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            font.capitalization: Font.AllUppercase
                         }
 
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: support_mass_ + " PVA"
+                            text: support_mass_ + " " + print_support_material_
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            font.capitalization: Font.AllUppercase
                         }
                     }
                 }
@@ -630,7 +643,7 @@ Item {
                         Text {
                             id: extruder1_life_text
                             color: "#ffffff"
-                            text: "9999HR"
+                            text: extruderAExtrusionDistance +"mm"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -642,7 +655,7 @@ Item {
                         Text {
                             id: extruder2_life_text
                             color: "#ffffff"
-                            text: "9999HR"
+                            text: extruderBExtrusionDistance +"mm"
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"

@@ -4,6 +4,11 @@ import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 
 LoadUnloadFilamentForm {
+
+    snipMaterial.continueButton.button_mouseArea.onClicked: {
+        snipMaterialAlertAcknowledged = true
+    }
+
     acknowledgeButton {
         button_mouseArea.onClicked: {
             if(state == "feed_filament") {
@@ -58,6 +63,8 @@ LoadUnloadFilamentForm {
 
     retryButton {
         button_mouseArea.onClicked: {
+            // loadFilament(tool_index, external, whilePrinitng)
+            // unloadFilament(tool_index, external, whilePrinitng)
             if(state == "loaded_filament") {
                 if(bot.process.type == ProcessType.None) {
                     bot.loadFilament(bayID - 1, false, false)
@@ -67,21 +74,21 @@ LoadUnloadFilamentForm {
                 }
             } else if(state == "unloaded_filament") {
                 if(bot.process.type == ProcessType.None) {
-                    bot.unloadFilament(bayID - 1, false, false)
+                    bot.unloadFilament(bayID - 1, true, false)
                 }
                 else if(bot.process.type == ProcessType.Print) {
-                    bot.unloadFilament(bayID - 1, false, true)
+                    bot.unloadFilament(bayID - 1, true, true)
                 }
             } else if(state == "error") {
                 if(bot.process.type == ProcessType.None) {
                     isLoadFilament ?
                         bot.loadFilament(bayID - 1, false, false) :
-                        bot.unloadFilament(bayID - 1, false, false)
+                        bot.unloadFilament(bayID - 1, true, false)
                 }
                 else if(bot.process.type == ProcessType.Print) {
                     isLoadFilament ?
                         bot.loadFilament(bayID - 1, false, true) :
-                        bot.unloadFilament(bayID - 1, false, true)
+                        bot.unloadFilament(bayID - 1, true, true)
                 }
             }
         }

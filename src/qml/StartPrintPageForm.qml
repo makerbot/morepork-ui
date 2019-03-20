@@ -50,11 +50,13 @@ Item {
                     id: printName
                     width: 330
                     text: file_name
+                    elide: Text.ElideRight
+                    maximumLineCount: 2
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     smooth: false
                     antialiasing: false
                     font.letterSpacing: 3
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 21
                     lineHeight: 1.1
@@ -95,7 +97,7 @@ Item {
                         smooth: false
                         antialiasing: false
                         font.letterSpacing: 3
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.weight: Font.Light
                         font.pixelSize: 18
                         color: "#ffffff"
@@ -116,7 +118,7 @@ Item {
                         smooth: false
                         antialiasing: false
                         font.letterSpacing: 3
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.weight: Font.Light
                         font.pixelSize: 18
                         color: "#ffffff"
@@ -131,7 +133,7 @@ Item {
                     smooth: false
                     antialiasing: false
                     font.letterSpacing: 3
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                     font.pixelSize: 18
                     color: "#ffffff"
@@ -204,14 +206,20 @@ Item {
 
                 Text {
                     id: fileName_text1
-                    color: "#cbcbcb"
+                    // In a ColumnLayout you must set 'Layout.maximumWidth' not 'width'
+                    Layout.maximumWidth: 330
                     text: file_name
-                    antialiasing: false
+                    elide: Text.ElideRight
+                    maximumLineCount: 2
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     smooth: false
+                    antialiasing: false
                     font.letterSpacing: 3
                     font.family: "Antenna"
                     font.weight: Font.Bold
-                    font.pixelSize: 20
+                    font.pixelSize: 21
+                    lineHeight: 1.1
+                    color: "#cbcbcb"
                 }
 
                 Item {
@@ -227,6 +235,7 @@ Item {
                     height: 100
                     smooth: false
                     spacing: 30
+                    anchors.top: divider_item1.bottom
 
                     ColumnLayout {
                         id: columnLayout1
@@ -246,6 +255,7 @@ Item {
                             font.family: "Antenna"
                             font.weight: Font.Light
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -259,6 +269,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -272,6 +283,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -285,6 +297,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -332,6 +345,7 @@ Item {
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -344,6 +358,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -356,6 +371,7 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
@@ -368,30 +384,33 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: false
                         }
 
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: model_mass + " PLA"
+                            text: model_mass + " " + print_model_material
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            font.capitalization: Font.AllUppercase
                         }
 
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: support_mass + " PVA"
+                            text: support_mass + " " + print_support_material
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            font.capitalization: Font.AllUppercase
                         }
                     }
                 }

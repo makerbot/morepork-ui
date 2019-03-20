@@ -1,7 +1,14 @@
 import QtQuick 2.10
+import ErrorTypeEnum 1.0
+import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 ErrorScreenForm {
+    function acknowledgeError() {
+        lastReportedErrorCode = 0
+        lastReportedErrorType = ErrorType.NoError
+    }
+
     function resetSwipeViews() {
         if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
             printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -42,12 +49,17 @@ ErrorScreenForm {
     button1 {
         disable_button: {
             if (state == "print_lid_open_error" ||
-               state == "door_open_error" ||
+               state == "print_door_open_error" ||
                state == "filament_jam_error" ||
                state == "filament_bay_oof_error" ||
                state == "extruder_oof_error_state1") {
-                bot.process.stateType != ProcessStateType.Paused
-            } else {
+                bot.process.stateType != ProcessStateType.Paused &&
+                bot.process.stateType != ProcessStateType.Failed
+            }
+            else if (state == "calibration_failed") {
+                bot.process.type != ProcessType.None
+            }
+            else {
                 false
             }
         }
@@ -55,9 +67,13 @@ ErrorScreenForm {
         button_mouseArea {
             onClicked: {
                 if(state == "print_lid_open_error" ||
-                        state == "door_open_error") {
+                        state == "print_door_open_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         bot.pauseResumePrint("resume")
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        if(!inFreStep) {
+                            bot.done("acknowledge_failure")
+                        }
                     }
                 }
                 else if(state == "filament_jam_error") {
@@ -94,8 +110,30 @@ ErrorScreenForm {
                         materialPage.loadUnloadFilamentProcess.state = "preheating"
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
+                } else if (state == "no_tool_connected") {
+                    resetSwipeViews()
+                    mainSwipeView.swipeToItem(2)
+                    // sigh
+                    extruderPage.itemAttachExtruder.extruder = bot.process.errorSource + 1
+                    extruderPage.itemAttachExtruder.state = "base state"
+                    extruderPage.extruderSwipeView.swipeToItem(1)
                 }
-                errorAcknowledged();
+                else if(state == "generic_error") {
+                    // just clear the error
+                }
+                else if(state == "calibration_failed") {
+                    // just clear the error
+                }
+                else if(state == "heater_not_reaching_temp") {
+                    // just clear the error
+                }
+                else if(state == "heater_over_temp") {
+                    // just clear the error
+                }
+                else if(state == "toolhead_disconnect") {
+                    // just clear the error
+                }
+                acknowledgeError()
             }
         }
     }
@@ -121,7 +159,7 @@ ErrorScreenForm {
                         materialPage.materialSwipeView.swipeToItem(1)
                     }
                 }
-                errorAcknowledged()
+                acknowledgeError()
             }
         }
     }

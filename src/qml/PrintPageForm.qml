@@ -41,6 +41,7 @@ Item {
     property bool printAgain: false
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
+    property alias printErrorScreen: errorScreen
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
@@ -317,19 +318,23 @@ Item {
                 uses_support_: uses_support
                 uses_raft_: uses_raft
                 print_time_: print_time
+                print_model_material_: print_model_material
+                print_support_material_: print_support_material
             }
 
             ErrorScreen {
                 id: errorScreen
+                isActive: bot.process.type == ProcessType.Print
                 visible: {
                     isPrintProcess &&
                     (bot.process.stateType == ProcessStateType.Pausing ||
                      bot.process.stateType == ProcessStateType.Paused ||
+                     bot.process.stateType == ProcessStateType.Failed ||
                      // Out of filament while printing, which should
                      // still show the error handling screen.
                      bot.process.stateType == ProcessStateType.UnloadingFilament ||
                      bot.process.stateType == ProcessStateType.Preheating) &&
-                    bot.process.errorType != ErrorType.NoError
+                    lastReportedErrorType != ErrorType.NoError
                 }
             }
 
@@ -477,7 +482,7 @@ Item {
             ColumnLayout {
                 id: layout
                 width: 600
-                height: 350
+                spacing: 10
                 anchors.left: parent.left
                 anchors.leftMargin: 65
                 anchors.top: parent.top
@@ -506,12 +511,14 @@ Item {
                     id: printInfo_usesSupport
                     labelText: qsTr("Supports") + cpUiTr.emptyStr
                     dataText: uses_support
+                    visible: false
                 }
 
                 InfoItem {
                     id: printInfo_usesRaft
                     labelText: qsTr("Rafts") + cpUiTr.emptyStr
                     dataText: uses_raft
+                    visible: false
                 }
 
                 InfoItem {
@@ -530,6 +537,7 @@ Item {
                     id: printInfo_Shells
                     labelText: qsTr("Shells") + cpUiTr.emptyStr
                     dataText: num_shells
+                    visible: false
                 }
 
                 InfoItem {
@@ -548,6 +556,7 @@ Item {
                     id: printInfo_slicerName
                     labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
                     dataText: slicer_name
+                    visible: false
                 }
             }
         }

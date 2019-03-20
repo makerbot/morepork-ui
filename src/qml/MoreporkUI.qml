@@ -1934,6 +1934,7 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 bot.cancel()
+                                printPage.clearErrors()
                                 cancelPrintPopup.close()
                             }
                         }
