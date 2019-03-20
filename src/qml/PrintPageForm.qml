@@ -317,6 +317,8 @@ Item {
                 uses_support_: uses_support
                 uses_raft_: uses_raft
                 print_time_: print_time
+                print_model_material_: print_model_material
+                print_support_material_: print_support_material
             }
 
             ErrorScreen {
