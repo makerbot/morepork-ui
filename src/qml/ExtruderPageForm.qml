@@ -159,7 +159,7 @@ Item {
                     text: {
                         if(itemAttachExtruder.state == "close_top_lid") {
                             if(bot.chamberErrorCode == 48) {
-                                "CLOSE CHMABER DOOR"
+                                "CLOSE CHAMBER DOOR"
                             }
                             else if(bot.chamberErrorCode == 45) {
                                 "PLACE TOP LID"
