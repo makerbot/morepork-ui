@@ -695,9 +695,7 @@ Item {
                                   "The limited warranty included with this 3D printer does\n" +
                                   "not apply to damage caused by the use of materials\n" +
                                   "not certified or approved by MakerBot. For additional\n" +
-                                  "information, please visit MakerBot.com/legal/warranty.\n" +
-                                  "Custom settings in MakerBot Print software are\n" +
-                                  "required to configure and use this material."
+                                  "information, please visit MakerBot.com/legal/warranty."
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

@@ -102,6 +102,7 @@ Item {
             case ErrorType.NotConnected:
                 state = "toolhead_disconnect"
                 break;
+            case ErrorType.NoFilamentAtExtruder:
             case ErrorType.OtherError:
                 state = "generic_error"
                 break;
