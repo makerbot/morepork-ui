@@ -49,15 +49,7 @@ Item {
                 authorizeAccountView.visible = false
             }
             signInSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == 0) {
-                // When we swipe to the 0th index of this page set
-                // the current item as the settings page item that
-                // holds this page since we want the back button to
-                // use the settings items altBack()
-                setCurrentItem(settingsSwipeView.itemAt(4))
-            } else {
-                setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
-            }
+            setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
             signInSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
         }
 
@@ -144,8 +136,23 @@ Item {
             id: enterUsernameView
             property var backSwiper: signInSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    signInSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                signInPage.backToSettings()
+                mainSwipeView.swipeToItem(0)
+            }
 
             Item {
                 id: enterUsernameContainer
