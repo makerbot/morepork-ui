@@ -258,7 +258,7 @@ Item {
             RowLayout {
                 id: extruderDetails
                 anchors.bottom: materialButton.top
-                anchors.bottomMargin: 35
+                anchors.bottomMargin: 20
                 spacing: 10
                 visible: extruderPresent
                 Text {
