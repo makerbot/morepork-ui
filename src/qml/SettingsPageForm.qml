@@ -285,23 +285,8 @@ Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
-            property bool hasAltBack: true
             smooth: false
             visible: false
-
-            function altBack() {
-                if(!inFreStep) {
-                    signInPage.backToSettings()
-                }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                signInPage.backToSettings()
-                mainSwipeView.swipeToItem(0)
-            }
 
             SignInPage {
                 id: signInPage
