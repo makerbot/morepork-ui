@@ -112,7 +112,7 @@ Item {
                             "CANCELLING"
                             break;
                         case ProcessStateType.CleaningUp:
-                            if(timeLeftString == "0M") {
+                            if(bot.process.complete) {
                                 "FINISHING UP"
                             }
                             else {
