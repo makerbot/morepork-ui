@@ -4,6 +4,7 @@
 #define _SRC_BOT_MODEL_H
 
 #include <QObject>
+#include <QList>
 #include <QDebug>
 
 #include "base_model.h"
@@ -69,6 +70,9 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void shutdown();
     Q_INVOKABLE virtual void getToolStats(const int index);
     Q_INVOKABLE virtual void setTimeZone(const QString time_zone);
+    QStringList firmwareReleaseNotesList();
+    void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
+    void firmwareReleaseNotesListReset();
 
   private:
     Q_OBJECT
@@ -80,6 +84,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, firmwareUpdateVersion, "Unknown")
     MODEL_PROP(QString, firmwareUpdateReleaseDate, "Unknown")
     MODEL_PROP(QString, firmwareUpdateReleaseNotes, "Unknown")
+    QStringList m_firmwareReleaseNotes;
+    Q_PROPERTY(QStringList firmwareReleaseNotesList
+               READ firmwareReleaseNotesList
+               WRITE firmwareReleaseNotesListSet
+               RESET firmwareReleaseNotesListReset
+               NOTIFY firmwareReleaseNotesListChanged)
     MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QString, username, "Unknown")
     MODEL_PROP(QString, systemTime, "Unknown")
@@ -266,6 +276,10 @@ class BotModel : public BaseModel {
 
   protected:
     BotModel();
+
+  signals:
+    void firmwareReleaseNotesListChanged();
+
 };
 
 // Make a dummy implementation of the API with all submodels filled in.

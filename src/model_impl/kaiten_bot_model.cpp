@@ -27,6 +27,7 @@ class KaitenBotModel : public BotModel {
     void authRequestUpdate(const Json::Value &request);
     void installUnsignedFwRequestUpdate(const Json::Value &request);
     void firmwareUpdateNotif(const Json::Value & firmware_info);
+    QStringList split(const std::string s, char delimiter);
     void printFileValidNotif(const Json::Value &info);
     void unknownMatWarningUpdate(const Json::Value &params);
     void usbCopyCompleteUpdate();
@@ -1173,17 +1174,32 @@ void KaitenBotModel::netUpdate(const Json::Value &state) {
 }
 
 void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
-    if(!params.empty()){
+    if(!params.empty()) {
         if(params["update_available"].asBool()) {
             firmwareUpdateAvailableSet(true);
             UPDATE_STRING_PROP(firmwareUpdateVersion, params["version"]);
             UPDATE_STRING_PROP(firmwareUpdateReleaseDate, params["release_date"]);
             UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, params["release_notes"]);
+
+            std::string s = params["release_notes"].asString();
+            QStringList releaseNotesList = split(s, '\n');
+            firmwareReleaseNotesListSet(releaseNotesList);
         }
         else {
             firmwareUpdateAvailableReset();
         }
     }
+}
+
+// Helper function for parsing release notes
+QStringList KaitenBotModel::split(const std::string s, char delimiter) {
+   QStringList token_list;
+   std::string token;
+   std::istringstream tokenStream(s);
+   while (std::getline(tokenStream, token, delimiter)) {
+      token_list.append(QString::fromStdString("•  " + token));
+   }
+   return token_list;
 }
 
 void KaitenBotModel::printFileValidNotif(const Json::Value &params) {

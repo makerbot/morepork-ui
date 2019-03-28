@@ -133,8 +133,9 @@ Item {
                 id: viewReleaseNotesMouseArea
                 anchors.fill: parent
                 onClicked: {
-                    rootAppWindow.viewReleaseNotes = true
                     firmwareUpdatePopup.open()
+                    skipFirmwareUpdate = false
+                    viewReleaseNotes = true
                 }
             }
         }
@@ -189,7 +190,7 @@ Item {
 
             PropertyChanges {
                 target: release_notes_text
-                anchors.topMargin: 235
+                anchors.topMargin: 225
                 visible: true
             }
 
