@@ -111,6 +111,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(bool, filamentBayAOOF, false)
     MODEL_PROP(bool, filamentBayBOOF, false)
     MODEL_PROP(bool, cancelled, false)
+    MODEL_PROP(bool, complete, false)
 
   public:
     ProcessModel();
