@@ -3,9 +3,23 @@
 #include "bot_model.h"
 #include "error_utils.h"
 
-
 BotModel::BotModel() {
     reset();
+}
+
+QStringList BotModel::firmwareReleaseNotesList() {
+    return m_firmwareReleaseNotes;
+}
+
+void BotModel::firmwareReleaseNotesListSet(QStringList &release_notes) {
+    auto temp = release_notes;
+    m_firmwareReleaseNotes = release_notes;
+    emit firmwareReleaseNotesListChanged();
+    temp.clear();
+}
+
+void BotModel::firmwareReleaseNotesListReset() {
+    m_firmwareReleaseNotes.clear();
 }
 
 void BotModel::cancel() {

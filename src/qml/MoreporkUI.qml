@@ -1400,10 +1400,11 @@ ApplicationWindow {
                                 update_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(mainSwipeView.currentIndex != 3 ||
-                                   settingsPage.settingsSwipeView.currentIndex != 3) {
+                                if(mainSwipeView.currentIndex != 3) {
                                     mainSwipeView.swipeToItem(3)
-                                    settingsPage.settingsSwipeView.swipeToItem(3)
+                                }
+                                if(settingsPage.settingsSwipeView.currentIndex != 5) {
+                                    settingsPage.settingsSwipeView.swipeToItem(5)
                                 }
                                 firmwareUpdatePopup.close()
                             }
@@ -1436,14 +1437,14 @@ ApplicationWindow {
                         width: 200
                         height: 10
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        visible: viewReleaseNotes ? false : skipFirmwareUpdate ? false : true
+                        visible: skipFirmwareUpdate ? false : true
                     }
 
                     Text {
                         id: firmware_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? bot.firmwareUpdateReleaseNotes : skipFirmwareUpdate ? "We recommend using the most up to date software for your printer." : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                        text: skipFirmwareUpdate ? "We recommend using the most up to date software for your printer." : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
@@ -1452,6 +1453,39 @@ ApplicationWindow {
                         font.family: "Antennae"
                         font.pixelSize: 18
                         lineHeight: 1.35
+                        visible: !viewReleaseNotes
+                    }
+
+                    ListView {
+                        width: 600
+                        height: 120
+                        clip: true
+                        spacing: 1
+                        orientation: ListView.Vertical
+                        boundsBehavior: Flickable.DragOverBounds
+                        flickableDirection: Flickable.VerticalFlick
+                        model: bot.firmwareReleaseNotesList
+                        visible: viewReleaseNotes
+                        smooth: false
+                        delegate:
+                            Text {
+                                id: firmware_release_notes_text
+                                width: 600
+                                color: "#ffffff"
+                                text: model.modelData
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                Layout.fillWidth: true
+                                font.weight: Font.Light
+                                wrapMode: Text.WordWrap
+                                font.family: "Antenna"
+                                font.pixelSize: 18
+                                lineHeight: 1.35
+                            }
+                        ScrollBar.vertical: ScrollBar {
+                            orientation: Qt.Vertical
+                            policy: ScrollBar.AsNeeded
+                        }
                     }
 
                     Text {
