@@ -1182,7 +1182,7 @@ void KaitenBotModel::firmwareUpdateNotif(const Json::Value &params) {
             UPDATE_STRING_PROP(firmwareUpdateReleaseNotes, params["release_notes"]);
 
             std::string s = params["release_notes"].asString();
-            QStringList releaseNotesList = split(s, '-');
+            QStringList releaseNotesList = split(s, '\n');
             firmwareReleaseNotesListSet(releaseNotesList);
         }
         else {
