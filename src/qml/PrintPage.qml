@@ -25,10 +25,12 @@ PrintPageForm {
                     print_model_material) {
                 return false
             }
-            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
-                startPrintWithInsufficientModelMaterial = true
-                return false
-            }
+            // Disable material quantity check before print for now
+            // until the spool quantity reading becomes reliable
+//            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
+//                startPrintWithInsufficientModelMaterial = true
+//                return false
+//            }
             else {
                 return true
             }
@@ -53,16 +55,18 @@ PrintPageForm {
                     materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
                 return false
             }
-            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired ||
-                    materialPage.bay2.filamentQuantity < supportMaterialRequired) {
-                if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
-                    startPrintWithInsufficientModelMaterial = true
-                }
-                if(materialPage.bay2.filamentQuantity < supportMaterialRequired) {
-                    startPrintWithInsufficientSupportMaterial = true
-                }
-                return false
-            }
+            // Disable material quantity check before print for now
+            // until the spool quantity reading becomes reliable
+//            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired ||
+//                    materialPage.bay2.filamentQuantity < supportMaterialRequired) {
+//                if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
+//                    startPrintWithInsufficientModelMaterial = true
+//                }
+//                if(materialPage.bay2.filamentQuantity < supportMaterialRequired) {
+//                    startPrintWithInsufficientSupportMaterial = true
+//                }
+//                return false
+//            }
             else {
                 return true
             }
