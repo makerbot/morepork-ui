@@ -81,13 +81,17 @@ Item {
         source: "qrc:/img/alert.png"
         visible: {
             if(filamentBayID == 1 &&
-               materialPage.bay1.filamentMaterialName.toLowerCase() == print_model_material &&
-               materialPage.bay1.filamentQuantity > materialRequired) {
+               materialPage.bay1.filamentMaterialName.toLowerCase() == print_model_material) {
+                // Disable material quantity check before print for now
+                // until the spool quantity reading becomes reliable
+                   // && materialPage.bay1.filamentQuantity > materialRequired) {
                 false
             }
             else if(filamentBayID == 2 &&
-                    materialPage.bay2.filamentMaterialName.toLowerCase() == print_support_material &&
-                    materialPage.bay2.filamentQuantity > materialRequired) {
+                    materialPage.bay2.filamentMaterialName.toLowerCase() == print_support_material) {
+                // Disable material quantity check before print for now
+                // until the spool quantity reading becomes reliable
+                // && materialPage.bay2.filamentQuantity > materialRequired) {
                 false
             }
             else {
