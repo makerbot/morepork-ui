@@ -41,6 +41,9 @@ Item {
 
     property alias spoolInfoPage: spoolInfoPage
 
+    property string lightBlue: "#3183af"
+    property string otherBlue: "#45a2d3"
+
     Timer {
         id: closeResetPopupTimer
         interval: 2500
