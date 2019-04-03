@@ -959,7 +959,7 @@ void KaitenBotModel::moveAxis(QString axis, float distance, float speed) {
         mach_params["point_mm"] = Json::Value(distance);
         mach_params["mm_per_second"] = Json::Value(speed);
         mach_params["relative"] = Json::Value(true);
-        json_params["machine_func"] = Json::Value("move_axis");
+        json_params["machine_func"] = Json::Value("move_axis_upto_endstop");
         json_params["params"] = std::move(mach_params);
         json_params["ignore_tool_errors"] = Json::Value(true);
 
