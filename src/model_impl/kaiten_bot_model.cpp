@@ -76,6 +76,7 @@ class KaitenBotModel : public BotModel {
     void deauthorizeAllAccounts();
     void preheatChamber(const int chamber_temperature);
     void moveAxis(QString axis, float distance, float speed);
+    void moveAxisToEndstop(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bayID);
     void shutdown();
     bool checkError(const Json::Value error_list, const int error_code);
@@ -959,7 +960,30 @@ void KaitenBotModel::moveAxis(QString axis, float distance, float speed) {
         mach_params["point_mm"] = Json::Value(distance);
         mach_params["mm_per_second"] = Json::Value(speed);
         mach_params["relative"] = Json::Value(true);
-        json_params["machine_func"] = Json::Value("move_axis_upto_endstop");
+        json_params["machine_func"] = Json::Value("move_axis");
+        json_params["params"] = std::move(mach_params);
+        json_params["ignore_tool_errors"] = Json::Value(true);
+
+        conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::moveAxisToEndstop(QString axis, float distance, float speed) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        Json::Value mach_params(Json::objectValue);
+
+        mach_params["axis"] = Json::Value(axis.toStdString());
+        mach_params["point_mm"] = Json::Value(distance);
+        mach_params["mm_per_second"] = Json::Value(speed);
+        mach_params["relative"] = Json::Value(true);
+        json_params["machine_func"] = Json::Value("move_axis_to_endstop");
         json_params["params"] = std::move(mach_params);
         json_params["ignore_tool_errors"] = Json::Value(true);
 
