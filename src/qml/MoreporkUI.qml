@@ -609,7 +609,8 @@ ApplicationWindow {
                                     fre.setFreStep(FreStep.FreComplete)
                                 }
                                 else if(currentFreStep == FreStep.SetupWifi) {
-                                    if(isNetworkConnectionAvailable) {
+                                    if(isNetworkConnectionAvailable &&
+                                       isfirmwareUpdateAvailable) {
                                         // Go to software update step only if
                                         // network connection is available
                                         fre.gotoNextStep(currentFreStep)
