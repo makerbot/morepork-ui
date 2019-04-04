@@ -102,7 +102,7 @@ Item {
 
             button_mouseArea {
                 onClicked: {
-                    bot.moveAxis("z", -distanceTumbler.model[distanceTumbler.currentIndex],
+                    bot.moveAxisToEndstop("z", -distanceTumbler.model[distanceTumbler.currentIndex],
                                        speedTumbler.model[speedTumbler.currentIndex])
                 }
                 enabled: {

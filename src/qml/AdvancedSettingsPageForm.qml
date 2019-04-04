@@ -211,6 +211,7 @@ Item {
                         id: buttonRaiseLowerBuildPlate
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: "RAISE/LOWER BUILD PLATE"
+                        enabled: !isProcessRunning()
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;

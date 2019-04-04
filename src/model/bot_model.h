@@ -66,6 +66,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void deauthorizeAllAccounts();
     Q_INVOKABLE virtual void preheatChamber(const int chamber_temperature);
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
+    Q_INVOKABLE virtual void moveAxisToEndstop(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
     Q_INVOKABLE virtual void shutdown();
     Q_INVOKABLE virtual void getToolStats(const int index);
