@@ -10,6 +10,7 @@ Button {
     anchors.left: parent.left
     property alias buttonText: buttonText
     property alias buttonImage: buttonImage
+    property bool buttonNeedsAction: false
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
     enabled: true
@@ -30,6 +31,19 @@ Button {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
         antialiasing: false
+    }
+
+    Image {
+        id: buttonAlertImage
+        width: sourceSize.width
+        height: sourceSize.height
+        anchors.right: parent.right
+        anchors.rightMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
+        smooth: false
+        antialiasing: false
+        source: "qrc:/img/alert.png"
+        visible: buttonNeedsAction
     }
 
     contentItem: Text {

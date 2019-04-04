@@ -158,6 +158,7 @@ Item {
                         id: buttonFirmwareUpdate
                         buttonImage.source: "qrc:/img/icon_software_update.png"
                         buttonText.text: "SOFTWARE UPDATE"
+                        buttonNeedsAction: isfirmwareUpdateAvailable
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
