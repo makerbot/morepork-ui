@@ -33,8 +33,7 @@ FrePageForm {
 
         button_mouseArea.onClicked: {
             if(state == "wifi_setup") {
-                if(bot.net.interface == "ethernet" ||
-                   bot.net.interface == "wifi") {
+                if(isNetworkConnectionAvailable) {
                     if(isfirmwareUpdateAvailable) {
                         fre.gotoNextStep(currentFreStep)
                     }
@@ -94,8 +93,7 @@ FrePageForm {
                 fre.setFreStep(FreStep.FreComplete)
             } else {
                 // At base state screen
-                if(bot.net.interface != "ethernet" &&
-                   bot.net.interface != "wifi") {
+                if(!isNetworkConnectionAvailable) {
                     // Goto Wifi Setup step
                     fre.gotoNextStep(currentFreStep)
                 }

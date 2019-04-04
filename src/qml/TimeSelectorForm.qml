@@ -259,8 +259,9 @@ Item {
                     timeSwipeView.swipeToItem(0)
                     settingsSwipeView.swipeToItem(0)
                     mainSwipeView.swipeToItem(0)
-                    if(bot.net.interface == "ethernet" ||
-                       bot.net.interface == "wifi") {
+                    if(isNetworkConnectionAvailable) {
+                        // Go to login to makerbot account step
+                        // only if network connection is available
                         fre.gotoNextStep(currentFreStep)
                     }
                     else {

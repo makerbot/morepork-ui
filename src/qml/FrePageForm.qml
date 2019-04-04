@@ -241,8 +241,7 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: {
-                    if(bot.net.interface == "ethernet" ||
-                       bot.net.interface == "wifi") {
+                    if(isNetworkConnectionAvailable) {
                         "CONNECTED TO NETWORK"
                     }
                     else {
@@ -257,8 +256,7 @@ Item {
             PropertyChanges {
                 target: subtitle_text
                 text: {
-                    if(bot.net.interface == "ethernet" ||
-                       bot.net.interface == "wifi") {
+                    if(isNetworkConnectionAvailable) {
                         "You seem to be connected to a network."
                     }
                     else {
@@ -271,8 +269,7 @@ Item {
                 target: continueButton
                 label_width: 300
                 buttonWidth: {
-                    if(bot.net.interface == "ethernet" ||
-                       bot.net.interface == "wifi") {
+                    if(isNetworkConnectionAvailable) {
                         175
                     }
                     else {
@@ -280,8 +277,7 @@ Item {
                     }
                 }
                 label: {
-                    if(bot.net.interface == "ethernet" ||
-                       bot.net.interface == "wifi") {
+                    if(isNetworkConnectionAvailable) {
                         "CONTINUE"
                     }
                     else {
