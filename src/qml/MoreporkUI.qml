@@ -21,6 +21,8 @@ ApplicationWindow {
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
     property bool extruderAToolTypeCorrect: bot.extruderAToolTypeCorrect
     property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
+    readonly property int th_disconnect_err: 13
+    readonly property string th_disconnect_err_str: "13 "
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
     property bool skipAuthentication: false
@@ -1739,6 +1741,53 @@ ApplicationWindow {
                                 "into slot 2\nto continue attaching the "+
                                 "extruders. Currently only model\nand support "+
                                 "printing is supported."
+                            }
+                        }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                }
+            }
+        }
+
+        // Modal Popup for Toolhead Disconnected/FFC Cable Disconnected
+        ModalPopup {
+            /* When the toolhead disconnects, the Kaiten's Bot Model's
+               extruderXErrorCode the toolhead error disconnect error
+               code followed by a space.
+            */
+            property bool toolheadADisconnect:
+                bot.extruderAErrorCode.localeCompare(th_disconnect_err.toString() + " ") === 0
+            property bool toolheadBDisconnect:
+                bot.extruderBErrorCode.localeCompare(th_disconnect_err.toString() + " ") === 0
+
+            id: toolheadDisconnectedPopup
+            visible: toolheadADisconnect || toolheadBDisconnect
+            disableUserClose: false
+
+            popup_contents.contentItem: Item {
+                anchors.fill: parent
+                ColumnLayout {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 150
+
+                    TitleText {
+                        text: "TOOLHEAD DISCONNECT"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                    BodyText{
+                        text: {
+                            if (toolheadDisconnectedPopup.toolheadADisconnect) {
+                                "Toolhead A is not communicating or "+
+                                "disconnected.\nPlease contact Support."
+                            }
+                            else if (toolheadDisconnectedPopup.toolheadBDisconnect) {
+                                "Toolhead B is not communicating or "+
+                                "disconnected.\nPlease contact Support."
                             }
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
