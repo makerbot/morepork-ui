@@ -1758,10 +1758,8 @@ ApplicationWindow {
                extruderXErrorCode the toolhead error disconnect error
                code followed by a space.
             */
-            property bool toolheadADisconnect:
-                bot.extruderAErrorCode.localeCompare(th_disconnect_err.toString() + " ") === 0
-            property bool toolheadBDisconnect:
-                bot.extruderBErrorCode.localeCompare(th_disconnect_err.toString() + " ") === 0
+            property bool toolheadADisconnect: bot.extruderAToolheadDisconnect
+            property bool toolheadBDisconnect: bot.extruderBToolheadDisconnect
 
             id: toolheadDisconnectedPopup
             visible: toolheadADisconnect || toolheadBDisconnect
@@ -1781,7 +1779,12 @@ ApplicationWindow {
                     }
                     BodyText{
                         text: {
-                            if (toolheadDisconnectedPopup.toolheadADisconnect) {
+                            if (toolheadDisconnectedPopup.toolheadADisconnect &&
+                                     toolheadDisconnectedPopup.toolheadBDisconnect) {
+                                "Both Toolhead A and B are not communicating or are "+
+                                "disconnected.\nPlease contact Support."
+                            }
+                            else if (toolheadDisconnectedPopup.toolheadADisconnect) {
                                 "Toolhead A is not communicating or "+
                                 "disconnected.\nPlease contact Support."
                             }
@@ -1789,6 +1792,7 @@ ApplicationWindow {
                                 "Toolhead B is not communicating or "+
                                 "disconnected.\nPlease contact Support."
                             }
+
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
