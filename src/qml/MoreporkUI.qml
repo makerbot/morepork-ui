@@ -28,6 +28,8 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+    property bool isNetworkConnectionAvailable: (bot.net.interface == "ethernet" ||
+                                                 bot.net.interface == "wifi")
 
     property bool safeToRemoveUsb: bot.safeToRemoveUsb
     onSafeToRemoveUsbChanged: {
@@ -40,8 +42,7 @@ ApplicationWindow {
     onConnectionStateChanged: {
         if(connectionState == ConnectionState.Connected) {
             fre.initialize()
-            if(bot.net.interface == "ethernet" ||
-               bot.net.interface == "wifi") {
+            if(isNetworkConnectionAvailable) {
                 bot.firmwareUpdateCheck(false)
             }
         }
@@ -607,9 +608,21 @@ ApplicationWindow {
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
                                 }
+                                else if(currentFreStep == FreStep.SetupWifi) {
+                                    if(isNetworkConnectionAvailable &&
+                                       isfirmwareUpdateAvailable) {
+                                        // Go to software update step only if
+                                        // network connection is available
+                                        fre.gotoNextStep(currentFreStep)
+                                    }
+                                    else {
+                                        fre.setFreStep(FreStep.NamePrinter)
+                                    }
+                                }
                                 else if(currentFreStep == FreStep.SetTimeDate) {
-                                    if(bot.net.interface == "ethernet" ||
-                                       bot.net.interface == "wifi") {
+                                    if(isNetworkConnectionAvailable) {
+                                        // Go to login to makerbot account step
+                                        // only if network connection is available
                                         fre.gotoNextStep(currentFreStep)
                                     }
                                     else {
