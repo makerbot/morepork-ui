@@ -21,6 +21,8 @@ ApplicationWindow {
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
     property bool extruderAToolTypeCorrect: bot.extruderAToolTypeCorrect
     property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
+    readonly property int th_disconnect_err: 13
+    readonly property string th_disconnect_err_str: "13 "
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
     property bool skipAuthentication: false
@@ -1753,6 +1755,46 @@ ApplicationWindow {
                                 "extruders. Currently only model\nand support "+
                                 "printing is supported."
                             }
+                        }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                }
+            }
+        }
+
+        // Modal Popup for Toolhead Disconnected/FFC Cable Disconnected
+        ModalPopup {
+            /* When the toolhead disconnects, the Kaiten's Bot Model's
+               extruderXErrorCode the toolhead error disconnect error
+               code followed by a space.
+            */
+            property bool toolheadADisconnect: bot.extruderAToolheadDisconnect
+            property bool toolheadBDisconnect: bot.extruderBToolheadDisconnect
+
+            id: toolheadDisconnectedPopup
+            visible: toolheadADisconnect || toolheadBDisconnect
+            disableUserClose: false
+
+            popup_contents.contentItem: Item {
+                anchors.fill: parent
+                ColumnLayout {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 150
+
+                    TitleText {
+                        text: "CARRIAGE COMMUNICATION ERROR"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                    BodyText{
+                        text: {
+                            "The printer’s carriage is reporting communication drop-outs.\n"+
+                            "Try restarting the printer. If this happens again, please\n"+
+                            "contact MakerBot support."
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter

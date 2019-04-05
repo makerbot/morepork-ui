@@ -1081,6 +1081,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             /* TODO(praveen) */ \
             /* The error and it's source are present in the error */ \
             /* dict so this is not the best way to do this. */ \
+            extruder ## EXT_SYM ## ToolheadDisconnectSet(checkError(kErrList, 13)); \
             extruder ## EXT_SYM ## OOFSet(checkError(kErrList, 80)); \
             extruder ## EXT_SYM ## JammedSet(checkError(kErrList, 81)); \
             if(kErrList.isArray() && kErrList.size() > 0) { \
