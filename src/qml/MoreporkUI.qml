@@ -1779,20 +1779,8 @@ ApplicationWindow {
                     }
                     BodyText{
                         text: {
-                            if (toolheadDisconnectedPopup.toolheadADisconnect &&
-                                     toolheadDisconnectedPopup.toolheadBDisconnect) {
-                                "Both Toolhead A and B are not communicating or are "+
-                                "disconnected.\nPlease contact Support."
-                            }
-                            else if (toolheadDisconnectedPopup.toolheadADisconnect) {
-                                "Toolhead A is not communicating or "+
-                                "disconnected.\nPlease contact Support."
-                            }
-                            else if (toolheadDisconnectedPopup.toolheadBDisconnect) {
-                                "Toolhead B is not communicating or "+
-                                "disconnected.\nPlease contact Support."
-                            }
-
+                            "One or more toolheads are not communicating or are "+
+                            "disconnected.\nPlease contact Support."
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
