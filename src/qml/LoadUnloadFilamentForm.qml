@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
+import ErrorTypeEnum 1.0
 
 Item {
     id: loadUnloadForm
@@ -116,16 +117,29 @@ Item {
     }
 
     property int errorCode
+    property bool doingAutoUnload: false
     signal processDone
     property int currentState: bot.process.stateType
+    property int errorType: bot.process.errorType
+
+    onErrorTypeChanged: {
+        if (errorType === ErrorType.DrawerOutOfFilament &&
+                currentState === ProcessStateType.UnloadingFilament) {
+            doingAutoUnload = true
+        }
+    }
     onCurrentStateChanged: {
+        if (currentState != ProcessStateType.UnloadingFilament) {
+            doingAutoUnload = false
+        }
         switch(currentState) {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
             snipMaterialAlertAcknowledged = false
             delayedEnableRetryButton()
             overrideInvalidMaterial = false
-            if(bot.process.errorCode > 0) {
+            // (sorry)
+            if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
                 state = "error"
             }
@@ -176,7 +190,7 @@ Item {
                     isLoadFilament ? state = "loaded_filament" :
                                      state = "unloaded_filament"
                 }
-                if(bot.process.errorCode > 0) {
+                if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                     errorCode = bot.process.errorCode
                     state = "error"
                 }
@@ -639,6 +653,7 @@ Item {
             when: (bot.process.stateType == ProcessStateType.UnloadingFilament ||
                    bot.process.stateType == ProcessStateType.CleaningUp) &&
                   (bot.process.type == ProcessType.Unload ||
+                   bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
@@ -648,13 +663,19 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: "UNLOADING"
+                text: {
+                    doingAutoUnload ?  "OUT OF FILAMENT" : "UNLOADING"
+                }
                 anchors.topMargin: 165
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "The material is backing out of the extruder, please wait."
+                text: {
+                    doingAutoUnload ?
+                        "Please wait while the remaining material backs out of the printer." :
+                        "The material is backing out of the extruder, please wait."
+                }
                 anchors.topMargin: 30
             }
 

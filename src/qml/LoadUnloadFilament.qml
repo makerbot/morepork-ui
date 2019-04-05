@@ -91,6 +91,7 @@ LoadUnloadFilamentForm {
                         bot.unloadFilament(bayID - 1, true, true)
                 }
             }
+            state = "base_state"
         }
     }
 }
