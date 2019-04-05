@@ -1773,14 +1773,15 @@ ApplicationWindow {
                     height: 150
 
                     TitleText {
-                        text: "TOOLHEAD DISCONNECT"
+                        text: "CARRIAGE COMMUNICATION ERROR"
                         anchors.horizontalCenter: parent.horizontalCenter
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                     BodyText{
                         text: {
-                            "One or more toolheads are not communicating or are "+
-                            "disconnected.\nPlease contact Support."
+                            "The printer’s carriage is reporting communication drop-outs.\n"+
+                            "Try restarting the printer. If this happens again, please\n"+
+                            "contact MakerBot support."
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
