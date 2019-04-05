@@ -128,15 +128,15 @@ Item {
                     if(extruderPresent) {
                         switch(extruderID) {
                         case 1:
-                            "MATERIAL EXTRUDER"
+                            qsTr("MATERIAL EXTRUDER")
                             break;
                         case 2:
-                            "SUPPORT EXTRUDER"
+                            qsTr("SUPPORT EXTRUDER")
                             break;
                         }
                     }
                     else {
-                        "NO EXTRUDER DETECTED"
+                        qsTr("NO EXTRUDER DETECTED")
                     }
                 }
                 lineHeight: 1.6
@@ -169,7 +169,7 @@ Item {
 
                     Text {
                         id: temperature_label
-                        text: "TEMPERATURE"
+                        text: qsTr("TEMPERATURE")
                         antialiasing: false
                         smooth: false
                         color: "#cbcbcb"
@@ -181,7 +181,7 @@ Item {
 
                     Text {
                         id: usage_label
-                        text: "USAGE"
+                        text: qsTr("USAGE")
                         antialiasing: false
                         smooth: false
                         color: "#cbcbcb"
@@ -236,7 +236,7 @@ Item {
                 id: detachButton
                 anchors.top: extruderStats.bottom
                 anchors.topMargin: 15
-                label: "DETACH"
+                label: qsTr("DETACH")
                 visible: false
                 buttonHeight: 46
                 buttonWidth: 130
@@ -250,7 +250,7 @@ Item {
                 anchors.bottomMargin: 20
                 buttonHeight: 46
                 buttonWidth: 130
-                label: "ATTACH"
+                label: qsTr("ATTACH")
                 label_size: 18
                 visible: !extruderPresent
             }
@@ -281,10 +281,10 @@ Item {
                             }
                         }
                         else if(extruderFilamentPresent) {
-                            "UNKNOWN\nMATERIAL"
+                            qsTr("UNKNOWN\nMATERIAL")
                         }
                         else {
-                            "NO MATERIAL"
+                            qsTr("NO MATERIAL")
                         }
                     }
                     font.capitalization: Font.AllUppercase
@@ -305,7 +305,7 @@ Item {
                 anchors.topMargin: 130
                 buttonHeight: 46
                 buttonWidth: 165
-                label: "MATERIAL"
+                label: qsTr("MATERIAL")
                 label_size: 18
                 disable_button: !extruderPresent
                 opacity: !extruderPresent ? 0.4 : 1

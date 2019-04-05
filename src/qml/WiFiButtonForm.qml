@@ -45,7 +45,7 @@ Button {
 
     Text {
         id: wifiName
-        text: "WiFi Name"
+        text: qsTr("WiFi Name")
         anchors.left: parent.left
         anchors.leftMargin: 75
         anchors.verticalCenter: parent.verticalCenter

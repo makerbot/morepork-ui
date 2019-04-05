@@ -84,5 +84,7 @@ int main(int argc, char ** argv) {
         else
             qCritical() << "Cannot find morepork_main_qml";
 
+    ui_trans.selectLanguage(QStringLiteral("eh"));
+
     return qapp.exec();
 }

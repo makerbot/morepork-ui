@@ -111,14 +111,16 @@ Item {
                 font.weight: Font.Light
                 text: {
                     if(!bot.net.wifiEnabled) {
-                        "Turn on WiFi and try again."
+                        qsTr("Turn on WiFi and try again.")
                     } else if ((wifiList.count == 0) && (bot.net.wifiState == WifiState.Searching)) {
-                        "Searching..."
+                        qsTr("Searching...")
                     } else if (bot.net.wifiState == WifiState.NoWifiFound) {
-                        "No wireless networks found."
+                        qsTr("No wireless networks found.")
                     } else if (bot.net.wifiState == WifiState.NotConnected &&
                             bot.net.wifiError != WifiError.NoError) {
-                        "Search for wireless networks failed."
+                        qsTr("Search for wireless networks failed.")
+                    } else {
+                        ""
                     }
                 }
                 anchors.verticalCenter: parent.verticalCenter
@@ -298,7 +300,7 @@ Item {
                 antialiasing: false
 
                 Text {
-                    text: "ENTER PASSWORD FOR " + selectedWifiName
+                    text: qsTr("ENTER PASSWORD FOR %1").arg(selectedWifiName)
                     font.capitalization: Font.AllUppercase
                     font.letterSpacing: 1.5
                     font.wordSpacing: 1
@@ -348,7 +350,7 @@ Item {
                     anchors.top: parent.top
                     anchors.topMargin: 48
                     label_width: 150
-                    label: "CONNECT"
+                    label: qsTr("CONNECT")
                     buttonWidth: 160
                     buttonHeight: 50
                     button_mouseArea.onClicked: {
@@ -395,7 +397,7 @@ Item {
                     Text {
                         id: show_password_text
                         color: "#ffffff"
-                        text: "Show Password"
+                        text: qsTr("Show Password")
                         font.letterSpacing: 2
                         font.family: "Antennae"
                         font.weight: Font.Light
@@ -522,7 +524,7 @@ Item {
                     Text {
                         id: left_text
                         color: "#ffffff"
-                        text: "YES"
+                        text: qsTr("YES")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -572,7 +574,7 @@ Item {
                     Text {
                         id: right_text
                         color: "#ffffff"
-                        text: "CANCEL"
+                        text: qsTr("CANCEL")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -620,17 +622,17 @@ Item {
                         color: "#ffffff"
                         text: {
                             if(bot.net.wifiState == WifiState.Connecting) {
-                                "CANCEL"
+                                qsTr("CANCEL")
                             }
                             else {
                                 if(bot.net.wifiError == WifiError.ConnectFailed) {
-                                    "RETRY"
+                                    qsTr("RETRY")
                                 }
                                 else if(bot.net.wifiError == WifiError.InvalidPassword) {
-                                    "CLOSE"
+                                    qsTr("CLOSE")
                                 }
                                 else {
-                                    "CLOSE"
+                                    qsTr("CLOSE")
                                 }
                             }
                         }
@@ -697,25 +699,25 @@ Item {
                     color: "#cbcbcb"
                     text: {
                         if(isForgetEnabled) {
-                            "FORGET " + selectedWifiName + "?"
+                            qsTr("FORGET %1?").arg(selectedWifiName)
                         }
                         else if(bot.net.wifiState == WifiState.Connecting ||
                                 bot.net.wifiState == WifiState.Connected ||
                                 bot.net.wifiState == WifiState.Connected) {
-                            "CONNECTING TO " + selectedWifiName
+                            qsTr("CONNECTING TO %1").arg(selectedWifiName)
                         }
                         else if(bot.net.wifiState == WifiState.Disconnecting) {
-                            "DISCONNECT FROM " + selectedWifiName + "?"
+                            qsTr("DISCONNECT FROM %1?").arg(selectedWifiName)
                         }
                         else {
                             if(bot.net.wifiError == WifiError.InvalidPassword) {
-                                "INVALID PASSWORD"
+                                qsTr("INVALID PASSWORD")
                             }
                             else if(bot.net.wifiError == WifiError.ConnectFailed) {
-                                "FAILED TO CONNECT TO " + selectedWifiName
+                                qsTr("FAILED TO CONNECT TO %1").arg(selectedWifiName)
                             }
                             else if(bot.net.wifiState == WifiState.NotConnected) {
-                                "CONNECTION FAILED"
+                                qsTr("CONNECTION FAILED")
                             }
                         }
                     }

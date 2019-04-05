@@ -219,7 +219,7 @@ Item {
             property int backSwipeIndex: 0
             property bool hasAltBack: true
             smooth: false
-            visible: false
+            visible: true
 
             function altBack() {
                 if(!inFreStep) {
@@ -259,10 +259,10 @@ Item {
                         fileThumbnail.width: 70
                         fileThumbnail.height: 53
                         fileThumbnail.anchors.leftMargin: 60
-                        filenameText.text: "INTERNAL STORAGE"
-                        filePrintTime.text: "FILES SAVED ON PRINTER"
+                        filenameText.text: qsTr("INTERNAL STORAGE")
+                        filePrintTime.text: qsTr("FILES SAVED ON PRINTER")
                         fileMaterial.visible: false
-                        visible: false
+                        visible: true
                         onClicked: {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
@@ -282,9 +282,9 @@ Item {
                         id: buttonUsbStorage
                         fileThumbnail.source: "qrc:/img/usb_icon.png"
                         fileThumbnail.opacity: usbStorageConnected ? 1 : 0.4
-                        filenameText.text: "USB"
+                        filenameText.text: qsTr("USB")
                         filenameText.opacity: usbStorageConnected ? 1 : 0.4
-                        filePrintTime.text: usbStorageConnected ? "EXTERNAL STORAGE" : "PLEASE INSERT A USB DRIVE"
+                        filePrintTime.text: usbStorageConnected ? qsTr("EXTERNAL STORAGE") : qsTr("PLEASE INSERT A USB DRIVE")
                         filePrintTime.opacity: usbStorageConnected ? 1 : 0.4
                         fileMaterial.visible: false
                         onClicked: {
@@ -352,7 +352,6 @@ Item {
             property int backSwipeIndex: 0
             property bool hasAltBack: true
             smooth: false
-            visible: false
 
             function altBack() {
                 var backDir = storage.backStackPop()
@@ -369,7 +368,7 @@ Item {
                 color: "#ffffff"
                 font.family: "Antennae"
                 font.weight: Font.Light
-                text: "No Items"
+                text: qsTr("No Items")
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize: 20

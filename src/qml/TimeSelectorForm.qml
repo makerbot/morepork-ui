@@ -17,6 +17,10 @@ Item {
     }
 
     function formatTime() {
+        if (systemTime.indexOf(" ") < 0) {
+            // not ready for parsing; do nothing
+            return
+        }
         // 2018-09-10 18:04:16
         var time_elements = systemTime.split(" ")
         var date_element = time_elements[0] // 2018-09-10
@@ -241,7 +245,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 50
         anchors.horizontalCenter: parent.horizontalCenter
-        label: "DONE"
+        label: qsTr("DONE")
         opacity: {
             button_mouseArea.enabled ? 1.0 : 0.1
         }

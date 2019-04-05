@@ -308,7 +308,7 @@ Item {
             Text {
                 id: material_bay_text
                 color: "#cbcbcb"
-                text: "MATERIAL BAY " + filamentBayID
+                text: qsTr("MATERIAL BAY %1").arg(filamentBayID)
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 font.letterSpacing: 5
                 font.family: "Antenna"
@@ -334,10 +334,10 @@ Item {
                             filamentColorName
                         }
                         else if(extruderFilamentPresent) {
-                            "UNKNOWN MATERIAL"
+                            qsTr("UNKNOWN MATERIAL")
                         }
                         else {
-                            "NO MATERIAL DETECTED"
+                            qsTr("NO MATERIAL DETECTED")
                         }
                     }
                     font.capitalization: Font.AllUppercase
@@ -371,8 +371,7 @@ Item {
                     id: material_quantity_text
                     color: "#ffffff"
                     text: spoolPresent ?
-                            filamentQuantity +
-                            "KG" + " REMAINING" :
+                            qsTr("%1KG  REMAINING").arg(filamentQuantity) :
                             " "
                     font.letterSpacing: 4
                     font.family: "Antenna"
@@ -406,14 +405,14 @@ Item {
                                       135 : 120
                     buttonHeight: 50
                     label: extruderFilamentPresent ?
-                               "PURGE" : "LOAD"
+                               qsTr("PURGE") : qsTr("LOAD")
                 }
 
                 RoundedButton {
                     id: unloadButton
                     buttonWidth: 150
                     buttonHeight: 50
-                    label: "UNLOAD"
+                    label: qsTr("UNLOAD")
                 }
             }
         }
@@ -429,7 +428,7 @@ Item {
 
         Text {
             id: text1
-            text: "Int."
+            text: qsTr("Int.")
             anchors.horizontalCenterOffset: -25
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: switch1.bottom
@@ -441,7 +440,7 @@ Item {
 
         Text {
             id: text2
-            text: "Ext."
+            text: qsTr("Ext.")
             anchors.horizontalCenterOffset: 25
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: switch1.bottom

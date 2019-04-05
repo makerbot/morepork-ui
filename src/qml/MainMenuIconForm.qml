@@ -41,7 +41,7 @@ Item {
             id: textIconDesc
             x: 52
             color: "#a0a0a0"
-            text: "Icon Name"
+            text: qsTr("Icon Name")
             anchors.top: parent.top
             anchors.topMargin: 130
             antialiasing: false

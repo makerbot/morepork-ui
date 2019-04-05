@@ -23,7 +23,7 @@ Item {
 
         Text {
             id: filamentBayLabelProperty
-            text: "FILAMENT BAY LABEL"
+            text: qsTr("FILAMENT BAY LABEL")
             font.letterSpacing: 2
             font.pixelSize: 15
             font.family: "Antennae"
@@ -40,33 +40,33 @@ Item {
 
         AdvancedInfoElement {
             id: temperatureProperty
-            label: "TEMPERATURE"
+            label: qsTr("TEMPERATURE")
         }
 
         AdvancedInfoElement {
             id: humidityProperty
-            label: "HUMIDITY"
+            label: qsTr("HUMIDITY")
         }
 
         AdvancedInfoElement {
             id: filamentPresentProperty
-            label: "FILAMENT PRESENT"
+            label: qsTr("FILAMENT PRESENT")
         }
 
         AdvancedInfoElement {
             id: tagPresentProperty
-            label: "TAG PRESENT"
+            label: qsTr("TAG PRESENT")
         }
 
         AdvancedInfoElement {
             id: tagUidProperty
-            label: "TAG UID"
+            label: qsTr("TAG UID")
             value_anchors.leftMargin: value == "Unknown" ? 25 : -50
         }
 
         AdvancedInfoElement {
             id: tagVerifiedProperty
-            label: "TAG VERIFIED"
+            label: qsTr("TAG VERIFIED")
             value_element.visible: {
                 !waitingSpinner.spinnerActive
             }
@@ -85,12 +85,12 @@ Item {
 
         AdvancedInfoElement {
             id: verificationDoneProperty
-            label: "VERIFICATION DONE"
+            label: qsTr("VERIFICATION DONE")
         }
 
         AdvancedInfoElement {
             id: errorCodeProperty
-            label: "ERROR"
+            label: qsTr("ERROR")
         }
     }
 }

@@ -462,7 +462,7 @@ void MoreporkStorage::printFileListReset(){
   storageIsEmptySet(true);
   QList<QObject*> print_file_list;
   print_file_list.append(new PrintFileInfo("/null/path",
-    "No Items Present", "No Items Present", QDateTime(), false));
+    tr("No Items Present"), tr("No Items Present"), QDateTime(), false));
   printFileListSet(print_file_list);
 }
 

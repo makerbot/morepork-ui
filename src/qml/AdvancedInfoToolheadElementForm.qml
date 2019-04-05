@@ -25,7 +25,7 @@ Item {
 
         Text {
             id: toolheadLabelProperty
-            text: "TOOLHEAD LABEL"
+            text: qsTr("TOOLHEAD LABEL")
             font.letterSpacing: 2
             font.pixelSize: 15
             font.family: "Antennae"
@@ -42,52 +42,52 @@ Item {
 
         AdvancedInfoElement {
             id: attachedProperty
-            label: "ATTACHED"
+            label: qsTr("ATTACHED")
         }
 
         AdvancedInfoElement {
             id: filamentPresentProperty
-            label: "FILAMENT PRESENT"
+            label: qsTr("FILAMENT PRESENT")
         }
 
         AdvancedInfoElement {
             id: currentTempProperty
-            label: "CURRENT TEMP."
+            label: qsTr("CURRENT TEMP.")
         }
 
         AdvancedInfoElement {
             id: targetTempProperty
-            label: "TARGET TEMP."
+            label: qsTr("TARGET TEMP.")
         }
 
         AdvancedInfoElement {
             id: encoderTicksProperty
-            label: "ENCODER TICKS"
+            label: qsTr("ENCODER TICKS")
         }
 
         AdvancedInfoElement {
             id: activeFanRpmProperty
-            label: "ACTIVE FAN RPM"
+            label: qsTr("ACTIVE FAN RPM")
         }
 
         AdvancedInfoElement {
             id: gradientFanRpmProperty
-            label: "GRADIENT FAN RPM"
+            label: qsTr("GRADIENT FAN RPM")
         }
 
         AdvancedInfoElement {
             id: hesValueProperty
-            label: "HES VALUE"
+            label: qsTr("HES VALUE")
         }
 
         AdvancedInfoElement {
             id: jamEnabledProperty
-            label: "JAM ENABLED"
+            label: qsTr("JAM ENABLED")
         }
 
         AdvancedInfoElement {
             id: errorCodeProperty
-            label: "ERROR"
+            label: qsTr("ERROR")
         }
     }
 }

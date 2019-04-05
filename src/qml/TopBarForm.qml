@@ -133,58 +133,58 @@ Item {
                 case ProcessType.Print:
                     switch(bot.process.stateType) {
                     case ProcessStateType.Loading:
-                        "LOADING"
+                        qsTr("LOADING")
                         break;
                     case ProcessStateType.Printing:
-                        "PRINTING"
+                        qsTr("PRINTING")
                         break;
                     case ProcessStateType.Pausing:
-                        "PAUSING"
+                        qsTr("PAUSING")
                         break;
                     case ProcessStateType.Resuming:
-                        "RESUMING"
+                        qsTr("RESUMING")
                         break;
                     case ProcessStateType.Paused:
-                        "PAUSED"
+                        qsTr("PAUSED")
                         break;
                     case ProcessStateType.Failed:
-                        "FAILED"
+                        qsTr("FAILED")
                         break;
                     case ProcessStateType.Completed:
-                        "PRINT COMPLETE"
+                        qsTr("PRINT COMPLETE")
                         break;
                     }
                     break;
                 case ProcessType.Load:
                     switch(bot.process.stateType) {
                     case ProcessStateType.Preheating:
-                        "PREHEATING"
+                        qsTr("PREHEATING")
                         break;
                     case ProcessStateType.Extrusion:
-                        "EXTRUDING"
+                        qsTr("EXTRUDING")
                         break;
                     case ProcessStateType.Stopping:
                     case ProcessStateType.Done:
-                        "MATERIAL LOADED"
+                        qsTr("MATERIAL LOADED")
                         break;
                     default:
-                        "LOAD MATERIAL"
+                        qsTr("LOAD MATERIAL")
                         break;
                     }
                     break;
                 case ProcessType.Unload:
                     switch(bot.process.stateType) {
                     case ProcessStateType.Preheating:
-                        "PREHEATING"
+                        qsTr("PREHEATING")
                         break;
                     case ProcessStateType.UnloadingFilament:
-                        "UNLOADING MATERIAL"
+                        qsTr("UNLOADING MATERIAL")
                         break;
                     case ProcessStateType.Done:
-                        "MATERIAL UNLOADED"
+                        qsTr("MATERIAL UNLOADED")
                         break;
                     default:
-                        "UNLOAD MATERIAL"
+                        qsTr("UNLOAD MATERIAL")
                         break;
                     }
                     break;
@@ -197,99 +197,100 @@ Item {
                         switch(printPage.printSwipeView.currentIndex) {
                         case 0:
                         case 1:
-                            "CHOOSE A FILE"
+                            qsTr("CHOOSE A FILE")
                             break;
                         case 2:
-                            "PRINT"
+                            qsTr("PRINT")
                             break;
                         case 3:
-                            "FILE INFORMATION"
+                            qsTr("FILE INFORMATION")
                             break;
                         }
                         break;
                     case 2:
                         switch(extruderPage.extruderSwipeView.currentIndex) {
                         case 0:
-                            "EXTRUDERS"
+                            qsTr("EXTRUDERS")
                             break;
                         case 1:
-                            "ATTACHING EXTRUDERS"
+                            qsTr("ATTACHING EXTRUDERS")
                             break;
                         default:
-                            "EXTRUDERS"
+                            qsTr("EXTRUDERS")
                             break;
                         }
                         break;
                     case 3:
                         switch(settingsPage.settingsSwipeView.currentIndex) {
                         case 1:
-                            bot.name + " INFO"
+                            qsTr("%1 INFO").arg(bot.name)
                             break;
                         case 2:
-                            "CHANGE PRINTER NAME"
+                            qsTr("CHANGE PRINTER NAME")
                             break;
                         case 3:
-                            "CHOOSE WIFI NETWORK"
+                            qsTr("CHOOSE WIFI NETWORK")
                             break;
                         case 4:
-                            "AUTHORIZE MAKERBOT ACCOUNT"
+                            qsTr("AUTHORIZE MAKERBOT ACCOUNT")
                             break;
                         case 5:
-                            "SOFTWARE UPDATE"
+                            qsTr("SOFTWARE UPDATE")
                             break;
                         case 6:
-                            "CALIBRATE EXTRUDERS"
+                            qsTr("CALIBRATE EXTRUDERS")
                             break;
                         case 7:
                             switch(settingsPage.timePage.timeSwipeView.currentIndex) {
                             case 0:
-                                "SET TIME ZONE"
+                                qsTr("SET TIME ZONE")
                                 break;
                             case 1:
-                                "SET CURRENT TIME"
+                                qsTr("SET CURRENT TIME")
                                 break;
                             }
                             break;
                         case 8:
                             switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
                             case 1:
-                                bot.name + " SENSOR INFO"
+                                qsTr("%1 SENSOR INFO").arg(bot.name)
                                 break;
                             case 2:
-                                "PREHEAT"
+                                qsTr("PREHEAT")
                                 break;
                             case 3:
-                                "ASSISTED LEVELING"
+                                qsTr("ASSISTED LEVELING")
                                 break;
                             default:
-                                "ADVANCED"
+                                qsTr("ADVANCED")
                                 break;
                             }
                             break;
                         default:
-                            "SETTINGS"
+                            qsTr("SETTINGS")
                             break;
                         }
                         break;
                     case 4:
-                        "INFO"
+                        qsTr("INFO")
                         break;
                     case 5:
-                        "MATERIAL"
+                        qsTr("MATERIAL")
                         break;
                     case 6:
                         switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
                         case 1:
-                            bot.name + " SENSOR INFO"
+                            qsTr("%1 SENSOR INFO").arg(bot.name)
+                                break;
                             break;
                         case 2:
-                            "PREHEAT"
+                            qsTr("PREHEAT")
                             break;
                         case 3:
-                            "ASSISTED LEVELING"
+                            qsTr("ASSISTED LEVELING")
                             break;
                         default:
-                            "ADVANCED"
+                            qsTr("ADVANCED")
                             break;
                         }
                         break;

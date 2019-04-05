@@ -73,7 +73,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonSortAZ
-                buttonText.text: "A-Z"
+                buttonText.text: qsTr("A-Z")
                 buttonImage.source: ""
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -86,7 +86,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonSortDateAdded
-                buttonText.text: "DATE ADDED"
+                buttonText.text: qsTr("DATE ADDED")
                 buttonImage.source: "qrc:/img/check_circle_small.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -99,7 +99,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonSortPrintTime
-                buttonText.text: "PRINT TIME"
+                buttonText.text: qsTr("PRINT TIME")
                 buttonImage.source: ""
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

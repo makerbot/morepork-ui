@@ -51,7 +51,7 @@ Button {
         Text {
             id: filenameText
             width: 525
-            text: "Filename Text"
+            text: qsTr("Filename Text")
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Bold
@@ -74,7 +74,7 @@ Button {
 
             Text {
                 id: filePrintTime
-                text: "File Print Time"
+                text: qsTr("File Print Time")
                 font.family: "Antenna"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -96,7 +96,7 @@ Button {
 
             Text {
                 id: fileMaterial
-                text: "File Material"
+                text: qsTr("File Material")
                 font.capitalization: Font.AllUppercase
                 font.family: "Antenna"
                 font.letterSpacing: 3

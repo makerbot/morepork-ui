@@ -31,7 +31,7 @@ Item {
         Text {
             id: title_text
             color: "#ffffff"
-            text: "FIRMWARE " + bot.version + "\n" + "SUCCESSFULLY\nINSTALLED"
+            text: qsTr("FIRMWARE %1\nSUCCESSFULLY\nINSTALLED").arg(bot.version)
             font.letterSpacing: 2
             anchors.top: parent.top
             anchors.topMargin: 35
@@ -47,7 +47,7 @@ Item {
             anchors.topMargin: 30
             label_width: 175
             buttonWidth: 175
-            label: "CONTINUE"
+            label: qsTr("CONTINUE")
             buttonHeight: 50
             button_mouseArea.onClicked: {
                 fre.acknowledgeFirstBoot()

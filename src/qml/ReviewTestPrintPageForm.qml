@@ -32,7 +32,7 @@ Item {
             id: text1
             width: 500
             color: "#cbcbcb"
-            text: "The support material should be centered inside the outer space and easily\nseparated when the raft is removed. If not, run the extruder calibration again.\nFor more detailed info visit Makerbot.com/Calibration"
+            text: qsTr("The support material should be centered inside the outer space and easily\nseparated when the raft is removed. If not, run the extruder calibration again.\nFor more detailed info visit Makerbot.com/Calibration")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             Layout.fillWidth: true
@@ -53,7 +53,7 @@ Item {
                 id: calibrate_button
                 buttonWidth: 280
                 buttonHeight: 50
-                label: "CALIBRATE AGAIN"
+                label: qsTr("CALIBRATE AGAIN")
                 visible: true
                 anchors.left: parent.left
                 anchors.leftMargin: 155
@@ -64,7 +64,7 @@ Item {
                 id: continue_button
                 buttonWidth: 170
                 buttonHeight: 50
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 visible: true
                 anchors.right: parent.right
                 anchors.rightMargin: 155

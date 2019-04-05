@@ -83,7 +83,7 @@ Item {
             Text {
                 id: title
                 width: 360
-                text: "BUILD PLATFORM\nLEVELING"
+                text: qsTr("BUILD PLATFORM\nLEVELING")
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 anchors.top: parent.top
@@ -110,14 +110,14 @@ Item {
                 font.family: "Antennae"
                 font.pixelSize: 18
                 font.weight: Font.Light
-                text: "Assisted leveling will check your build platform and prompt you to make any adjustments."
+                text: qsTr("Assisted leveling will check your build platform and prompt you to make any adjustments.")
                 lineHeight: 1.2
                 visible: true
             }
 
             RoundedButton {
                 id: startDoneButton
-                label: "START LEVELING"
+                label: qsTr("START LEVELING")
                 buttonWidth: 260
                 buttonHeight: 50
                 anchors.left: parent.left
@@ -141,7 +141,7 @@ Item {
         Text {
             id: processText
             width: 325
-            text: "PROCESS"
+            text: qsTr("PROCESS")
             anchors.top: parent.top
             anchors.topMargin: 50
             anchors.left: parent.right
@@ -163,7 +163,7 @@ Item {
             font.family: "Antennae"
             font.pixelSize: 18
             font.weight: Font.Light
-            text: "PROCESS DESCRIPTION"
+            text: qsTr("PROCESS DESCRIPTION")
             anchors.top: processText.bottom
             anchors.topMargin: 25
             anchors.left: parent.right
@@ -184,7 +184,7 @@ Item {
 
             Text {
                 id: extruder_A_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
+                text: qsTr("%1C").arg(bot.extruderACurrentTemp)
                 font.family: "Antennae"
                 color: "#ffffff"
                 font.letterSpacing: 3
@@ -201,7 +201,7 @@ Item {
 
             Text {
                 id: extruder_A_target_temperature_text
-                text: "50C"
+                text: qsTr("50C")
                 font.family: "Antennae"
                 color: "#ffffff"
                 font.letterSpacing: 3
@@ -216,7 +216,7 @@ Item {
 
             Text {
                 id: extruder_B_current_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
+                text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
                 font.family: "Antennae"
                 color: "#ffffff"
                 font.letterSpacing: 3
@@ -233,7 +233,7 @@ Item {
 
             Text {
                 id: extruder_B_target_temperature_text
-                text: "50C"
+                text: qsTr("50C")
                 font.family: "Antennae"
                 color: "#ffffff"
                 font.letterSpacing: 3
@@ -254,7 +254,7 @@ Item {
 
         Text {
             id: leveling_instruction
-            text: "Text"
+            text: qsTr("Text")
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 120
             lineHeight: 1.3
@@ -300,7 +300,7 @@ Item {
             Text {
                 id: low
                 color: "#ffffff"
-                text: "TOO CLOSE"
+                text: qsTr("TOO CLOSE")
                 anchors.horizontalCenterOffset: -250
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -313,7 +313,7 @@ Item {
             Text {
                 id: ok
                 color: "#ffffff"
-                text: "LEVEL"
+                text: qsTr("LEVEL")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -325,7 +325,7 @@ Item {
             Text {
                 id: high
                 color: "#ffffff"
-                text: "TOO FAR"
+                text: qsTr("TOO FAR")
                 anchors.horizontalCenterOffset: 250
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -343,7 +343,7 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             buttonWidth: 180
             buttonHeight: 45
-            label: "NEXT STEP"
+            label: qsTr("NEXT STEP")
             visible: false
         }
     }
@@ -367,18 +367,18 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "OPEN DOOR AND\nREMOVE BUILD PLATE"
+                text: qsTr("OPEN DOOR AND\nREMOVE BUILD PLATE")
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "The extruders need to hit precise points under the build plate."
+                text: qsTr("The extruders need to hit precise points under the build plate.")
             }
 
             PropertyChanges {
                 target: startDoneButton
                 buttonWidth: 120
-                label: "NEXT"
+                label: qsTr("NEXT")
                 disable_button: false
                 opacity: 1
             }
@@ -420,17 +420,17 @@ Item {
                 text: {
                     switch(bot.process.stateType) {
                     case ProcessStateType.CheckLeftLevel:
-                        "MOVING TO THE\nLEFT LEVELING POINT"
+                        qsTr("MOVING TO THE\nLEFT LEVELING POINT")
                         break;
                     case ProcessStateType.CheckRightLevel:
-                        "MOVING TO THE\nRIGHT LEVELING POINT"
+                        qsTr("MOVING TO THE\nRIGHT LEVELING POINT")
                         break;
                     default:
                         if(bot.process.stepStr == "cooling") {
-                            "COOLING EXTRUDER\nNOZZLES"
+                            qsTr("COOLING EXTRUDER\nNOZZLES")
                         }
                         else {
-                            "CHECKING\nLEVELNESS"
+                            qsTr("CHECKING\nLEVELNESS")
                         }
                         break;
                     }
@@ -443,14 +443,14 @@ Item {
                     switch(bot.process.stateType) {
                     case ProcessStateType.CheckLeftLevel:
                     case ProcessStateType.CheckRightLevel:
-                        "The system is moving into position."
+                        qsTr("The system is moving into position.")
                         break;
                     default:
                         if(bot.process.stepStr == "cooling") {
-                            "Leveling will continue after the nozzles cool down"
+                            qsTr("Leveling will continue after the nozzles cool down")
                         }
                         else {
-                            "The extruders are checking the levelness of the build platform."
+                            qsTr("The extruders are checking the levelness of the build platform.")
                         }
                         break;
                     }
@@ -485,7 +485,7 @@ Item {
 
             PropertyChanges {
                 target: leveling_instruction
-                text: "Locate the two leveling hex screws under the part of the build platform.\nPushing up with too much force on the hex key\ncould cause false readings."
+                text: qsTr("Locate the two leveling hex screws under the part of the build platform.\nPushing up with too much force on the hex key\ncould cause false readings.")
                 anchors.bottomMargin: 100
                 visible: true
             }
@@ -560,10 +560,10 @@ Item {
                 text: {
                     switch(bot.process.stateType) {
                     case ProcessStateType.LevelingLeft:
-                        "Adjust front left height"
+                        qsTr("Adjust front left height")
                         break;
                     case ProcessStateType.LevelingRight:
-                        "Adjust front right height"
+                        qsTr("Adjust front right height")
                         break;
                     default:
                         ""
@@ -653,20 +653,20 @@ Item {
             PropertyChanges {
                 target: title
                 width: 390
-                text: "INSERT BUILD PLATE\nAND CLOSE DOOR"
+                text: qsTr("INSERT BUILD PLATE\nAND CLOSE DOOR")
                 anchors.topMargin: 0
                 font.pixelSize: 25
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "To finish leveling please insert the build\nplate back into the printer and close the\nbuild chamber door."
+                text: qsTr("To finish leveling please insert the build\nplate back into the printer and close the\nbuild chamber door.")
             }
 
             PropertyChanges {
                 target: startDoneButton
                 buttonWidth: 180
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 opacity: 1
                 disable_button: false
             }
@@ -700,20 +700,20 @@ Item {
             PropertyChanges {
                 target: title
                 width: 390
-                text: "BUILD PLATFORM\nIS LEVEL"
+                text: qsTr("BUILD PLATFORM\nIS LEVEL")
                 anchors.topMargin: 0
                 font.pixelSize: 25
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "Sensors indicate the build platform\nis level."
+                text: qsTr("Sensors indicate the build platform\nis level.")
             }
 
             PropertyChanges {
                 target: startDoneButton
                 buttonWidth: 120
-                label: "DONE"
+                label: qsTr("DONE")
                 opacity: 1
                 disable_button: false
             }
@@ -741,7 +741,7 @@ Item {
             PropertyChanges {
                 target: title
                 width: 390
-                text: "ASSISTED LEVELING FAILED"
+                text: qsTr("ASSISTED LEVELING FAILED")
                 font.pixelSize: 25
                 anchors.topMargin: 55
             }
@@ -756,7 +756,7 @@ Item {
                 disable_button: false
                 buttonWidth: 120
                 anchors.topMargin: "-10"
-                label: "DONE"
+                label: qsTr("DONE")
                 opacity: 1
             }
 
@@ -786,7 +786,7 @@ Item {
 
             PropertyChanges {
                 target: processText
-                text: "CANCELLING LEVELING"
+                text: qsTr("CANCELLING LEVELING")
             }
 
             PropertyChanges {
@@ -801,7 +801,7 @@ Item {
 
             PropertyChanges {
                 target: processDescriptionText
-                text: "Please wait"
+                text: qsTr("Please wait")
             }
         }
     ]
@@ -882,7 +882,7 @@ Item {
                     Text {
                         id: cancel_leveling_text
                         color: "#ffffff"
-                        text: "CANCEL LEVELING"
+                        text: qsTr("CANCEL LEVELING")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -920,7 +920,7 @@ Item {
                     Text {
                         id: continue_leveling_text
                         color: "#ffffff"
-                        text: "CONTINUE LEVELING"
+                        text: qsTr("CONTINUE LEVELING")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -956,7 +956,7 @@ Item {
                 Text {
                     id: cancel_text
                     color: "#cbcbcb"
-                    text: "CANCEL ASSISTED LEVELING"
+                    text: qsTr("CANCEL ASSISTED LEVELING")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -967,7 +967,7 @@ Item {
                 Text {
                     id: cancel_description_text
                     color: "#cbcbcb"
-                    text: "Are you sure you want to cancel the leveling process?"
+                    text: qsTr("Are you sure you want to cancel the leveling process?")
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

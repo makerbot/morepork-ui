@@ -90,7 +90,7 @@ Item {
                     MenuButton {
                         id: buttonPrinterInfo
                         buttonImage.source: "qrc:/img/icon_printer_info.png"
-                        buttonText.text: "PRINTER INFO"
+                        buttonText.text: qsTr("PRINTER INFO")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -100,7 +100,7 @@ Item {
                     MenuButton {
                         id: buttonChangePrinterName
                         buttonImage.source: "qrc:/img/icon_name_printer.png"
-                        buttonText.text: "CHANGE PRINTER NAME"
+                        buttonText.text: qsTr("CHANGE PRINTER NAME")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -110,7 +110,7 @@ Item {
                     MenuButton {
                         id: buttonWiFi
                         buttonImage.source: "qrc:/img/icon_wifi.png"
-                        buttonText.text: "WiFi"
+                        buttonText.text: qsTr("WiFi")
 
                         SlidingSwitch {
                             id: switchWifi
@@ -137,7 +137,7 @@ Item {
                     MenuButton {
                         id: buttonAuthorizeAccounts
                         buttonImage.source: "qrc:/img/icon_authorize_account.png"
-                        buttonText.text: "AUTHORIZE MAKERBOT ACCOUNT"
+                        buttonText.text: qsTr("AUTHORIZE MAKERBOT ACCOUNT")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -147,7 +147,7 @@ Item {
                     MenuButton {
                         id: buttonDeauthorizeAccounts
                         buttonImage.source: "qrc:/img/icon_deauthorize_accounts.png"
-                        buttonText.text: "DEAUTHORIZE MAKERBOT ACCOUNTS"
+                        buttonText.text: qsTr("DEAUTHORIZE MAKERBOT ACCOUNTS")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -157,7 +157,7 @@ Item {
                     MenuButton {
                         id: buttonFirmwareUpdate
                         buttonImage.source: "qrc:/img/icon_software_update.png"
-                        buttonText.text: "SOFTWARE UPDATE"
+                        buttonText.text: qsTr("SOFTWARE UPDATE")
                         buttonNeedsAction: isfirmwareUpdateAvailable
                     }
 
@@ -168,7 +168,7 @@ Item {
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
-                        buttonText.text: "CALIBRATE EXTRUDERS"
+                        buttonText.text: qsTr("CALIBRATE EXTRUDERS")
                         enabled: !isProcessRunning()
                     }
 
@@ -179,7 +179,7 @@ Item {
                     MenuButton {
                         id: buttonTime
                         buttonImage.source: "qrc:/img/icon_time_and_date.png"
-                        buttonText.text: "TIME"
+                        buttonText.text: qsTr("TIME")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -189,7 +189,7 @@ Item {
                     MenuButton {
                         id: buttonAdvancedSettings
                         buttonImage.source: "qrc:/img/icon_preheat.png"
-                        buttonText.text: "ADVANCED"
+                        buttonText.text: qsTr("ADVANCED")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -199,7 +199,7 @@ Item {
                     MenuButton {
                         id: buttonShutdown
                         buttonImage.source: "qrc:/img/icon_power.png"
-                        buttonText.text: "SHUT DOWN"
+                        buttonText.text: qsTr("SHUT DOWN")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -463,11 +463,11 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 TitleText {
-                    text: "SHUT DOWN PRINTER"
+                    text: qsTr("SHUT DOWN PRINTER")
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
                 BodyText{
-                    text: "Are you sure you want to shut down the printer?"
+                    text: qsTr("Are you sure you want to shut down the printer?")
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
@@ -559,7 +559,7 @@ Item {
                     Text {
                         id: remove_accounts_text_deauth_accounts
                         color: "#ffffff"
-                        text: "REMOVE ACCOUNTS"
+                        text: qsTr("REMOVE ACCOUNTS")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -602,7 +602,7 @@ Item {
                     Text {
                         id: cancel_text_deauth_accounts
                         color: "#ffffff"
-                        text: "CANCEL"
+                        text: qsTr("CANCEL")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -642,7 +642,7 @@ Item {
                 Text {
                     id: alert_text_deauth_accounts
                     color: "#cbcbcb"
-                    text: deauthorizeAccountsPopup.clearingAccounts ? "ALL ACCOUNTS DEAUTHORIZED" : "DEAUTHORIZE ACCOUNTS"
+                    text: deauthorizeAccountsPopup.clearingAccounts ? qsTr("ALL ACCOUNTS DEAUTHORIZED") : qsTr("DEAUTHORIZE ACCOUNTS")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -661,7 +661,7 @@ Item {
                 Text {
                     id: description_text_deauth_accounts
                     color: "#cbcbcb"
-                    text: "Deauthorize all accounts currently connected to this printer? You will have to reauthorize any account you wish to connect in the future."
+                    text: qsTr("Deauthorize all accounts currently connected to this printer? You will have to reauthorize any account you wish to connect in the future.")
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true

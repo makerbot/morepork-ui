@@ -83,7 +83,7 @@ Drawer {
                         qsTr("RESUME PRINT") + cpUiTr.emptyStr
                         break;
                     default:
-                        "PAUSE PRINT"
+                        qsTr("PAUSE PRINT")
                         break;
                     }
                 }

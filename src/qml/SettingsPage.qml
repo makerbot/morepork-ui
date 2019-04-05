@@ -54,8 +54,8 @@ SettingsPageForm {
     }
 
     buttonShutdown.onClicked: {
-        shutdownPopup.left_text.text = "CANCEL"
-        shutdownPopup.right_text.text = "SHUT DOWN"
+        shutdownPopup.left_text.text = qsTr("CANCEL")
+        shutdownPopup.right_text.text = qsTr("SHUT DOWN")
         shutdownPopup.showButtonBar = true
         shutdownPopup.showTwoButtons = true
         shutdownPopup.open();

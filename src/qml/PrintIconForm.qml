@@ -143,7 +143,7 @@ Item {
             Text {
                 id: percentage_symbol_text
                 color: "#ffffff"
-                text: "%"
+                text: qsTr("%")
                 antialiasing: false
                 smooth: false
                 anchors.top: parent.top

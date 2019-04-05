@@ -29,9 +29,12 @@ class UiTranslator : public QObject {
 #endif
             // .qm files are generated from .ts files during compilation
             // load the .qm file by referenceing it without the .qm extension
-            QString kFileNameNoExt(QString("morepork_%1").arg(trans_file_suffix));
-            if(!translator_->load(kFilePath + kFileNameNoExt))
-                qDebug() << "error loading translation [" << kFilePath + kFileNameNoExt << "]\n";
+            QString kFileNameNoExt(QString("morepork_%1.ts").arg(trans_file_suffix));
+            if(!translator_->load(kFilePath + kFileNameNoExt)) {
+                qInfo() << "error loading translation [" << kFilePath << kFileNameNoExt << "]\n";
+            } else {
+                qInfo() << "Successfully loaded translation file " << kFilePath << kFileNameNoExt;
+            }
             qApp->installTranslator(translator_);
             emit languageChanged();
         }

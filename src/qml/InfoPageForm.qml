@@ -20,7 +20,7 @@ Item {
             anchors.leftMargin: 65
             anchors.top: parent.top
             anchors.topMargin: 5
-            text: bot.name + " info"
+            text: qsTr("%1 info").arg(bot.name)
             font.pixelSize: 22
             font.capitalization: Font.AllUppercase
             color: "#cbcbcb"
@@ -100,7 +100,7 @@ Item {
             InfoItem {
                 id: info_wifiNetwork
                 labelText: qsTr("WiFi Name") + cpUiTr.emptyStr
-                dataText: bot.net.interface === "wifi" ? bot.net.name : "n/a"
+                dataText: bot.net.interface === "wifi" ? bot.net.name : qsTr("n/a")
             }
             InfoItem {
                 id: info_ethMacAddress

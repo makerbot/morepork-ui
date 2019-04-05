@@ -372,7 +372,7 @@ Item {
                     Text {
                         id: cancel_text_no_extruder_popup
                         color: "#ffffff"
-                        text: "CANCEL"
+                        text: qsTr("CANCEL")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -410,7 +410,7 @@ Item {
                     Text {
                         id: attach_extruder_text_no_extruder_popup
                         color: "#ffffff"
-                        text: "ATTACH EXTRUDER"
+                        text: qsTr("ATTACH EXTRUDER")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -446,7 +446,7 @@ Item {
                 Text {
                     id: title_text_no_extruder_popup
                     color: "#cbcbcb"
-                    text: "NO EXTRUDER DETECTED"
+                    text: qsTr("NO EXTRUDER DETECTED")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -458,10 +458,9 @@ Item {
                     id: description_text_no_extruder_popup
                     color: "#cbcbcb"
                     text: {
-                        "Please attach a" +
-                        (extruderIDnoExtruderPopup == 1 ? " Model 1" : " Support 2") +
-                        " Performance extruder into slot" +
-                        (extruderIDnoExtruderPopup == 1 ? " one" : " two")
+                        qsTr("Please attach a %1 Performance extruder into slot %2").arg(
+                            extruderIDnoExtruderPopup == 1 ? qsTr("Model 1") : qsTr("Support 2")).arg(
+                            extruderIDnoExtruderPopup == 1 ? qsTr("one") : qsTr("two"))
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
@@ -559,7 +558,7 @@ Item {
                     Text {
                         id: ok_text_mat_warning_popup
                         color: "#ffffff"
-                        text: "OK"
+                        text: qsTr("OK")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -598,7 +597,7 @@ Item {
                     Text {
                         id: acknowledge_text_mat_warning_popup
                         color: "#ffffff"
-                        text: "ACKNOWLEDGE"
+                        text: qsTr("ACKNOWLEDGE")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -637,7 +636,7 @@ Item {
                     Text {
                         id: cancel_text_mat_warning_popup
                         color: "#ffffff"
-                        text: "CANCEL LOADING"
+                        text: qsTr("CANCEL LOADING")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -675,9 +674,9 @@ Item {
                     color: "#cbcbcb"
                     text: isMaterialMismatch ?
                               (loadUnloadFilamentProcess.currentActiveTool == 1 ?
-                                  "MODEL MATERIAL REQUIRED" :
-                                  "SUPPORT MATERIAL REQUIRED") :
-                                  "UNKNOWN MATERIAL WARNING"
+                                  qsTr("MODEL MATERIAL REQUIRED") :
+                                  qsTr("SUPPORT MATERIAL REQUIRED")) :
+                                  qsTr("UNKNOWN MATERIAL WARNING")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -690,12 +689,12 @@ Item {
                     color: "#cbcbcb"
                     text: isMaterialMismatch ?
                               (loadUnloadFilamentProcess.currentActiveTool == 1 ?
-                                  "Only model material such as PLA and Tough are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue." :
-                                  "Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.") :
-                                  "The limited warranty included with this 3D printer does\n" +
+                                  qsTr("Only model material such as PLA and Tough are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.") :
+                                  qsTr("Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")) :
+                                  qsTr("The limited warranty included with this 3D printer does\n" +
                                   "not apply to damage caused by the use of materials\n" +
                                   "not certified or approved by MakerBot. For additional\n" +
-                                  "information, please visit MakerBot.com/legal/warranty."
+                                  "information, please visit MakerBot.com/legal/warranty.")
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -785,7 +784,7 @@ Item {
                     Text {
                         id: cancel_loading_text
                         color: "#ffffff"
-                        text: isLoadFilament ? "CANCEL LOADING" : "CANCEL UNLOADING"
+                        text: isLoadFilament ? qsTr("CANCEL LOADING") : qsTr("CANCEL UNLOADING")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -823,7 +822,7 @@ Item {
                     Text {
                         id: continue_loading_text
                         color: "#ffffff"
-                        text: isLoadFilament ? "CONTINUE LOADING" : "CONTINUE UNLOADING"
+                        text: isLoadFilament ? qsTr("CONTINUE LOADING") : qsTr("CONTINUE UNLOADING")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -859,8 +858,8 @@ Item {
                 Text {
                     id: cancel_text
                     color: "#cbcbcb"
-                    text: isLoadFilament ? "CANCEL MATERIAL LOADING?" :
-                                           "CANCEL MATERIAL UNLOADING?"
+                    text: isLoadFilament ? qsTr("CANCEL MATERIAL LOADING?") :
+                                           qsTr("CANCEL MATERIAL UNLOADING?")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -871,8 +870,8 @@ Item {
                 Text {
                     id: cancel_description_text
                     color: "#cbcbcb"
-                    text: "Are you sure you want to cancel the material " +
-                                (isLoadFilament ? "loading" : "unloading") + " process?"
+                    text: qsTr("Are you sure you want to cancel the material %1 process?").arg(
+                                    isLoadFilament ? qsTr("loading") : qsTr("unloading"))
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -932,7 +931,7 @@ Item {
             Text {
                 id: popup_content_text
                 color: "#cbcbcb"
-                text: "Please wait until the unloading process completes."
+                text: qsTr("Please wait until the unloading process completes.")
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
