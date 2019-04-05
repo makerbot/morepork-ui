@@ -23,6 +23,8 @@ ApplicationWindow {
     property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
+    property bool extruderACalibrated: bot.extruderACalibrated
+    property bool extruderBCalibrated: bot.extruderBCalibrated
     property bool skipAuthentication: false
     property bool isAuthenticated: false
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
@@ -147,6 +149,23 @@ ApplicationWindow {
         }
         else {
             updatingExtruderFirmwarePopup.close()
+        }
+    }
+
+    onExtruderACalibratedChanged: {
+        if(extruderACalibrated && extruderBCalibrated) {
+            extNotCalibratedPopup.close()
+        }
+        else {
+            extNotCalibratedPopup.open()
+        }
+    }
+    onExtruderBCalibratedChanged: {
+        if(extruderACalibrated && extruderBCalibrated) {
+            extNotCalibratedPopup.close()
+        }
+        else {
+            extNotCalibratedPopup.open()
         }
     }
 
@@ -1753,6 +1772,167 @@ ApplicationWindow {
                                 "extruders. Currently only model\nand support "+
                                 "printing is supported."
                             }
+                        }
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                }
+            }
+        }
+
+        Popup {
+            id: extNotCalibratedPopup
+            width: 800
+            height: 480
+            modal: true
+            dim: false
+            focus: true
+            closePolicy: Popup.CloseOnPressOutside
+            parent: overlay
+
+            background: Rectangle {
+                id: extNotCalibratedPopupBackgroundDim
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                opacity: 0.5
+                anchors.fill: parent
+            }
+            Rectangle {
+                id: basePopupItem3
+                color: "#000000"
+                rotation: rootItem.rotation == 180 ? 180 : 0
+                width: 720
+                height: 270
+                radius: 10
+                border.width: 2
+                border.color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Rectangle {
+                    id: horizontal_divider3
+                    width: 720
+                    height: 2
+                    color: "#ffffff"
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 72
+                }
+
+                Rectangle {
+                    id: vertical_divider3
+                    x: 359
+                    y: 328
+                    width: 2
+                    height: 72
+                    color: "#ffffff"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Item {
+                    id: buttonBar2
+                    width: 720
+                    height: 72
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+
+                    Rectangle {
+                        id: calib_rectangle
+                        x: 0
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: calib_text
+                            color: "#ffffff"
+                            text: "CALIBRATE NOW"
+                            Layout.fillHeight: false
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            Layout.fillWidth: false
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: calib_mouseArea
+                            anchors.fill: parent
+                            onClicked: {
+                                extNotCalibratedPopup.close()
+                                mainSwipeView.swipeToItem(3)
+                                settingsPage.settingsSwipeView.swipeToItem(6)
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        id: cancel_calib_rectangle
+                        x: 360
+                        y: 0
+                        width: 360
+                        height: 72
+                        color: "#00000000"
+                        radius: 10
+
+                        Text {
+                            id: cancel_calib_text
+                            color: "#ffffff"
+                            text: "CANCEL"
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            font.letterSpacing: 3
+                            font.weight: Font.Bold
+                            font.family: "Antennae"
+                            font.pixelSize: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            id: cancel_calib_mouseArea
+                            anchors.fill: parent
+                            onClicked: {
+                                extNotCalibratedPopup.close()
+                            }
+                        }
+                    }
+                }
+                ColumnLayout {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 150
+                    anchors.top: parent.top
+
+                    TitleText {
+                        anchors.top: parent.top
+                        anchors.topMargin: 40
+                        font.weight: Font.Bold
+                        text: "CALIBRATION REQUIRED"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                    BodyText {
+                        anchors.top: parent.top
+                        anchors.topMargin: 90
+                        font.weight: Font.Light
+                        wrapMode: Text.WordWrap
+                        font.family: "Antennae"
+                        font.pixelSize: 18
+                        lineHeight: 1.3
+                        text: {
+                            "Automatic calibration must be run when "+
+                            "attaching extruders for best\nprint quality. "+
+                            "Be sure the extruders are latched into place "+
+                            "before\ncalibrating."
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter

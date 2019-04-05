@@ -34,6 +34,7 @@ class KaitenBotModel : public BotModel {
     void assistedLevelUpdate(const Json::Value & status);
     void queryStatusUpdate(const Json::Value & info);
     void wifiUpdate(const Json::Value & result);
+    void extChangeUpdate(const Json::Value & params);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -351,6 +352,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<SetTimeZoneCallback> m_stzCb;
+
+    class ExtruderChangeNotification : public JsonRpcNotification {
+      public:
+        ExtruderChangeNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->extChangeUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<ExtruderChangeNotification> m_extChange;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -1027,7 +1039,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_matWarningNot(new UnknownMaterialNotification(this)),
         m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)),
         m_sysTimeNot(new SystemTimeNotification(this)),
-        m_stzCb(new SetTimeZoneCallback()) {
+        m_stzCb(new SetTimeZoneCallback()),
+        m_extChange(new ExtruderChangeNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1043,10 +1056,25 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("material_warning", m_matWarningNot);
     conn->jsonrpc.addMethod("usb_copy_complete", m_usbCopyCompleteNot);
     conn->jsonrpc.addMethod("system_time_notification", m_sysTimeNot);
+    conn->jsonrpc.addMethod("extruder_change", m_extChange);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
     connect(conn, &LocalJsonRpc::timeout, this, &KaitenBotModel::timeout);
+}
+
+void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
+    const Json::Value &calibrated = params["config"]["calibrated"];
+    if(params["index"] == 0) {
+        if (calibrated.isBool()) {
+            extruderACalibratedSet(calibrated.asBool());
+        }
+    }
+    else if(params["index"] == 1) {
+        if (calibrated.isBool()) {
+            extruderBCalibratedSet(calibrated.asBool());
+        }
+    }
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
