@@ -86,37 +86,37 @@ Item {
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            "GETTING READY"
+                            qsTr("GETTING READY")
                             break;
                         case ProcessStateType.Printing:
-                            "PRINTING"
+                            qsTr("PRINTING")
                             break;
                         case ProcessStateType.Pausing:
-                            "PAUSING"
+                            qsTr("PAUSING")
                             break;
                         case ProcessStateType.Resuming:
-                            "RESUMING"
+                            qsTr("RESUMING")
                             break;
                         case ProcessStateType.Paused:
                         case ProcessStateType.UnloadingFilament: // Out of filament during print
                         case ProcessStateType.Preheating:
-                            "PAUSED"
+                            qsTr("PAUSED")
                             break;
                         case ProcessStateType.Completed:
                             fileName_
                             break;
                         case ProcessStateType.Failed:
-                            "PRINT FAILED"
+                            qsTr("PRINT FAILED")
                             break;
                         case ProcessStateType.Cancelling:
-                            "CANCELLING"
+                            qsTr("CANCELLING")
                             break;
                         case ProcessStateType.CleaningUp:
                             if(bot.process.complete) {
-                                "FINISHING UP"
+                                qsTr("FINISHING UP")
                             }
                             else {
-                                "CANCELLING"
+                                qsTr("CANCELLING")
                             }
                             break;
                         default:
@@ -139,13 +139,13 @@ Item {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
                             if(bot.process.stepStr == "waiting_for_file") {
-                                "WAITING FOR PRINT FILE"
+                                qsTr("WAITING FOR PRINT FILE")
                             } else if(bot.process.stepStr == "transfer") {
-                                "TRANSFERRING PRINT FILE"
+                                qsTr("TRANSFERRING PRINT FILE")
                             } else if(bot.extruderATargetTemp > 0) {
-                                "HEATING UP EXTRUDER"
+                                qsTr("HEATING UP EXTRUDER")
                             } else {
-                                "HEATING UP CHAMBER"
+                                qsTr("HEATING UP CHAMBER")
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -155,11 +155,11 @@ Item {
                         case ProcessStateType.Resuming:
                         case ProcessStateType.Paused:
                             (bot.process.errorCode?
-                                "Error " + bot.process.errorCode :
+                                qsTr("Error ").arg(bot.process.errorCode) :
                                 fileName_)
                             break;
                         case ProcessStateType.Completed:
-                            print_time_ + " PRINT TIME"
+                            qsTr("%1 PRINT TIME").arg(print_time_)
                             break;
                         case ProcessStateType.Failed:
                             "Error " + bot.process.errorCode
@@ -192,10 +192,10 @@ Item {
                             } else if(bot.process.stepStr == "transfer") {
                                 bot.process.printPercentage + "%"
                             } else if(bot.extruderATargetTemp > 0) {
-                                (bot.extruderACurrentTemp + " C" + " | " + bot.extruderATargetTemp + " C\n" +
-                                 bot.extruderBCurrentTemp + " C" + " | " + bot.extruderBTargetTemp + " C")
+                                (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C\n").arg(bot.extruderATargetTemp) +
+                                 qsTr("%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp))
                             } else {
-                                (bot.chamberCurrentTemp + " C" + " | " + bot.chamberTargetTemp + " C")
+                                (qsTr("%1 C").arg(bot.chamberCurrentTemp) + " | " + qsTr("%1 C").arg(bot.chamberTargetTemp))
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -203,15 +203,15 @@ Item {
                         case ProcessStateType.Resuming:
                         case ProcessStateType.Paused: {
                             timeLeftString == "0M" ?
-                                        "FINISHING UP" :
-                                        timeLeftString + " REMAINING"
+                                        qsTr("FINISHING UP") :
+                                        qsTr("%1 REMAINING").arg(timeLeftString)
                         }
                             break;
                         case ProcessStateType.Failed:
-                            print_time_ + " PRINT TIME"
+                            qsTr("%1 PRINT TIME").arg(print_time_)
                             break;
                         case ProcessStateType.Completed:
-                            "PRINT COMPLETE"
+                            qsTr("PRINT COMPLETE")
                             break;
                         default:
                             ""
@@ -339,7 +339,7 @@ Item {
                         Text {
                             id: infill_label
                             color: "#cbcbcb"
-                            text: "INFILL"
+                            text: qsTr("INFILL")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -353,7 +353,7 @@ Item {
                         Text {
                             id: supports_label
                             color: "#cbcbcb"
-                            text: "SUPPORTS"
+                            text: qsTr("SUPPORTS")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -367,7 +367,7 @@ Item {
                         Text {
                             id: rafts_label
                             color: "#cbcbcb"
-                            text: "RAFTS"
+                            text: qsTr("RAFTS")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -381,7 +381,7 @@ Item {
                         Text {
                             id: model_label
                             color: "#cbcbcb"
-                            text: "MODEL"
+                            text: qsTr("MODEL")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -394,7 +394,7 @@ Item {
                         Text {
                             id: support_label
                             color: "#cbcbcb"
-                            text: "SUPPORT"
+                            text: qsTr("SUPPORT")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -415,7 +415,7 @@ Item {
                         Text {
                             id: infill_text
                             color: "#ffffff"
-                            text: "99.99%"
+                            text: qsTr("99.99%")
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -454,7 +454,7 @@ Item {
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: model_mass_ + " " + print_model_material_
+                            text: qsTr("%1 %2").arg(model_mass_).arg(print_model_material_)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -467,7 +467,7 @@ Item {
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: support_mass_ + " " + print_support_material_
+                            text: qsTr("%1 %2").arg(support_mass_).arg(print_support_material_)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -513,7 +513,7 @@ Item {
                 Text {
                     id: printerName_text2
                     color: "#cbcbcb"
-                    text: printerName + " INFO"
+                    text: qsTr("%1 INFO").arg(printerName)
                     antialiasing: false
                     smooth: false
                     font.family: "Antenna"
@@ -546,7 +546,7 @@ Item {
                         Text {
                             id: extruder1_temp_label
                             color: "#cbcbcb"
-                            text: "EX 1 TEMP"
+                            text: qsTr("EX 1 TEMP")
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -559,7 +559,7 @@ Item {
                         Text {
                             id: extruder2_temp_label
                             color: "#cbcbcb"
-                            text: "EX 2 TEMP"
+                            text: qsTr("EX 2 TEMP")
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -572,7 +572,7 @@ Item {
                         Text {
                             id: extruder1_life_label
                             color: "#cbcbcb"
-                            text: "EX 1 LIFE"
+                            text: qsTr("EX 1 LIFE")
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -585,7 +585,7 @@ Item {
                         Text {
                             id: extruder2_life_label
                             color: "#cbcbcb"
-                            text: "EX 2 LIFE"
+                            text: qsTr("EX 2 LIFE")
                             antialiasing: false
                             smooth: false
                             font.pixelSize: 18
@@ -598,7 +598,7 @@ Item {
                         Text {
                             id: chamber_temp_label
                             color: "#cbcbcb"
-                            text: "CHAMBER TEMP"
+                            text: qsTr("CHAMBER TEMP")
                             antialiasing: false
                             smooth: false
                             font.pixelSize: 18
@@ -619,7 +619,7 @@ Item {
                         Text {
                             id: extruder1_temp_text
                             color: "#ffffff"
-                            text: bot.extruderACurrentTemp + "C"
+                            text: qsTr("%1C").arg(bot.extruderACurrentTemp)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -631,7 +631,7 @@ Item {
                         Text {
                             id: extruder2_temp_text
                             color: "#ffffff"
-                            text: bot.extruderBCurrentTemp + "C"
+                            text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -643,7 +643,7 @@ Item {
                         Text {
                             id: extruder1_life_text
                             color: "#ffffff"
-                            text: extruderAExtrusionDistance +"mm"
+                            text: qsTr("%1mm").arg(extruderAExtrusionDistance)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -655,7 +655,7 @@ Item {
                         Text {
                             id: extruder2_life_text
                             color: "#ffffff"
-                            text: extruderBExtrusionDistance +"mm"
+                            text: qsTr("%1mm").arg(extruderBExtrusionDistance)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -667,7 +667,7 @@ Item {
                         Text {
                             id: chamber_temp_text
                             color: "#ffffff"
-                            text: bot.chamberCurrentTemp + "C"
+                            text: qsTr("%1C").arg(bot.chamberCurrentTemp)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -739,7 +739,7 @@ Item {
                 Text {
                     id: printer_name_is_printing_text
                     color: "#cbcbcb"
-                    text: printerName + " IS PRINTING"
+                    text: qsTr("%1 IS PRINTING").arg(printerName)
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -795,7 +795,7 @@ Item {
                     Text {
                         id: is_printing_label
                         color: "#cbcbcb"
-                        text: "IS PRINTING"
+                        text: qsTr("IS PRINTING")
                         antialiasing: false
                         smooth: false
                         anchors.bottom: parent.bottom

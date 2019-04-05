@@ -540,28 +540,28 @@ ApplicationWindow {
                                     ""
                                     break;
                                 case FreStep.SetupWifi:
-                                    "SKIP WIFI"
+                                    qsTr("SKIP WIFI")
                                     break;
                                 case FreStep.SoftwareUpdate:
-                                    "SKIP SOFTWARE UPDATE"
+                                    qsTr("SKIP SOFTWARE UPDATE")
                                     break;
                                 case FreStep.NamePrinter:
-                                    "SKIP NAMING PRINTER"
+                                    qsTr("SKIP NAMING PRINTER")
                                     break;
                                 case FreStep.SetTimeDate:
-                                    "SKIP SETTING TIME"
+                                    qsTr("SKIP SETTING TIME")
                                     break;
                                 case FreStep.LoginMbAccount:
-                                    "SKIP SIGN IN"
+                                    qsTr("SKIP SIGN IN")
                                     break;
                                 case FreStep.AttachExtruders:
                                 case FreStep.LevelBuildPlate:
                                 case FreStep.CalibrateExtruders:
                                 case FreStep.LoadMaterial:
-                                    "SKIP PRINTER SETUP"
+                                    qsTr("SKIP PRINTER SETUP")
                                     break;
                                 case FreStep.TestPrint:
-                                    "SKIP TEST PRINT"
+                                    qsTr("SKIP TEST PRINT")
                                     break;
                                 case FreStep.SetupComplete:
                                     ""
@@ -648,7 +648,7 @@ ApplicationWindow {
                         Text {
                             id: continue_text
                             color: "#ffffff"
-                            text: "CONTINUE"
+                            text: qsTr("CONTINUE")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -693,34 +693,34 @@ ApplicationWindow {
                                 ""
                                 break;
                             case FreStep.SetupWifi:
-                                "SKIP WI-FI SETUP?"
+                                qsTr("SKIP WI-FI SETUP?")
                                 break;
                             case FreStep.SoftwareUpdate:
-                                "SKIP SOFTWARE UPDATE?"
+                                qsTr("SKIP SOFTWARE UPDATE?")
                                 break;
                             case FreStep.NamePrinter:
-                                "SKIP NAMING PRINTER?"
+                                qsTr("SKIP NAMING PRINTER?")
                                 break;
                             case FreStep.SetTimeDate:
-                                "SKIP SETTING TIME?"
+                                qsTr("SKIP SETTING TIME?")
                                 break;
                             case FreStep.LoginMbAccount:
-                                "SKIP ACCOUNT SIGN IN?"
+                                qsTr("SKIP ACCOUNT SIGN IN?")
                                 break;
                             case FreStep.AttachExtruders:
-                                "SKIP ATTACHING EXTRUDERS?"
+                                qsTr("SKIP ATTACHING EXTRUDERS?")
                                 break;
                             case FreStep.LevelBuildPlate:
-                                "SKIP LEVELING BUILD PLATE?"
+                                qsTr("SKIP LEVELING BUILD PLATE?")
                                 break;
                             case FreStep.CalibrateExtruders:
-                                "SKIP CALIBRATING EXTRUDERS?"
+                                qsTr("SKIP CALIBRATING EXTRUDERS?")
                                 break;
                             case FreStep.LoadMaterial:
-                                "SKIP LOADING MATERIAL?"
+                                qsTr("SKIP LOADING MATERIAL?")
                                 break;
                             case FreStep.TestPrint:
-                                "SKIP TEST PRINT?"
+                                qsTr("SKIP TEST PRINT?")
                                 break;
                             case FreStep.SetupComplete:
                                 ""
@@ -748,34 +748,34 @@ ApplicationWindow {
                                 ""
                                 break;
                             case FreStep.SetupWifi:
-                                "Connecting to Wi-Fi enables remote printing and monitoring from any internet connected device. An Ethernet cable can also be used."
+                                qsTr("Connecting to Wi-Fi enables remote printing and monitoring from any internet connected device. An Ethernet cable can also be used.")
                                 break;
                             case FreStep.SoftwareUpdate:
-                                "It is recommended to keep your printer updated for the latest features and quality."
+                                qsTr("It is recommended to keep your printer updated for the latest features and quality.")
                                 break;
                             case FreStep.NamePrinter:
-                                "You can name your printer later from the printer settings menu."
+                                qsTr("You can name your printer later from the printer settings menu.")
                                 break;
                             case FreStep.SetTimeDate:
-                                "You can set the time later from the printer settings menu."
+                                qsTr("You can set the time later from the printer settings menu.")
                                 break;
                             case FreStep.LoginMbAccount:
-                                "By signing in, this printer will automatically appear in your list of printers on any signed in device."
+                                qsTr("By signing in, this printer will automatically appear in your list of printers on any signed in device.")
                                 break;
                             case FreStep.AttachExtruders:
-                                "Extruders are required to use the printer."
+                                qsTr("Extruders are required to use the printer.")
                                 break;
                             case FreStep.LevelBuildPlate:
-                                "For best print quality and dimensional accuracy, the build plate should be leveled."
+                                qsTr("For best print quality and dimensional accuracy, the build plate should be leveled.")
                                 break;
                             case FreStep.CalibrateExtruders:
-                                "For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached."
+                                qsTr("For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached.")
                                 break;
                             case FreStep.LoadMaterial:
-                                "Printing requires material to be loaded into the extruders."
+                                qsTr("Printing requires material to be loaded into the extruders.")
                                 break;
                             case FreStep.TestPrint:
-                                "A test print is a small print that ensures the printer is working properly."
+                                qsTr("A test print is a small print that ensures the printer is working properly.")
                                 break;
                             case FreStep.SetupComplete:
                                 ""
@@ -856,7 +856,7 @@ ApplicationWindow {
                     Text {
                         id: authenticate_header_text
                         color: "#cbcbcb"
-                        text: isAuthenticated ? "AUTHENTICATION COMPLETE" : skipAuthentication ? "CANCEL AUTHENTICATION" : "AUTHENTICATION REQUEST"
+                        text: isAuthenticated ? qsTr("AUTHENTICATION COMPLETE") : skipAuthentication ? qsTr("CANCEL AUTHENTICATION") : qsTr("AUTHENTICATION REQUEST")
                         anchors.top: parent.top
                         anchors.topMargin: 0
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -880,7 +880,7 @@ ApplicationWindow {
                     Text {
                         id: authenticate_description_text1
                         color: isAuthenticated ? "#ffffff" : "#cbcbcb"
-                        text: isAuthenticated ? bot.username : skipAuthentication ? "Are you sure you want to cancel?" : "Would you like to authenticate"
+                        text: isAuthenticated ? bot.username : skipAuthentication ? qsTr("Are you sure you want to cancel?") : qsTr("Would you like to authenticate")
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.topMargin: 17
                         anchors.top: authImage.bottom
@@ -917,7 +917,7 @@ ApplicationWindow {
                         Text {
                             id: authenticate_description_text3
                             color: "#cbcbcb"
-                            text: isAuthenticated ? "is now authenticated to this printer" : "to this printer?"
+                            text: isAuthenticated ? qsTr("is now authenticated to this printer") : qsTr("to this printer?")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
                             font.weight: Font.Light
@@ -973,7 +973,7 @@ ApplicationWindow {
                         Text {
                             id: dismiss_text
                             color: "#ffffff"
-                            text: skipAuthentication ? "BACK" : "DISMISS"
+                            text: skipAuthentication ? qsTr("BACK") : qsTr("DISMISS")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -1021,7 +1021,7 @@ ApplicationWindow {
                         Text {
                             id: authenticate_text
                             color: "#ffffff"
-                            text: skipAuthentication ? "CONTINUE" : "AUTHENTICATE"
+                            text: skipAuthentication ? qsTr("CONTINUE") : qsTr("AUTHENTICATE")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -1110,7 +1110,7 @@ ApplicationWindow {
                     Text {
                         id: install_unsigned_fw_header_text
                         color: "#cbcbcb"
-                        text: "UNKNOWN FIRMWARE"
+                        text: qsTr("UNKNOWN FIRMWARE")
                         anchors.top: parent.top
                         anchors.topMargin: 0
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -1123,7 +1123,7 @@ ApplicationWindow {
                     Text {
                         id: install_unsigned_fw_description_text1
                         color: "#cbcbcb"
-                        text: "You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?"
+                        text: qsTr("You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?")
                         // To specify a WordWrap property, the width must be defined
                         width: parent.width
                         wrapMode: Text.WordWrap
@@ -1183,7 +1183,7 @@ ApplicationWindow {
                         Text {
                             id: install_text
                             color: "#ffffff"
-                            text: "INSTALL"
+                            text: qsTr("INSTALL")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -1227,7 +1227,7 @@ ApplicationWindow {
                         Text {
                             id: cancel_text
                             color: "#ffffff"
-                            text: "CANCEL"
+                            text: qsTr("CANCEL")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -1342,7 +1342,7 @@ ApplicationWindow {
                         Text {
                             id: dismiss_text1
                             color: "#ffffff"
-                            text: skipFirmwareUpdate ? "SKIP" : "NOT NOW"
+                            text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -1391,7 +1391,7 @@ ApplicationWindow {
                         Text {
                             id: update_text
                             color: "#ffffff"
-                            text: "UPDATE"
+                            text: qsTr("UPDATE")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -1437,7 +1437,7 @@ ApplicationWindow {
                     Text {
                         id: firmware_header_text
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? "SOFTWARE " + bot.firmwareUpdateVersion + " RELEASE NOTES" : skipFirmwareUpdate ? "SKIP SOFTWARE UPDATE?" : "SOFTWARE UPDATE AVAILABLE"
+                        text: viewReleaseNotes ? qsTr("SOFTWARE %1 RELEASEE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP SOFTWARE UPDATE?") : qsTr("SOFTWARE UPDATE AVAILABLE")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
                         font.family: "Antennae"
@@ -1457,7 +1457,7 @@ ApplicationWindow {
                         id: firmware_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? "We recommend using the most up to date software for your printer." : "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date software for your printer.") : qsTr("A new version of software is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
@@ -1504,7 +1504,7 @@ ApplicationWindow {
                     Text {
                         id: firmware_description_text2
                         color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? "" : "Tap to see Release Notes"
+                        text: skipFirmwareUpdate ? "" : qsTr("Tap to see Release Notes")
                         font.underline: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -1607,7 +1607,7 @@ ApplicationWindow {
                         Text {
                             id: start_print_text
                             color: "#ffffff"
-                            text: "START PRINT"
+                            text: qsTr("START PRINT")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -1655,7 +1655,7 @@ ApplicationWindow {
                         Text {
                             id: cancel_print_text
                             color: "#ffffff"
-                            text: "CANCEL"
+                            text: qsTr("CANCEL")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -1695,7 +1695,7 @@ ApplicationWindow {
                     Text {
                         id: clear_build_plate_text
                         color: "#cbcbcb"
-                        text: "CLEAR BUILD PLATE"
+                        text: qsTr("CLEAR BUILD PLATE")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.family: "Antennae"
@@ -1706,7 +1706,7 @@ ApplicationWindow {
                     Text {
                         id: clear_build_plate_desc_text
                         color: "#cbcbcb"
-                        text: "Please be sure your build plate is clear."
+                        text: qsTr("Please be sure your build plate is clear.")
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -1736,22 +1736,22 @@ ApplicationWindow {
                     height: 150
 
                     TitleText {
-                        text: "WRONG EXTRUDER TYPE DETECTED"
+                        text: qsTr("WRONG EXTRUDER TYPE DETECTED")
                         anchors.horizontalCenter: parent.horizontalCenter
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                     BodyText{
                         text: {
                             if (wrongExtruderPopup.modelExtWrong) {
-                                "Please insert a Model 1 Performance Extruder "+
-                                "into slot 1\nto continue attaching the "+
-                                "extruders."
+                                qsTr("Please insert a Model 1 Performance Extruder "+
+                                     "into slot 1\nto continue attaching the "+
+                                     "extruders.")
                             }
                             else if (wrongExtruderPopup.supportExtWrong) {
-                                "Please insert a Support 2 Performance Extruder "+
-                                "into slot 2\nto continue attaching the "+
-                                "extruders. Currently only model\nand support "+
-                                "printing is supported."
+                                qsTr("Please insert a Support 2 Performance Extruder "+
+                                     "into slot 2\nto continue attaching the "+
+                                     "extruders. Currently only model\nand support "+
+                                     "printing is supported.")
                             }
                         }
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -1869,7 +1869,7 @@ ApplicationWindow {
                     Text {
                         id: alert_text
                         color: "#cbcbcb"
-                        text: "EXTRUDERS ARE BEING PROGRAMMED..."
+                        text: qsTr("EXTRUDERS ARE BEING PROGRAMMED...")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.family: "Antennae"
@@ -1956,7 +1956,7 @@ ApplicationWindow {
                         Text {
                             id: cancel_text_cancel_print_popup
                             color: "#ffffff"
-                            text: "CANCEL PRINT"
+                            text: qsTr("CANCEL PRINT")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -1999,7 +1999,7 @@ ApplicationWindow {
                         Text {
                             id: continue_text_cancel_print_popup
                             color: "#ffffff"
-                            text: "CONTINUE PRINT"
+                            text: qsTr("CONTINUE PRINT")
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
@@ -2038,7 +2038,7 @@ ApplicationWindow {
                     Text {
                         id: cancel_title_text_cancel_print_popup
                         color: "#cbcbcb"
-                        text: "CANCEL PRINT"
+                        text: qsTr("CANCEL PRINT")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.family: "Antennae"
@@ -2049,7 +2049,7 @@ ApplicationWindow {
                     Text {
                         id: cancel_description_text_cancel_print_popup
                         color: "#cbcbcb"
-                        text: "Are you sure?"
+                        text: qsTr("Are you sure?")
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -2126,7 +2126,7 @@ ApplicationWindow {
                         Text {
                             id: ok_text_remove_usb_popup
                             color: "#ffffff"
-                            text: "OK"
+                            text: qsTr("OK")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -2168,7 +2168,7 @@ ApplicationWindow {
                     Text {
                         id: remove_usb_text_remove_usb_popup
                         color: "#cbcbcb"
-                        text: "YOU CAN NOW SAFELY REMOVE THE USB"
+                        text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.family: "Antennae"
@@ -2302,9 +2302,7 @@ ApplicationWindow {
                         Text {
                             id: full_text_start_print_errors_popup
                             color: "#ffffff"
-                            text: {
-                                "OK"
-                            }
+                            text: qsTr("OK")
                             Layout.fillHeight: false
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             Layout.fillWidth: false
@@ -2351,18 +2349,18 @@ ApplicationWindow {
                             color: "#ffffff"
                             text: {
                                 if(printPage.startPrintNoFilament) {
-                                    "CANCEL"
+                                    qsTr("CANCEL")
                                 }
                                 else if(printPage.startPrintWithUnknownMaterials) {
-                                    "START ANYWAY"
+                                    qsTr("START ANYWAY")
                                 }
                                 else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
                                         materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                    "OK"
+                                    qsTr("OK")
                                 }
                                 else if(printPage.startPrintWithInsufficientModelMaterial ||
                                         printPage.startPrintWithInsufficientSupportMaterial) {
-                                    "START PRINT"
+                                    qsTr("START PRINT")
                                 }
                             }
                             Layout.fillHeight: false
@@ -2430,16 +2428,16 @@ ApplicationWindow {
                             color: "#ffffff"
                             text: {
                                 if(printPage.startPrintNoFilament) {
-                                    "LOAD MATERIAL"
+                                    qsTr("LOAD MATERIAL")
                                 }
                                 else if(printPage.startPrintWithUnknownMaterials ||
                                         printPage.startPrintWithInsufficientModelMaterial ||
                                         printPage.startPrintWithInsufficientSupportMaterial) {
-                                    "CHANGE MATERIAL"
+                                    qsTr("CHANGE MATERIAL")
                                 }
                                 else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
                                         materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                    "CHANGE MATERIAL"
+                                    qsTr("CHANGE MATERIAL")
                                 }
                             }
 
@@ -2511,24 +2509,24 @@ ApplicationWindow {
                         color: "#cbcbcb"
                         text: {
                             if(printPage.startPrintTopLidOpen) {
-                                "CLOSE THE TOP LID"
+                                qsTr("CLOSE THE TOP LID")
                             }
                             else if(printPage.startPrintBuildDoorOpen) {
-                                "CLOSE BUILD CHAMBER DOOR"
+                                qsTr("CLOSE BUILD CHAMBER DOOR")
                             }
                             else if(printPage.startPrintNoFilament) {
-                                "NO MATERIAL DETECTED"
+                                qsTr("NO MATERIAL DETECTED")
                             }
                             else if(printPage.startPrintWithUnknownMaterials) {
-                                "UNKNOWN MATERIAL DETECTED"
+                                qsTr("UNKNOWN MATERIAL DETECTED")
                             }
                             else if(printPage.startPrintWithInsufficientModelMaterial ||
                                     printPage.startPrintWithInsufficientSupportMaterial) {
-                                "LOW MATERIAL"
+                                qsTr("LOW MATERIAL")
                             }
                             else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
                                     materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                "MATERIAL MISMATCH WARNING"
+                                qsTr("MATERIAL MISMATCH WARNING")
                             }
                         }
                         font.letterSpacing: 3
@@ -2543,49 +2541,53 @@ ApplicationWindow {
                         color: "#cbcbcb"
                         text: {
                             if(printPage.startPrintTopLidOpen) {
-                                "Put the top lid back on the printer to start the print."
+                                qsTr("Put the top lid back on the printer to start the print.")
                             }
                             else if(printPage.startPrintBuildDoorOpen) {
-                                "Close the build chamber door to start the print."
+                                qsTr("Close the build chamber door to start the print.")
                             }
                             else if(printPage.startPrintNoFilament) {
-                                "There is no material detected in at least one of the extruders.\n" +
-                                "Please load material to start a print."
+                                qsTr("There is no material detected in at least one of the extruders.\n" +
+                                     "Please load material to start a print.")
                             }
                             else if(printPage.startPrintWithUnknownMaterials) {
-                                "Be sure <b>" +
-                                 printPage.print_model_material.toUpperCase() +
-                                 "</b> is in <b>Model Extruder 1</b>" +
+                                qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
+                                     printPage.print_model_material.toUpperCase()) +
                                  ((printPage.print_support_material != "") ?
-                                            " and <b>" + printPage.print_support_material.toUpperCase() + "</b> is in <b>Support Extruder 2</b>." :
-                                            ".") +
-                                  "\nThis printer is optimized for genuine MakerBot materials."
+                                            qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
+                                                 printPage.print_support_material.toUpperCase()) :
+                                            qsTr(".")) +
+                                  qsTr("\nThis printer is optimized for genuine MakerBot materials.")
                             }
                             else if(printPage.startPrintWithInsufficientModelMaterial ||
                                     printPage.startPrintWithInsufficientSupportMaterial) {
-                                "There may not be enough <b>" +
-                                ((printPage.startPrintWithInsufficientModelMaterial && printPage.startPrintWithInsufficientSupportMaterial) ?
-                                     (printPage.print_model_material.toUpperCase() + "</b> and <b>" + printPage.print_support_material.toUpperCase() + "</b>") :
-                                     (printPage.startPrintWithInsufficientModelMaterial ? (printPage.print_model_material.toUpperCase() + "</b>") :
-                                                                                          (printPage.startPrintWithInsufficientSupportMaterial ?
-                                                                                              (printPage.print_support_material.toUpperCase() + "</b>") :
-                                                                                              ("</b>")))) +
-                                " to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now."
+                                var insufficientModel = printPage.startPrintWithInsufficientModelMaterial
+                                var insufficientSupport = printPage.startPrintWithInsufficientSupportMaterial
+                                // WE NEED USER FACING STRINGS FOR MATERIALS
+                                var modelMatStr = printPage.print_model_material.toUpperCase()
+                                var supportMatStr = printPage.print_support_material.toUpperCase()
+                                qsTr("There may not be enough <b>%1").arg(
+                                     (insufficientModel && insufficientSupport) ?
+                                         qsTr("%1</b> and <b>%2</b>").arg(modelMatStr).arg(supportMatStr) :
+                                         (insufficientModel ?
+                                                qsTr("%1</b>").arg(modelMatStr) :
+                                                (insufficientSupport ?
+                                                    qsTr("%1</b>").arg(supportMatStr) :
+                                                    qsTr("</b>")))) +
+                                qsTr(" to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now.")
                             }
                             else if(printPage.print_support_material == "" &&
                                     materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material) {
-                                "This print requires <b>" +
-                                printPage.print_model_material.toUpperCase() +
-                                "</b> in <b>Model Extruder 1</b>." +
-                                "\nLoad the correct material to start the print or export the file again with these material settings."
+                                qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
+                                        printPage.print_model_material.toUpperCase()) +
+                                qsTr("\nLoad the correct material to start the print or export the file again with these material settings.")
                             }
                             else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
                                     materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                "This print requires <b>" +
-                                printPage.print_model_material.toUpperCase() +
-                                "</b> in <b>Model Extruder 1</b> and <b>" +
-                                printPage.print_support_material.toUpperCase() +
-                                "</b> in <b>Support Extruder 2</b>.\nLoad the correct materials to start the print or export the file again with these material settings."
+                                qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
+                                        printPage.print_model_material.toUpperCase()).arg(
+                                        printPage.print_support_material.toUpperCase()) +
+                                qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
                             }
                         }
                         horizontalAlignment: Text.AlignHCenter

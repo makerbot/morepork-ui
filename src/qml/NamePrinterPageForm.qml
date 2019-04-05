@@ -55,7 +55,7 @@ Item {
                 antialiasing: false
 
                 Text {
-                    text: "ENTER A NAME FOR YOUR PRINTER"
+                    text: qsTr("ENTER A NAME FOR YOUR PRINTER")
                     font.capitalization: Font.AllUppercase
                     font.letterSpacing: 1.5
                     font.wordSpacing: 1
@@ -100,7 +100,7 @@ Item {
                     anchors.top: parent.top
                     anchors.topMargin: 48
                     label_width: 150
-                    label: "ENTER"
+                    label: qsTr("ENTER")
                     buttonWidth: 160
                     buttonHeight: 50
                     button_mouseArea.onClicked: {
@@ -168,7 +168,7 @@ Item {
                     color: "#ffffff"
                     font.family: "Antennae"
                     font.weight: Font.Bold
-                    text: "PRINTER NAME"
+                    text: qsTr("PRINTER NAME")
                     anchors.top: parent.top
                     anchors.topMargin: 40
                     font.pixelSize: 20
@@ -198,7 +198,7 @@ Item {
                     id: continueWithNameButton
                     anchors.top: printer_name_text.bottom
                     anchors.topMargin: 55
-                    label: "CONTINUE"
+                    label: qsTr("CONTINUE")
                     buttonWidth: 200
                     buttonHeight: 50
                     label_width: 200

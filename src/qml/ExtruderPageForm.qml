@@ -159,7 +159,7 @@ Item {
                     text: {
                         if(itemAttachExtruder.state == "close_top_lid") {
                             if(bot.chamberErrorCode == 48) {
-                                "CLOSE CHAMBER DOOR"
+                                qsTr("CLOSE CHAMBER DOOR")
                             }
                             else if(bot.chamberErrorCode == 45) {
                                 "PLACE TOP LID"
@@ -219,19 +219,19 @@ Item {
                     label_size: 18
                     label: {
                         if(itemAttachExtruder.state == "base state") {
-                            "NEXT"
+                            qsTr("NEXT")
                         }
                         else if(itemAttachExtruder.state == "close_top_lid") {
                             if (inFreStep) {
-                                "DONE"
+                                qsTr("DONE")
                             } else if (bot.process.type == ProcessType.None) {
-                                "RUN CALIBRATION"
+                                qsTr("RUN CALIBRATION")
                             } else if (bot.process.type == ProcessType.Print) {
-                                "RESUME PRINT"
+                                qsTr("RESUME PRINT")
                             }
                         }
                         else {
-                            "DONE"
+                            qsTr("DONE")
                         }
                     }
                     disable_button: {
@@ -352,7 +352,7 @@ Item {
 
                         Text {
                             id: bulletNumber
-                            text: "WAITING FOR EXTRUDER..."
+                            text: qsTr("WAITING FOR EXTRUDER...")
                             anchors.left: waitingSpinner.right
                             anchors.leftMargin: 10
                             font.letterSpacing: 3
@@ -399,10 +399,10 @@ Item {
                         target: main_instruction_text
                         text: {
                             if(itemAttachExtruder.extruder == 1) {
-                                "INSERT THE MODEL\nEXTRUDER INTO SLOT 1"
+                                qsTr("INSERT THE MODEL\nEXTRUDER INTO SLOT 1")
                             }
                             else {
-                                "INSERT THE SUPPORT\nEXTRUDER INTO SLOT 2"
+                                qsTr("INSERT THE SUPPORT\nEXTRUDER INTO SLOT 2")
                             }
                         }
                     }
@@ -429,7 +429,7 @@ Item {
 
                     PropertyChanges {
                         target: attach_extruder_next_button
-                        label: "NEXT"
+                        label: qsTr("NEXT")
                         label_width: 125
                         label_size: 18
                         buttonWidth: 125
@@ -470,7 +470,7 @@ Item {
 
                     PropertyChanges {
                         target: main_instruction_text
-                        text: "LOCK THE EXTRUDER\nIN PLACE AND ATTACH\nTHE SWIVEL CLIP"
+                        text: qsTr("LOCK THE EXTRUDER\nIN PLACE AND ATTACH\nTHE SWIVEL CLIP")
                     }
 
                     PropertyChanges {
@@ -499,9 +499,9 @@ Item {
                             if (itemAttachExtruder.isAttached) {
                                 if (itemAttachExtruder.extruder == 1 &&
                                         (inFreStep || !bot.extruderBPresent)) {
-                                    "NEXT: Attach Support Extruder"
+                                    qsTr("NEXT: Attach Support Extruder")
                                 } else {
-                                    "NEXT"
+                                    qsTr("NEXT")
                                 }
                             }
                         }
@@ -563,19 +563,19 @@ Item {
                     PropertyChanges {
                         target: main_instruction_text
                         anchors.topMargin: 80
-                        text: "ENSURE THE MATERIAL\nCLIPS ARE ATTACHED"
+                        text: qsTr("ENSURE THE MATERIAL\nCLIPS ARE ATTACHED")
                     }
 
                     PropertyChanges {
                         target: sub_instruction_text
-                        text: "The material clips guide the material\ninto the correct extruders."
+                        text: qsTr("The material clips guide the material\ninto the correct extruders.")
                         opacity: 1
                     }
 
                     PropertyChanges {
                         target: attach_extruder_next_button
                         anchors.topMargin: -60
-                        label: "NEXT"
+                        label: qsTr("NEXT")
                         label_width: 125
                         label_size: 18
                         buttonWidth: 125

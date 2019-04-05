@@ -28,7 +28,7 @@ Rectangle {
     Text {
         id: button_text
         width: label_width
-        text: "Button Text"
+        text: qsTr("Button Text")
         anchors.verticalCenterOffset: 7
         font.capitalization: Font.AllUppercase
         anchors.horizontalCenter: parent.horizontalCenter

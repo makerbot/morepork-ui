@@ -14,7 +14,7 @@ Item {
 
         Text {
             id: heading
-            text: "CHAMBER"
+            text: qsTr("CHAMBER")
             font.letterSpacing: 2
             font.weight: Font.Bold
             font.pixelSize: 20
@@ -31,43 +31,43 @@ Item {
 
         AdvancedInfoElement {
             id: currentTempProperty
-            label: "CURRENT TEMP."
+            label: qsTr("CURRENT TEMP.")
             value: bot.infoChamberCurrentTemp
         }
 
         AdvancedInfoElement {
             id: targetTempProperty
-            label: "TARGET TEMP."
+            label: qsTr("TARGET TEMP.")
             value: bot.infoChamberTargetTemp
         }
 
         AdvancedInfoElement {
             id: fanASpeedProperty
-            label: "FAN A SPEED"
+            label: qsTr("FAN A SPEED")
             value: bot.infoChamberFanASpeed
         }
 
         AdvancedInfoElement {
             id: fanBSpeedProperty
-            label: "FAN B SPEED"
+            label: qsTr("FAN B SPEED")
             value: bot.infoChamberFanBSpeed
         }
 
         AdvancedInfoElement {
             id: heaterATempProperty
-            label: "HEATER A TEMP."
+            label: qsTr("HEATER A TEMP.")
             value: bot.infoChamberHeaterATemp
         }
 
         AdvancedInfoElement {
             id: heaterBTempProperty
-            label: "HEATER B TEMP."
+            label: qsTr("HEATER B TEMP.")
             value: bot.infoChamberHeaterBTemp
         }
 
         AdvancedInfoElement {
             id: errorCodeProperty
-            label: "ERROR"
+            label: qsTr("ERROR")
             value: bot.infoChamberError
         }
     }

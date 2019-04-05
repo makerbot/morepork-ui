@@ -162,7 +162,7 @@ Item {
                     anchors.topMargin: 28
                     buttonWidth: inFreStep ? 300 : 210
                     buttonHeight: 50
-                    label: inFreStep ? "START TEST PRINT" : "START PRINT"
+                    label: inFreStep ? qsTr("START TEST PRINT") : qsTr("START PRINT")
                     button_mouseArea.onClicked: {
                         if(startPrintCheck()){
                             startPrint()
@@ -247,7 +247,7 @@ Item {
                         Text {
                             id: print_mode_label
                             color: "#cbcbcb"
-                            text: "PRINT MODE"
+                            text: qsTr("PRINT MODE")
                             font.letterSpacing: 3
                             antialiasing: false
                             font.wordSpacing: 2
@@ -261,7 +261,7 @@ Item {
                         Text {
                             id: infill_label
                             color: "#cbcbcb"
-                            text: "INFILL"
+                            text: qsTr("INFILL")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -275,7 +275,7 @@ Item {
                         Text {
                             id: layer_height_label
                             color: "#cbcbcb"
-                            text: "LAYER HEIGHT"
+                            text: qsTr("LAYER HEIGHT")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -289,7 +289,7 @@ Item {
                         Text {
                             id: shells_label
                             color: "#cbcbcb"
-                            text: "SHELLS"
+                            text: qsTr("SHELLS")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -303,7 +303,7 @@ Item {
                         Text {
                             id: model_label
                             color: "#cbcbcb"
-                            text: "MODEL"
+                            text: qsTr("MODEL")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -316,7 +316,7 @@ Item {
                         Text {
                             id: support_label
                             color: "#cbcbcb"
-                            text: "SUPPORT"
+                            text: qsTr("SUPPORT")
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
@@ -338,7 +338,7 @@ Item {
                         Text {
                             id: print_mode_text
                             color: "#ffffff"
-                            text: "BALANCED"
+                            text: qsTr("BALANCED")
                             font.letterSpacing: 3
                             antialiasing: false
                             smooth: false
@@ -351,7 +351,7 @@ Item {
                         Text {
                             id: infill_text
                             color: "#ffffff"
-                            text: "99.99%"
+                            text: qsTr("99.99%")
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -377,7 +377,7 @@ Item {
                         Text {
                             id: shells_text
                             color: "#ffffff"
-                            text: "2"
+                            text: qsTr("2")
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -390,7 +390,7 @@ Item {
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: model_mass + " " + print_model_material
+                            text: qsTr("%1 %2").arg(model_mass).arg(print_model_material)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"
@@ -403,7 +403,7 @@ Item {
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: support_mass + " " + print_support_material
+                            text: qsTr("%1 %2").arg(support_mass).arg(print_support_material)
                             antialiasing: false
                             smooth: false
                             font.family: "Antenna"

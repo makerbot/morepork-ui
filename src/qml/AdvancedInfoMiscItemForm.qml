@@ -8,7 +8,7 @@ Item {
 
     Text {
         id: heading
-        text: "MISCELLANEOUS"
+        text: qsTr("MISCELLANEOUS")
         font.letterSpacing: 2
         font.weight: Font.Bold
         font.pixelSize: 20
@@ -24,25 +24,25 @@ Item {
 
         AdvancedInfoElement {
             id: doorActivatedProperty
-            label: "DOOR CLOSED"
+            label: qsTr("DOOR CLOSED")
             value: bot.infoDoorActivated
         }
 
         AdvancedInfoElement {
             id: lidActivatedProperty
-            label: "LID CLOSED"
+            label: qsTr("LID CLOSED")
             value: bot.infoLidActivated
         }
 
         AdvancedInfoElement {
             id: topBunkFanARpmProperty
-            label: "TOP BUNK FAN A RPM"
+            label: qsTr("TOP BUNK FAN A RPM")
             value: bot.infoTopBunkFanARPM
         }
 
         AdvancedInfoElement {
             id: topBunkFanBRpmProperty
-            label: "TOP BUNK FAN B RPM"
+            label: qsTr("TOP BUNK FAN B RPM")
             value: bot.infoTopBunkFanBRPM
         }
     }

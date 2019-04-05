@@ -14,7 +14,7 @@ Item {
     Text {
         id: distance_text
         color: "#ffffff"
-        text: "DISTANCE (mm)"
+        text: qsTr("DISTANCE (mm)")
         anchors.horizontalCenterOffset: -80
         anchors.bottom: row.top
         anchors.bottomMargin: 50
@@ -27,7 +27,7 @@ Item {
     Text {
         id: speed_text
         color: "#ffffff"
-        text: "SPEED (mm/s)"
+        text: qsTr("SPEED (mm/s)")
         anchors.horizontalCenterOffset: 30
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: row.top
@@ -87,7 +87,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             buttonHeight: 75
             buttonWidth: 120
-            label: "UP"
+            label: qsTr("UP")
             label_size: 20
 
             opacity: {
@@ -116,7 +116,7 @@ Item {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             buttonHeight: 75
             buttonWidth: 120
-            label: "DOWN"
+            label: qsTr("DOWN")
             label_size: 20
 
             opacity: {

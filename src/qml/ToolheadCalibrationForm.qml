@@ -84,7 +84,7 @@ Item {
         Text {
             id: title
             width: 350
-            text: "EXTRUDER CALIBRATION"
+            text: qsTr("EXTRUDER CALIBRATION")
             antialiasing: false
             smooth: false
             font.letterSpacing: 3
@@ -113,14 +113,14 @@ Item {
             font.family: "Antennae"
             font.pixelSize: 18
             font.weight: Font.Light
-            text: "Use this process anytime an extruder (new or used) is attached to the printer."
+            text: qsTr("Use this process anytime an extruder (new or used) is attached to the printer.")
             lineHeight: 1.2
             opacity: 1.0
         }
 
         RoundedButton {
             id: actionButton
-            label: "BEGIN CALIBRATION"
+            label: qsTr("BEGIN CALIBRATION")
             buttonWidth: 310
             buttonHeight: 50
             anchors.left: parent.left
@@ -132,7 +132,7 @@ Item {
 
         RoundedButton {
             id: actionButton2
-            label: "SKIP"
+            label: qsTr("SKIP")
             buttonWidth: 120
             buttonHeight: 50
             anchors.left: parent.left
@@ -253,7 +253,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "CHECK EXTRUDER NOZZLES"
+                text: qsTr("CHECK EXTRUDER NOZZLES")
                 anchors.topMargin: -20
                 font.pixelSize: 22
                 opacity: 1.0
@@ -261,7 +261,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "If there is material on the tips of the extruders, use the steel brush to clean them in the next steps."
+                text: qsTr("If there is material on the tips of the extruders, use the steel brush to clean them in the next steps.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -270,13 +270,13 @@ Item {
                 target: actionButton
                 label_width: 300
                 buttonWidth: 300
-                label: "CLEAN EXTRUDERS"
+                label: qsTr("CLEAN EXTRUDERS")
                 opacity: 1.0
             }
 
             PropertyChanges {
                 target: actionButton2
-                label: "SKIP"
+                label: qsTr("SKIP")
                 buttonWidth: 120
                 buttonHeight: 50
                 opacity: 1.0
@@ -316,14 +316,14 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "EXTRUDERS\nHEATING UP"
+                text: qsTr("EXTRUDERS\nHEATING UP")
                 font.pixelSize: 22
                 opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "The extruders are heating up. Please wait to clean nozzles."
+                text: qsTr("The extruders are heating up. Please wait to clean nozzles.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -373,14 +373,14 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "CLEAN EXTRUDER NOZZLES"
+                text: qsTr("CLEAN EXTRUDER NOZZLES")
                 font.pixelSize: 22
                 opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "Use the provided brush to clean the tips of the extruders for the most accurate calibration."
+                text: qsTr("Use the provided brush to clean the tips of the extruders for the most accurate calibration.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -389,7 +389,7 @@ Item {
                 target: actionButton
                 label_width: 100
                 buttonWidth: 100
-                label: "NEXT"
+                label: qsTr("NEXT")
                 opacity: 1.0
             }
 
@@ -432,14 +432,14 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "COOLING EXTRUDER NOZZLES"
+                text: qsTr("COOLING EXTRUDER NOZZLES")
                 font.pixelSize: 22
                 opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "Calibration will continue after the nozzles cool down."
+                text: qsTr("Calibration will continue after the nozzles cool down.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -494,14 +494,14 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "REMOVE BUILD PLATE"
+                text: qsTr("REMOVE BUILD PLATE")
                 font.pixelSize: 22
                 opacity: 1.0
             }
 
             PropertyChanges {
                 target: subtitle
-                text: "This part of the process is performed with the build plate removed."
+                text: qsTr("This part of the process is performed with the build plate removed.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -510,7 +510,7 @@ Item {
                 target: actionButton
                 label_width: 400
                 buttonWidth: 400
-                label: "BUILD PLATE IS REMOVED"
+                label: qsTr("BUILD PLATE IS REMOVED")
                 opacity: 1.0
             }
 
@@ -554,7 +554,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "INSERT\nBUILD PLATE"
+                text: qsTr("INSERT\nBUILD PLATE")
                 font.pixelSize: 22
                 anchors.topMargin: 20
                 opacity: 1.0
@@ -562,7 +562,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "This part of the process is performed with the build plate installed."
+                text: qsTr("This part of the process is performed with the build plate installed.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -570,7 +570,7 @@ Item {
             PropertyChanges {
                 target: actionButton
                 label_width: 400
-                label: "BUILD PLATE IS INSTALLED"
+                label: qsTr("BUILD PLATE IS INSTALLED")
                 buttonWidth: 410
                 opacity: 1.0
             }
@@ -613,7 +613,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "CALIBRATING"
+                text: qsTr("CALIBRATING")
                 font.pixelSize: 22
                 anchors.topMargin: 40
                 opacity: 1
@@ -621,7 +621,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "Please wait while the printer calibrates."
+                text: qsTr("Please wait while the printer calibrates.")
                 font.pixelSize: 18
                 opacity: 1
             }
@@ -671,7 +671,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "CALIBRATION SUCCESSFUL"
+                text: qsTr("CALIBRATION SUCCESSFUL")
                 anchors.topMargin: 0
                 font.pixelSize: 22
                 opacity: 1.0
@@ -684,7 +684,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "This pair of extruders are now calibrated and can now be used for printing."
+                text: qsTr("This pair of extruders are now calibrated and can now be used for printing.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -692,7 +692,7 @@ Item {
             PropertyChanges {
                 target: actionButton
                 label_width: 100
-                label: "DONE"
+                label: qsTr("DONE")
                 buttonWidth: 125
                 opacity: 1.0
             }
@@ -729,7 +729,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: "CANCELLING"
+                text: qsTr("CANCELLING")
                 anchors.topMargin: 40
                 font.pixelSize: 22
                 opacity: 1.0
@@ -737,7 +737,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "Please wait."
+                text: qsTr("Please wait.")
                 font.pixelSize: 18
                 opacity: 1.0
             }
@@ -839,7 +839,7 @@ Item {
                     Text {
                         id: stop_calib_text
                         color: "#ffffff"
-                        text: "STOP CALIBRATION"
+                        text: qsTr("STOP CALIBRATION")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -879,7 +879,7 @@ Item {
                     Text {
                         id: continue_calib_text
                         color: "#ffffff"
-                        text: "CONTINUE"
+                        text: qsTr("CONTINUE")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -917,7 +917,7 @@ Item {
                 Text {
                     id: cancel_text
                     color: "#cbcbcb"
-                    text: "STOP CALIBRATION?"
+                    text: qsTr("STOP CALIBRATION?")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -928,7 +928,7 @@ Item {
                 Text {
                     id: cancel_description_text
                     color: "#cbcbcb"
-                    text: "Are you sure you want to cancel calibration?"
+                    text: qsTr("Are you sure you want to cancel calibration?")
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

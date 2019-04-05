@@ -8,7 +8,7 @@ Item {
 
     Text {
         id: region
-        text: "WORLD"
+        text: qsTr("WORLD")
         anchors.left: parent.left
         anchors.leftMargin: 25
         anchors.verticalCenter: parent.verticalCenter

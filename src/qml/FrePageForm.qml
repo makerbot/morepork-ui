@@ -38,7 +38,7 @@ Item {
         Text {
             id: title_text
             color: "#ffffff"
-            text: "WELCOME"
+            text: qsTr("WELCOME")
             font.letterSpacing: 2
             anchors.top: parent.top
             anchors.topMargin: 35
@@ -51,7 +51,7 @@ Item {
         Text {
             id: subtitle_text
             color: "#cbcbcb"
-            text: "Follow these steps to set up your\nMethod Performance 3D Printer."
+            text: qsTr("Follow these steps to set up your\nMethod Performance 3D Printer.")
             anchors.top: title_text.bottom
             anchors.topMargin: 20
             font.family: "Antennae"
@@ -64,7 +64,7 @@ Item {
             id: continueButton
             anchors.top: subtitle_text.bottom
             anchors.topMargin: 30
-            label: "BEGIN SETUP"
+            label: qsTr("BEGIN SETUP")
             label_width: 210
             buttonHeight: 50
             buttonWidth: 210
@@ -124,7 +124,7 @@ Item {
                 Text {
                     id: text1
                     color: parent.color
-                    text: "SETUP"
+                    text: qsTr("SETUP")
                     font.letterSpacing: 1
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
@@ -146,7 +146,7 @@ Item {
                 Text {
                     id: text2
                     color: parent.color
-                    text: "LOG IN"
+                    text: qsTr("LOG IN")
                     font.letterSpacing: 1
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
@@ -168,7 +168,7 @@ Item {
                 Text {
                     id: text3
                     color: parent.color
-                    text: "EXTRUDERS"
+                    text: qsTr("EXTRUDERS")
                     font.letterSpacing: 1
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
@@ -190,7 +190,7 @@ Item {
                 Text {
                     id: text4
                     color: parent.color
-                    text: "MATERIAL"
+                    text: qsTr("MATERIAL")
                     font.letterSpacing: 1
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
@@ -212,7 +212,7 @@ Item {
                 Text {
                     id: text5
                     color: parent.color
-                    text: "PRINT"
+                    text: qsTr("PRINT")
                     font.letterSpacing: 1
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
@@ -242,10 +242,10 @@ Item {
                 target: title_text
                 text: {
                     if(isNetworkConnectionAvailable) {
-                        "CONNECTED TO NETWORK"
+                        qsTr("CONNECTED TO NETWORK")
                     }
                     else {
-                        "WI-FI SETUP"
+                        qsTr("WI-FI SETUP")
                     }
                 }
                 lineHeight: 1.2
@@ -257,10 +257,10 @@ Item {
                 target: subtitle_text
                 text: {
                     if(isNetworkConnectionAvailable) {
-                        "You seem to be connected to a network."
+                        qsTr("You seem to be connected to a network.")
                     }
                     else {
-                        "Connect to the internet to enable remote monitoring and\nprinting from any connected device."
+                        qsTr("Connect to the internet to enable remote monitoring and\nprinting from any connected device.")
                     }
                 }
             }
@@ -278,10 +278,10 @@ Item {
                 }
                 label: {
                     if(isNetworkConnectionAvailable) {
-                        "CONTINUE"
+                        qsTr("CONTINUE")
                     }
                     else {
-                        "CHOOSE NETWORK"
+                        qsTr("CHOOSE NETWORK")
                     }
                 }
                 anchors.topMargin: 30
@@ -327,7 +327,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "PRINTER SOFTWARE UPDATE AVAILABLE"
+                text: qsTr("PRINTER SOFTWARE UPDATE AVAILABLE")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -335,14 +335,14 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Update the Method’s printer software for the most up to date\nfeatures and quality."
+                text: qsTr("Update the Method’s printer software for the most up to date\nfeatures and quality.")
             }
 
             PropertyChanges {
                 target: continueButton
                 label_width: 175
                 buttonWidth: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 anchors.topMargin: 30
             }
 
@@ -386,7 +386,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "NAME PRINTER"
+                text: qsTr("NAME PRINTER")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -394,14 +394,14 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Give this printer a name to find it easier."
+                text: qsTr("Give this printer a name to find it easier.")
             }
 
             PropertyChanges {
                 target: continueButton
                 label_width: 175
                 buttonWidth: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 anchors.topMargin: 30
             }
 
@@ -445,7 +445,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "SET THE PRINTER'S CLOCK"
+                text: qsTr("SET THE PRINTER'S CLOCK")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -453,14 +453,14 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Input your local time for more accurate print estimates."
+                text: qsTr("Input your local time for more accurate print estimates.")
             }
 
             PropertyChanges {
                 target: continueButton
                 label_width: 175
                 buttonWidth: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 anchors.topMargin: 30
             }
 
@@ -504,7 +504,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "LOG IN"
+                text: qsTr("LOG IN")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -512,13 +512,13 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Log in to add this printer to your MakerBot account."
+                text: qsTr("Log in to add this printer to your MakerBot account.")
             }
 
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 buttonWidth: 175
                 anchors.topMargin: 30
             }
@@ -573,7 +573,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "ATTACH EXTRUDERS"
+                text: qsTr("ATTACH EXTRUDERS")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -582,7 +582,7 @@ Item {
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 buttonWidth: 190
                 anchors.topMargin: 30
             }
@@ -624,7 +624,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Follow the on screen steps to attach each extruder."
+                text: qsTr("Follow the on screen steps to attach each extruder.")
             }
         },
         State {
@@ -642,7 +642,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "LEVEL BUILD PLATFORM"
+                text: qsTr("LEVEL BUILD PLATFORM")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -651,7 +651,7 @@ Item {
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 buttonWidth: 190
                 anchors.topMargin: 30
             }
@@ -693,7 +693,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Follow the on-screen steps to level the build plate."
+                text: qsTr("Follow the on-screen steps to level the build plate.")
             }
         },
         State {
@@ -711,7 +711,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "CALIBRATE EXTRUDERS"
+                text: qsTr("CALIBRATE EXTRUDERS")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -720,7 +720,7 @@ Item {
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 buttonWidth: 190
                 anchors.topMargin: 30
             }
@@ -762,7 +762,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality."
+                text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
             }
         },
         State {
@@ -780,7 +780,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "LOAD MATERIAL"
+                text: qsTr("LOAD MATERIAL")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -789,7 +789,7 @@ Item {
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 buttonWidth: 175
                 anchors.topMargin: 30
             }
@@ -831,7 +831,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Follow the on screen steps to load material into each bay."
+                text: qsTr("Follow the on screen steps to load material into each bay.")
             }
         },
         State {
@@ -849,7 +849,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "READY TO PRINT"
+                text: qsTr("READY TO PRINT")
                 lineHeight: 1.2
                 font.pixelSize: 28
                 anchors.topMargin: 25
@@ -858,7 +858,7 @@ Item {
             PropertyChanges {
                 target: continueButton
                 label_width: 175
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
                 buttonWidth: 175
                 anchors.topMargin: 30
             }
@@ -900,7 +900,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Start a test print to ensure the printer is set up correctly."
+                text: qsTr("Start a test print to ensure the printer is set up correctly.")
             }
         },
         State {
@@ -913,7 +913,7 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: "YOUR PRINTER IS\nSUCCESSFULLY SET UP"
+                text: qsTr("YOUR PRINTER IS\nSUCCESSFULLY SET UP")
                 lineHeight: 1.4
                 font.pixelSize: 25
                 anchors.topMargin: 35
@@ -921,7 +921,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: "Download MakerBot Print to\nprepare your own files for\nthis printer."
+                text: qsTr("Download MakerBot Print to\nprepare your own files for\nthis printer.")
                 anchors.topMargin: 20
             }
 
@@ -929,7 +929,7 @@ Item {
                 target: continueButton
                 buttonWidth: 110
                 label_width: 110
-                label: "DONE"
+                label: qsTr("DONE")
             }
 
             PropertyChanges {

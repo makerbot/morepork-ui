@@ -82,7 +82,7 @@ Item {
                     Text {
                         id: title
                         width: 375
-                        text: "AUTHORIZE MAKERBOT ACCOUNT"
+                        text: qsTr("AUTHORIZE MAKERBOT ACCOUNT")
                         antialiasing: false
                         smooth: false
                         font.letterSpacing: 3
@@ -111,14 +111,14 @@ Item {
                         font.family: "Antennae"
                         font.pixelSize: 18
                         font.weight: Font.Light
-                        text: "Sign in with your MakerBot Account to add this printer to your printer list. If you do not have a MakerBot Account, please visit MakerBot.com to create an account."
+                        text: qsTr("Sign in with your MakerBot Account to add this printer to your printer list. If you do not have a MakerBot Account, please visit MakerBot.com to create an account.")
                         lineHeight: 1.2
                         visible: true
                     }
 
                     RoundedButton {
                         id: addAccountButton
-                        label: "ADD ACCOUNT"
+                        label: qsTr("ADD ACCOUNT")
                         buttonWidth: 260
                         buttonHeight: 50
                         anchors.left: parent.left
@@ -163,7 +163,7 @@ Item {
                 antialiasing: false
 
                 Text {
-                    text: "ENTER USERNAME OR EMAIL"
+                    text: qsTr("ENTER USERNAME OR EMAIL")
                     font.letterSpacing: 1.5
                     font.wordSpacing: 1
                     font.pointSize: 12
@@ -202,7 +202,7 @@ Item {
                     anchors.top: parent.top
                     anchors.topMargin: 48
                     label_width: 150
-                    label: "NEXT"
+                    label: qsTr("NEXT")
                     buttonWidth: 160
                     buttonHeight: 50
                     disable_button: usernameTextField.text == ""
@@ -216,7 +216,7 @@ Item {
                     padding: 0
 
                     contentItem: Text {
-                        text: "Don't have a MakerBot account?"
+                        text: qsTr("Don't have a MakerBot account?")
                         font.wordSpacing: 1
                         font.pointSize: 12
                         color: "#ffffff"
@@ -257,7 +257,7 @@ Item {
                 antialiasing: false
 
                 Text {
-                    text: "ENTER ACCOUNT PASSWORD"
+                    text: qsTr("ENTER ACCOUNT PASSWORD")
                     font.letterSpacing: 1.5
                     font.wordSpacing: 1
                     font.pointSize: 12
@@ -304,7 +304,7 @@ Item {
                     anchors.top: parent.top
                     anchors.topMargin: 48
                     label_width: 150
-                    label: "AUTHORIZE"
+                    label: qsTr("AUTHORIZE")
                     buttonHeight: 50
                 }
 
@@ -325,7 +325,7 @@ Item {
 
                     Text {
                         id: showPasswordText
-                        text: " Show Password"
+                        text: qsTr(" Show Password")
                         font.wordSpacing: 1
                         font.pointSize: 12
                         color: "#ffffff"
@@ -340,7 +340,7 @@ Item {
                         padding: 0
 
                         contentItem: Text {
-                            text: "Forgot Password?"
+                            text: qsTr("Forgot Password?")
                             font.wordSpacing: 1
                             font.pointSize: 12
                             color: "#ffffff"
@@ -392,7 +392,7 @@ Item {
             Text {
                 id: noAccountText
                 width: 600
-                text: "PLEASE VISIT MAKERBOT.COM TO\nCREATE AN ACCOUNT."
+                text: qsTr("PLEASE VISIT MAKERBOT.COM TO\nCREATE AN ACCOUNT.")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -418,7 +418,7 @@ Item {
             Text {
                 id: resetPasswordText
                 width: 600
-                text: "VISIT MAKERBOT.COM TO RESET YOUR PASSWORD"
+                text: qsTr("VISIT MAKERBOT.COM TO RESET YOUR PASSWORD")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
@@ -443,7 +443,7 @@ Item {
             anchors.fill: parent
             Text {
                 id: authorizingText
-                text: "AUTHORIZING ACCOUNT"
+                text: qsTr("AUTHORIZING ACCOUNT")
                 anchors.top: parent.top
                 anchors.topMargin: 60
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -479,7 +479,7 @@ Item {
             Text {
                 id: signInFailedText
                 width: 600
-                text: "AUTHENTICATION ERROR"
+                text: qsTr("AUTHENTICATION ERROR")
                 anchors.top: parent.top
                 anchors.topMargin: 60
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -499,7 +499,7 @@ Item {
             Text {
                 id: signInFailedBody
                 color: "#cbcbcb"
-                text: "The username or password did not match. Please try again."
+                text: qsTr("The username or password did not match. Please try again.")
                 anchors.top: signInFailedText.bottom
                 anchors.topMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -529,7 +529,7 @@ Item {
             }
             Text {
                 id: signInSucceededTitle
-                text: "AUTHENTICATION\nCOMPLETE"
+                text: qsTr("AUTHENTICATION\nCOMPLETE")
                 anchors.left: authCompleteImage.right
                 anchors.leftMargin: 70
                 anchors.top: authCompleteImage.top
@@ -549,7 +549,7 @@ Item {
             Text {
                 id: signInSucceededBody
                 color: "#cbcbcb"
-                text: "<b>" + username + "</b><br>is now authenticated to this printer."
+                text: qsTr("<b>%1</b><br>is now authenticated to this printer.").arg(username)
                 anchors.left: authCompleteImage.right
                 anchors.leftMargin: 70
                 anchors.bottom: authCompleteImage.bottom

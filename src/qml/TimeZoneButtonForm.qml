@@ -51,7 +51,7 @@ Button {
 
     Text {
         id: timeZoneCodeText
-        text: "UTC"
+        text: qsTr("UTC")
         anchors.left: parent.left
         anchors.leftMargin: 25
         anchors.verticalCenter: parent.verticalCenter
@@ -68,7 +68,7 @@ Button {
 
     Text {
         id: timeZoneNameText
-        text: "UNIVERSAL COORDINATED TIME"
+        text: qsTr("UNIVERSAL COORDINATED TIME")
         anchors.left: parent.left
         anchors.leftMargin: 120
         anchors.verticalCenter: parent.verticalCenter
@@ -84,7 +84,7 @@ Button {
 
     Text {
         id: timeZoneGMTReferenceText
-        text: "GMT"
+        text: qsTr("GMT")
         anchors.right: parent.right
         anchors.rightMargin: 25
         anchors.verticalCenter: parent.verticalCenter

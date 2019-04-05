@@ -151,7 +151,7 @@ Item {
 
             Text {
                 id: errorMessageTitle
-                text: "ERROR TITLE"
+                text: qsTr("ERROR TITLE")
                 anchors.top: parent.top
                 anchors.topMargin: 65
                 font.bold: true
@@ -167,7 +167,7 @@ Item {
 
             Text {
                 id: errorMessageDescription
-                text: "Error description"
+                text: qsTr("Error description")
                 anchors.top: errorMessageTitle.bottom
                 anchors.topMargin: 20
                 font.family: "Antennae"
@@ -217,12 +217,12 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "PROCESS FAILED.\nCLOSE BUILD\nCHAMBER DOOR."
+                text: qsTr("PROCESS FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "Close the build chamber door and\ntry again."
+                text: qsTr("Close the build chamber door and\ntry again.")
             }
 
             PropertyChanges {
@@ -253,12 +253,12 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "PROCESS FAILED.\nCLOSE THE\nTOP LID."
+                text: qsTr("PROCESS FAILED.\nCLOSE THE\nTOP LID.")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "Put the lid back on the printer\nand try again."
+                text: qsTr("Put the lid back on the printer\nand try again.")
             }
 
             PropertyChanges {
@@ -283,9 +283,9 @@ Item {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateTyep == ProcessStateType.Paused) {
-                        "PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR."
+                        qsTr("PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        "PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR."
+                        qsTr("PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
                     }
                 }
             }
@@ -295,9 +295,9 @@ Item {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateTyep == ProcessStateType.Paused) {
-                        "Close the build chamber door to\ncontinue printing."
+                        qsTr("Close the build chamber door to\ncontinue printing.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        "Close the build chamber door and\nrestart print."
+                        qsTr("Close the build chamber door and\nrestart print.")
                     }
                 }
             }
@@ -326,9 +326,9 @@ Item {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateTyep == ProcessStateType.Paused) {
-                        "PRINT PAUSED.\nCLOSE THE\nTOP LID."
+                        qsTr("PRINT PAUSED.\nCLOSE THE\nTOP LID.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        "PRINT FAILED.\nCLOSE THE\nTOP LID."
+                        qsTr("PRINT FAILED.\nCLOSE THE\nTOP LID.")
                     }
                 }
             }
@@ -338,9 +338,9 @@ Item {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateTyep == ProcessStateType.Paused) {
-                        "Put the lid back on the printer\nto continue printing."
+                        qsTr("Put the lid back on the printer\nto continue printing.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        "Put the lid back on the printer and\nrestart print."
+                        qsTr("Put the lid back on the printer and\nrestart print.")
                     }
                 }
             }
@@ -366,12 +366,12 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "CALIBRATION FAILED.\nCLOSE THE\nTOP LID."
+                text: qsTr("CALIBRATION FAILED.\nCLOSE THE\nTOP LID.")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "Put the lid back on the printer\nand retry calibrating"
+                text: qsTr("Put the lid back on the printer\nand retry calibrating")
             }
 
             PropertyChanges {
@@ -397,16 +397,16 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "MATERIAL JAM\nDETECTED"
+                text: qsTr("MATERIAL JAM\nDETECTED")
                 anchors.topMargin: 0
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: (bot.extruderAJammed ?
-                           "Model Extruder 1" :
-                           "Support Extruder 2") +
-                      " seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it."
+                text: qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.").arg(
+                    (bot.extruderAJammed ?
+                           qsTr("Model Extruder 1") :
+                           qsTr("Support Extruder 2")))
             }
 
             PropertyChanges {
@@ -414,8 +414,8 @@ Item {
                 buttonWidth: 340
                 label_width: 300
                 label: {
-                    "PURGE EXTRUDER " +
-                       (bot.extruderAJammed ? "1" : "2")
+                    qsTr("PURGE EXTRUDER %1").arg(
+                       (bot.extruderAJammed ? qsTr("1") : qsTr("2")))
                 }
             }
 
@@ -448,11 +448,10 @@ Item {
             PropertyChanges {
                 target: errorMessageTitle
                 text: {
-                    "PRINT PAUSING\nOUT OF " +
-                    (bot.process.filamentBayAOOF ?
-                         "MODEL" :
-                         "SUPPORT") +
-                    "\nMATERIAL"
+                    qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
+                        (bot.process.filamentBayAOOF ?
+                             qsTr("MODEL") :
+                             qsTr("SUPPORT")))
                 }
                 anchors.topMargin: 0
             }
@@ -460,13 +459,12 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    "The printer has run out of " +
-                        (bot.process.filamentBayAOOF ?
+                    qsTr("The printer has run out of %1").arg(
+                        bot.process.filamentBayAOOF ?
                              printPage.print_model_material.toUpperCase() :
                              printPage.print_support_material.toUpperCase()) +
-                        ". Open\nmaterial bay " +
-                        (bot.process.filamentBayAOOF ? "1" : "2") +
-                        " and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds."
+                        qsTr(". Open\nmaterial bay %1 and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds.").arg(
+                            bot.process.filamentBayAOOF ? qsTr("1") : qsTr("2"))
                 }
             }
 
@@ -502,11 +500,8 @@ Item {
             PropertyChanges {
                 target: errorMessageTitle
                 text: {
-                    "PRINT PAUSING\nOUT OF " +
-                    (bot.extruderAOOF ?
-                                "MODEL" :
-                                "SUPPORT") +
-                     "\nMATERIAL"
+                    qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
+                        bot.extruderAOOF ?  qsTr("MODEL") : qsTr("SUPPORT"))
                 }
                 anchors.topMargin: 0
             }
@@ -514,15 +509,14 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    "Remove the lid and swivel clip then\ngently pull out the remaining " +
-                    (bot.extruderAOOF ?
-                          "model" :
-                          "support") +
-                    "\nmaterial from " +
-                    (bot.extruderAOOF ?
-                          "Model Extruder 1." :
-                          "Support Extruder 2.") +
-                    " This\nprocess can take up to 60 seconds."
+                    qsTr("Remove the lid and swivel clip then\ngently pull out the remaining %1\nmaterial from %2.").arg(
+                        bot.extruderAOOF ?
+                              qsTr("model") :
+                              qsTr("support")).arg(
+                        bot.extruderAOOF ?
+                              qsTr("Model Extruder 1") :
+                              qsTr("Support Extruder 2")) +
+                    qsTr(" This\nprocess can take up to 60 seconds.")
                 }
             }
 
@@ -531,7 +525,7 @@ Item {
                 label_width: 200
                 buttonWidth: 200
                 label: {
-                    "CONTINUE"
+                    qsTr("CONTINUE")
                 }
             }
 
@@ -558,7 +552,7 @@ Item {
             PropertyChanges {
                 target: errorMessageTitle
                 text: {
-                    "REMOVE EMPTY\nSPOOL"
+                    qsTr("REMOVE EMPTY\nSPOOL")
                 }
                 anchors.topMargin: 50
             }
@@ -566,10 +560,8 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    "Open material bay " +
-                     (bot.extruderAOOF ?
-                                "1" : "2") +
-                      " and remove the\nempty material spool."
+                    qsTr("Open material bay %1 and remove the\nempty material spool.").arg(
+                            bot.extruderAOOF ? qsTr("1") : qsTr("2"))
                 }
             }
 
@@ -578,7 +570,7 @@ Item {
                 label_width: 280
                 buttonWidth: 280
                 label: {
-                    "LOAD MATERIAL"
+                    qsTr("LOAD MATERIAL")
                 }
             }
 
@@ -611,16 +603,15 @@ Item {
             PropertyChanges {
                 target: errorMessageTitle
                 text: {
-                    "PRINT PAUSED.\nEXTRUDER " +
-                    (bot.process.errorSource + 1) +
-                     "\nDISCONNECTED."
+                    qsTr("PRINT PAUSED.\nEXTRUDER %1\nDISCONNECTED.").arg(
+                        bot.process.errorSource + 1);
                 }
                 anchors.topMargin: 0
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "Ensure the extruder is attached and\npress the button below to continue."
+                text: qsTr("Ensure the extruder is attached and\npress the button below to continue.")
             }
 
             PropertyChanges {
@@ -628,7 +619,7 @@ Item {
                 label_width: 340
                 buttonWidth: 340
                 label: {
-                    "ATTACH EXTRUDER " + (bot.process.errorSource + 1)
+                    qsTr("ATTACH EXTRUDER %1").arg(bot.process.errorSource + 1)
                 }
             }
 
@@ -660,15 +651,14 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "ERROR"
+                text: qsTr("ERROR")
                 anchors.topMargin: 50
             }
 
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    "Error " + errorCode +
-                    "\nVisit MakerBot.com/support\nfor more info."
+                    qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(errorCode)
                 }
             }
 
@@ -676,7 +666,7 @@ Item {
                 target: button1
                 label_width: 200
                 buttonWidth: 200
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -696,17 +686,17 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "CALIBRATION\nERROR"
+                text: qsTr("CALIBRATION\nERROR")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error " + lastReportedErrorCode
+                text: qsTr("There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error %1").arg(lastReportedErrorCode)
             }
 
             PropertyChanges {
                 target: button1
-                label: "TRY AGAIN"
+                label: qsTr("TRY AGAIN")
             }
 
             PropertyChanges {
@@ -721,17 +711,17 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "HEATING ERROR"
+                text: qsTr("HEATING ERROR")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError " + lastReportedErrorCode
+                text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
             }
 
             PropertyChanges {
                 target: button1
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -746,17 +736,17 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "HEATER\nTEMPERATURE\nERROR"
+                text: qsTr("HEATER\nTEMPERATURE\nERROR")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError " + lastReportedErrorCode
+                text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
             }
 
             PropertyChanges {
                 target: button1
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -771,12 +761,12 @@ Item {
 
             PropertyChanges {
                 target: errorMessageTitle
-                text: "CARRIAGE\nCOMMUNICATION\nERROR"
+                text: qsTr("CARRIAGE\nCOMMUNICATION\nERROR")
             }
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: "The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact MakerBot\nsupport. Error " + lastReportedErrorCode
+                text: qsTr("The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact MakerBot\nsupport. Error %1").arg(lastReportedErrorCode)
             }
 
             PropertyChanges {

@@ -38,7 +38,7 @@ Item {
         color: "#ffffff"
         font.family: "Antennae"
         font.weight: Font.Light
-        text: "No Firmware Files Found"
+        text: qsTr("No Firmware Files Found")
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         font.pointSize: 20
@@ -80,7 +80,7 @@ Item {
                         storage.backStackPush(model.modelData.filePath)
                         storage.updateFirmwareFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                     }
-                    else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
+                    else if(model.modelData.fileBaseName !== qsTr("No Items Present")) { // Ignore default fileBaseName object
                         if(storage.firmwareIsValid(model.modelData.filePath + "/" + model.modelData.fileName)) {
                             getFwFileDetails(model.modelData)
                             storage.copyFirmwareToDisk(model.modelData.filePath + "/" + model.modelData.fileName)
@@ -165,7 +165,7 @@ Item {
                    Text {
                        id: full_button_text_copy_firmware_popup
                        color: "#ffffff"
-                       text: "CANCEL"
+                       text: qsTr("CANCEL")
                        Layout.fillHeight: false
                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                        Layout.fillWidth: false
@@ -208,7 +208,7 @@ Item {
                 Text {
                     id: alert_text_copy_firmware_popup
                     color: "#cbcbcb"
-                    text: "COPYING FIRMWARE"
+                    text: qsTr("COPYING FIRMWARE")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"

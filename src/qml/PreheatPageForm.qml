@@ -27,17 +27,17 @@ Item {
                 id: buttonStartStopPreheat
                 buttonImage.source: "qrc:/img/icon_preheat.png"
                 buttonText.text: bot.chamberTargetTemp > 0 ?
-                                     "STOP CHAMBER PREHEAT" :
-                                     "START CHAMBER PREHEAT"
+                                     qsTr("STOP CHAMBER PREHEAT") :
+                                     qsTr("START CHAMBER PREHEAT")
                 Text {
                     id: temperature_text
                     color: "#ffffff"
                     text: {
                         if(bot.chamberTargetTemp > 0) {
-                            bot.chamberCurrentTemp + "|" + bot.chamberTargetTemp + "\u00b0C"
+                            bot.chamberCurrentTemp + "|" + bot.chamberTargetTemp + qsTr("\u00b0C")
                         }
                         else {
-                            bot.chamberCurrentTemp + "\u00b0C"
+                            bot.chamberCurrentTemp + qsTr("\u00b0C")
                         }
                     }
                     font.letterSpacing: 3

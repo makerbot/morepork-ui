@@ -241,7 +241,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 50
         anchors.horizontalCenter: parent.horizontalCenter
-        label: "DONE"
+        label: qsTr("DONE")
         opacity: {
             button_mouseArea.enabled ? 1.0 : 0.1
         }
