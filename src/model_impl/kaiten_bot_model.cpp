@@ -1075,6 +1075,7 @@ void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
             extruderBCalibratedSet(calibrated.asBool());
         }
     }
+    extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated());
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {

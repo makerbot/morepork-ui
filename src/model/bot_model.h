@@ -118,6 +118,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderBJammed, false)
     MODEL_PROP(bool, extruderBOOF, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
+    MODEL_PROP(bool, extrudersCalibrated, true)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
     MODEL_PROP(int, chamberErrorCode, 0)

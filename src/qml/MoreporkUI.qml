@@ -23,8 +23,7 @@ ApplicationWindow {
     property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
-    property bool extruderACalibrated: bot.extruderACalibrated
-    property bool extruderBCalibrated: bot.extruderBCalibrated
+    property bool extrudersCalibrated: bot.extrudersCalibrated
     property bool skipAuthentication: false
     property bool isAuthenticated: false
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
@@ -152,16 +151,8 @@ ApplicationWindow {
         }
     }
 
-    onExtruderACalibratedChanged: {
-        if(extruderACalibrated && extruderBCalibrated) {
-            extNotCalibratedPopup.close()
-        }
-        else {
-            extNotCalibratedPopup.open()
-        }
-    }
-    onExtruderBCalibratedChanged: {
-        if(extruderACalibrated && extruderBCalibrated) {
+    onExtrudersCalibratedChanged: {
+        if(extrudersCalibrated) {
             extNotCalibratedPopup.close()
         }
         else {
