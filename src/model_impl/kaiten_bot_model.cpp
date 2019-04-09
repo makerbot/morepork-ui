@@ -35,6 +35,7 @@ class KaitenBotModel : public BotModel {
     void queryStatusUpdate(const Json::Value & info);
     void wifiUpdate(const Json::Value & result);
     void extChangeUpdate(const Json::Value & params);
+    void spoolChangeUpdate(const Json::Value & spool_info);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -65,9 +66,6 @@ class KaitenBotModel : public BotModel {
     void disconnectWifi(QString path);
     void forgetWifi(QString path);
     void addMakerbotAccount(QString username, QString makerbot_token);
-    void getSpoolInfo(const int bayIndex);
-    void updateSpoolInfo(const int bayIndex);
-    void spoolUpdate(const Json::Value & res, const int bayIndex);
     void zipLogs(QString path);
     void forceSyncFile(QString path);
     void changeMachineName(QString new_name);
@@ -265,35 +263,6 @@ class KaitenBotModel : public BotModel {
     };
     std::shared_ptr<WifiUpdateCallback> m_wifiCb;
 
-    class SpoolInfoCallback : public JsonRpcCallback {
-      public:
-        SpoolInfoCallback(KaitenBotModel * bot, const int bayIndex)
-                : m_bot(bot),
-                  m_index(bayIndex) {}
-        void response(const Json::Value & resp) override {
-            m_bot->spoolUpdate(resp, m_index);
-        }
-      private:
-        const int m_index;
-        KaitenBotModel *m_bot;
-    };
-    std::vector<std::shared_ptr<SpoolInfoCallback> > m_spoolInfoCb;
-
-    class UpdateSpoolInfoCallback : public JsonRpcCallback {
-      public:
-        UpdateSpoolInfoCallback(KaitenBotModel * bot, const int bayIndex)
-                : m_bot(bot),
-                  m_index(bayIndex) {}
-        void response(const Json::Value & resp) override {
-            m_index ? m_bot->spoolBUpdateFinishedSet(true) :
-                      m_bot->spoolAUpdateFinishedSet(true);
-        }
-      private:
-        const int m_index;
-        KaitenBotModel *m_bot;
-    };
-    std::vector<std::shared_ptr<UpdateSpoolInfoCallback> > m_updateSpoolInfoCb;
-
     class ToolStatsCallback : public JsonRpcCallback {
       public:
         ToolStatsCallback(KaitenBotModel * bot, const int index)
@@ -363,6 +332,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<ExtruderChangeNotification> m_extChange;
+
+    class SpoolChangeNotification : public JsonRpcNotification {
+      public:
+        SpoolChangeNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->spoolChangeUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<SpoolChangeNotification> m_spoolChange;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -812,40 +792,6 @@ void KaitenBotModel::addMakerbotAccount(QString username, QString makerbot_token
     }
 }
 
-void KaitenBotModel::getSpoolInfo(const int bayIndex){
-  try{
-      qDebug() << FL_STRM << "called";
-      auto conn = m_conn.data();
-      Json::Value json_params(Json::objectValue);
-      json_params["bay_index"] = Json::Value(bayIndex);
-      conn->jsonrpc.invoke(
-              "get_spool_info",
-              json_params,
-              m_spoolInfoCb[bayIndex]);
-  }
-  catch(JsonRpcInvalidOutputStream &e){
-      qWarning() << FFL_STRM << e.what();
-  }
-}
-
-void KaitenBotModel::updateSpoolInfo(const int bayIndex){
-  try{
-      qDebug() << FL_STRM << "called";
-      auto conn = m_conn.data();
-      Json::Value json_params(Json::objectValue);
-      json_params["bay_index"] = Json::Value(bayIndex);
-      bayIndex ? spoolBUpdateFinishedSet(false) : spoolAUpdateFinishedSet(false);
-      conn->jsonrpc.invoke(
-              "update_spool_info",
-              json_params,
-              m_updateSpoolInfoCb[bayIndex]);
-  }
-  catch(JsonRpcInvalidOutputStream &e){
-      qWarning() << FFL_STRM << e.what();
-      bayIndex ? spoolBUpdateFinishedSet(true) : spoolAUpdateFinishedSet(true);
-  }
-}
-
 void KaitenBotModel::getToolStats(const int index){
   try{
       qDebug() << FL_STRM << "called";
@@ -1024,14 +970,6 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_queryStatusCb(new QueryStatusCallback(this)),
         m_wifiResult(new WifiUpdateResult(this)),
         m_wifiCb(new WifiUpdateCallback(this)),
-        m_spoolInfoCb{std::shared_ptr<SpoolInfoCallback>(
-                              new SpoolInfoCallback(this, 0)),
-                      std::shared_ptr<SpoolInfoCallback>(
-                              new SpoolInfoCallback(this, 1))},
-        m_updateSpoolInfoCb{std::shared_ptr<UpdateSpoolInfoCallback>(
-                              new UpdateSpoolInfoCallback(this, 0)),
-                      std::shared_ptr<UpdateSpoolInfoCallback>(
-                              new UpdateSpoolInfoCallback(this, 1))},
         m_toolStatsCb{std::shared_ptr<ToolStatsCallback>(
                               new ToolStatsCallback(this, 0)),
                       std::shared_ptr<ToolStatsCallback>(
@@ -1040,7 +978,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_usbCopyCompleteNot(new UsbCopyCompleteNotification(this)),
         m_sysTimeNot(new SystemTimeNotification(this)),
         m_stzCb(new SetTimeZoneCallback()),
-        m_extChange(new ExtruderChangeNotification(this)) {
+        m_extChange(new ExtruderChangeNotification(this)),
+        m_spoolChange(new SpoolChangeNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1057,6 +996,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("usb_copy_complete", m_usbCopyCompleteNot);
     conn->jsonrpc.addMethod("system_time_notification", m_sysTimeNot);
     conn->jsonrpc.addMethod("extruder_change", m_extChange);
+    conn->jsonrpc.addMethod("spool_change", m_spoolChange);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -1076,6 +1016,49 @@ void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
         }
     }
     extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated());
+}
+
+void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
+    LOG(info) << spool_info;
+    // We don't update amount remaining here. This comes as an ongoing update
+    // via the system information packet (see above).
+#define UPDATE_SPOOL_INFO(BAY_SYM) \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## Version, spool_info["version"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingDate, \
+        spool_info["manufacturing_date"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## Material, \
+        spool_info["material_type"]); \
+    UPDATE_STRING_PROP(spool ## BAY_SYM ## SupplierCode, \
+        spool_info["supplier_code"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingLotCode, \
+        spool_info["manufacturing_lot_code"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## OriginalAmount, \
+        spool_info["original_amount"]); \
+    UPDATE_INT_LIST_PROP(spool ## BAY_SYM ## ColorRGB, \
+        spool_info["material_color_rgb"]); \
+    UPDATE_STRING_PROP(spool ## BAY_SYM ## ColorName, \
+        spool_info["material_color_name"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## Checksum, spool_info["checksum"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## SchemaVersion, \
+        spool_info["rw_version"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## MaxHumidity, \
+        spool_info["max_humidity"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## FirstLoadDate, \
+        spool_info["first_load_date"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## MaxTemperature, \
+        spool_info["max_temperature"]);
+    const Json::Value &index = spool_info["bay_index"];
+    if (index.isInt()) {
+        switch (index.asInt()) {
+            case 0:
+                UPDATE_SPOOL_INFO(A)
+                break;
+            case 1:
+                UPDATE_SPOOL_INFO(B)
+                break;
+        }
+    }
+#undef UPDATE_SPOOL_INFO
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
@@ -1288,93 +1271,36 @@ void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index)
     }
 }
 
-void KaitenBotModel::spoolUpdate(const Json::Value &result, const int index) {
-    const Json::Value & res = result["result"];
-
-    // :(
-    switch(index) {
-        case 0: {
-            UPDATE_INT_PROP(spoolAOriginalAmount, res["original_amount"]);
-            UPDATE_INT_PROP(spoolAVersion, res["version"]);
-            UPDATE_INT_PROP(spoolAManufacturingLotCode, res["manufacturing_lot_code"]);
-            UPDATE_INT_PROP(spoolAManufacturingDate, res["manufacturing_date"]);
-            UPDATE_STRING_PROP(spoolASupplierCode, res["supplier_code"]);
-            UPDATE_INT_PROP(spoolAMaterial, res["material_type"]);
-            UPDATE_INT_PROP(spoolAChecksum, res["checksum"]);
-            UPDATE_INT_LIST_PROP(spoolAColorRGB, res["material_color_rgb"]);
-            UPDATE_STRING_PROP(spoolAColorName, res["material_color_name"]);
-
-            UPDATE_INT_PROP(spoolAAmountRemaining, res["amount_remaining"]);
-            UPDATE_INT_PROP(spoolAFirstLoadDate, res["first_load_date"]);
-            UPDATE_INT_PROP(spoolAMaxHumidity, res["max_humidity"]);
-            UPDATE_INT_PROP(spoolAMaxTemperature, res["max_temperature"]);
-            UPDATE_INT_PROP(spoolASchemaVersion, res["rw_version"]);
-            spoolADetailsReadySet(true);
-            break;
-        }
-        case 1: {
-            UPDATE_INT_PROP(spoolBOriginalAmount, res["original_amount"]);
-            UPDATE_INT_PROP(spoolBVersion, res["version"]);
-            UPDATE_INT_PROP(spoolBManufacturingLotCode, res["manufacturing_lot_code"]);
-            UPDATE_INT_PROP(spoolBManufacturingDate, res["manufacturing_date"]);
-            UPDATE_STRING_PROP(spoolBSupplierCode, res["supplier_code"]);
-            UPDATE_INT_PROP(spoolBMaterial, res["material_type"]);
-            UPDATE_INT_PROP(spoolBChecksum, res["checksum"]);
-            UPDATE_INT_LIST_PROP(spoolBColorRGB, res["material_color_rgb"]);
-            UPDATE_STRING_PROP(spoolBColorName, res["material_color_name"]);
-
-            UPDATE_INT_PROP(spoolBAmountRemaining, res["amount_remaining"]);
-            UPDATE_INT_PROP(spoolBFirstLoadDate, res["first_load_date"]);
-            UPDATE_INT_PROP(spoolBMaxHumidity, res["max_humidity"]);
-            UPDATE_INT_PROP(spoolBMaxTemperature, res["max_temperature"]);
-            UPDATE_INT_PROP(spoolBSchemaVersion, res["rw_version"]);
-            spoolBDetailsReadySet(true);
-            break;
-        }
-    }
-}
-
 void KaitenBotModel::resetSpoolProperties(const int bayID) {
+    LOG(info) << "bay ID: " << bayID;
+#define RESET_SPOOL_INFO(BAY_SYM) \
+    spool ## BAY_SYM ## UpdateFinishedReset(); \
+    spool ## BAY_SYM ## DetailsReadyReset(); \
+    spool ## BAY_SYM ## VersionReset(); \
+    spool ## BAY_SYM ## ManufacturingDateReset(); \
+    spool ## BAY_SYM ## MaterialReset(); \
+    spool ## BAY_SYM ## SupplierCodeReset(); \
+    spool ## BAY_SYM ## ManufacturingLotCodeReset(); \
+    spool ## BAY_SYM ## OriginalAmountReset(); \
+    spool ## BAY_SYM ## ColorRGBReset(); \
+    spool ## BAY_SYM ## ColorNameReset(); \
+    spool ## BAY_SYM ## ChecksumReset(); \
+    spool ## BAY_SYM ## SchemaVersionReset(); \
+    spool ## BAY_SYM ## MaxHumidityReset(); \
+    spool ## BAY_SYM ## FirstLoadDateReset(); \
+    spool ## BAY_SYM ## AmountRemainingReset(); \
+    spool ## BAY_SYM ## MaxTemperatureReset();
     switch(bayID) {
         case 1: {
-            spoolADetailsReadyReset();
-            spoolAOriginalAmountReset();
-            spoolAVersionReset();
-            spoolAManufacturingLotCodeReset();
-            spoolAManufacturingDateReset();
-            spoolASupplierCodeReset();
-            spoolAMaterialReset();
-            spoolAChecksumReset();
-            spoolAColorRGBReset();
-            spoolAColorNameReset();
-            spoolAAmountRemainingReset();
-            spoolAFirstLoadDateReset();
-            spoolAMaxHumidityReset();
-            spoolAMaxTemperatureReset();
-            spoolASchemaVersionReset();
-            spoolAUpdateFinishedReset();
+            RESET_SPOOL_INFO(A)
             break;
         }
         case 2: {
-            spoolBDetailsReadyReset();
-            spoolBOriginalAmountReset();
-            spoolBVersionReset();
-            spoolBManufacturingLotCodeReset();
-            spoolBManufacturingDateReset();
-            spoolBSupplierCodeReset();
-            spoolBMaterialReset();
-            spoolBChecksumReset();
-            spoolBColorRGBReset();
-            spoolBColorNameReset();
-            spoolBAmountRemainingReset();
-            spoolBFirstLoadDateReset();
-            spoolBMaxHumidityReset();
-            spoolBMaxTemperatureReset();
-            spoolBSchemaVersionReset();
-            spoolBUpdateFinishedReset();
+            RESET_SPOOL_INFO(B)
             break;
         }
     }
+#undef RESET_SPOOL_INFO
 }
 
 void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
