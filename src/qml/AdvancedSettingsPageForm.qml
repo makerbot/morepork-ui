@@ -454,7 +454,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -494,7 +494,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -533,7 +533,7 @@ Item {
                     text: hasReset ? "RESET SUCCESSFUL" : isResetting ? "RESETTING TO FACTORY..." : "RESET TO FACTORY"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -556,7 +556,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     lineHeight: 1.3
                     visible: !hasReset
@@ -596,7 +596,7 @@ Item {
                         color: "#cbcbcb"
                         text: "Clear calibration settings"
                         font.letterSpacing: 2
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.weight: Font.Light
                         font.pixelSize: 16
                         visible: !isResetting && !hasReset

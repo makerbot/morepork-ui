@@ -92,7 +92,7 @@ Item {
                         anchors.left: parent.left
                         anchors.leftMargin: 0
                         color: "#e6e6e6"
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 26
                         font.weight: Font.Bold
                         lineHeight: 1.2
@@ -108,7 +108,7 @@ Item {
                         anchors.left: parent.left
                         anchors.leftMargin: 0
                         color: "#e6e6e6"
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         font.weight: Font.Light
                         text: "Sign in with your MakerBot Account to add this printer to your printer list. If you do not have a MakerBot Account, please visit MakerBot.com to create an account."
@@ -171,7 +171,7 @@ Item {
                     anchors.left: usernameTextField.left
                     anchors.bottom: usernameTextField.top
                     anchors.bottomMargin: 12
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                 }
 
@@ -185,7 +185,7 @@ Item {
                     anchors.topMargin: 50
                     anchors.left: parent.left
                     anchors.leftMargin: 50
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                     font.pointSize: 14
                     background: Rectangle {
@@ -220,7 +220,7 @@ Item {
                         font.wordSpacing: 1
                         font.pointSize: 12
                         color: "#ffffff"
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.weight: Font.Light
                         //anchors.left: usernameTextField.left
                     }
@@ -265,7 +265,7 @@ Item {
                     anchors.left: passwordField.left
                     anchors.bottom: passwordField.top
                     anchors.bottomMargin: 10
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                 }
 
@@ -285,7 +285,7 @@ Item {
                         color: "#f7f7f7"
                     }
                     color: "#000000"
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                     font.pointSize: (showPassword.checked ||
                                     text == "") ? 14 : 24
@@ -329,7 +329,7 @@ Item {
                         font.wordSpacing: 1
                         font.pointSize: 12
                         color: "#ffffff"
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.weight: Font.Light
                         anchors.left: showPassword.right
                     }
@@ -344,7 +344,7 @@ Item {
                             font.wordSpacing: 1
                             font.pointSize: 12
                             color: "#ffffff"
-                            font.family: "Antennae"
+                            font.family: "Antenna"
                             font.weight: Font.Light
                         }
 
@@ -401,7 +401,7 @@ Item {
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.4
@@ -427,7 +427,7 @@ Item {
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.4
@@ -453,7 +453,7 @@ Item {
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.2
@@ -489,7 +489,7 @@ Item {
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.2
@@ -507,7 +507,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 font.weight: Font.Light
                 wrapMode: Text.WordWrap
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 20
                 lineHeight: 1.3
                 visible: true
@@ -539,7 +539,7 @@ Item {
                 font.letterSpacing: 3
                 wrapMode: Text.WordWrap
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.4
@@ -556,7 +556,7 @@ Item {
                 anchors.bottomMargin: 10
                 font.weight: Font.Light
                 wrapMode: Text.WordWrap
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 20
                 font.letterSpacing: 1
                 lineHeight: 1.3

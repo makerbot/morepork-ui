@@ -30,7 +30,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 2
                 font.pixelSize: 14
-                font.family: "Antennae"
+                font.family: "Antenna"
                 smooth: false
                 antialiasing: false
             }
@@ -46,7 +46,7 @@ Item {
         anchors.leftMargin: 36
         color: "#ffffff"
         font.pixelSize: 19
-        font.family: "Antennae"
+        font.family: "Antenna"
         font.weight: Font.Light
         smooth: false
         antialiasing: false

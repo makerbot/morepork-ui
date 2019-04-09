@@ -36,7 +36,7 @@ Item {
 
     Text {
         color: "#ffffff"
-        font.family: "Antennae"
+        font.family: "Antenna"
         font.weight: Font.Light
         text: "No Firmware Files Found"
         anchors.horizontalCenter: parent.horizontalCenter
@@ -171,7 +171,7 @@ Item {
                        Layout.fillWidth: false
                        font.letterSpacing: 3
                        font.weight: Font.Bold
-                       font.family: "Antennae"
+                       font.family: "Antenna"
                        font.pixelSize: 18
                        anchors.verticalCenter: parent.verticalCenter
                        anchors.horizontalCenter: parent.horizontalCenter
@@ -211,7 +211,7 @@ Item {
                     text: "COPYING FIRMWARE"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -234,7 +234,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     lineHeight: 1.3
                     visible: true

@@ -280,7 +280,7 @@ Item {
             anchors.topMargin: 100
             font.letterSpacing: 4
             wrapMode: Text.WordWrap
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             font.pixelSize: 20
             lineHeight: 1.3
@@ -324,7 +324,7 @@ Item {
             anchors.top: main_instruction_text.bottom
             anchors.topMargin: 30
             wrapMode: Text.WordWrap
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Light
             font.pixelSize: 18
             lineHeight: 1.35
@@ -366,7 +366,7 @@ Item {
             Text {
                 id: extruder_current_temperature_text
                 text: currentTemperature + "C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -383,7 +383,7 @@ Item {
             Text {
                 id: extruder_target_temperature_text
                 text: targetTemperature + "C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light

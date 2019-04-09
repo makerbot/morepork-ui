@@ -367,7 +367,7 @@ Item {
 
             Text {
                 color: "#ffffff"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.weight: Font.Light
                 text: "No Items"
                 anchors.verticalCenter: parent.verticalCenter

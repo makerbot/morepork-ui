@@ -42,7 +42,7 @@ Item {
             font.letterSpacing: 2
             anchors.top: parent.top
             anchors.topMargin: 35
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             font.pixelSize: 28
             lineHeight: 1.2
@@ -54,7 +54,7 @@ Item {
             text: "Follow these steps to set up your\nMethod Performance 3D Printer."
             anchors.top: title_text.bottom
             anchors.topMargin: 20
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Light
             font.pixelSize: 20
             lineHeight: 1.3
@@ -129,7 +129,7 @@ Item {
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 14
                 }
@@ -151,7 +151,7 @@ Item {
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 14
                 }
@@ -173,7 +173,7 @@ Item {
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 14
                 }
@@ -195,7 +195,7 @@ Item {
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 14
                 }
@@ -217,7 +217,7 @@ Item {
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 14
                 }

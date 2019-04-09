@@ -124,7 +124,7 @@ Item {
             smooth: false
             antialiasing: false
             font.letterSpacing: 3
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             font.pixelSize: 17
             color: "#cbcbcb"
@@ -139,7 +139,7 @@ Item {
             smooth: false
             antialiasing: false
             font.letterSpacing: 3
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             font.pixelSize: 17
             color: "#cbcbcb"
@@ -157,7 +157,7 @@ Item {
             smooth: false
             antialiasing: false
             font.letterSpacing: 3
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Normal
             font.pixelSize: 18
             color: "#cbcbcb"
@@ -182,7 +182,7 @@ Item {
             smooth: false
             antialiasing: false
             font.letterSpacing: 1
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Light
             font.pixelSize: 18
             color: "#ffffff"

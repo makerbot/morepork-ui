@@ -436,7 +436,7 @@ Item {
             anchors.topMargin: 0
             color: "#ffffff"
             font.pixelSize: 15
-            font.family: "Antennae"
+            font.family: "Antenna"
         }
 
         Text {
@@ -448,7 +448,7 @@ Item {
             anchors.topMargin: 0
             color: "#ffffff"
             font.pixelSize: 15
-            font.family: "Antennae"
+            font.family: "Antenna"
         }
     }
 }

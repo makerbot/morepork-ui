@@ -28,7 +28,7 @@ Item {
             text: "TOOLHEAD LABEL"
             font.letterSpacing: 2
             font.pixelSize: 15
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             color: "#ffffff"
         }

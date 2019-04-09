@@ -155,7 +155,7 @@ Item {
                 anchors.top: parent.top
                 anchors.topMargin: 65
                 font.bold: true
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.weight: Font.Bold
                 font.pixelSize: 26
                 font.letterSpacing: 2
@@ -170,7 +170,7 @@ Item {
                 text: "Error description"
                 anchors.top: errorMessageTitle.bottom
                 anchors.topMargin: 20
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 18
                 lineHeight: 1.2
                 color: "#e8e8e8"

@@ -38,7 +38,7 @@ Item {
             Layout.fillWidth: true
             font.weight: Font.Light
             wrapMode: Text.WordWrap
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 20
             lineHeight: 1.5
             anchors.bottom: parent.bottom

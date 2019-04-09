@@ -16,7 +16,7 @@ Item {
             font.letterSpacing: 2
             font.weight: Font.Bold
             font.pixelSize: 20
-            font.family: "Antennae"
+            font.family: "Antenna"
             color: "#ffffff"
         }
 

@@ -64,7 +64,7 @@ Item {
                     anchors.left: nameField.left
                     anchors.bottom: nameField.top
                     anchors.bottomMargin: 10
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                 }
 
@@ -85,7 +85,7 @@ Item {
                             color: "#f7f7f7"
                         }
                     color: "#000000"
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                     font.pointSize: 14
                     placeholderText: "My Method Printer"
@@ -166,7 +166,7 @@ Item {
                 Text {
                     id: printer_name_label
                     color: "#ffffff"
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     text: "PRINTER NAME"
                     anchors.top: parent.top
@@ -178,7 +178,7 @@ Item {
                 Text {
                     id: printer_name_text
                     color: "#ffffff"
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Light
                     text: {
                         if(nameField.text == "") {

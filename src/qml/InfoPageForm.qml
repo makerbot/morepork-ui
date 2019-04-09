@@ -24,7 +24,7 @@ Item {
             font.pixelSize: 22
             font.capitalization: Font.AllUppercase
             color: "#cbcbcb"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             font.letterSpacing: 5
         }

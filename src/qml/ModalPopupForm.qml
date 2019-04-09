@@ -116,7 +116,7 @@ Popup {
                     Layout.fillWidth: false
                     font.letterSpacing: 3
                     font.weight: Font.Bold
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -152,7 +152,7 @@ Popup {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.letterSpacing: 3
                     font.weight: Font.Bold
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -190,7 +190,7 @@ Popup {
                     Layout.fillWidth: false
                     font.letterSpacing: 3
                     font.weight: Font.Bold
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter

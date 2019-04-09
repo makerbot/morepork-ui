@@ -94,7 +94,7 @@ Item {
             anchors.left: parent.left
             anchors.leftMargin: 0
             color: "#e6e6e6"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 26
             font.weight: Font.Bold
             lineHeight: 1.2
@@ -110,7 +110,7 @@ Item {
             anchors.left: parent.left
             anchors.leftMargin: 0
             color: "#e6e6e6"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 18
             font.weight: Font.Light
             text: "Use this process anytime an extruder (new or used) is attached to the printer."
@@ -156,7 +156,7 @@ Item {
             Text {
                 id: extruder_A_current_temperature_text
                 text: bot.extruderACurrentTemp + "C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -175,7 +175,7 @@ Item {
                 text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
                            "50C" :
                            (bot.extruderATargetTemp + "C")
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -190,7 +190,7 @@ Item {
             Text {
                 id: extruder_B_current_temperature_text
                 text: bot.extruderBCurrentTemp + "C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -209,7 +209,7 @@ Item {
                 text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
                           "50C" :
                           (bot.extruderBTargetTemp + "C")
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -845,7 +845,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -883,7 +883,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -920,7 +920,7 @@ Item {
                     text: "STOP CALIBRATION?"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -934,7 +934,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }

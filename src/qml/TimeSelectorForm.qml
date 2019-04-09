@@ -77,7 +77,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: Tumbler.tumbler.count > 2 ? 175 : 60
             font.weight: Font.Light
-            font.family: "Antennae"
+            font.family: "Antenna"
             color: "#ffffff"
         }
     }
@@ -107,7 +107,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             anchors.verticalCenter: parent.verticalCenter
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 135
         }
 

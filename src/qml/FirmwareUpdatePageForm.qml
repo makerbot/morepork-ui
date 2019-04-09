@@ -91,7 +91,7 @@ Item {
             wrapMode: Text.WordWrap
             font.letterSpacing: 3
             color: "#cbcbcb"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Bold
             font.capitalization: Font.AllUppercase
             font.pixelSize: 20
@@ -108,7 +108,7 @@ Item {
             font.wordSpacing: 1
             font.letterSpacing: 2
             color: "#cbcbcb"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Light
             font.pixelSize: 18
             lineHeight: 1.35
@@ -120,7 +120,7 @@ Item {
             id: release_notes_text
             text: "RELEASE NOTES"
             color: "#cbcbcb"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.weight: Font.Light
             font.underline: true
             font.capitalization: Font.AllUppercase

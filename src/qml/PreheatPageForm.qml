@@ -42,7 +42,7 @@ Item {
                     }
                     font.letterSpacing: 3
                     font.weight: Font.Light
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 20
                     anchors.right: parent.right
                     anchors.rightMargin: {

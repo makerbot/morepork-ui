@@ -91,7 +91,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 0
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 24
                 font.weight: Font.Bold
                 lineHeight: 1.3
@@ -107,7 +107,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 0
                 color: "#e6e6e6"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 font.pixelSize: 18
                 font.weight: Font.Light
                 text: "Assisted leveling will check your build platform and prompt you to make any adjustments."
@@ -148,7 +148,7 @@ Item {
             anchors.leftMargin: 75
             wrapMode: Text.WordWrap
             color: "#e6e6e6"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 22
             font.weight: Font.Bold
             lineHeight: 1.2
@@ -160,7 +160,7 @@ Item {
             width: 350
             wrapMode: Text.WordWrap
             color: "#e6e6e6"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 18
             font.weight: Font.Light
             text: "PROCESS DESCRIPTION"
@@ -185,7 +185,7 @@ Item {
             Text {
                 id: extruder_A_current_temperature_text
                 text: bot.extruderACurrentTemp + "C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -202,7 +202,7 @@ Item {
             Text {
                 id: extruder_A_target_temperature_text
                 text: "50C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -217,7 +217,7 @@ Item {
             Text {
                 id: extruder_B_current_temperature_text
                 text: bot.extruderBCurrentTemp + "C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -234,7 +234,7 @@ Item {
             Text {
                 id: extruder_B_target_temperature_text
                 text: "50C"
-                font.family: "Antennae"
+                font.family: "Antenna"
                 color: "#ffffff"
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -261,7 +261,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
             color: "#ffffff"
-            font.family: "Antennae"
+            font.family: "Antenna"
             font.pixelSize: 18
             font.weight: Font.Light
         }
@@ -307,7 +307,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.pixelSize: 18
                 font.weight: Font.Bold
-                font.family: "Antennae"
+                font.family: "Antenna"
             }
 
             Text {
@@ -319,7 +319,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.pixelSize: 18
                 font.weight: Font.Bold
-                font.family: "Antennae"
+                font.family: "Antenna"
             }
 
             Text {
@@ -332,7 +332,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.pixelSize: 18
                 font.weight: Font.Bold
-                font.family: "Antennae"
+                font.family: "Antenna"
             }
         }
 
@@ -888,7 +888,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -924,7 +924,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: "Antenna"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -959,7 +959,7 @@ Item {
                     text: "CANCEL ASSISTED LEVELING"
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -973,7 +973,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: "Antenna"
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }
