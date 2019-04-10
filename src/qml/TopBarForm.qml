@@ -281,7 +281,6 @@ Item {
                         switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
                         case 1:
                             qsTr("%1 SENSOR INFO").arg(bot.name)
-                                break;
                             break;
                         case 2:
                             qsTr("PREHEAT")

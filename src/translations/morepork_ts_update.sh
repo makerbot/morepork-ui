@@ -2,7 +2,6 @@
 
 lupdate ../qml/*.qml -ts \
 morepork_de.ts \
-morepork_eh.ts \
 morepork_es.ts \
 morepork_es_la.ts \
 morepork_fr.ts \

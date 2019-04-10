@@ -219,7 +219,7 @@ Item {
             property int backSwipeIndex: 0
             property bool hasAltBack: true
             smooth: false
-            visible: true
+            visible: false
 
             function altBack() {
                 if(!inFreStep) {
@@ -262,7 +262,7 @@ Item {
                         filenameText.text: qsTr("INTERNAL STORAGE")
                         filePrintTime.text: qsTr("FILES SAVED ON PRINTER")
                         fileMaterial.visible: false
-                        visible: true
+                        visible: false
                         onClicked: {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
@@ -352,6 +352,7 @@ Item {
             property int backSwipeIndex: 0
             property bool hasAltBack: true
             smooth: false
+            visible: false
 
             function altBack() {
                 var backDir = storage.backStackPop()
