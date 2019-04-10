@@ -29,7 +29,7 @@ Item {
                 timeZoneCode: qsTr("HST")
                 timeZoneName: qsTr("HAWAII STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-10:00")
-                timeZonePathName: qsTr("US/Hawaii")
+                timeZonePathName: "US/Hawaii"
             }
 
             TimeZoneButton {
@@ -37,7 +37,7 @@ Item {
                 timeZoneCode: qsTr("AST")
                 timeZoneName: qsTr("ALASKA STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-9:00")
-                timeZonePathName: qsTr("US/Alaska")
+                timeZonePathName: "US/Alaska"
             }
 
             TimeZoneButton {
@@ -45,7 +45,7 @@ Item {
                 timeZoneCode: qsTr("PST")
                 timeZoneName: qsTr("PACIFIC STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-8:00")
-                timeZonePathName: qsTr("US/Pacific")
+                timeZonePathName: "US/Pacific"
             }
 
             TimeZoneButton {
@@ -53,7 +53,7 @@ Item {
                 timeZoneCode: qsTr("PNT")
                 timeZoneName: qsTr("PHOENIX STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-7:00")
-                timeZonePathName: qsTr("US/Arizona")
+                timeZonePathName: "US/Arizona"
             }
 
             TimeZoneButton {
@@ -61,7 +61,7 @@ Item {
                 timeZoneCode: qsTr("MST")
                 timeZoneName: qsTr("MOUNTAIN STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-7:00")
-                timeZonePathName: qsTr("US/Mountain")
+                timeZonePathName: "US/Mountain"
             }
 
             TimeZoneButton {
@@ -69,7 +69,7 @@ Item {
                 timeZoneCode: qsTr("CST")
                 timeZoneName: qsTr("CENTRAL STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-6:00")
-                timeZonePathName: qsTr("US/Central")
+                timeZonePathName: "US/Central"
             }
 
             TimeZoneButton {
@@ -77,7 +77,7 @@ Item {
                 timeZoneCode: qsTr("EST")
                 timeZoneName: qsTr("EASTERN STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-5:00")
-                timeZonePathName: qsTr("US/Eastern")
+                timeZonePathName: "US/Eastern"
             }
 
             TimeZoneButton {
@@ -85,7 +85,7 @@ Item {
                 timeZoneCode: qsTr("IET")
                 timeZoneName: qsTr("INDIANA EASTERN STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-5:00")
-                timeZonePathName: qsTr("US/East-Indiana")
+                timeZonePathName: "US/East-Indiana"
             }
 
             TimeZoneButton {
@@ -93,7 +93,7 @@ Item {
                 timeZoneCode: qsTr("PRT")
                 timeZoneName: qsTr("PUERTO RICO & US VIRGIN ISLANDS TIME")
                 timeZoneGMTReference: qsTr("GMT-4:00")
-                timeZonePathName: qsTr("Etc/GMT-4")
+                timeZonePathName: "Etc/GMT-4"
             }
 
             TimeZoneButton {
@@ -101,7 +101,7 @@ Item {
                 timeZoneCode: qsTr("CNT")
                 timeZoneName: qsTr("CANADA NEWFOUNDLAND TIME")
                 timeZoneGMTReference: qsTr("GMT-3:30")
-                timeZonePathName: qsTr("Canada/Newfoundland")
+                timeZonePathName: "Canada/Newfoundland"
             }
 
             TimeZoneButton {
@@ -109,7 +109,7 @@ Item {
                 timeZoneCode: qsTr("AGT")
                 timeZoneName: qsTr("ARGENTINA STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT-3:00")
-                timeZonePathName: qsTr("Etc/GMT-3")
+                timeZonePathName: "Etc/GMT-3"
             }
 
             TimeZoneButton {
@@ -117,7 +117,7 @@ Item {
                 timeZoneCode: qsTr("BET")
                 timeZoneName: qsTr("BRAZIL EASTERN TIME")
                 timeZoneGMTReference: qsTr("GMT-3:00")
-                timeZonePathName: qsTr("Etc/GMT-3")
+                timeZonePathName: "Etc/GMT-3"
             }
 
             // Europe
@@ -130,7 +130,7 @@ Item {
                 timeZoneCode: qsTr("CAT")
                 timeZoneName: qsTr("CENTRAL AFRICAN TIME")
                 timeZoneGMTReference: qsTr("GMT-1:00")
-                timeZonePathName: qsTr("Etc/GMT-1")
+                timeZonePathName: "Etc/GMT-1"
             }
 
             TimeZoneButton {
@@ -138,7 +138,7 @@ Item {
                 timeZoneCode: qsTr("GMT")
                 timeZoneName: qsTr("GREENWICH MEAN TIME")
                 timeZoneGMTReference: qsTr("GMT")
-                timeZonePathName: qsTr("UTC")
+                timeZonePathName: "UTC"
             }
 
             TimeZoneButton {
@@ -146,7 +146,7 @@ Item {
                 timeZoneCode: qsTr("ECT")
                 timeZoneName: qsTr("EUROPEAN CENTRAL TIME")
                 timeZoneGMTReference: qsTr("GMT+1:00")
-                timeZonePathName: qsTr("Etc/GMT+1")
+                timeZonePathName: "Etc/GMT+1"
             }
 
             TimeZoneButton {
@@ -154,7 +154,7 @@ Item {
                 timeZoneCode: qsTr("EET")
                 timeZoneName: qsTr("EASTERN EUROPEAN TIME")
                 timeZoneGMTReference: qsTr("GMT+2:00")
-                timeZonePathName: qsTr("Etc/GMT+2")
+                timeZonePathName: "Etc/GMT+2"
             }
 
             // Middle East
@@ -167,7 +167,7 @@ Item {
                 timeZoneCode: qsTr("ART")
                 timeZoneName: qsTr("(ARABIC) EGYPT STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+2:00")
-                timeZonePathName: qsTr("Etc/GMT+2")
+                timeZonePathName: "Etc/GMT+2"
             }
 
             TimeZoneButton {
@@ -175,7 +175,7 @@ Item {
                 timeZoneCode: qsTr("EAT")
                 timeZoneName: qsTr("EASTERN AFRICAN TIME")
                 timeZoneGMTReference: qsTr("GMT+3:00")
-                timeZonePathName: qsTr("Etc/GMT+3")
+                timeZonePathName: "Etc/GMT+3"
             }
 
             TimeZoneButton {
@@ -183,7 +183,7 @@ Item {
                 timeZoneCode: qsTr("MET")
                 timeZoneName: qsTr("MIDDLE EAST TIME")
                 timeZoneGMTReference: qsTr("GMT+3:30")
-                timeZonePathName: qsTr("Iran")
+                timeZonePathName: "Iran"
             }
 
             TimeZoneButton {
@@ -191,7 +191,7 @@ Item {
                 timeZoneCode: qsTr("NET")
                 timeZoneName: qsTr("NEAR EAST TIME")
                 timeZoneGMTReference: qsTr("GMT+4:00")
-                timeZonePathName: qsTr("Etc/GMT+4")
+                timeZonePathName: "Etc/GMT+4"
             }
 
             // Asia
@@ -204,7 +204,7 @@ Item {
                 timeZoneCode: qsTr("PLT")
                 timeZoneName: qsTr("PAKISTAN LAHORE TIME")
                 timeZoneGMTReference: qsTr("GMT+5:00")
-                timeZonePathName: qsTr("Etc/GMT+5")
+                timeZonePathName: "Etc/GMT+5"
             }
 
             TimeZoneButton {
@@ -212,7 +212,7 @@ Item {
                 timeZoneCode: qsTr("IST")
                 timeZoneName: qsTr("INDIA STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+5:30")
-                timeZonePathName: qsTr("Asia/Calcutta")
+                timeZonePathName: "Asia/Calcutta"
             }
 
             TimeZoneButton {
@@ -220,7 +220,7 @@ Item {
                 timeZoneCode: qsTr("BST")
                 timeZoneName: qsTr("BANGLADESH STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+6:00")
-                timeZonePathName: qsTr("Etc/GMT+6")
+                timeZonePathName: "Etc/GMT+6"
             }
 
             TimeZoneButton {
@@ -228,7 +228,7 @@ Item {
                 timeZoneCode: qsTr("VST")
                 timeZoneName: qsTr("VIETNAM STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+7:00")
-                timeZonePathName: qsTr("Etc/GMT+7")
+                timeZonePathName: "Etc/GMT+7"
             }
 
             TimeZoneButton {
@@ -236,7 +236,7 @@ Item {
                 timeZoneCode: qsTr("CTT")
                 timeZoneName: qsTr("CHINA TAIWAN TIME")
                 timeZoneGMTReference: qsTr("GMT+8:00")
-                timeZonePathName: qsTr("Etc/GMT+8")
+                timeZonePathName: "Etc/GMT+8"
             }
 
             TimeZoneButton {
@@ -244,7 +244,7 @@ Item {
                 timeZoneCode: qsTr("JST")
                 timeZoneName: qsTr("JAPAN STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+9:00")
-                timeZonePathName: qsTr("Etc/GMT+9")
+                timeZonePathName: "Etc/GMT+9"
             }
 
             // Australia
@@ -257,7 +257,7 @@ Item {
                 timeZoneCode: qsTr("ACT")
                 timeZoneName: qsTr("AUSTRALIA CENTRAL TIME")
                 timeZoneGMTReference: qsTr("GMT+9:30")
-                timeZonePathName: qsTr("Australia/ACT")
+                timeZonePathName: "Australia/ACT"
             }
 
             TimeZoneButton {
@@ -265,7 +265,7 @@ Item {
                 timeZoneCode: qsTr("AET")
                 timeZoneName: qsTr("AUSTRALIA EASTERN TIME")
                 timeZoneGMTReference: qsTr("GMT+10:00")
-                timeZonePathName: qsTr("Etc/GMT+10")
+                timeZonePathName: "Etc/GMT+10"
             }
 
             TimeZoneButton {
@@ -273,7 +273,7 @@ Item {
                 timeZoneCode: qsTr("SST")
                 timeZoneName: qsTr("SOLOMON STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+11:00")
-                timeZonePathName: qsTr("Etc/GMT+11")
+                timeZonePathName: "Etc/GMT+11"
             }
 
             TimeZoneButton {
@@ -281,7 +281,7 @@ Item {
                 timeZoneCode: qsTr("NST")
                 timeZoneName: qsTr("NEW ZEALAND STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+12:00")
-                timeZonePathName: qsTr("Etc/GMT+12")
+                timeZonePathName: "Etc/GMT+12"
             }
 
             TimeZoneButton {
@@ -289,7 +289,7 @@ Item {
                 timeZoneCode: qsTr("MIT")
                 timeZoneName: qsTr("MIDWAY ISLANDS TIME")
                 timeZoneGMTReference: qsTr("GMT-11:00")
-                timeZonePathName: qsTr("Etc/GMT-11")
+                timeZonePathName: "Etc/GMT-11"
             }
         }
     }
