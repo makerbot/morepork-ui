@@ -389,7 +389,6 @@ Item {
         onClosed: {
             isResetting = false
             hasReset = false
-            clearCalibrationSettings.checked = false
         }
 
         Rectangle {
@@ -472,7 +471,7 @@ Item {
                             yes_rectangle.color = "#00000000"
                         }
                         onClicked: {
-                            bot.resetToFactory(clearCalibrationSettings.checked)
+                            bot.resetToFactory(true)
                             isResetting = true
                         }
                     }
@@ -521,10 +520,10 @@ Item {
             ColumnLayout {
                 id: columnLayout
                 width: 590
-                height: 160
+                height: isResetting ? 180 : 130
                 spacing: 0
                 anchors.top: parent.top
-                anchors.topMargin: isResetting ? 50 : 25
+                anchors.topMargin: isResetting ? 50 : 35
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
@@ -538,18 +537,10 @@ Item {
                     font.pixelSize: 20
                 }
 
-                Item {
-                    id: emptyItem
-                    width: 10
-                    height: 10
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    visible: !hasReset
-                }
-
                 Text {
                     id: description_text
                     color: "#cbcbcb"
-                    text: hasReset ? "" : isResetting ? "Please wait." : "This will erase all history, preferences and account information."
+                    text: hasReset ? "" : isResetting ? "Please wait." : "This will erase all history, preferences, account information and calibration settings."
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
@@ -562,105 +553,11 @@ Item {
                     visible: !hasReset
                 }
 
-                RowLayout {
-                    id: rowLayout
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    visible: !hasReset
-
-                    CheckBox {
-                        id: clearCalibrationSettings
-                        checked: false
-                        visible: !isResetting && !hasReset
-                        indicator: Rectangle {
-                                implicitWidth: 26
-                                implicitHeight: 26
-                                x: parent.width / 2 - width / 2
-                                y: parent.height / 2 - height / 2
-                                radius: 3
-                                border.color: clearCalibrationSettings.down ? otherBlue : lightBlue
-
-                                Rectangle {
-                                    width: 14
-                                    height: 14
-                                    x: 6
-                                    y: 6
-                                    radius: 2
-                                    color: clearCalibrationSettings.down ? otherBlue : lightBlue
-                                    visible: clearCalibrationSettings.checked
-                                }
-                            }
-                    }
-
-                    Text {
-                        id: clear_calibration_settings_text
-                        color: "#cbcbcb"
-                        text: "Clear calibration settings"
-                        font.letterSpacing: 2
-                        font.family: "Antennae"
-                        font.weight: Font.Light
-                        font.pixelSize: 16
-                        visible: !isResetting && !hasReset
-                    }
-
-                    BusyIndicator {
-                        id: busyIndicator
-                        running: isResetting && !hasReset
-                        visible: isResetting && !hasReset
-
-                        contentItem:
-                        Item {
-                            implicitWidth: 64
-                            implicitHeight: 64
-
-                            Item {
-                                id: spinnerItem
-                                x: parent.width / 2 - 32
-                                y: parent.height / 2 - 32
-                                width: 64
-                                height: 64
-                                opacity: busyIndicator.running ? 1 : 0
-
-                                Behavior on opacity {
-                                    OpacityAnimator {
-                                        duration: 250
-                                    }
-                                }
-
-                                RotationAnimator {
-                                    target: spinnerItem
-                                    running: busyIndicator.visible && busyIndicator.running
-                                    from: 0
-                                    to: 360
-                                    loops: Animation.Infinite
-                                    duration: 1500
-                                }
-
-                                Repeater {
-                                    id: repeater
-                                    model: 6
-
-                                    Rectangle {
-                                        x: spinnerItem.width / 2 - width / 2
-                                        y: spinnerItem.height / 2 - height / 2
-                                        implicitWidth: 2
-                                        implicitHeight: 16
-                                        radius: 0
-                                        color: "#ffffff"
-                                        transform: [
-                                            Translate {
-                                                y: -Math.min(spinnerItem.width, spinnerItem.height) * 0.5 + 5
-                                            },
-                                            Rotation {
-                                                angle: index / repeater.count * 360
-                                                origin.x: 1
-                                                origin.y: 8
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    }
+                BusySpinner {
+                    id: resettingSpinner
+                    spinnerActive: isResetting
+                    spinnerSize: 64
+                    Layout.alignment: Qt.AlignHCenter
                 }
             }
         }

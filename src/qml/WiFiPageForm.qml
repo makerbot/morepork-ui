@@ -28,7 +28,7 @@ Item {
 
         button_mouseArea.onClicked: {
             bot.scanWifi(true)
-            bot.net.setWifiState(WifiState.Searching);
+            bot.net.setWifiState(WifiState.Searching)
         }
 
         busy: bot.net.wifiState === WifiState.Searching
@@ -141,69 +141,15 @@ Item {
             // progress to the user using a combination of conditions.
             // We also use the condition that the wifi list isn't
             // populated yet by the backend.
-            BusyIndicator {
+            BusySpinner {
                 id: wifiBusyIndicator
-                running: true
-                visible: wifiList.count == 0 &&
+                spinnerActive: wifiList.count == 0 &&
                         (isWifiConnected ||
                          bot.net.wifiState == WifiState.Connected)
+                spinnerSize: 64
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -20
                 anchors.horizontalCenter: parent.horizontalCenter
-
-
-                contentItem: Item {
-                        implicitWidth: 64
-                        implicitHeight: 64
-
-                        Item {
-                            id: item
-                            x: parent.width / 2 - 32
-                            y: parent.height / 2 - 32
-                            width: 64
-                            height: 64
-                            opacity: wifiBusyIndicator.running ? 1 : 0
-
-                            Behavior on opacity {
-                                OpacityAnimator {
-                                    duration: 250
-                                }
-                            }
-
-                            RotationAnimator {
-                                target: item
-                                running: wifiBusyIndicator.visible && wifiBusyIndicator.running
-                                from: 0
-                                to: 360
-                                loops: Animation.Infinite
-                                duration: 1500
-                            }
-
-                            Repeater {
-                                id: repeater
-                                model: 6
-
-                                Rectangle {
-                                    x: item.width / 2 - width / 2
-                                    y: item.height / 2 - height / 2
-                                    implicitWidth: 2
-                                    implicitHeight: 16
-                                    radius: 0
-                                    color: "#ffffff"
-                                    transform: [
-                                        Translate {
-                                            y: -Math.min(item.width, item.height) * 0.5 + 5
-                                        },
-                                        Rotation {
-                                            angle: index / repeater.count * 360
-                                            origin.x: 1
-                                            origin.y: 8
-                                        }
-                                    ]
-                                }
-                            }
-                        }
-                    }
             }
 
             // The wifi list shows up when the scan retuns atleast
@@ -727,66 +673,13 @@ Item {
                     font.pixelSize: 20
                 }
 
-                BusyIndicator {
+                BusySpinner {
                     id: wifiConnectingBusy
+                    spinnerActive: (bot.net.wifiState == WifiState.Connecting ||
+                                    bot.net.wifiState == WifiState.Connected) &&
+                                    !isForgetEnabled
+                    spinnerSize: 64
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    running: true
-                    visible: (bot.net.wifiState == WifiState.Connecting ||
-                             bot.net.wifiState == WifiState.Connected) &&
-                             !isForgetEnabled
-
-                    contentItem: Item {
-                            implicitWidth: 64
-                            implicitHeight: 64
-
-                            Item {
-                                id: item1
-                                x: parent.width / 2 - 32
-                                y: parent.height / 2 - 32
-                                width: 64
-                                height: 64
-                                opacity: wifiConnectingBusy.running ? 1 : 0
-
-                                Behavior on opacity {
-                                    OpacityAnimator {
-                                        duration: 250
-                                    }
-                                }
-
-                                RotationAnimator {
-                                    target: item1
-                                    running: wifiConnectingBusy.visible && wifiConnectingBusy.running
-                                    from: 0
-                                    to: 360
-                                    loops: Animation.Infinite
-                                    duration: 1500
-                                }
-
-                                Repeater {
-                                    id: repeater1
-                                    model: 6
-
-                                    Rectangle {
-                                        x: item1.width / 2 - width / 2
-                                        y: item1.height / 2 - height / 2
-                                        implicitWidth: 2
-                                        implicitHeight: 16
-                                        radius: 0
-                                        color: "#ffffff"
-                                        transform: [
-                                            Translate {
-                                                y: -Math.min(item1.width, item1.height) * 0.5 + 5
-                                            },
-                                            Rotation {
-                                                angle: index / repeater1.count * 360
-                                                origin.x: 1
-                                                origin.y: 8
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        }
                 }
 
                 Item {
