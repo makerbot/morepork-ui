@@ -183,8 +183,8 @@ void BotModel::moveAxisToEndstop(QString axis, float distance, float speed) {
     qDebug() << FL_STRM << "called with parameters" << axis << distance << speed;
 }
 
-void BotModel::resetSpoolProperties(const int bayID) {
-    qDebug() << FL_STRM << "called with parameter" << bayID;
+void BotModel::resetSpoolProperties(const int bay_index) {
+    qDebug() << FL_STRM << "called with parameter" << bay_index;
 }
 
 void BotModel::shutdown() {

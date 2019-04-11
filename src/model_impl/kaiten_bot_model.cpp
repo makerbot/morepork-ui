@@ -77,7 +77,7 @@ class KaitenBotModel : public BotModel {
     void preheatChamber(const int chamber_temperature);
     void moveAxis(QString axis, float distance, float speed);
     void moveAxisToEndstop(QString axis, float distance, float speed);
-    void resetSpoolProperties(const int bayID);
+    void resetSpoolProperties(const int bay_index);
     void shutdown();
     bool checkError(const Json::Value error_list, const int error_code);
     void getToolStats(const int index);
@@ -1039,39 +1039,47 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
     const Json::Value & si = result.isObject() ? result : spool_info;
     // We don't update amount remaining here. This comes as an ongoing update
     // via the system information packet (see above).
-#define UPDATE_SPOOL_INFO(BAY_SYM) \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## Version, si["version"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingDate, \
-        si["manufacturing_date"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## Material, \
-        si["material_type"]); \
-    UPDATE_STRING_PROP(spool ## BAY_SYM ## SupplierCode, \
-        si["supplier_code"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingLotCode, \
-        si["manufacturing_lot_code"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## OriginalAmount, \
-        si["original_amount"]); \
-    UPDATE_INT_LIST_PROP(spool ## BAY_SYM ## ColorRGB, \
-        si["material_color_rgb"]); \
-    UPDATE_STRING_PROP(spool ## BAY_SYM ## ColorName, \
-        si["material_color_name"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## Checksum, si["checksum"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## SchemaVersion, \
-        si["rw_version"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## MaxHumidity, \
-        si["max_humidity"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## FirstLoadDate, \
-        si["first_load_date"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## MaxTemperature, \
-        si["max_temperature"]);
+#define UPDATE_SPOOL_INFO(BAY_SYM, BAY_IDX) \
+    { \
+      Json::Value tag_uid = si["tag_uid"]; \
+      if (tag_uid.isNull()) { \
+          resetSpoolProperties(BAY_IDX); \
+      } else { \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## Version, si["version"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingDate, \
+              si["manufacturing_date"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## Material, \
+              si["material_type"]); \
+          UPDATE_STRING_PROP(spool ## BAY_SYM ## SupplierCode, \
+              si["supplier_code"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingLotCode, \
+              si["manufacturing_lot_code"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## OriginalAmount, \
+              si["original_amount"]); \
+          UPDATE_INT_LIST_PROP(spool ## BAY_SYM ## ColorRGB, \
+              si["material_color_rgb"]); \
+          UPDATE_STRING_PROP(spool ## BAY_SYM ## ColorName, \
+              si["material_color_name"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## Checksum, si["checksum"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## SchemaVersion, \
+              si["rw_version"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## MaxHumidity, \
+              si["max_humidity"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## FirstLoadDate, \
+              si["first_load_date"]); \
+          UPDATE_INT_PROP(spool ## BAY_SYM ## MaxTemperature, \
+              si["max_temperature"]); \
+          spool ## BAY_SYM ## DetailsReadySet(true); \
+      } \
+    }
     const Json::Value &index = si["bay_index"];
     if (index.isInt()) {
         switch (index.asInt()) {
             case 0:
-                UPDATE_SPOOL_INFO(A)
+                UPDATE_SPOOL_INFO(A, 0)
                 break;
             case 1:
-                UPDATE_SPOOL_INFO(B)
+                UPDATE_SPOOL_INFO(B, 1)
                 break;
         }
     }
@@ -1288,8 +1296,8 @@ void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index)
     }
 }
 
-void KaitenBotModel::resetSpoolProperties(const int bayID) {
-    LOG(info) << "bay ID: " << bayID;
+void KaitenBotModel::resetSpoolProperties(const int bay_index) {
+    LOG(info) << "bay ID: " << bay_index;
 #define RESET_SPOOL_INFO(BAY_SYM) \
     spool ## BAY_SYM ## UpdateFinishedReset(); \
     spool ## BAY_SYM ## DetailsReadyReset(); \
@@ -1307,12 +1315,12 @@ void KaitenBotModel::resetSpoolProperties(const int bayID) {
     spool ## BAY_SYM ## FirstLoadDateReset(); \
     spool ## BAY_SYM ## AmountRemainingReset(); \
     spool ## BAY_SYM ## MaxTemperatureReset();
-    switch(bayID) {
-        case 1: {
+    switch(bay_index) {
+        case 0: {
             RESET_SPOOL_INFO(A)
             break;
         }
-        case 2: {
+        case 1: {
             RESET_SPOOL_INFO(B)
             break;
         }
