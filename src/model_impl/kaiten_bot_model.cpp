@@ -343,6 +343,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<SpoolChangeNotification> m_spoolChange;
+
+    class UpdateSpoolInfoCallback : public JsonRpcCallback {
+      public:
+        UpdateSpoolInfoCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->spoolChangeUpdate(resp);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<UpdateSpoolInfoCallback> m_updateSpoolInfoCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -979,7 +990,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_sysTimeNot(new SystemTimeNotification(this)),
         m_stzCb(new SetTimeZoneCallback()),
         m_extChange(new ExtruderChangeNotification(this)),
-        m_spoolChange(new SpoolChangeNotification(this)) {
+        m_spoolChange(new SpoolChangeNotification(this)),
+        m_updateSpoolInfoCb(new UpdateSpoolInfoCallback(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1020,34 +1032,39 @@ void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
 
 void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
     LOG(info) << spool_info;
+    // This function is called both from a notfication socket and as a callback.
+    // When spool_info comes from kaiten as a callback, the spool data exists
+    // within a key called "result".
+    const Json::Value & result = spool_info["result"];
+    const Json::Value & si = result.isObject() ? result : spool_info;
     // We don't update amount remaining here. This comes as an ongoing update
     // via the system information packet (see above).
 #define UPDATE_SPOOL_INFO(BAY_SYM) \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## Version, spool_info["version"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## Version, si["version"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingDate, \
-        spool_info["manufacturing_date"]); \
+        si["manufacturing_date"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## Material, \
-        spool_info["material_type"]); \
+        si["material_type"]); \
     UPDATE_STRING_PROP(spool ## BAY_SYM ## SupplierCode, \
-        spool_info["supplier_code"]); \
+        si["supplier_code"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingLotCode, \
-        spool_info["manufacturing_lot_code"]); \
+        si["manufacturing_lot_code"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## OriginalAmount, \
-        spool_info["original_amount"]); \
+        si["original_amount"]); \
     UPDATE_INT_LIST_PROP(spool ## BAY_SYM ## ColorRGB, \
-        spool_info["material_color_rgb"]); \
+        si["material_color_rgb"]); \
     UPDATE_STRING_PROP(spool ## BAY_SYM ## ColorName, \
-        spool_info["material_color_name"]); \
-    UPDATE_INT_PROP(spool ## BAY_SYM ## Checksum, spool_info["checksum"]); \
+        si["material_color_name"]); \
+    UPDATE_INT_PROP(spool ## BAY_SYM ## Checksum, si["checksum"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## SchemaVersion, \
-        spool_info["rw_version"]); \
+        si["rw_version"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## MaxHumidity, \
-        spool_info["max_humidity"]); \
+        si["max_humidity"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## FirstLoadDate, \
-        spool_info["first_load_date"]); \
+        si["first_load_date"]); \
     UPDATE_INT_PROP(spool ## BAY_SYM ## MaxTemperature, \
-        spool_info["max_temperature"]);
-    const Json::Value &index = spool_info["bay_index"];
+        si["max_temperature"]);
+    const Json::Value &index = si["bay_index"];
     if (index.isInt()) {
         switch (index.asInt()) {
             case 0:
@@ -1482,6 +1499,12 @@ void KaitenBotModel::connected() {
     // TODO: Kaiten codegen?
     m_conn->jsonrpc.invoke("get_system_information", Json::Value(), m_sysInfoCb);
     m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
+    // Get spool info for bay indicies 0 and 1
+    Json::Value jval_param(Json::objectValue);
+    for (int i = 0; i < 2; ++i) {
+	      jval_param["bay_index"] = Json::Value(i);
+        m_conn->jsonrpc.invoke("get_spool_info", jval_param, m_updateSpoolInfoCb);
+    }
     // TODO: Wait for callbacks before setting state to connected
     m_conn->jsonrpc.invoke("register_lcd", Json::Value(), std::weak_ptr<JsonRpcCallback>());
 
