@@ -1437,7 +1437,7 @@ ApplicationWindow {
                     Text {
                         id: firmware_header_text
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? qsTr("SOFTWARE %1 RELEASEE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP SOFTWARE UPDATE?") : qsTr("SOFTWARE UPDATE AVAILABLE")
+                        text: viewReleaseNotes ? qsTr("SOFTWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP SOFTWARE UPDATE?") : qsTr("SOFTWARE UPDATE AVAILABLE")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
                         font.family: "Antennae"

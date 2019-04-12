@@ -162,18 +162,18 @@ Item {
                             if(bot.chamberErrorCode == 48) {
                                 qsTr("CLOSE CHAMBER DOOR")
                             } else if(bot.chamberErrorCode == 45) {
-                                "PLACE TOP LID"
+                                qsTr("PLACE TOP LID")
                             } else if(bot.chamberErrorCode == 0) {
-                                "PLACE TOP LID"
+                                qsTr("PLACE TOP LID")
                             }
                         }
                         else if(itemAttachExtruder.state == "base state") {
                             if(bot.chamberErrorCode == 48) {
-                                "CLOSE CHAMBER DOOR"
+                                qsTr("CLOSE CHAMBER DOOR")
                             } if(bot.chamberErrorCode == 45) {
-                                "REMOVE TOP LID"
+                                qsTr("REMOVE TOP LID")
                             } else if(bot.chamberErrorCode == 0) {
-                                "REMOVE TOP LID"
+                                qsTr("REMOVE TOP LID")
                             }
                         } else {
                             ""
@@ -408,22 +408,22 @@ Item {
 
                     PropertyChanges {
                         target: step1
-                        bulletNumber: "1"
-                        bulletText: "Flip open the lock"
+                        bulletNumber: qsTr("1")
+                        bulletText: qsTr("Flip open the lock")
                     }
 
                     PropertyChanges {
                         target: step2
-                        bulletNumber: "2"
-                        bulletText: "Flip open the front latch"
+                        bulletNumber: qsTr("2")
+                        bulletText: qsTr("Flip open the front latch")
                     }
 
                     PropertyChanges {
                         target: step3
-                        bulletNumber: "3"
+                        bulletNumber: qsTr("3")
                         bulletText: itemAttachExtruder.extruder == 1 ?
-                                        "Insert the Model 1 Extruder into\nSlot 1" :
-                                        "Insert the Support 2 Extruder into\nSlot 2"
+                                        qsTr("Insert the Model 1 Extruder into\nSlot 1") :
+                                        qsTr("Insert the Support 2 Extruder into\nSlot 2")
                     }
 
                     PropertyChanges {
@@ -474,22 +474,22 @@ Item {
 
                     PropertyChanges {
                         target: step1
-                        bulletNumber: "4"
-                        bulletText: "Close the front latch"
+                        bulletNumber: qsTr("4")
+                        bulletText: qsTr("Close the front latch")
                     }
 
                     PropertyChanges {
                         target: step2
-                        bulletNumber: "5"
-                        bulletText: "Flip the lock closed"
+                        bulletNumber: qsTr("5")
+                        bulletText: qsTr("Flip the lock closed")
                     }
 
                     PropertyChanges {
                         target: step3
-                        bulletNumber: "6"
+                        bulletNumber: qsTr("6")
                         bulletText: itemAttachExtruder.extruder == 1 ?
-                                        "Attach swivel clip 1" :
-                                        "Attach swivel clip 2"
+                                        qsTr("Attach swivel clip 1") :
+                                        qsTr("Attach swivel clip 2")
                     }
 
                     PropertyChanges {
