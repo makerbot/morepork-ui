@@ -54,8 +54,6 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void connectWifi(QString path, QString password, QString name);
     Q_INVOKABLE virtual void forgetWifi(QString path);
     Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
-    Q_INVOKABLE virtual void getSpoolInfo(const int bayIndex);
-    Q_INVOKABLE virtual void updateSpoolInfo(const int bayIndex);
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
@@ -67,7 +65,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void preheatChamber(const int chamber_temperature);
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void moveAxisToEndstop(QString axis, float distance, float speed);
-    Q_INVOKABLE virtual void resetSpoolProperties(const int bayID);
+    Q_INVOKABLE virtual void resetSpoolProperties(const int bay_index);
     Q_INVOKABLE virtual void shutdown();
     Q_INVOKABLE virtual void getToolStats(const int index);
     Q_INVOKABLE virtual void setTimeZone(const QString time_zone);

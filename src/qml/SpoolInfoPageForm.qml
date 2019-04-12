@@ -14,12 +14,7 @@ Item {
 
     RefreshButton {
         enabled: (bot.spoolAUpdateFinished && bot.spoolBUpdateFinished)
-        button_mouseArea.onClicked: {
-            bot.updateSpoolInfo(0)
-            bot.getSpoolInfo(0)
-            bot.updateSpoolInfo(1)
-            bot.getSpoolInfo(1)
-        }
+        button_mouseArea.onClicked: { }
         busy: !enabled
     }
 

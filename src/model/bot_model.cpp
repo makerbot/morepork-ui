@@ -139,14 +139,6 @@ void BotModel::addMakerbotAccount(QString username, QString makerbot_token) {
              << username << "; " <<  makerbot_token;
 }
 
-void BotModel::getSpoolInfo(const int bayIndex) {
-    qDebug() << FL_STRM << "called with parameter: " << bayIndex;
-}
-
-void BotModel::updateSpoolInfo(const int bayIndex) {
-    qDebug() << FL_STRM << "called with parameter: " << bayIndex;
-}
-
 void BotModel::zipLogs(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
@@ -191,8 +183,8 @@ void BotModel::moveAxisToEndstop(QString axis, float distance, float speed) {
     qDebug() << FL_STRM << "called with parameters" << axis << distance << speed;
 }
 
-void BotModel::resetSpoolProperties(const int bayID) {
-    qDebug() << FL_STRM << "called with parameter" << bayID;
+void BotModel::resetSpoolProperties(const int bay_index) {
+    qDebug() << FL_STRM << "called with parameter" << bay_index;
 }
 
 void BotModel::shutdown() {

@@ -101,12 +101,6 @@ SpoolInfoColumnForm {
         // TODO(shirley): I think this ends up getting called before the
         // get_spool_info cache is ready, so it gets a result of
         // { "tag_uid": null } ... For now, there's a refresh button.
-        /*
-        var spoolUIDchangedSignal = "onInfoBay%1TagUIDChanged".arg(index+1);
-        bot[spoolUIDchangedSignal].connect(function() {
-            bot.getSpoolInfo(index);
-        });
-        */
 
         initialized = true;
     }

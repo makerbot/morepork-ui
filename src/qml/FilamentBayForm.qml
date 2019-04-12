@@ -83,10 +83,6 @@ Item {
         }
     }
 
-    onTagUIDChanged: {
-        bot.resetSpoolProperties(filamentBayID)
-    }
-
     property bool extruderFilamentPresent: {
         switch(filamentBayID) {
         case 1:
@@ -211,25 +207,6 @@ Item {
         default:
             ""
             break;
-        }
-    }
-
-    onTagVerificationDoneChanged: {
-        // TODO: praveen
-        // Add (tag_verified == true) condition
-        // when we have tags that actually pass
-        // verification.
-        if(tagVerificationDone && tagUID != "Unknown") {
-            getSpoolInfoTimer.start()
-        }
-    }
-
-    Timer {
-        id: getSpoolInfoTimer
-        interval: 1000
-        onTriggered: {
-            bot.updateSpoolInfo(filamentBayID-1)
-            bot.getSpoolInfo(filamentBayID-1)
         }
     }
 
