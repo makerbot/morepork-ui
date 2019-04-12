@@ -70,9 +70,8 @@ Item {
     // ready.
     function materialValidityCheck() {
         if(bayID == 1) {
-            if(bay1.spoolPresent &&
-               (bay1.filamentMaterialName == "PLA" ||
-                bay1.filamentMaterialName == "TOUGH")) {
+            if(bay1.filamentMaterialName == "PLA" ||
+               bay1.filamentMaterialName == "TOUGH") {
                 return true
             }
             else if(bay1.filamentMaterialName == "PVA") {
@@ -84,8 +83,7 @@ Item {
             }
         }
         else if(bayID == 2) {
-            if(bay2.spoolPresent &&
-               bay2.filamentMaterialName == "PVA") {
+            if(bay2.filamentMaterialName == "PVA") {
                 return true
             }
             else if(bay2.filamentMaterialName == "PLA" ||

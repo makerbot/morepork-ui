@@ -97,7 +97,7 @@ Item {
 
     Timer {
         id: checkSpoolValidityTimer
-        interval: 500
+        interval: 100
         onTriggered: {
             checkSpoolValidity()
         }
@@ -257,6 +257,7 @@ Item {
                 isExternalLoad: bayID == 1 ?
                             bay1.switch1.checked :
                             bay2.switch1.checked
+
                 bayFilamentSwitch: bayID == 1 ?
                                     bot.filamentBayAFilamentPresent :
                                     bot.filamentBayBFilamentPresent
