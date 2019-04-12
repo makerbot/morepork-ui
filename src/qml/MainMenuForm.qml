@@ -25,30 +25,30 @@ Item {
                 switch(bot.process.stateType) {
                 case ProcessStateType.Loading:
                 case ProcessStateType.Printing:
-                    "PRINTING"
+                    qsTr("PRINTING")
                     break;
                 case ProcessStateType.Pausing:
-                    "PAUSING"
+                    qsTr("PAUSING")
                     break;
                 case ProcessStateType.Paused:
-                    "PAUSED"
+                    qsTr("PAUSED")
                     break;
                 case ProcessStateType.Resuming:
-                    "RESUMING"
+                    qsTr("RESUMING")
                     break;
                 case ProcessStateType.Completed:
-                    "PRINT COMPLETE"
+                    qsTr("PRINT COMPLETE")
                     break;
                 case ProcessStateType.Failed:
-                    "PRINT FAILED"
+                    qsTr("PRINT FAILED")
                     break;
                 default:
-                    "PRINT"
+                    qsTr("PRINT")
                     break;
                 }
             }
             else {
-                "PRINT"
+                qsTr("PRINT")
             }
         }
 
@@ -111,7 +111,7 @@ Item {
                 "qrc:/img/extruder_none.png"
             }
         }
-        textIconDesc.text: "EXTRUDERS"
+        textIconDesc.text: qsTr("EXTRUDERS")
     }
 
     MainMenuIcon {
@@ -121,7 +121,7 @@ Item {
         anchors.horizontalCenterOffset: 220
         anchors.horizontalCenter: mainMenuIcon_extruder.horizontalCenter
         image.source: "qrc:/img/settings_icon.png"
-        textIconDesc.text: "SETTINGS"
+        textIconDesc.text: qsTr("SETTINGS")
 
         Image {
             id: image
@@ -142,7 +142,7 @@ Item {
         smooth: false
         anchors.horizontalCenter: mainMenuIcon_print.horizontalCenter
         image.source: "qrc:/img/info_icon.png"
-        textIconDesc.text: "INFO"
+        textIconDesc.text: qsTr("INFO")
     }
 
     MainMenuIcon {
@@ -151,7 +151,7 @@ Item {
         smooth: false
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
-        textIconDesc.text: "MATERIAL"
+        textIconDesc.text: qsTr("MATERIAL")
     }
 
     MainMenuIcon {
@@ -160,6 +160,6 @@ Item {
         smooth: false
         anchors.horizontalCenter: mainMenuIcon_settings.horizontalCenter
         image.source: "qrc:/img/advanced_icon.png"
-        textIconDesc.text: "ADVANCED"
+        textIconDesc.text: qsTr("ADVANCED")
     }
 }

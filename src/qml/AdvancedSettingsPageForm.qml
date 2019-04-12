@@ -133,7 +133,7 @@ Item {
                     MenuButton {
                         id: buttonAdvancedInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: "SENSOR INFO"
+                        buttonText.text: qsTr("SENSOR INFO")
                     }
 
                     Item { width: parent.width; height: 1; smooth: false;
@@ -143,7 +143,7 @@ Item {
                     MenuButton {
                         id: buttonPreheat
                         buttonImage.source: "qrc:/img/icon_preheat.png"
-                        buttonText.text: "PREHEAT"
+                        buttonText.text: qsTr("PREHEAT")
                         enabled: !isProcessRunning()
                     }
 
@@ -154,7 +154,7 @@ Item {
                     MenuButton {
                         id: buttonAssistedLeveling
                         buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
-                        buttonText.text: "ASSISTED LEVELING"
+                        buttonText.text: qsTr("ASSISTED LEVELING")
                         enabled: !isProcessRunning()
                     }
 
@@ -165,7 +165,7 @@ Item {
                     MenuButton {
                         id: buttonCopyLogs
                         buttonImage.source: "qrc:/img/icon_copy_logs.png"
-                        buttonText.text: "COPY LOGS TO USB"
+                        buttonText.text: qsTr("COPY LOGS TO USB")
                         enabled: (!isProcessRunning() && storage.usbStorageConnected)
                     }
 
@@ -177,7 +177,7 @@ Item {
                         id: buttonResetToFactory
                         buttonImage.anchors.leftMargin: 30
                         buttonImage.source: "qrc:/img/alert.png"
-                        buttonText.text: "RESTORE FACTORY SETTINGS"
+                        buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
                         enabled: !isProcessRunning()
                     }
 
@@ -188,7 +188,7 @@ Item {
                     MenuButton {
                         id: buttonSpoolInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: "SPOOL INFO"
+                        buttonText.text: qsTr("SPOOL INFO")
                         visible: false
                     }
 
@@ -199,7 +199,7 @@ Item {
                     MenuButton {
                         id: buttonColorSwatch
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: "COLOR SWATCH"
+                        buttonText.text: qsTr("COLOR SWATCH")
                         visible: false
                     }
 
@@ -210,7 +210,7 @@ Item {
                     MenuButton {
                         id: buttonRaiseLowerBuildPlate
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: "RAISE/LOWER BUILD PLATE"
+                        buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
                         enabled: !isProcessRunning()
                     }
 
@@ -343,7 +343,7 @@ Item {
 
         id: copyingLogsPopup
         visible: zipLogsInProgress
-        busyPopupText: "COPYING LOGS TO USB..."
+        busyPopupText: qsTr("COPYING LOGS TO USB...")
     }
 
     ModalPopup {
@@ -355,8 +355,8 @@ Item {
             anchors.fill: parent
             TitleText {
                 text: copyLogsFinishedPopup.succeeded ?
-                            "FINISHED COPYING LOGS TO USB" :
-                            "FAILED TO COPY LOGS TO USB"
+                            qsTr("FINISHED COPYING LOGS TO USB") :
+                            qsTr("FAILED TO COPY LOGS TO USB")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -447,7 +447,7 @@ Item {
                     Text {
                         id: yes_text
                         color: "#ffffff"
-                        text: "RESET TO FACTORY"
+                        text: qsTr("RESET TO FACTORY")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -489,7 +489,7 @@ Item {
                     Text {
                         id: no_text
                         color: "#ffffff"
-                        text: "CANCEL"
+                        text: qsTr("CANCEL")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
@@ -529,7 +529,7 @@ Item {
                 Text {
                     id: alert_text
                     color: "#cbcbcb"
-                    text: hasReset ? "RESET SUCCESSFUL" : isResetting ? "RESETTING TO FACTORY..." : "RESET TO FACTORY"
+                    text: hasReset ? qsTr("RESET SUCCESSFUL") : isResetting ? qsTr("RESETTING TO FACTORY...") : qsTr("RESET TO FACTORY")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: "Antennae"
@@ -540,7 +540,7 @@ Item {
                 Text {
                     id: description_text
                     color: "#cbcbcb"
-                    text: hasReset ? "" : isResetting ? "Please wait." : "This will erase all history, preferences, account information and calibration settings."
+                    text: hasReset ? "" : isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true

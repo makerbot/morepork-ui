@@ -84,7 +84,7 @@ Item {
 
         Text {
             id: main_status_text
-            text: "CHECKING FOR UPDATES"
+            text: qsTr("CHECKING FOR UPDATES")
             width: parent.width
             anchors.top: parent.top
             anchors.topMargin: 0
@@ -101,7 +101,7 @@ Item {
 
         Text {
             id: sub_status_text
-            text: "PLEASE WAIT A MOMENT"
+            text: qsTr("PLEASE WAIT A MOMENT")
             width: parent.width
             anchors.top: parent.top
             anchors.topMargin: 70
@@ -118,7 +118,7 @@ Item {
 
         Text {
             id: release_notes_text
-            text: "RELEASE NOTES"
+            text: qsTr("RELEASE NOTES")
             color: "#cbcbcb"
             font.family: "Antennae"
             font.weight: Font.Light
@@ -144,7 +144,7 @@ Item {
             id: button1
             buttonWidth: 265
             buttonHeight: 50
-            label: "TEXT"
+            label: qsTr("TEXT")
             visible: false
             anchors.top: parent.top
             anchors.topMargin: 0
@@ -178,13 +178,13 @@ Item {
 
             PropertyChanges {
                 target: main_status_text
-                text: "NEW SOFTWARE AVAILABLE"
+                text: qsTr("NEW SOFTWARE AVAILABLE")
                 anchors.topMargin: 30
             }
 
             PropertyChanges {
                 target: sub_status_text
-                text: "A new version of software is available. Do you want to update to the most recent version " + bot.firmwareUpdateVersion + " ?"
+                text: qsTr("A new version of software is available. Do you want to update to the most recent version %1 ?").arg(bot.firmwareUpdateVersion)
                 anchors.topMargin: 110
             }
 
@@ -198,7 +198,7 @@ Item {
                 target: button1
                 anchors.topMargin: 275
                 buttonWidth: 265
-                label: "INSTALL UPDATE"
+                label: qsTr("INSTALL UPDATE")
                 visible: true
                 disable_button: isProcessRunning()
             }
@@ -237,13 +237,13 @@ Item {
 
             PropertyChanges {
                 target: main_status_text
-                text: "SOFTWARE IS UP TO DATE"
+                text: qsTr("SOFTWARE IS UP TO DATE")
                 anchors.topMargin: 35
             }
 
             PropertyChanges {
                 target: sub_status_text
-                text: "No update is required at this time."
+                text: qsTr("No update is required at this time.")
                 anchors.topMargin: 85
             }
 
@@ -255,7 +255,7 @@ Item {
             PropertyChanges {
                 target: button1
                 buttonWidth: 100
-                label: "OK"
+                label: qsTr("OK")
                 visible: true
                 anchors.topMargin: 160
             }
@@ -263,7 +263,7 @@ Item {
             PropertyChanges {
                 target: button2
                 anchors.topMargin: 230
-                label: "UPDATE VIA USB STICK"
+                label: qsTr("UPDATE VIA USB STICK")
                 buttonWidth: 360
                 label_width: 325
                 visible: true
@@ -298,13 +298,13 @@ Item {
 
             PropertyChanges {
                 target: main_status_text
-                text: "SOFTWARE UPDATE FAILED"
+                text: qsTr("SOFTWARE UPDATE FAILED")
                 anchors.topMargin: 20
             }
 
             PropertyChanges {
                 target: sub_status_text
-                text: "Make sure your printer is connected to the internet and please try again."
+                text: qsTr("Make sure your printer is connected to the internet and please try again.")
                 anchors.topMargin: 100
             }
 
@@ -315,7 +315,7 @@ Item {
 
             PropertyChanges {
                 target: button1
-                label: "OK"
+                label: qsTr("OK")
                 buttonWidth: 175
                 visible: true
                 anchors.topMargin: 200
@@ -356,16 +356,16 @@ Item {
                     // 'loading' state in print process
                     case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
-                        "UPDATING SOFTWARE [1/3]"
+                        qsTr("UPDATING SOFTWARE [1/3]")
                         break;
                     case ProcessStateType.VerifyingFirmware:
-                        "UPDATING SOFTWARE [2/3]"
+                        qsTr("UPDATING SOFTWARE [2/3]")
                         break;
                     case ProcessStateType.InstallingFirmware:
-                        "UPDATING SOFTWARE [3/3]"
+                        qsTr("UPDATING SOFTWARE [3/3]")
                         break;
                     default:
-                        "CHECKING FOR UPDATES"
+                        qsTr("CHECKING FOR UPDATES")
                         break;
                     }
                 }
@@ -381,16 +381,16 @@ Item {
                         // 'loading' state in print process
                     case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
-                        "TRANSFERRING... " + bot.process.printPercentage + "%"
+                        qsTr("TRANSFERRING... %1\%").arg(bot.process.printPercentage)
                         break;
                     case ProcessStateType.VerifyingFirmware:
-                        "VERIFYING FILE... " + bot.process.printPercentage + "%"
+                        qsTr("VERIFYING FILE... %1\%").arg(bot.process.printPercentage)
                         break;
                     case ProcessStateType.InstallingFirmware:
-                        "INSTALLING... " + bot.process.printPercentage + "%"
+                        qsTr("INSTALLING... %1\%").arg(bot.process.printPercentage)
                         break;
                     default:
-                        "PLEASE WAIT A MOMENT"
+                        qsTr("PLEASE WAIT A MOMENT")
                         break;
                     }
                 }
@@ -439,13 +439,13 @@ Item {
 
             PropertyChanges {
                 target: main_status_text
-                text: "DOWNLOAD TO\nUSB STICK"
+                text: qsTr("DOWNLOAD TO\nUSB STICK")
                 anchors.topMargin: 20
             }
 
             PropertyChanges {
                 target: sub_status_text
-                text: "Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                text: qsTr("Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
                 anchors.topMargin: 100
             }
 
@@ -457,7 +457,7 @@ Item {
             PropertyChanges {
                 target: button1
                 buttonWidth: 220
-                label: "CHOOSE FILE"
+                label: qsTr("CHOOSE FILE")
                 visible: true
                 anchors.topMargin: 260
                 disable_button: !storage.usbStorageConnected

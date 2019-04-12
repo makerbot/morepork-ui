@@ -12,7 +12,7 @@ Item {
     Text {
         id: label
         width: 200
-        text: "LABEL"
+        text: qsTr("LABEL")
         font.letterSpacing: 2
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: 15
@@ -22,7 +22,7 @@ Item {
 
     Text {
         id: value
-        text: "VALUE"
+        text: qsTr("VALUE")
         font.capitalization: Font.AllUppercase
         font.letterSpacing: 2
         font.bold: true

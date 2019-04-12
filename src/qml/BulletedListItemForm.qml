@@ -23,7 +23,7 @@ Item {
 
             Text {
                 id: bulletNumber
-                text: "0"
+                text: qsTr("0")
                 font.bold: true
                 color: "#000000"
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -39,7 +39,7 @@ Item {
 
     Text {
         id: bulletText
-        text: "default text"
+        text: qsTr("default text")
         anchors.top: parent.top
         anchors.topMargin: 7
         anchors.left: parent.left

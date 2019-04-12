@@ -117,7 +117,7 @@ Item {
             id: materialNameOrBayIDText
             text: isSpoolPresent ?
                       materialName :
-                      ("BAY " + filamentBayID)
+                      qsTr("BAY %1").arg(filamentBayID)
             anchors.top: parent.top
                       anchors.topMargin: 8
             font.capitalization: Font.AllUppercase
@@ -149,7 +149,7 @@ Item {
         Text {
             id: noMaterialText
             width: 210
-            text: "NO MATERIAL DETECTED"
+            text: qsTr("NO MATERIAL DETECTED")
             anchors.top: materialNameOrBayIDText.bottom
             anchors.topMargin: 8
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -169,10 +169,7 @@ Item {
             id: materialRequiredText
             text: {
                 if(materialColorName != "Reading Spool...") {
-                    materialRequired +
-                    "KG OF " +
-                    materialAvailable +
-                    "KG"
+                    qsTr("%1KG OF %2KG").arg(materialRequired).arg(materialAvailable)
                 } else {
                     ""
                 }

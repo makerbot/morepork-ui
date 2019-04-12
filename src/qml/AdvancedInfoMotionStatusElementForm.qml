@@ -12,7 +12,7 @@ Item {
     Text {
         id: axis_label
         width: 50
-        text: "AXIS"
+        text: qsTr("AXIS")
         font.letterSpacing: 2
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: 15
@@ -23,7 +23,7 @@ Item {
     Text {
         id: enabled_value
         width: 100
-        text: "ENABLED"
+        text: qsTr("ENABLED")
         font.capitalization: Font.AllUppercase
         font.letterSpacing: 2
         anchors.left: axis_label.right
@@ -38,7 +38,7 @@ Item {
         id: endstop_value
         width: 100
         color: "#ffffff"
-        text: "ENDSTOP"
+        text: qsTr("ENDSTOP")
         font.letterSpacing: 2
         font.pixelSize: 15
         font.capitalization: Font.AllUppercase
@@ -52,7 +52,7 @@ Item {
         id: position_value
         width: 100
         color: "#ffffff"
-        text: "POSITION"
+        text: qsTr("POSITION")
         font.letterSpacing: 2
         font.pixelSize: 15
         font.capitalization: Font.AllUppercase

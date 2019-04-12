@@ -55,10 +55,10 @@ int main(int argc, char ** argv) {
 #endif
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
-    UiTranslator ui_trans;
     MoreporkStorage storage;
     FreTracker fre_tracker;
     QQmlApplicationEngine engine;
+    UiTranslator ui_trans(&engine);
     engine.rootContext()->setContextProperty("bot", bot.data());
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("cpUiTr", (QObject*)&ui_trans);

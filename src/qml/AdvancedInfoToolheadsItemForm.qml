@@ -12,7 +12,7 @@ Item {
 
         Text {
             id: heading
-            text: "TOOLHEADS"
+            text: qsTr("TOOLHEADS")
             font.letterSpacing: 2
             font.weight: Font.Bold
             font.pixelSize: 20
@@ -28,7 +28,7 @@ Item {
 
             AdvancedInfoToolheadElement {
                 id: toolheadA
-                toolheadLabelProperty.text: "A/1"
+                toolheadLabelProperty.text: qsTr("A/1")
                 attachedProperty.value: bot.infoToolheadAAttached
                 filamentPresentProperty.value: bot.infoToolheadAFilamentPresent
                 currentTempProperty.value: bot.infoToolheadACurrentTemp
@@ -43,7 +43,7 @@ Item {
 
             AdvancedInfoToolheadElement {
                 id: toolheadB
-                toolheadLabelProperty.text: "B/2"
+                toolheadLabelProperty.text: qsTr("B/2")
                 attachedProperty.value: bot.infoToolheadBAttached
                 filamentPresentProperty.value: bot.infoToolheadBFilamentPresent
                 currentTempProperty.value: bot.infoToolheadBCurrentTemp

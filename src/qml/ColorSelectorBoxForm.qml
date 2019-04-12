@@ -16,7 +16,7 @@ Item {
     Text {
         id: colorText
         color: "#ffffff"
-        text: "COLOR"
+        text: qsTr("COLOR")
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 25

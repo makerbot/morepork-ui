@@ -12,7 +12,7 @@ Item {
 
         Text {
             id: heading
-            text: "FILAMENT BAY"
+            text: qsTr("FILAMENT BAY")
             font.letterSpacing: 2
             font.weight: Font.Bold
             font.pixelSize: 20
@@ -28,7 +28,7 @@ Item {
 
             AdvancedInfoFilamentBayElement {
                 id: filamentBayA
-                filamentBayLabelProperty.text: "BAY 1"
+                filamentBayLabelProperty.text: qsTr("BAY 1")
                 temperatureProperty.value: bot.infoBay1Temp
                 humidityProperty.value: bot.infoBay1Humidity
                 filamentPresentProperty.value: bot.infoBay1FilamentPresent
@@ -41,7 +41,7 @@ Item {
 
             AdvancedInfoFilamentBayElement {
                 id: filamentBayB
-                filamentBayLabelProperty.text: "BAY 2"
+                filamentBayLabelProperty.text: qsTr("BAY 2")
                 temperatureProperty.value: bot.infoBay2Temp
                 humidityProperty.value: bot.infoBay2Humidity
                 filamentPresentProperty.value: bot.infoBay2FilamentPresent

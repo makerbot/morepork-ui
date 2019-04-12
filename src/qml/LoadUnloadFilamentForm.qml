@@ -286,7 +286,7 @@ Item {
             id: main_instruction_text
             width: 375
             color: "#cbcbcb"
-            text: "OPEN BAY " + bayID
+            text: qsTr("OPEN BAY %1").arg(bayID)
             font.capitalization: Font.AllUppercase
             anchors.top: parent.top
             anchors.topMargin: 100
@@ -345,7 +345,7 @@ Item {
         RoundedButton {
             id: acknowledgeButton
             label_width: 180
-            label: "CONTINUE"
+            label: qsTr("CONTINUE")
             buttonWidth: 180
             buttonHeight: 50
             anchors.top: instruction_description_text.bottom
@@ -355,7 +355,7 @@ Item {
 
         RoundedButton {
             id: retryButton
-            label: "RETRY"
+            label: qsTr("RETRY")
             label_size: 18
             buttonWidth: 150
             buttonHeight: 50
@@ -377,7 +377,7 @@ Item {
 
             Text {
                 id: extruder_current_temperature_text
-                text: currentTemperature + "C"
+                text: qsTr("%1C").arg(currentTemperature)
                 font.family: "Antennae"
                 color: "#ffffff"
                 font.letterSpacing: 3
@@ -394,7 +394,7 @@ Item {
 
             Text {
                 id: extruder_target_temperature_text
-                text: targetTemperature + "C"
+                text: qsTr("%1C").arg(targetTemperature)
                 font.family: "Antennae"
                 color: "#ffffff"
                 font.letterSpacing: 3
@@ -422,24 +422,24 @@ Item {
                 target: main_instruction_text
                 text: {
                     if(overrideInvalidMaterial) {
-                        "UNKNOWN MATERIAL"
+                        qsTr("UNKNOWN MATERIAL")
                     }
                     else if(isMaterialValid) {
-                        materialName + " DETECTED"
+                        qsTr("%1 DETECTED").arg(materialName)
                     }
                 }
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Push the end of the material into the slot until you feel it being pulled in."
+                text: qsTr("Push the end of the material into the slot until you feel it being pulled in.")
                 opacity: 0
             }
 
             PropertyChanges {
                 target: acknowledgeButton
                 opacity: 0
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -476,13 +476,13 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: "MATERIAL LOADING"
+                text: qsTr("MATERIAL LOADING")
                 anchors.topMargin: 160
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds."
+                text: qsTr("Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds.")
             }
 
             PropertyChanges {
@@ -536,8 +536,8 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: (targetTemperature > currentTemperature) ?
-                          "EXTRUDER " + bayID + " IS\nHEATING UP" :
-                          "EXTRUDER " + bayID + " IS\nCOOLING DOWN"
+                          qsTr("EXTRUDER %1 IS\nHEATING UP").arg(bayID) :
+                          qsTr("EXTRUDER %1 IS\nCOOLING DOWN").arg(bayID)
                 anchors.topMargin: 140
             }
 
@@ -553,13 +553,13 @@ Item {
 
             PropertyChanges {
                 target: extruder_current_temperature_text
-                text: currentTemperature + "C"
+                text: qsTr("%1C").arg(currentTemperature)
                 visible: true
             }
 
             PropertyChanges {
                 target: extruder_target_temperature_text
-                text: targetTemperature + "C"
+                text: qsTr("%1C").arg(targetTemperature)
                 visible: true
             }
 
@@ -603,13 +603,13 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: "EXTRUSION CONFIRMATION"
+                text: qsTr("EXTRUSION CONFIRMATION")
                 anchors.topMargin: 120
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Look inside of the printer and wait until you see material begin to extrude."
+                text: qsTr("Look inside of the printer and wait until you see material begin to extrude.")
                 anchors.topMargin: 25
             }
 
@@ -621,7 +621,7 @@ Item {
                 buttonHeight: 80
                 anchors.topMargin: 20
                 opacity: 1
-                label: "CONFIRM\nMATERIAL EXTRUSION"
+                label: qsTr("CONFIRM\nMATERIAL EXTRUSION")
             }
 
             PropertyChanges {
@@ -662,7 +662,7 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: {
-                    doingAutoUnload ?  "OUT OF FILAMENT" : "UNLOADING"
+                    doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("UNLOADING")
                 }
                 anchors.topMargin: 165
             }
@@ -671,8 +671,8 @@ Item {
                 target: instruction_description_text
                 text: {
                     doingAutoUnload ?
-                        "Please wait while the remaining material backs out of the printer." :
-                        "The material is backing out of the extruder, please wait."
+                        qsTr("Please wait while the remaining material backs out of the printer.") :
+                        qsTr("The material is backing out of the extruder, please wait.")
                 }
                 anchors.topMargin: 30
             }
@@ -721,12 +721,12 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: "CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN"
+                text: qsTr("CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN")
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Wait a few moments until the material has cooled. Close the build chamber and material drawer."
+                text: qsTr("Wait a few moments until the material has cooled. Close the build chamber and material drawer.")
                 anchors.topMargin: 60
             }
 
@@ -791,18 +791,18 @@ Item {
                 label: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
-                            "DONE"
+                            qsTr("DONE")
                         }
                         else if(bot.process.type == ProcessType.None) {
                             if(bayID == 1) {
-                                "NEXT: LOAD SUPPORT MATERIAL"
+                                qsTr("NEXT: LOAD SUPPORT MATERIAL")
                             } else if(bayID == 2) {
-                                "DONE"
+                                qsTr("DONE")
                             }
                         }
                     }
                     else {
-                        "DONE"
+                        qsTr("DONE")
                     }
                 }
             }
@@ -812,14 +812,14 @@ Item {
                 label: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
-                            "RETRY PURGING"
+                            qsTr("RETRY PURGING")
                         }
                         else if(bot.process.type == ProcessType.None) {
-                            "RETRY LOADING"
+                            qsTr("RETRY LOADING")
                         }
                     }
                     else {
-                        "RETRY LOADING"
+                        qsTr("RETRY LOADING")
                     }
                 }
                 label_size: 18
@@ -849,13 +849,13 @@ Item {
 
             PropertyChanges {
                 target: extruder_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
+                text: qsTr("%1C").arg(bot.extruderACurrentTemp)
                 visible: true
             }
 
             PropertyChanges {
                 target: extruder_target_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
+                text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
                 visible: true
             }
 
@@ -878,15 +878,13 @@ Item {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: "REWIND SPOOL"
+                text: qsTr("REWIND SPOOL")
                 anchors.topMargin: 120
             }
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Open material bay " +
-                      bayID +
-                      " and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door."
+                text: qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
                 anchors.topMargin: 30
             }
 
@@ -895,7 +893,7 @@ Item {
                 buttonWidth: 120
                 anchors.topMargin: 30
                 opacity: 1
-                label: "DONE"
+                label: qsTr("DONE")
             }
 
             PropertyChanges {
@@ -903,14 +901,14 @@ Item {
                 label: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
-                            "RETRY UNLOADING"
+                            qsTr("RETRY UNLOADING")
                         }
                         else if(bot.process.type == ProcessType.None) {
-                            "RETRY UNLOADING"
+                            qsTr("RETRY UNLOADING")
                         }
                     }
                     else {
-                        "RETRY UNLOADING"
+                        qsTr("RETRY UNLOADING")
                     }
                 }
                 label_size: 18
@@ -956,10 +954,10 @@ Item {
                 text: {
                     switch(bot.process.type) {
                       case ProcessType.Load:
-                          "FILAMENT LOADING FAILED"
+                          qsTr("FILAMENT LOADING FAILED")
                           break;
                       case ProcessType.Unload:
-                          "FILAMENT UNLOADING FAILED"
+                          qsTr("FILAMENT UNLOADING FAILED")
                           break;
                     }
                 }
@@ -967,7 +965,7 @@ Item {
 
             PropertyChanges {
                 target: instruction_description_text
-                text: "Error " + errorCode
+                text: qsTr("Error %1").arg(errorCode)
             }
 
             PropertyChanges {
@@ -975,7 +973,7 @@ Item {
                 buttonWidth: 120
                 anchors.topMargin: 50
                 opacity: 1
-                label: "DONE"
+                label: qsTr("DONE")
             }
 
             PropertyChanges {
