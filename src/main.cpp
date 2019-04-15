@@ -5,6 +5,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QLocale>
 
 #include "ui_translator.h"
 #include "logger.h"
@@ -57,6 +58,7 @@ int main(int argc, char ** argv) {
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
     MoreporkStorage storage;
     FreTracker fre_tracker;
+    QLocale::setDefault(QLocale(QStringLiteral("en_US")));
     QQmlApplicationEngine engine;
     UiTranslator ui_trans(&engine);
     engine.rootContext()->setContextProperty("bot", bot.data());

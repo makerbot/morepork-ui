@@ -23,7 +23,6 @@ Item {
     property string doneByDayString: "DEFAULT_STRING"
     property string doneByTimeString: "99:99"
     property string timeLeftString: "99:99"
-    property string doneByMeridianString
     property alias printStatusSwipeView: printStatusSwipeView
     property bool testPrintComplete: false
     property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
@@ -31,22 +30,40 @@ Item {
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
-        var timeLeft = new Date("", "", "", "", "", timeLeftSeconds)
         var currentTime = new Date()
         var endMS = currentTime.getTime() + timeLeftSeconds*1000
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
-        timeLeftString = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
-                                                    timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
-                                                                               timeLeft.getMinutes() + "M"
-        doneByDayString = daysLeft > 1 ? "DONE IN " + daysLeft + " DAYS BY" :
-                                         daysLeft == 1 ? "DONE TOMMORROW BY" : "DONE TODAY BY"
-        doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() :
-                                                                                      "12" + ":" + endTime.getMinutes() :
-                                                          endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() :
-                                                                                      endTime.getHours() % 12 + ":" + endTime.getMinutes()
-        doneByMeridianString = endTime.getHours() >= 12 ? "PM" : "AM"
+
+        // Is there a better way to do this.....
+        var timeLeft_s = timeLeftSeconds
+        // (86400 seconds in a day)
+        var timeLeft_d = Math.floor(timeLeft_s / 86400)
+        timeLeft_s %= 86400
+        // (3600 seconds in an hour)
+        var timeLeft_h = Math.floor(timeLeft_s / 3600)
+        timeLeft_s %= 3600
+        var timeLeft_m = Math.floor(timeLeft_s / 60)
+        timeLeft_s %= 60
+
+        if (timeLeft_d > 0) {
+            timeLeftString = qsTr("%1D %2HR %3M").arg(timeLeft_d).arg(timeLeft_h).arg(timeLeft_m)
+        } else if (timeLeft_h > 0) {
+            timeLeftString = qsTr("%1HR %2M").arg(timeLeft_h).arg(timeLeft_m)
+        } else {
+            timeLeftString = qsTr("%1M").arg(timeLeft_m)
+        }
+
+        if (daysLeft > 1) {
+            doneByDayString = qsTr("DONE IN %1 DAYS BY").arg(daysLeft)
+        } else if (daysLeft === 1) {
+            doneByDayString = qsTr("DONE TOMORROW BY")
+        } else {
+            doneByDayString = qsTr("DONE TODAY BY")
+        }
+
+        doneByTimeString = endTime.toLocaleTimeString(Qt.locale().name)
     }
 
     SwipeView {
@@ -155,18 +172,18 @@ Item {
                         case ProcessStateType.Resuming:
                         case ProcessStateType.Paused:
                             (bot.process.errorCode?
-                                qsTr("Error ").arg(bot.process.errorCode) :
+                                qsTr("Error %1").arg(bot.process.errorCode) :
                                 fileName_)
                             break;
                         case ProcessStateType.Completed:
                             qsTr("%1 PRINT TIME").arg(print_time_)
                             break;
                         case ProcessStateType.Failed:
-                            "Error " + bot.process.errorCode
+                            qsTr("Error %1").arg(bot.process.errorCode)
                             break;
                         case ProcessStateType.UnloadingFilament:
                         case ProcessStateType.Preheating: //Out of filament while printing
-                            "OUT OF FILAMENT - UNLOADING"
+                            qsTr("OUT OF FILAMENT - UNLOADING")
                             break;
                         default:
                             ""
@@ -231,7 +248,7 @@ Item {
                     id: print_again_button
                     buttonWidth: 290
                     buttonHeight: 50
-                    label: "RETRY TEST PRINT"
+                    label: qsTr("RETRY TEST PRINT")
                     visible: {
                         if(inFreStep) {
                             bot.process.stateType == ProcessStateType.Completed ||
@@ -254,7 +271,7 @@ Item {
                     id: done_button
                     buttonWidth: 100
                     buttonHeight: 50
-                    label: "DONE"
+                    label: qsTr("DONE")
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
                     button_mouseArea.onClicked: {
@@ -718,22 +735,6 @@ Item {
                     font.family: "Antenna"
                     font.weight: Font.Light
                     font.letterSpacing: 3
-
-                    Text {
-                        id: am_pm_text
-                        color: "#ffffff"
-                        text: doneByMeridianString
-                        antialiasing: false
-                        smooth: false
-                        anchors.right: parent.right
-                        anchors.rightMargin: -24
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: 26
-                        font.pixelSize: 15
-                        font.family: "Antenna"
-                        font.weight: Font.Light
-                        font.letterSpacing: 3
-                    }
                 }
 
                 Text {
@@ -811,8 +812,8 @@ Item {
                             text: fileName_
                             antialiasing: false
                             smooth: false
-                            anchors.left: parent.left
-                            anchors.leftMargin: 145
+                            anchors.left: parent.right
+                            anchors.leftMargin: 10
                             font.pixelSize: 16
                             font.family: "Antenna"
                             font.weight: Font.Bold
@@ -835,11 +836,11 @@ Item {
                             Text {
                                 id: end_time_text4
                                 color: "#ffffff"
-                                text: doneByTimeString + doneByMeridianString
+                                text: doneByTimeString
                                 antialiasing: false
                                 smooth: false
-                                anchors.right: parent.right
-                                anchors.rightMargin: -90
+                                anchors.left: parent.right
+                                anchors.leftMargin: 10
                                 font.pixelSize: 16
                                 font.family: "Antenna"
                                 font.weight: Font.Bold
