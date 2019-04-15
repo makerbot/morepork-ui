@@ -158,7 +158,10 @@ ApplicationWindow {
             extNotCalibratedPopup.close()
         }
         else {
-            extNotCalibratedPopup.open()
+            // For now we don't want users to see this popup because it may be
+            // erroneous and we are having trouble getting people to actually
+            // clean their extruders.
+            // extNotCalibratedPopup.open()
         }
     }
 
