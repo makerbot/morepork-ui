@@ -309,22 +309,20 @@ Item {
             BulletedListItem {
                 id: bulletItem1
                 bulletNumber: "1"
-                bulletText: "Press side latch to unlock and\nopen bay " +
-                            bayID
+                bulletText: qsTr("Press side latch to unlock and\nopen bay %1").arg(bayID)
             }
 
             BulletedListItem {
                 id: bulletItem2
                 bulletNumber: "2"
-                bulletText: "Place a " +
-                            (bayID == 1 ? "Model " : "Support ") +
-                            "material spool in\nthe bay"
+                bulletText: qsTr("Place a %1 material spool in\nthe bay").arg(
+                                    bayID == 1 ? qsTr("Model") : qsTr("Support"))
             }
 
             BulletedListItem {
                 id: bulletItem3
                 bulletNumber: "3"
-                bulletText: "Push the end of the material into\nthe slot until you feel it being\npulled in."
+                bulletText: qsTr("Push the end of the material into\nthe slot until you feel it being\npulled in.")
             }
         }
 
