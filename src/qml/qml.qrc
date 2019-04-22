@@ -140,5 +140,9 @@
         <file>TimeZoneLocationSeparatorForm.qml</file>
         <file>SnipMaterialScreen.qml</file>
         <file>SnipMaterialScreenForm.qml</file>
+        <file>LanguageSelector.qml</file>
+        <file>LanguageSelectorForm.qml</file>
+        <file>LanguageButton.qml</file>
+        <file>LanguageButtonForm.qml</file>
     </qresource>
 </RCC>

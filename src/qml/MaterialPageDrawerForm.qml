@@ -71,7 +71,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonCancelMaterialChange
-                buttonText.text: qsTr("CANCEL MATERIAL CHANGE") + cpUiTr.emptyStr
+                buttonText.text: qsTr("CANCEL MATERIAL CHANGE")
                 buttonImage.source: "qrc:/img/cancel.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -84,7 +84,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonResume
-                buttonText.text: qsTr("RESUME") + cpUiTr.emptyStr
+                buttonText.text: qsTr("RESUME")
                 buttonImage.source: "qrc:/img/close.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

@@ -491,70 +491,70 @@ Item {
 
                 InfoItem {
                     id: printInfo_fileName
-                    labelText: qsTr("Filename") + cpUiTr.emptyStr
+                    labelText: qsTr("Filename")
                     dataText: file_name
                 }
 
                 InfoItem {
                     id: printInfo_timeEstimate
-                    labelText: qsTr("Print Time Estimate") + cpUiTr.emptyStr
+                    labelText: qsTr("Print Time Estimate")
                     dataText: print_time
                 }
 
                 InfoItem {
                     id: printInfo_material
-                    labelText: qsTr("Print Material") + cpUiTr.emptyStr
+                    labelText: qsTr("Print Material")
                     dataText: print_material
                 }
 
                 InfoItem {
                     id: printInfo_usesSupport
-                    labelText: qsTr("Supports") + cpUiTr.emptyStr
+                    labelText: qsTr("Supports")
                     dataText: uses_support
                     visible: false
                 }
 
                 InfoItem {
                     id: printInfo_usesRaft
-                    labelText: qsTr("Rafts") + cpUiTr.emptyStr
+                    labelText: qsTr("Rafts")
                     dataText: uses_raft
                     visible: false
                 }
 
                 InfoItem {
                     id: printInfo_modelMass
-                    labelText: qsTr("Model") + cpUiTr.emptyStr
+                    labelText: qsTr("Model")
                     dataText: model_mass
                 }
 
                 InfoItem {
                     id: printInfo_supportMass
-                    labelText: qsTr("Support") + cpUiTr.emptyStr
+                    labelText: qsTr("Support")
                     dataText: support_mass
                 }
 
                 InfoItem {
                     id: printInfo_Shells
-                    labelText: qsTr("Shells") + cpUiTr.emptyStr
+                    labelText: qsTr("Shells")
                     dataText: num_shells
                     visible: false
                 }
 
                 InfoItem {
                     id: printInfo_extruderTemperature
-                    labelText: qsTr("Extruder Temperature") + cpUiTr.emptyStr
+                    labelText: qsTr("Extruder Temperature")
                     dataText: extruder_temp
                 }
 
                 InfoItem {
                     id: printInfo_chamberTemperature
-                    labelText: qsTr("Chamber Temperature") + cpUiTr.emptyStr
+                    labelText: qsTr("Chamber Temperature")
                     dataText: chamber_temp
                 }
 
                 InfoItem {
                     id: printInfo_slicerName
-                    labelText: qsTr("Slicer Name") + cpUiTr.emptyStr
+                    labelText: qsTr("Slicer Name")
                     dataText: slicer_name
                     visible: false
                 }

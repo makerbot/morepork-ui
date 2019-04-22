@@ -112,7 +112,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonClose
-                buttonText.text: qsTr("CLOSE") + cpUiTr.emptyStr
+                buttonText.text: qsTr("CLOSE")
                 buttonImage.source: ""
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

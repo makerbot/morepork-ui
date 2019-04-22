@@ -77,10 +77,10 @@ Drawer {
                 buttonText.text: {
                     switch(bot.process.stateType) {
                     case ProcessStateType.Printing:
-                        qsTr("PAUSE PRINT") + cpUiTr.emptyStr
+                        qsTr("PAUSE PRINT")
                         break;
                     case ProcessStateType.Paused:
-                        qsTr("RESUME PRINT") + cpUiTr.emptyStr
+                        qsTr("RESUME PRINT")
                         break;
                     default:
                         qsTr("PAUSE PRINT")
@@ -102,7 +102,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonCancelPrint
-                buttonText.text: qsTr("CANCEL PRINT") + cpUiTr.emptyStr
+                buttonText.text: qsTr("CANCEL PRINT")
                 buttonImage.source: "qrc:/img/cancel.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -115,7 +115,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonChangeFilament
-                buttonText.text: qsTr("CHANGE MATERIAL") + cpUiTr.emptyStr
+                buttonText.text: qsTr("CHANGE MATERIAL")
                 buttonImage.source: "qrc:/img/change_filament.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"
@@ -131,7 +131,7 @@ Drawer {
 
             MoreporkButton {
                 id: buttonClose
-                buttonText.text: qsTr("CLOSE") + cpUiTr.emptyStr
+                buttonText.text: qsTr("CLOSE")
                 buttonImage.source: "qrc:/img/close.png"
                 buttonColor: "#000000"
                 buttonPressColor: "#0a0a0a"

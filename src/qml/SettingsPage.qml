@@ -44,6 +44,11 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(6)
     }
 
+    buttonChangeLanguage.onClicked: {
+        languageSelector.currentLocale = Qt.locale().name
+        settingsSwipeView.swipeToItem(9)
+    }
+
     buttonTime.onClicked: {
         bot.getSystemTime()
         settingsSwipeView.swipeToItem(7)

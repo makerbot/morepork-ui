@@ -115,7 +115,7 @@ Item {
             visible: true
 
             Flickable {
-                id: flickableSettings
+                id: flickableAdvancedSettings
                 smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
@@ -136,19 +136,11 @@ Item {
                         buttonText.text: qsTr("SENSOR INFO")
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonPreheat
                         buttonImage.source: "qrc:/img/icon_preheat.png"
                         buttonText.text: qsTr("PREHEAT")
                         enabled: !isProcessRunning()
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
                     MenuButton {
@@ -158,19 +150,11 @@ Item {
                         enabled: !isProcessRunning()
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonCopyLogs
                         buttonImage.source: "qrc:/img/icon_copy_logs.png"
                         buttonText.text: qsTr("COPY LOGS TO USB")
                         enabled: (!isProcessRunning() && storage.usbStorageConnected)
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
                     MenuButton {
@@ -181,19 +165,11 @@ Item {
                         enabled: !isProcessRunning()
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonSpoolInfo
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: qsTr("SPOOL INFO")
                         visible: false
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false; visible: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
                     MenuButton {
@@ -203,19 +179,11 @@ Item {
                         visible: false
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; visible: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonRaiseLowerBuildPlate
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
                         enabled: !isProcessRunning()
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
                 }
             }
