@@ -50,20 +50,22 @@ int main(int argc, char ** argv) {
 
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
     QDirIterator it(MOREPORK_ROOT_DIR "/fonts");
-    while(it.hasNext())
-        if(QFileInfo(it.next()).suffix() == "otf")
+    while(it.hasNext()) {
+        if(QFileInfo(it.next()).suffix() == "otf") {
             QFontDatabase::addApplicationFont(it.fileInfo().absoluteFilePath());
+        }
+    }
 #endif
 
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
     MoreporkStorage storage;
     FreTracker fre_tracker;
-    QLocale::setDefault(QLocale(QStringLiteral("en_US")));
+    QLocale::setDefault(QLocale(QStringLiteral("en_GB")));
     QQmlApplicationEngine engine;
     UiTranslator ui_trans(&engine);
     engine.rootContext()->setContextProperty("bot", bot.data());
     // Context Property UI Translator
-    engine.rootContext()->setContextProperty("cpUiTr", (QObject*)&ui_trans);
+    engine.rootContext()->setContextProperty("translate", (QObject*)&ui_trans);
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
     engine.rootContext()->setContextProperty("fre", (QObject*)&fre_tracker);
 

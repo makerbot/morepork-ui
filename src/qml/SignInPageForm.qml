@@ -325,7 +325,7 @@ Item {
 
                     Text {
                         id: showPasswordText
-                        text: qsTr(" Show Password")
+                        text: qsTr("Show Password")
                         font.wordSpacing: 1
                         font.pointSize: 12
                         color: "#ffffff"

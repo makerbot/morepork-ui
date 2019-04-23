@@ -30,6 +30,9 @@ Item {
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
     property alias calibrateErrorScreen: calibrateErrorScreen
 
+    property alias buttonChangeLanguage: buttonChangeLanguage
+    property alias languageSelector: languageSelectorPage
+
     property alias buttonTime: buttonTime
     property alias timePage: timePage
 
@@ -93,18 +96,10 @@ Item {
                         buttonText.text: qsTr("PRINTER INFO")
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonChangePrinterName
                         buttonImage.source: "qrc:/img/icon_name_printer.png"
                         buttonText.text: qsTr("CHANGE PRINTER NAME")
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
                     MenuButton {
@@ -130,28 +125,16 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonAuthorizeAccounts
                         buttonImage.source: "qrc:/img/icon_authorize_account.png"
                         buttonText.text: qsTr("AUTHORIZE MAKERBOT ACCOUNT")
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonDeauthorizeAccounts
                         buttonImage.source: "qrc:/img/icon_deauthorize_accounts.png"
                         buttonText.text: qsTr("DEAUTHORIZE MAKERBOT ACCOUNTS")
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
 
                     MenuButton {
@@ -161,10 +144,6 @@ Item {
                         buttonNeedsAction: isfirmwareUpdateAvailable
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
@@ -172,8 +151,10 @@ Item {
                         enabled: !isProcessRunning()
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
+                    MenuButton {
+                        id: buttonChangeLanguage
+                        buttonImage.source: "qrc:/img/icon_change_language.png"
+                        buttonText.text: qsTr("CHANGE LANGUAGE")
                     }
 
                     MenuButton {
@@ -182,28 +163,16 @@ Item {
                         buttonText.text: qsTr("TIME")
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonAdvancedSettings
                         buttonImage.source: "qrc:/img/icon_preheat.png"
                         buttonText.text: qsTr("ADVANCED")
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
-                    }
-
                     MenuButton {
                         id: buttonShutdown
                         buttonImage.source: "qrc:/img/icon_power.png"
                         buttonText.text: qsTr("SHUT DOWN")
-                    }
-
-                    Item { width: parent.width; height: 1; smooth: false;
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent }
                     }
                 }
             }
@@ -443,6 +412,19 @@ Item {
 
             AdvancedSettingsPage {
                 id: advancedSettingsPage
+            }
+        }
+
+        //settingsSwipeView.index = 9
+        Item {
+            id: changeLanguageItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            LanguageSelector {
+                id: languageSelectorPage
             }
         }
     }

@@ -41,33 +41,33 @@ Item {
 
             InfoItemForm {
                 id: info_firmwareVersion
-                labelText: qsTr("Firmware Version") + cpUiTr.emptyStr
+                labelText: qsTr("Firmware Version")
                 dataText: bot.version
             }
             InfoItem {
                 id: info_connectionType
-                labelText: qsTr("Connection Type") + cpUiTr.emptyStr
+                labelText: qsTr("Connection Type")
                 dataText: bot.net.interface
             }
             InfoItem {
                 id: info_ipAddress
-                labelText: qsTr("IP Address") + cpUiTr.emptyStr
+                labelText: qsTr("IP Address")
                 dataText: bot.net.ipAddr
             }
             InfoItem {
                 id: info_subnet
-                labelText: qsTr("Netmask") + cpUiTr.emptyStr
+                labelText: qsTr("Netmask")
                 dataText: bot.net.netmask
             }
             InfoItem {
                 id: info_gateway
-                labelText: qsTr("Gateway") + cpUiTr.emptyStr
+                labelText: qsTr("Gateway")
                 dataText: bot.net.gateway
             }
             InfoItem {
                 id: info_dns
                 height: listView.height
-                labelText: qsTr("DNS") + cpUiTr.emptyStr
+                labelText: qsTr("DNS")
                 dataText: bot.net.gateway
                 labelElement.anchors.top: baseElement.top
                 labelElement.anchors.topMargin: 0
@@ -99,17 +99,17 @@ Item {
 
             InfoItem {
                 id: info_wifiNetwork
-                labelText: qsTr("WiFi Name") + cpUiTr.emptyStr
+                labelText: qsTr("WiFi Name")
                 dataText: bot.net.interface === "wifi" ? bot.net.name : qsTr("n/a")
             }
             InfoItem {
                 id: info_ethMacAddress
-                labelText: qsTr("Ethernet MAC Address") + cpUiTr.emptyStr
+                labelText: qsTr("Ethernet MAC Address")
                 dataText: bot.net.ethMacAddr
             }
             InfoItem {
                 id: info_wlanMacAddress
-                labelText: qsTr("WiFi MAC Address") + cpUiTr.emptyStr
+                labelText: qsTr("WiFi MAC Address")
                 dataText: bot.net.wlanMacAddr
             }
         }

@@ -9,7 +9,6 @@
 
 class UiTranslator : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString emptyStr READ getEmptyStr NOTIFY languageChanged)
     QQmlApplicationEngine *engine_;
     QTranslator *translator_;
 
@@ -17,10 +16,6 @@ class UiTranslator : public QObject {
         UiTranslator(QQmlApplicationEngine *engine) {
             engine_ = engine;
             translator_ = new QTranslator(this);
-        }
-
-        QString getEmptyStr() {
-            return QString();
         }
 
         Q_INVOKABLE void selectLanguage(QString localeStr){
@@ -36,24 +31,17 @@ class UiTranslator : public QObject {
             // where language is a lowercase, two-letter ISO 639 language code,
             // and country is an uppercase, two- or three-letter ISO 3166 country
             // code.'
-            // Our translation filenames (currently) only use the language part...
-            QString trans_file_suffix(localeStr.split("_")[0]);
-            // .qm files are generated from .ts files during compilation
-            // load the .qm file by referenceing it without the .qm extension
-            QString kFileNameNoExt(QString("morepork_%1.qm").arg(trans_file_suffix));
-            if(translator_->load(kFilePath + kFileNameNoExt)) {
-                qInfo() << "Successfully loaded translation file " << kFilePath + kFileNameNoExt;
+            QString kFileName(QString("translation_%1.qm").arg(localeStr));
+            QLocale::setDefault(QLocale(localeStr));
+
+            if(translator_->load(kFilePath + kFileName)) {
+                qInfo() << "Successfully loaded translation file " << kFilePath + kFileName;
                 qApp->installTranslator(translator_);
-                QLocale::setDefault(QLocale(localeStr));
                 engine_->retranslate();
-                emit languageChanged();
             } else {
-                qInfo() << "error loading translation [" << kFilePath + kFileNameNoExt << "]\n";
+                qInfo() << "error loading translation [" << kFilePath + kFileName << "]";
             }
         }
-
-    signals:
-        void languageChanged();
 };
 
 #endif //__MP_TRANSLATOR__

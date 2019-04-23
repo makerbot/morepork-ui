@@ -184,7 +184,7 @@ Item {
 
             PropertyChanges {
                 target: sub_status_text
-                text: qsTr("A new version of software is available. Do you want to update to the most recent version %1 ?").arg(bot.firmwareUpdateVersion)
+                text: qsTr("A new version of software is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
                 anchors.topMargin: 110
             }
 
