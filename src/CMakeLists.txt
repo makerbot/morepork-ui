@@ -52,7 +52,8 @@ set(SOURCES
     model/logger.cpp
     model/network.cpp
     model/fre_tracker.cpp
-    storage/storage.cpp)
+    storage/storage.cpp
+    storage/disk_manager.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
@@ -78,7 +79,8 @@ set(MOREPORK_UI_HEADERS
     model/network.h
     model/fre_tracker.h
     storage/storage.h
-    storage/progress_copy.h)
+    storage/progress_copy.h
+    storage/disk_manager.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})

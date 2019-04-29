@@ -11,8 +11,6 @@ PrintPageForm {
     property bool startPrintTopLidOpen: false
     property bool startPrintBuildDoorOpen: false
     property bool startPrintNoFilament: false
-    buttonUsbStorage.filenameText.text: qsTr("USB")
-    buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE")
 
     function startPrintMaterialCheck() {
         // Single extruder prints

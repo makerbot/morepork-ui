@@ -466,19 +466,15 @@ void MoreporkStorage::printFileListReset(){
   printFileListSet(print_file_list);
 }
 
-
 void MoreporkStorage::backStackPush(const QString kDirPath){
   if(QFileInfo(kDirPath).isDir())
     back_dir_stack_.push(kDirPath);
 }
 
-
 QString MoreporkStorage::backStackPop(){
   return back_dir_stack_.empty() ? "" : back_dir_stack_.pop();
 }
 
-
 void MoreporkStorage::backStackClear(){
   back_dir_stack_.clear();
 }
-

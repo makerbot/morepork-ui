@@ -241,7 +241,6 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
       const QSize &requestedSize);
 };
 
-
 class MoreporkStorage : public QObject {
   Q_OBJECT
   public:

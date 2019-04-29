@@ -45,7 +45,10 @@ Item {
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(!storage.usbStorageConnected) {
+        if(usbStorageConnected) {
+            diskman.updateUsbUsage()
+        }
+        else if(!storage.usbStorageConnected) {
             if(printSwipeView.currentIndex != 0 &&
                     browsingUsbStorage) {
                 setDrawerState(false)
@@ -253,16 +256,15 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    FileButton {
+                    StorageTypeButton {
                         id: buttonInternalStorage
-                        fileThumbnail.source: "qrc:/img/sombrero_icon.png"
-                        fileThumbnail.width: 70
-                        fileThumbnail.height: 53
-                        fileThumbnail.anchors.leftMargin: 60
-                        filenameText.text: qsTr("INTERNAL STORAGE")
-                        filePrintTime.text: qsTr("FILES SAVED ON PRINTER")
-                        fileMaterial.visible: false
-                        visible: false
+                        storageThumbnail.source: "qrc:/img/sombrero_icon.png"
+                        storageThumbnail.width: 70
+                        storageThumbnail.height: 53
+                        storageThumbnail.anchors.leftMargin: 60
+                        storageName: qsTr("INTERNAL STORAGE")
+                        storageDescription: qsTr("FILES SAVED ON PRINTER")
+                        storageUsed: diskman.internalUsed.toFixed(1)
                         onClicked: {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
@@ -273,20 +275,13 @@ Item {
                         }
                     }
 
-                    Item { width: parent.width; height: 1; smooth: false; visible: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
-                        }
-                    }
-
-                    FileButton {
+                    StorageTypeButton {
                         id: buttonUsbStorage
-                        fileThumbnail.source: "qrc:/img/usb_icon.png"
-                        fileThumbnail.opacity: usbStorageConnected ? 1 : 0.4
-                        filenameText.text: qsTr("USB")
-                        filenameText.opacity: usbStorageConnected ? 1 : 0.4
-                        filePrintTime.text: usbStorageConnected ? qsTr("EXTERNAL STORAGE") : qsTr("PLEASE INSERT A USB DRIVE")
-                        filePrintTime.opacity: usbStorageConnected ? 1 : 0.4
-                        fileMaterial.visible: false
+                        storageThumbnail.source: "qrc:/img/usb_icon.png"
+                        storageName: qsTr("USB")
+                        storageDescription: usbStorageConnected ? qsTr("EXTERNAL STORAGE") : qsTr("PLEASE INSERT A USB DRIVE")
+//                        storageUsed: diskman.usbUsed.toFixed(1)
+                        enabled: usbStorageConnected
                         onClicked: {
                             if(usbStorageConnected) {
                                 browsingUsbStorage = true
@@ -296,10 +291,6 @@ Item {
                                 setDrawerState(true)
                                 printSwipeView.swipeToItem(1)
                             }
-                        }
-                    }
-                    Item { width: parent.width; height: 1; smooth: false
-                        Rectangle { color: "#505050"; smooth: false; anchors.fill: parent
                         }
                     }
                 }
@@ -416,7 +407,6 @@ Item {
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
-                            setDrawerState(false)
                             if(!startPrintMaterialCheck() &&
                                !startPrintWithUnknownMaterials &&
                                !startPrintWithInsufficientModelMaterial &&
@@ -424,13 +414,11 @@ Item {
                                 startPrintErrorsPopup.open()
                             }
                             else {
+                                setDrawerState(false)
                                 printSwipeView.swipeToItem(2)
                             }
                         }
                     }
-
-                    Item { width: parent.width; height: 1; smooth: false
-                        Rectangle { color: "#4d4d4d"; smooth: false; anchors.fill: parent } }
                 }
             }
         }
