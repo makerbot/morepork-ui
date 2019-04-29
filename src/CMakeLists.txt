@@ -45,6 +45,8 @@ find_package(Qt5LinguistTools)
 # Model impl sources aren't built for Qt creator so they just live here
 set(SOURCES
     main.cpp
+    settings_interface/settings_interface.cpp
+    settings_interface/ui_settings.cpp
     model/base_model.cpp
     model/bot_model.cpp
     model/net_model.cpp
@@ -69,6 +71,9 @@ set(MODEL_IMPL_SOURCES
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} model model_impl)
 set(MOREPORK_UI_HEADERS
     logging.h
+    settings_interface/settings_interface.h
+    settings_interface/ui_settings.h
+    settings_interface/nlohmann/json.hpp
     ui_translator.h
     model/base_model.h
     model/logger.h

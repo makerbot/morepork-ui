@@ -37,6 +37,7 @@ void msgHandler(QtMsgType type,
 #include "fre_tracker.h"
 #include "parsed_qml_enums.h"
 #include "storage/storage.h"
+#include "settings_interface/settings_interface.h"
 
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
@@ -60,6 +61,8 @@ int main(int argc, char ** argv) {
     QScopedPointer<BotModel, QScopedPointerDeleteLater> bot(MOREPORK_BOT_MODEL);
     MoreporkStorage storage;
     FreTracker fre_tracker;
+    SettingsInterface settings;
+
     QLocale::setDefault(QLocale(QStringLiteral("en_GB")));
     QQmlApplicationEngine engine;
     UiTranslator ui_trans(&engine);
@@ -68,6 +71,7 @@ int main(int argc, char ** argv) {
     engine.rootContext()->setContextProperty("translate", (QObject*)&ui_trans);
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
     engine.rootContext()->setContextProperty("fre", (QObject*)&fre_tracker);
+    engine.rootContext()->setContextProperty("settings", (QObject*)&settings);
 
     QScopedPointer<Logger, QScopedPointerDeleteLater> log(MOREPORK_LOGGER);
     engine.rootContext()->setContextProperty("log", log.data());

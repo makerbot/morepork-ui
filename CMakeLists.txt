@@ -52,6 +52,7 @@ if(${CMAKE_CROSSCOMPILING} OR ${QT_CREATOR_BUILD})
         add_definitions(-DQT_NO_DEBUG_OUTPUT)
     endif()
     add_subdirectory(src)
+    add_subdirectory(settings)
 endif()
 
 if(NOT ${QT_CREATOR_BUILD})
