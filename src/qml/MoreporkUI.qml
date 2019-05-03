@@ -2431,6 +2431,10 @@ ApplicationWindow {
                 printPage.startPrintWithUnknownMaterials = false
                 printPage.startPrintWithInsufficientModelMaterial = false
                 printPage.startPrintWithInsufficientSupportMaterial = false
+                printPage.startPrintNoFilament = false
+                printPage.startPrintUnknownSliceGenuineMaterial = false
+                printPage.startPrintGenuineSliceUnknownMaterial = false
+                printPage.startPrintMaterialMismatch = false
             }
 
             Rectangle {
@@ -2440,7 +2444,8 @@ ApplicationWindow {
                 width: 720
                 height: {
                     (printPage.startPrintTopLidOpen ||
-                     printPage.startPrintBuildDoorOpen) ? 220 : 300
+                     printPage.startPrintBuildDoorOpen) ?
+                                220 : 300
                 }
                 radius: 10
                 border.width: 2
@@ -2459,7 +2464,8 @@ ApplicationWindow {
                     source: "qrc:/img/skip.png"
                     visible: (printPage.startPrintWithUnknownMaterials ||
                               printPage.startPrintWithInsufficientModelMaterial ||
-                              printPage.startPrintWithInsufficientSupportMaterial) &&
+                              printPage.startPrintWithInsufficientSupportMaterial ||
+                              printPage.startPrintUnknownSliceGenuineMaterial) &&
                              !printPage.startPrintBuildDoorOpen &&
                              !printPage.startPrintTopLidOpen
 
@@ -2568,12 +2574,13 @@ ApplicationWindow {
                                 if(printPage.startPrintNoFilament) {
                                     qsTr("CANCEL")
                                 }
-                                else if(printPage.startPrintWithUnknownMaterials) {
-                                    qsTr("START ANYWAY")
-                                }
-                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
-                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
+                                else if(printPage.startPrintMaterialMismatch ||
+                                        printPage.startPrintGenuineSliceUnknownMaterial) {
                                     qsTr("OK")
+                                }
+                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                                        printPage.startPrintWithUnknownMaterials) {
+                                    qsTr("START ANYWAY")
                                 }
                                 else if(printPage.startPrintWithInsufficientModelMaterial ||
                                         printPage.startPrintWithInsufficientSupportMaterial) {
@@ -2611,19 +2618,20 @@ ApplicationWindow {
                                 if(printPage.startPrintNoFilament) {
                                     // Do Nothing
                                 }
-                                else if(printPage.startPrintWithUnknownMaterials ||
-                                   printPage.startPrintWithInsufficientModelMaterial ||
-                                   printPage.startPrintWithInsufficientSupportMaterial) {
+                                else if(printPage.startPrintMaterialMismatch ||
+                                        printPage.startPrintGenuineSliceUnknownMaterial) {
+                                    startPrintErrorsPopup.close()
+                                }
+                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                                        printPage.startPrintWithUnknownMaterials ||
+                                        printPage.startPrintWithInsufficientModelMaterial ||
+                                        printPage.startPrintWithInsufficientSupportMaterial) {
                                     if(printPage.startPrintDoorLidCheck()) {
                                         printPage.startPrint()
                                     }
                                     else {
                                         startPrintErrorsPopup.open()
                                     }
-                                }
-                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
-                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                    startPrintErrorsPopup.close()
                                 }
                             }
                         }
@@ -2649,15 +2657,17 @@ ApplicationWindow {
                                 if(printPage.startPrintNoFilament) {
                                     qsTr("LOAD MATERIAL")
                                 }
-                                else if(printPage.startPrintWithUnknownMaterials ||
+                                else if(printPage.startPrintMaterialMismatch ||
+                                        printPage.startPrintGenuineSliceUnknownMaterial) {
+                                    qsTr("CHANGE MATERIAL")
+                                }
+                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                                        printPage.startPrintWithUnknownMaterials ||
                                         printPage.startPrintWithInsufficientModelMaterial ||
                                         printPage.startPrintWithInsufficientSupportMaterial) {
                                     qsTr("CHANGE MATERIAL")
                                 }
-                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
-                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                    qsTr("CHANGE MATERIAL")
-                                } else {
+                                else {
                                     ""
                                 }
                             }
@@ -2682,32 +2692,29 @@ ApplicationWindow {
                                 right_text_start_print_errors_popup.color = "#ffffff"
                                 right_rectangle_start_print_errors_popup.color = "#00000000"
                             }
+
+                            function resetDetailsAndGoToMaterialsPage() {
+                                printPage.resetPrintFileDetails()
+                                if(printPage.printSwipeView.currentIndex != 0) {
+                                    printPage.printSwipeView.setCurrentIndex(0)
+                                }
+                                mainSwipeView.swipeToItem(5)
+                            }
+
                             onClicked: {
                                 startPrintErrorsPopup.close()
-                                // TODO - there is a bunch of duplicate code here
                                 if(printPage.startPrintNoFilament) {
-                                    printPage.resetPrintFileDetails()
-                                    if(printPage.printSwipeView.currentIndex != 0) {
-                                        printPage.printSwipeView.setCurrentIndex(0)
-                                    }
-                                    mainSwipeView.swipeToItem(5)
+                                    resetDetailsAndGoToMaterialsPage()
                                 }
-                                else if(printPage.startPrintWithUnknownMaterials ||
-                                   printPage.startPrintWithInsufficientModelMaterial ||
-                                   printPage.startPrintWithInsufficientSupportMaterial) {
-                                    printPage.resetPrintFileDetails()
-                                    if(printPage.printSwipeView.currentIndex != 0) {
-                                        printPage.printSwipeView.setCurrentIndex(0)
-                                    }
-                                    mainSwipeView.swipeToItem(5)
+                                else if(printPage.startPrintMaterialMismatch ||
+                                        printPage.startPrintGenuineSliceUnknownMaterial) {
+                                    resetDetailsAndGoToMaterialsPage()
                                 }
-                                else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
-                                        materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                    printPage.resetPrintFileDetails()
-                                    if(printPage.printSwipeView.currentIndex != 0) {
-                                        printPage.printSwipeView.setCurrentIndex(0)
-                                    }
-                                    mainSwipeView.swipeToItem(5)
+                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                                        printPage.startPrintWithUnknownMaterials ||
+                                        printPage.startPrintWithInsufficientModelMaterial ||
+                                        printPage.startPrintWithInsufficientSupportMaterial) {
+                                    resetDetailsAndGoToMaterialsPage()
                                 }
                             }
                         }
@@ -2719,7 +2726,7 @@ ApplicationWindow {
                     width: 590
                     height: {
                         (printPage.startPrintBuildDoorOpen ||
-                         printPage.startPrintTopLidOpen) ? 100 : 170
+                         printPage.startPrintTopLidOpen) ? 100 : 180
                     }
                     anchors.top: parent.top
                     anchors.topMargin: 30
@@ -2738,6 +2745,15 @@ ApplicationWindow {
                             else if(printPage.startPrintNoFilament) {
                                 qsTr("NO MATERIAL DETECTED")
                             }
+                            else if(printPage.startPrintMaterialMismatch) {
+                                qsTr("MATERIAL MISMATCH WARNING")
+                            }
+                            else if(printPage.startPrintGenuineSliceUnknownMaterial) {
+                                qsTr("UNKNOWN MATERIAL WARNING")
+                            }
+                            else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                                qsTr("MAKERBOT GENUINE MATERIALS")
+                            }
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 qsTr("UNKNOWN MATERIAL DETECTED")
                             }
@@ -2745,10 +2761,7 @@ ApplicationWindow {
                                     printPage.startPrintWithInsufficientSupportMaterial) {
                                 qsTr("LOW MATERIAL")
                             }
-                            else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
-                                    materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                qsTr("MATERIAL MISMATCH WARNING")
-                            } else {
+                            else {
                                 ""
                             }
                         }
@@ -2773,6 +2786,26 @@ ApplicationWindow {
                                 qsTr("There is no material detected in at least one of the extruders.\n" +
                                      "Please load material to start a print.")
                             }
+                            else if(printPage.startPrintMaterialMismatch) {
+                                qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
+                                            printPage.print_model_material.toUpperCase()) +
+                                        (printPage.print_support_material == "" ?
+                                            "." :
+                                            (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
+                                                printPage.print_support_material.toUpperCase())) +
+                                qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
+                            }
+                            else if(printPage.startPrintGenuineSliceUnknownMaterial) {
+                                qsTr("This .MakerBot was exported for MakerBot materials. Use custom settings to" +
+                                     " re-export this file for unknown materials. The limited warranty included" +
+                                     " with this 3D printer does not apply to damage caused by the use of materials" +
+                                     " not certified or approved by MakerBot. For additional information, please visit" +
+                                     " MakerBot.com/legal/warranty.")
+                            }
+                            else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                                qsTr("This .MakerBot is exported for unknown materials. It is recommended" +
+                                     " to re-export this file for the correct materials for best results.")
+                            }
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
                                      printPage.print_model_material.toUpperCase()) +
@@ -2786,7 +2819,6 @@ ApplicationWindow {
                                     printPage.startPrintWithInsufficientSupportMaterial) {
                                 var insufficientModel = printPage.startPrintWithInsufficientModelMaterial
                                 var insufficientSupport = printPage.startPrintWithInsufficientSupportMaterial
-                                // WE NEED USER FACING STRINGS FOR MATERIALS
                                 var modelMatStr = printPage.print_model_material.toUpperCase()
                                 var supportMatStr = printPage.print_support_material.toUpperCase()
                                 qsTr("There may not be enough <b>%1").arg(
@@ -2799,19 +2831,7 @@ ApplicationWindow {
                                                     qsTr("</b>")))) +
                                 qsTr(" to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now.")
                             }
-                            else if(printPage.print_support_material == "" &&
-                                    materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material) {
-                                qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
-                                        printPage.print_model_material.toUpperCase()) +
-                                qsTr("\nLoad the correct material to start the print or export the file again with these material settings.")
-                            }
-                            else if(materialPage.bay1.filamentMaterialName.toLowerCase() != printPage.print_model_material ||
-                                    materialPage.bay2.filamentMaterialName.toLowerCase() != printPage.print_support_material) {
-                                qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                        printPage.print_model_material.toUpperCase()).arg(
-                                        printPage.print_support_material.toUpperCase()) +
-                                qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
-                            } else {
+                             else {
                                 ""
                             }
                         }

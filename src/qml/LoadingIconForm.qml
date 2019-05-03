@@ -26,9 +26,9 @@ Rectangle {
 
         RotationAnimator {
             target: inner_image
-            from: 360000
+            from: 360
             to: 0
-            duration: 10000000
+            duration: 10000
             running: parent.visible
         }
     }
