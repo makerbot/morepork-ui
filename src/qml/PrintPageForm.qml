@@ -45,10 +45,7 @@ Item {
 
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
-        if(usbStorageConnected) {
-            diskman.updateUsbUsage()
-        }
-        else if(!storage.usbStorageConnected) {
+        if(!storage.usbStorageConnected) {
             if(printSwipeView.currentIndex != 0 &&
                     browsingUsbStorage) {
                 setDrawerState(false)
@@ -280,7 +277,6 @@ Item {
                         storageThumbnail.source: "qrc:/img/usb_icon.png"
                         storageName: qsTr("USB")
                         storageDescription: usbStorageConnected ? qsTr("EXTERNAL STORAGE") : qsTr("PLEASE INSERT A USB DRIVE")
-//                        storageUsed: diskman.usbUsed.toFixed(1)
                         enabled: usbStorageConnected
                         onClicked: {
                             if(usbStorageConnected) {

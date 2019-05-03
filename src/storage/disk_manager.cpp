@@ -16,12 +16,6 @@ DiskManager::DiskManager() {
     connect(internal_, SIGNAL(storageInfoUpdated(float)),
             this, SLOT(setInternalUsage(float)));
     updateInternalUsage();
-/*
-    usb_ = new StorageVolume(USB_PATH);
-    connect(usb_, SIGNAL(storageInfoUpdated(float)),
-            this, SLOT(setUsbUsage(float)));
-    updateUsbUsage();
-*/
 }
 
 void DiskManager::setInternalUsage(float usage) {
@@ -36,18 +30,3 @@ void DiskManager::updateInternalUsage() {
 float DiskManager::internalUsed() const {
     return internalUsed_;
 }
-
-/*
-void DiskManager::setUsbUsage(float usage) {
-    usbUsed_ = usage;
-}
-
-void DiskManager::updateUsbUsage() {
-    usbUsed_ = usb_->getUsage();
-    emit usbChanged();
-}
-
-float DiskManager::usbUsed() const {
-    return usbUsed_;
-}
-*/

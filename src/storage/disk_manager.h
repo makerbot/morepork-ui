@@ -9,11 +9,9 @@
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define INTERNAL_PATH QString("/home/")+qgetenv("USER")+"/things"
-#define USB_PATH QString("/home/")+qgetenv("USER")+"/things"
 #else
 // embedded linux path
 #define INTERNAL_PATH QString("/home/things")
-#define USB_PATH QString("/home/usb_storage0")
 #endif
 
 class StorageVolume : public QObject {
@@ -56,41 +54,21 @@ class DiskManager : public QObject {
                READ internalUsed
                WRITE setInternalUsage
                NOTIFY internalChanged)
-    /*
-    Q_PROPERTY(float usbUsed
-               READ usbUsed
-               WRITE setUsbUsage
-               NOTIFY usbChanged)
-    */
 public:
     explicit DiskManager();
 
     float internalUsed() const;
     Q_INVOKABLE void updateInternalUsage();
-    /*
-     float usbUsed() const;
-     Q_INVOKABLE void updateUsbUsage();
-    */
 
 public slots:
     void setInternalUsage(float);
-    /*
-     void setUsbUsage(float);
-    */
 
 signals:
     void internalChanged();
-    /*
-     void usbChanged();
-    */
 
 private:
     StorageVolume *internal_;
     float internalUsed_;
-    /*
-     StorageVolume *usb_;
-     float usbUsed_;
-    */
 };
 
 #endif // DISK_MANAGER_H
