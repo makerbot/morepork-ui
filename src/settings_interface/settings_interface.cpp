@@ -5,36 +5,68 @@
 #include "settings_interface.h"
 
 SettingsInterface::SettingsInterface() 
-    : ui_settings_(new UISettings("/usr/settings/ui_settings.json",
-                                  "/home/settings/ui_settings.json")) {
+    : default_file_("/usr/settings/ui_settings.json"),
+      override_file_("/home/walter/settings/ui_settings.json") {
+    initialize();
+}
+
+void SettingsInterface::initialize() {
+    if (!fileExists(default_file_)) {
+        LOG(error) << "Default settings file does not exist.";
+        return;
+    }
+    std::ifstream file_strm_1(default_file_);
+    Json::Reader reader;
+    // Make sure there is content in the file and json parsing is successful
+    if (!(file_strm_1 && reader.parse(file_strm_1, cached_settings_))) {
+        LOG(error) << "Default settings file parse error";
+    }
+    std::ifstream file_strm_2(override_file_);
+    Json::Value override_settings;
+    if (!(file_strm_2 && reader.parse(file_strm_2, override_settings))) {
+        LOG(error) << "Override settings file parse error";
+    }
+    mergeSettings(cached_settings_, override_settings);
+}
+
+bool SettingsInterface::fileExists(std::string file_name) {
+    struct stat buf;
+    return stat(file_name.c_str(), &buf) == 0;
+}
+
+void SettingsInterface::writeSettings() {
+    std::ofstream file_strm(override_file_);
+    if (file_strm) {
+        Json::StyledWriter styledWriter;
+        file_strm << styledWriter.write(cached_settings_);
+    }
+}
+
+void SettingsInterface::mergeSettings(Json::Value &s1, Json::Value s2) {
+    if (!s1.isObject() || !s2.isObject()) return;
+    for (const auto& key : s2.getMemberNames()) {
+        if (s1[key].isObject()) {
+            mergeSettings(s1[key], s2[key]);
+        } else {
+            s1[key] = s2[key];
+        }
+    }
 }
 
 QString SettingsInterface::getLanguageCode() {
-    return ui_settings_->getStrValue("language_code");
+    return QString::fromStdString(cached_settings_["language_code"].asString());
 }
 
 void SettingsInterface::setLanguageCode(const std::string language_code) {
-    ui_settings_->setValue("language_code", language_code);
+    cached_settings_["language_code"] = language_code;
+    writeSettings();
 }
 
 bool SettingsInterface::getAllowInternalStorage() {
-    return ui_settings_->getBoolValue("allow_internal_storage");
+    return cached_settings_["allow_internal_storage"].asBool();
 }
 
 void SettingsInterface::setAllowInternalStorage(bool allow) {
-    ui_settings_->setValue("allow_internal_storage", allow);
+    cached_settings_["allow_internal_storage"] = allow;
+    writeSettings();
 }
-
-/*
-// In settings file:
-// { "foo":
-//     { "bar": "my_value"}
-// }
-QString SettingsInterface::getBar() {
-    return ui_settings_->getStrValue("foo.bar");
-}
-
-void SettingsInterface::setBar(const std::string bar) {
-    ui_settings_->setValue("foo.bar", language_code);
-}
-*/

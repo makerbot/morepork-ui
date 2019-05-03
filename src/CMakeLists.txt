@@ -45,8 +45,6 @@ find_package(Qt5LinguistTools)
 # Model impl sources aren't built for Qt creator so they just live here
 set(SOURCES
     main.cpp
-    settings_interface/settings_interface.cpp
-    settings_interface/ui_settings.cpp
     model/base_model.cpp
     model/bot_model.cpp
     model/net_model.cpp
@@ -54,7 +52,8 @@ set(SOURCES
     model/logger.cpp
     model/network.cpp
     model/fre_tracker.cpp
-    storage/storage.cpp)
+    storage/storage.cpp
+    settings_interface/settings_interface.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
@@ -71,9 +70,6 @@ set(MODEL_IMPL_SOURCES
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} model model_impl)
 set(MOREPORK_UI_HEADERS
     logging.h
-    settings_interface/settings_interface.h
-    settings_interface/ui_settings.h
-    settings_interface/nlohmann/json.hpp
     ui_translator.h
     model/base_model.h
     model/logger.h
@@ -83,7 +79,8 @@ set(MOREPORK_UI_HEADERS
     model/network.h
     model/fre_tracker.h
     storage/storage.h
-    storage/progress_copy.h)
+    storage/progress_copy.h
+    settings_interface/settings_interface.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})
