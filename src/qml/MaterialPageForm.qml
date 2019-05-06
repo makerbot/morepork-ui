@@ -88,6 +88,9 @@ Item {
 
     onIsSpoolValidityCheckPendingChanged: {
         if(isSpoolValidityCheckPending) {
+            if(cancelLoadUnloadPopup.opened) {
+                cancelLoadUnloadPopup.close()
+            }
             checkSpoolValidityTimer.start()
         }
         else {
@@ -110,7 +113,6 @@ Item {
             // if material is valid immediately acknowledge and
             // continue with loading material
             if(loadUnloadFilamentProcess.materialValidityCheck()) {
-                loadUnloadFilamentProcess.isMaterialValid = true
                 bot.acknowledgeMaterial(true)
                 if(materialWarningPopup.opened) {
                     materialWarningPopup.close()
@@ -692,10 +694,12 @@ Item {
                               (loadUnloadFilamentProcess.currentActiveTool == 1 ?
                                   qsTr("Only model material such as PLA and Tough are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.") :
                                   qsTr("Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")) :
-                                  qsTr("The limited warranty included with this 3D printer does\n" +
-                                  "not apply to damage caused by the use of materials\n" +
-                                  "not certified or approved by MakerBot. For additional\n" +
-                                  "information, please visit MakerBot.com/legal/warranty.")
+                                  qsTr("The limited warranty included with this 3D printer does not\n" +
+                                  "apply to damage caused by the use of materials not certified\n" +
+                                  "or approved by MakerBot. For additional information, please\n" +
+                                  "visit MakerBot.com/legal/warranty.\n" +
+                                  "Custom settings in MakerBot Print software are required to\n" +
+                                  "configure and use this material.")
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
