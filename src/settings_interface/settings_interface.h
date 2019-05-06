@@ -12,6 +12,20 @@
 
 #include "logging.h"
 
+#ifdef MOREPORK_UI_QT_CREATOR_BUILD
+// desktop linux path
+#define OVERRIDE_UI_SETTINGS_PATH "/home/"+qgetenv("USER")+"/settings/ui_settings.json"
+#ifdef SETTINGS_FILE_DIR
+#define DEFAULT_UI_SETTINGS_PATH SETTINGS_FILE_DIR+std::string("/ui_settings.json")
+#else
+#define DEFAULT_UI_SETTINGS_PATH "/home/"+qgetenv("USER")+"/settings/ui_settings.json"
+#endif
+#else
+// embedded linux path
+#define OVERRIDE_UI_SETTINGS_PATH "/home/settings/ui_settings.json"
+#define DEFAULT_UI_SETTINGS_PATH "/usr/settings/ui_settings.json"
+#endif
+
 class SettingsInterface : public QObject {
   Q_OBJECT
   public:

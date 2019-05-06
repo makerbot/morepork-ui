@@ -47,6 +47,8 @@ if(NOT ${QT_CREATOR_BUILD})
     add_subdirectory(auther)
 endif()
 
+add_definitions(-DSETTINGS_FILE_DIR="${CMAKE_SOURCE_DIR}/settings")
+
 if(${CMAKE_CROSSCOMPILING} OR ${QT_CREATOR_BUILD})
     if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
         add_definitions(-DQT_NO_DEBUG_OUTPUT)

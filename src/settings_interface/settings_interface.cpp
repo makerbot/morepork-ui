@@ -5,8 +5,8 @@
 #include "settings_interface.h"
 
 SettingsInterface::SettingsInterface() 
-    : default_file_("/usr/settings/ui_settings.json"),
-      override_file_("/home/walter/settings/ui_settings.json") {
+    : default_file_(DEFAULT_UI_SETTINGS_PATH),
+      override_file_(OVERRIDE_UI_SETTINGS_PATH) {
     initialize();
 }
 
