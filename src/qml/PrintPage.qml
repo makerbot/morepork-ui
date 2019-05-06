@@ -5,53 +5,60 @@ import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
 PrintPageForm {
+    property bool startPrintMaterialMismatch: false
     property bool startPrintWithInsufficientModelMaterial: false
     property bool startPrintWithInsufficientSupportMaterial: false
     property bool startPrintWithUnknownMaterials: false
     property bool startPrintTopLidOpen: false
     property bool startPrintBuildDoorOpen: false
     property bool startPrintNoFilament: false
+    property bool startPrintGenuineSliceUnknownMaterial: false
+    property bool startPrintUnknownSliceGenuineMaterial: false
+    buttonUsbStorage.filenameText.text: qsTr("USB")
+    buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE")
 
     function startPrintMaterialCheck() {
+        // This function checks for and saves all possible failures
+        // of material checks as there can be multiple, and just
+        // returns true/false.
+        // The priority of the failures i.e. which should be reported
+        // to the user is determined in the startPrintErrorsPopup popup.
+        // e.g. In a case where there is both unknown material error
+        // for model material and material mismatch error for support
+        // material for the selected print file, they are both recorded
+        // here, but only one of them can be shown to the user based
+        // on the error priority, which is handled by the popup.
+
+        var modelMaterialOK = false
         // Single extruder prints
         if(print_support_material == "" && print_model_material != "") {
-            if(materialPage.bay1.filamentMaterialName.toLowerCase() == "") {
-                startPrintWithUnknownMaterials = true
-                return false
-            }
-            else if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
+            if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
                     print_model_material) {
-                return false
+                startPrintMaterialMismatch = true
             }
-            // Disable material quantity check before print for now
-            // until the spool quantity reading becomes reliable
+             // Disable material quantity check before print for now
+             // until the spool quantity reading becomes reliable
 //            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
 //                startPrintWithInsufficientModelMaterial = true
-//                return false
 //            }
-            else {
-                return true
-            }
         }
 
         // Dual extruder prints
         if(print_support_material != "" && print_model_material != "") {
-            if(materialPage.bay1.filamentMaterialName == "" ||
-               materialPage.bay2.filamentMaterialName == "") {
-                if(materialPage.bay1.filamentMaterialName != "" &&
-                    materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) {
-                    return false
+            if(print_model_material == "unknown" || materialPage.bay1.isUnknownMaterial) {
+                if(print_model_material == "unknown" && materialPage.bay1.isMaterialValid) {
+                    startPrintUnknownSliceGenuineMaterial = true
+                } else if(materialPage.bay1.checkSliceValid(print_model_material.toUpperCase()) &&
+                          materialPage.bay1.isUnknownMaterial) {
+                    startPrintGenuineSliceUnknownMaterial = true
+                } else if(print_model_material == "unknown" && materialPage.bay1.isUnknownMaterial) {
+                    modelMaterialOK = true
                 }
-                if(materialPage.bay2.filamentMaterialName != "" &&
-                    materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
-                    return false
-                }
-                startPrintWithUnknownMaterials = true
-                return false
             }
-            else if(materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material ||
-                    materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material) {
-                return false
+            // Since slices aren't
+            if((!modelMaterialOK && (materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material)) ||
+               (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material)) {
+                startPrintMaterialMismatch = true
             }
             // Disable material quantity check before print for now
             // until the spool quantity reading becomes reliable
@@ -63,11 +70,18 @@ PrintPageForm {
 //                if(materialPage.bay2.filamentQuantity < supportMaterialRequired) {
 //                    startPrintWithInsufficientSupportMaterial = true
 //                }
-//                return false
 //            }
-            else {
-                return true
-            }
+        }
+
+        if(startPrintUnknownSliceGenuineMaterial ||
+           startPrintGenuineSliceUnknownMaterial ||
+           startPrintMaterialMismatch ||
+           startPrintWithInsufficientModelMaterial ||
+           startPrintWithInsufficientSupportMaterial) {
+            return false
+        }
+        else {
+            return true
         }
     }
 
@@ -93,7 +107,6 @@ PrintPageForm {
             }
             return false
         }
-        startPrintNoFilament = false
         return true
     }
 
