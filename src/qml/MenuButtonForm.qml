@@ -26,7 +26,7 @@ Button {
         width: parent.width
         height: 1
         anchors.top: parent.bottom
-        anchors.topMargin: 0
+        anchors.topMargin: -1
         smooth: false
     }
 
