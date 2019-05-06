@@ -29,6 +29,7 @@ Rectangle {
             from: 360
             to: 0
             duration: 10000
+            loops: Animation.Infinite
             running: parent.visible
         }
     }
@@ -46,8 +47,9 @@ Rectangle {
         RotationAnimator {
             target: outer_image
             from: 0
-            to: 360000
-            duration: 10000000
+            to: 360
+            duration: 10000
+            loops: Animation.Infinite
             running: parent.visible
         }
     }
