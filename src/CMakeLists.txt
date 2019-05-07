@@ -53,7 +53,7 @@ set(SOURCES
     model/network.cpp
     model/fre_tracker.cpp
     storage/storage.cpp
-    settings_interface/settings_interface.cpp)
+    settings_interface/settings_interface.cpp
     storage/disk_manager.cpp)
 
 # These are not used QtCreator build
