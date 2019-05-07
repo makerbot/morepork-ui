@@ -241,7 +241,6 @@ class ThumbnailPixmapProvider : public QQuickImageProvider {
       const QSize &requestedSize);
 };
 
-
 class MoreporkStorage : public QObject {
   Q_OBJECT
   public:
@@ -284,6 +283,7 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE bool firmwareIsValid(const QString file_path);
     Q_INVOKABLE void setStorageFileType(
             const MoreporkStorage::StorageFileType type);
+    void updateMaterialNames(QString &material);
 
   private:
     QFileSystemWatcher *storage_watcher_;

@@ -38,6 +38,7 @@ void msgHandler(QtMsgType type,
 #include "parsed_qml_enums.h"
 #include "storage/storage.h"
 #include "settings_interface/settings_interface.h"
+#include "storage/disk_manager.h"
 
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
@@ -62,6 +63,7 @@ int main(int argc, char ** argv) {
     MoreporkStorage storage;
     FreTracker fre_tracker;
     SettingsInterface settings;
+    DiskManager disk_manager;
 
     QLocale::setDefault(QLocale(QStringLiteral("en_GB")));
     QQmlApplicationEngine engine;
@@ -72,6 +74,7 @@ int main(int argc, char ** argv) {
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
     engine.rootContext()->setContextProperty("fre", (QObject*)&fre_tracker);
     engine.rootContext()->setContextProperty("settings", (QObject*)&settings);
+    engine.rootContext()->setContextProperty("diskman", (QObject*)&disk_manager);
 
     QScopedPointer<Logger, QScopedPointerDeleteLater> log(MOREPORK_LOGGER);
     engine.rootContext()->setContextProperty("log", log.data());

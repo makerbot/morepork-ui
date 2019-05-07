@@ -35,7 +35,6 @@ Item {
             isMaterialValid = false
             if(bot.process.type == ProcessType.Load) {
                 if(materialValidityCheck()) {
-                    isMaterialValid = true
                     if(materialWarningPopup.opened) {
                         materialWarningPopup.close()
                     }
@@ -45,6 +44,7 @@ Item {
     }
 
     property bool isMaterialValid: false
+    property bool isUnknownMaterial: false
 
     property bool isSpoolDetailsReady: bayID == 1 ?
                                        bay1.spoolDetailsReady :
@@ -54,7 +54,6 @@ Item {
         if(isSpoolDetailsReady) {
             if(bot.process.type == ProcessType.Load) {
                 if(materialValidityCheck()) {
-                    isMaterialValid = true
                     bot.acknowledgeMaterial(true)
                 } else {
                     isMaterialValid = false
@@ -62,6 +61,7 @@ Item {
             }
         }
         else {
+            isMaterialValid = false
             materialWarningPopup.close()
         }
     }
@@ -69,31 +69,18 @@ Item {
     // Also add spool checksum to this whenever thats
     // ready.
     function materialValidityCheck() {
-        if(bayID == 1) {
-            if(bay1.filamentMaterialName == "PLA" ||
-               bay1.filamentMaterialName == "TOUGH") {
-                return true
-            }
-            else if(bay1.filamentMaterialName == "PVA") {
-                isMaterialMismatch = true
-                return false
-            }
-            else {
-                return false
-            }
+        var bay = ((bayID == 1) ? bay1 : bay2)
+        if(bay.isMaterialValid) {
+            isMaterialValid = true
+            return true
         }
-        else if(bayID == 2) {
-            if(bay2.filamentMaterialName == "PVA") {
-                return true
-            }
-            else if(bay2.filamentMaterialName == "PLA" ||
-                    bay2.filamentMaterialName == "TOUGH") {
-                isMaterialMismatch = true
-                return false
-            }
-            else {
-                return false
-            }
+        else if(bay.isUnknownMaterial) {
+            isUnknownMaterial = true
+            return false
+        }
+        else {
+            isMaterialMismatch = true
+            return false
         }
     }
 

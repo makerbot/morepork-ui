@@ -72,6 +72,16 @@ Item {
         currentIndex: 0 // Should never be non zero
         anchors.fill: parent
         visible: true
+
+        // The second page of the Print Status is the Extruder Page
+        // with the Extruder Lifetime stats. Make sure these update
+        // similar to the same way that the ExtruderForm.qml updates.
+        onCurrentIndexChanged: {
+            if(currentIndex == 2) {
+                bot.getToolStats(0);
+                bot.getToolStats(1);
+            }
+        }
         Item {
             id: page0
             width: 800

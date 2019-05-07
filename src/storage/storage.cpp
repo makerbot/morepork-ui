@@ -252,13 +252,9 @@ void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
           if(file_meta_reader.loadMetadata()){
             auto &meta_data = file_meta_reader.meta_data_;
             QString material_name_a = QString::fromStdString(meta_data->material[1]);
-            if(material_name_a == "im-pla") {
-                material_name_a = "tough";
-            }
+            updateMaterialNames(material_name_a);
             QString material_name_b = QString::fromStdString(meta_data->material[0]);
-            if(material_name_b == "im-pla") {
-                material_name_b = "tough";
-            }
+            updateMaterialNames(material_name_b);
             current_thing = new PrintFileInfo(kFileInfo.absolutePath(),
                                 kFileInfo.fileName(),
                                 kFileInfo.completeBaseName(),
@@ -341,16 +337,9 @@ void MoreporkStorage::updatePrintFileList(const QString kDirectory){
         if(file_meta_reader.loadMetadata()){
           auto &meta_data = file_meta_reader.meta_data_;
           QString material_name_a = QString::fromStdString(meta_data->material[1]);
-          // TODO(praveen): Make this less hacky
-          // not good.
-          if(material_name_a == "im-pla") {
-              material_name_a = "tough";
-          }
+          updateMaterialNames(material_name_a);
           QString material_name_b = QString::fromStdString(meta_data->material[0]);
-          // not good again.
-          if(material_name_b == "im-pla") {
-              material_name_b = "tough";
-          }
+          updateMaterialNames(material_name_b);
           print_file_list.append(
             new PrintFileInfo(kFileInfo.absolutePath(),
                               kFileInfo.fileName(),
@@ -466,19 +455,23 @@ void MoreporkStorage::printFileListReset(){
   printFileListSet(print_file_list);
 }
 
-
 void MoreporkStorage::backStackPush(const QString kDirPath){
   if(QFileInfo(kDirPath).isDir())
     back_dir_stack_.push(kDirPath);
 }
 
-
 QString MoreporkStorage::backStackPop(){
   return back_dir_stack_.empty() ? "" : back_dir_stack_.pop();
 }
-
 
 void MoreporkStorage::backStackClear(){
   back_dir_stack_.clear();
 }
 
+void MoreporkStorage::updateMaterialNames(QString &name) {
+    if(name == "im-pla") {
+        name = "tough";
+    } else if(name == "generic_model") {
+        name = "unknown";
+    }
+}

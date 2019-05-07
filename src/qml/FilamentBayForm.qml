@@ -205,7 +205,31 @@ Item {
             break;
         case 0:
         default:
-            ""
+            "UNKNOWN"
+            break;
+        }
+    }
+
+    property bool isUnknownMaterial: filamentMaterialName == "UNKNOWN"
+
+    property bool isMaterialValid: {
+        (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
+    }
+
+    function checkSliceValid(material) {
+        return (goodMaterialsList.indexOf(material) >= 0)
+    }
+
+    property var goodMaterialsList: {
+        switch(filamentBayID) {
+        case 1:
+            ["PLA", "TOUGH"]
+            break;
+        case 2:
+            ["PVA"]
+            break;
+        default:
+            []
             break;
         }
     }
@@ -230,27 +254,14 @@ Item {
             antialiasing: false
             smooth: false
             source: "qrc:/img/alert.png"
-            visible: {
-                if(filamentBayID == 1 && spoolPresent &&
-                   filamentMaterialName == "PVA") {
-                    true
-                }
-                else if(filamentBayID == 2 && spoolPresent &&
-                        (filamentMaterialName == "PLA" ||
-                        filamentMaterialName == "TOUGH")) {
-                    true
-                }
-                else {
-                    false
-                }
-            }
+            visible: !isMaterialValid && !isUnknownMaterial && spoolPresent
         }
 
         Text {
             id: materialType_text
             color: "#ffffff"
             text: {
-                if(spoolPresent) {
+                if(spoolPresent && !isUnknownMaterial) {
                     filamentMaterialName
                 }
                 else {
@@ -259,8 +270,8 @@ Item {
             }
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: materialErrorAlertIcon.visible ?
-                                                12 : 0
+            anchors.verticalCenterOffset: !isMaterialValid ?
+                                              12 : 0
             font.capitalization: Font.AllUppercase
             font.letterSpacing: 4
             font.family: "Antenna"
@@ -348,8 +359,8 @@ Item {
                     id: material_quantity_text
                     color: "#ffffff"
                     text: spoolPresent ?
-                            qsTr("%1KG  REMAINING").arg(filamentQuantity) :
-                            " "
+                            qsTr("%1KG REMAINING").arg(filamentQuantity) :
+                            ""
                     font.letterSpacing: 4
                     font.family: "Antenna"
                     font.weight: Font.Light
