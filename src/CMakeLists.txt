@@ -53,6 +53,7 @@ set(SOURCES
     model/network.cpp
     model/fre_tracker.cpp
     storage/storage.cpp
+    settings_interface/settings_interface.cpp
     storage/disk_manager.cpp)
 
 # These are not used QtCreator build
@@ -80,6 +81,7 @@ set(MOREPORK_UI_HEADERS
     model/fre_tracker.h
     storage/storage.h
     storage/progress_copy.h
+    settings_interface/settings_interface.h
     storage/disk_manager.h)
 
 if(NOT ${QT_CREATOR_BUILD})
