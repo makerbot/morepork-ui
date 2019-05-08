@@ -284,6 +284,11 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE bool firmwareIsValid(const QString file_path);
     Q_INVOKABLE void setStorageFileType(
             const MoreporkStorage::StorageFileType type);
+
+    // Helper function to change internal material names (used
+    // throughout fw/toolpath) to user facing (marketing) names
+    // displayed on the printer UI. All comparisons on UI happen
+    // with marketing names for simplicity.
     void updateMaterialNames(QString &material);
 
   private:
