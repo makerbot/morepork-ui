@@ -158,7 +158,7 @@ Item {
             ((filamentVolume * 1.20)/1000).toFixed(3)
             break;
         case 4:
-            //PETG
+            //PET
             ((filamentVolume * 1.27)/1000).toFixed(3)
             break;
         case 5:
@@ -192,7 +192,7 @@ Item {
             "PVA"
             break;
         case 4:
-            "PETG"
+            "PET"
             break;
         case 5:
             "ABS"
@@ -223,7 +223,7 @@ Item {
     property var goodMaterialsList: {
         switch(filamentBayID) {
         case 1:
-            ["PLA", "TOUGH"]
+            ["PLA", "TOUGH", "PET"]
             break;
         case 2:
             ["PVA"]

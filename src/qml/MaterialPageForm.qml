@@ -692,7 +692,7 @@ Item {
                     color: "#cbcbcb"
                     text: isMaterialMismatch ?
                               (loadUnloadFilamentProcess.currentActiveTool == 1 ?
-                                  qsTr("Only model material such as PLA and Tough are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.") :
+                                  qsTr("Only model materials PLA, Tough and PET are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.") :
                                   qsTr("Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")) :
                                   qsTr("The limited warranty included with this 3D printer does not\n" +
                                   "apply to damage caused by the use of materials not certified\n" +
