@@ -14,8 +14,6 @@ PrintPageForm {
     property bool startPrintNoFilament: false
     property bool startPrintGenuineSliceUnknownMaterial: false
     property bool startPrintUnknownSliceGenuineMaterial: false
-    buttonUsbStorage.filenameText.text: qsTr("USB")
-    buttonInternalStorage.filenameText.text: qsTr("INTERNAL STORAGE")
 
     function startPrintMaterialCheck() {
         // This function checks for and saves all possible failures
