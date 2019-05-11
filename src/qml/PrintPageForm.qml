@@ -43,6 +43,18 @@ Item {
     property alias reviewTestPrint: reviewTestPrint
     property alias printErrorScreen: errorScreen
 
+    property bool isFileCopying: storage.fileIsCopying
+
+    onIsFileCopyingChanged: {
+        if(isFileCopying &&
+           mainSwipeView.currentIndex == 1) {
+            copyingFilePopup.open()
+        }
+    }
+
+    property bool isFileCopySuccessful: storage.fileCopySucceeded
+    property bool internalStorageFull: false
+
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
         if(!storage.usbStorageConnected) {
@@ -261,7 +273,7 @@ Item {
                         storageThumbnail.anchors.leftMargin: 60
                         storageName: qsTr("INTERNAL STORAGE")
                         storageDescription: qsTr("FILES SAVED ON PRINTER")
-                        storageUsed: diskman.internalUsed.toFixed(1)
+                        storageUsed: Math.min(diskman.internalUsed.toFixed(1), 100)
                         onClicked: {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
@@ -342,6 +354,7 @@ Item {
             visible: false
 
             function altBack() {
+                resetPrintFileDetails()
                 var backDir = storage.backStackPop()
                 if(backDir !== "") {
                     storage.updatePrintFileList(backDir)
@@ -353,27 +366,48 @@ Item {
             }
 
             Text {
+                id: noFilesText
                 color: "#ffffff"
                 font.family: "Antennae"
-                font.weight: Font.Light
-                text: qsTr("No Items")
+                font.weight: Font.Bold
+                text: qsTr("NO PRINTABLE FILES")
+                horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -40
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pointSize: 20
+                font.pixelSize: 19
+                font.letterSpacing: 2
                 visible: storage.storageIsEmpty
+
+                Text {
+                    color: "#ffffff"
+                    font.family: "Antennae"
+                    font.weight: Font.Light
+                    text: qsTr("Choose another folder or export a .MakerBot\nfile from the MakerBot Print app.")
+                    anchors.top: parent.bottom
+                    anchors.topMargin: 15
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 17
+                    font.letterSpacing: 1
+                    lineHeight: 1.4
+                }
             }
 
             ListView {
+                id: fileList
                 smooth: false
                 anchors.fill: parent
                 boundsBehavior: Flickable.DragOverBounds
                 spacing: 1
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
+                ScrollBar.vertical: ScrollBar {}
                 visible: !storage.storageIsEmpty
                 model: storage.printFileList
                 delegate:
                     FileButton {
+                    id: filebutton
                     property int printTimeSecRaw: model.modelData.timeEstimateSec
                     property int printTimeMinRaw: printTimeSecRaw/60
                     property int printTimeHrRaw: printTimeMinRaw/60
@@ -403,10 +437,7 @@ Item {
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
-                            if(!startPrintMaterialCheck() &&
-                               !startPrintWithUnknownMaterials &&
-                               !startPrintWithInsufficientModelMaterial &&
-                               !startPrintWithInsufficientSupportMaterial) {
+                            if(!startPrintMaterialCheck()) {
                                 startPrintErrorsPopup.open()
                             }
                             else {
@@ -415,6 +446,22 @@ Item {
                             }
                         }
                     }
+
+                    onPressAndHold: {
+                        if(!model.modelData.isDir) {
+                            // There is functionality in Qt 5.11 to get touch
+                            // coordinates rather than using this lame way to
+                            // open the options menu always at a specific position
+                            // on the file button.
+                            optionsMenu.popup(filebutton.x + 700, filebutton.y - fileList.contentY + 25)
+                            getPrintFileDetails(model.modelData)
+                        }
+                    }
+                }
+
+                FileOptionsPopupMenu {
+                    id: optionsMenu
+
                 }
             }
         }
@@ -542,6 +589,100 @@ Item {
                     dataText: slicer_name
                     visible: false
                 }
+            }
+        }
+    }
+
+    CustomPopup {
+        id: copyingFilePopup
+        popupWidth: 720
+        popupHeight: 265
+
+        onClosed: {
+            internalStorageFull = false
+        }
+
+        showTwoButtons: isFileCopySuccessful || internalStorageFull
+        left_button_text: internalStorageFull ? qsTr("OK") : qsTr("DONE")
+        left_button.onClicked: {
+            copyingFilePopup.close()
+        }
+
+        right_button_text: internalStorageFull ? qsTr("VIEW FILES") : qsTr("VIEW FILE")
+        right_button.onClicked: {
+            browsingUsbStorage = false
+            storage.setStorageFileType(StorageFileType.Print)
+            storage.updatePrintFileList("?root_internal?")
+            activeDrawer = printPage.sortingDrawer
+            setDrawerState(true)
+            if(printSwipeView.currentIndex != 1) {
+                printSwipeView.swipeToItem(1)
+            }
+            copyingFilePopup.close()
+        }
+
+        showOneButton: isFileCopying
+        full_button_text: qsTr("CANCEL")
+        full_button.onClicked: {
+            storage.cancelCopy()
+            copyingFilePopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_copy_file_popup
+            width: 590
+            height: children.height
+            spacing: 35
+            anchors.top: parent.top
+            anchors.topMargin: 150
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: alert_text_copy_file_popup
+                color: "#cbcbcb"
+                text: {
+                    if(internalStorageFull) {
+                        qsTr("PRINTER STORAGE IS FULL")
+                    } else if(isFileCopying) {
+                        qsTr("COPYING")
+                    } else if(isFileCopySuccessful) {
+                        qsTr("FILE ADDED")
+                    }
+                }
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter
+                font.family: "Antennae"
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            Text {
+                id: description_text_copy_file_popup
+                color: "#cbcbcb"
+                text: {
+                    if (internalStorageFull) {
+                        qsTr("Remove unwanted files from the printer's internal storage to free up space")
+                    } else if(isFileCopySuccessful) {
+                        qsTr("<b>%1</b> has been added to internal storage.").arg(file_name)
+                    }
+                }
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: "Antennae"
+                font.pixelSize: 18
+                font.letterSpacing: 1
+                lineHeight: 1.3
+                visible: isFileCopySuccessful || internalStorageFull
+            }
+
+            ProgressBar {
+                id: progressBar
+                Layout.alignment: Qt.AlignHCenter
+                value: (storage.fileCopyProgress).toFixed(2)
+                visible: isFileCopying
             }
         }
     }

@@ -146,5 +146,13 @@
         <file>LanguageButtonForm.qml</file>
         <file>StorageTypeButton.qml</file>
         <file>StorageTypeButtonForm.qml</file>
+        <file>PopupMenu.qml</file>
+        <file>PopupMenuForm.qml</file>
+        <file>PopupMenuItem.qml</file>
+        <file>PopupMenuItemForm.qml</file>
+        <file>CustomPopup.qml</file>
+        <file>CustomPopupForm.qml</file>
+        <file>FileOptionsPopupMenu.qml</file>
+        <file>FileOptionsPopupMenuForm.qml</file>
     </qresource>
 </RCC>

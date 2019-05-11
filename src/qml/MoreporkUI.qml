@@ -2783,7 +2783,7 @@ ApplicationWindow {
                                 qsTr("Close the build chamber door to start the print.")
                             }
                             else if(printPage.startPrintNoFilament) {
-                                qsTr("There is no material detected in at least one of the extruders.\n" +
+                                qsTr("There is no material detected in at least one of the extruders." +
                                      "Please load material to start a print.")
                             }
                             else if(printPage.startPrintMaterialMismatch) {
