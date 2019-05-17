@@ -48,6 +48,7 @@ PrintPageForm {
             if(print_model_material == "unknown" || materialPage.bay1.isUnknownMaterial) {
                 if(print_model_material == "unknown" && materialPage.bay1.isMaterialValid) {
                     startPrintUnknownSliceGenuineMaterial = true
+                    modelMaterialOK = true
                 } else if(materialPage.bay1.checkSliceValid(print_model_material.toUpperCase()) &&
                           materialPage.bay1.isUnknownMaterial) {
                     startPrintGenuineSliceUnknownMaterial = true
