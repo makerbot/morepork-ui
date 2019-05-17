@@ -223,7 +223,7 @@ Item {
     property var goodMaterialsList: {
         switch(filamentBayID) {
         case 1:
-            ["PLA", "TOUGH"]
+            ["PLA", "TOUGH", "PETG"]
             break;
         case 2:
             ["PVA"]

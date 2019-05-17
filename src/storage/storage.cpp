@@ -471,6 +471,8 @@ void MoreporkStorage::backStackClear(){
 void MoreporkStorage::updateMaterialNames(QString &name) {
     if(name == "im-pla") {
         name = "tough";
+    } else if(name == "pet") {
+        name = "petg";
     } else if(name == "generic_model") {
         name = "unknown";
     }
