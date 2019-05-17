@@ -2,6 +2,10 @@
 StorageVolume::StorageVolume(const QString path,
                              int reserved_space_mb)
     : reserved_space_mb_(reserved_space_mb){
+    QDir dir(path);
+    if (!dir.exists()) {
+        dir.mkpath(".");
+    }
    storage_ = new QStorageInfo();
    watcher_ = new QFileSystemWatcher();
    watcher_->addPath(path);
