@@ -215,6 +215,9 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
                     bay_out_of_filament_b = true;
                 }
                 break;
+            case 99:
+                errorTypeSet(ErrorType::ChamberFanFailure);
+                break;
             case 1001:
                 errorTypeSet(ErrorType::HeaterNotReachingTemp);
                 break;
