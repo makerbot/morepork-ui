@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import StorageFileTypeEnum 1.0
 
 Item {
     width: 800
@@ -158,6 +159,7 @@ Item {
                 }
 
                 RoundedButton {
+                    id: startPrintButton
                     anchors.top: materialBay2.bottom
                     anchors.topMargin: 28
                     buttonWidth: inFreStep ? 300 : 210
@@ -170,6 +172,29 @@ Item {
                         else {
                             startPrintErrorsPopup.open()
                         }
+                    }
+                }
+
+                RoundedButton {
+                    id: moreOptionsButton
+                    buttonWidth: 75
+                    buttonHeight: 50
+                    label: "···"
+                    label_size: 30
+                    visible: !inFreStep
+                    anchors.top: materialBay2.bottom
+                    anchors.topMargin: 28
+                    anchors.left: startPrintButton.right
+                    anchors.leftMargin: 15
+                    button_text.anchors.verticalCenterOffset: 10
+                    button_mouseArea.onClicked: {
+                        optionsMenu.open()
+                    }
+
+                    FileOptionsPopupMenu {
+                        id: optionsMenu
+                        x: -75
+                        y: -170
                     }
                 }
             }

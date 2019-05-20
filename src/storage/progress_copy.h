@@ -41,7 +41,13 @@ class ProgressCopy : public QObject {
       src_qfile_.close();
       dst_qfile_.close();
       src_qfile_.setFileName(src_file_path);
-      dst_qfile_.setFileName(dst_file_path);
+      QFileInfo src(src_file_path);
+      QFileInfo dest(dst_file_path);
+      if (dest.isDir()) {
+        dst_qfile_.setFileName(dst_file_path + "/" + src.fileName());
+      } else {
+        dst_qfile_.setFileName(dst_file_path);
+      }
     }
 
     void setCopyBufferSize(const uint64_t buffer_size) {

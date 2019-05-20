@@ -26,7 +26,8 @@ Item {
     property bool isFirmwareFileCopying: storage.fileIsCopying
 
     onIsFirmwareFileCopyingChanged: {
-        if(isFirmwareFileCopying) {
+        if(isFirmwareFileCopying &&
+           firmwareUpdatePage.state == "select_firmware_file") {
             copyingFirmwareFilePopup.open()
         }
         else {
@@ -35,14 +36,34 @@ Item {
     }
 
     Text {
+        id: noFilesText
         color: "#ffffff"
         font.family: "Antennae"
-        font.weight: Font.Light
-        text: qsTr("No Firmware Files Found")
-        anchors.horizontalCenter: parent.horizontalCenter
+        font.weight: Font.Bold
+        text: qsTr("NO FIRMWARE FILES")
+        horizontalAlignment: Text.AlignHCenter
         anchors.verticalCenter: parent.verticalCenter
-        font.pointSize: 20
+        anchors.verticalCenterOffset: -75
+        anchors.horizontalCenter: parent.horizontalCenter
+        font.pixelSize: 19
+        font.letterSpacing: 2
         visible: storage.storageIsEmpty
+
+        Text {
+            color: "#ffffff"
+            font.family: "Antennae"
+            font.weight: Font.Light
+            text: qsTr("Choose another folder or visit MakerBot.com/MethodFW to\n" +
+                        "download the latest firmware. Drag the file onto a usb\n" +
+                        "stick and insert it into the front of the printer.")
+            anchors.top: parent.bottom
+            anchors.topMargin: 15
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            font.pixelSize: 17
+            font.letterSpacing: 1
+            lineHeight: 1.4
+        }
     }
 
     Item {

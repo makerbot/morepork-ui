@@ -15,20 +15,20 @@
 #define DEFAULT_FW_FILE_NAME QString("firmware.zip")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
-#define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
-#define USB_STORAGE_PATH QString()
-#define USB_STORAGE_DEV_BY_PATH QString()
-#define LEGACY_USB_DEV_BY_PATH QString()
+#define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/usb_storage"
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_print"
+#define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
+#define USB_STORAGE_DEV_BY_PATH QString()
+#define LEGACY_USB_DEV_BY_PATH QString()
 #else
 // embedded linux path
-#define FIRMWARE_FOLDER_PATH QString("/home/firmware")
-#define TEST_PRINT_PATH QString("/home/test_print")
-#define CURRENT_THING_PATH QString("/home/current_thing")
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
+#define CURRENT_THING_PATH QString("/home/current_thing")
+#define TEST_PRINT_PATH QString("/home/test_print")
+#define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define USB_STORAGE_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 // TODO(chris): Remove this when we no longer need to support rev B boards
@@ -124,6 +124,28 @@ class PrintFileInfo : public QObject {
                   material_name_a_(material_name_a),
                   material_name_b_(material_name_b),
                   slicer_name_(slicer_name) { }
+
+    PrintFileInfo(const PrintFileInfo &rvalue) {
+        file_path_ = rvalue.file_path_;
+        file_name_ = rvalue.file_name_;
+        file_base_name_ = rvalue.file_base_name_;
+        file_last_read_ = rvalue.file_last_read_;
+        is_dir_ = rvalue.is_dir_;
+        extrusion_mass_grams_a_ = rvalue.extrusion_mass_grams_a_;
+        extrusion_mass_grams_b_ = rvalue.extrusion_mass_grams_b_;
+        extruder_temp_celcius_a_ = rvalue.extruder_temp_celcius_a_;
+        extruder_temp_celcius_b_ = rvalue.extruder_temp_celcius_b_;
+        chamber_temp_celcius_ = rvalue.chamber_temp_celcius_;
+        num_shells_ = rvalue.num_shells_;
+        layer_height_mm_ = rvalue.layer_height_mm_;
+        infill_density_ = rvalue.infill_density_;
+        time_estimate_sec_ = rvalue.time_estimate_sec_;
+        uses_support_ = rvalue.uses_support_;
+        uses_raft_ = rvalue.uses_raft_;
+        material_name_a_ = rvalue.material_name_a_;
+        material_name_b_ = rvalue.material_name_b_;
+        slicer_name_ = rvalue.slicer_name_;
+    }
 
     PrintFileInfo& operator=(const PrintFileInfo& rvalue){
         PrintFileInfo* temp = new PrintFileInfo(
@@ -257,6 +279,8 @@ class MoreporkStorage : public QObject {
     Q_PROPERTY(const QString usbStoragePath CONSTANT MEMBER usbStoragePath);
     Q_INVOKABLE void updateFirmwareFileList(const QString directory_path);
     Q_INVOKABLE void copyFirmwareToDisk(const QString file_path);
+    Q_INVOKABLE void copyPrintFile(const QString source);
+    PrintFileInfo* createPrintFileObject(const QFileInfo kFileInfo);
     Q_INVOKABLE void updatePrintFileList(const QString kDirectory);
     Q_INVOKABLE void deletePrintFile(QString file_name);
     Q_PROPERTY(QList<QObject*> printFileList
