@@ -102,6 +102,11 @@ Item {
             case ErrorType.NotConnected:
                 state = "toolhead_disconnect"
                 break;
+            case ErrorType.ChamberFanFailure:
+                if(lastReportedProcessType == ProcessType.Print) {
+                    state = "chamber_fan_failure"
+                }
+                break;
             case ErrorType.NoFilamentAtExtruder:
             case ErrorType.OtherError:
                 state = "generic_error"
@@ -234,7 +239,7 @@ Item {
                 target: button1
                 label_width: 200
                 buttonWidth: 200
-                label: "TRY AGAIN"
+                label: qsTr("TRY AGAIN")
             }
         },
 
@@ -270,7 +275,7 @@ Item {
                 target: button1
                 label_width: 200
                 buttonWidth: 200
-                label: "TRY AGAIN"
+                label: qsTr("TRY AGAIN")
             }
         },
 
@@ -309,9 +314,9 @@ Item {
                 label: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateTyep == ProcessStateType.Paused) {
-                        "RESUME PRINT"
+                        qsTr("RESUME PRINT")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        "CONTINUE"
+                        qsTr("CONTINUE")
                     }
                 }
             }
@@ -352,9 +357,9 @@ Item {
                 label: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateTyep == ProcessStateType.Paused) {
-                        "RESUME PRINT"
+                        qsTr("RESUME PRINT")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        "CONTINUE"
+                        qsTr("CONTINUE")
                     }
                 }
             }
@@ -376,7 +381,7 @@ Item {
 
             PropertyChanges {
                 target: button1
-                label: "TRY AGAIN"
+                label: qsTr("TRY AGAIN")
             }
         },
 
@@ -425,8 +430,8 @@ Item {
                 buttonWidth: 340
                 label_width: 320
                 label: {
-                    "UNLOAD EXTRUDER " +
-                    (bot.extruderAJammed ? "1" : "2")
+                    qsTr("UNLOAD EXTRUDER %1").arg(
+                       (bot.extruderAJammed ? qsTr("1") : qsTr("2")))
                 }
             }
         },
@@ -473,7 +478,7 @@ Item {
                 buttonWidth: 280
                 label_width: 280
                 label: {
-                    "LOAD MATERIAL"
+                    qsTr("LOAD MATERIAL")
                 }
             }
 
@@ -771,12 +776,47 @@ Item {
 
             PropertyChanges {
                 target: button1
-                label: "CONTINUE"
+                label: qsTr("CONTINUE")
             }
 
             PropertyChanges {
                 target: errorMessageContainer
                 anchors.verticalCenterOffset: -40
+            }
+        },
+        State {
+            name: "chamber_fan_failure"
+
+            PropertyChanges {
+                target: errorIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: errorImage
+                source: "qrc:/img/error_chamber_fan_failure.png"
+            }
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: qsTr("PRINT FAILED.\nFAN ERROR.")
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: qsTr("Please clear the chamber and make\n" +
+                      "sure no filament is caught in the\n" +
+                      "chamber heater fans.")
+            }
+
+            PropertyChanges {
+                target: button1
+                label: qsTr("CONTINUE")
+            }
+
+            PropertyChanges {
+                target: button2
+                visible: false
             }
         }
     ]

@@ -70,6 +70,7 @@ class ProcessModel : public BaseModel {
         NoFilamentAtExtruder,
         FilamentJam,
         DrawerOutOfFilament,
+        ChamberFanFailure,
         HeaterNotReachingTemp,
         BadHESCalibrationFail,
         ExtruderOutOfFilament,
