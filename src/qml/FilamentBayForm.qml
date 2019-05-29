@@ -173,6 +173,10 @@ Item {
             //PVA-M
             ((filamentVolume * 1.22)/1000).toFixed(3)
             break;
+        case 8:
+            //SR-30
+            ((filamentVolume * 1.1)/1000).toFixed(3)
+            break;
         case 0:
         default:
             0
@@ -202,6 +206,9 @@ Item {
             break;
         case 7:
             "PVA-M"
+            break;
+        case 8:
+            "SR-30"
             break;
         case 0:
         default:
