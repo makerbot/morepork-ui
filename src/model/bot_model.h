@@ -17,6 +17,18 @@
 class BotModel : public BaseModel {
   public:
     // MOREPORK_QML_ENUM
+    enum MachineType {
+        Fire,
+        Lava
+    };
+
+    // MOREPORK_QML_ENUM
+    enum ExtruderType {
+        MK14,
+        MK14_HOT
+    };
+
+    // MOREPORK_QML_ENUM
     enum ConnectionState {
         Connecting,
         Connected,
@@ -24,6 +36,8 @@ class BotModel : public BaseModel {
         TimedOut
     };
 
+    Q_ENUM(MachineType)
+    Q_ENUM(ExtruderType)
     Q_ENUM(ConnectionState)
 
     Q_INVOKABLE virtual void cancel();
@@ -77,6 +91,7 @@ class BotModel : public BaseModel {
     Q_OBJECT
     SUBMODEL(NetModel, net)
     SUBMODEL(ProcessModel, process)
+    MODEL_PROP(MachineType, machineType, Fire)
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
     MODEL_PROP(bool, firmwareUpdateAvailable, false)
@@ -95,6 +110,10 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, timeZone, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)
     MODEL_PROP(bool, isInstallUnsignedFwRequestPending, false)
+    // TODO(praveen): Would be good to move these extruder
+    //                properties to it's own sub model.
+    MODEL_PROP(ExtruderType, extruderAType, MK14)
+    MODEL_PROP(ExtruderType, extruderBType, MK14)
     MODEL_PROP(bool, updatingExtruderFirmware, false)
     MODEL_PROP(int, extruderFirmwareUpdateProgressA, 0)
     MODEL_PROP(int, extruderFirmwareUpdateProgressB, 0)

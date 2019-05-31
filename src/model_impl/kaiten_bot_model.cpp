@@ -1092,6 +1092,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
         info["current_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
 
+    const Json::Value &kMachinetype = info["machine_type"];
+    if (kMachinetype.isString()) {
+        const QString kMachineTypeStr = kMachinetype.asString().c_str();
+        if (kMachineTypeStr == "fire") {
+            machineTypeSet(MachineType::Fire);
+        } else if (kMachineTypeStr == "lava") {
+            machineTypeSet(MachineType::Lava);
+        } else {
+            machineTypeReset();
+        }
+    } else {
+        machineTypeReset();
+    }
+
     if(!info.empty()){
       // Try to update extruder and chamber GUI values
       const Json::Value & kToolheads = info["toolheads"];
@@ -1113,6 +1127,22 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 kExtruder ## EXT_SYM["updating_extruder_firmware"].asBool(); \
             UPDATE_INT_PROP(extruderFirmwareUpdateProgress ## EXT_SYM, \
                             kExtruder ## EXT_SYM["extruder_firmware_update_progress"]) \
+ \
+            const Json::Value &kExtruderType = kExtruder ## EXT_SYM["tool_name"]; \
+            if (kExtruderType.isString()) { \
+                const QString kExtruderTypeStr = kExtruderType.asString().c_str(); \
+                if (kExtruderTypeStr == "mk14" || \
+                    kExtruderTypeStr == "mk14_s") { \
+                    extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14); \
+                } else if (kExtruderTypeStr == "mk14_hot" || \
+                           kExtruderTypeStr == "mk14_hot_s") { \
+                    extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_HOT); \
+                } else { \
+                    extruder ## EXT_SYM ## TypeReset(); \
+                } \
+            } else { \
+                extruder ## EXT_SYM ## TypeReset(); \
+            } \
  \
             const Json::Value &kErrList = kExtruder ## EXT_SYM["error"]; \
             /* TODO(praveen) */ \
