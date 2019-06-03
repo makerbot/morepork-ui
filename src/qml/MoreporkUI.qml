@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ConnectionStateEnum 1.0
 import FreStepEnum 1.0
+import MachineTypeEnum 1.0
 
 ApplicationWindow {
     id: rootAppWindow
@@ -1736,6 +1737,15 @@ ApplicationWindow {
         }
 
         ModalPopup {
+            // tool_type_correct flag is sent in system notification by
+            // kaiten which determines the "correctness" by looking through
+            // printer settings.json under 'supported_tool_types' key.
+            // Since the UI just knows whether the attached tool is correct
+            // or not and nothing about the type of mismatch, the messaging
+            // to user is determined below based on the printer type. It is
+            // the machine/kaiten's responsibility to tell the UI about
+            // the mismatch.
+
             property bool modelExtWrong: extruderAPresent &&
                                          !extruderAToolTypeCorrect
             property bool supportExtWrong: extruderBPresent &&
@@ -1757,17 +1767,34 @@ ApplicationWindow {
                     }
                     BodyText{
                         text: {
-                            if (wrongExtruderPopup.modelExtWrong) {
-                                qsTr("Please insert a Model 1 Performance Extruder "+
-                                     "into slot 1\nto continue attaching the "+
-                                     "extruders.")
-                            } else if (wrongExtruderPopup.supportExtWrong) {
-                                qsTr("Please insert a Support 2 Performance Extruder "+
-                                     "into slot 2\nto continue attaching the "+
-                                     "extruders. Currently only model\nand support "+
-                                     "printing is supported.")
-                            } else {
-                                ""
+                            if (bot.machineType == MachineType.Fire) {
+                                // V1 printers support only mk14 extruders.
+                                if (wrongExtruderPopup.modelExtWrong) {
+                                    qsTr("Please insert a Model 1 Performance Extruder "+
+                                         "into slot 1\nto continue attaching the "+
+                                         "extruders.")
+                                } else if (wrongExtruderPopup.supportExtWrong) {
+                                    qsTr("Please insert a Support 2 Performance Extruder "+
+                                         "into slot 2\nto continue attaching the "+
+                                         "extruders. Currently only model\nand support "+
+                                         "printing is supported.")
+                                } else {
+                                    ""
+                                }
+                            } else if (bot.machineType == MachineType.Lava) {
+                                // Hot bot (V2) supports both mk14 and mk14_hot extruders.
+                                if (wrongExtruderPopup.modelExtWrong) {
+                                    qsTr("Please insert a Model 1 Performance Extruder " +
+                                         "or Model 1 ABS\nPerformance Extruder into slot 1 " +
+                                         "to continue attaching the\nextruders.")
+                                } else if (wrongExtruderPopup.supportExtWrong) {
+                                    qsTr("Please insert a Support 2 Performance Extruder "+
+                                         "or Support 2\nSR-30 Performance Extruder into slot " +
+                                         "2 to continue attaching\nthe extruders. Currently only" +
+                                         " model and support printing is\nsupported.")
+                                } else {
+                                    ""
+                                }
                             }
                         }
                         anchors.horizontalCenter: parent.horizontalCenter

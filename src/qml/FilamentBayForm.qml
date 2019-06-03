@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ExtruderTypeEnum 1.0
 
 Item {
     id: filamentBayBaseItem
@@ -228,12 +229,38 @@ Item {
     }
 
     property var goodMaterialsList: {
+        // The materials valid for a bay/extruder depends
+        // on the extruder attached. The materials are
+        // extruder specific and not machine specific, but
+        // the extruders are themselves machine specific,
+        // so in theory the materials are also machine
+        // specific. e.g. hot extruders can never be attached
+        // to V1 printers so ABS/SR-30 can't be used on V1
+        // without some warranty voiding creativity. This logic
+        // shouldn't get too broken since an extruder should
+        // always be attached to a printer anytime the user
+        // wants to print or load which are the only times the
+        // material checks can block something.
         switch(filamentBayID) {
         case 1:
-            ["PLA", "TOUGH", "PETG"]
+            switch (bot.extruderAType) {
+            case ExtruderType.MK14:
+                ["PLA", "TOUGH", "PETG"]
+                break;
+            case ExtruderType.MK14_HOT:
+                ["ABS"]
+                break;
+            }
             break;
         case 2:
-            ["PVA"]
+            switch (bot.extruderBType) {
+            case ExtruderType.MK14:
+                ["PVA"]
+                break;
+            case ExtruderType.MK14_HOT:
+                ["SR-30"]
+                break;
+            }
             break;
         default:
             []
