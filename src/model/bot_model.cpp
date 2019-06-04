@@ -199,6 +199,14 @@ void BotModel::setTimeZone(const QString time_zone) {
     qDebug() << FL_STRM << "called with parameter: " << time_zone;
 }
 
+void BotModel::getCloudServicesInfo() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::setAnalyticsEnabled(const bool enabled) {
+    qDebug() << FL_STRM << "called with parameter: " << enabled;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

@@ -97,3 +97,10 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
         }
     }
 }
+
+void KaitenNetModel::cloudServicesInfoUpdate(const Json::Value &result) {
+    if(result.isObject()) {
+        // 'None' is interpreted as false by asBool()
+        analyticsEnabledSet(result["analytics_enabled"].asBool());
+    }
+}

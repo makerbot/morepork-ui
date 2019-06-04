@@ -39,6 +39,8 @@ Item {
 
     property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
 
+    property alias buttonAnalytics: buttonAnalytics
+
     property alias spoolInfoPage: spoolInfoPage
 
     property string lightBlue: "#3183af"
@@ -185,6 +187,12 @@ Item {
                         buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
                         enabled: !isProcessRunning()
                     }
+
+                    MenuButton {
+                        id: buttonAnalytics
+                        buttonImage.source: "qrc:/img/icon_printer_info.png"
+                        buttonText.text: qsTr("ANALYTICS")
+                    }
                 }
             }
         }
@@ -302,6 +310,20 @@ Item {
                 id: raiseLowerBuildPlate
             }
         }
+
+        //advancedSettingsSwipeView.index = 7
+        Item {
+            id: analyticsItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            AnalyticsScreen {
+                id: analyticsScreen
+            }
+        }
+
     }
 
     BusyPopup {

@@ -68,4 +68,9 @@ AdvancedSettingsPageForm {
         advancedSettingsSwipeView.swipeToItem(6)
 
     }
+
+    buttonAnalytics.onClicked: {
+        bot.getCloudServicesInfo()
+        advancedSettingsSwipeView.swipeToItem(7)
+    }
 }
