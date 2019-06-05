@@ -32,7 +32,7 @@ class SettingsInterface : public QObject {
       SettingsInterface();
       Q_INVOKABLE QString getLanguageCode();
       Q_INVOKABLE bool getAllowInternalStorage();
-      Q_INVOKABLE void setLanguageCode(const std::string language_code);
+      Q_INVOKABLE void setLanguageCode(const QString language_code);
       Q_INVOKABLE void setAllowInternalStorage(bool allow);
   private:
       std::string default_file_, override_file_;

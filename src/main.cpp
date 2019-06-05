@@ -65,7 +65,8 @@ int main(int argc, char ** argv) {
     SettingsInterface settings;
     DiskManager disk_manager;
 
-    QLocale::setDefault(QLocale(QStringLiteral("en_GB")));
+    QLocale::setDefault(QLocale(settings.getLanguageCode()));
+
     QQmlApplicationEngine engine;
     UiTranslator ui_trans(&engine);
     engine.rootContext()->setContextProperty("bot", bot.data());
