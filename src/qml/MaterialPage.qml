@@ -213,6 +213,7 @@ MaterialPageForm {
             }
         }
         else if(bot.process.type == ProcessType.Load) {
+            bot.acknowledgeMaterial(false)
             materialChangeCancelled = true
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"

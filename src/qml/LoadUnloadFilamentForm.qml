@@ -51,18 +51,19 @@ Item {
                                        bay2.spoolDetailsReady
 
     onIsSpoolDetailsReadyChanged: {
-        if(isSpoolDetailsReady) {
-            if(bot.process.type == ProcessType.Load) {
-                if(materialValidityCheck()) {
+        if(bot.process.type == ProcessType.Load) {
+            if(isSpoolDetailsReady) {
+                if(isSpoolValidityCheckPending &&
+                    materialValidityCheck()) {
                     bot.acknowledgeMaterial(true)
                 } else {
                     isMaterialValid = false
                 }
             }
-        }
-        else {
-            isMaterialValid = false
-            materialWarningPopup.close()
+            else {
+                isMaterialValid = false
+                materialWarningPopup.close()
+            }
         }
     }
 
