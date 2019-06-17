@@ -154,5 +154,7 @@
         <file>CustomPopupForm.qml</file>
         <file>FileOptionsPopupMenu.qml</file>
         <file>FileOptionsPopupMenuForm.qml</file>
+        <file>DayOneUpdateScreen.qml</file>
+        <file>DayOneUpdateScreenForm.qml</file>
     </qresource>
 </RCC>
