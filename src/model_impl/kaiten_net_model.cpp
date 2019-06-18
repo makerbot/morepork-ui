@@ -100,7 +100,15 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
 
 void KaitenNetModel::cloudServicesInfoUpdate(const Json::Value &result) {
     if(result.isObject()) {
-        // 'None' is interpreted as false by asBool()
-        analyticsEnabledSet(result["analytics_enabled"].asBool());
+        const Json::Value &enabled = result["analytics_enabled"];
+        if (enabled.empty()) {
+            // 'None' should be interpreted as 'true' as it means
+            // analytics will be shared when a makerbot account is
+            // connected with the printer, which is most likely to be
+            // the case for majority of users.
+            analyticsEnabledSet(true);
+        } else {
+            analyticsEnabledSet(enabled.asBool());
+        }
     }
 }
