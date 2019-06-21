@@ -36,6 +36,7 @@ class KaitenBotModel : public BotModel {
     void wifiUpdate(const Json::Value & result);
     void extChangeUpdate(const Json::Value & params);
     void spoolChangeUpdate(const Json::Value & spool_info);
+    void cloudServicesInfoUpdate(const Json::Value &result);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -83,6 +84,8 @@ class KaitenBotModel : public BotModel {
     void getToolStats(const int index);
     void toolStatsUpdate(const Json::Value & res, const int index);
     void setTimeZone(const QString time_zone);
+    void getCloudServicesInfo();
+    void setAnalyticsEnabled(const bool enabled);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -354,6 +357,28 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<UpdateSpoolInfoCallback> m_updateSpoolInfoCb;
+
+    class CloudServicesInfoCallback : public JsonRpcCallback {
+      public:
+        CloudServicesInfoCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->cloudServicesInfoUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<CloudServicesInfoCallback> m_cloudServicesInfoCb;
+
+    class SetAnalyticsCallback : public JsonRpcCallback {
+    public:
+        SetAnalyticsCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response (const Json::Value & resp) override {
+            m_bot->getCloudServicesInfo();
+        }
+    private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<SetAnalyticsCallback> m_setAnalyticsCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -964,6 +989,37 @@ void KaitenBotModel::moveAxisToEndstop(QString axis, float distance, float speed
     }
 }
 
+void KaitenBotModel::getCloudServicesInfo() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("get_cloud_services_info", Json::Value(), m_cloudServicesInfoCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::cloudServicesInfoUpdate(const Json::Value &result) {
+    dynamic_cast<KaitenNetModel*>(m_net.data())->cloudServicesInfoUpdate(result);
+}
+
+void KaitenBotModel::setAnalyticsEnabled(const bool enabled) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["enabled"] = Json::Value(enabled);
+        // set_analytics_enabled(bool) just enables/disables analytics but there's
+        // no way for clients to know the status right afterwards so we register a
+        // callback to call get_cloud_services_info() manually.
+        conn->jsonrpc.invoke("set_analytics_enabled", json_params, m_setAnalyticsCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -991,7 +1047,9 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_stzCb(new SetTimeZoneCallback()),
         m_extChange(new ExtruderChangeNotification(this)),
         m_spoolChange(new SpoolChangeNotification(this)),
-        m_updateSpoolInfoCb(new UpdateSpoolInfoCallback(this)) {
+        m_updateSpoolInfoCb(new UpdateSpoolInfoCallback(this)),
+        m_cloudServicesInfoCb(new CloudServicesInfoCallback(this)),
+        m_setAnalyticsCb(new SetAnalyticsCallback(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 

@@ -154,5 +154,7 @@
         <file>CustomPopupForm.qml</file>
         <file>FileOptionsPopupMenu.qml</file>
         <file>FileOptionsPopupMenuForm.qml</file>
+        <file>AnalyticsScreen.qml</file>
+        <file>AnalyticsScreenForm.qml</file>
     </qresource>
 </RCC>

@@ -83,6 +83,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void shutdown();
     Q_INVOKABLE virtual void getToolStats(const int index);
     Q_INVOKABLE virtual void setTimeZone(const QString time_zone);
+    Q_INVOKABLE virtual void getCloudServicesInfo();
+    Q_INVOKABLE virtual void setAnalyticsEnabled(const bool enabled);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();

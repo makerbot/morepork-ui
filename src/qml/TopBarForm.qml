@@ -261,6 +261,12 @@ Item {
                             case 3:
                                 qsTr("ASSISTED LEVELING")
                                 break;
+                            case 6:
+                                qsTr("RAISE/LOWER BUILD PLATE")
+                                break;
+                            case 7:
+                                qsTr("ANALYTICS")
+                                break;
                             default:
                                 qsTr("ADVANCED")
                                 break;
@@ -278,6 +284,10 @@ Item {
                         qsTr("MATERIAL")
                         break;
                     case 6:
+                        // This bit is repeated from above, but making it a function
+                        // returning a string doesn't seem to be updating the title
+                        // dynamically when the advanced page is reached through the
+                        // settings page.
                         switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
                         case 1:
                             qsTr("%1 SENSOR INFO").arg(bot.name)
@@ -287,6 +297,12 @@ Item {
                             break;
                         case 3:
                             qsTr("ASSISTED LEVELING")
+                            break;
+                        case 6:
+                            qsTr("RAISE/LOWER BUILD PLATE")
+                            break;
+                        case 7:
+                            qsTr("ANALYTICS")
                             break;
                         default:
                             qsTr("ADVANCED")

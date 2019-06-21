@@ -93,6 +93,7 @@ class NetModel : public BaseModel {
     MODEL_PROP(bool, wifiEnabled, false)
     MODEL_PROP(WifiState, wifiState, NotConnected)
     MODEL_PROP(WifiError, wifiError, NoError)
+    MODEL_PROP(bool, analyticsEnabled, false)
 
   public:
     NetModel();
