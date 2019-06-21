@@ -36,7 +36,7 @@ QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
 
-constexpr std::array<int, 1> kValidMachinePid = {14};
+constexpr std::array<int, 1> kValidMachinePid = {15};
 
 class PrintFileInfo : public QObject {
   Q_OBJECT

@@ -543,7 +543,7 @@ Item {
                     300
                 }
                 else if(isCancelUpdateProcess) {
-                    250
+                    320
                 }
                 else if(setDownloadFailed) {
                     250
