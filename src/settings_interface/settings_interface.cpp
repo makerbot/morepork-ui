@@ -47,7 +47,7 @@ void SettingsInterface::writeSettings() {
     if (fd) {
         int err = rename(tmp_path.c_str(), override_file_.c_str());
         if (err) {
-            LOG(info) << "Error writing to log "
+            LOG(info) << "Error writing to settings "
                       << override_file_.c_str()
                       << ": "
                       << strerror(err);
