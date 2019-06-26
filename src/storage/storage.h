@@ -26,7 +26,7 @@
 #else
 // embedded linux path
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
-#define TEST_PRINT_PATH QString("/home/test_prints/")
+#define TEST_PRINT_PATH QString("/usr/test_prints/")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")

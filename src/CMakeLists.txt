@@ -173,7 +173,7 @@ if(NOT ${QT_CREATOR_BUILD})
         DESTINATION "${ROOT_INSTALL_DIR}/usr/share/morepork_ui/translations")
 
     install(DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints"
-	    DESTINATION "${ROOT_INSTALL_DIR}/home")
+	    DESTINATION "${ROOT_INSTALL_DIR}/usr")
 endif()
 
 # Read qml qrc file, parse out all qml file names, and install them
