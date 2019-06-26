@@ -10,6 +10,7 @@ Button {
 
     onClicked: {
         translate.selectLanguage(localeCode)
+        settings.setLanguageCode(localeCode)
 
         // currentLocale is referenced from the parent page
         // 'LanguageSelectorForm.qml' which is a bad thing

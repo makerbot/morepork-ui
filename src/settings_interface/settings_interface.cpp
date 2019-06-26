@@ -1,6 +1,9 @@
 // Copyright 2019 MakerBot Industries.
 
+#include <unistd.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include <fstream>  // NOLINT(readability/streams)
 #include "settings_interface.h"
 
@@ -35,11 +38,22 @@ bool SettingsInterface::fileExists(std::string file_name) {
 }
 
 void SettingsInterface::writeSettings() {
-    std::ofstream file_strm(override_file_);
-    if (file_strm) {
-        Json::StyledWriter styledWriter;
-        file_strm << styledWriter.write(cached_settings_);
+    std::string tmp_path = override_file_ + ".tmp";
+    std::ofstream tmp_strm(tmp_path);
+    tmp_strm << cached_settings_.toStyledString();
+    tmp_strm.close(); //force flush
+    int fd = open(tmp_path.c_str(), O_APPEND);
+    fsync(fd);
+    if (fd) {
+        int err = rename(tmp_path.c_str(), override_file_.c_str());
+        if (err) {
+            LOG(info) << "Error writing to settings "
+                      << override_file_.c_str()
+                      << ": "
+                      << strerror(err);
+        }
     }
+    close(fd);
 }
 
 void SettingsInterface::mergeSettings(Json::Value &s1, Json::Value s2) {
@@ -57,8 +71,8 @@ QString SettingsInterface::getLanguageCode() {
     return QString::fromStdString(cached_settings_["language_code"].asString());
 }
 
-void SettingsInterface::setLanguageCode(const std::string language_code) {
-    cached_settings_["language_code"] = language_code;
+void SettingsInterface::setLanguageCode(const QString language_code) {
+    cached_settings_["language_code"] = language_code.toStdString();
     writeSettings();
 }
 
