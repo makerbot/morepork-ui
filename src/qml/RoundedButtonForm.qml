@@ -4,18 +4,19 @@ Rectangle {
     property alias button_rectangle: button_rectangle
     property alias button_text: button_text
     property alias button_mouseArea: button_mouseArea
-    property alias buttonWidth: button_rectangle.width
+    property int buttonWidth: 100
     property alias buttonHeight: button_rectangle.height
     property alias label: button_text.text
     property int label_size: 20
-    property int label_width: 300
+    property int label_width: 300 // DEPRECATED
     property bool disable_button: false
     property bool is_button_transparent: true
     property string button_pressed_color: "#ffffff"
     property string button_not_pressed_color: "#000000"
+    property bool forceButtonWidth: false
 
     id: button_rectangle
-    width: 200
+    width: forceButtonWidth ? buttonWidth : (button_text.width + 30)
     height: 40
     color: is_button_transparent ? "#00000000" : button_not_pressed_color
     radius: 8
@@ -27,8 +28,7 @@ Rectangle {
 
     Text {
         id: button_text
-        width: label_width
-        text: qsTr("Button Text")
+        text: qsTr("")
         anchors.verticalCenterOffset: 7
         font.capitalization: Font.AllUppercase
         anchors.horizontalCenter: parent.horizontalCenter
