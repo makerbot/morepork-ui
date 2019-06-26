@@ -78,22 +78,6 @@ MoreporkStorage::MoreporkStorage()
   fileCopySucceededSet(false);
   fileCopyProgressSet(0);
   storageFileTypeSet(MoreporkStorage::StorageFileType::Print);
-
-  QDir dir(TEST_PRINT_PATH);
-  if (!dir.exists()) {
-      // Creates TEST_PRINT_PATH
-      dir.mkpath(".");
-  }
-  if(!QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").exists() ||
-     !QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").isFile() ||
-     (QFile(TEST_PRINT_PATH + "/test_print.makerbot").size() !=
-      QFile(":/test_files/test_print.makerbot").size())) {
-      QFile::remove(TEST_PRINT_PATH + "/test_print.makerbot");
-      // Tiny test file 74 kb, so okay to do I/O in constructor I guess.
-      QFile::copy(":/test_files/test_print.makerbot",
-                  TEST_PRINT_PATH + "/test_print.makerbot");
-  }
-
   updateUsbStorageConnected();
 }
 
@@ -235,11 +219,64 @@ void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
   }
 }
 
+void MoreporkStorage::getTestPrint(const QString material) {
+    const QString test_print = TEST_PRINT_FILE_PREFIX + material + ".makerbot";
+    const QString path = TEST_PRINT_PATH + test_print;
+    const QFileInfo kFileInfo = QFileInfo(path);
+    PrintFileInfo* current_thing = nullptr;
+
+    // TODO(praveen): The print file parsing code below has been
+    // simplified but it is not in ReleaseMorepork1.2 branch so
+    // just copy pasting the old code. This should be updated to
+    // use the createPrintFileObject() function once merged into
+    // a newer branch.
+
+#ifdef HAVE_LIBTINYTHING
+    MakerbotFileMetaReader file_meta_reader(kFileInfo);
+    if (file_meta_reader.loadMetadata()) {
+    auto &meta_data = file_meta_reader.meta_data_;
+    QString material_name_a = QString::fromStdString(meta_data->material[1]);
+    updateMaterialNames(material_name_a);
+    QString material_name_b = QString::fromStdString(meta_data->material[0]);
+    updateMaterialNames(material_name_b);
+    current_thing = new PrintFileInfo(kFileInfo.absolutePath(),
+                        kFileInfo.fileName(),
+                        kFileInfo.completeBaseName(),
+                        kFileInfo.lastRead(),
+                        kFileInfo.isDir(),
+                        meta_data->extrusion_mass_g[1],
+                        meta_data->extrusion_mass_g[0],
+                        meta_data->extruder_temperature[1],
+                        meta_data->extruder_temperature[0],
+                        meta_data->chamber_temperature,
+                        meta_data->shells,
+                        meta_data->layer_height,
+                        meta_data->infill_density,
+                        meta_data->duration_s,
+                        meta_data->uses_support,
+                        meta_data->uses_raft,
+                        material_name_a,
+                        material_name_b,
+                        QString::fromStdString(meta_data->slicer_name));
+    }
+#else
+    current_thing = new PrintFileInfo(dir_path,
+                      kFileInfo.fileName(),
+                      kFileInfo.fileName(),
+                      kFileInfo.lastRead(),
+                      kFileInfo.isDir());
+#endif
+    if (current_thing != nullptr) {
+        currentThingSet(current_thing);
+    } else {
+        currentThingReset();
+    }
+}
 
 
 
-void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
-  const QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
+void MoreporkStorage::updateCurrentThing() {
+  const QString dir_path = CURRENT_THING_PATH;
   if(QDir(dir_path).exists()){
       QDirIterator current_thing_dir(dir_path, QDir::Files |
                                 QDir::NoDotAndDotDot | QDir::Readable);
