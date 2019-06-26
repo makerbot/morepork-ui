@@ -78,6 +78,7 @@ MoreporkStorage::MoreporkStorage()
   fileCopySucceededSet(false);
   fileCopyProgressSet(0);
   storageFileTypeSet(MoreporkStorage::StorageFileType::Print);
+  setMachinePid();
 
   QDir dir(TEST_PRINT_PATH);
   if (!dir.exists()) {
@@ -97,6 +98,15 @@ MoreporkStorage::MoreporkStorage()
   updateUsbStorageConnected();
 }
 
+
+void MoreporkStorage::setMachinePid() {
+    std::ifstream file_strm(MACHINE_PID_PATH);
+    if (file_strm) {
+        file_strm >> std::hex >> machine_pid_;
+    } else {
+        LOG(error) << "No PID file found";
+    }
+}
 
 void MoreporkStorage::setStorageFileType(
     const MoreporkStorage::StorageFileType type) {
@@ -134,11 +144,7 @@ bool MoreporkStorage::firmwareIsValid(const QString file_path) {
                 const Json::Value &pid_jval = sm["pid"];
                 if (pid_jval.isNumeric()) {
                   const int manifest_pid = pid_jval.asInt();
-                  for (auto pid : kValidMachinePid) {
-                    if (fw_is_valid = pid == manifest_pid) {
-                      break;
-                    }
-                  }
+                  fw_is_valid = machine_pid_ == manifest_pid;
                 }
               }
             }
