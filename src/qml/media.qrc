@@ -131,9 +131,4 @@
 	<file alias="calib_verification.png">images/calib_verification.png</file>
 	<file alias="cut_filament_tip.png">images/cut_filament_tip.png</file>
     </qresource>
-    
-    <qresource prefix="/test_files">
-        <file alias="test_print.makerbot">test_print/test_print.makerbot</file>
-    </qresource>
-
 </RCC>

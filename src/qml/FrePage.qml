@@ -5,7 +5,10 @@ import WifiStateEnum 1.0
 FrePageForm {
     function startTestPrint() {
         printPage.printFromUI = true
-        storage.updateCurrentThing(true)
+        // We could use the spool journal to determine the
+        // loaded material but sticking with this way that
+        // we use everywhere else currently.
+        storage.getTestPrint(materialPage.bay1.filamentMaterialName.toLowerCase())
         printPage.getPrintFileDetails(storage.currentThing)
         mainSwipeView.swipeToItem(1)
         printPage.printSwipeView.swipeToItem(2)

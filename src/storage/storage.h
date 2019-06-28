@@ -13,12 +13,13 @@
 #include "storage/progress_copy.h"
 
 #define DEFAULT_FW_FILE_NAME QString("firmware.zip")
+#define TEST_PRINT_FILE_PREFIX QString("test_print_")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/usb_storage"
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
-#define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_print"
+#define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define USB_STORAGE_DEV_BY_PATH QString()
 #define LEGACY_USB_DEV_BY_PATH QString()
@@ -30,7 +31,7 @@
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define CURRENT_THING_PATH QString("/home/current_thing")
-#define TEST_PRINT_PATH QString("/home/test_print")
+#define TEST_PRINT_PATH QString("/usr/test_prints/")
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define USB_STORAGE_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
@@ -293,7 +294,7 @@ class MoreporkStorage : public QObject {
     QList<QObject*> printFileList() const;
     void printFileListSet(const QList<QObject*> &print_file_list);
     void printFileListReset();
-    Q_INVOKABLE void updateCurrentThing(bool is_test_print = false);
+    Q_INVOKABLE void updateCurrentThing();
     Q_PROPERTY(PrintFileInfo* currentThing
       READ currentThing
       WRITE currentThingSet
@@ -316,6 +317,8 @@ class MoreporkStorage : public QObject {
     // displayed on the printer UI. All comparisons on UI happen
     // with marketing names for simplicity.
     void updateMaterialNames(QString &material);
+
+    Q_INVOKABLE void getTestPrint(QString material);
 
   private:
     QFileSystemWatcher *storage_watcher_;
