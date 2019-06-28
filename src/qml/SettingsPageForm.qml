@@ -155,7 +155,6 @@ Item {
                         id: buttonChangeLanguage
                         buttonImage.source: "qrc:/img/icon_change_language.png"
                         buttonText.text: qsTr("CHANGE LANGUAGE")
-                        visible: false
                     }
 
                     MenuButton {

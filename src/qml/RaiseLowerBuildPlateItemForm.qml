@@ -76,10 +76,11 @@ Item {
     ColumnLayout {
         id: columnLayout
         width: 100
-        height: 150
+        height: 250
         anchors.right: parent.right
         anchors.rightMargin: 100
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 100
         spacing: 50
 
         RoundedButton {
