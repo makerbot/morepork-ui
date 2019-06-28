@@ -1,9 +1,11 @@
 import QtQuick 2.10
+import QtQuick.Layouts 1.3
 
 Rectangle {
     property alias button_rectangle: button_rectangle
     property alias button_text: button_text
     property alias button_mouseArea: button_mouseArea
+    // buttonWidth is only used if forceButtonWidth is set to true
     property int buttonWidth: 100
     property alias buttonHeight: button_rectangle.height
     property alias label: button_text.text
@@ -25,6 +27,12 @@ Rectangle {
     border.width: 2
     border.color: "#ffffff"
     opacity: disable_button ? 0.3 : 1
+    // For elements used inside auto layout elements like ColumLayout,
+    // RowLayout etc. the children's dimensions are controlled by the
+    // layout element. To ovverride, preferredWidth and preferredHeight
+    // properties need to be explicity set.
+    Layout.preferredHeight: height
+    Layout.preferredWidth: width
 
     Text {
         id: button_text
