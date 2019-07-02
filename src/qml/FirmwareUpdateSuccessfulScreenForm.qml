@@ -35,7 +35,7 @@ Item {
             font.letterSpacing: 2
             anchors.top: parent.top
             anchors.topMargin: 35
-            font.family: "Antennae"
+            font.family: defaultFont.name
             font.weight: Font.Bold
             font.pixelSize: 22
             lineHeight: 1.3

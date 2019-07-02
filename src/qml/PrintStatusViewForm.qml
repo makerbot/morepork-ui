@@ -154,7 +154,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 5
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 18
                 }
@@ -203,7 +203,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 3
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     font.pixelSize: 18
                 }
@@ -248,7 +248,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 3
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     font.pixelSize: 18
                     lineHeight: 1.4
@@ -336,7 +336,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.letterSpacing: 3
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -370,7 +370,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -384,7 +384,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -398,7 +398,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -412,7 +412,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -425,7 +425,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.wordSpacing: 2
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -445,7 +445,7 @@ Item {
                             text: qsTr("99.99%")
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -458,7 +458,7 @@ Item {
                             text: uses_support_
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -471,7 +471,7 @@ Item {
                             text: uses_raft_
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -484,7 +484,7 @@ Item {
                             text: qsTr("%1 %2").arg(model_mass_).arg(print_model_material_)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -497,7 +497,7 @@ Item {
                             text: qsTr("%1 %2").arg(support_mass_).arg(print_support_material_)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                             font.pixelSize: 18
@@ -543,7 +543,7 @@ Item {
                     text: qsTr("%1 INFO").arg(printerName)
                     antialiasing: false
                     smooth: false
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.pixelSize: 20
                     font.weight: Font.Bold
                     font.letterSpacing: 3
@@ -576,7 +576,7 @@ Item {
                             text: qsTr("EX 1 TEMP")
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Light
                             font.letterSpacing: 3
@@ -589,7 +589,7 @@ Item {
                             text: qsTr("EX 2 TEMP")
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Light
                             font.letterSpacing: 3
@@ -602,7 +602,7 @@ Item {
                             text: qsTr("EX 1 LIFE")
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Light
                             font.letterSpacing: 3
@@ -616,7 +616,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.pixelSize: 18
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.wordSpacing: 2
@@ -629,7 +629,7 @@ Item {
                             antialiasing: false
                             smooth: false
                             font.pixelSize: 18
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.wordSpacing: 2
@@ -649,7 +649,7 @@ Item {
                             text: qsTr("%1C").arg(bot.extruderACurrentTemp)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Bold
                             font.letterSpacing: 3
@@ -661,7 +661,7 @@ Item {
                             text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Bold
                             font.letterSpacing: 3
@@ -673,7 +673,7 @@ Item {
                             text: qsTr("%1mm").arg(extruderAExtrusionDistance)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Bold
                             font.letterSpacing: 3
@@ -685,7 +685,7 @@ Item {
                             text: qsTr("%1mm").arg(extruderBExtrusionDistance)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Bold
                             font.letterSpacing: 3
@@ -697,7 +697,7 @@ Item {
                             text: qsTr("%1C").arg(bot.chamberCurrentTemp)
                             antialiasing: false
                             smooth: false
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.weight: Font.Bold
                             font.letterSpacing: 3
@@ -729,7 +729,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.pixelSize: 15
                     font.weight: Font.Light
                     font.letterSpacing: 3
@@ -742,7 +742,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.pixelSize: 145
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     font.letterSpacing: 3
                 }
@@ -754,7 +754,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.pixelSize: 15
                     font.weight: Font.Light
                     font.letterSpacing: 3
@@ -767,7 +767,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.pixelSize: 15
                     font.weight: Font.Bold
                     font.letterSpacing: 3
@@ -799,7 +799,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.pixelSize: 85
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.letterSpacing: 0
 
@@ -812,7 +812,7 @@ Item {
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: -30
                         font.pixelSize: 16
-                        font.family: "Antenna"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.letterSpacing: 3
 
@@ -825,7 +825,7 @@ Item {
                             anchors.left: parent.right
                             anchors.leftMargin: 10
                             font.pixelSize: 16
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                         }
@@ -839,7 +839,7 @@ Item {
                             anchors.bottom: parent.bottom
                             anchors.bottomMargin: -30
                             font.pixelSize: 16
-                            font.family: "Antenna"
+                            font.family: defaultFont.name
                             font.weight: Font.Light
                             font.letterSpacing: 3
 
@@ -852,7 +852,7 @@ Item {
                                 anchors.left: parent.right
                                 anchors.leftMargin: 10
                                 font.pixelSize: 16
-                                font.family: "Antenna"
+                                font.family: defaultFont.name
                                 font.weight: Font.Bold
                                 font.letterSpacing: 3
                             }

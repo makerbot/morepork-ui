@@ -49,7 +49,7 @@ Button {
         Text {
             id: buttonText
             text: "Default Text"
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.letterSpacing: 3
             font.weight: Font.Bold
             font.pointSize: 14

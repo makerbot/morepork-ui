@@ -381,7 +381,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -417,7 +417,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -452,7 +452,7 @@ Item {
                     text: qsTr("NO EXTRUDER DETECTED")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -470,7 +470,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }
@@ -567,7 +567,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -606,7 +606,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -643,7 +643,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -682,7 +682,7 @@ Item {
                                   qsTr("UNKNOWN MATERIAL WARNING")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -705,7 +705,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 20
                     lineHeight: 1.4
                 }
@@ -795,7 +795,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -831,7 +831,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -867,7 +867,7 @@ Item {
                                            qsTr("CANCEL MATERIAL UNLOADING?")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -882,7 +882,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }
@@ -943,7 +943,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.weight: Font.Light
                 wrapMode: Text.WordWrap
-                font.family: "Antennae"
+                font.family: defaultFont.name
                 font.pixelSize: 18
                 lineHeight: 1.3
                 anchors.horizontalCenter: parent.horizontalCenter

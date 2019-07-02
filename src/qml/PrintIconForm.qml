@@ -136,7 +136,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             visible: false
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.weight: Font.Light
             font.pixelSize: 75
 
@@ -153,7 +153,7 @@ Item {
                 anchors.rightMargin: -30
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                font.family: "Antenna"
+                font.family: defaultFont.name
                 font.weight: Font.Light
                 font.pixelSize: 25
             }
