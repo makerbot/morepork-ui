@@ -367,7 +367,7 @@ Item {
 
             Text {
                 color: "#ffffff"
-                font.family: "Antennae"
+                font.family: defaultFont.name
                 font.weight: Font.Light
                 text: qsTr("No Items")
                 anchors.verticalCenter: parent.verticalCenter

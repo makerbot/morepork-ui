@@ -41,7 +41,7 @@ Rectangle {
         font.capitalization: Font.AllUppercase
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        font.family: "Antennae"
+        font.family: defaultFont.name
         color: "#ffffff"
         smooth: false
         antialiasing: false

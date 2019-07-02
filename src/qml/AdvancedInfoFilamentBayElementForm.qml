@@ -26,7 +26,7 @@ Item {
             text: qsTr("FILAMENT BAY LABEL")
             font.letterSpacing: 2
             font.pixelSize: 15
-            font.family: "Antennae"
+            font.family: defaultFont.name
             font.weight: Font.Bold
             color: "#ffffff"
         }

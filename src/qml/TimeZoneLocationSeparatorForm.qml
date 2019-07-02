@@ -13,7 +13,7 @@ Item {
         anchors.leftMargin: 25
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -5
-        font.family: "Antenna"
+        font.family: defaultFont.name
         font.letterSpacing: 3
         font.weight: Font.Bold
         font.pointSize: 14

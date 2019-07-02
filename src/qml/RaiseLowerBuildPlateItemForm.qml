@@ -20,7 +20,7 @@ Item {
         anchors.bottomMargin: 50
         anchors.horizontalCenter: row.horizontalCenter
         font.weight: Font.Light
-        font.family: "Antennae"
+        font.family: defaultFont.name
         font.pixelSize: 20
     }
 
@@ -33,7 +33,7 @@ Item {
         anchors.bottom: row.top
         anchors.bottomMargin: 50
         font.weight: Font.Light
-        font.family: "Antennae"
+        font.family: defaultFont.name
         font.pixelSize: 20
     }
 
