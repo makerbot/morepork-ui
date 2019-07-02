@@ -46,7 +46,7 @@ Item {
             anchors.topMargin: 130
             antialiasing: false
             smooth: false
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.letterSpacing: 3
             font.weight: Font.Light
             anchors.horizontalCenter: parent.horizontalCenter

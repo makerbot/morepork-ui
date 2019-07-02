@@ -24,7 +24,7 @@ Item {
             font.pixelSize: 22
             font.capitalization: Font.AllUppercase
             color: "#cbcbcb"
-            font.family: "Antennae"
+            font.family: defaultFont.name
             font.weight: Font.Bold
             font.letterSpacing: 5
         }
@@ -88,7 +88,7 @@ Item {
                     delegate:
                         Text {
                         text: model.modelData
-                        font.family: "Antenna"
+                        font.family: defaultFont.name
                         font.letterSpacing: 2
                         font.weight: Font.Bold
                         font.pixelSize: 18

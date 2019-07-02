@@ -23,7 +23,7 @@ Item {
             smooth: false
             anchors.left: parent.left
             anchors.leftMargin: 0
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.weight: Font.Light
             font.letterSpacing: 3
             font.pixelSize: 18
@@ -39,7 +39,7 @@ Item {
             anchors.leftMargin: 350
             antialiasing: false
             smooth: false
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.letterSpacing: 5
             font.weight: Font.Bold
             font.pixelSize: 18

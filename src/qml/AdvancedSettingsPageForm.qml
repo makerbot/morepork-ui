@@ -421,7 +421,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -461,7 +461,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -500,7 +500,7 @@ Item {
                     text: hasReset ? qsTr("RESET SUCCESSFUL") : isResetting ? qsTr("RESETTING TO FACTORY...") : qsTr("RESET TO FACTORY")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -515,7 +515,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 18
                     lineHeight: 1.3
                     visible: !hasReset

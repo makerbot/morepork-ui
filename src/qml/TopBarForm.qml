@@ -106,7 +106,7 @@ Item {
             antialiasing: false
             smooth: false
             verticalAlignment: Text.AlignVCenter
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.letterSpacing: 3
             font.weight: Font.Light
             font.pixelSize: 22
@@ -304,7 +304,7 @@ Item {
             antialiasing: false
             smooth: false
             verticalAlignment: Text.AlignVCenter
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.letterSpacing: 3
             font.weight: Font.Light
             font.pixelSize: 22

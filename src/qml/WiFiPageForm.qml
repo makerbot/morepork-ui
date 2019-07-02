@@ -107,7 +107,7 @@ Item {
             // 'Not Connected' or 'NoWifiFound' states.
             Text {
                 color: "#ffffff"
-                font.family: "Antennae"
+                font.family: defaultFont.name
                 font.weight: Font.Light
                 text: {
                     if(!bot.net.wifiEnabled) {
@@ -255,7 +255,7 @@ Item {
                     anchors.left: passwordField.left
                     anchors.bottom: passwordField.top
                     anchors.bottomMargin: 10
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                 }
 
@@ -276,7 +276,7 @@ Item {
                             color: "#f7f7f7"
                         }
                     color: "#000000"
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     font.pointSize: (showPassword.checked ||
                                     text == "") ? 14 : 24
@@ -345,7 +345,7 @@ Item {
                         color: "#ffffff"
                         text: qsTr("Show Password")
                         font.letterSpacing: 2
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 18
                     }
@@ -476,7 +476,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -524,7 +524,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -588,7 +588,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -670,7 +670,7 @@ Item {
                     font.capitalization: Font.AllUppercase
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
