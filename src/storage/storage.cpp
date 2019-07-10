@@ -103,6 +103,9 @@ void MoreporkStorage::setStorageFileType(
   storageFileTypeSet(type);
 }
 
+void MoreporkStorage::setMachinePID(int pid) {
+    machinePIDSet(pid);
+}
 
 // Check if the firmware zip contains a manifest.json file and there exists a
 // PID key within that file with a valid value.
@@ -134,10 +137,8 @@ bool MoreporkStorage::firmwareIsValid(const QString file_path) {
                 const Json::Value &pid_jval = sm["pid"];
                 if (pid_jval.isNumeric()) {
                   const int manifest_pid = pid_jval.asInt();
-                  for (auto pid : kValidMachinePid) {
-                    if (fw_is_valid = pid == manifest_pid) {
+                    if (fw_is_valid = (machinePID() == manifest_pid)) {
                       break;
-                    }
                   }
                 }
               }

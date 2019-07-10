@@ -3,6 +3,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
 import StorageFileTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 DayOneUpdateScreenForm {
     button1 {
@@ -96,6 +97,17 @@ DayOneUpdateScreenForm {
     button3 {
         button_mouseArea.onClicked: {
             state = "download_to_usb_stick"
+            // The best way to set the machine PID would be through the
+            // system info, but the pid exists in the storage class which
+            // is separate from any of the models so exposing the storage
+            // class to the model classes just for this purpose seems
+            // unneccessary considering this is going to exist only in the
+            // blocking fw for now.
+            if(bot.nachineType == MachineType.Fire) {
+                storage.setMachinePID(14)
+            } else if(bot.machineType == MachineType.Lava) {
+                storage.setMachinePID(15)
+            }
         }
 
         disable_button: {

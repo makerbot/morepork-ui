@@ -240,7 +240,7 @@ Item {
             font.family: "Antennae"
             font.pixelSize: 18
             font.weight: Font.Light
-            text: "Follow these steps to set up your\nMethod Performance 3D Printer."
+            text: "Follow these steps to set up your\n" + productName + " Performance 3D Printer."
             lineHeight: 1.2
             opacity: 1.0
         }

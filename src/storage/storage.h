@@ -36,8 +36,6 @@ QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #endif
 
-constexpr std::array<int, 1> kValidMachinePid = {15};
-
 class PrintFileInfo : public QObject {
   Q_OBJECT
 
@@ -304,6 +302,7 @@ class MoreporkStorage : public QObject {
     Q_INVOKABLE void backStackClear();
 
     Q_INVOKABLE void cancelCopy();
+    Q_INVOKABLE void setMachinePID(int pid);
     Q_INVOKABLE bool firmwareIsValid(const QString file_path);
     Q_INVOKABLE void setStorageFileType(
             const MoreporkStorage::StorageFileType type);
@@ -331,6 +330,7 @@ class MoreporkStorage : public QObject {
                PrintFileInfo::StorageSortType::DateAdded)
     MODEL_PROP(MoreporkStorage::StorageFileType, storageFileType,
                MoreporkStorage::StorageFileType::Print)
+    MODEL_PROP(int, machinePID, 14)
 
   private slots:
     void updateUsbStorageConnected();
