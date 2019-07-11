@@ -16,6 +16,7 @@ RoundedButton {
     button_rectangle.antialiasing: true
     button_text.visible: false
     is_button_transparent: false
+    forceButtonWidth: true
 
     Image {
         id: refresh_image

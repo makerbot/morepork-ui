@@ -49,7 +49,7 @@ Button {
         anchors.left: parent.left
         anchors.leftMargin: 75
         anchors.verticalCenter: parent.verticalCenter
-        font.family: "Antenna"
+        font.family: defaultFont.name
         font.letterSpacing: 3
         font.weight: Font.Bold
         font.pointSize: 14

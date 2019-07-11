@@ -368,7 +368,6 @@ Item {
             Text {
                 id: noFilesText
                 color: "#ffffff"
-                font.family: "Antennae"
                 font.weight: Font.Bold
                 text: qsTr("NO PRINTABLE FILES")
                 horizontalAlignment: Text.AlignHCenter

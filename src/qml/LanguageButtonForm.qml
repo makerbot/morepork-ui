@@ -10,6 +10,7 @@ Button {
 
     onClicked: {
         translate.selectLanguage(localeCode)
+        settings.setLanguageCode(localeCode)
 
         // currentLocale is referenced from the parent page
         // 'LanguageSelectorForm.qml' which is a bad thing
@@ -69,7 +70,7 @@ Button {
         anchors.left: parent.left
         anchors.leftMargin: 120
         anchors.verticalCenter: parent.verticalCenter
-        font.family: "Antenna"
+        font.family: defaultFont.name
         font.letterSpacing: 2
         font.weight: Font.Bold
         font.pointSize: 14

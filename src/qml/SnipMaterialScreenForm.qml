@@ -37,7 +37,7 @@ Item {
             text: qsTr("REMOVE BENT MATERIAL")
             font.letterSpacing: 1
             font.wordSpacing: 3
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.pixelSize: 22
             font.weight: Font.Bold
             antialiasing: false
@@ -48,7 +48,7 @@ Item {
             id: description_text
             color: "#cbcbcb"
             text: qsTr("Cleanly cut any material that is bent\nor kinked before inserting it into the\nguide tube. Any kinks can cause the\nmaterial to become jammed in the\ntube.")
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.pixelSize: 20
             font.weight: Font.Light
             lineHeight: 1.3

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
+import ExtruderTypeEnum 1.0
 
 Item {
     id: materialPage
@@ -381,7 +382,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -417,7 +418,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -452,7 +453,7 @@ Item {
                     text: qsTr("NO EXTRUDER DETECTED")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -470,7 +471,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }
@@ -567,7 +568,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -606,7 +607,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -643,7 +644,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -682,7 +683,7 @@ Item {
                                   qsTr("UNKNOWN MATERIAL WARNING")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -690,22 +691,42 @@ Item {
                 Text {
                     id: description_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: isMaterialMismatch ?
-                              (loadUnloadFilamentProcess.currentActiveTool == 1 ?
-                                  qsTr("Only model materials PLA, Tough and PETG are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.") :
-                                  qsTr("Currently only support material such as PVA are compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")) :
-                                  qsTr("The limited warranty included with this 3D printer does not\n" +
-                                  "apply to damage caused by the use of materials not certified\n" +
-                                  "or approved by MakerBot. For additional information, please\n" +
-                                  "visit MakerBot.com/legal/warranty.\n" +
-                                  "Custom settings in MakerBot Print software are required to\n" +
-                                  "configure and use this material.")
+                    text: {
+                        if(isMaterialMismatch) {
+                            if(loadUnloadFilamentProcess.currentActiveTool == 1) {
+                                switch (bot.extruderAType) {
+                                case ExtruderType.MK14:
+                                    qsTr("Only model materials PLA, Tough and PETG are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                    break;
+                                case ExtruderType.MK14_HOT:
+                                    qsTr("Only model material ABS is compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                    break;
+                                }
+                            } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
+                                switch (bot.extruderBType) {
+                                case ExtruderType.MK14:
+                                    qsTr("Only support material PVA is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
+                                    break;
+                                case ExtruderType.MK14_HOT:
+                                    qsTr("Only support material SR-30 is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
+                                    break;
+                                }
+                            }
+                        } else {
+                            qsTr("The limited warranty included with this 3D printer does not\n" +
+                            "apply to damage caused by the use of materials not certified\n" +
+                            "or approved by MakerBot. For additional information, please\n" +
+                            "visit MakerBot.com/legal/warranty.\n" +
+                            "Custom settings in MakerBot Print software are required to\n" +
+                            "configure and use this material.")
+                        }
+                    }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 20
                     lineHeight: 1.4
                 }
@@ -795,7 +816,7 @@ Item {
                         Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -831,7 +852,7 @@ Item {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -867,7 +888,7 @@ Item {
                                            qsTr("CANCEL MATERIAL UNLOADING?")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
                 }
@@ -882,7 +903,7 @@ Item {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.pixelSize: 18
                     lineHeight: 1.3
                 }
@@ -943,7 +964,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.weight: Font.Light
                 wrapMode: Text.WordWrap
-                font.family: "Antennae"
+                font.family: defaultFont.name
                 font.pixelSize: 18
                 lineHeight: 1.3
                 anchors.horizontalCenter: parent.horizontalCenter

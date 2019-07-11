@@ -114,7 +114,7 @@ Item {
                 antialiasing: false
                 smooth: false
                 color: "#ffffff"
-                font.family: "Antenna"
+                font.family: defaultFont.name
                 font.weight: Font.Bold
                 font.pixelSize: 36
             }
@@ -145,7 +145,7 @@ Item {
                 antialiasing: false
                 smooth: false
                 color: "#ffffff"
-                font.family: "Antenna"
+                font.family: defaultFont.name
                 font.weight: Font.Bold
                 font.pixelSize: 16
             }
@@ -174,7 +174,7 @@ Item {
                         smooth: false
                         color: "#cbcbcb"
                         font.letterSpacing: 2
-                        font.family: "Antenna"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 13
                     }
@@ -186,7 +186,7 @@ Item {
                         smooth: false
                         color: "#cbcbcb"
                         font.letterSpacing: 2
-                        font.family: "Antenna"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 13
                     }
@@ -211,7 +211,7 @@ Item {
                         smooth: false
                         color: "#cbcbcb"
                         font.letterSpacing: 2
-                        font.family: "Antenna"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 13
                     }
@@ -225,7 +225,7 @@ Item {
                         smooth: false
                         color: "#cbcbcb"
                         font.letterSpacing: 2
-                        font.family: "Antenna"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 13
                     }
@@ -292,7 +292,7 @@ Item {
                     smooth: false
                     color: "#ffffff"
                     font.letterSpacing: 3
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 16
                     lineHeight: 1.6

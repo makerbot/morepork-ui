@@ -78,25 +78,20 @@ MoreporkStorage::MoreporkStorage()
   fileCopySucceededSet(false);
   fileCopyProgressSet(0);
   storageFileTypeSet(MoreporkStorage::StorageFileType::Print);
-
-  QDir dir(TEST_PRINT_PATH);
-  if (!dir.exists()) {
-      // Creates TEST_PRINT_PATH
-      dir.mkpath(".");
-  }
-  if(!QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").exists() ||
-     !QFileInfo(TEST_PRINT_PATH + "/test_print.makerbot").isFile() ||
-     (QFile(TEST_PRINT_PATH + "/test_print.makerbot").size() !=
-      QFile(":/test_files/test_print.makerbot").size())) {
-      QFile::remove(TEST_PRINT_PATH + "/test_print.makerbot");
-      // Tiny test file 74 kb, so okay to do I/O in constructor I guess.
-      QFile::copy(":/test_files/test_print.makerbot",
-                  TEST_PRINT_PATH + "/test_print.makerbot");
-  }
+  setMachinePid();
 
   updateUsbStorageConnected();
 }
 
+
+void MoreporkStorage::setMachinePid() {
+    std::ifstream file_strm(MACHINE_PID_PATH);
+    if (file_strm) {
+        file_strm >> std::hex >> machine_pid_;
+    } else {
+        LOG(error) << "No PID file found";
+    }
+}
 
 void MoreporkStorage::setStorageFileType(
     const MoreporkStorage::StorageFileType type) {
@@ -134,11 +129,7 @@ bool MoreporkStorage::firmwareIsValid(const QString file_path) {
                 const Json::Value &pid_jval = sm["pid"];
                 if (pid_jval.isNumeric()) {
                   const int manifest_pid = pid_jval.asInt();
-                  for (auto pid : kValidMachinePid) {
-                    if (fw_is_valid = pid == manifest_pid) {
-                      break;
-                    }
-                  }
+                  fw_is_valid = machine_pid_ == manifest_pid;
                 }
               }
             }
@@ -245,6 +236,19 @@ void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
   }
 }
 
+void MoreporkStorage::getTestPrint(const QString material) {
+    const QString test_print = TEST_PRINT_FILE_PREFIX + material + ".makerbot";
+    const QString path = TEST_PRINT_PATH + test_print;
+    const QFileInfo kFileInfo = QFileInfo(path);
+
+    PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
+
+    if (current_thing != nullptr) {
+        currentThingSet(current_thing);
+    } else {
+        currentThingReset();
+    }
+}
 
 PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo) {
 #ifdef HAVE_LIBTINYTHING
@@ -298,8 +302,8 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
 #endif
 }
 
-void MoreporkStorage::updateCurrentThing(const bool is_test_print) {
-    const QString dir_path = (is_test_print ? TEST_PRINT_PATH : CURRENT_THING_PATH);
+void MoreporkStorage::updateCurrentThing() {
+    const QString dir_path = CURRENT_THING_PATH;
     if(QDir(dir_path).exists()) {
         QDirIterator current_thing_dir(dir_path, QDir::Files |
                                 QDir::NoDotAndDotDot | QDir::Readable);

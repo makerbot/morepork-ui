@@ -308,7 +308,7 @@ Item {
                                               12 : 0
             font.capitalization: Font.AllUppercase
             font.letterSpacing: 4
-            font.family: "Antenna"
+            font.family: defaultFont.name
             font.weight: Font.Light
             font.pixelSize: 18
             smooth: false
@@ -333,7 +333,7 @@ Item {
                 text: qsTr("MATERIAL BAY %1").arg(filamentBayID)
                 Layout.alignment: Qt.AlignLeft | Qt.AlignTop
                 font.letterSpacing: 5
-                font.family: "Antenna"
+                font.family: defaultFont.name
                 font.weight: Font.Bold
                 font.pixelSize: 20
                 smooth: false
@@ -364,7 +364,7 @@ Item {
                     }
                     font.capitalization: Font.AllUppercase
                     font.letterSpacing: 4
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     font.pixelSize: 18
                     smooth: false
@@ -396,7 +396,7 @@ Item {
                             qsTr("%1KG REMAINING").arg(filamentQuantity) :
                             ""
                     font.letterSpacing: 4
-                    font.family: "Antenna"
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     font.pixelSize: 18
                     smooth: false
@@ -457,7 +457,7 @@ Item {
             anchors.topMargin: 0
             color: "#ffffff"
             font.pixelSize: 15
-            font.family: "Antennae"
+            font.family: defaultFont.name
         }
 
         Text {
@@ -469,7 +469,7 @@ Item {
             anchors.topMargin: 0
             color: "#ffffff"
             font.pixelSize: 15
-            font.family: "Antennae"
+            font.family: defaultFont.name
         }
     }
 }
