@@ -16,7 +16,7 @@ Item {
         font.letterSpacing: 2
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: 15
-        font.family: "Antennae"
+        font.family: defaultFont.name
         color: "#c9c9c9"
     }
 
@@ -30,7 +30,7 @@ Item {
         anchors.leftMargin: 70
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: 15
-        font.family: "Antennae"
+        font.family: defaultFont.name
         color: "#ffffff"
     }
 
@@ -43,7 +43,7 @@ Item {
         font.pixelSize: 15
         font.capitalization: Font.AllUppercase
         anchors.leftMargin: 70
-        font.family: "Antennae"
+        font.family: defaultFont.name
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: enabled_value.right
     }
@@ -57,7 +57,7 @@ Item {
         font.pixelSize: 15
         font.capitalization: Font.AllUppercase
         anchors.leftMargin: 70
-        font.family: "Antennae"
+        font.family: defaultFont.name
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: endstop_value.right
     }

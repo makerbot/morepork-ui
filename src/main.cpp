@@ -53,7 +53,8 @@ int main(int argc, char ** argv) {
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
     QDirIterator it(MOREPORK_ROOT_DIR "/fonts");
     while(it.hasNext()) {
-        if(QFileInfo(it.next()).suffix() == "otf") {
+        if(QFileInfo(it.next()).suffix() == "otf" ||
+           QFileInfo(it.next()).suffix() == "ttf") {
             QFontDatabase::addApplicationFont(it.fileInfo().absoluteFilePath());
         }
     }

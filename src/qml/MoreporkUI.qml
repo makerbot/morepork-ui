@@ -256,6 +256,11 @@ ApplicationWindow {
         return (bot.process.type != ProcessType.None)
     }
 
+    FontLoader {
+        id: defaultFont
+        name: "Antenna"
+    }
+
     Item {
         id: rootItem
         smooth: false
@@ -595,7 +600,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -668,7 +673,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -750,7 +755,7 @@ ApplicationWindow {
                         }
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 20
                     }
@@ -808,7 +813,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         lineHeight: 1.3
                     }
@@ -877,7 +882,7 @@ ApplicationWindow {
                         anchors.topMargin: 0
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.letterSpacing: 5
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 22
                     }
@@ -902,7 +907,7 @@ ApplicationWindow {
                         anchors.top: authImage.bottom
                         horizontalAlignment: Text.AlignLeft
                         font.weight: isAuthenticated ? Font.Bold : Font.Light
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         font.letterSpacing: isAuthenticated ? 3 : 1
                         font.capitalization: isAuthenticated ? Font.AllUppercase : Font.MixedCase
@@ -924,7 +929,7 @@ ApplicationWindow {
                             horizontalAlignment: Text.AlignLeft
                             font.weight: Font.Bold
                             font.capitalization: Font.AllUppercase
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.letterSpacing: 3
                             visible: !isAuthenticated
@@ -937,7 +942,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             horizontalAlignment: Text.AlignLeft
                             font.weight: Font.Light
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             font.letterSpacing: 1
                             visible: !skipAuthentication
@@ -995,7 +1000,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1041,7 +1046,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1131,7 +1136,7 @@ ApplicationWindow {
                         anchors.topMargin: 0
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.letterSpacing: 5
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 22
                     }
@@ -1148,7 +1153,7 @@ ApplicationWindow {
                         anchors.top: install_unsigned_fw_header_text.bottom
                         horizontalAlignment: Text.AlignHCenter
                         font.weight: Font.Light
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         font.letterSpacing: 3
                         font.capitalization: Font.MixedCase
@@ -1205,7 +1210,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1247,7 +1252,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1364,7 +1369,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1411,7 +1416,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1456,7 +1461,7 @@ ApplicationWindow {
                         text: viewReleaseNotes ? qsTr("SOFTWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP SOFTWARE UPDATE?") : qsTr("SOFTWARE UPDATE AVAILABLE")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 18
                     }
@@ -1479,7 +1484,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         lineHeight: 1.35
                         visible: !viewReleaseNotes
@@ -1507,7 +1512,7 @@ ApplicationWindow {
                                 Layout.fillWidth: true
                                 font.weight: Font.Light
                                 wrapMode: Text.WordWrap
-                                font.family: "Antenna"
+                                font.family: defaultFont.name
                                 font.pixelSize: 18
                                 lineHeight: 1.35
                             }
@@ -1527,7 +1532,7 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         visible: viewReleaseNotes ? false : true
 
@@ -1629,7 +1634,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1675,7 +1680,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1714,7 +1719,7 @@ ApplicationWindow {
                         text: qsTr("CLEAR BUILD PLATE")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 20
                     }
@@ -1728,7 +1733,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         lineHeight: 1.3
                     }
@@ -1922,7 +1927,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1955,7 +1960,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -1989,7 +1994,7 @@ ApplicationWindow {
                         anchors.topMargin: 90
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         lineHeight: 1.3
                         text: {
@@ -2116,7 +2121,7 @@ ApplicationWindow {
                         text: qsTr("EXTRUDERS ARE BEING PROGRAMMED...")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 20
                     }
@@ -2206,7 +2211,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -2247,7 +2252,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -2285,7 +2290,7 @@ ApplicationWindow {
                         text: qsTr("CANCEL PRINT")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 20
                     }
@@ -2299,7 +2304,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 18
                         lineHeight: 1.3
                     }
@@ -2376,7 +2381,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -2415,7 +2420,7 @@ ApplicationWindow {
                         text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 20
                     }
@@ -2558,7 +2563,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -2621,7 +2626,7 @@ ApplicationWindow {
                             Layout.fillWidth: false
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -2702,7 +2707,7 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                             font.letterSpacing: 3
                             font.weight: Font.Bold
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             font.pixelSize: 18
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -2794,7 +2799,7 @@ ApplicationWindow {
                         }
                         font.letterSpacing: 3
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 20
                     }
@@ -2867,7 +2872,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.pixelSize: 20
                         lineHeight: 1.35
                     }

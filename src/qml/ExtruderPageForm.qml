@@ -184,7 +184,7 @@ Item {
                     anchors.left: handle_top_lid_image.right
                     anchors.leftMargin: 50
                     font.letterSpacing: 2
-                    font.family: "Antennae"
+                    font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 21
                     lineHeight: 1.2
@@ -284,7 +284,7 @@ Item {
                         anchors.top: parent.top
                         anchors.topMargin: 50
                         font.letterSpacing: 2
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Bold
                         font.pixelSize: 21
                         lineHeight: 1.2
@@ -298,7 +298,7 @@ Item {
                         text: ""
                         anchors.top: main_instruction_text.bottom
                         anchors.topMargin: 25
-                        font.family: "Antennae"
+                        font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 18
                         lineHeight: 1.1
@@ -359,7 +359,7 @@ Item {
                             color: "#ffffff"
                             anchors.verticalCenter: parent.verticalCenter
                             font.pixelSize: 16
-                            font.family: "Antennae"
+                            font.family: defaultFont.name
                             smooth: false
                             antialiasing: false
                         }

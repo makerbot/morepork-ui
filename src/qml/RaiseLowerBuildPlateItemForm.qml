@@ -20,7 +20,7 @@ Item {
         anchors.bottomMargin: 50
         anchors.horizontalCenter: row.horizontalCenter
         font.weight: Font.Light
-        font.family: "Antennae"
+        font.family: defaultFont.name
         font.pixelSize: 20
     }
 
@@ -33,7 +33,7 @@ Item {
         anchors.bottom: row.top
         anchors.bottomMargin: 50
         font.weight: Font.Light
-        font.family: "Antennae"
+        font.family: defaultFont.name
         font.pixelSize: 20
     }
 
@@ -76,10 +76,11 @@ Item {
     ColumnLayout {
         id: columnLayout
         width: 100
-        height: 150
+        height: 250
         anchors.right: parent.right
         anchors.rightMargin: 100
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        anchors.topMargin: 100
         spacing: 50
 
         RoundedButton {

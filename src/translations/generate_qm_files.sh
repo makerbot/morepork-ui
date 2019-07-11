@@ -12,5 +12,5 @@
 # Edit this script to pass in the absolute 'lrelease' path for qt5 otherwise
 # the qt4 version will be used by default by 'qtchooser'
 
-lrelease -nounfinished *.ts
+lrelease *.ts
 
