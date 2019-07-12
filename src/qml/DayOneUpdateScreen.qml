@@ -20,6 +20,7 @@ DayOneUpdateScreenForm {
             else if(state == "download_to_usb_stick") {
                 storage.setStorageFileType(StorageFileType.Firmware)
                 storage.updateFirmwareFileList("?root_usb?")
+                firmwareUpdatePage.state = "select_firmware_file"
                 state = "usb_fw_file_list"
             }
             else if(state == "connect_to_wifi") {
@@ -103,7 +104,7 @@ DayOneUpdateScreenForm {
             // class to the model classes just for this purpose seems
             // unneccessary considering this is going to exist only in the
             // blocking fw for now.
-            if(bot.nachineType == MachineType.Fire) {
+            if(bot.machineType == MachineType.Fire) {
                 storage.setMachinePID(14)
             } else if(bot.machineType == MachineType.Lava) {
                 storage.setMachinePID(15)

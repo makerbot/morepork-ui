@@ -106,7 +106,7 @@ ApplicationWindow {
         if (bot.machineType == MachineType.Fire) {
             "Method"
         } else if (bot.machineType == MachineType.Lava) {
-            "Method X"
+            "MethodX"
         }
     }
 

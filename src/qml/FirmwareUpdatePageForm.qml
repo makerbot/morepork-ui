@@ -415,6 +415,7 @@ Item {
             PropertyChanges {
                 target: columnLayout
                 height: 150
+                visible: true
             }
 
             PropertyChanges {

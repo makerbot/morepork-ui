@@ -16,6 +16,7 @@ Item {
     property alias mouseArea_backArrow: mouseArea_backArrow
     property alias wifiPageDayOneUpdate: wifiPageDayOneUpdate
     property alias dayOneUpdatePagePopup: dayOneUpdatePagePopup
+    property alias firmwareUpdatePage: firmwareUpdatePage
 
     property bool isFirmwareUpdateProcess: bot.process.type == ProcessType.FirmwareUpdate
 
@@ -343,7 +344,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                text: "Visit MakerBot.com/"+ productName +"FW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
             }
 
             PropertyChanges {
@@ -453,7 +454,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                text: "Visit MakerBot.com/"+ productName +"FW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
                 visible: false
             }
 
@@ -482,7 +483,7 @@ Item {
             }
 
             PropertyChanges {
-                target: usbFirmwareList
+                target: firmwareUpdatePage
                 visible: true
             }
 
