@@ -298,6 +298,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, infoLidActivated, false)
     MODEL_PROP(int, infoTopBunkFanARPM, -999)
     MODEL_PROP(int, infoTopBunkFanBRPM, -999)
+    MODEL_PROP(QString, cameraState, "Unknown")
 
   protected:
     BotModel();

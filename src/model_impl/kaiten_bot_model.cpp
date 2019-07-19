@@ -36,6 +36,7 @@ class KaitenBotModel : public BotModel {
     void wifiUpdate(const Json::Value & result);
     void extChangeUpdate(const Json::Value & params);
     void spoolChangeUpdate(const Json::Value & spool_info);
+    void cameraStateUpdate(const Json::Value & state);
     void cloudServicesInfoUpdate(const Json::Value &result);
     void cancel();
     void pauseResumePrint(QString action);
@@ -346,6 +347,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<SpoolChangeNotification> m_spoolChange;
+
+    class CameraStateNotification : public JsonRpcNotification {
+      public:
+        CameraStateNotification(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->cameraStateUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<CameraStateNotification> m_cameraState;
 
     class UpdateSpoolInfoCallback : public JsonRpcCallback {
       public:
@@ -1049,7 +1061,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_spoolChange(new SpoolChangeNotification(this)),
         m_updateSpoolInfoCb(new UpdateSpoolInfoCallback(this)),
         m_cloudServicesInfoCb(new CloudServicesInfoCallback(this)),
-        m_setAnalyticsCb(new SetAnalyticsCallback(this)) {
+        m_setAnalyticsCb(new SetAnalyticsCallback(this)),
+        m_cameraState(new CameraStateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1067,6 +1080,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("system_time_notification", m_sysTimeNot);
     conn->jsonrpc.addMethod("extruder_change", m_extChange);
     conn->jsonrpc.addMethod("spool_change", m_spoolChange);
+    conn->jsonrpc.addMethod("camera_state", m_cameraState);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -1142,6 +1156,10 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
         }
     }
 #undef UPDATE_SPOOL_INFO
+}
+
+void KaitenBotModel::cameraStateUpdate(const Json::Value &state) {
+    UPDATE_STRING_PROP(cameraState, state["state"]);
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {

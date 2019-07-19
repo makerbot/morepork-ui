@@ -45,5 +45,12 @@ Item {
             label: qsTr("TOP BUNK FAN B RPM")
             value: bot.infoTopBunkFanBRPM
         }
+
+        AdvancedInfoElement {
+            id: cameraStateProperty
+            label: qsTr("CAMERA STATE")
+            value_anchors.leftMargin: value == "Unknown" ? 25 : -25
+            value: bot.cameraState
+        }
     }
 }
