@@ -5,6 +5,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 Item {
     id: loadUnloadForm
@@ -556,9 +557,27 @@ Item {
 
             PropertyChanges {
                 target: static_image
-                source: bayID == 1 ?
-                            "qrc:/img/extruder_1_heating.png" :
+                source: {
+                    if(bayID == 1) {
+                        switch(bot.extruderAType) {
+                        case ExtruderType.MK14:
+                            "qrc:/img/extruder_1_heating.png"
+                            break;
+                        case ExtruderType.MK14_HOT:
+                            "qrc:/img/extruder_1XA_heating.png"
+                            break;
+                        }
+                    } else if(bayID == 2) {
+                        switch(bot.extruderBType) {
+                        case ExtruderType.MK14:
                             "qrc:/img/extruder_2_heating.png"
+                            break;
+                        case ExtruderType.MK14_HOT:
+                            "qrc:/img/extruder_2XA_heating.png"
+                            break;
+                        }
+                    }
+                }
             }
 
             PropertyChanges {

@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 Item {
     width: 800
@@ -390,9 +391,27 @@ Item {
 
             PropertyChanges {
                 target: errorImage
-                source: bot.extruderAJammed ?
-                            "qrc:/img/error_filament_jam_1.png" :
+                source: {
+                    if(bot.extruderAJammed) {
+                        switch(bot.extruderAType) {
+                        case ExtruderType.MK14:
+                            "qrc:/img/error_filament_jam_1.png"
+                            break;
+                        case ExtruderType.MK14_HOT:
+                            "qrc:/img/error_filament_jam_1XA.png"
+                            break;
+                        }
+                    } else if(bot.extruderBJammed) {
+                        switch(bot.extruderBType) {
+                        case ExtruderType.MK14:
                             "qrc:/img/error_filament_jam_2.png"
+                            break;
+                        case ExtruderType.MK14_HOT:
+                            "qrc:/img/error_filament_jam_2XA.png"
+                            break;
+                        }
+                    }
+                }
             }
 
             PropertyChanges {
