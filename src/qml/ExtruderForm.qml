@@ -112,7 +112,35 @@ Item {
 
             Text {
                 id: extruderID_text
-                text: extruderID
+                text: {
+                    if(extruderPresent) {
+                        switch(extruderID) {
+                        case 1:
+                            switch(bot.extruderAType) {
+                            case ExtruderType.MK14:
+                                "1"
+                                break;
+                            case ExtruderType.MK14_HOT:
+                                "1XA"
+                                break;
+                            }
+                            break;
+                        case 2:
+                            switch(bot.extruderBType) {
+                            case ExtruderType.MK14:
+                                "2"
+                                break;
+                            case ExtruderType.MK14_HOT:
+                                "2XA"
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                    else {
+                        extruderID
+                    }
+                }
                 anchors.top: parent.top
                 anchors.topMargin: -10
                 antialiasing: false
@@ -121,6 +149,7 @@ Item {
                 font.family: defaultFont.name
                 font.weight: Font.Bold
                 font.pixelSize: 36
+                font.letterSpacing: 2
             }
 
             Text {
@@ -132,7 +161,7 @@ Item {
                     if(extruderPresent) {
                         switch(extruderID) {
                         case 1:
-                            qsTr("MATERIAL EXTRUDER")
+                            qsTr("MODEL EXTRUDER")
                             break;
                         case 2:
                             qsTr("SUPPORT EXTRUDER")
