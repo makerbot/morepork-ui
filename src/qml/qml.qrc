@@ -156,5 +156,7 @@
         <file>FileOptionsPopupMenuForm.qml</file>
         <file>AnalyticsScreen.qml</file>
         <file>AnalyticsScreenForm.qml</file>
+        <file>WaitToCoolChamberScreen.qml</file>
+        <file>WaitToCoolChamberScreenForm.qml</file>
     </qresource>
 </RCC>
