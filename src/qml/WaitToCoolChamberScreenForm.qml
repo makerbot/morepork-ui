@@ -8,42 +8,33 @@ Item {
     height: 440
 
     property alias continueButton: continueButton
-    property bool timedOut: true
-    property var start: new Date()
+    property int timeLeftSeconds: 0
 
     Timer {
-        interval: 500; running: true; repeat: true
+        interval: 1000; running: true; repeat: true
         onTriggered: time.text = countdown().toString()
     }
 
     Text { id: time }
 
     function startTimer() {
-        start = new Date();
-        timedOut = false;
+        // Start 10 minute timer. 10 * 60 secs
+        timeLeftSeconds = 600;
     }
 
     function countdown() {
-        if (timedOut) {
+        if (timeLeftSeconds == 0) {
             return "00:00";
         }
 
-        var now = new Date();
-        var timeDiff = start.getTime() - now.getTime();
-        var seconds = Math.floor(timeDiff / 1000);
+        // countdown() gets called every second. Decrement timer's seconds left.
+        timeLeftSeconds--;
+
+        var seconds = timeLeftSeconds;
         var minutes = Math.floor(seconds / 60);
 
         minutes %= 60;
         seconds %= 60;
-        // countdown from 10 minutes
-        minutes = 10 + minutes;
-        seconds = 60 + seconds;
-
-        // Time out when we reach 00:00
-        if (minutes == 0 && seconds == 60) {
-            timedOut = true;
-            return "00:00";
-        }
 
         var minutes_str = minutes;
         var seconds_str = seconds;

@@ -28,7 +28,6 @@ Item {
     property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
     property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
     onTimeLeftMinutesChanged: updateTime()
-    readonly property int waitToCoolTemperature: 70
 
     function updateTime() {
         var currentTime = new Date()
@@ -65,25 +64,6 @@ Item {
         }
 
         doneByTimeString = endTime.toLocaleTimeString(Qt.locale().name)
-    }
-    property bool waitToCoolChamberScreenVisible: false
-    WaitToCoolChamberScreen {
-        id: waitToCoolChamber
-        z: 1
-        anchors.verticalCenterOffset: -20
-        visible: waitToCoolChamberScreenVisible
-        continueButton.button_mouseArea.onClicked: {
-            waitToCoolChamberScreenVisible = false
-        }
-    }
-
-    property bool isPrintDone: bot.process.stateType == ProcessStateType.Completed ||
-                               bot.process.stateType == ProcessStateType.Failed
-    onIsPrintDoneChanged: {
-        if(isPrintDone && bot.chamberCurrentTemp > waitToCoolTemperature) {
-            waitToCoolChamberScreenVisible = true
-            waitToCoolChamber.startTimer()
-        }
     }
 
     SwipeView {
