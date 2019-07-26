@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 Item {
     id: extruder
@@ -43,20 +44,6 @@ Item {
         }
     }
 
-    property bool extruderFilamentPresent: {
-        switch(extruderID) {
-        case 1:
-            bot.extruderAFilamentPresent
-            break;
-        case 2:
-            bot.extruderBFilamentPresent
-            break;
-        default:
-            false
-            break;
-        }
-    }
-
     onVisibleChanged: {
         if (visible) {
             bot.getToolStats(extruderID - 1);
@@ -84,18 +71,35 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 50
         source: {
-            switch(extruderID) {
-            case 1:
-                extruderPresent ? "qrc:/img/extruder_1_attached.png" :
-                                      "qrc:/img/extruder_not_attached.png"
-                break;
-            case 2:
-                extruderPresent ? "qrc:/img/extruder_2_attached.png" :
-                                      "qrc:/img/extruder_not_attached.png"
-                break;
-            default:
+            if(extruderPresent) {
+                switch(extruderID) {
+                case 1:
+                    switch(bot.extruderAType) {
+                        case ExtruderType.MK14:
+                            "qrc:/img/extruder_1_attached.png"
+                            break;
+                        case ExtruderType.MK14_HOT:
+                            "qrc:/img/extruder_1XA_attached.png"
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch(bot.extruderBType) {
+                        case ExtruderType.MK14:
+                            "qrc:/img/extruder_2_attached.png"
+                            break;
+                        case ExtruderType.MK14_HOT:
+                            "qrc:/img/extruder_2XA_attached.png"
+                            break;
+                    }
+                    break;
+                default:
+                    "qrc:/img/extruder_not_attached.png"
+                    break;
+                }
+
+            } else {
                 "qrc:/img/extruder_not_attached.png"
-                break;
             }
         }
         Item {
@@ -108,7 +112,35 @@ Item {
 
             Text {
                 id: extruderID_text
-                text: extruderID
+                text: {
+                    if(extruderPresent) {
+                        switch(extruderID) {
+                        case 1:
+                            switch(bot.extruderAType) {
+                            case ExtruderType.MK14:
+                                "1"
+                                break;
+                            case ExtruderType.MK14_HOT:
+                                "1XA"
+                                break;
+                            }
+                            break;
+                        case 2:
+                            switch(bot.extruderBType) {
+                            case ExtruderType.MK14:
+                                "2"
+                                break;
+                            case ExtruderType.MK14_HOT:
+                                "2XA"
+                                break;
+                            }
+                            break;
+                        }
+                    }
+                    else {
+                        extruderID
+                    }
+                }
                 anchors.top: parent.top
                 anchors.topMargin: -10
                 antialiasing: false
@@ -117,6 +149,7 @@ Item {
                 font.family: defaultFont.name
                 font.weight: Font.Bold
                 font.pixelSize: 36
+                font.letterSpacing: 2
             }
 
             Text {
@@ -128,7 +161,7 @@ Item {
                     if(extruderPresent) {
                         switch(extruderID) {
                         case 1:
-                            qsTr("MATERIAL EXTRUDER")
+                            qsTr("MODEL EXTRUDER")
                             break;
                         case 2:
                             qsTr("SUPPORT EXTRUDER")
@@ -280,7 +313,7 @@ Item {
                                 break;
                             }
                         }
-                        else if(extruderFilamentPresent) {
+                        else if(filamentPresent) {
                             qsTr("UNKNOWN\nMATERIAL")
                         }
                         else {

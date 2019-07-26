@@ -37,7 +37,9 @@
       	<file alias="confirm_extrusion_1.png">images/confirm_extrusion_1.png</file>
       	<file alias="confirm_extrusion_2.png">images/confirm_extrusion_2.png</file>
       	<file alias="extruder_1_heating.png">images/extruder_1_heating.png</file>
+	<file alias="extruder_1XA_heating.png">images/extruder_1XA_heating.png</file>
       	<file alias="extruder_2_heating.png">images/extruder_2_heating.png</file>
+	<file alias="extruder_2XA_heating.png">images/extruder_2XA_heating.png</file>
       	<file alias="change_filament.png">images/change_filament.png</file>
       	<file alias="close.png">images/close.png</file>
       	<file alias="directory_icon.png">images/directory_icon.png</file>
@@ -54,7 +56,9 @@
 	<file alias="sombrero_icon.png">images/sombrero_icon.png</file>
       	<file alias="usb_icon.png">images/usb_icon.png</file>
 	<file alias="extruder_1_attached.png">images/extruder_1_attached.png</file>
+	<file alias="extruder_1XA_attached.png">images/extruder_1XA_attached.png</file>
 	<file alias="extruder_2_attached.png">images/extruder_2_attached.png</file>
+	<file alias="extruder_2XA_attached.png">images/extruder_2XA_attached.png</file>
 	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
 	<file alias="extruder_left.png">images/extruder_left.png</file>
 	<file alias="extruder_right.png">images/extruder_right.png</file>
@@ -88,6 +92,7 @@
 	<file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
 	<file alias="icon_power.png">images/icon_power.png</file>
 	<file alias="calib_extruders.png">images/calib_extruders.png</file>
+	<file alias="calib_extruders_XA.png">images/calib_extruders_XA.png</file>
 	<file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
 	<file alias="calib_remove_build_plate.png">images/calib_remove_build_plate.png</file>
 	<file alias="calib_check_nozzles_clean.png">images/calib_check_nozzles_clean.png</file>
@@ -108,6 +113,7 @@
 	<file alias="attach_extruder_2_step1.gif">images/attach_extruder_2_step1.gif</file>
 	<file alias="attach_extruder_2_step2.gif">images/attach_extruder_2_step2.gif</file>
 	<file alias="attach_extruder_swivel_clips.gif">images/attach_extruder_swivel_clips.gif</file>
+	<file alias="attach_extruder_swivel_clips_XA.gif">images/attach_extruder_swivel_clips_XA.gif</file>
 	<file alias="file_no_preview.png">images/file_no_preview.png</file>
 	<file alias="remove_top_lid.png">images/remove_top_lid.png</file>
 	<file alias="makerbot_startup_splash.png">images/makerbot_startup_splash.png</file>
@@ -124,7 +130,9 @@
 	<file alias="error_oof_bay1.png">images/error_oof_bay1.png</file>
 	<file alias="error_oof_bay2.png">images/error_oof_bay2.png</file>
 	<file alias="error_filament_jam_1.png">images/error_filament_jam_1.png</file>
+	<file alias="error_filament_jam_1XA.png">images/error_filament_jam_1XA.png</file>
 	<file alias="error_filament_jam_2.png">images/error_filament_jam_2.png</file>
+	<file alias="error_filament_jam_2XA.png">images/error_filament_jam_2XA.png</file>
 	<file alias="error_oof_extruder1.png">images/error_oof_extruder1.png</file>
 	<file alias="error_oof_extruder2.png">images/error_oof_extruder2.png</file>
 	<file alias="error_chamber_fan_failure.png">images/error_chamber_fan_failure.png</file>
