@@ -9,25 +9,34 @@ Item {
 
     property alias continueButton: continueButton
     property int timeLeftSeconds: 0
+    readonly property int minutesToCountDown: 10
 
     Timer {
-        interval: 1000; running: true; repeat: true
+        id: countdownTimer
+        interval: 1000; running: false; repeat: true
         onTriggered: time.text = countdown().toString()
     }
 
-    Text { id: time }
+    Text {
+        id: time
+        text: minutesToCountDown+":00"
+    }
 
     function startTimer() {
-        // Start 10 minute timer. 10 * 60 secs
-        timeLeftSeconds = 600;
+        timeLeftSeconds = minutesToCountDown * 60;
+        countdownTimer.start()
     }
 
     function countdown() {
+        //countdown() is called every second. Timer gets started
+        // when startTimer() gets called and stops when timeLeftSeconds
+        // decrements to zero.
+
         if (timeLeftSeconds == 0) {
-            return "00:00";
+            countdownTimer.stop()
+            return "00:00"
         }
 
-        // countdown() gets called every second. Decrement timer's seconds left.
         timeLeftSeconds--;
 
         var seconds = timeLeftSeconds;
