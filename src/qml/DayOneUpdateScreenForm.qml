@@ -241,7 +241,7 @@ Item {
             font.family: "Antennae"
             font.pixelSize: 18
             font.weight: Font.Light
-            text: "Follow these steps to set up your\n" + productName + " Performance 3D Printer."
+            text: "Follow these steps to set up your\nMethod X Performance 3D Printer."
             lineHeight: 1.2
             opacity: 1.0
         }
@@ -344,7 +344,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "Visit MakerBot.com/"+ productName +"FW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                text: "Visit MakerBot.com/MethodXFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
             }
 
             PropertyChanges {
@@ -454,7 +454,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle
-                text: "Visit MakerBot.com/"+ productName +"FW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
+                text: "Visit MakerBot.com/MethodXFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer."
                 visible: false
             }
 

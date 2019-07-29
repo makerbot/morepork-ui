@@ -102,14 +102,6 @@ ApplicationWindow {
         }
     }
 
-    property string productName: {
-        if (bot.machineType == MachineType.Fire) {
-            "Method"
-        } else if (bot.machineType == MachineType.Lava) {
-            "MethodX"
-        }
-    }
-
     Timer {
         id: authTimeOut
         onTriggered: {
