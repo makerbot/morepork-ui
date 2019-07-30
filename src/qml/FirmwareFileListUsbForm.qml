@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: element
@@ -52,9 +53,17 @@ Item {
             color: "#ffffff"
             font.family: "Antennae"
             font.weight: Font.Light
-            text: qsTr("Choose another folder or visit MakerBot.com/MethodFW to\n" +
+            text: {
+                if (bot.machineType == MachineType.Fire) {
+                    qsTr("Choose another folder or visit MakerBot.com/MethodFW to\n" +
                         "download the latest firmware. Drag the file onto a usb\n" +
                         "stick and insert it into the front of the printer.")
+                } else if (bot.machineType == MachineType.Lava) {
+                    qsTr("Choose another folder or visit MakerBot.com/MethodXFW to\n" +
+                        "download the latest firmware. Drag the file onto a usb\n" +
+                        "stick and insert it into the front of the printer.")
+                }
+            }
             anchors.top: parent.bottom
             anchors.topMargin: 15
             horizontalAlignment: Text.AlignHCenter
