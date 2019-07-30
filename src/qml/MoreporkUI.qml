@@ -1776,11 +1776,11 @@ ApplicationWindow {
                             if (bot.machineType == MachineType.Fire) {
                                 // V1 printers support only mk14 extruders.
                                 if (wrongExtruderPopup.modelExtWrong) {
-                                    qsTr("Please insert a Model 1 Performance Extruder "+
+                                    qsTr("Please insert a Model 1A Performance Extruder "+
                                          "into slot 1\nto continue attaching the "+
                                          "extruders.")
                                 } else if (wrongExtruderPopup.supportExtWrong) {
-                                    qsTr("Please insert a Support 2 Performance Extruder "+
+                                    qsTr("Please insert a Support 2A Performance Extruder "+
                                          "into slot 2\nto continue attaching the "+
                                          "extruders. Currently only model\nand support "+
                                          "printing is supported.")
@@ -1790,11 +1790,11 @@ ApplicationWindow {
                             } else if (bot.machineType == MachineType.Lava) {
                                 // Hot bot (V2) supports both mk14 and mk14_hot extruders.
                                 if (wrongExtruderPopup.modelExtWrong) {
-                                    qsTr("Please insert a Model 1 or Model 1XA Performance\n" +
+                                    qsTr("Please insert a Model 1A or Model 1XA Performance\n" +
                                          "Extruder into slot 1 to continue attaching the " +
                                          "extruders.")
                                 } else if (wrongExtruderPopup.supportExtWrong) {
-                                    qsTr("Please insert a Support 2 or Support 2XA Performance\n" +
+                                    qsTr("Please insert a Support 2A or Support 2XA Performance\n" +
                                          "Extruder into slot 2 to continue attaching the extruders.\n" +
                                          "Currently only model and support printing is supported. ")
                                 } else {
