@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: item1
@@ -445,7 +446,15 @@ Item {
 
             PropertyChanges {
                 target: sub_status_text
-                text: qsTr("Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
+                text: {
+                    if (bot.machineType == MachineType.Fire) {
+                        qsTr("Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
+
+                    } else if (bot.machineType == MachineType.Lava) {
+                        qsTr("Visit MakerBot.com/MethodXFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
+                    }
+
+                }
                 anchors.topMargin: 100
             }
 

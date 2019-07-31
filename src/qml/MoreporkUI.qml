@@ -262,6 +262,14 @@ ApplicationWindow {
         name: "Antenna"
     }
 
+    property string productName: {
+        if (bot.machineType == MachineType.Fire) {
+            "Method"
+        } else if (bot.machineType == MachineType.Lava) {
+            "Method X"
+        }
+    }
+
     Item {
         id: rootItem
         smooth: false
