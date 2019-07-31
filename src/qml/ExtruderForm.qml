@@ -118,7 +118,7 @@ Item {
                         case 1:
                             switch(bot.extruderAType) {
                             case ExtruderType.MK14:
-                                "1"
+                                "1A"
                                 break;
                             case ExtruderType.MK14_HOT:
                                 "1XA"
@@ -128,7 +128,7 @@ Item {
                         case 2:
                             switch(bot.extruderBType) {
                             case ExtruderType.MK14:
-                                "2"
+                                "2A"
                                 break;
                             case ExtruderType.MK14_HOT:
                                 "2XA"

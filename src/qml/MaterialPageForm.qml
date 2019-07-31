@@ -5,6 +5,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: materialPage
@@ -676,11 +677,21 @@ Item {
                 Text {
                     id: title_text_mat_warning_popup
                     color: "#cbcbcb"
-                    text: isMaterialMismatch ?
-                              (loadUnloadFilamentProcess.currentActiveTool == 1 ?
-                                  qsTr("MODEL MATERIAL REQUIRED") :
-                                  qsTr("SUPPORT MATERIAL REQUIRED")) :
-                                  qsTr("UNKNOWN MATERIAL WARNING")
+                    text: {
+                        if(isMaterialMismatch) {
+                            if (loadUnloadFilamentProcess.currentActiveTool == 1) {
+                                if (bot.machineType == MachineType.Lava && materialPage.bay1.filamentMaterialName == "ABS") {
+                                    qsTr("UNSUPPORTED MATERIAL DETECTED")
+                                } else {
+                                    qsTr("MODEL MATERIAL REQUIRED")
+                                }
+                            } else if (loadUnloadFilamentProcess.currentActiveTool == 2) {
+                                qsTr("SUPPORT MATERIAL REQUIRED")
+                            }
+                        } else {
+                            qsTr("UNKNOWN MATERIAL WARNING")
+                        }
+                    }
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: defaultFont.name
@@ -696,19 +707,27 @@ Item {
                             if(loadUnloadFilamentProcess.currentActiveTool == 1) {
                                 switch (bot.extruderAType) {
                                 case ExtruderType.MK14:
-                                    qsTr("Only model materials PLA, Tough and PETG are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                    // This is a special case when V1 extruder is being used on
+                                    // a V2 printer and the user tries to load a V2 hot extruder
+                                    // specific material. This warning can be made generic for
+                                    // all such materials.
+                                    if (bot.machineType == MachineType.Lava && materialPage.bay1.filamentMaterialName == "ABS") {
+                                        qsTr("Only PLA, Tough and PETG model material are compatible with a Model 1A Extruder. Insert a Model 1XA Extruder to print ABS")
+                                    } else {
+                                        qsTr("Only PLA, Tough and PETG model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                    }
                                     break;
                                 case ExtruderType.MK14_HOT:
-                                    qsTr("Only model material ABS is compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                    qsTr("Only ABS model material is compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
                                     break;
                                 }
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
                                 switch (bot.extruderBType) {
                                 case ExtruderType.MK14:
-                                    qsTr("Only support material PVA is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
+                                    qsTr("Only PVA support material is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
                                     break;
                                 case ExtruderType.MK14_HOT:
-                                    qsTr("Only support material SR-30 is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
+                                    qsTr("Only SR-30 support material is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
                                     break;
                                 }
                             }
