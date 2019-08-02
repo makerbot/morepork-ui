@@ -34,6 +34,7 @@ Item {
 
         if (timeLeftSeconds == 0) {
             countdownTimer.stop()
+            mainItem.visible = false
             return "00:00"
         }
 
