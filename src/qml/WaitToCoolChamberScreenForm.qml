@@ -10,6 +10,7 @@ Item {
     property alias continueButton: continueButton
     property int timeLeftSeconds: 0
     readonly property int minutesToCountDown: 10
+    property bool waitToCoolChamberScreenVisible: false
 
     Timer {
         id: countdownTimer
@@ -34,7 +35,7 @@ Item {
 
         if (timeLeftSeconds == 0) {
             countdownTimer.stop()
-            mainItem.visible = false
+            waitToCoolChamberScreenVisible = false
             return "00:00"
         }
 

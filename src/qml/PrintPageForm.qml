@@ -132,7 +132,6 @@ Item {
         }
     }
 
-    property bool waitToCoolChamberScreenVisible: false
     WaitToCoolChamberScreen {
         id: waitToCoolChamber
         z: 1
@@ -148,7 +147,7 @@ Item {
                                bot.process.stateType == ProcessStateType.Cancelling
     onIsPrintDoneChanged: {
         if(isPrintDone && bot.chamberCurrentTemp > waitToCoolTemperature) {
-            waitToCoolChamberScreenVisible = true
+            waitToCoolChamber.waitToCoolChamberScreenVisible = true
             waitToCoolChamber.startTimer()
         }
     }
