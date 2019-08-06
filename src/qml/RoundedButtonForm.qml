@@ -18,7 +18,7 @@ Rectangle {
     property bool forceButtonWidth: false
 
     id: button_rectangle
-    width: forceButtonWidth ? buttonWidth : (button_text.width + 30)
+    width: forceButtonWidth ? buttonWidth : (button_text.contentWidth + 35)
     height: 40
     color: is_button_transparent ? "#00000000" : button_not_pressed_color
     radius: 8
