@@ -5,6 +5,7 @@ import ProcessTypeEnum 1.0
 import ConnectionStateEnum 1.0
 import FreStepEnum 1.0
 import MachineTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 ApplicationWindow {
     id: rootAppWindow
@@ -259,6 +260,14 @@ ApplicationWindow {
     FontLoader {
         id: defaultFont
         name: "Antenna"
+    }
+
+    property string productName: {
+        if (bot.machineType == MachineType.Fire) {
+            "Method"
+        } else if (bot.machineType == MachineType.Lava) {
+            "Method X"
+        }
     }
 
     Item {
@@ -1775,11 +1784,11 @@ ApplicationWindow {
                             if (bot.machineType == MachineType.Fire) {
                                 // V1 printers support only mk14 extruders.
                                 if (wrongExtruderPopup.modelExtWrong) {
-                                    qsTr("Please insert a Model 1 Performance Extruder "+
+                                    qsTr("Please insert a Model 1A Performance Extruder "+
                                          "into slot 1\nto continue attaching the "+
                                          "extruders.")
                                 } else if (wrongExtruderPopup.supportExtWrong) {
-                                    qsTr("Please insert a Support 2 Performance Extruder "+
+                                    qsTr("Please insert a Support 2A Performance Extruder "+
                                          "into slot 2\nto continue attaching the "+
                                          "extruders. Currently only model\nand support "+
                                          "printing is supported.")
@@ -1789,14 +1798,13 @@ ApplicationWindow {
                             } else if (bot.machineType == MachineType.Lava) {
                                 // Hot bot (V2) supports both mk14 and mk14_hot extruders.
                                 if (wrongExtruderPopup.modelExtWrong) {
-                                    qsTr("Please insert a Model 1 Performance Extruder " +
-                                         "or Model 1 ABS\nPerformance Extruder into slot 1 " +
-                                         "to continue attaching the\nextruders.")
+                                    qsTr("Please insert a Model 1A or Model 1XA Performance\n" +
+                                         "Extruder into slot 1 to continue attaching the " +
+                                         "extruders.")
                                 } else if (wrongExtruderPopup.supportExtWrong) {
-                                    qsTr("Please insert a Support 2 Performance Extruder "+
-                                         "or Support 2\nSR-30 Performance Extruder into slot " +
-                                         "2 to continue attaching\nthe extruders. Currently only" +
-                                         " model and support printing is\nsupported.")
+                                    qsTr("Please insert a Support 2A or Support 2XA Performance\n" +
+                                         "Extruder into slot 2 to continue attaching the extruders.\n" +
+                                         "Currently only model and support printing is supported. ")
                                 } else {
                                     ""
                                 }

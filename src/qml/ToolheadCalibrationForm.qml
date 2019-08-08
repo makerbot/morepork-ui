@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 Item {
     id: calibrationPage
@@ -67,7 +68,23 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/calib_extruders.png"
+        source: {
+            // At places where images of both the extruders are displayed
+            // together we just check the model extruder since the support
+            // extruder has to correspond to it for the printer to be usable,
+            // to determine which version of extruders to display as a set.
+            switch(bot.extruderAType) {
+            case ExtruderType.MK14:
+                "qrc:/img/calib_extruders.png"
+                break;
+            case ExtruderType.MK14_HOT:
+                "qrc:/img/calib_extruders_XA.png"
+                break;
+            default:
+                "qrc:/img/calib_extruders.png"
+                break;
+            }
+        }
         opacity: 1.0
     }
 

@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 Item {
     id: extruderPage
@@ -555,7 +556,23 @@ Item {
 
                     PropertyChanges {
                         target: attach_extruder_image
-                        source: "qrc:/img/attach_extruder_swivel_clips.gif"
+                        source: {
+                            // At places where images of both the extruders are displayed
+                            // together we just check the model extruder since the support
+                            // extruder has to correspond to it for the printer to be usable,
+                            // to determine which version of extruders to display as a set.
+                            switch(bot.extruderAType) {
+                            case ExtruderType.MK14:
+                                "qrc:/img/attach_extruder_swivel_clips.gif"
+                                break;
+                            case ExtruderType.MK14_HOT:
+                                "qrc:/img/attach_extruder_swivel_clips_XA.gif"
+                                break;
+                            default:
+                                "qrc:/img/attach_extruder_swivel_clips.gif"
+                                break;
+                            }
+                        }
                         opacity: 1
                     }
 

@@ -51,7 +51,7 @@ Item {
         Text {
             id: subtitle_text
             color: "#cbcbcb"
-            text: qsTr("Follow these steps to set up your\nMethod Performance 3D Printer.")
+            text: qsTr("Follow these steps to set up your\n%1 Performance 3D Printer.").arg(productName)
             anchors.top: title_text.bottom
             anchors.topMargin: 20
             font.family: defaultFont.name
@@ -335,7 +335,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: qsTr("Update the Method’s printer software for the most up to date\nfeatures and quality.")
+                text: qsTr("Update the %1's printer software for the most up to date\nfeatures and quality.").arg(productName)
             }
 
             PropertyChanges {

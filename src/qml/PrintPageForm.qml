@@ -42,7 +42,7 @@ Item {
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
     property alias printErrorScreen: errorScreen
-
+    readonly property int waitToCoolTemperature: 70
     property bool isFileCopying: storage.fileIsCopying
 
     onIsFileCopyingChanged: {
@@ -129,6 +129,26 @@ Item {
             print_time = timeElapsed.getDate() != 31 ? timeElapsed.getDate() + "D " + timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
                                                        timeElapsed.getHours() != 0 ? timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
                                                                                      timeElapsed.getMinutes() + "M"
+        }
+    }
+
+    WaitToCoolChamberScreen {
+        id: waitToCoolChamber
+        z: 1
+        anchors.verticalCenterOffset: -20
+        visible: waitToCoolChamberScreenVisible
+        continueButton.button_mouseArea.onClicked: {
+            waitToCoolChamberScreenVisible = false
+        }
+    }
+
+    property bool isPrintDone: bot.process.stateType == ProcessStateType.Completed ||
+                               bot.process.stateType == ProcessStateType.Failed ||
+                               bot.process.stateType == ProcessStateType.Cancelling
+    onIsPrintDoneChanged: {
+        if(isPrintDone && bot.chamberCurrentTemp > waitToCoolTemperature) {
+            waitToCoolChamber.waitToCoolChamberScreenVisible = true
+            waitToCoolChamber.startTimer()
         }
     }
 
