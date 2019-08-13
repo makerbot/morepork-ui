@@ -255,9 +255,9 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
     MakerbotFileMetaReader file_meta_reader(kFileInfo);
     if(file_meta_reader.loadMetadata()) {
         auto &meta_data = file_meta_reader.meta_data_;
-        QString material_name_a = QString::fromStdString(meta_data->material[1]);
+        QString material_name_a = QString::fromStdString(meta_data->material[0]);
         updateMaterialNames(material_name_a);
-        QString material_name_b = QString::fromStdString(meta_data->material[0]);
+        QString material_name_b = QString::fromStdString(meta_data->material[1]);
         updateMaterialNames(material_name_b);
         return
             // e.g. "/tmp/archive.tar.gz"
@@ -270,10 +270,12 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
                                                 // like baseName()
                   kFileInfo.lastRead(),
                   kFileInfo.isDir(),
-                  meta_data->extrusion_mass_g[1],
+                  (meta_data->extrusion_distance_mm[0] > 0.0),
+                  (meta_data->extrusion_distance_mm[1] > 0.0),
                   meta_data->extrusion_mass_g[0],
-                  meta_data->extruder_temperature[1],
+                  meta_data->extrusion_mass_g[1],
                   meta_data->extruder_temperature[0],
+                  meta_data->extruder_temperature[1],
                   meta_data->chamber_temperature,
                   meta_data->shells,
                   meta_data->layer_height,

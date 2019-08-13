@@ -2823,13 +2823,18 @@ ApplicationWindow {
                                 qsTr("Close the build chamber door to start the print.")
                             }
                             else if(printPage.startPrintNoFilament) {
-                                qsTr("There is no material detected in at least one of the extruders." +
-                                     " Please load material to start a print.")
+                                if (printPage.model_extruder_used && printPage.support_extruder_used) {
+                                    qsTr("There is no material detected in at least one of the extruders." +
+                                         " Please load material to start a print.")
+                                } else if (printPage.model_extruder_used && !printPage.support_extruder_used) {
+                                    qsTr("There is no material detected in the model extruder." +
+                                         " Please load material to start a print.")
+                                }
                             }
                             else if(printPage.startPrintMaterialMismatch) {
                                 qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
                                             printPage.print_model_material.toUpperCase()) +
-                                        (printPage.print_support_material == "" ?
+                                        (!printPage.support_extruder_used ?
                                             "." :
                                             (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
                                                 printPage.print_support_material.toUpperCase())) +
@@ -2849,7 +2854,7 @@ ApplicationWindow {
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
                                      printPage.print_model_material.toUpperCase()) +
-                                 ((printPage.print_support_material != "") ?
+                                 (printPage.support_extruder_used ?
                                             qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
                                                  printPage.print_support_material.toUpperCase()) :
                                             qsTr(".")) +
