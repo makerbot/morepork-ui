@@ -155,7 +155,7 @@ Item {
                     anchors.topMargin: 12
                     filamentBayID: 2
                     materialRequired: supportMaterialRequired
-                    visible: print_support_material != ""
+                    visible: support_extruder_used
                 }
 
                 RoundedButton {
@@ -349,8 +349,8 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: support_extruder_used
                         }
-
                     }
 
                     ColumnLayout {
@@ -436,6 +436,7 @@ Item {
                             font.letterSpacing: 3
                             font.pixelSize: 18
                             font.capitalization: Font.AllUppercase
+                            visible: support_extruder_used
                         }
                     }
                 }

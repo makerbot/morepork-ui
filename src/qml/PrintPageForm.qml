@@ -13,6 +13,8 @@ Item {
     property string file_name
     property string print_time
     property string print_material
+    property bool model_extruder_used
+    property bool support_extruder_used
     property string print_model_material
     property string print_support_material
     property string uses_support
@@ -156,22 +158,24 @@ Item {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
         file_name = file.fileBaseName
-        print_model_material = file.materialNameB
-        print_support_material = file.materialNameA
-        print_material = file.materialNameA == "" ? file.materialNameB :
-                                                    file.materialNameB + "+" + file.materialNameA
+        model_extruder_used = file.extruderUsedA
+        support_extruder_used = file.extruderUsedB
+        print_model_material = file.materialNameA
+        print_support_material = file.materialNameB
+        print_material = !file.extruderUsedB ? file.materialNameA :
+                                               file.materialNameA + "+" + file.materialNameB
         uses_support = file.usesSupport ? "YES" : "NO"
         uses_raft = file.usesRaft ? "YES" : "NO"
-        model_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
-                                                       (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
-        support_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
-                                                         (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
-        modelMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
-        supportMaterialRequired = (file.extrusionMassGramsA/1000).toFixed(3)
+        model_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
+                                                       (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
+        support_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
+                                                         (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
+        modelMaterialRequired = (file.extrusionMassGramsA/1000).toFixed(3)
+        supportMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
         layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
-        extruder_temp = file.extruderTempCelciusA == 0 ? file.extruderTempCelciusB + "C" :
-                                                         file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
+        extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
+                                              file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
         chamber_temp = file.chamberTempCelcius + "C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
@@ -181,6 +185,8 @@ Item {
         fileName = ""
         file_name = ""
         print_time = ""
+        model_extruder_used = false
+        support_extruder_used = false
         print_material = ""
         print_model_material = ""
         print_support_material = ""
@@ -339,6 +345,8 @@ Item {
                 print_time_: print_time
                 print_model_material_: print_model_material
                 print_support_material_: print_support_material
+                model_extruder_used_: model_extruder_used
+                support_extruder_used_: support_extruder_used
             }
 
             ErrorScreen {
@@ -442,12 +450,21 @@ Item {
                     filePrintTime.text: printTimeDay != 0 ?
                                             (printTimeDay + "D" + printTimeHr + "HR" + printTimeMin + "M") :
                                             (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
-                    fileMaterial.text: model.modelData.materialNameA == "" ?
-                                           model.modelData.materialNameB :
-                                           model.modelData.materialNameB + "+" + model.modelData.materialNameA
+                    fileMaterial.text: {
+                        if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
+                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                        } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
+                            model.modelData.materialNameA
+                        }
+                    }
                     materialError.visible: {
-                        ((model.modelData.materialNameB != materialPage.bay1.filamentMaterialName.toLowerCase()) ||
-                         (model.modelData.materialNameA != materialPage.bay2.filamentMaterialName.toLowerCase()))
+                        if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
+                            ((model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()) ||
+                             (model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase()))
+                        } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
+                            model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()
+                        }
+
                     }
                     onClicked: {
                         if(model.modelData.isDir) {
@@ -581,6 +598,7 @@ Item {
                     id: printInfo_supportMass
                     labelText: qsTr("Support")
                     dataText: support_mass
+                    visible: support_extruder_used
                 }
 
                 InfoItem {

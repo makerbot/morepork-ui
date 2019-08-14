@@ -15,6 +15,8 @@ Item {
     property string uses_support_
     property string uses_raft_
     property string print_time_
+    property bool model_extruder_used_
+    property bool support_extruder_used_
     property string print_model_material_
     property string print_support_material_
     property string printerName: bot.name
@@ -219,8 +221,10 @@ Item {
                             } else if(bot.process.stepStr == "transfer") {
                                 bot.process.printPercentage + "%"
                             } else if(bot.extruderATargetTemp > 0) {
-                                (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C\n").arg(bot.extruderATargetTemp) +
-                                 qsTr("%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp))
+                                (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderATargetTemp) +
+                                 support_extruder_used_ ?
+                                     qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp) :
+                                     "\n")
                             } else {
                                 (qsTr("%1 C").arg(bot.chamberCurrentTemp) + " | " + qsTr("%1 C").arg(bot.chamberTargetTemp))
                             }
@@ -429,6 +433,7 @@ Item {
                             font.weight: Font.Light
                             font.letterSpacing: 3
                             font.pixelSize: 18
+                            visible: support_extruder_used_
                         }
                     }
 
@@ -502,6 +507,7 @@ Item {
                             font.letterSpacing: 3
                             font.pixelSize: 18
                             font.capitalization: Font.AllUppercase
+                            visible: support_extruder_used_
                         }
                     }
                 }

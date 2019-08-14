@@ -29,7 +29,7 @@ PrintPageForm {
 
         var modelMaterialOK = false
         // Single extruder prints
-        if(print_support_material == "" && print_model_material != "") {
+        if(model_extruder_used && !support_extruder_used) {
             if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
                     print_model_material) {
                 startPrintMaterialMismatch = true
@@ -42,7 +42,7 @@ PrintPageForm {
         }
 
         // Dual extruder prints
-        if(print_support_material != "" && print_model_material != "") {
+        if(support_extruder_used && model_extruder_used) {
             if(print_model_material == "unknown" || materialPage.bay1.isUnknownMaterial) {
                 if(print_model_material == "unknown" && materialPage.bay1.isMaterialValid) {
                     startPrintUnknownSliceGenuineMaterial = true
@@ -99,11 +99,17 @@ PrintPageForm {
     }
 
     function startPrintFilamentCheck() {
-        if(!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent) {
+        if (model_extruder_used && support_extruder_used &&
+            (!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent)) {
             startPrintNoFilament = true
-            if(bot.process.stateType == ProcessStateType.Failed) {
-                bot.done("acknowledge_failure")
-            }
+        } else if (model_extruder_used && !support_extruder_used &&
+                   !bot.extruderAFilamentPresent) {
+            startPrintNoFilament = true
+        }
+        if(bot.process.stateType == ProcessStateType.Failed) {
+            bot.done("acknowledge_failure")
+        }
+        if (startPrintNoFilament) {
             return false
         }
         return true

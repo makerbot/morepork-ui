@@ -52,6 +52,8 @@ class PrintFileInfo : public QObject {
 
   // see morepork-libtinything/include/tinything/TinyThingReader.hh for a
   // complete list of the available meta items.
+  Q_PROPERTY(bool extruderUsedA READ extruderUsedA NOTIFY fileInfoChanged)
+  Q_PROPERTY(float extruderUsedB READ extruderUsedB NOTIFY fileInfoChanged)
   Q_PROPERTY(float extrusionMassGramsA READ extrusionMassGramsA NOTIFY fileInfoChanged)
   Q_PROPERTY(float extrusionMassGramsB READ extrusionMassGramsB NOTIFY fileInfoChanged)
   Q_PROPERTY(int extruderTempCelciusA READ extruderTempCelciusA NOTIFY fileInfoChanged)
@@ -70,6 +72,7 @@ class PrintFileInfo : public QObject {
   QString file_name_, file_path_, file_base_name_;
   QDateTime file_last_read_;
   bool is_dir_;
+  bool extruder_used_a_, extruder_used_b_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
   int extruder_temp_celcius_a_, extruder_temp_celcius_b_,
       chamber_temp_celcius_, num_shells_;
@@ -92,6 +95,8 @@ class PrintFileInfo : public QObject {
                   const QString &file_base_name,
                   const QDateTime &file_last_read,
                   const bool &is_dir,
+                  const bool extruder_used_a = false,
+                  const bool extruder_used_b = false,
                   const float extrusion_mass_grams_a = 0.0f,
                   const float extrusion_mass_grams_b = 0.0f,
                   const int extruder_temp_celcius_a = 0,
@@ -113,6 +118,8 @@ class PrintFileInfo : public QObject {
                   file_base_name_(file_base_name),
                   file_last_read_(file_last_read),
                   is_dir_(is_dir),
+                  extruder_used_a_(extruder_used_a),
+                  extruder_used_b_(extruder_used_b),
                   extrusion_mass_grams_a_(extrusion_mass_grams_a),
                   extrusion_mass_grams_b_(extrusion_mass_grams_b),
                   extruder_temp_celcius_a_(extruder_temp_celcius_a),
@@ -134,6 +141,8 @@ class PrintFileInfo : public QObject {
         file_base_name_ = rvalue.file_base_name_;
         file_last_read_ = rvalue.file_last_read_;
         is_dir_ = rvalue.is_dir_;
+        extruder_used_a_ = rvalue.extruder_used_a_;
+        extruder_used_b_ = rvalue.extruder_used_b_;
         extrusion_mass_grams_a_ = rvalue.extrusion_mass_grams_a_;
         extrusion_mass_grams_b_ = rvalue.extrusion_mass_grams_b_;
         extruder_temp_celcius_a_ = rvalue.extruder_temp_celcius_a_;
@@ -157,6 +166,8 @@ class PrintFileInfo : public QObject {
                 rvalue.file_base_name_,
                 rvalue.file_last_read_,
                 rvalue.is_dir_,
+                rvalue.extruder_used_a_,
+                rvalue.extruder_used_b_,
                 rvalue.extrusion_mass_grams_a_,
                 rvalue.extrusion_mass_grams_b_,
                 rvalue.extruder_temp_celcius_a_,
@@ -188,6 +199,12 @@ class PrintFileInfo : public QObject {
     }
     bool isDir() const {
         return is_dir_;
+    }
+    bool extruderUsedA() const {
+        return extruder_used_a_;
+    }
+    bool extruderUsedB() const {
+        return extruder_used_b_;
     }
     float extrusionMassGramsA() const {
         return extrusion_mass_grams_a_;
