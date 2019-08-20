@@ -47,14 +47,40 @@ MaterialPageForm {
         }
     }
 
-    function canLoadUnloadStart(extruderID) {
-        if(isExtruderPresent(extruderID) &&
-           (bot.process.type == ProcessType.None ||
-            (printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused))) {
-            return true
-        }
-        else {
+    function isExtruderFilamentPresent(extruderID) {
+        if(extruderID == 1) {
+            return bot.extruderAFilamentPresent
+        } else if(extruderID == 2) {
+            return bot.extruderBFilamentPresent
+        } else {
             return false
+        }
+    }
+
+    function canLoadUnloadStart(extruderID) {
+        if(!isExtruderPresent(extruderID)) {
+            // Can never load without an extruder
+            return false
+        } else if(bot.process.type == ProcessType.None) {
+            // Always allow loading while idle (material mismatch blocking occurs
+            // after starting the process)
+            return true
+        } else if(!printPage.isPrintProcess || !bot.process.stateType == ProcessStateType.Paused) {
+            // During a paused print is the only non-idle state that allows filament change
+            return false
+        } else if(isExtruderFilamentPresent(extruderID)) {
+            // Always allow purge and unload while paused
+            return true
+        } else {
+            // Disallow loading in any case where we would not start a print
+            var bay_material = ((extruderID == 1)? bay1 : bay2).filamentMaterialName.toLowerCase()
+            var print_material = (extruderID == 1)? printPage.print_model_material :
+                                                    printPage.print_support_material
+            if(print_material == "unknown") {
+                return true
+            } else {
+                return bay_material == print_material
+            }
         }
     }
 
