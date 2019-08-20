@@ -724,7 +724,7 @@ Item {
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
                                 switch (bot.extruderBType) {
                                 case ExtruderType.MK14:
-                                    qsTr("Only PVA support material is compatible in material bay 2. Insert MakerBot support material in material bay 2 to continue.")
+                                    qsTr("Only PVA support material is compatible in material bay 2. Insert PVA support material in material bay 2 to continue.")
                                     break;
                                 case ExtruderType.MK14_HOT:
                                     qsTr("Only SR-30 support material is compatible in material bay 2. Insert MakerBot SR-30 support material in material bay 2 to continue.")
