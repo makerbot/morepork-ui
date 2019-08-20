@@ -18,6 +18,7 @@ Item {
     property alias namePrinter: namePrinter
 
     property alias buttonWiFi: buttonWiFi
+    property alias koreaDFSScreen: koreaDFSScreen
 
     property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
     property alias signInPage: signInPage
@@ -424,6 +425,19 @@ Item {
 
             LanguageSelector {
                 id: languageSelectorPage
+            }
+        }
+
+        //settingsSwipeView.index = 10
+        Item {
+            id: koreaDFSScreenItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: false
+
+            KoreaDFSScreenForm {
+                id: koreaDFSScreen
             }
         }
     }
