@@ -270,6 +270,19 @@ ApplicationWindow {
         }
     }
 
+    // Machine/Kaiten doesn't evaluate extruder combos, they just
+    // check if an extruder is valid on the installed slot for that
+    // machine. So the 'tool_type_correct' flag cannot be used to
+    // show the extruder combo warning.
+    //
+    // This is required now to cover a specific case described
+    // in BW-4975 (https://makerbot.atlassian.net/browse/BW-4975)
+    // or atleast until single extruder support is launched to public?
+    property bool extruderComboMismatch: {
+        (bot.extruderAType == ExtruderType.MK14 && bot.extruderBType == ExtruderType.MK14_HOT) ||
+        (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14)
+    }
+
     Item {
         id: rootItem
         smooth: false
@@ -1765,7 +1778,7 @@ ApplicationWindow {
             property bool supportExtWrong: extruderBPresent &&
                                          !extruderBToolTypeCorrect
             id: wrongExtruderPopup
-            visible: modelExtWrong || supportExtWrong
+            visible: modelExtWrong || supportExtWrong || extruderComboMismatch
             disableUserClose: true
             popup_contents.contentItem: Item {
                 anchors.fill: parent
@@ -1781,7 +1794,12 @@ ApplicationWindow {
                     }
                     BodyText{
                         text: {
-                            if (bot.machineType == MachineType.Fire) {
+                            if (extruderComboMismatch) {
+                                qsTr("A Model 1XA Extruder can only be used with a " +
+                                     "Support 2XA Extruder.\nA Model 1A Extruder can " +
+                                     "only be used with a Support 2A Extruder.")
+                            }
+                            else if (bot.machineType == MachineType.Fire) {
                                 // V1 printers support only mk14 extruders.
                                 if (wrongExtruderPopup.modelExtWrong) {
                                     qsTr("Please insert a Model 1A Performance Extruder "+
