@@ -247,7 +247,6 @@ Item {
                 id: wifiPage
 
             }
-
         }
 
         //settingsSwipeView.index = 4

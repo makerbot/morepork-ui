@@ -97,8 +97,23 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: true
+
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                settingsSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(0)
+            }
 
             // When the bot is not connected to wifi and the user
             // performs a wifi scan. In this case a deep scan happens
