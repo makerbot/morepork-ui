@@ -487,8 +487,12 @@ Item {
                         bot.process.filamentBayAOOF ?
                              printPage.print_model_material.toUpperCase() :
                              printPage.print_support_material.toUpperCase()) +
-                        qsTr(". Open\nmaterial bay %1 and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds.").arg(
-                            bot.process.filamentBayAOOF ? qsTr("1") : qsTr("2"))
+                    qsTr(". Open\nmaterial bay %1 and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds.\n").arg(
+                        bot.process.filamentBayAOOF ? qsTr("1") : qsTr("2")) +
+                    qsTr("Then place a MakerBot %1 spool\nin the bay to load material.").arg(
+                        bot.process.filamentBayAOOF ?
+                             printPage.print_model_material.toUpperCase() :
+                             printPage.print_support_material.toUpperCase())
                 }
             }
 
@@ -585,7 +589,11 @@ Item {
                 target: errorMessageDescription
                 text: {
                     qsTr("Open material bay %1 and remove the\nempty material spool.").arg(
-                            bot.extruderAOOF ? qsTr("1") : qsTr("2"))
+                            bot.extruderAOOF ? qsTr("1") : qsTr("2")) +
+                    qsTr(" Then place a\nMakerBot %1 spool in the bay\nto load material.").arg(
+                        bot.extruderAOOF ?
+                             printPage.print_model_material.toUpperCase() :
+                             printPage.print_support_material.toUpperCase())
                 }
             }
 
