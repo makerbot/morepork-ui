@@ -474,7 +474,7 @@ void MoreporkStorage::updateMaterialNames(QString &name) {
         name = "petg";
     } else if(name == "sr30") {
         name = "sr-30";
-    } else if(name == "generic_model") {
+    } else if(name == "generic-model") {
         name = "unknown";
     }
 }
