@@ -9,7 +9,7 @@ Item {
 
     property alias continueButton: continueButton
     property int timeLeftSeconds: 0
-    readonly property int minutesToCountDown: 10
+    readonly property int minutesToCountDown: 15
     property bool waitToCoolChamberScreenVisible: false
 
     Timer {
