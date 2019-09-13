@@ -680,7 +680,9 @@ Item {
                     text: {
                         if(isMaterialMismatch) {
                             if (loadUnloadFilamentProcess.currentActiveTool == 1) {
-                                if (bot.machineType == MachineType.Lava && materialPage.bay1.filamentMaterialName == "ABS") {
+                                if (bot.machineType == MachineType.Lava &&
+                                        (materialPage.bay1.filamentMaterialName == "ABS" ||
+                                         materialPage.bay1.filamentMaterialName == "ASA")) {
                                     qsTr("UNSUPPORTED MATERIAL DETECTED")
                                 } else {
                                     qsTr("MODEL MATERIAL REQUIRED")
@@ -720,7 +722,7 @@ Item {
                                     }
                                     break;
                                 case ExtruderType.MK14_HOT:
-                                    qsTr("Only ABS model material is compatible in material bay 1. Insert MakerBot ABS model material in material bay 1 to continue.")
+                                    qsTr("Only ABS and ASA model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
                                     break;
                                 }
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
