@@ -711,8 +711,10 @@ Item {
                                     // a V2 printer and the user tries to load a V2 hot extruder
                                     // specific material. This warning can be made generic for
                                     // all such materials.
-                                    if (bot.machineType == MachineType.Lava && materialPage.bay1.filamentMaterialName == "ABS") {
-                                        qsTr("Only PLA, Tough and PETG model material are compatible with a Model 1A Extruder. Insert a Model 1XA Extruder to print ABS")
+                                    if (bot.machineType == MachineType.Lava &&
+                                        (materialPage.bay1.filamentMaterialName == "ABS" ||
+                                         materialPage.bay1.filamentMaterialName == "ASA")) {
+                                        qsTr("Only PLA, Tough and PETG model material are compatible with a Model 1A Extruder. Insert a Model 1XA Extruder to print ABS or ASA.")
                                     } else {
                                         qsTr("Only PLA, Tough and PETG model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
                                     }

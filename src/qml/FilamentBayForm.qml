@@ -212,6 +212,9 @@ Item {
         case 8:
             "SR-30"
             break;
+        case 9:
+            "ASA"
+            break;
         case 0:
         default:
             "UNKNOWN"
@@ -249,7 +252,10 @@ Item {
                 ["PLA", "TOUGH", "PETG"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS"]
+                ["ABS", "ASA"]
+                break;
+            default:
+                []
                 break;
             }
             break;
@@ -260,6 +266,9 @@ Item {
                 break;
             case ExtruderType.MK14_HOT:
                 ["SR-30"]
+                break;
+            default:
+                []
                 break;
             }
             break;
