@@ -159,11 +159,9 @@ ApplicationWindow {
         if(extrudersCalibrated) {
             extNotCalibratedPopup.close()
         }
-        else {
-            // For now we don't want users to see this popup because it may be
-            // erroneous and we are having trouble getting people to actually
-            // clean their extruders.
-            // extNotCalibratedPopup.open()
+        // Do not open popup in FRE
+        if (!extrudersCalibrated && isFreComplete) {
+            extNotCalibratedPopup.open()
         }
     }
 
