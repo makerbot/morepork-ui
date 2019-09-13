@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ExtruderTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 Item {
     id: filamentBayBaseItem
@@ -268,6 +269,20 @@ Item {
         }
     }
 
+    property string printMaterialName : {
+        switch(filamentBayID) {
+        case 1:
+            printPage.print_model_material
+            break;
+        case 2:
+            printPage.print_support_material
+            break;
+        default:
+            ""
+            break;
+        }
+    }
+
     MaterialIcon {
         id: materialIconLarge
         anchors.left: parent.left
@@ -352,7 +367,14 @@ Item {
                     id: materialColor_text
                     color: "#ffffff"
                     text: {
-                        if(spoolPresent) {
+                        if(printPage.isPrintProcess &&
+                           bot.process.stateType == ProcessStateType.Paused &&
+                           !extruderFilamentPresent &&
+                           !spoolPresent &&
+                           filamentMaterialName.toLowerCase() != printMaterialName) {
+                            qsTr("INSERT %1 TO CONTINUE").arg(printMaterialName)
+                        }
+                        else if(spoolPresent) {
                             filamentColorName
                         }
                         else if(extruderFilamentPresent) {

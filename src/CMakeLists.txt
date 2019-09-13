@@ -178,8 +178,14 @@ if(NOT ${QT_CREATOR_BUILD})
     install(FILES ${QM_FILES}
         DESTINATION "${ROOT_INSTALL_DIR}/usr/share/morepork_ui/translations")
 
-    install(DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints"
-	    DESTINATION "${ROOT_INSTALL_DIR}/usr")
+    install(
+        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/fire/"
+	    DESTINATION
+            "${CMAKE_INSTALL_PREFIX}/per_machine/fire/rootfs/usr/test_prints")
+    install(
+        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/lava/"
+	    DESTINATION
+            "${CMAKE_INSTALL_PREFIX}/per_machine/lava/rootfs/usr/test_prints")
 endif()
 
 # Read qml qrc file, parse out all qml file names, and install them
