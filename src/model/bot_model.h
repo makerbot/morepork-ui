@@ -24,6 +24,7 @@ class BotModel : public BaseModel {
 
     // MOREPORK_QML_ENUM
     enum ExtruderType {
+        NONE,
         MK14,
         MK14_HOT
     };
@@ -114,8 +115,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, isInstallUnsignedFwRequestPending, false)
     // TODO(praveen): Would be good to move these extruder
     //                properties to it's own sub model.
-    MODEL_PROP(ExtruderType, extruderAType, MK14)
-    MODEL_PROP(ExtruderType, extruderBType, MK14)
+    MODEL_PROP(ExtruderType, extruderAType, NONE)
+    MODEL_PROP(ExtruderType, extruderBType, NONE)
     MODEL_PROP(bool, updatingExtruderFirmware, false)
     MODEL_PROP(int, extruderFirmwareUpdateProgressA, 0)
     MODEL_PROP(int, extruderFirmwareUpdateProgressB, 0)

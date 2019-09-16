@@ -51,10 +51,27 @@ ErrorScreenForm {
             if (state == "print_lid_open_error" ||
                state == "print_door_open_error" ||
                state == "filament_jam_error" ||
-               state == "filament_bay_oof_error" ||
                state == "extruder_oof_error_state1") {
                 bot.process.stateType != ProcessStateType.Paused &&
                 bot.process.stateType != ProcessStateType.Failed
+            }
+            else if (state == "filament_bay_oof_error" ||
+                     state == "extruder_oof_error_state2") {
+                // Loading can directly be started from these error
+                // screens so use the same material matching check
+                // as in the material page when trying to load mid-
+                // print. Purging which is an option in the
+                // filament jam error screen is just loading and can
+                // be started without any material matching check.
+
+                // Disable load button until the printer isn't completely
+                // paused (auto-unloading) or when there is no correct
+                // material spool on the bay for the paused print.
+                (bot.process.stateType != ProcessStateType.Paused ||
+                (bot.process.stateType == ProcessStateType.Paused &&
+                  (bot.process.filamentBayAOOF || bot.extruderAOOF ?
+                      printPage.print_model_material != materialPage.bay1.filamentMaterialName.toLowerCase() :
+                      printPage.print_support_material != materialPage.bay2.filamentMaterialName.toLowerCase())))
             }
             else if (state == "calibration_failed") {
                 bot.process.type != ProcessType.None
@@ -66,6 +83,14 @@ ErrorScreenForm {
 
         button_mouseArea {
             onClicked: {
+                // Some errors have multiple instructional screens
+                // so the button in the first of such screens shouldn't
+                // clear the error but just move to the following screens.
+                // Add all such intermediate screens to this if condition.
+                if(state != "extruder_oof_error_state1") {
+                    acknowledgeError()
+                }
+
                 if(state == "print_lid_open_error" ||
                         state == "print_door_open_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
@@ -133,7 +158,6 @@ ErrorScreenForm {
                 else if(state == "toolhead_disconnect") {
                     // just clear the error
                 }
-                acknowledgeError()
             }
         }
     }
