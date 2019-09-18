@@ -74,6 +74,7 @@ class ProcessModel : public BaseModel {
         HeaterNotReachingTemp,
         BadHESCalibrationFail,
         ExtruderOutOfFilament,
+        IncompatibleSlice,
         OtherError
     };
 
