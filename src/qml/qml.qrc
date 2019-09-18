@@ -158,5 +158,7 @@
         <file>AnalyticsScreenForm.qml</file>
         <file>WaitToCoolChamberScreen.qml</file>
         <file>WaitToCoolChamberScreenForm.qml</file>
+        <file>KoreaDFSScreen.qml</file>
+        <file>KoreaDFSScreenForm.qml</file>
     </qresource>
 </RCC>

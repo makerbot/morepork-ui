@@ -39,6 +39,7 @@ void msgHandler(QtMsgType type,
 #include "storage/storage.h"
 #include "settings_interface/settings_interface.h"
 #include "storage/disk_manager.h"
+#include "dfs/dfs_settings.h"
 
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
@@ -65,6 +66,7 @@ int main(int argc, char ** argv) {
     FreTracker fre_tracker;
     SettingsInterface settings;
     DiskManager disk_manager;
+    DFSSettings dfs_settings;
 
     QLocale::setDefault(QLocale(settings.getLanguageCode()));
 
@@ -77,6 +79,7 @@ int main(int argc, char ** argv) {
     engine.rootContext()->setContextProperty("fre", (QObject*)&fre_tracker);
     engine.rootContext()->setContextProperty("settings", (QObject*)&settings);
     engine.rootContext()->setContextProperty("diskman", (QObject*)&disk_manager);
+    engine.rootContext()->setContextProperty("dfs", (QObject*)&dfs_settings);
 
     QScopedPointer<Logger, QScopedPointerDeleteLater> log(MOREPORK_LOGGER);
     engine.rootContext()->setContextProperty("log", log.data());
