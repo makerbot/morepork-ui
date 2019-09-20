@@ -108,6 +108,11 @@ Item {
                     state = "chamber_fan_failure"
                 }
                 break;
+            case ErrorType.IncompatibleSlice:
+                if(lastReportedProcessType == ProcessType.Print) {
+                    state = "incompatible_slice"
+                }
+                break;
             case ErrorType.NoFilamentAtExtruder:
             case ErrorType.OtherError:
                 state = "generic_error"
@@ -177,6 +182,7 @@ Item {
                 anchors.top: errorMessageTitle.bottom
                 anchors.topMargin: 20
                 font.family: defaultFont.name
+                font.weight: Font.Light
                 font.pixelSize: 18
                 lineHeight: 1.2
                 color: "#e8e8e8"
@@ -758,7 +764,7 @@ Item {
 
             PropertyChanges {
                 target: errorMessageContainer
-                anchors.verticalCenterOffset: -20
+                anchors.verticalCenterOffset: -10
             }
         },
 
@@ -844,6 +850,31 @@ Item {
             PropertyChanges {
                 target: button2
                 visible: false
+            }
+        },
+
+        State {
+            name: "incompatible_slice"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: qsTr("INCOMPATIBLE\nPRINT FILE")
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: qsTr("This .Makerbot was prepared for\na different type of printer. Please\nexport it again for this printer type.\nError %1").arg(lastReportedErrorCode)
+            }
+
+            PropertyChanges {
+                target: button1
+                label: qsTr("OK")
+            }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: -15
             }
         }
     ]

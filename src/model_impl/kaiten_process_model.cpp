@@ -227,6 +227,9 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             case 1041:
                 errorTypeSet(ErrorType::ExtruderOutOfFilament);
                 break;
+            case 1049:
+                errorTypeSet(ErrorType::IncompatibleSlice);
+                break;
             default:
                 errorTypeSet(ErrorType::OtherError);
                 break;
