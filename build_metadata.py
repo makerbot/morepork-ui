@@ -7,34 +7,34 @@ else:
     dependencies = [
         artifactory_utils.ArtifactSelector(
             project="Toolchain-Release",
-            revision="ReleaseMorepork0.59",
+            revision="develop",
             version="^4.6",
             debug=False,
             stable_required=True),
         artifactory_utils.ArtifactSelector(
             project="morepork-build-root",
-            revision="HotfixMorepork1.3.1",
+            revision="morepork",
             debug=False,
             stable_required=True),
         artifactory_utils.ArtifactSelector(
             project="morepork-mbcoreutils",
-            revision="ReleaseMorepork1.3",
+            revision="develop",
             version="^4.0",
             debug=False,
             stable_required=True),
         artifactory_utils.ArtifactSelector(
             project="morepork-json-cpp",
-            revision="ReleaseMorepork0.59",
+            revision="develop",
             debug=False,
             stable_required=True),
         artifactory_utils.ArtifactSelector(
             project="morepork-jsonrpc",
-            revision="ReleaseMorepork0.59",
+            revision="develop",
             debug=False,
             stable_required=True),
         artifactory_utils.ArtifactSelector(
             project="morepork-libtinything",
-            revision="ReleaseMorepork1.4",
+            revision="develop",
             debug=False,
             stable_required=True),
     ]
