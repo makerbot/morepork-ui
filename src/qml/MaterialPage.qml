@@ -270,11 +270,7 @@ MaterialPageForm {
         cancelLoadUnloadPopup.close()
     }
 
-    acknowledge_unk_mat_loading_mouseArea.onClicked: {
-        bot.acknowledgeMaterial(true)
-    }
-
-    cancel_unk_mat_loading_mouseArea.onClicked: {
+    ok_unk_mat_loading_mouseArea.onClicked: {
         bot.acknowledgeMaterial(false)
         materialChangeCancelled = true
         bot.cancel()
@@ -285,12 +281,7 @@ MaterialPageForm {
             mainSwipeView.swipeToItem(0)
             inFreStep = false
         }
-    }
-
-    ok_unk_mat_loading_mouseArea.onClicked: {
         materialWarningPopup.close()
-        materialSwipeView.swipeToItem(0)
-        setDrawerState(false)
     }
 
     attach_extruder_mouseArea_no_extruder_popup.onClicked: {

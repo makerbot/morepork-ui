@@ -54,8 +54,7 @@ Item {
     onIsSpoolDetailsReadyChanged: {
         if(bot.process.type == ProcessType.Load) {
             if(isSpoolDetailsReady) {
-                if(isSpoolValidityCheckPending &&
-                    materialValidityCheck()) {
+                if(materialValidityCheck()) {
                     bot.acknowledgeMaterial(true)
                 } else {
                     isMaterialValid = false
