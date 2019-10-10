@@ -160,5 +160,13 @@
         <file>WaitToCoolChamberScreenForm.qml</file>
         <file>KoreaDFSScreen.qml</file>
         <file>KoreaDFSScreenForm.qml</file>
+        <file>ExpExtruderSettings.qml</file>
+        <file>ExpExtruderSettingsForm.qml</file>
+        <file>ExpExtruderMaterialButton.qml</file>
+        <file>ExpExtruderMaterialButtonForm.qml</file>
+        <file>ExpExtruderMaterialSelector.qml</file>
+        <file>ExpExtruderMaterialSelectorForm.qml</file>
+        <file>ExpExtruderTempSelector.qml</file>
+        <file>ExpExtruderTempSelectorForm.qml</file>
     </qresource>
 </RCC>

@@ -20,7 +20,8 @@ Item {
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
-    property bool isExternalLoad: false
+    property bool isExternalLoadUnload: false
+    property int lastHeatingTemperature: 0
     property int bayID: 0
     property int currentActiveTool: bot.process.currentToolIndex + 1
     // Hold onto the current bay ID even after the process completes
@@ -85,9 +86,10 @@ Item {
         }
     }
 
-    property bool overrideInvalidMaterial: false
-    property int materialCode: bayID == 1 ? bay1.filamentMaterialCode :
-                                            bay2.filamentMaterialCode
+    property bool usingExpExtruder: {
+        bayID == 1 ? bay1.usingExperimentalExtruder :
+                     bay2.usingExperimentalExtruder
+    }
     property string materialName: bayID == 1 ? bay1.filamentMaterialName :
                                                bay2.filamentMaterialName
 
@@ -123,7 +125,6 @@ Item {
         case ProcessStateType.Done:
             snipMaterialAlertAcknowledged = false
             delayedEnableRetryButton()
-            overrideInvalidMaterial = false
             // (sorry)
             if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
@@ -249,7 +250,7 @@ Item {
         // Since this is the base state, settting playing to true
         // makes the gif always keep playing even when this page is
         // not visible which makes the entire UI lag.
-        playing: materialSwipeView.currentIndex == 1 &&
+        playing: materialSwipeView.currentIndex == 2 &&
                  (loadUnloadForm.state == "base state" ||
                   loadUnloadForm.state == "feed_filament" ||
                   loadUnloadForm.state == "loaded_filament" ||
@@ -393,8 +394,7 @@ Item {
     states: [
         State {
             name: "feed_filament"
-            when: (isMaterialValid || overrideInvalidMaterial) &&
-                  !isExternalLoad && !bayFilamentSwitch &&
+            when: isMaterialValid && !isExternalLoadUnload && !bayFilamentSwitch &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
@@ -407,12 +407,7 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: {
-                    if(overrideInvalidMaterial) {
-                        qsTr("UNKNOWN MATERIAL")
-                    }
-                    else if(isMaterialValid) {
-                        qsTr("%1 DETECTED").arg(materialName)
-                    }
+                    qsTr("%1 DETECTED").arg(materialName)
                 }
             }
 
@@ -448,8 +443,7 @@ Item {
         },
         State {
             name: "pushing_filament"
-            when: ((bayFilamentSwitch && !extruderFilamentSwitch) ||
-                   isExternalLoad) &&
+            when: (bayFilamentSwitch && !extruderFilamentSwitch) &&
                    bot.process.stateType == ProcessStateType.Preheating &&
                    (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
@@ -508,7 +502,7 @@ Item {
         },
         State {
             name: "preheating"
-            when: (extruderFilamentSwitch || isExternalLoad) &&
+            when: (extruderFilamentSwitch || isExternalLoadUnload) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
@@ -564,6 +558,9 @@ Item {
                             break;
                         case ExtruderType.MK14_HOT:
                             "qrc:/img/extruder_1XA_heating.png"
+                            break;
+                        case ExtruderType.MK14_EXP:
+                            "qrc:/img/extruder_labs_heating.png"
                             break;
                         }
                     } else if(bayID == 2) {

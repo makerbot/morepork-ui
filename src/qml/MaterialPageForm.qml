@@ -14,6 +14,7 @@ Item {
     property alias bay2: bay2
     property alias defaultItem: itemFilamentBay
     property alias materialSwipeView: materialSwipeView
+    property alias expExtruderSettingsPage: expExtruderSettingsPage
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
 
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
@@ -54,8 +55,8 @@ Item {
                 mainSwipeView.swipeToItem(5)
             }
             enableMaterialDrawer()
-            if(materialSwipeView.currentIndex != 1){
-                materialSwipeView.swipeToItem(1)
+            if(materialSwipeView.currentIndex != 2){
+                materialSwipeView.swipeToItem(2)
             }
             switch(bot.process.type) {
             case ProcessType.Load:
@@ -76,6 +77,11 @@ Item {
 
     onIsTopLoadingChanged: {
         if(isTopLoading) {
+            if(loadUnloadFilamentProcess.bayID == 1 &&
+               bay1.usingExperimentalExtruder) {
+                bot.acknowledgeMaterial(true)
+                return;
+            }
             if(cancelLoadUnloadPopup.opened) {
                 cancelLoadUnloadPopup.close()
             }
@@ -169,6 +175,7 @@ Item {
         // and go back.
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
+            loadUnloadFilamentProcess.isExternalLoadUnload = false
             materialSwipeView.swipeToItem(0)
             setDrawerState(false)
         }
@@ -221,11 +228,23 @@ Item {
 
         // materialSwipeView.index = 1
         Item {
+            id: itemExpExtruderSettings
+            property var backSwiper: materialSwipeView
+            property int backSwipeIndex: 0
+            visible: false
+
+            ExpExtruderSettings {
+                id: expExtruderSettingsPage
+            }
+        }
+
+        // materialSwipeView.index = 2
+        Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
-            property int backSwipeIndex: 1
+            property int backSwipeIndex: 0
             property bool hasAltBack: true
-            visible: true
+            visible: false
 
             function altBack() {
                 if(!inFreStep) {
@@ -256,10 +275,6 @@ Item {
 
             LoadUnloadFilament {
                 id: loadUnloadFilamentProcess
-                isExternalLoad: bayID == 1 ?
-                            bay1.switch1.checked :
-                            bay2.switch1.checked
-
                 bayFilamentSwitch: bayID == 1 ?
                                     bot.filamentBayAFilamentPresent :
                                     bot.filamentBayBFilamentPresent
@@ -282,6 +297,7 @@ Item {
                                     bot.extruderBFilamentPresent
                 onProcessDone: {
                     state = "base state"
+                    isExternalLoadUnload = false
                     materialSwipeView.swipeToItem(0)
                     setDrawerState(false)
                     // If load/unload process completes successfully while,

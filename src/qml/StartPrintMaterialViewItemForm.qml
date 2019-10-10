@@ -9,6 +9,20 @@ Item {
 
     property int filamentBayID: 0
 
+    property bool isLabsMaterial: {
+        switch(filamentBayID) {
+        case 1:
+            materialPage.bay1.usingExperimentalExtruder
+            break;
+        case 2:
+            materialPage.bay2.usingExperimentalExtruder
+            break;
+        default:
+            false
+            break;
+        }
+    }
+
     property bool isSpoolPresent: {
         switch(filamentBayID) {
         case 1:
@@ -81,7 +95,8 @@ Item {
         source: "qrc:/img/alert.png"
         visible: {
             if(filamentBayID == 1 &&
-               materialPage.bay1.filamentMaterialName.toLowerCase() == print_model_material) {
+               materialPage.bay1.filamentMaterialName.toLowerCase() == print_model_material ||
+               materialPage.bay1.usingExperimentalExtruder) {
                 // Disable material quantity check before print for now
                 // until the spool quantity reading becomes reliable
                    // && materialPage.bay1.filamentQuantity > materialRequired) {
@@ -115,9 +130,15 @@ Item {
 
         Text {
             id: materialNameOrBayIDText
-            text: isSpoolPresent ?
-                      materialName :
-                      qsTr("BAY %1").arg(filamentBayID)
+            text: {
+                if(isLabsMaterial) {
+                    qsTr("NOT USING BAY %1").arg(filamentBayID)
+                } else if(isSpoolPresent) {
+                    materialName
+                } else {
+                    qsTr("BAY %1").arg(filamentBayID)
+                }
+            }
             anchors.top: parent.top
                       anchors.topMargin: 8
             font.capitalization: Font.AllUppercase
@@ -143,13 +164,21 @@ Item {
             font.weight: Font.Bold
             font.pixelSize: 17
             color: "#cbcbcb"
-            visible: isSpoolPresent
+            visible: {
+                if(isLabsMaterial) {
+                    false
+                } else {
+                    isSpoolPresent
+                }
+            }
         }
 
         Text {
             id: noMaterialText
             width: 210
-            text: qsTr("NO MATERIAL DETECTED")
+            text: isLabsMaterial ?
+                      qsTr("LABS MATERIAL LOADED") :
+                      qsTr("NO MATERIAL DETECTED")
             anchors.top: materialNameOrBayIDText.bottom
             anchors.topMargin: 8
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -162,7 +191,7 @@ Item {
             font.pixelSize: 18
             color: "#cbcbcb"
             lineHeight: 1.3
-            visible: !isSpoolPresent
+            visible: !isSpoolPresent || isLabsMaterial
         }
 
         Text {
@@ -183,7 +212,13 @@ Item {
             font.weight: Font.Light
             font.pixelSize: 18
             color: "#ffffff"
-            visible: isSpoolPresent
+            visible: {
+                if(isLabsMaterial) {
+                    false
+                } else {
+                    isSpoolPresent
+                }
+            }
         }
     }
 }

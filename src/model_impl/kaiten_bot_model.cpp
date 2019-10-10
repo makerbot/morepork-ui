@@ -42,9 +42,9 @@ class KaitenBotModel : public BotModel {
     void pauseResumePrint(QString action);
     void print(QString file_name);
     void done(QString acknowledge_result);
-    void loadFilament(const int kToolIndex, bool external, bool whilePrinting);
+    void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
     void loadFilamentStop();
-    void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
+    void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
     void assistedLevel();
     void continue_leveling();
     void acknowledge_level();
@@ -518,12 +518,20 @@ void KaitenBotModel::done(QString acknowledge_result){
     }
 }
 
-void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting){
+void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         qDebug() << FL_STRM << "external: " << external;;
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
+
+        if(temperature[kToolIndex] > 0) {
+            Json::Value temperature_list(Json::arrayValue);
+            for(int i = 0; i < temperature.size(); i++) {
+                temperature_list[i] = (temperature.value(i));
+            }
+            json_params["temperature_settings"] = Json::Value(temperature_list);
+        }
 
         if(!whilePrinting) {
             json_params["tool_index"] = Json::Value(kToolIndex);
@@ -558,11 +566,20 @@ void KaitenBotModel::loadFilamentStop(){
     }
 }
 
-void KaitenBotModel::unloadFilament(const int kToolIndex, bool external, bool whilePrinting){
+void KaitenBotModel::unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
+
+        if(temperature[kToolIndex] > 0) {
+            Json::Value temperature_list(Json::arrayValue);
+            for(int i = 0; i < temperature.size(); i++) {
+                temperature_list[i] = (temperature.value(i));
+            }
+            json_params["temperature_settings"] = Json::Value(temperature_list);
+        }
+
         if(!whilePrinting) {
             json_params["tool_index"] = Json::Value(kToolIndex);
             json_params["external"] = Json::Value(external);
@@ -1213,6 +1230,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 } else if (kExtruderTypeStr == "mk14_hot" || \
                            kExtruderTypeStr == "mk14_hot_s") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_HOT); \
+                } else if (kExtruderTypeStr == "mk14_e") { \
+                    extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_EXP); \
                 } else { \
                     extruder ## EXT_SYM ## TypeReset(); \
                 } \

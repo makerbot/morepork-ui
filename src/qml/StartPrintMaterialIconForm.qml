@@ -7,7 +7,6 @@ Item {
     smooth: false
 
     property int filamentBayID: 0
-
     property real filamentRequired: 0
 
     property int filamentPercentRequired: {
@@ -111,6 +110,10 @@ Item {
             rotation: -90
             anchors.fill: parent
             visible: {
+                if(isLabsMaterial) {
+                    false
+                    return;
+                }
                 switch(filamentBayID) {
                      case 1:
                          bot.filamentBayATagPresent

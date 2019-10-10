@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import FreStepEnum 1.0
 
 Item {
     width: 75
@@ -19,7 +20,7 @@ Item {
             height: 26
             smooth: false
             anchors.verticalCenter: parent.verticalCenter
-            opacity: isFreComplete || currentFreStep >= 6
+            opacity: isFreComplete || currentFreStep >= FreStep.AttachExtruders
 
             FilamentIcon {
                 id: filament1_icon

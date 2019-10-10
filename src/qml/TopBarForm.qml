@@ -281,7 +281,24 @@ Item {
                         qsTr("INFO")
                         break;
                     case 5:
-                        qsTr("MATERIAL")
+                        switch(materialPage.materialSwipeView.currentIndex) {
+                        case 0:
+                            qsTr("MATERIAL")
+                            break;
+                        case 1:
+                            switch(materialPage.expExtruderSettingsPage.selectMaterialSwipeView.currentIndex) {
+                                case 0:
+                                qsTr("CHOOSE BASE MATERIAL")
+                                break;
+                                case 1:
+                                qsTr("CHOOSE TEMPERATURE")
+                                break;
+                            }
+                            break;
+                        default:
+                            qsTr("MATERIAL")
+                            break;
+                        }
                         break;
                     case 6:
                         // This bit is repeated from above, but making it a function

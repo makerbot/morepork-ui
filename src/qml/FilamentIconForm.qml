@@ -11,10 +11,12 @@ Item {
     property bool spoolPresent: {
         switch(filamentBayID) {
              case 1:
-                 bot.filamentBayATagPresent
+                 materialPage.bay1.usingExperimentalExtruder ?
+                         true : materialPage.bay1.spoolPresent
                  break;
              case 2:
-                 bot.filamentBayBTagPresent
+                 materialPage.bay2.usingExperimentalExtruder ?
+                         true : materialPage.bay2.spoolPresent
                  break;
              default:
                  false
@@ -25,14 +27,10 @@ Item {
     property string filamentColor: {
         switch(filamentBayID) {
         case 1:
-            Qt.rgba(bot.spoolAColorRGB[0]/255,
-                    bot.spoolAColorRGB[1]/255,
-                    bot.spoolAColorRGB[2]/255)
+            materialPage.bay1.filamentColor
             break;
         case 2:
-            Qt.rgba(bot.spoolBColorRGB[0]/255,
-                    bot.spoolBColorRGB[1]/255,
-                    bot.spoolBColorRGB[2]/255)
+            materialPage.bay2.filamentColor
             break;
         default:
             "#ffffff"

@@ -12,7 +12,6 @@ Item {
     antialiasing: false
     property alias loadButton: loadButton
     property alias unloadButton: unloadButton
-    property alias switch1: switch1
 
     property int filamentBayID: 0
     property bool spoolDetailsReady: {
@@ -109,6 +108,48 @@ Item {
             break;
         default:
             "Unknown Color"
+            break;
+        }
+    }
+
+    property string filamentColor: {
+        if(usingExperimentalExtruder) {
+            expExtruderColor
+            return;
+        }
+        switch(filamentBayID) {
+        case 1:
+            Qt.rgba(bot.spoolAColorRGB[0]/255,
+                    bot.spoolAColorRGB[1]/255,
+                    bot.spoolAColorRGB[2]/255)
+            break;
+        case 2:
+            Qt.rgba(bot.spoolBColorRGB[0]/255,
+                    bot.spoolBColorRGB[1]/255,
+                    bot.spoolBColorRGB[2]/255)
+            break;
+        default:
+            "#000000"
+            break;
+        }
+    }
+
+    property int filamentPercent: {
+        if(usingExperimentalExtruder) {
+            100
+            return;
+        }
+        switch(filamentBayID) {
+        case 1:
+            (bot.spoolAAmountRemaining/
+            bot.spoolAOriginalAmount) * 100
+            break;
+        case 2:
+            (bot.spoolBAmountRemaining/
+            bot.spoolBOriginalAmount) * 100
+            break;
+        default:
+            0
             break;
         }
     }
@@ -222,14 +263,20 @@ Item {
         }
     }
 
-    property bool isUnknownMaterial: filamentMaterialName == "UNKNOWN"
+    property bool isUnknownMaterial: {
+        usingExperimentalExtruder ? false : filamentMaterialName == "UNKNOWN"
+    }
 
     property bool isMaterialValid: {
-        (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
+        usingExperimentalExtruder ?
+              true :
+              (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
     }
 
     function checkSliceValid(material) {
-        return (goodMaterialsList.indexOf(material) >= 0)
+        return (usingExperimentalExtruder ?
+                    true :
+                    (goodMaterialsList.indexOf(material) >= 0))
     }
 
     property var goodMaterialsList: {
@@ -292,6 +339,22 @@ Item {
         }
     }
 
+    property bool usingExperimentalExtruder: {
+        switch(filamentBayID) {
+        case 1:
+            bot.extruderAType == ExtruderType.MK14_EXP
+            break;
+        case 2:
+            false
+            break;
+        default:
+            false
+            break;
+        }
+    }
+
+    property string expExtruderColor: "#FF4800"
+
     MaterialIcon {
         id: materialIconLarge
         anchors.left: parent.left
@@ -299,7 +362,6 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
         antialiasing: false
-        filamentBayID: filamentBayBaseItem.filamentBayID
 
         Image {
             id: materialErrorAlertIcon
@@ -319,7 +381,9 @@ Item {
             id: materialType_text
             color: "#ffffff"
             text: {
-                if(spoolPresent && !isUnknownMaterial) {
+                if(usingExperimentalExtruder) {
+                    "LABS"
+                } else if(spoolPresent && !isUnknownMaterial) {
                     filamentMaterialName
                 }
                 else {
@@ -328,8 +392,15 @@ Item {
             }
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: !isMaterialValid ?
-                                              12 : 0
+            anchors.verticalCenterOffset: {
+                if (usingExperimentalExtruder) {
+                    0
+                } else if(!isMaterialValid) {
+                    12
+                } else {
+                    0
+                }
+            }
             font.capitalization: Font.AllUppercase
             font.letterSpacing: 4
             font.family: defaultFont.name
@@ -387,7 +458,9 @@ Item {
                             filamentColorName
                         }
                         else if(extruderFilamentPresent) {
-                            qsTr("UNKNOWN MATERIAL")
+                            usingExperimentalExtruder ?
+                                 qsTr("LABS MATERIAL LOADED") :
+                                 qsTr("UNKNOWN MATERIAL")
                         }
                         else {
                             qsTr("NO MATERIAL DETECTED")
@@ -468,39 +541,6 @@ Item {
                     label: qsTr("UNLOAD")
                 }
             }
-        }
-    }
-
-    Switch {
-        id: switch1
-        checked: false
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 700
-        visible: false
-
-        Text {
-            id: text1
-            text: qsTr("Int.")
-            anchors.horizontalCenterOffset: -25
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: switch1.bottom
-            anchors.topMargin: 0
-            color: "#ffffff"
-            font.pixelSize: 15
-            font.family: defaultFont.name
-        }
-
-        Text {
-            id: text2
-            text: qsTr("Ext.")
-            anchors.horizontalCenterOffset: 25
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: switch1.bottom
-            anchors.topMargin: 0
-            color: "#ffffff"
-            font.pixelSize: 15
-            font.family: defaultFont.name
         }
     }
 }

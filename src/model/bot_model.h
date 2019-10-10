@@ -26,7 +26,8 @@ class BotModel : public BaseModel {
     enum ExtruderType {
         NONE,
         MK14,
-        MK14_HOT
+        MK14_HOT,
+        MK14_EXP
     };
 
     // MOREPORK_QML_ENUM
@@ -45,9 +46,9 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
     Q_INVOKABLE virtual void done(QString acknowledge_result);
-    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external, bool whilePrinting);
+    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void loadFilamentStop();
-    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting);
+    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void acknowledge_level();
     Q_INVOKABLE virtual void continue_leveling();

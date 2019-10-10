@@ -6,41 +6,6 @@ Item {
     height: 164
     smooth: false
 
-    property int filamentBayID: 0
-    property string filamentColor: {
-        switch(filamentBayID) {
-        case 1:
-            Qt.rgba(bot.spoolAColorRGB[0]/255,
-                    bot.spoolAColorRGB[1]/255,
-                    bot.spoolAColorRGB[2]/255)
-            break;
-        case 2:
-            Qt.rgba(bot.spoolBColorRGB[0]/255,
-                    bot.spoolBColorRGB[1]/255,
-                    bot.spoolBColorRGB[2]/255)
-            break;
-        default:
-            "#000000"
-            break;
-        }
-    }
-
-    property int filamentPercent: {
-        switch(filamentBayID) {
-        case 1:
-            (bot.spoolAAmountRemaining/
-            bot.spoolAOriginalAmount) * 100
-            break;
-        case 2:
-            (bot.spoolBAmountRemaining/
-            bot.spoolBOriginalAmount) * 100
-            break;
-        default:
-            0
-            break;
-        }
-    }
-
     Rectangle {
         id: base_circle
         anchors.fill: parent
@@ -66,17 +31,7 @@ Item {
             rotation: -90
             anchors.fill: parent
             visible: {
-                switch(filamentBayID) {
-                     case 1:
-                         bot.filamentBayATagPresent
-                         break;
-                     case 2:
-                         bot.filamentBayBTagPresent
-                         break;
-                     default:
-                         false
-                         break;
-                     }
+                usingExperimentalExtruder ? true : spoolPresent
             }
             onPaint: {
                 var context = getContext("2d");
@@ -84,6 +39,16 @@ Item {
                 var centreX = parent.width * 0.5;
                 var centreY = parent.height * 0.5;
                 context.beginPath();
+                if(usingExperimentalExtruder) {
+                    context.fillStyle = parent.fillColor;
+                    context.moveTo(centreX, centreY);
+                    //0.06283185 = PI*2/100
+                    context.arc(centreX, centreY, parent.width*0.40, 0,
+                                parent.fillPercent*0.06283185, false);
+                    context.lineTo(centreX, centreY);
+                    context.fill();
+                    return;
+                }
                 //0.06283185 = PI*2/100
                 context.arc(centreX, centreY, parent.width*0.40, 0,
                             parent.fillPercent*0.06283185, false);
