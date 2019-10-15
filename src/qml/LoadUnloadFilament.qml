@@ -35,7 +35,7 @@ LoadUnloadFilamentForm {
                             isLoadFilament = true
                             bot.loadFilament(1, false, false)
                             setDrawerState(true)
-                            materialSwipeView.swipeToItem(1)
+                            materialSwipeView.swipeToItem(2)
                         } else if(bayID == 2) {
                             fre.gotoNextStep(currentFreStep)
                             mainSwipeView.swipeToItem(0)
@@ -50,14 +50,6 @@ LoadUnloadFilamentForm {
             else if(state == "extrusion") {
                 bot.loadFilamentStop()
             }
-            else {
-                // This condition is when the page is in
-                // "base state". For some reason QML doesn't
-                // allow us to check for the base state like
-                // the other if blocks above.
-                // i.e. if(state == "base state") doesn't work.
-                overrideInvalidMaterial = true
-            }
         }
     }
 
@@ -65,30 +57,34 @@ LoadUnloadFilamentForm {
         button_mouseArea.onClicked: {
             // loadFilament(tool_index, external, whilePrinitng)
             // unloadFilament(tool_index, external, whilePrinitng)
+            var temperature_list = [0,0]
+            if(isExternalLoadUnload) {
+                temperature_list[bayID - 1] = lastHeatingTemperature
+            }
             if(state == "loaded_filament") {
                 if(bot.process.type == ProcessType.None) {
-                    bot.loadFilament(bayID - 1, false, false)
+                    bot.loadFilament(bayID - 1, false, false, temperature_list)
                 }
                 else if(bot.process.type == ProcessType.Print) {
-                    bot.loadFilament(bayID - 1, false, true)
+                    bot.loadFilament(bayID - 1, false, true, temperature_list)
                 }
             } else if(state == "unloaded_filament") {
                 if(bot.process.type == ProcessType.None) {
-                    bot.unloadFilament(bayID - 1, true, false)
+                    bot.unloadFilament(bayID - 1, true, false, temperature_list)
                 }
                 else if(bot.process.type == ProcessType.Print) {
-                    bot.unloadFilament(bayID - 1, true, true)
+                    bot.unloadFilament(bayID - 1, true, true, temperature_list)
                 }
             } else if(state == "error") {
                 if(bot.process.type == ProcessType.None) {
                     isLoadFilament ?
-                        bot.loadFilament(bayID - 1, false, false) :
-                        bot.unloadFilament(bayID - 1, true, false)
+                        bot.loadFilament(bayID - 1, false, false, temperature_list) :
+                        bot.unloadFilament(bayID - 1, true, false, temperature_list)
                 }
                 else if(bot.process.type == ProcessType.Print) {
                     isLoadFilament ?
-                        bot.loadFilament(bayID - 1, false, true) :
-                        bot.unloadFilament(bayID - 1, true, true)
+                        bot.loadFilament(bayID - 1, false, true, temperature_list) :
+                        bot.unloadFilament(bayID - 1, true, true, temperature_list)
                 }
             }
             state = "base_state"

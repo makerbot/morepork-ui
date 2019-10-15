@@ -108,7 +108,7 @@ ErrorScreenForm {
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
                         materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(1)
+                        materialPage.materialSwipeView.swipeToItem(2)
                     }
                 }
                 else if(state == "filament_bay_oof_error") {
@@ -118,7 +118,7 @@ ErrorScreenForm {
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
                         materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(1)
+                        materialPage.materialSwipeView.swipeToItem(2)
                     }
                 }
                 else if(state == "extruder_oof_error_state1") {
@@ -133,7 +133,7 @@ ErrorScreenForm {
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
                         materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(1)
+                        materialPage.materialSwipeView.swipeToItem(2)
                     }
                 } else if (state == "no_tool_connected") {
                     resetSwipeViews()
@@ -180,7 +180,7 @@ ErrorScreenForm {
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
                         materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(1)
+                        materialPage.materialSwipeView.swipeToItem(2)
                     }
                 }
                 acknowledgeError()

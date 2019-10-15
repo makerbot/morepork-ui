@@ -20,7 +20,7 @@ FrePageForm {
         materialPage.isLoadFilament = true
         materialPage.enableMaterialDrawer()
         bot.loadFilament(0, false, false)
-        materialPage.materialSwipeView.swipeToItem(1)
+        materialPage.materialSwipeView.swipeToItem(2)
     }
 
     continueButton {

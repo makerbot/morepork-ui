@@ -459,10 +459,14 @@ Item {
                     }
                     materialError.visible: {
                         if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
-                            ((model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()) ||
-                             (model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase()))
+                            materialPage.bay1.usingExperimentalExtruder ?
+                                (model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase()) :
+                                (model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase() ||
+                                 model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase())
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
-                            model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()
+                            materialPage.bay1.usingExperimentalExtruder ?
+                                    false :
+                                    model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()
                         }
 
                     }

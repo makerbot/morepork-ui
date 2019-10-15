@@ -14,6 +14,7 @@ Item {
     property alias bay2: bay2
     property alias defaultItem: itemFilamentBay
     property alias materialSwipeView: materialSwipeView
+    property alias expExtruderSettingsPage: expExtruderSettingsPage
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
 
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
@@ -28,8 +29,6 @@ Item {
     property alias cancel_mouseArea_no_extruder_popup: cancel_mouseArea_no_extruder_popup
 
     property alias materialWarningPopup: materialWarningPopup
-    property alias acknowledge_unk_mat_loading_mouseArea: acknowledge_mat_warning_mouseArea
-    property alias cancel_unk_mat_loading_mouseArea: cancel_mat_warning_mouseArea
     property alias ok_unk_mat_loading_mouseArea: ok_mat_warning_mouseArea
 
     property alias materialPageDrawer: materialPageDrawer
@@ -56,8 +55,8 @@ Item {
                 mainSwipeView.swipeToItem(5)
             }
             enableMaterialDrawer()
-            if(materialSwipeView.currentIndex != 1){
-                materialSwipeView.swipeToItem(1)
+            if(materialSwipeView.currentIndex != 2){
+                materialSwipeView.swipeToItem(2)
             }
             switch(bot.process.type) {
             case ProcessType.Load:
@@ -78,6 +77,11 @@ Item {
 
     onIsTopLoadingChanged: {
         if(isTopLoading) {
+            if(loadUnloadFilamentProcess.bayID == 1 &&
+               bay1.usingExperimentalExtruder) {
+                bot.acknowledgeMaterial(true)
+                return;
+            }
             if(cancelLoadUnloadPopup.opened) {
                 cancelLoadUnloadPopup.close()
             }
@@ -171,6 +175,7 @@ Item {
         // and go back.
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
+            loadUnloadFilamentProcess.isExternalLoadUnload = false
             materialSwipeView.swipeToItem(0)
             setDrawerState(false)
         }
@@ -223,11 +228,23 @@ Item {
 
         // materialSwipeView.index = 1
         Item {
+            id: itemExpExtruderSettings
+            property var backSwiper: materialSwipeView
+            property int backSwipeIndex: 0
+            visible: false
+
+            ExpExtruderSettings {
+                id: expExtruderSettingsPage
+            }
+        }
+
+        // materialSwipeView.index = 2
+        Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
-            property int backSwipeIndex: 1
+            property int backSwipeIndex: 0
             property bool hasAltBack: true
-            visible: true
+            visible: false
 
             function altBack() {
                 if(!inFreStep) {
@@ -258,10 +275,6 @@ Item {
 
             LoadUnloadFilament {
                 id: loadUnloadFilamentProcess
-                isExternalLoad: bayID == 1 ?
-                            bay1.switch1.checked :
-                            bay2.switch1.checked
-
                 bayFilamentSwitch: bayID == 1 ?
                                     bot.filamentBayAFilamentPresent :
                                     bot.filamentBayBFilamentPresent
@@ -284,6 +297,7 @@ Item {
                                     bot.extruderBFilamentPresent
                 onProcessDone: {
                     state = "base state"
+                    isExternalLoadUnload = false
                     materialSwipeView.swipeToItem(0)
                     setDrawerState(false)
                     // If load/unload process completes successfully while,
@@ -512,7 +526,7 @@ Item {
             color: "#000000"
             rotation: rootItem.rotation == 180 ? 180 : 0
             width: 720
-            height: isMaterialMismatch ? 250 : 325
+            height: isMaterialMismatch ? 250 : 280
             radius: 10
             border.width: 2
             border.color: "#ffffff"
@@ -540,7 +554,7 @@ Item {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: !isMaterialMismatch
+                visible: false
             }
 
             Item {
@@ -549,6 +563,7 @@ Item {
                 height: 72
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 0
+                visible: !isMaterialMismatch
 
                 Rectangle {
                     id: ok_rectangle_mat_warning_popup
@@ -558,7 +573,6 @@ Item {
                     height: 72
                     color: "#00000000"
                     radius: 10
-                    visible: false
 
                     Text {
                         id: ok_text_mat_warning_popup
@@ -588,88 +602,12 @@ Item {
                         }
                     }
                 }
-
-                Rectangle {
-                    id: acknowledge_rectangle_mat_warning_popup
-                    x: 0
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-                    visible: !isMaterialMismatch
-
-                    Text {
-                        id: acknowledge_text_mat_warning_popup
-                        color: "#ffffff"
-                        text: qsTr("ACKNOWLEDGE")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    MouseArea {
-                        id: acknowledge_mat_warning_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            acknowledge_text_mat_warning_popup.color = "#000000"
-                            acknowledge_rectangle_mat_warning_popup.color = "#ffffff"
-                        }
-                        onReleased: {
-                            acknowledge_text_mat_warning_popup.color = "#ffffff"
-                            acknowledge_rectangle_mat_warning_popup.color = "#00000000"
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: cancel_rectangle_mat_warning_popup
-                    x: 360
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-                    visible: !isMaterialMismatch
-
-                    Text {
-                        id: cancel_text_mat_warning_popup
-                        color: "#ffffff"
-                        text: qsTr("CANCEL LOADING")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    MouseArea {
-                        id: cancel_mat_warning_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            cancel_text_mat_warning_popup.color = "#000000"
-                            cancel_rectangle_mat_warning_popup.color = "#ffffff"
-                        }
-                        onReleased: {
-                            cancel_text_mat_warning_popup.color = "#ffffff"
-                            cancel_rectangle_mat_warning_popup.color = "#00000000"
-                        }
-                    }
-                }
             }
 
             ColumnLayout {
                 id: columnLayout_mat_warning_popup
                 width: 680
-                height: isMaterialMismatch ? 135 : 210
+                height: isMaterialMismatch ? 135 : 150
                 anchors.top: parent.top
                 anchors.topMargin: isMaterialMismatch ? 60 : 35
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -691,7 +629,7 @@ Item {
                                 qsTr("SUPPORT MATERIAL REQUIRED")
                             }
                         } else {
-                            qsTr("UNKNOWN MATERIAL WARNING")
+                            qsTr("MATERIAL NOT SUPPORTED")
                         }
                     }
                     font.letterSpacing: 3
@@ -736,12 +674,14 @@ Item {
                                 }
                             }
                         } else {
-                            qsTr("The limited warranty included with this 3D printer does not\n" +
-                            "apply to damage caused by the use of materials not certified\n" +
-                            "or approved by MakerBot. For additional information, please\n" +
-                            "visit MakerBot.com/legal/warranty.\n" +
-                            "Custom settings in MakerBot Print software are required to\n" +
-                            "configure and use this material.")
+                            if(loadUnloadFilamentProcess.currentActiveTool == 1) {
+                                qsTr("The Performance Model extruder is only compatible with\n" +
+                                "MakerBot Method materials. To use 3rd Party Materials, please\n" +
+                                "use a MakerBot Labs Extruder. Learn more at Makerbot.com/Labs")
+                            } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
+                                qsTr("The Performance Support extruder is only compatible with\n" +
+                                "MakerBot Method support materials.")
+                            }
                         }
                     }
                     horizontalAlignment: Text.AlignHCenter

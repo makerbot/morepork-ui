@@ -281,6 +281,12 @@ ApplicationWindow {
         (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14)
     }
 
+    property bool experimentalExtruderInstalled: {
+        (materialPage.bay1.usingExperimentalExtruder ||
+         materialPage.bay2.usingExperimentalExtruder)
+    }
+    property bool experimentalExtruderAcknowledged: false
+
     Item {
         id: rootItem
         smooth: false
@@ -2848,12 +2854,15 @@ ApplicationWindow {
                                 }
                             }
                             else if(printPage.startPrintMaterialMismatch) {
-                                qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
-                                            printPage.print_model_material.toUpperCase()) +
-                                        (!printPage.support_extruder_used ?
-                                            "." :
-                                            (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                                printPage.print_support_material.toUpperCase())) +
+                                (materialPage.bay1.usingExperimentalExtruder ?
+                                        qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
+                                                    printPage.print_support_material.toUpperCase()) :
+                                        qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
+                                                    printPage.print_model_material.toUpperCase()) +
+                                                (!printPage.support_extruder_used ?
+                                                    "." :
+                                                    (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
+                                                    printPage.print_support_material.toUpperCase()))) +
                                 qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
                             }
                             else if(printPage.startPrintGenuineSliceUnknownMaterial) {
@@ -2905,6 +2914,62 @@ ApplicationWindow {
                         font.pixelSize: 20
                         lineHeight: 1.35
                     }
+                }
+            }
+        }
+
+        CustomPopup {
+            id: experimentalExtruderPopup
+            popupWidth: 720
+            popupHeight: 305
+            visible: !experimentalExtruderAcknowledged &&
+                     experimentalExtruderInstalled
+            showOneButton: true
+            full_button_text: qsTr("CONTINUE")
+            full_button.onClicked: {
+                experimentalExtruderAcknowledged = true
+                experimentalExtruderPopup.close()
+            }
+
+            ColumnLayout {
+                id: columnLayout_exp_ext_popup
+                width: 590
+                height: children.height
+                spacing: 25
+                anchors.top: parent.top
+                anchors.topMargin: 115
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text_exp_ext_popup
+                    color: "#cbcbcb"
+                    text: qsTr("MAKERBOT LABS EXTRUDER DETECTED")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_exp_ext_popup
+                    color: "#cbcbcb"
+                    text: {
+                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
+                             "partners and recommended print settings. Material should\n" +
+                             "be loaded through the AUX port under the removable cover\n" +
+                             "on the top left of the printer. Make sure that the extruders\n" +
+                             "are calibrated before printing.")
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: defaultFont.name
+                    font.pixelSize: 18
+                    font.letterSpacing: 1
+                    lineHeight: 1.3
                 }
             }
         }

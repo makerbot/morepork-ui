@@ -40,6 +40,7 @@
 	<file alias="extruder_1XA_heating.png">images/extruder_1XA_heating.png</file>
       	<file alias="extruder_2_heating.png">images/extruder_2_heating.png</file>
 	<file alias="extruder_2XA_heating.png">images/extruder_2XA_heating.png</file>
+	<file alias="extruder_labs_heating.png">images/extruder_labs_heating.png</file>
       	<file alias="change_filament.png">images/change_filament.png</file>
       	<file alias="close.png">images/close.png</file>
       	<file alias="directory_icon.png">images/directory_icon.png</file>
@@ -59,6 +60,7 @@
 	<file alias="extruder_1XA_attached.png">images/extruder_1XA_attached.png</file>
 	<file alias="extruder_2_attached.png">images/extruder_2_attached.png</file>
 	<file alias="extruder_2XA_attached.png">images/extruder_2XA_attached.png</file>
+	<file alias="extruder_exp_attached.png">images/extruder_exp_attached.png</file>
 	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
 	<file alias="extruder_left.png">images/extruder_left.png</file>
 	<file alias="extruder_right.png">images/extruder_right.png</file>

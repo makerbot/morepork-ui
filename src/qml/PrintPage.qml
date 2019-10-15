@@ -30,7 +30,9 @@ PrintPageForm {
         var modelMaterialOK = false
         // Single extruder prints
         if(model_extruder_used && !support_extruder_used) {
-            if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
+            if (materialPage.bay1.usingExperimentalExtruder) {
+                // Empty case, flag no errors!
+            } else if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
                     print_model_material) {
                 startPrintMaterialMismatch = true
             }
@@ -44,7 +46,9 @@ PrintPageForm {
         // Dual extruder prints
         if(support_extruder_used && model_extruder_used) {
             if(print_model_material == "unknown" || materialPage.bay1.isUnknownMaterial) {
-                if(print_model_material == "unknown" && materialPage.bay1.isMaterialValid) {
+                if(materialPage.bay1.usingExperimentalExtruder) {
+                    modelMaterialOK = true
+                } else if(print_model_material == "unknown" && materialPage.bay1.isMaterialValid) {
                     startPrintUnknownSliceGenuineMaterial = true
                     modelMaterialOK = true
                 } else if(materialPage.bay1.checkSliceValid(print_model_material.toUpperCase()) &&
@@ -55,8 +59,10 @@ PrintPageForm {
                 }
             }
             // Since slices aren't
-            if((!modelMaterialOK && (materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material)) ||
-               (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material)) {
+            if((!modelMaterialOK && // Skip model checking if approved earlier
+                !materialPage.bay1.usingExperimentalExtruder && // Skip model checking if exp. extruder used
+                 materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) ||
+                (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material)) {
                 startPrintMaterialMismatch = true
             }
             // Disable material quantity check before print for now

@@ -38,16 +38,16 @@ void BotModel::done(QString acknowledge_result) {
     qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
 }
 
-void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " external: " << external << " whilePrinting " << whilePrinting;
+void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " external: " << external << " whilePrinting: " << whilePrinting;
 }
 
 void BotModel::loadFilamentStop() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::unloadFilament(const int kToolIndex, bool external, bool whilePrinting) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " external: " << external << " whilePrinting " << whilePrinting;
+void BotModel::unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " external: " << external << " whilePrinting " << whilePrinting;
 }
 
 void BotModel::assistedLevel() {
