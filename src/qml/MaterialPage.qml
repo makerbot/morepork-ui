@@ -129,7 +129,9 @@ MaterialPageForm {
                     enableMaterialDrawer()
                     // unloadFilament(int tool_index, bool external, bool whilePrinitng)
                     if(printPage.isPrintProcess &&
-                     bot.process.stateType == ProcessStateType.Paused) {
+                     (bot.process.stateType == ProcessStateType.Paused ||
+                      bot.process.stateType == ProcessStateType.Pausing ||
+                      bot.process.stateType == ProcessStateType.Printing)) {
                         bot.unloadFilament(0, true, true)
                     }
                     else {
