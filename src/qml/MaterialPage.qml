@@ -65,7 +65,7 @@ MaterialPageForm {
             // Always allow loading while idle (material mismatch blocking occurs
             // after starting the process)
             return true
-        } else if(!printPage.isPrintProcess || !bot.process.stateType == ProcessStateType.Paused) {
+        } else if(!printPage.isPrintProcess || bot.process.stateType != ProcessStateType.Paused) {
             // During a paused print is the only non-idle state that allows filament change
             return false
         } else if(isExtruderFilamentPresent(extruderID)) {
