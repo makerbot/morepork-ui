@@ -220,6 +220,18 @@ Item {
             //SR-30
             ((filamentVolume * 1.1)/1000).toFixed(3)
             break;
+        case 9:
+            //ASA TODO:(placeholder this needs to be updated)
+            ((filamentVolume * 1.04)/1000).toFixed(3)
+            break;
+        case 10:
+            //ESD-Tough TODO:(placeholder this needs to be updated)
+            ((filamentVolume * 1.1)/1000).toFixed(3)
+            break;
+        case 11:
+            //Nylon TODO:(placeholder this needs to be updated)
+            ((filamentVolume * 1.1)/1000).toFixed(3)
+            break;
         case 0:
         default:
             0
@@ -255,6 +267,12 @@ Item {
             break;
         case 9:
             "ASA"
+            break;
+        case 10:
+            "ESD-TOUGH"
+            break;
+        case 11:
+            "NYLON"
             break;
         case 0:
         default:
@@ -296,7 +314,7 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "TOUGH", "PETG"]
+                ["PLA", "TOUGH", "PETG", "NYLON"]
                 break;
             case ExtruderType.MK14_HOT:
                 ["ABS", "ASA"]
