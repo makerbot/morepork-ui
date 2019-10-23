@@ -87,6 +87,8 @@ class KaitenBotModel : public BotModel {
     void setTimeZone(const QString time_zone);
     void getCloudServicesInfo();
     void setAnalyticsEnabled(const bool enabled);
+    void drySpool();
+    void startDrying(const int temperature, const float time);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1026,6 +1028,33 @@ void KaitenBotModel::setAnalyticsEnabled(const bool enabled) {
         // no way for clients to know the status right afterwards so we register a
         // callback to call get_cloud_services_info() manually.
         conn->jsonrpc.invoke("set_analytics_enabled", json_params, m_setAnalyticsCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::drySpool() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("dry_spool", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::startDrying(const int temperature, const float time){
+    try{
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("start_drying");
+        Json::Value json_args(Json::objectValue);
+        json_args["temperature"] = Json::Value(temperature);
+        json_args["duration"] = Json::Value(time);
+        json_params["params"] = Json::Value(json_args);
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

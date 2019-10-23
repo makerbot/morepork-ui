@@ -30,6 +30,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::FactoryResetProcess);
         else if (kNameStr == "ZipLogsProcess")
             typeSet(ProcessType::ZipLogsProcess);
+        else if (kNameStr == "DryingCycleProcess")
+            typeSet(ProcessType::DryingCycleProcess);
         else
             typeSet(ProcessType::None);
     }
@@ -93,7 +95,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // Firmware Updating States
         // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
         else if (kStepStr == "downloading")
-        //Another possible step for firmwareUpdate is 'transfer' which is mapped to 'Loading' 
+        //Another possible step for firmwareUpdate is 'transfer' which is mapped to 'Loading'
             stateTypeSet(ProcessStateType::TransferringFirmware);
         else if (kStepStr == "verify_firmware")
             stateTypeSet(ProcessStateType::VerifyingFirmware);
@@ -141,6 +143,16 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::RemoveBuildPlate);
         else if (kStepStr == "install_build_plate")
             stateTypeSet(ProcessStateType::InstallBuildPlate);
+        // Drying Cycle States
+        // see morepork-kaiten/kaiten/src/kaiten/processes/dryngcycleprocess.py
+        else if (kStepStr == "positioning_build_plate")
+            stateTypeSet(ProcessStateType::PositioningBuildPlate);
+        else if (kStepStr == "waiting_for_spool")
+            stateTypeSet(ProcessStateType::WaitingForSpool);
+        else if (kStepStr == "heating_chamber")
+            stateTypeSet(ProcessStateType::HeatingChamber);
+        else if (kStepStr == "drying_spool")
+            stateTypeSet(ProcessStateType::DryingSpool);
         else
             stateTypeReset();
     }

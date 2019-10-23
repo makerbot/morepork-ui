@@ -19,6 +19,7 @@ class ProcessModel : public BaseModel {
         CalibrationProcess,
         FactoryResetProcess,
         ZipLogsProcess,
+        DryingCycleProcess,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -57,7 +58,11 @@ class ProcessModel : public BaseModel {
         CoolingNozzle,
         CalibratingToolheads,
         InstallBuildPlate,
-        RemoveBuildPlate
+        RemoveBuildPlate,
+        PositioningBuildPlate, // Drying Cycle Process states
+        WaitingForSpool,
+        HeatingChamber,
+        DryingSpool
     };
     //MOREPORK_QML_ENUM
     enum ErrorType {

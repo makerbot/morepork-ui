@@ -19,6 +19,8 @@ Item {
 
     property alias buttonAssistedLeveling: buttonAssistedLeveling
 
+    property alias buttonDryMaterial: buttonDryMaterial
+
     property alias buttonCopyLogs: buttonCopyLogs
 
     property alias copyingLogsPopup: copyingLogsPopup
@@ -149,6 +151,13 @@ Item {
                         id: buttonAssistedLeveling
                         buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
                         buttonText.text: qsTr("ASSISTED LEVELING")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonDryMaterial
+                        buttonImage.source: "qrc:/img/icon_dry_material.png"
+                        buttonText.text: qsTr("DRY MATERIAL")
                         enabled: !isProcessRunning()
                     }
 
@@ -324,6 +333,36 @@ Item {
             }
         }
 
+        //advancedSettingsSwipeView.index = 8
+        Item {
+            id: dryMaterialItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: 0
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(bot.process.type == ProcessType.DryingCycleProcess) {
+                    dryMaterial.cancelDryingCyclePopup.open()
+                } else {
+                    dryMaterial.state = "base state"
+                    if(advancedSettingsSwipeView.currentIndex != 0) {
+                        advancedSettingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
+
+            DryMaterial {
+                id: dryMaterial
+                onProcessDone: {
+                    state = "base state"
+                    if(advancedSettingsSwipeView.currentIndex != 0) {
+                        advancedSettingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
+        }
     }
 
     BusyPopup {
