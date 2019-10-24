@@ -23,7 +23,7 @@ Item {
                 case ProcessStateType.WaitingForSpool:
                     state = "waiting_for_spool"
                     break;
-                case ProcessStateType.HeatingChamber:
+                case ProcessStateType.Loading:
                 case ProcessStateType.DryingSpool:
                     state = "drying_spool"
                     break;
@@ -290,7 +290,7 @@ Item {
             PropertyChanges {
                 target: title
                 text: {
-                    if(bot.process.stateType == ProcessStateType.HeatingChamber) {
+                    if(bot.process.stateType == ProcessStateType.Loading) {
                         qsTr("HEATING CHAMBER")
 
                     } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
@@ -308,7 +308,7 @@ Item {
             PropertyChanges {
                 target: time_remaining_text
                 visible: {
-                    if(bot.process.stateType == ProcessStateType.HeatingChamber) {
+                    if(bot.process.stateType == ProcessStateType.Loading) {
                         false
 
                     } else if(bot.process.stateType == ProcessStateType.DryingSpool) {

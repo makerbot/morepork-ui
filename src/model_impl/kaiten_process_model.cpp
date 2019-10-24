@@ -47,6 +47,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // see morepork-kaiten/kaiten/src/kaiten/processes/printprocess.py
         if (kStepStr == "initializing" ||
             kStepStr == "initial_heating" ||
+            kStepStr == "heating_chamber" ||
             kStepStr == "final_heating" ||
             kStepStr == "cooling" ||
             kStepStr == "cooling_resuming" ||
@@ -149,8 +150,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::PositioningBuildPlate);
         else if (kStepStr == "waiting_for_spool")
             stateTypeSet(ProcessStateType::WaitingForSpool);
-        else if (kStepStr == "heating_chamber")
-            stateTypeSet(ProcessStateType::HeatingChamber);
+        // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
         else if (kStepStr == "drying_spool")
             stateTypeSet(ProcessStateType::DryingSpool);
         else

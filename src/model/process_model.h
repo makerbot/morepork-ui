@@ -61,7 +61,6 @@ class ProcessModel : public BaseModel {
         RemoveBuildPlate,
         PositioningBuildPlate, // Drying Cycle Process states
         WaitingForSpool,
-        HeatingChamber,
         DryingSpool
     };
     //MOREPORK_QML_ENUM
