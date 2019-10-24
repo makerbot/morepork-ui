@@ -13,12 +13,12 @@ Item {
     property alias selectMaterialSwipeView: selectMaterialSwipeView
 
     property variant expMaterialsList : [
-        {label: "pla", load : 220, unload : 180},
-        {label: "tough", load : 220, unload : 180},
-        {label: "petg", load : 230, unload : 200},
-        {label: "abs", load : 230, unload : 200},
-        {label: "asa", load : 230, unload : 200},
-        {label: "nylon", load : 230, unload : 200}
+        {label: "pla", load : 220, unload : 220},
+        {label: "tough", load : 220, unload : 220},
+        {label: "petg", load : 230, unload : 230},
+        {label: "abs", load : 245, unload : 245},
+        {label: "asa", load : 245, unload : 245},
+        {label: "nylon", load : 220, unload : 220}
     ]
 
     function startLoadUnloadExpExtruder(temperature) {
