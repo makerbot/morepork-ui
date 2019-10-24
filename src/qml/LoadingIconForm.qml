@@ -13,6 +13,7 @@ Rectangle {
     visible: true
 
     property alias loading: loading_icon.visible
+    property int loadingProgress: 0
 
     Image {
         id: inner_image
@@ -22,7 +23,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/loading_gears.png"
-        visible: parent.visible
+        visible: parent.visible && loadingProgress == 0
 
         RotationAnimator {
             target: inner_image
@@ -42,7 +43,7 @@ Rectangle {
         source: "qrc:/img/loading_rings.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: parent.visible
+        visible: parent.visible && loadingProgress == 0
 
         RotationAnimator {
             target: outer_image
@@ -51,6 +52,66 @@ Rectangle {
             duration: 10000
             loops: Animation.Infinite
             running: parent.visible
+        }
+    }
+
+    Text {
+        id: progress_text
+        color: "#ffffff"
+        text: loadingProgress
+        antialiasing: false
+        smooth: false
+        anchors.verticalCenterOffset: 4
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        visible: loadingProgress > 0
+        font.family: defaultFont.name
+        font.weight: Font.Light
+        font.pixelSize: 75
+
+        Text {
+            id: percentage_symbol_text
+            color: "#ffffff"
+            text: "%"
+            antialiasing: false
+            smooth: false
+            anchors.top: parent.top
+            anchors.topMargin: 2
+            anchors.right: parent.right
+            anchors.rightMargin: -30
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.family: defaultFont.name
+            font.weight: Font.Light
+            font.pixelSize: 25
+        }
+    }
+
+    onLoadingProgressChanged: canvas.requestPaint()
+    Canvas {
+        id: canvas
+        visible: loadingProgress > 0
+        antialiasing: false
+        smooth: false
+        rotation : -90
+        anchors.fill: parent
+        onPaint: {
+            var context = getContext("2d");
+            context.reset();
+
+            var centreX = parent.width*0.5;
+            var centreY = parent.height*0.5;
+
+            context.beginPath();
+            //0.06283185 = PI*2/100
+            context.arc(centreX, centreY, parent.width*0.5-15, 0,
+                        parent.loadingProgress*0.06283185, false);
+            context.lineWidth = 10;
+            context.lineCap = "round";
+            context.strokeStyle = "#FFFFFF";
+            context.stroke()
         }
     }
 }
