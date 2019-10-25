@@ -140,5 +140,6 @@
 	<file alias="error_chamber_fan_failure.png">images/error_chamber_fan_failure.png</file>
 	<file alias="calib_verification.png">images/calib_verification.png</file>
 	<file alias="cut_filament_tip.png">images/cut_filament_tip.png</file>
+        <file alias="exp_extruder_instructions.png">images/exp_extruder_instructions.png</file>
     </qresource>
 </RCC>

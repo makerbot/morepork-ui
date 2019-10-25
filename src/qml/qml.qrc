@@ -168,5 +168,7 @@
         <file>ExpExtruderMaterialSelectorForm.qml</file>
         <file>ExpExtruderTempSelector.qml</file>
         <file>ExpExtruderTempSelectorForm.qml</file>
+        <file>ExpExtruderInstructionsScreen.qml</file>
+        <file>ExpExtruderInstructionsScreenForm.qml</file>
     </qresource>
 </RCC>
