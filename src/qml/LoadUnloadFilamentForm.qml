@@ -221,7 +221,13 @@ Item {
         id: snipMaterial
         z: 1
         anchors.verticalCenterOffset: -20
-        visible: !snipMaterialAlertAcknowledged
+        visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload
+    }
+
+    ExpExtruderInstructionsScreen {
+        id: expExtruderInstructions
+        z: 1
+        visible: false
     }
 
     Image {
@@ -405,6 +411,11 @@ Item {
             }
 
             PropertyChanges {
+                target: expExtruderInstructions
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: {
                     qsTr("%1 DETECTED").arg(materialName)
@@ -451,7 +462,12 @@ Item {
 
             PropertyChanges {
                 target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged
+                visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload
+            }
+
+            PropertyChanges {
+                target: expExtruderInstructions
+                visible: false
             }
 
             PropertyChanges {
@@ -511,6 +527,30 @@ Item {
             PropertyChanges {
                 target: snipMaterial
                 visible: false
+            }
+
+            PropertyChanges {
+                target: expExtruderInstructions
+                visible: {
+                    // Dont show this screen when either of the
+                    // switches are triggered which means the user
+                    // has already chosen their loading style.
+                    // Show this creen only during a load process
+                    // and only when external loading i.e. using
+                    // exp. extruder.
+                    // Show this when the extruder is close to the
+                    // target temperature. The target temp. non
+                    // check is required to accomodate the kaiten
+                    // notification delay and ignore the condition
+                    // (currentTemperature + 30 >= 0).
+
+                    !bayFilamentSwitch &&
+                    !extruderFilamentSwitch &&
+                    bot.process.type == ProcessType.Load &&
+                    isExternalLoadUnload &&
+                    targetTemperature > 0 &&
+                    ((currentTemperature + 30) >= targetTemperature)
+                }
             }
 
             PropertyChanges {
@@ -603,6 +643,11 @@ Item {
             }
 
             PropertyChanges {
+                target: expExtruderInstructions
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: qsTr("EXTRUSION CONFIRMATION")
                 anchors.topMargin: 120
@@ -657,6 +702,11 @@ Item {
 
             PropertyChanges {
                 target: snipMaterial
+                visible: false
+            }
+
+            PropertyChanges {
+                target: expExtruderInstructions
                 visible: false
             }
 
@@ -717,6 +767,11 @@ Item {
 
             PropertyChanges {
                 target: snipMaterial
+                visible: false
+            }
+
+            PropertyChanges {
+                target: expExtruderInstructions
                 visible: false
             }
 
@@ -878,6 +933,11 @@ Item {
             }
 
             PropertyChanges {
+                target: expExtruderInstructions
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: qsTr("REWIND SPOOL")
                 anchors.topMargin: 120
@@ -946,6 +1006,11 @@ Item {
 
             PropertyChanges {
                 target: snipMaterial
+                visible: false
+            }
+
+            PropertyChanges {
+                target: expExtruderInstructions
                 visible: false
             }
 
