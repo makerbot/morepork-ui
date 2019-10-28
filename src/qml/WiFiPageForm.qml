@@ -51,7 +51,9 @@ Item {
             }
         }
         else {
-            bot.net.setWifiState(WifiState.NotConnected)
+            if (bot.net.wifiState != WifiState.Connecting) {
+                bot.net.setWifiState(WifiState.NotConnected)
+            }
         }
     }
 
@@ -633,7 +635,7 @@ Item {
                             else if(bot.net.wifiError == WifiError.InvalidPassword) {
                                 wifiPopup.close()
                             }
-                            else if(bot.net.wifiState == WifiState.NotConnected) {
+                            if(wifiPopup.opened) {
                                 wifiPopup.close()
                             }
                         }
@@ -662,10 +664,11 @@ Item {
                         if(isForgetEnabled) {
                             qsTr("FORGET %1?").arg(selectedWifiName)
                         }
-                        else if(bot.net.wifiState == WifiState.Connecting ||
-                                bot.net.wifiState == WifiState.Connected ||
-                                bot.net.wifiState == WifiState.Connected) {
+                        else if(bot.net.wifiState == WifiState.Connecting) {
                             qsTr("CONNECTING TO %1").arg(selectedWifiName)
+                        }
+                        else if(bot.net.wifiState == WifiState.Connected) {
+                            qsTr("CONNECTED")
                         }
                         else if(bot.net.wifiState == WifiState.Disconnecting) {
                             qsTr("DISCONNECT FROM %1?").arg(selectedWifiName)
@@ -674,11 +677,8 @@ Item {
                             if(bot.net.wifiError == WifiError.InvalidPassword) {
                                 qsTr("INVALID PASSWORD")
                             }
-                            else if(bot.net.wifiError == WifiError.ConnectFailed) {
+                            else if (bot.net.wifiError != WifiError.NoError) {
                                 qsTr("FAILED TO CONNECT TO %1").arg(selectedWifiName)
-                            }
-                            else if(bot.net.wifiState == WifiState.NotConnected) {
-                                qsTr("CONNECTION FAILED")
                             }
                         }
                     }
