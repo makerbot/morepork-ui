@@ -28,7 +28,9 @@ Item {
                     state = "drying_spool"
                     break;
                 case ProcessStateType.Done:
-                    if(state != "cancelling") {
+                    if(state != "cancelling" &&
+                       state != "drying_failed" &&
+                       state != "base state") {
                         state = "drying_complete"
                     }
                     break;
