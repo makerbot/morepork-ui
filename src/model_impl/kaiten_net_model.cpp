@@ -27,9 +27,6 @@ void KaitenNetModel::netUpdate(const Json::Value &state) {
         const QString kIfaceStr = kIface.asString().c_str();
         if (kIfaceStr == "wifi")
             wifiStateSet(WifiState::Connected);
-        else if(kIfaceStr == "ethernet" ||
-                kIfaceStr == "offline")
-            wifiStateSet(WifiState::NotConnected);
     }
 
     QString eth_mac_addr, wlan_mac_addr;
@@ -74,7 +71,6 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
             wifiStateSet(WifiState::NoWifiFound);
             WiFiListReset();
         } else {
-            wifiStateSet(WifiState::NotConnected);
             WiFiListSet(wifi_list);
         }
     }
