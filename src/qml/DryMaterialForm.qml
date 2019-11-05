@@ -54,7 +54,7 @@ Item {
     property variant dryingMaterialsListMethod : [
         {label: "pla", temperature : 45, time : 4},
         {label: "tough", temperature : 45, time : 4},
-        {label: "pva", temperature : 45, time : 4},
+        {label: "pva", temperature : 45, time : 16},
         {label: "abs/asa/sr30", temperature : 60, time : 4},
         {label: "petg", temperature : 60, time : 2},
     ]
@@ -62,10 +62,9 @@ Item {
     property variant dryingMaterialsListMethodX : [
         {label: "pla", temperature : 45, time : 4},
         {label: "tough", temperature : 45, time : 4},
-        {label: "pva", temperature : 45, time : 4},
+        {label: "pva", temperature : 45, time : 16},
         {label: "abs/asa/sr30", temperature : 60, time : 4},
         {label: "petg", temperature : 60, time : 2},
-        {label: "nylon", temperature : 80, time : 8}
     ]
 
     Image {
