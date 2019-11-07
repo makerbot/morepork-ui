@@ -207,6 +207,14 @@ void BotModel::setAnalyticsEnabled(const bool enabled) {
     qDebug() << FL_STRM << "called with parameter: " << enabled;
 }
 
+void BotModel::drySpool() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::startDrying(const int temperature, const float time) {
+    qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

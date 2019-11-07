@@ -12,6 +12,10 @@ AdvancedSettingsPageForm {
         advancedSettingsSwipeView.swipeToItem(2)
     }
 
+    buttonDryMaterial.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(8)
+    }
+
     buttonAssistedLeveling.onClicked: {
         advancedSettingsSwipeView.swipeToItem(3)
     }

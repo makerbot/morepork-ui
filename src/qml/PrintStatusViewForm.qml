@@ -222,9 +222,9 @@ Item {
                                 bot.process.printPercentage + "%"
                             } else if(bot.extruderATargetTemp > 0) {
                                 (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderATargetTemp) +
-                                 support_extruder_used_ ?
-                                     qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp) :
-                                     "\n")
+                                 (support_extruder_used_ ?
+                                     (qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp)) :
+                                     "\n"))
                             } else {
                                 (qsTr("%1 C").arg(bot.chamberCurrentTemp) + " | " + qsTr("%1 C").arg(bot.chamberTargetTemp))
                             }

@@ -170,5 +170,11 @@
         <file>ExpExtruderTempSelectorForm.qml</file>
         <file>ExpExtruderInstructionsScreen.qml</file>
         <file>ExpExtruderInstructionsScreenForm.qml</file>
+        <file>DryMaterial.qml</file>
+        <file>DryMaterialForm.qml</file>
+        <file>DryMaterialButton.qml</file>
+        <file>DryMaterialButtonForm.qml</file>
+        <file>DryMaterialSelector.qml</file>
+        <file>DryMaterialSelectorForm.qml</file>
     </qresource>
 </RCC>
