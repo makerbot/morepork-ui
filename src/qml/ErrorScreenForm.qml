@@ -408,7 +408,7 @@ Item {
                             "qrc:/img/error_filament_jam_1XA.png"
                             break;
                         }
-                    } else if(bot.process.extruderBJammed || bot.extruderBJammed) {
+                    } else if(bot.process.extruderBJammed) {
                         switch(bot.extruderBType) {
                         case ExtruderType.MK14:
                             "qrc:/img/error_filament_jam_2.png"
