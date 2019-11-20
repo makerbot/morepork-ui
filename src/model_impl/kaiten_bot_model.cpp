@@ -541,12 +541,16 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
             conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
         }
         else {
-            json_params["method"] = Json::Value("load_filament");
+            Json::Value json_params1(Json::objectValue);
+            json_params1["method"] = Json::Value("load_filament");
             Json::Value json_args(Json::objectValue);
             json_args["tool_index"] = Json::Value(kToolIndex);
+            if(json_params.isMember("temperature_settings")) {
+                json_args["temperature_settings"] = json_params["temperature_settings"];
+            }
             json_args["external"] = Json::Value(external);
-            json_params["params"] = Json::Value(json_args);
-            conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+            json_params1["params"] = Json::Value(json_args);
+            conn->jsonrpc.invoke("process_method", json_params1, std::weak_ptr<JsonRpcCallback>());
         }
     }
     catch(JsonRpcInvalidOutputStream &e){
@@ -588,11 +592,15 @@ void KaitenBotModel::unloadFilament(const int kToolIndex, bool external, bool wh
             conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
         }
         else {
-            json_params["method"] = Json::Value("unload_filament");
+            Json::Value json_params1(Json::objectValue);
+            json_params1["method"] = Json::Value("unload_filament");
             Json::Value json_args(Json::objectValue);
             json_args["tool_index"] = Json::Value(kToolIndex);
-            json_params["params"] = Json::Value(json_args);
-            conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+            if(json_params.isMember("temperature_settings")) {
+                json_args["temperature_settings"] = json_params["temperature_settings"];
+            }
+            json_params1["params"] = Json::Value(json_args);
+            conn->jsonrpc.invoke("process_method", json_params1, std::weak_ptr<JsonRpcCallback>());
         }
     }
     catch(JsonRpcInvalidOutputStream &e){
@@ -1269,12 +1277,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             } \
  \
             const Json::Value &kErrList = kExtruder ## EXT_SYM["error"]; \
-            /* TODO(praveen) */ \
-            /* The error and it's source are present in the error */ \
-            /* dict so this is not the best way to do this. */ \
             extruder ## EXT_SYM ## ToolheadDisconnectSet(checkError(kErrList, 13)); \
-            extruder ## EXT_SYM ## OOFSet(checkError(kErrList, 80)); \
-            extruder ## EXT_SYM ## JammedSet(checkError(kErrList, 81)); \
             if(kErrList.isArray() && kErrList.size() > 0) { \
               QString errStr; \
               for (const Json::Value err : kErrList) { \

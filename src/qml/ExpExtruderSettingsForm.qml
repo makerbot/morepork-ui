@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import ProcessStateTypeEnum 1.0
 
 Item {
     width: 800
@@ -30,7 +31,9 @@ Item {
             // loadFilament(int tool_index, bool external, bool whilePrinitng, QList<int> temperature_list)
             if(printPage.isPrintProcess &&
                bot.process.stateType == ProcessStateType.Paused) {
-                bot.loadFilament(0, false, true, [temperature, 0])
+                // When using experimental extruder, loading
+                // mid-print should use external loading.
+                bot.loadFilament(0, true, true, [temperature, 0])
             }
             else {
                 bot.loadFilament(0, false, false, [temperature,0])
@@ -44,8 +47,8 @@ Item {
             else {
                 bot.unloadFilament(0, true, false, [temperature,0])
             }
-            loadUnloadFilamentProcess.state = "preheating"
         }
+        loadUnloadFilamentProcess.state = "preheating"
         selectMaterialSwipeView.swipeToItem(0)
         materialSwipeView.swipeToItem(2)
     }

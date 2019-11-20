@@ -179,8 +179,6 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     const Json::Value &error = proc["error"];
     UPDATE_INT_PROP(errorCode, error["code"]);
 
-    bool bay_out_of_filament_a = false,
-         bay_out_of_filament_b = false;
     if (error.isObject() && error["code"].isInt()) {
         const int err = error["code"].asInt();
 
@@ -194,9 +192,23 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             }
         }
 
+        #define UPDATE_ERROR(COMP, ERR) \
+          if(error_source_idx == 0) { \
+            COMP ## A ## ERR ## Set(true); \
+          } else if(error_source_idx == 1) { \
+            COMP ## B ## ERR ## Set(true); \
+          } \
+
+        #define CLEAR_ERROR(COMP, ERR) \
+          COMP ## A ## ERR ## Reset(); \
+          COMP ## B ## ERR ## Reset(); \
+
         switch(err) {
             case 0:
                 errorTypeSet(ErrorType::NoError);
+                CLEAR_ERROR(extruder, OOF)
+                CLEAR_ERROR(extruder, Jammed)
+                CLEAR_ERROR(filamentBay, OOF)
                 break;
             case 13:
                 errorTypeSet(ErrorType::NotConnected);
@@ -218,14 +230,11 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
                 break;
             case 81:
                 errorTypeSet(ErrorType::FilamentJam);
+                UPDATE_ERROR(extruder, Jammed)
                 break;
             case 83:
                 errorTypeSet(ErrorType::DrawerOutOfFilament);
-                if(error_source_idx == 0) {
-                    bay_out_of_filament_a = true;
-                } else if(error_source_idx == 1) {
-                    bay_out_of_filament_b = true;
-                }
+                UPDATE_ERROR(filamentBay, OOF)
                 break;
             case 99:
                 errorTypeSet(ErrorType::ChamberFanFailure);
@@ -238,6 +247,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
                 break;
             case 1041:
                 errorTypeSet(ErrorType::ExtruderOutOfFilament);
+                UPDATE_ERROR(extruder, OOF)
                 break;
             case 1049:
                 errorTypeSet(ErrorType::IncompatibleSlice);
@@ -249,8 +259,6 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     } else {
         errorTypeReset();
     }
-    filamentBayAOOFSet(bay_out_of_filament_a);
-    filamentBayBOOFSet(bay_out_of_filament_b);
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
 

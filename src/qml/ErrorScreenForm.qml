@@ -398,16 +398,17 @@ Item {
             PropertyChanges {
                 target: errorImage
                 source: {
-                    if(bot.extruderAJammed) {
+                    if(bot.process.extruderAJammed) {
                         switch(bot.extruderAType) {
                         case ExtruderType.MK14:
+                        case ExtruderType.MK14_EXP:
                             "qrc:/img/error_filament_jam_1.png"
                             break;
                         case ExtruderType.MK14_HOT:
                             "qrc:/img/error_filament_jam_1XA.png"
                             break;
                         }
-                    } else if(bot.extruderBJammed) {
+                    } else if(bot.process.extruderBJammed || bot.extruderBJammed) {
                         switch(bot.extruderBType) {
                         case ExtruderType.MK14:
                             "qrc:/img/error_filament_jam_2.png"
@@ -434,9 +435,9 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.").arg(
-                    (bot.extruderAJammed ?
-                           qsTr("Model Extruder 1") :
-                           qsTr("Support Extruder 2")))
+                    (bot.process.extruderAJammed ?
+                                    qsTr("Model Extruder 1") :
+                                    qsTr("Support Extruder 2")))
             }
 
             PropertyChanges {
@@ -444,8 +445,8 @@ Item {
                 buttonWidth: 340
                 label_width: 300
                 label: {
-                    qsTr("PURGE EXTRUDER %1").arg(
-                       (bot.extruderAJammed ? qsTr("1") : qsTr("2")))
+                    qsTr("PURGE EXTRUDER %1").arg((bot.process.extruderAJammed ?
+                                                       qsTr("1") : qsTr("2")))
                 }
             }
 
@@ -455,8 +456,8 @@ Item {
                 buttonWidth: 340
                 label_width: 320
                 label: {
-                    qsTr("UNLOAD EXTRUDER %1").arg(
-                       (bot.extruderAJammed ? qsTr("1") : qsTr("2")))
+                    qsTr("UNLOAD EXTRUDER %1").arg((bot.process.extruderAJammed ?
+                                                        qsTr("1") : qsTr("2")))
                 }
             }
         },
@@ -480,8 +481,7 @@ Item {
                 text: {
                     qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
                         (bot.process.filamentBayAOOF ?
-                             qsTr("MODEL") :
-                             qsTr("SUPPORT")))
+                             qsTr("MODEL") : qsTr("SUPPORT")))
                 }
                 anchors.topMargin: 0
             }
@@ -521,7 +521,7 @@ Item {
             name: "extruder_oof_error_state1"
             PropertyChanges {
                 target: errorImage
-                source: bot.extruderAOOF ?
+                source: bot.process.extruderAOOF ?
                             "qrc:/img/error_oof_extruder1.png" :
                             "qrc:/img/error_oof_extruder2.png"
             }
@@ -535,7 +535,8 @@ Item {
                 target: errorMessageTitle
                 text: {
                     qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
-                        bot.extruderAOOF ?  qsTr("MODEL") : qsTr("SUPPORT"))
+                                bot.process.extruderAOOF ?
+                                    qsTr("MODEL") : qsTr("SUPPORT"))
                 }
                 anchors.topMargin: 0
             }
@@ -544,10 +545,10 @@ Item {
                 target: errorMessageDescription
                 text: {
                     qsTr("Remove the lid and swivel clip then\ngently pull out the remaining %1\nmaterial from %2.").arg(
-                        bot.extruderAOOF ?
+                        bot.process.extruderAOOF ?
                               qsTr("model") :
                               qsTr("support")).arg(
-                        bot.extruderAOOF ?
+                        bot.process.extruderAOOF ?
                               qsTr("Model Extruder 1") :
                               qsTr("Support Extruder 2")) +
                     qsTr(" This\nprocess can take up to 60 seconds.")
@@ -573,7 +574,7 @@ Item {
             name: "extruder_oof_error_state2"
             PropertyChanges {
                 target: errorImage
-                source: bot.extruderAOOF ?
+                source: bot.process.extruderAOOF ?
                             "qrc:/img/error_oof_bay1.png" :
                             "qrc:/img/error_oof_bay1.png"
             }
@@ -595,9 +596,9 @@ Item {
                 target: errorMessageDescription
                 text: {
                     qsTr("Open material bay %1 and remove the\nempty material spool.").arg(
-                            bot.extruderAOOF ? qsTr("1") : qsTr("2")) +
+                            bot.process.extruderAOOF ? qsTr("1") : qsTr("2")) +
                     qsTr(" Then place a\nMakerBot %1 spool in the bay\nto load material.").arg(
-                        bot.extruderAOOF ?
+                        bot.process.extruderAOOF ?
                              printPage.print_model_material.toUpperCase() :
                              printPage.print_support_material.toUpperCase())
                 }

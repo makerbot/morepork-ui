@@ -2,6 +2,7 @@ import QtQuick 2.10
 import ErrorTypeEnum 1.0
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 ErrorScreenForm {
     function acknowledgeError() {
@@ -14,36 +15,53 @@ ErrorScreenForm {
             printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
         }
         if(mainSwipeView.currentIndex != 0) {
-            mainSwipeView.setCurrentIndex(0)
+            mainSwipeView.swipeToItem(0)
         }
     }
 
+    function isExtruderAError() {
+        return (bot.process.extruderAJammed ||
+                bot.process.filamentBayAOOF ||
+                bot.process.extruderAOOF)
+    }
+
     function loadPurgeFromErrorScreen() {
+        if(isExtruderAError() && materialPage.bay1.usingExperimentalExtruder) {
+            materialPage.isLoadFilament = true
+            materialPage.materialSwipeView.swipeToItem(1)
+            return;
+        }
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true
         materialPage.enableMaterialDrawer()
         // loadFilament(int tool_index, bool external, bool whilePrinitng)
         // if load/unload happens while in print process
         // i.e. while print paused, set whilePrinting to true
-        if(bot.extruderAJammed ||
-           bot.process.filamentBayAOOF ||
-           bot.extruderAOOF) {
+        if(isExtruderAError) {
             bot.loadFilament(0, false, true)
         } else {
             bot.loadFilament(1, false, true)
         }
+        materialPage.materialSwipeView.swipeToItem(2)
     }
 
     function unloadFromErrorScreen() {
+        if(isExtruderAError() && materialPage.bay1.usingExperimentalExtruder) {
+            materialPage.isLoadFilament = false
+            materialPage.materialSwipeView.swipeToItem(1)
+            return;
+        }
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = false
         materialPage.enableMaterialDrawer()
         // unloadFilament(int tool_index, bool external, bool whilePrinitng)
-        if(bot.extruderAJammed) {
+        if(isExtruderAError) {
             bot.unloadFilament(0, true, true)
         } else {
             bot.unloadFilament(1, true, true)
         }
+        materialPage.loadUnloadFilamentProcess.state = "preheating"
+        materialPage.materialSwipeView.swipeToItem(2)
     }
 
     button1 {
@@ -69,7 +87,7 @@ ErrorScreenForm {
                 // material spool on the bay for the paused print.
                 (bot.process.stateType != ProcessStateType.Paused ||
                 (bot.process.stateType == ProcessStateType.Paused &&
-                  (bot.process.filamentBayAOOF || bot.extruderAOOF ?
+                  (bot.process.filamentBayAOOF || bot.process.extruderAOOF ?
                       printPage.print_model_material != materialPage.bay1.filamentMaterialName.toLowerCase() :
                       printPage.print_support_material != materialPage.bay2.filamentMaterialName.toLowerCase())))
             }
@@ -104,36 +122,36 @@ ErrorScreenForm {
                 else if(state == "filament_jam_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Purge
-                        loadPurgeFromErrorScreen()
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
-                        materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(2)
+                        loadPurgeFromErrorScreen()
                     }
                 }
                 else if(state == "filament_bay_oof_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Load material
-                        loadPurgeFromErrorScreen()
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
-                        materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(2)
+                        loadPurgeFromErrorScreen()
                     }
                 }
                 else if(state == "extruder_oof_error_state1") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
-                        state = "extruder_oof_error_state2"
+                        if(bot.extruderAType == ExtruderType.MK14_EXP) {
+                            acknowledgeError()
+                            resetSwipeViews()
+                            mainSwipeView.swipeToItem(5)
+                        } else {
+                            state = "extruder_oof_error_state2"
+                        }
                     }
                 }
                 else if(state == "extruder_oof_error_state2") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Load material
-                        loadPurgeFromErrorScreen()
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
-                        materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(2)
+                        loadPurgeFromErrorScreen()
                     }
                 } else if (state == "no_tool_connected") {
                     resetSwipeViews()
@@ -176,11 +194,9 @@ ErrorScreenForm {
                 if(state == "filament_jam_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Unload
-                        unloadFromErrorScreen()
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(5)
-                        materialPage.loadUnloadFilamentProcess.state = "preheating"
-                        materialPage.materialSwipeView.swipeToItem(2)
+                        unloadFromErrorScreen()
                     }
                 }
                 acknowledgeError()
