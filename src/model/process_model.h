@@ -114,6 +114,11 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, targetHesLower, 3400)
     MODEL_PROP(int, currentHes, 3600)
     MODEL_PROP(int, levelState, 0)
+    // Only valid in a print process context
+    MODEL_PROP(bool, extruderAOOF, false)
+    MODEL_PROP(bool, extruderBOOF, false)
+    MODEL_PROP(bool, extruderAJammed, false)
+    MODEL_PROP(bool, extruderBJammed, false)
     MODEL_PROP(bool, filamentBayAOOF, false)
     MODEL_PROP(bool, filamentBayBOOF, false)
     MODEL_PROP(bool, cancelled, false)

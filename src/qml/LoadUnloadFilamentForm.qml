@@ -546,7 +546,8 @@ Item {
 
                     !bayFilamentSwitch &&
                     !extruderFilamentSwitch &&
-                    bot.process.type == ProcessType.Load &&
+                    (bot.process.type == ProcessType.Print ||
+                     bot.process.type == ProcessType.Load) &&
                     isExternalLoadUnload &&
                     targetTemperature > 0 &&
                     ((currentTemperature + 30) >= targetTemperature)

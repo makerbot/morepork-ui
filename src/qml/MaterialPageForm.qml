@@ -41,7 +41,6 @@ Item {
     property alias closeWaitUntilUnloadedPopup: closeWaitUntilUnloadedPopup
     property bool isTopLoading: bot.topLoadingWarning
     property bool isSpoolValidityCheckPending: bot.spoolValidityCheckPending
-
     property bool isMaterialMismatch: false
 
     onIsLoadUnloadProcessChanged: {
@@ -75,17 +74,37 @@ Item {
         }
     }
 
+    // There is a weird race condition when resetting the bool
+    // (bot.topLoadingWarning) immediately after it is set,
+    // where the bool is actually reset but the qml side property
+    // pointing to the bool(isTopLoading) doesn't reflect it and
+    // understandably no changed() signal (qml side) is emitted
+    // either. This delay seems to eliminate this race condition(?)
+    // and with this the qml side property reflects the change
+    // correctly. Not happy that I spent two days tracking this down.
+
+    // C++ property --changes--> qml property changes --> on qml property
+    // change, call a function that changes the c++ property --> c++ property
+    // is changed by function --> qml property does not change.
+    Timer {
+        id: respondExpExtruderTopLoading
+        interval: 100
+        onTriggered: {
+            bot.acknowledgeMaterial(true)
+        }
+    }
+
     onIsTopLoadingChanged: {
         if(isTopLoading) {
             if(loadUnloadFilamentProcess.bayID == 1 &&
                bay1.usingExperimentalExtruder) {
-                bot.acknowledgeMaterial(true)
-                return;
+                respondExpExtruderTopLoading.start()
+            } else {
+                if(cancelLoadUnloadPopup.opened) {
+                    cancelLoadUnloadPopup.close()
+                }
+                materialWarningPopup.open()
             }
-            if(cancelLoadUnloadPopup.opened) {
-                cancelLoadUnloadPopup.close()
-            }
-            materialWarningPopup.open()
         }
         else {
             materialWarningPopup.close()

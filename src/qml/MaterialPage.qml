@@ -57,6 +57,16 @@ MaterialPageForm {
         }
     }
 
+    function isUsingExpExtruder(extruderID) {
+        if(extruderID == 1) {
+            return bay1.usingExperimentalExtruder
+        } else if(extruderID == 2) {
+            return bay2.usingExperimentalExtruder
+        } else {
+            return false
+        }
+    }
+
     function canLoadUnloadStart(extruderID) {
         if(!isExtruderPresent(extruderID)) {
             // Can never load without an extruder
@@ -70,6 +80,9 @@ MaterialPageForm {
             return false
         } else if(isExtruderFilamentPresent(extruderID)) {
             // Always allow purge and unload while paused
+            return true
+        } else if(isUsingExpExtruder(extruderID)) {
+            // Allow loading mid-print for experimental extruders without any material checks
             return true
         } else {
             // Disallow loading in any case where we would not start a print
