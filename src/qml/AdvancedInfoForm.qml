@@ -11,6 +11,7 @@ Item {
     RefreshButton {
         button_mouseArea.onClicked: {
             bot.query_status()
+            bot.get_calibration_offsets()
         }
     }
 
@@ -58,6 +59,15 @@ Item {
             AdvancedInfoMotionStatusItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 40
+            }
+
+            RowLayout {
+                anchors.left: parent.left
+                anchors.leftMargin: 40
+                spacing: 0
+                AdvancedInfoCalibrationItem {
+
+                }
             }
         }
     }
