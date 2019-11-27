@@ -3,13 +3,11 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 400
-    height: 240
+    width: 800
+    height: 200
 
     ColumnLayout {
-        id: columnLayout
-        anchors.bottomMargin: 80
-        spacing: -1.5
+        anchors.bottomMargin: 10
         anchors.fill: parent
 
         Text {
@@ -22,29 +20,27 @@ Item {
             color: "#ffffff"
         }
 
-        Item {
-            id: spacing_item
-            width: 200
-            height: 15
-            visible: true
-        }
+        RowLayout {
+            id: calibration_rowLayout
+            spacing: 0
+            anchors.top: heading.bottom
+            anchors.topMargin: 15
 
-        AdvancedInfoElement {
-            id: currentTempProperty
-            label: qsTr("X OFFSET")
-            value: bot.offsetX
-        }
+            AdvancedInfoCalibrationElement {
+                id: toolheadA
+                calibrationLabelProperty.text: qsTr("TOOLHEAD A")
+                xOffset.value: bot.offsetAX.toFixed(10)
+                yOffset.value: bot.offsetAY.toFixed(10)
+                zOffset.value: bot.offsetAZ.toFixed(10)
+            }
 
-        AdvancedInfoElement {
-            id: targetTempProperty
-            label: qsTr("Y OFFSET")
-            value: bot.offsetY
-        }
-
-        AdvancedInfoElement {
-            id: fanASpeedProperty
-            label: qsTr("Z OFFSET")
-            value: bot.offsetZ
+            AdvancedInfoCalibrationElement {
+                id: toolheadB
+                calibrationLabelProperty.text: qsTr("TOOLHEAD B")
+                xOffset.value: bot.offsetBX.toFixed(10)
+                yOffset.value: bot.offsetBY.toFixed(10)
+                zOffset.value: bot.offsetBZ.toFixed(10)
+            }
         }
     }
 }

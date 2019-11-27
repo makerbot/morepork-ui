@@ -61,13 +61,9 @@ Item {
                 anchors.leftMargin: 40
             }
 
-            RowLayout {
+            AdvancedInfoCalibrationItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 40
-                spacing: 0
-                AdvancedInfoCalibrationItem {
-
-                }
             }
         }
     }

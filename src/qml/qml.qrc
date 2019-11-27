@@ -178,5 +178,7 @@
         <file>DryMaterialSelectorForm.qml</file>
         <file>AdvancedInfoCalibrationItem.qml</file>
         <file>AdvancedInfoCalibrationItemForm.qml</file>
+        <file>AdvancedInfoCalibrationElementForm.qml</file>
+        <file>AdvancedInfoCalibrationElement.qml</file>
     </qresource>
 </RCC>

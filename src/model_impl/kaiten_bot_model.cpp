@@ -1688,9 +1688,12 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
 
 void KaitenBotModel::getCalibrationOffsetsUpdate(const Json::Value &result) {
     if (result.isObject()) {
-        UPDATE_FLOAT_PROP(offsetX, result["x"]);
-        UPDATE_FLOAT_PROP(offsetY, result["y"]);
-        UPDATE_FLOAT_PROP(offsetZ, result["z"]);
+        UPDATE_FLOAT_PROP(offsetAX, result["a"]["x"]);
+        UPDATE_FLOAT_PROP(offsetAY, result["a"]["y"]);
+        UPDATE_FLOAT_PROP(offsetAZ, result["a"]["z"]);
+        UPDATE_FLOAT_PROP(offsetBX, result["b"]["x"]);
+        UPDATE_FLOAT_PROP(offsetBY, result["b"]["y"]);
+        UPDATE_FLOAT_PROP(offsetBZ, result["b"]["z"]);
     }
 }
 

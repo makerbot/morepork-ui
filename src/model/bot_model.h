@@ -302,9 +302,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, cameraState, "Unknown")
 
     // Calibration Offsets
-    MODEL_PROP(float, offsetX, -999.999)
-    MODEL_PROP(float, offsetY, -999.999)
-    MODEL_PROP(float, offsetZ, -999.999)
+    MODEL_PROP(float, offsetAX, -999.999)
+    MODEL_PROP(float, offsetAY, -999.999)
+    MODEL_PROP(float, offsetAZ, -999.999)
+    MODEL_PROP(float, offsetBX, -999.999)
+    MODEL_PROP(float, offsetBY, -999.999)
+    MODEL_PROP(float, offsetBZ, -999.999)
 
   protected:
     BotModel();

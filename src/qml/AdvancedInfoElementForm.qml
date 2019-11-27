@@ -5,6 +5,7 @@ Item {
     height: 25
 
     property alias label: label.text
+    property alias label_width: label.width
     property alias value: value.text
     property alias value_element: value
     property alias value_anchors: value.anchors
