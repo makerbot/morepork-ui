@@ -205,6 +205,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, spoolAUpdateFinished, true)
     MODEL_PROP(bool, spoolBUpdateFinished, true)
 
+    MODEL_PROP(float, spoolALinearDensity, -999.999)
+    MODEL_PROP(float, spoolBLinearDensity, -999.999)
+
     // Advanced Info Properties
     // Chamber
     MODEL_PROP(int, infoChamberCurrentTemp, -999)

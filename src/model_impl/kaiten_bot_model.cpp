@@ -1195,6 +1195,8 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
               si["first_load_date"]); \
           UPDATE_INT_PROP(spool ## BAY_SYM ## MaxTemperature, \
               si["max_temperature"]); \
+          UPDATE_FLOAT_PROP(spool ## BAY_SYM ## LinearDensity, \
+              si["linear_density"]); \
           spool ## BAY_SYM ## DetailsReadySet(true); \
       } \
     }
