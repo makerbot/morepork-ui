@@ -215,6 +215,10 @@ void BotModel::startDrying(const int temperature, const float time) {
     qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
 }
 
+void BotModel::get_calibration_offsets() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
