@@ -2,6 +2,6 @@
 !.gitignore
 /morepork-ui-artifactory/artifacts
 morepork-ui-artifactory
-morepork-ui-artifactory.pro.*
 /build
 /artifacts
+CMakeLists.txt.user
