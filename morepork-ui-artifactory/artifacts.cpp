@@ -8,8 +8,7 @@ const QString Artifacts::UNZIPPED_LOC = PROJECT_DIR + "/../artifacts/";
 #if __APPLE__
 #define MB_PLATFORM "Mac64"
 #elif defined(__linux__)
-// TODO: Support more than one linux platform
-#define MB_PLATFORM "Ubuntu_1604_64"
+#define MB_PLATFORM LINUX_DISTRO
 #else
 #error Building on unsupported platform
 #endif
