@@ -13,7 +13,6 @@ Item {
     smooth: false
     antialiasing: false
     property alias actionButton: actionButton
-    property alias actionButton2: actionButton2
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     property alias continueButton: continue_mouseArea
     property alias stopButton: stop_mouseArea
@@ -146,93 +145,6 @@ Item {
             anchors.topMargin: 25
             opacity: 1.0
         }
-
-        RoundedButton {
-            id: actionButton2
-            label: qsTr("SKIP")
-            buttonWidth: 120
-            buttonHeight: 50
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: actionButton.bottom
-            anchors.topMargin: 15
-            opacity: 0.0
-        }
-
-        RowLayout {
-            id: temperatureDisplay
-            anchors.top: subtitle.bottom
-            anchors.topMargin: 25
-            width: children.width
-            height: 35
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            spacing: 10
-            opacity: 0
-
-            Text {
-                id: extruder_A_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                id: divider_rectangle1
-                width: 1
-                height: 25
-                color: "#ffffff"
-            }
-
-            Text {
-                id: extruder_A_target_temperature_text
-                text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
-                           "50C" :
-                           (bot.extruderATargetTemp + "C")
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                width: 10
-                color: "#000000"
-            }
-
-            Text {
-                id: extruder_B_current_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                id: divider_rectangle2
-                width: 1
-                height: 25
-                color: "#ffffff"
-            }
-
-            Text {
-                id: extruder_B_target_temperature_text
-                text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
-                          "50C" :
-                          (bot.extruderBTargetTemp + "C")
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-        }
     }
 
     LoadingIcon {
@@ -242,78 +154,22 @@ Item {
         anchors.leftMargin: 80
         anchors.verticalCenter: parent.verticalCenter
         opacity: 0
-        visible: true
+    }
+
+    CleanExtrudersSequence {
+        id: cleanExtruders
+        anchors.verticalCenter: parent.verticalCenter
+        visible: false
     }
 
     states: [
         State {
-            name: "check_nozzle_clean"
+            name: "clean_nozzles"
             when: bot.process.type == ProcessType.CalibrationProcess &&
-                  bot.process.stateType == ProcessStateType.CheckNozzleClean
-
-            PropertyChanges {
-                target: animated_image
-                source: ""
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: header_image
-                source: "qrc:/img/calib_check_nozzles_clean.png"
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("CHECK EXTRUDER NOZZLES")
-                anchors.topMargin: -20
-                font.pixelSize: 22
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("If there is material on the tips of the extruders, use the steel brush to clean them in the next steps.")
-                font.pixelSize: 18
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                label_width: 300
-                buttonWidth: 300
-                label: qsTr("CLEAN EXTRUDERS")
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton2
-                label: qsTr("SKIP")
-                buttonWidth: 120
-                buttonHeight: 50
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
-            }
-        },
-
-        State {
-            name: "heating_nozzle"
-            when: bot.process.type == ProcessType.CalibrationProcess &&
-                  bot.process.stateType == ProcessStateType.HeatingNozzle
+                  (bot.process.stateType == ProcessStateType.CheckNozzleClean ||
+                   bot.process.stateType == ProcessStateType.HeatingNozzle ||
+                   bot.process.stateType == ProcessStateType.CleanNozzle ||
+                   bot.process.stateType == ProcessStateType.CoolingNozzle)
 
             PropertyChanges {
                 target: animated_image
@@ -328,90 +184,6 @@ Item {
 
             PropertyChanges {
                 target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("EXTRUDERS\nHEATING UP")
-                font.pixelSize: 22
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("The extruders are heating up. Please wait to clean nozzles.")
-                font.pixelSize: 18
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton2
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 1.0
-            }
-        },
-
-        State {
-            name: "clean_nozzle"
-            when: bot.process.type == ProcessType.CalibrationProcess &&
-                  bot.process.stateType == ProcessStateType.CleanNozzle
-
-            PropertyChanges {
-                target: header_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: animated_image
-                source: "qrc:/img/calib_scrub_nozzles.gif"
-                playing: true
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("CLEAN EXTRUDER NOZZLES")
-                font.pixelSize: 22
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Use the provided brush to clean the tips of the extruders for the most accurate calibration.")
-                font.pixelSize: 18
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                label_width: 100
-                buttonWidth: 100
-                label: qsTr("NEXT")
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton2
                 opacity: 0
             }
 
@@ -421,64 +193,8 @@ Item {
             }
 
             PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
-            }
-        },
-
-        State {
-            name: "cooling_nozzle"
-            when: bot.process.type == ProcessType.CalibrationProcess &&
-                  bot.process.stateType == ProcessStateType.CoolingNozzle
-
-            PropertyChanges {
-                target: animated_image
-                source: ""
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: header_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("COOLING EXTRUDER NOZZLES")
-                font.pixelSize: 22
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Calibration will continue after the nozzles cool down.")
-                font.pixelSize: 18
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton2
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 1.0
+                target: cleanExtruders
+                visible: true
             }
         },
 
@@ -529,16 +245,6 @@ Item {
                 buttonWidth: 400
                 label: qsTr("BUILD PLATE IS REMOVED")
                 opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton2
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
             }
         },
 
@@ -591,16 +297,6 @@ Item {
                 buttonWidth: 410
                 opacity: 1.0
             }
-
-            PropertyChanges {
-                target: actionButton2
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
-            }
         },
         State {
             name: "calibrating"
@@ -644,17 +340,7 @@ Item {
             }
 
             PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
-            }
-
-            PropertyChanges {
                 target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton2
                 opacity: 0
             }
         },
@@ -695,11 +381,6 @@ Item {
             }
 
             PropertyChanges {
-                target: actionButton2
-                opacity: 0
-            }
-
-            PropertyChanges {
                 target: subtitle
                 text: qsTr("This pair of extruders are now calibrated and can now be used for printing.")
                 font.pixelSize: 18
@@ -712,11 +393,6 @@ Item {
                 label: qsTr("DONE")
                 buttonWidth: 125
                 opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
             }
         },
 
@@ -760,17 +436,7 @@ Item {
             }
 
             PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
-            }
-
-            PropertyChanges {
                 target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton2
                 opacity: 0
             }
         }
