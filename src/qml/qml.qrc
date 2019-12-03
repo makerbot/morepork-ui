@@ -176,5 +176,11 @@
         <file>DryMaterialButtonForm.qml</file>
         <file>DryMaterialSelector.qml</file>
         <file>DryMaterialSelectorForm.qml</file>
+        <file>CleanExtrudersSequence.qml</file>
+        <file>CleanExtrudersSequenceForm.qml</file>
+        <file>CleanExtruders.qml</file>
+        <file>CleanExtrudersForm.qml</file>
+        <file>CleanExtruderMaterialSelector.qml</file>
+        <file>CleanExtruderMaterialSelectorForm.qml</file>
     </qresource>
 </RCC>

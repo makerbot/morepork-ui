@@ -20,6 +20,7 @@ class ProcessModel : public BaseModel {
         FactoryResetProcess,
         ZipLogsProcess,
         DryingCycleProcess,
+        NozzleCleaningProcess,
         Other
     };
     //MOREPORK_QML_ENUM

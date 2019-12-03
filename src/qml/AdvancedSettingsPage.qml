@@ -77,4 +77,8 @@ AdvancedSettingsPageForm {
         bot.getCloudServicesInfo()
         advancedSettingsSwipeView.swipeToItem(7)
     }
+
+    buttonCleanExtruders.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(9)
+    }
 }

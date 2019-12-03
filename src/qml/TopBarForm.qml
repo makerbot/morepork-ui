@@ -270,6 +270,9 @@ Item {
                             case 8:
                                 qsTr("DRYING CYCLE")
                                 break;
+                            case 9:
+                                qsTr("CLEAN EXTRUDERS")
+                                break;
                             default:
                                 qsTr("ADVANCED")
                                 break;
@@ -326,6 +329,9 @@ Item {
                             break;
                         case 8:
                             qsTr("DRYING CYCLE")
+                            break;
+                        case 9:
+                            qsTr("CLEAN EXTRUDERS")
                             break;
                         default:
                             qsTr("ADVANCED")

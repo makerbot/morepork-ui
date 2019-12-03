@@ -215,6 +215,15 @@ void BotModel::startDrying(const int temperature, const float time) {
     qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
 }
 
+void BotModel::cleanNozzles(const QList<int> temperature) {
+    qDebug() << FL_STRM << "called";
+    qDebug() << "Temperatures";
+    for(int i = 0; i < temperature.size(); i++) {
+        qDebug() << temperature.value(i);
+    }
+}
+
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
