@@ -111,7 +111,11 @@ MaterialPageForm {
     bay1 {
         loadButton {
             button_mouseArea.onClicked: {
-                if(experimentalExtruderInstalled) {
+                // Only if an experimental extruder is installed and there is no recognized
+                // material spool in the bay, do we want the user to choose a load temperature.
+                // Otherwise, Kaiten should handle using the proper temperature for the material
+                // loaded in the bay.
+                if(experimentalExtruderInstalled && bay1.filamentMaterialName == "UNKNOWN") {
                     isLoadFilament = true
                     materialSwipeView.swipeToItem(1)
                     return;
@@ -137,7 +141,11 @@ MaterialPageForm {
 
         unloadButton {
             button_mouseArea.onClicked: {
-                if(experimentalExtruderInstalled) {
+                // Only if an experimental extruder is installed and there is no recognized
+                // material spool in the bay, do we want the user to choose an unload temperature.
+                // Otherwise, Kaiten should handle using the proper temperature for the material
+                // loaded in the bay.
+                if(experimentalExtruderInstalled && bay1.filamentMaterialName == "UNKNOWN") {
                     isLoadFilament = false
                     materialSwipeView.swipeToItem(1)
                     return;
