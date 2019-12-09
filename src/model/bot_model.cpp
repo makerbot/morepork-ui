@@ -219,6 +219,15 @@ void BotModel::get_calibration_offsets() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::cleanNozzles(const QList<int> temperature) {
+    qDebug() << FL_STRM << "called";
+    qDebug() << "Temperatures";
+    for(int i = 0; i < temperature.size(); i++) {
+        qDebug() << temperature.value(i);
+    }
+}
+
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

@@ -92,6 +92,7 @@
 	<file alias="icon_preheat.png">images/icon_preheat.png</file>
 	<file alias="icon_name_printer.png">images/icon_name_printer.png</file>
 	<file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
+	<file alias="icon_clean_extruders.png">images/icon_clean_extruders.png</file>
 	<file alias="icon_dry_material.png">images/icon_dry_material.png</file>
 	<file alias="icon_power.png">images/icon_power.png</file>
 	<file alias="calib_extruders.png">images/calib_extruders.png</file>
