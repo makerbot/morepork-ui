@@ -34,7 +34,7 @@ Item {
 
             LanguageButton {
                 id: buttonLanguageChinese
-                languageName: "中文"
+                languageName: "中文（简体）"
                 localeCode: "zh_CN"
             }
 
@@ -64,7 +64,7 @@ Item {
 
             LanguageButton {
                 id: buttonLanguageJapanese
-                languageName: "日本人"
+                languageName: "日本語"
                 localeCode: "ja_JP"
             }
 
