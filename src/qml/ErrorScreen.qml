@@ -37,7 +37,7 @@ ErrorScreenForm {
         // loadFilament(int tool_index, bool external, bool whilePrinitng)
         // if load/unload happens while in print process
         // i.e. while print paused, set whilePrinting to true
-        if(isExtruderAError) {
+        if(isExtruderAError()) {
             bot.loadFilament(0, false, true)
         } else {
             bot.loadFilament(1, false, true)
@@ -55,7 +55,7 @@ ErrorScreenForm {
         materialPage.isLoadFilament = false
         materialPage.enableMaterialDrawer()
         // unloadFilament(int tool_index, bool external, bool whilePrinitng)
-        if(isExtruderAError) {
+        if(isExtruderAError()) {
             bot.unloadFilament(0, true, true)
         } else {
             bot.unloadFilament(1, true, true)
