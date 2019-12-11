@@ -84,12 +84,24 @@ ErrorScreenForm {
 
                 // Disable load button until the printer isn't completely
                 // paused (auto-unloading) or when there is no correct
-                // material spool on the bay for the paused print.
-                (bot.process.stateType != ProcessStateType.Paused ||
-                (bot.process.stateType == ProcessStateType.Paused &&
-                  (bot.process.filamentBayAOOF || bot.process.extruderAOOF ?
-                      printPage.print_model_material != materialPage.bay1.filamentMaterialName.toLowerCase() :
-                      printPage.print_support_material != materialPage.bay2.filamentMaterialName.toLowerCase())))
+                // material spool on the bay for the paused print. Skip
+                // the material check when using experimental extruder.
+                if(bot.process.stateType != ProcessStateType.Paused) {
+                   true
+                } else if(bot.process.stateType == ProcessStateType.Paused) {
+                    if(materialPage.isUsingExpExtruder(bot.process.errorSource + 1)) {
+                        // Allow loading if the offending extruder is an experimental
+                        // extruder
+                        false
+                    } else {
+                        // For normal extruders only allow loading if the bay material
+                        // matches the print material which is the same logic used in the
+                        // material page.
+                        isExtruderAError() ?
+                            printPage.print_model_material != materialPage.bay1.filamentMaterialName.toLowerCase() :
+                            printPage.print_support_material != materialPage.bay2.filamentMaterialName.toLowerCase()
+                    }
+                }
             }
             else if (state == "calibration_failed") {
                 bot.process.type != ProcessType.None
