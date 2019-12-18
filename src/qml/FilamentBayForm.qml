@@ -232,6 +232,14 @@ Item {
             //Nylon TODO:(placeholder this needs to be updated)
             ((filamentVolume * 1.1)/1000).toFixed(3)
             break;
+        case 12:
+            //PCABS TODO:(placeholder this needs to be updated)
+            ((filamentVolume * 1.04)/1000).toFixed(3)
+            break;
+        case 13:
+            //PCABSFR TODO:(placeholder this needs to be updated)
+            ((filamentVolume * 1.04)/1000).toFixed(3)
+            break;
         case 0:
         default:
             0
@@ -245,7 +253,7 @@ Item {
             "PLA"
             break;
         case 2:
-            "TOUGH"
+            "Tough"
             break;
         case 3:
             "PVA"
@@ -269,10 +277,16 @@ Item {
             "ASA"
             break;
         case 10:
-            "ESD-TOUGH"
+            "ESD Tough"
             break;
         case 11:
             "NYLON"
+            break;
+        case 12:
+            "PC-ABS"
+            break;
+        case 13:
+            "PC-ABS FR"
             break;
         case 0:
         default:
@@ -314,10 +328,10 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "TOUGH", "PETG", "NYLON"]
+                ["PLA", "Tough", "PETG", "NYLON", "ESD Tough"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS", "ASA"]
+                ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]
                 break;
             default:
                 []
