@@ -89,6 +89,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void setAnalyticsEnabled(const bool enabled);
     Q_INVOKABLE virtual void drySpool();
     Q_INVOKABLE virtual void startDrying(const int temperature, const float time);
+    Q_INVOKABLE virtual void get_calibration_offsets();
+    Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -205,6 +207,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, spoolAUpdateFinished, true)
     MODEL_PROP(bool, spoolBUpdateFinished, true)
 
+    MODEL_PROP(float, spoolALinearDensity, -999.999)
+    MODEL_PROP(float, spoolBLinearDensity, -999.999)
+
     // Advanced Info Properties
     // Chamber
     MODEL_PROP(int, infoChamberCurrentTemp, -999)
@@ -299,6 +304,14 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoTopBunkFanARPM, -999)
     MODEL_PROP(int, infoTopBunkFanBRPM, -999)
     MODEL_PROP(QString, cameraState, "Unknown")
+
+    // Calibration Offsets
+    MODEL_PROP(float, offsetAX, -999.999)
+    MODEL_PROP(float, offsetAY, -999.999)
+    MODEL_PROP(float, offsetAZ, -999.999)
+    MODEL_PROP(float, offsetBX, -999.999)
+    MODEL_PROP(float, offsetBY, -999.999)
+    MODEL_PROP(float, offsetBZ, -999.999)
 
   protected:
     BotModel();

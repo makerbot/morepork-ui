@@ -176,5 +176,15 @@
         <file>DryMaterialButtonForm.qml</file>
         <file>DryMaterialSelector.qml</file>
         <file>DryMaterialSelectorForm.qml</file>
+        <file>CleanExtrudersSequence.qml</file>
+        <file>CleanExtrudersSequenceForm.qml</file>
+        <file>CleanExtruders.qml</file>
+        <file>CleanExtrudersForm.qml</file>
+        <file>CleanExtruderMaterialSelector.qml</file>
+        <file>CleanExtruderMaterialSelectorForm.qml</file>
+        <file>AdvancedInfoCalibrationItem.qml</file>
+        <file>AdvancedInfoCalibrationItemForm.qml</file>
+        <file>AdvancedInfoCalibrationElementForm.qml</file>
+        <file>AdvancedInfoCalibrationElement.qml</file>
     </qresource>
 </RCC>

@@ -19,6 +19,8 @@ Item {
 
     property alias buttonAssistedLeveling: buttonAssistedLeveling
 
+    property alias buttonCleanExtruders: buttonCleanExtruders
+
     property alias buttonDryMaterial: buttonDryMaterial
 
     property alias buttonCopyLogs: buttonCopyLogs
@@ -151,6 +153,13 @@ Item {
                         id: buttonAssistedLeveling
                         buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
                         buttonText.text: qsTr("ASSISTED LEVELING")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonCleanExtruders
+                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
+                        buttonText.text: qsTr("CLEAN EXTRUDERS")
                         enabled: !isProcessRunning()
                     }
 
@@ -355,6 +364,37 @@ Item {
 
             DryMaterial {
                 id: dryMaterial
+                onProcessDone: {
+                    state = "base state"
+                    if(advancedSettingsSwipeView.currentIndex != 0) {
+                        advancedSettingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
+        }
+
+        //advancedSettingsSwipeView.index = 9
+        Item {
+            id: cleanExtrudersItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: 0
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(bot.process.type == ProcessType.NozzleCleaningProcess) {
+                    cleanExtruders.cancelCleanExtrudersPopup.open()
+                } else {
+                    cleanExtruders.state = "base state"
+                    if(advancedSettingsSwipeView.currentIndex != 0) {
+                        advancedSettingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
+
+            CleanExtruders {
+                id: cleanExtruders
                 onProcessDone: {
                     state = "base state"
                     if(advancedSettingsSwipeView.currentIndex != 0) {

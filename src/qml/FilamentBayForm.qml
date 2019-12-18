@@ -187,65 +187,18 @@ Item {
     }
 
     property real filamentQuantity: {
-        switch(filamentMaterialCode) {
+        switch(filamentBayID) {
         case 1:
-            //PLA
-            ((filamentVolume * 1.25)/1000).toFixed(3)
+            (filamentVolume * bot.spoolALinearDensity).toFixed(3)
             break;
         case 2:
-            //TOUGH
-            ((filamentVolume * 1.25)/1000).toFixed(3)
+            (filamentVolume * bot.spoolBLinearDensity).toFixed(3)
             break;
-        case 3:
-            //PVA
-            ((filamentVolume * 1.20)/1000).toFixed(3)
-            break;
-        case 4:
-            //PETG
-            ((filamentVolume * 1.27)/1000).toFixed(3)
-            break;
-        case 5:
-            //ABS
-            ((filamentVolume * 1.03)/1000).toFixed(3)
-            break;
-        case 6:
-            //HIPS
-            ((filamentVolume * 1.04)/1000).toFixed(3)
-            break;
-        case 7:
-            //PVA-M
-            ((filamentVolume * 1.22)/1000).toFixed(3)
-            break;
-        case 8:
-            //SR-30
-            ((filamentVolume * 1.1)/1000).toFixed(3)
-            break;
-        case 9:
-            //ASA TODO:(placeholder this needs to be updated)
-            ((filamentVolume * 1.04)/1000).toFixed(3)
-            break;
-        case 10:
-            //ESD-Tough TODO:(placeholder this needs to be updated)
-            ((filamentVolume * 1.1)/1000).toFixed(3)
-            break;
-        case 11:
-            //Nylon TODO:(placeholder this needs to be updated)
-            ((filamentVolume * 1.1)/1000).toFixed(3)
-            break;
-        case 12:
-            //PCABS TODO:(placeholder this needs to be updated)
-            ((filamentVolume * 1.04)/1000).toFixed(3)
-            break;
-        case 13:
-            //PCABSFR TODO:(placeholder this needs to be updated)
-            ((filamentVolume * 1.04)/1000).toFixed(3)
-            break;
-        case 0:
         default:
             0
             break;
         }
-    }
+    }  
 
     property string filamentMaterialName: {
         switch(filamentMaterialCode) {
@@ -328,7 +281,7 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "Tough", "PETG", "NYLON", "ESD Tough"]
+                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON"]
                 break;
             case ExtruderType.MK14_HOT:
                 ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]

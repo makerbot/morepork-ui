@@ -38,6 +38,7 @@ class KaitenBotModel : public BotModel {
     void spoolChangeUpdate(const Json::Value & spool_info);
     void cameraStateUpdate(const Json::Value & state);
     void cloudServicesInfoUpdate(const Json::Value &result);
+    void getCalibrationOffsetsUpdate(const Json::Value & result);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -89,6 +90,8 @@ class KaitenBotModel : public BotModel {
     void setAnalyticsEnabled(const bool enabled);
     void drySpool();
     void startDrying(const int temperature, const float time);
+    void get_calibration_offsets();
+    void cleanNozzles(const QList<int> temperature = {0,0});
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -393,6 +396,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<SetAnalyticsCallback> m_setAnalyticsCb;
+
+    class GetCalibrationOffsetsCallback : public JsonRpcCallback {
+      public:
+        GetCalibrationOffsetsCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->getCalibrationOffsetsUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<GetCalibrationOffsetsCallback> m_getCalibrationOffsetsCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -1086,6 +1100,39 @@ void KaitenBotModel::startDrying(const int temperature, const float time){
     }
 }
 
+void KaitenBotModel::get_calibration_offsets(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        conn->jsonrpc.invoke("get_calibration_offsets", json_params, m_getCalibrationOffsetsCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::cleanNozzles(const QList<int> temperature) {
+    try {
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        Json::Value temperature_list(Json::arrayValue);
+        for(int temp : temperature) {
+            if(temp > 0) {
+                for(int i = 0; i < temperature.size(); i++) {
+                    temperature_list[i] = temperature.value(i);
+                }
+                json_params["temperature"] = Json::Value(temperature_list);
+                break;
+            }
+        }
+        conn->jsonrpc.invoke("clean_nozzles", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -1116,6 +1163,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_updateSpoolInfoCb(new UpdateSpoolInfoCallback(this)),
         m_cloudServicesInfoCb(new CloudServicesInfoCallback(this)),
         m_setAnalyticsCb(new SetAnalyticsCallback(this)),
+        m_getCalibrationOffsetsCb(new GetCalibrationOffsetsCallback(this)),
         m_cameraState(new CameraStateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
@@ -1195,6 +1243,8 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
               si["first_load_date"]); \
           UPDATE_INT_PROP(spool ## BAY_SYM ## MaxTemperature, \
               si["max_temperature"]); \
+          UPDATE_FLOAT_PROP(spool ## BAY_SYM ## LinearDensity, \
+              si["linear_density"]); \
           spool ## BAY_SYM ## DetailsReadySet(true); \
       } \
     }
@@ -1657,6 +1707,17 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                }
             }
         }
+    }
+}
+
+void KaitenBotModel::getCalibrationOffsetsUpdate(const Json::Value &result) {
+    if (result.isObject()) {
+        UPDATE_FLOAT_PROP(offsetAX, result["a"]["x"]);
+        UPDATE_FLOAT_PROP(offsetAY, result["a"]["y"]);
+        UPDATE_FLOAT_PROP(offsetAZ, result["a"]["z"]);
+        UPDATE_FLOAT_PROP(offsetBX, result["b"]["x"]);
+        UPDATE_FLOAT_PROP(offsetBY, result["b"]["y"]);
+        UPDATE_FLOAT_PROP(offsetBZ, result["b"]["z"]);
     }
 }
 
