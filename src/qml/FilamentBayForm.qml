@@ -198,7 +198,7 @@ Item {
             0
             break;
         }
-    }
+    }  
 
     property string filamentMaterialName: {
         switch(filamentMaterialCode) {
@@ -206,7 +206,7 @@ Item {
             "PLA"
             break;
         case 2:
-            "TOUGH"
+            "Tough"
             break;
         case 3:
             "PVA"
@@ -230,10 +230,16 @@ Item {
             "ASA"
             break;
         case 10:
-            "ESD-TOUGH"
+            "ESD Tough"
             break;
         case 11:
             "NYLON"
+            break;
+        case 12:
+            "PC-ABS"
+            break;
+        case 13:
+            "PC-ABS FR"
             break;
         case 0:
         default:
@@ -275,10 +281,10 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "TOUGH", "PETG", "NYLON"]
+                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS", "ASA"]
+                ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]
                 break;
             default:
                 []
