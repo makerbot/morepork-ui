@@ -161,7 +161,7 @@ Item {
                     MenuButton {
                         id: buttonTime
                         buttonImage.source: "qrc:/img/icon_time_and_date.png"
-                        buttonText.text: qsTr("TIME")
+                        buttonText.text: qsTr("TIME AND DATE")
                     }
 
                     MenuButton {

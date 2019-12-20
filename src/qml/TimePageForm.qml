@@ -37,8 +37,22 @@ Item {
 
         //timeSwipeView.index = 0
         Item {
-            id: itemSetTimeZone
+            id: itemSetDate
             property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: 0
+            smooth: false
+            visible: true
+
+            DateSelector {
+                id: dateSelectorPage
+
+            }
+        }
+
+        //timeSwipeView.index = 1
+        Item {
+            id: itemSetTimeZone
+            property var backSwiper: timeSwipeView
             property int backSwipeIndex: 0
             smooth: false
             visible: true
@@ -49,11 +63,11 @@ Item {
             }
         }
 
-        //timeSwipeView.index = 1
+        //timeSwipeView.index = 2
         Item {
             id: itemSetTime
             property var backSwiper: timeSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: 1
             smooth: false
             visible: false
 
@@ -63,5 +77,4 @@ Item {
             }
         }
     }
-
 }
