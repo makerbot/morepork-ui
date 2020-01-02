@@ -453,7 +453,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: qsTr("Input your local time for more accurate print estimates.")
+                text: qsTr("Input your local date and time for accurate print estimates.")
             }
 
             PropertyChanges {
