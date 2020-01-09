@@ -169,6 +169,7 @@ Item {
                   (bot.process.stateType == ProcessStateType.CheckNozzleClean ||
                    bot.process.stateType == ProcessStateType.HeatingNozzle ||
                    bot.process.stateType == ProcessStateType.CleanNozzle ||
+                   bot.process.stateType == ProcessStateType.FinishCleaning ||
                    bot.process.stateType == ProcessStateType.CoolingNozzle)
 
             PropertyChanges {
