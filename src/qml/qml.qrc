@@ -186,5 +186,7 @@
         <file>AdvancedInfoCalibrationItemForm.qml</file>
         <file>AdvancedInfoCalibrationElementForm.qml</file>
         <file>AdvancedInfoCalibrationElement.qml</file>
+        <file>ReportPrintAnalyticsComponent.qml</file>
+        <file>ReportPrintAnalyticsComponentForm.qml</file>
     </qresource>
 </RCC>

@@ -201,6 +201,7 @@ Item {
         chamber_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
+        printStatusView.feedbackSubmitted = false
     }
 
     // Compute print time, print end time & get them in string format for UI.

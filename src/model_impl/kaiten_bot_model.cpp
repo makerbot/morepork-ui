@@ -92,6 +92,7 @@ class KaitenBotModel : public BotModel {
     void startDrying(const int temperature, const float time);
     void get_calibration_offsets();
     void cleanNozzles(const QList<int> temperature = {0,0});
+    void submitPrintFeedback(bool success);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1133,6 +1134,23 @@ void KaitenBotModel::cleanNozzles(const QList<int> temperature) {
         qWarning() << FFL_STRM << e.what();
     }
 }
+
+void KaitenBotModel::submitPrintFeedback(bool success) {
+    try {
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("submit_print_feedback");
+        Json::Value json_args(Json::objectValue);
+        json_args["success"] = Json::Value(success);
+        json_params["params"] = Json::Value(json_args);
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
