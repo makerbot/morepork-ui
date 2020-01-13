@@ -56,6 +56,7 @@ class ProcessModel : public BaseModel {
         CheckNozzleClean, // Toolhead calibration states
         HeatingNozzle,
         CleanNozzle,
+        FinishCleaning,
         CoolingNozzle,
         CalibratingToolheads,
         InstallBuildPlate,

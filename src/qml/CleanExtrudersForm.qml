@@ -228,7 +228,8 @@ Item {
             name: "cleaning_process"
             when: bot.process.type == ProcessType.NozzleCleaningProcess &&
                   (bot.process.stateType == ProcessStateType.HeatingNozzle ||
-                   bot.process.stateType == ProcessStateType.CleanNozzle)
+                   bot.process.stateType == ProcessStateType.CleanNozzle ||
+                   bot.process.stateType == ProcessStateType.FinishCleaning)
 
             PropertyChanges {
                 target: image

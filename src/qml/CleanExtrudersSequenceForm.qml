@@ -317,7 +317,8 @@ Item {
 
         State {
             name: "clean_nozzle"
-            when: bot.process.stateType == ProcessStateType.CleanNozzle
+            when: bot.process.stateType == ProcessStateType.CleanNozzle ||
+                  bot.process.stateType == ProcessStateType.FinishCleaning
 
             PropertyChanges {
                 target: header_image
@@ -355,7 +356,10 @@ Item {
                 label_width: 100
                 buttonWidth: 100
                 label: qsTr("NEXT")
-                opacity: 1.0
+                opacity: {
+                    bot.process.stateType == ProcessStateType.FinishCleaning ?
+                                1.0 : 0
+                }
             }
 
             PropertyChanges {
