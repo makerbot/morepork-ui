@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <sstream>
+#include <string>
 
 #include <QJSEngine>
 
@@ -1350,8 +1351,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           const Json::Value & kChamberA = kChamber[0];
           if(kChamberA.isObject()){
             // Update GUI variables for chamber temps
-            UPDATE_INT_PROP(chamberCurrentTemp, kChamberA["current_temperature"])
-            UPDATE_INT_PROP(chamberTargetTemp, kChamberA["target_temperature"])
+            UPDATE_INT_BPFROMSENSOR_PROP(chamberCurrentTemp, kChamberA["current_temperature"])
+            UPDATE_INT_BPFROMSENSOR_PROP(chamberTargetTemp, kChamberA["target_temperature"])
             UPDATE_INT_PROP(chamberErrorCode, kChamberA["error"])
           }
         }
@@ -1539,8 +1540,8 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
     if(!info.empty()){
         const Json::Value &kChamber = info["chamber_status"];
         if(kChamber.isObject()){
-            UPDATE_INT_PROP(infoChamberCurrentTemp, kChamber["current_temperature"]);
-            UPDATE_INT_PROP(infoChamberTargetTemp, kChamber["target_temperature"]);
+            UPDATE_INT_BPFROMSENSOR_PROP(infoChamberCurrentTemp, kChamber["current_temperature"]);
+            UPDATE_INT_BPFROMSENSOR_PROP(infoChamberTargetTemp, kChamber["target_temperature"]);
             UPDATE_INT_PROP(infoChamberFanASpeed, kChamber["fana_speed"]);
             UPDATE_INT_PROP(infoChamberFanBSpeed, kChamber["fanb_speed"]);
             UPDATE_INT_PROP(infoChamberHeaterATemp, kChamber["heatera_temperature"]);

@@ -51,6 +51,15 @@
             PROP ## Reset(); \
     }
 
+#define UPDATE_INT_BPFROMSENSOR_PROP(PROP, JSON_VAL) \
+    { \
+        const Json::Value & json_val = JSON_VAL; \
+        if(json_val.isInt()) \
+            PROP ## Set((json_val.asInt() > 40)?static_cast<int>((json_val.asInt() * 1.333) - 13):(json_val.asInt())); \
+        else \
+            PROP ## Reset(); \
+    }
+
 #define UPDATE_FLOAT_PROP(PROP, JSON_VAL) \
     { \
         const Json::Value & json_val = JSON_VAL; \

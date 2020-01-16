@@ -147,7 +147,10 @@ class PrintFileInfo : public QObject {
         extrusion_mass_grams_b_ = rvalue.extrusion_mass_grams_b_;
         extruder_temp_celcius_a_ = rvalue.extruder_temp_celcius_a_;
         extruder_temp_celcius_b_ = rvalue.extruder_temp_celcius_b_;
-        chamber_temp_celcius_ = rvalue.chamber_temp_celcius_;
+//        chamber_temp_celcius_ = rvalue.chamber_temp_celcius_;
+        chamber_temp_celcius_ = (rvalue.chamber_temp_celcius_ > 40)?
+               static_cast<int>((rvalue.chamber_temp_celcius_ * 1.333) - 13):
+                                (rvalue.chamber_temp_celcius_);
         num_shells_ = rvalue.num_shells_;
         layer_height_mm_ = rvalue.layer_height_mm_;
         infill_density_ = rvalue.infill_density_;
@@ -172,7 +175,10 @@ class PrintFileInfo : public QObject {
                 rvalue.extrusion_mass_grams_b_,
                 rvalue.extruder_temp_celcius_a_,
                 rvalue.extruder_temp_celcius_b_,
-                rvalue.chamber_temp_celcius_,
+//                rvalue.chamber_temp_celcius_,
+                (rvalue.chamber_temp_celcius_ > 40)?
+                 static_cast<int>((rvalue.chamber_temp_celcius_ * 1.333) - 13):
+                                  (rvalue.chamber_temp_celcius_),
                 rvalue.num_shells_,
                 rvalue.layer_height_mm_,
                 rvalue.infill_density_,
