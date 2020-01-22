@@ -90,6 +90,7 @@ Item {
                 getPrintDetailsTimer.start() //for prints started from repl
             }
             printFromUI = false //reset when the print actually starts
+            printStatusView.feedbackSubmitted = false // Reset when print starts
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -201,7 +202,6 @@ Item {
         chamber_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
-        printStatusView.feedbackSubmitted = false
     }
 
     // Compute print time, print end time & get them in string format for UI.
