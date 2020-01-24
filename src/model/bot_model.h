@@ -91,6 +91,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void startDrying(const int temperature, const float time);
     Q_INVOKABLE virtual void get_calibration_offsets();
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
+    Q_INVOKABLE virtual void submitPrintFeedback(bool success);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();

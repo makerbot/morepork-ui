@@ -29,6 +29,7 @@ Item {
     property bool testPrintComplete: false
     property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
     property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
+    property bool feedbackSubmitted: false
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -102,8 +103,15 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: bot.process.stateType == ProcessStateType.Completed ? 245 :
-                            bot.process.stateType == ProcessStateType.Failed ? 210 : 110
+                height: {
+                    if(bot.process.stateType == ProcessStateType.Completed) {
+                        feedbackSubmitted ? 245 : 320
+                    } else if(bot.process.stateType == ProcessStateType.Failed) {
+                        210
+                    } else {
+                        110
+                    }
+                }
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
@@ -300,6 +308,12 @@ Item {
                         }
                         printPage.resetPrintFileDetails()
                     }
+                }
+
+                ReportPrintAnalyticsComponent {
+                    id: reportAnalytics
+                    visible: bot.process.stateType == ProcessStateType.Completed &&
+                             !feedbackSubmitted
                 }
             }
         }
@@ -892,6 +906,74 @@ Item {
                 ColorAnimation {
                     duration: 200
                 }
+            }
+        }
+    }
+
+    CustomPopup {
+        id: printFeedbackAcknowledgementPopup
+        popupWidth: 720
+        popupHeight: 275
+        showOneButton: true
+        full_button_text: qsTr("OK")
+        full_button.onClicked: {
+            printFeedbackAcknowledgementPopup.close()
+        }
+        onOpened: {
+            feedbackSubmitted = true
+            autoClosePopup.start()
+        }
+        onClosed: {
+            autoClosePopup.stop()
+        }
+
+        property bool feedbackGood: true
+
+        Timer {
+            id: autoClosePopup
+            interval: 7000
+            onTriggered: printFeedbackAcknowledgementPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_printFeedbackAcknowledgementPopup
+            width: 590
+            height: children.height
+            spacing: 20
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -30
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: alert_text_printFeedbackAcknowledgementPopup
+                color: "#cbcbcb"
+                text: qsTr("FEEDBACK SUBMITTED")
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            Text {
+                id: description_text_printFeedbackAcknowledgementPopup
+                color: "#cbcbcb"
+                text: {
+                    if(printFeedbackAcknowledgementPopup.feedbackGood) {
+                        qsTr("Thanks for providing feedback. This will help us make improvements to your printer.")
+                    } else {
+                        qsTr("We are sorry that your print had trouble. Be sure that the extruders are calibrated and the material has not absorbed moisture. If problems continue please visit support.makerbot.com")
+                    }
+                }
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: defaultFont.name
+                font.pixelSize: 18
+                font.letterSpacing: 1
+                lineHeight: 1.3
             }
         }
     }

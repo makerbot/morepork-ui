@@ -227,6 +227,10 @@ void BotModel::cleanNozzles(const QList<int> temperature) {
     }
 }
 
+void BotModel::submitPrintFeedback(bool success) {
+    qDebug() << FL_STRM << "called with parameter: " << success;
+}
+
 
 class DummyBotModel : public BotModel {
   public:
