@@ -188,5 +188,7 @@
         <file>AdvancedInfoCalibrationElement.qml</file>
         <file>ReportPrintAnalyticsComponent.qml</file>
         <file>ReportPrintAnalyticsComponentForm.qml</file>
+        <file>DateSelector.qml</file>
+        <file>DateSelectorForm.qml</file>
     </qresource>
 </RCC>

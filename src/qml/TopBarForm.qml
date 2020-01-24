@@ -243,9 +243,12 @@ Item {
                         case 7:
                             switch(settingsPage.timePage.timeSwipeView.currentIndex) {
                             case 0:
-                                qsTr("SET TIME ZONE")
+                                qsTr("ENTER TODAY'S DATE")
                                 break;
                             case 1:
+                                qsTr("SET TIME ZONE")
+                                break;
+                            case 2:
                                 qsTr("SET CURRENT TIME")
                                 break;
                             }

@@ -182,23 +182,23 @@ Item {
         }
     }
 
-    property real filamentVolume: {
-        (3.14159 * Math.pow(0.0875, 2) * filamentLength)
-    }
-
     property real filamentQuantity: {
+        // convert length from cm to mm
+        // convert linear density from g/mm to kg/mm
+        // multiply to yield mass in kg
+
         switch(filamentBayID) {
         case 1:
-            (filamentVolume * bot.spoolALinearDensity).toFixed(3)
+            ((filamentLength*10) * (bot.spoolALinearDensity/1000)).toFixed(3)
             break;
         case 2:
-            (filamentVolume * bot.spoolBLinearDensity).toFixed(3)
+            ((filamentLength*10) * (bot.spoolBLinearDensity/1000)).toFixed(3)
             break;
         default:
             0
             break;
         }
-    }  
+    }
 
     property string filamentMaterialName: {
         switch(filamentMaterialCode) {
