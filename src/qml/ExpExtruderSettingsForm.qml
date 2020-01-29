@@ -19,10 +19,10 @@ Item {
         {label: "petg",     load : 230, unload : 200},
         {label: "abs",      load : 245, unload : 245},
         {label: "asa",      load : 245, unload : 245},
-        {label: "esdtough", load : 220, unload : 180},
         {label: "nylon",    load : 220, unload : 180},
-        {label: "pcabs",    load : 245, unload : 245},
-        {label: "pcabsfr",  load : 245, unload : 245}
+        {label: "esd-tough", load : 220, unload : 180},
+        {label: "pc-abs",    load : 245, unload : 245},
+        {label: "pc-abs-fr",  load : 245, unload : 245}
     ]
 
     function startLoadUnloadExpExtruder(temperature) {
