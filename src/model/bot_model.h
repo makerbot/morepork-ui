@@ -92,6 +92,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void get_calibration_offsets();
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void submitPrintFeedback(bool success);
+    Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -134,6 +135,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, extruderAErrorCode, 0)
     MODEL_PROP(bool, extruderAToolheadDisconnect, false)
     MODEL_PROP(bool, extruderACalibrated, true)
+    MODEL_PROP(bool, extruderAJamDetectionDisabled, false)
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)

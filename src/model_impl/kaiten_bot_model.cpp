@@ -93,6 +93,7 @@ class KaitenBotModel : public BotModel {
     void get_calibration_offsets();
     void cleanNozzles(const QList<int> temperature = {0,0});
     void submitPrintFeedback(bool success);
+    void ignoreError(const int index, const QList<int> error, const bool ignored);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1151,6 +1152,25 @@ void KaitenBotModel::submitPrintFeedback(bool success) {
     }
 }
 
+void KaitenBotModel::ignoreError(const int index, const QList<int> error, const bool ignored) {
+    try {
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["index"] = Json::Value(index);
+        json_params["ignored"] = Json::Value(ignored);
+        Json::Value error_list(Json::arrayValue);
+        for(int i = 0; i < error.size(); ++i) {
+            error_list[i] = error.value(i);
+        }
+        json_params["error"] = Json::Value(error_list);
+        conn->jsonrpc.invoke("ignore_error", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -1422,6 +1442,23 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       else {
         doorLidErrorDisabledReset();
       }
+
+        const Json::Value &ignored_errors = info["ignored_errors"];
+        const Json::Value &extruderA_ignored_errors = ignored_errors["0"];
+        if(extruderA_ignored_errors.isArray() && extruderA_ignored_errors.size() > 0){
+            bool jam_disabled = false;
+            for(const Json::Value error : extruderA_ignored_errors){
+                if(error.asString() == "filament_slip"){
+                    jam_disabled = true;
+                    break;
+                }
+            }
+            extruderAJamDetectionDisabledSet(jam_disabled);
+        }
+        else {
+            extruderAJamDetectionDisabledReset();
+        }
+
 
       // TODO(chris): This bit is a mess...
       const Json::Value & version_dict = info["firmware_version"];

@@ -13,6 +13,7 @@ Switch {
             radius: 17
             color: slidingSwitch.checked ? "#3183af" : "#ffffff"
             border.color: slidingSwitch.checked ? "#3183af" : "#cccccc"
+            opacity: enabled ? 1 : 0.3
 
             Rectangle {
                 x: slidingSwitch.checked ? parent.width - width - 3 : 3
@@ -24,5 +25,4 @@ Switch {
                 border.color: slidingSwitch.checked ? "#3183af" : "#999999"
             }
         }
-
 }
