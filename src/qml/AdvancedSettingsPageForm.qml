@@ -171,6 +171,31 @@ Item {
                     }
 
                     MenuButton {
+                        id: buttonJamDetectionExpExtruder
+                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
+                        buttonText.text: "LABS " + qsTr("EXTRUDER JAM DETECTION")
+                        enabled: bot.extruderAPresent &&
+                                 materialPage.bay1.usingExperimentalExtruder
+
+                        SlidingSwitch {
+                            id: switchToggleJamDetection
+                            checked: !bot.extruderAJamDetectionDisabled
+                            enabled: parent.enabled
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 50
+                            onClicked: {
+                                if(switchToggleJamDetection.checked) {
+                                    bot.ignoreError(0,[81],false)
+                                }
+                                else if(!switchToggleJamDetection.checked) {
+                                    bot.ignoreError(0,[81],true)
+                                }
+                            }
+                        }
+                    }
+
+                    MenuButton {
                         id: buttonCopyLogs
                         buttonImage.source: "qrc:/img/icon_copy_logs.png"
                         buttonText.text: qsTr("COPY LOGS TO USB")
