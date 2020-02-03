@@ -327,7 +327,7 @@ Item {
 
             PropertyChanges {
                 target: chamber_temperature_text
-                text: bot.chamberCurrentTemp + "°C"
+                text: bot.sensorCurrentTemp + "°C"
             }
 
             PropertyChanges {

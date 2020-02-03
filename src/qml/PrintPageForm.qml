@@ -26,7 +26,7 @@ Item {
     property int num_shells
     property real layer_height_mm
     property string extruder_temp
-    property string chamber_temp
+    property string buildplane_target_temp
     property string slicer_name
     property string readyByTime
     property int lastPrintTimeSec
@@ -149,7 +149,7 @@ Item {
                                bot.process.stateType == ProcessStateType.Failed ||
                                bot.process.stateType == ProcessStateType.Cancelling
     onIsPrintDoneChanged: {
-        if(isPrintDone && bot.chamberCurrentTemp > waitToCoolTemperature) {
+        if(isPrintDone && bot.buildplaneCurrentTemp > waitToCoolTemperature) {
             waitToCoolChamber.waitToCoolChamberScreenVisible = true
             waitToCoolChamber.startTimer()
         }
@@ -177,7 +177,7 @@ Item {
         num_shells = file.numShells
         extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
                                               file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
-        chamber_temp = file.chamberTempCelcius + "C"
+        buildplane_target_temp = file.buildplaneTargetTempCelcius + "C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
     }
@@ -199,7 +199,7 @@ Item {
         supportMaterialRequired = 0.0
         num_shells = ""
         extruder_temp = ""
-        chamber_temp = ""
+        buildplane_target_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
     }
@@ -622,7 +622,7 @@ Item {
                 InfoItem {
                     id: printInfo_chamberTemperature
                     labelText: qsTr("Chamber Temperature")
-                    dataText: chamber_temp
+                    dataText: buildplane_target_temp
                 }
 
                 InfoItem {

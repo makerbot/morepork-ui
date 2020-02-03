@@ -77,7 +77,7 @@ class KaitenBotModel : public BotModel {
     void getSystemTime();
     void setSystemTime(QString new_time);
     void deauthorizeAllAccounts();
-    void preheatChamber(const int chamber_temperature);
+    void preheatChamber(const int sensor_target_temperature);
     void moveAxis(QString axis, float distance, float speed);
     void moveAxisToEndstop(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bay_index);
@@ -979,7 +979,7 @@ void KaitenBotModel::deauthorizeAllAccounts() {
     }
 }
 
-void KaitenBotModel::preheatChamber(const int chamber_temperature) {
+void KaitenBotModel::preheatChamber(const int sensor_target_temperature) {
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
@@ -988,7 +988,7 @@ void KaitenBotModel::preheatChamber(const int chamber_temperature) {
 
         temperature_list[0] = 0;
         temperature_list[1] = 0;
-        temperature_list[2] = chamber_temperature;
+        temperature_list[2] = sensor_target_temperature;
 
         json_params["temperature_settings"] = Json::Value(temperature_list);
         conn->jsonrpc.invoke("preheat", json_params, std::weak_ptr<JsonRpcCallback>());
@@ -1388,8 +1388,10 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           const Json::Value & kChamberA = kChamber[0];
           if(kChamberA.isObject()){
             // Update GUI variables for chamber temps
-            UPDATE_INT_PROP(chamberCurrentTemp, kChamberA["current_temperature"])
-            UPDATE_INT_PROP(chamberTargetTemp, kChamberA["target_temperature"])
+            UPDATE_INT_PROP(sensorCurrentTemp, kChamberA["sensor_current_temperature"])
+            UPDATE_INT_PROP(sensorTargetTemp, kChamberA["sensor_target_temperature"])
+            UPDATE_INT_PROP(buildplaneCurrentTemp, kChamberA["buildplane_current_temperature"])
+            UPDATE_INT_PROP(buildplaneTargetTemp, kChamberA["buildplane_target_temperature"])
             UPDATE_INT_PROP(chamberErrorCode, kChamberA["error"])
           }
         }
@@ -1594,8 +1596,8 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
     if(!info.empty()){
         const Json::Value &kChamber = info["chamber_status"];
         if(kChamber.isObject()){
-            UPDATE_INT_PROP(infoChamberCurrentTemp, kChamber["current_temperature"]);
-            UPDATE_INT_PROP(infoChamberTargetTemp, kChamber["target_temperature"]);
+            UPDATE_INT_PROP(infoBuildplaneCurrentTemp, kChamber["buildplane_current_temperature"]);
+            UPDATE_INT_PROP(infoBuildplaneTargetTemp, kChamber["buildplane_target_temperature"]);
             UPDATE_INT_PROP(infoChamberFanASpeed, kChamber["fana_speed"]);
             UPDATE_INT_PROP(infoChamberFanBSpeed, kChamber["fanb_speed"]);
             UPDATE_INT_PROP(infoChamberHeaterATemp, kChamber["heatera_temperature"]);

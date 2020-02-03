@@ -58,7 +58,8 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(float extrusionMassGramsB READ extrusionMassGramsB NOTIFY fileInfoChanged)
   Q_PROPERTY(int extruderTempCelciusA READ extruderTempCelciusA NOTIFY fileInfoChanged)
   Q_PROPERTY(int extruderTempCelciusB READ extruderTempCelciusB NOTIFY fileInfoChanged)
-  Q_PROPERTY(int chamberTempCelcius READ chamberTempCelcius NOTIFY fileInfoChanged)
+  Q_PROPERTY(int sensorTargetTempCelcius READ sensorTargetTempCelcius NOTIFY fileInfoChanged)
+  Q_PROPERTY(int buildplaneTargetTempCelcius READ buildplaneTargetTempCelcius NOTIFY fileInfoChanged)
   Q_PROPERTY(int numShells READ numShells NOTIFY fileInfoChanged)
   Q_PROPERTY(float layerHeightMM READ layerHeightMM NOTIFY fileInfoChanged)
   Q_PROPERTY(float infillDensity READ infillDensity NOTIFY fileInfoChanged)
@@ -75,7 +76,7 @@ class PrintFileInfo : public QObject {
   bool extruder_used_a_, extruder_used_b_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
   int extruder_temp_celcius_a_, extruder_temp_celcius_b_,
-      chamber_temp_celcius_, num_shells_;
+      sensor_target_temp_celcius_, buildplane_target_temp_celcius_, num_shells_;
   float layer_height_mm_, infill_density_, time_estimate_sec_;
   bool uses_support_, uses_raft_;
   QString material_name_a_, material_name_b_, slicer_name_;
@@ -101,7 +102,8 @@ class PrintFileInfo : public QObject {
                   const float extrusion_mass_grams_b = 0.0f,
                   const int extruder_temp_celcius_a = 0,
                   const int extruder_temp_celcius_b = 0,
-                  const int chamber_temp_celcius = 0,
+                  const int sensor_target_temp_celcius = 0,
+                  const int buildplane_target_temp_celcius = 0,
                   const int num_shells = 0,
                   const float layer_height_mm = 0.0f,
                   const float infill_density = 0.0f,
@@ -124,7 +126,8 @@ class PrintFileInfo : public QObject {
                   extrusion_mass_grams_b_(extrusion_mass_grams_b),
                   extruder_temp_celcius_a_(extruder_temp_celcius_a),
                   extruder_temp_celcius_b_(extruder_temp_celcius_b),
-                  chamber_temp_celcius_(chamber_temp_celcius),
+                  sensor_target_temp_celcius_(sensor_target_temp_celcius),
+                  buildplane_target_temp_celcius_(buildplane_target_temp_celcius),
                   num_shells_(num_shells),
                   layer_height_mm_(layer_height_mm),
                   infill_density_(infill_density),
@@ -147,7 +150,8 @@ class PrintFileInfo : public QObject {
         extrusion_mass_grams_b_ = rvalue.extrusion_mass_grams_b_;
         extruder_temp_celcius_a_ = rvalue.extruder_temp_celcius_a_;
         extruder_temp_celcius_b_ = rvalue.extruder_temp_celcius_b_;
-        chamber_temp_celcius_ = rvalue.chamber_temp_celcius_;
+        sensor_target_temp_celcius_ = rvalue.sensor_target_temp_celcius_;
+        buildplane_target_temp_celcius_ = rvalue.buildplane_target_temp_celcius_;
         num_shells_ = rvalue.num_shells_;
         layer_height_mm_ = rvalue.layer_height_mm_;
         infill_density_ = rvalue.infill_density_;
@@ -172,7 +176,8 @@ class PrintFileInfo : public QObject {
                 rvalue.extrusion_mass_grams_b_,
                 rvalue.extruder_temp_celcius_a_,
                 rvalue.extruder_temp_celcius_b_,
-                rvalue.chamber_temp_celcius_,
+                rvalue.sensor_target_temp_celcius_,
+                rvalue.buildplane_target_temp_celcius_,
                 rvalue.num_shells_,
                 rvalue.layer_height_mm_,
                 rvalue.infill_density_,
@@ -218,8 +223,11 @@ class PrintFileInfo : public QObject {
     int extruderTempCelciusB() const {
         return extruder_temp_celcius_b_;
     }
-    int chamberTempCelcius() const {
-        return chamber_temp_celcius_;
+    int sensorTargetTempCelcius() const {
+        return sensor_target_temp_celcius_;
+    }
+    int buildplaneTargetTempCelcius() const {
+        return buildplane_target_temp_celcius_;
     }
     int numShells() const {
         return num_shells_;

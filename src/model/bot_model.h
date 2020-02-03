@@ -78,7 +78,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getSystemTime();
     Q_INVOKABLE virtual void setSystemTime(QString new_time);
     Q_INVOKABLE virtual void deauthorizeAllAccounts();
-    Q_INVOKABLE virtual void preheatChamber(const int chamber_temperature);
+    Q_INVOKABLE virtual void preheatChamber(const int sensor_target_temperature);
     Q_INVOKABLE virtual void moveAxis(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void moveAxisToEndstop(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bay_index);
@@ -145,8 +145,10 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderBToolheadDisconnect, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
     MODEL_PROP(bool, extrudersCalibrated, true)
-    MODEL_PROP(int, chamberCurrentTemp, -999)
-    MODEL_PROP(int, chamberTargetTemp, -999)
+    MODEL_PROP(int, sensorCurrentTemp, -999)
+    MODEL_PROP(int, buildplaneCurrentTemp, -999)
+    MODEL_PROP(int, sensorTargetTemp, -999)
+    MODEL_PROP(int, buildplaneTargetTemp, -999)
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
@@ -215,8 +217,8 @@ class BotModel : public BaseModel {
 
     // Advanced Info Properties
     // Chamber
-    MODEL_PROP(int, infoChamberCurrentTemp, -999)
-    MODEL_PROP(int, infoChamberTargetTemp, -999)
+    MODEL_PROP(int, infoBuildplaneCurrentTemp, -999)
+    MODEL_PROP(int, infoBuildplaneTargetTemp, -999)
     MODEL_PROP(int, infoChamberFanASpeed, -999)
     MODEL_PROP(int, infoChamberFanBSpeed, -999)
     MODEL_PROP(int, infoChamberHeaterATemp, -999)

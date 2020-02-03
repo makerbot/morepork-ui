@@ -104,7 +104,7 @@ Item {
         Text {
             id: description_text
             color: "#cbcbcb"
-            text: qsTr("The build chamber temperature is<br>at <b>%1 C.</b>").arg(bot.chamberCurrentTemp) +
+            text: qsTr("The build chamber temperature is<br>at <b>%1 C.</b>").arg(bot.buildplaneCurrentTemp) +
                   qsTr(" Please wait <b>%2</b><br>minutes before removing the build<br>plate from the chamber.").arg(time.text)
             font.family: defaultFont.name
             font.pixelSize: 20

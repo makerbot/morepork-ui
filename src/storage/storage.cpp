@@ -276,7 +276,8 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
                   meta_data->extrusion_mass_g[1],
                   meta_data->extruder_temperature[0],
                   meta_data->extruder_temperature[1],
-                  meta_data->chamber_temperature,
+                  meta_data->sensor_target_temperature,
+                  meta_data->buildplane_target_temperature,
                   meta_data->shells,
                   meta_data->layer_height,
                   meta_data->infill_density,
@@ -336,8 +337,8 @@ void MoreporkStorage::currentThingSet(PrintFileInfo* current_thing){
 
 
 void MoreporkStorage::currentThingReset() {
-    PrintFileInfo* temp = new PrintFileInfo("/null/path", "null", "null", QDateTime(), false);
-    currentThingSet(temp);
+    PrintFileInfo* blank = new PrintFileInfo("/null/path", "null", "null", QDateTime(), false);
+    currentThingSet(blank);
 }
 
 

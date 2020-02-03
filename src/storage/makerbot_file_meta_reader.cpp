@@ -1,6 +1,7 @@
 // Copyright 2017 MakerBot Industries
 //#include <boost/log/trivial.hpp>
 #include "storage/makerbot_file_meta_reader.h"
+#include "logging.h"
 
 
 MakerbotFileMetaReader::MakerbotFileMetaReader(){

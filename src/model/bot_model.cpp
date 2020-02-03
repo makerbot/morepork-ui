@@ -171,8 +171,8 @@ void BotModel::deauthorizeAllAccounts() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::preheatChamber(int chamber_temperature) {
-    qDebug() << FL_STRM << "called with parameters" << chamber_temperature;
+void BotModel::preheatChamber(int sensor_current_temperature) {
+    qDebug() << FL_STRM << "called with parameters" << sensor_current_temperature;
 }
 
 void BotModel::moveAxis(QString axis, float distance, float speed) {

@@ -234,7 +234,7 @@ Item {
                                      (qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp)) :
                                      "\n"))
                             } else {
-                                (qsTr("%1 C").arg(bot.chamberCurrentTemp) + " | " + qsTr("%1 C").arg(bot.chamberTargetTemp))
+                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -714,7 +714,7 @@ Item {
                         Text {
                             id: chamber_temp_text
                             color: "#ffffff"
-                            text: qsTr("%1C").arg(bot.chamberCurrentTemp)
+                            text: qsTr("%1C").arg(bot.buildplaneCurrentTemp)
                             antialiasing: false
                             smooth: false
                             font.family: defaultFont.name

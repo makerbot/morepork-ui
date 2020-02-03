@@ -32,13 +32,13 @@ Item {
         AdvancedInfoElement {
             id: currentTempProperty
             label: qsTr("CURRENT TEMP.")
-            value: bot.infoChamberCurrentTemp
+            value: bot.infoBuildplaneCurrentTemp
         }
 
         AdvancedInfoElement {
             id: targetTempProperty
             label: qsTr("TARGET TEMP.")
-            value: bot.infoChamberTargetTemp
+            value: bot.infoBuildplaneTargetTemp
         }
 
         AdvancedInfoElement {

@@ -26,18 +26,18 @@ Item {
             MenuButton {
                 id: buttonStartStopPreheat
                 buttonImage.source: "qrc:/img/icon_preheat.png"
-                buttonText.text: bot.chamberTargetTemp > 0 ?
+                buttonText.text: bot.buildplaneTargetTemp > 0 ?
                                      qsTr("STOP CHAMBER PREHEAT") :
                                      qsTr("START CHAMBER PREHEAT")
                 Text {
                     id: temperature_text
                     color: "#ffffff"
                     text: {
-                        if(bot.chamberTargetTemp > 0) {
-                            bot.chamberCurrentTemp + "|" + bot.chamberTargetTemp + qsTr("\u00b0C")
+                        if(bot.buildplaneTargetTemp > 0) {
+                            bot.buildplaneCurrentTemp + "|" + bot.buildplaneTargetTemp + qsTr("\u00b0C")
                         }
                         else {
-                            bot.chamberCurrentTemp + qsTr("\u00b0C")
+                            bot.buildplaneCurrentTemp + qsTr("\u00b0C")
                         }
                     }
                     font.letterSpacing: 3
@@ -46,7 +46,7 @@ Item {
                     font.pixelSize: 20
                     anchors.right: parent.right
                     anchors.rightMargin: {
-                        if(bot.chamberTargetTemp > 0) {
+                        if(bot.buildplaneTargetTemp > 0) {
                             35
                         }
                         else {

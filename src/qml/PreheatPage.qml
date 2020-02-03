@@ -6,7 +6,7 @@ PreheatPageForm {
 
     buttonStartStopPreheat.onClicked: {
         if(bot.process.type == ProcessType.None) {
-            if(bot.chamberTargetTemp > 0) {
+            if(bot.sensorTargetTemp > 0) {
                 bot.preheatChamber(0)
             }
             else {
