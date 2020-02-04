@@ -56,7 +56,9 @@ Item {
         {label: "petg", temperature : 190},
         {label: "abs", temperature : 240},
         {label: "asa", temperature : 240},
-        {label: "nylon", temperature : 190}
+        {label: "nylon", temperature : 190},
+        {label: "nylon-cf", "temperature": 250},
+        {label: "tpu", "temperature": 190}
     ]
 
     Image {
