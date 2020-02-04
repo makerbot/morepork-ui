@@ -231,6 +231,14 @@ void BotModel::submitPrintFeedback(bool success) {
     qDebug() << FL_STRM << "called with parameter: " << success;
 }
 
+void BotModel::ignoreError(const int index, const QList<int> error, const bool ignored) {
+    qDebug() << FL_STRM << "called with parameters " << index;
+    for(auto e : error) {
+        qDebug() << e;
+    }
+    qDebug() << ignored;
+}
+
 
 class DummyBotModel : public BotModel {
   public:
