@@ -57,6 +57,8 @@ Item {
         {label: "pva", temperature : 45, time : 16},
         {label: "abs/asa/sr30", temperature : 60, time : 4},
         {label: "petg", temperature : 60, time : 2},
+        {label: "nylon cf", temperature : 60, time : 6},
+        {label: "tpu", temperature : 45, time : 4}
     ]
 
     property variant dryingMaterialsListMethodX : [
@@ -65,7 +67,9 @@ Item {
         {label: "pva", temperature : 45, time : 16},
         {label: "abs/asa/sr30", temperature : 60, time : 4},
         {label: "petg", temperature : 60, time : 2},
-        {label: "nylon", temperature : 80, time : 8}
+        {label: "nylon", temperature : 80, time : 8},
+        {label: "nylon cf", temperature : 60, time : 6},
+        {label: "tpu", temperature : 45, time : 4}
     ]
 
     Image {
