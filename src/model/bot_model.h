@@ -145,6 +145,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderBToolheadDisconnect, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
     MODEL_PROP(bool, extrudersCalibrated, true)
+    MODEL_PROP(bool, noFilamentErrorDisabled, false)
     MODEL_PROP(int, sensorCurrentTemp, -999)
     MODEL_PROP(int, buildplaneCurrentTemp, -999)
     MODEL_PROP(int, sensorTargetTemp, -999)

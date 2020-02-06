@@ -1434,15 +1434,25 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       // to not complain before starting a print
       const Json::Value &kDisabledErrors = info["disabled_errors"];
       if(kDisabledErrors.isArray() && kDisabledErrors.size() > 0){
+        bool door_lid_open_error_disabled = false;
+        bool no_filament_error_disabled = false;
         for(const Json::Value error : kDisabledErrors){
-          if(error.asString() == "door_interlock_triggered" ||
-             error.asString() == "lid_interlock_triggered"){
-            doorLidErrorDisabledSet(true);
+          auto err = error.asString();
+          if(err == "door_interlock_triggered" ||
+             err == "lid_interlock_triggered"){
+            door_lid_open_error_disabled = true;
+          }
+          if(err == "no_filament" ||
+             err == "out_of_filament") {
+            no_filament_error_disabled = true;
           }
         }
+        doorLidErrorDisabledSet(door_lid_open_error_disabled);
+        noFilamentErrorDisabledSet(no_filament_error_disabled);
       }
       else {
         doorLidErrorDisabledReset();
+        noFilamentErrorDisabledReset();
       }
 
         const Json::Value &ignored_errors = info["ignored_errors"];
