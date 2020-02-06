@@ -105,7 +105,10 @@ PrintPageForm {
     }
 
     function startPrintFilamentCheck() {
-        if (model_extruder_used && support_extruder_used &&
+        if(bot.noFilamentErrorDisabled) {
+            return true
+        }
+        else if (model_extruder_used && support_extruder_used &&
             (!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent)) {
             startPrintNoFilament = true
         } else if (model_extruder_used && !support_extruder_used &&
