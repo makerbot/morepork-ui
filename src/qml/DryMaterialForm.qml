@@ -56,7 +56,7 @@ Item {
         {label: "tough", temperature : 45, time : 4},
         {label: "pva", temperature : 45, time : 16},
         {label: "abs/asa/sr30", temperature : 60, time : 4},
-        {label: "petg", temperature : 60, time : 2},
+        {label: "petg", temperature : 60, time : 2}
     ]
 
     property variant dryingMaterialsListMethodX : [

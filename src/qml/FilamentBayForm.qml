@@ -241,6 +241,12 @@ Item {
         case 13:
             "PC-ABS FR"
             break;
+        case 14:
+            "NYLON CF"
+            break;
+        case 15:
+            "TPU"
+            break;
         case 0:
         default:
             "UNKNOWN"
@@ -281,7 +287,7 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON"]
+                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "NYLON CF", "TPU"]
                 break;
             case ExtruderType.MK14_HOT:
                 ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]
