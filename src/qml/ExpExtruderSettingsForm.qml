@@ -22,9 +22,7 @@ Item {
         {label: "esdtough", load : 220, unload : 180},
         {label: "nylon",    load : 220, unload : 180},
         {label: "pcabs",    load : 245, unload : 245},
-        {label: "pcabsfr",  load : 245, unload : 245},
-        {label: "nylon-cf", load : 270, unload : 250},
-        {label: "tpu",      load : 220, unload : 180}
+        {label: "pcabsfr",  load : 245, unload : 245}
     ]
 
     function startLoadUnloadExpExtruder(temperature) {
