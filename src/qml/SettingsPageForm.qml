@@ -48,9 +48,23 @@ Item {
 
     smooth: false
 
+    enum PageIndex {
+        BasePage,                   // 0
+        PrinterInfoPage,            // 1
+        ChangePrinterNamePage,      // 2
+        WifiPage,                   // 3
+        AuthorizeAccountsPage,      // 4
+        FirmwareUpdatePage,         // 5
+        CalibrateExtrudersPage,     // 6
+        TimePage,                   // 7
+        AdvancedSettingsPage,       // 8
+        ChangeLanguagePage,         // 9
+        KoreaDFSSecretPage          // 10
+    }
+
     SwipeView {
         id: settingsSwipeView
-        currentIndex: 0
+        currentIndex: SettingsPage.BasePage
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -66,12 +80,12 @@ Item {
             settingsSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // settingsSwipeView.index = 0
+        // SettingsPage.BasePage
         Item {
             id: itemSettings
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
             visible: false
 
@@ -179,12 +193,12 @@ Item {
             }
         }
 
-        // settingsSwipeView.index = 1
+        // SettingsPage.PrinterInfoPage
         Item {
             id: printerInfoItem
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -193,18 +207,18 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 2
+        // SettingsPage.ChangePrinterNamePage
         Item {
             id: namePrinterItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(0)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -212,8 +226,8 @@ Item {
             }
 
             function skipFreStepAction() {
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             NamePrinterPage {
@@ -221,18 +235,18 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 3
+        // SettingsPage.WifiPage
         Item {
             id: wifiItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
             property bool hasAltBack: true
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(0)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -240,8 +254,8 @@ Item {
             }
 
             function skipFreStepAction() {
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             WiFiPageForm {
@@ -250,11 +264,11 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 4
+        // SettingsPage.AuthorizeAccountsPage
         Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -263,11 +277,11 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 5
+        // SettingsPage.FirmwareUpdatePage
         Item {
             id: firmwareUpdateItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -288,10 +302,10 @@ Item {
                     }
                     else if (firmwareUpdatePage.state == "firmware_update_failed") {
                         firmwareUpdatePage.state = "no_firmware_update_available"
-                        settingsSwipeView.swipeToItem(0)
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                     else {
-                        settingsSwipeView.swipeToItem(0)
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
                 else {
@@ -301,8 +315,8 @@ Item {
 
             function skipFreStepAction() {
                 bot.cancel()
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             FirmwareUpdatePage {
@@ -311,11 +325,11 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 6
+        // SettingsPage.CalibrateExtrudersPage
         Item {
             id: calibrateToolheadsItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -340,8 +354,8 @@ Item {
             function skipFreStepAction() {
                 bot.cancel()
                 toolheadCalibration.state = "base state"
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             ToolheadCalibration {
@@ -356,8 +370,8 @@ Item {
                     // Dont go back if an error happened
                     if(calibrateErrorScreen.lastReportedErrorType ==
                                                         ErrorType.NoError) {
-                        if(settingsSwipeView.currentIndex != 0) {
-                            settingsSwipeView.swipeToItem(0)
+                        if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         }
                     }
                 }
@@ -373,18 +387,18 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 7
+        // SettingsPage.TimePage
         Item {
             id: timeItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(0)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -392,8 +406,8 @@ Item {
             }
 
             function skipFreStepAction() {
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             TimePage {
@@ -402,11 +416,11 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 8
+        // SettingsPage.AdvancedSettingsPage
         Item {
             id: advancedSettingsItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -415,11 +429,11 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 9
+        // SettingsPage.ChangeLanguagePage
         Item {
             id: changeLanguageItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -428,11 +442,11 @@ Item {
             }
         }
 
-        //settingsSwipeView.index = 10
+        // SettingsPage.KoreaDFSSecretPage
         Item {
             id: koreaDFSScreenItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 

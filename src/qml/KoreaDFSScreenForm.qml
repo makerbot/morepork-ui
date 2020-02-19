@@ -13,6 +13,11 @@ Item {
     property alias wifiSwipeView: koreaDFScreenSwipeView
     property alias passwordField: passwordField
 
+    enum SwipeIndex {
+        BasePage,
+        ChangeDFSSettingPage
+    }
+
     SwipeView {
         id: koreaDFScreenSwipeView
         smooth: false
@@ -33,7 +38,7 @@ Item {
             id: itemEnterPassword
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: true
@@ -41,7 +46,7 @@ Item {
             function altBack() {
                 passwordField.clear()
                 showPassword.checked = false
-                settingsSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
 
             Item {
@@ -109,7 +114,7 @@ Item {
                     buttonHeight: 50
                     button_mouseArea.onClicked: {
                         if(passwordField.text === "methodkorea") {
-                            koreaDFScreenSwipeView.swipeToItem(1)
+                            koreaDFScreenSwipeView.swipeToItem(KoreaDFSScreen.ChangeDFSSettingPage)
                         }
                     }
                 }
@@ -162,7 +167,7 @@ Item {
                 id: inputPanelContainer
                 smooth: false
                 antialiasing: false
-                visible: settingsSwipeView.currentIndex == 10
+                visible: settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage
                 x: -30
                 y: parent.height - inputPanel.height
                 width: 860
@@ -182,7 +187,7 @@ Item {
             id: itemKoreaDFSSettings
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: koreaDFScreenSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: KoreaDFSScreen.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: true
@@ -238,8 +243,8 @@ Item {
                     onClicked: {
                         passwordField.clear()
                         showPassword.checked = false
-                        koreaDFScreenSwipeView.swipeToItem(0)
-                        settingsSwipeView.swipeToItem(0)
+                        koreaDFScreenSwipeView.swipeToItem(KoreaDFSScreen.BasePage)
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
             }

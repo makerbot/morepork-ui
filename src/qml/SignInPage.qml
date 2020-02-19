@@ -5,8 +5,8 @@ SignInPageForm {
         usernameTextField.clear()
         passwordField.clear()
         showPassword.checked = false
-        signInSwipeView.swipeToItem(0)
-        settingsSwipeView.swipeToItem(0)
+        signInSwipeView.swipeToItem(SignInPage.BasePage)
+        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
     }
 
     function closePopup() {
@@ -59,7 +59,7 @@ SignInPageForm {
         onTriggered: {
             closePopup()
             backToSettings()
-            mainSwipeView.swipeToItem(0)
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             fre.gotoNextStep(currentFreStep)
         }
     }
@@ -75,7 +75,7 @@ SignInPageForm {
 
     addAccountButton {
         button_mouseArea.onClicked: {
-            signInSwipeView.swipeToItem(1)
+            signInSwipeView.swipeToItem(SignInPage.UsernamePage)
             usernameTextField.forceActiveFocus()
         }
     }
@@ -90,7 +90,7 @@ SignInPageForm {
     enteredUsernameButton {
         button_mouseArea.onClicked: {
             username = usernameTextField.text
-            signInSwipeView.swipeToItem(2)
+            signInSwipeView.swipeToItem(SignInPage.PasswordPage)
             passwordField.forceActiveFocus()
         }
     }

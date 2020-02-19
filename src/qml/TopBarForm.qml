@@ -190,29 +190,29 @@ Item {
                     break;
                 default:
                     switch(mainSwipeView.currentIndex) {
-                    case 0:
+                    case MoreporkUI.BasePage:
                         bot.name
                         break;
-                    case 1:
+                    case MoreporkUI.PrintPage:
                         switch(printPage.printSwipeView.currentIndex) {
-                        case 0:
-                        case 1:
+                        case PrintPage.BasePage:
+                        case PrintPage.FileBrowser:
                             qsTr("CHOOSE A FILE")
                             break;
-                        case 2:
+                        case PrintPage.StartPrintConfirm:
                             qsTr("PRINT")
                             break;
-                        case 3:
+                        case PrintPage.FileInfoPage:
                             qsTr("FILE INFORMATION")
                             break;
                         }
                         break;
-                    case 2:
+                    case MoreporkUI.ExtruderPage:
                         switch(extruderPage.extruderSwipeView.currentIndex) {
-                        case 0:
+                        case ExtruderPage.BasePage:
                             qsTr("EXTRUDERS")
                             break;
-                        case 1:
+                        case ExtruderPage.AttachExtruderPage:
                             qsTr("ATTACHING EXTRUDERS")
                             break;
                         default:
@@ -220,60 +220,60 @@ Item {
                             break;
                         }
                         break;
-                    case 3:
+                    case MoreporkUI.SettingsPage:
                         switch(settingsPage.settingsSwipeView.currentIndex) {
-                        case 1:
+                        case SettingsPage.PrinterInfoPage:
                             qsTr("%1 INFO").arg(bot.name)
                             break;
-                        case 2:
+                        case SettingsPage.ChangePrinterNamePage:
                             qsTr("CHANGE PRINTER NAME")
                             break;
-                        case 3:
+                        case SettingsPage.WifiPage:
                             qsTr("CHOOSE WIFI NETWORK")
                             break;
-                        case 4:
+                        case SettingsPage.AuthorizeAccountsPage:
                             qsTr("AUTHORIZE MAKERBOT ACCOUNT")
                             break;
-                        case 5:
+                        case SettingsPage.FirmwareUpdatePage:
                             qsTr("SOFTWARE UPDATE")
                             break;
-                        case 6:
+                        case SettingsPage.CalibrateExtrudersPage:
                             qsTr("CALIBRATE EXTRUDERS")
                             break;
-                        case 7:
+                        case SettingsPage.TimePage:
                             switch(settingsPage.timePage.timeSwipeView.currentIndex) {
-                            case 0:
+                            case TimePage.SetDate:
                                 qsTr("ENTER TODAY'S DATE")
                                 break;
-                            case 1:
+                            case TimePage.SetTimeZone:
                                 qsTr("SET TIME ZONE")
                                 break;
-                            case 2:
+                            case TimePage.SetTime:
                                 qsTr("SET CURRENT TIME")
                                 break;
                             }
                             break;
-                        case 8:
+                        case SettingsPage.AdvancedSettingsPage:
                             switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
-                            case 1:
+                            case AdvancedSettingsPage.AdvancedInfoPage:
                                 qsTr("%1 SENSOR INFO").arg(bot.name)
                                 break;
-                            case 2:
+                            case AdvancedSettingsPage.PreheatPage:
                                 qsTr("PREHEAT")
                                 break;
-                            case 3:
+                            case AdvancedSettingsPage.AssistedLevelingPage:
                                 qsTr("ASSISTED LEVELING")
                                 break;
-                            case 6:
+                            case AdvancedSettingsPage.RaiseLowerBuildPlatePage:
                                 qsTr("RAISE/LOWER BUILD PLATE")
                                 break;
-                            case 7:
+                            case AdvancedSettingsPage.ShareAnalyticsPage:
                                 qsTr("ANALYTICS")
                                 break;
-                            case 8:
+                            case AdvancedSettingsPage.DryMaterialPage:
                                 qsTr("DRYING CYCLE")
                                 break;
-                            case 9:
+                            case AdvancedSettingsPage.CleanExtrudersPage:
                                 qsTr("CLEAN EXTRUDERS")
                                 break;
                             default:
@@ -281,25 +281,28 @@ Item {
                                 break;
                             }
                             break;
+                        case SettingsPage.ChangeLanguagePage:
+                            qsTr("SET PRINTER LANGUAGE")
+                            break;
                         default:
                             qsTr("SETTINGS")
                             break;
                         }
                         break;
-                    case 4:
+                    case MoreporkUI.InfoPage:
                         qsTr("INFO")
                         break;
-                    case 5:
+                    case MoreporkUI.MaterialPage:
                         switch(materialPage.materialSwipeView.currentIndex) {
-                        case 0:
+                        case MaterialPage.BasePage:
                             qsTr("MATERIAL")
                             break;
-                        case 1:
+                        case MaterialPage.ExpExtruderSettingsPage:
                             switch(materialPage.expExtruderSettingsPage.selectMaterialSwipeView.currentIndex) {
-                                case 0:
+                                case ExpExtruderSettings.SelectMaterialPage:
                                 qsTr("CHOOSE BASE MATERIAL")
                                 break;
-                                case 1:
+                                case ExpExtruderSettings.SelectTemperaturePage:
                                 qsTr("CHOOSE TEMPERATURE")
                                 break;
                             }
@@ -309,31 +312,31 @@ Item {
                             break;
                         }
                         break;
-                    case 6:
+                    case MoreporkUI.AdvancedPage:
                         // This bit is repeated from above, but making it a function
                         // returning a string doesn't seem to be updating the title
                         // dynamically when the advanced page is reached through the
                         // settings page.
                         switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
-                        case 1:
+                        case AdvancedSettingsPage.AdvancedInfoPage:
                             qsTr("%1 SENSOR INFO").arg(bot.name)
                             break;
-                        case 2:
+                        case AdvancedSettingsPage.PreheatPage:
                             qsTr("PREHEAT")
                             break;
-                        case 3:
+                        case AdvancedSettingsPage.AssistedLevelingPage:
                             qsTr("ASSISTED LEVELING")
                             break;
-                        case 6:
+                        case AdvancedSettingsPage.RaiseLowerBuildPlatePage:
                             qsTr("RAISE/LOWER BUILD PLATE")
                             break;
-                        case 7:
+                        case AdvancedSettingsPage.ShareAnalyticsPage:
                             qsTr("ANALYTICS")
                             break;
-                        case 8:
+                        case AdvancedSettingsPage.DryMaterialPage:
                             qsTr("DRYING CYCLE")
                             break;
-                        case 9:
+                        case AdvancedSettingsPage.CleanExtrudersPage:
                             qsTr("CLEAN EXTRUDERS")
                             break;
                         default:

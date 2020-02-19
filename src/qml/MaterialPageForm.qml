@@ -50,12 +50,12 @@ Item {
            // the UI to move to material page for some
            // reason, quick hack to fix this.
            (bot.process.errorCode != 1041)) {
-            if(mainSwipeView.currentIndex != 5){
-                mainSwipeView.swipeToItem(5)
+            if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage){
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }
             enableMaterialDrawer()
-            if(materialSwipeView.currentIndex != 2){
-                materialSwipeView.swipeToItem(2)
+            if(materialSwipeView.currentIndex != MaterialPage.LoadUnloadPage){
+                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
             switch(bot.process.type) {
             case ProcessType.Load:
@@ -178,7 +178,7 @@ Item {
             // and go back.
             if(bot.process.stateType == ProcessStateType.Paused) {
                 loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(0)
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 // If cancelled out of load/unload while in print process
                 // enable print drawer to set UI back to printing state.
                 setDrawerState(false)
@@ -195,7 +195,7 @@ Item {
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             loadUnloadFilamentProcess.isExternalLoadUnload = false
-            materialSwipeView.swipeToItem(0)
+            materialSwipeView.swipeToItem(MaterialPage.BasePage)
             setDrawerState(false)
         }
     }
@@ -204,9 +204,15 @@ Item {
         id: materialPageDrawer
     }
 
+    enum PageIndex {
+        BasePage,
+        ExpExtruderSettingsPage,
+        LoadUnloadPage
+    }
+
     SwipeView {
         id: materialSwipeView
-        currentIndex: 0
+        currentIndex: MaterialPage.BasePage
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -219,12 +225,12 @@ Item {
             materialSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // materialSwipeView.index = 0
+        // MaterialPage.BasePage
         Item {
             id: itemFilamentBay
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
             visible: true
 
@@ -245,11 +251,11 @@ Item {
             }
         }
 
-        // materialSwipeView.index = 1
+        // MaterialPage.ExpExtruderSettingsPage
         Item {
             id: itemExpExtruderSettings
             property var backSwiper: materialSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: MaterialPage.BasePage
             visible: false
 
             ExpExtruderSettings {
@@ -257,11 +263,11 @@ Item {
             }
         }
 
-        // materialSwipeView.index = 2
+        // MaterialPage.LoadUnloadPage
         Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: MaterialPage.BasePage
             property bool hasAltBack: true
             visible: false
 
@@ -287,9 +293,9 @@ Item {
                 materialChangeCancelled = true
                 bot.cancel()
                 loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(0)
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 setDrawerState(false)
-                mainSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             LoadUnloadFilament {
@@ -317,7 +323,7 @@ Item {
                 onProcessDone: {
                     state = "base state"
                     isExternalLoadUnload = false
-                    materialSwipeView.swipeToItem(0)
+                    materialSwipeView.swipeToItem(MaterialPage.BasePage)
                     setDrawerState(false)
                     // If load/unload process completes successfully while,
                     // in print process enable print drawer to set UI back,
@@ -327,7 +333,7 @@ Item {
                         setDrawerState(true)
                         // Go to print page directly after loading or
                         // unloading during a print.
-                        mainSwipeView.swipeToItem(1)
+                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                     }
                 }
             }

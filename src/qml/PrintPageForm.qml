@@ -49,7 +49,7 @@ Item {
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
-           mainSwipeView.currentIndex == 1) {
+           mainSwipeView.currentIndex == MoreporkUI.PrintPage) {
             copyingFilePopup.open()
         }
     }
@@ -60,10 +60,10 @@ Item {
     property bool usbStorageConnected: storage.usbStorageConnected
     onUsbStorageConnectedChanged: {
         if(!storage.usbStorageConnected) {
-            if(printSwipeView.currentIndex != 0 &&
+            if(printSwipeView.currentIndex != PrintPage.BasePage &&
                     browsingUsbStorage) {
                 setDrawerState(false)
-                printSwipeView.swipeToItem(0)
+                printSwipeView.swipeToItem(PrintPage.BasePage)
             }
             if(safeToRemoveUsbPopup.opened) {
                 bot.acknowledgeSafeToRemoveUsb()
@@ -80,8 +80,8 @@ Item {
             //view when print process actually starts
             //assuming the user had navigated to other
             //pages before the print starts.
-            if(printSwipeView.currentIndex != 0) {
-                printSwipeView.swipeToItem(0)
+            if(printSwipeView.currentIndex != PrintPage.BasePage) {
+                printSwipeView.swipeToItem(PrintPage.BasePage)
             }
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
@@ -93,7 +93,7 @@ Item {
             printStatusView.feedbackSubmitted = false // Reset when print starts
         }
         else {
-            printStatusView.printStatusSwipeView.setCurrentIndex(0)
+            printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
             setDrawerState(false)
             // Only reset at end of 'Print Process'
             // if 'Print Again' option isn't used
@@ -235,10 +235,17 @@ Item {
         id: sortingDrawer
     }
 
+    enum SwipeIndex {
+        BasePage,
+        FileBrowser,
+        StartPrintConfirm,
+        FileInfoPage
+    }
+
     SwipeView {
         id: printSwipeView
         smooth: false
-        currentIndex: 0 // Should never be non zero
+        currentIndex: PrintPage.BasePage
         anchors.fill: parent
         interactive: false
 
@@ -250,7 +257,7 @@ Item {
             printSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // printSwipeView.index = 0
+        // PrintPage.BasePage
         Item {
             id: itemPrintStorageOpt
             // backSwiper and backSwipeIndex are used by backClicked
@@ -262,7 +269,7 @@ Item {
 
             function altBack() {
                 if(!inFreStep) {
-                    mainSwipeView.swipeToItem(0)
+                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -272,7 +279,7 @@ Item {
             function skipFreStepAction() {
                 printStatusView.testPrintComplete = false
                 bot.cancel()
-                mainSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             Flickable {
@@ -307,7 +314,7 @@ Item {
                             storage.updatePrintFileList("?root_internal?")
                             activeDrawer = printPage.sortingDrawer
                             setDrawerState(true)
-                            printSwipeView.swipeToItem(1)
+                            printSwipeView.swipeToItem(PrintPage.FileBrowser)
                         }
                     }
 
@@ -324,7 +331,7 @@ Item {
                                 storage.updatePrintFileList("?root_usb?")
                                 activeDrawer = printPage.sortingDrawer
                                 setDrawerState(true)
-                                printSwipeView.swipeToItem(1)
+                                printSwipeView.swipeToItem(PrintPage.FileBrowser)
                             }
                         }
                     }
@@ -372,12 +379,12 @@ Item {
             }
         }
 
-        // printSwipeView.index = 1
+        // PrintPage.FileBrowser
         Item {
             id: itemPrintStorage
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: PrintPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -390,7 +397,7 @@ Item {
                 }
                 else {
                     setDrawerState(false)
-                    printSwipeView.swipeToItem(0)
+                    printSwipeView.swipeToItem(PrintPage.BasePage)
                 }
             }
 
@@ -483,7 +490,7 @@ Item {
                             }
                             else {
                                 setDrawerState(false)
-                                printSwipeView.swipeToItem(2)
+                                printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
                             }
                         }
                     }
@@ -507,19 +514,19 @@ Item {
             }
         }
 
-        // printSwipeView.index = 2
+        // PrintPage.StartPrintConfirm
         Item {
             id: itemPrintFileOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
-            property int backSwipeIndex: isPrintProcess ? 0 : 1
+            property int backSwipeIndex: isPrintProcess ? PrintPage.BasePage : PrintPage.FileBrowser
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    startPrintItem.startPrintSwipeView.setCurrentIndex(0)
+                    startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     resetPrintFileDetails()
                     setDrawerState(true)
                     currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
@@ -530,11 +537,11 @@ Item {
             }
 
             function skipFreStepAction() {
-                startPrintItem.startPrintSwipeView.setCurrentIndex(0)
+                startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                 resetPrintFileDetails()
                 setDrawerState(false)
-                printSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                printSwipeView.swipeToItem(PrintPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             StartPrintPage {
@@ -542,12 +549,12 @@ Item {
             }
         }
 
-        // printSwipeView.index = 3
+        // PrintPage.FileInfoPage
         Item {
             id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
-            property int backSwipeIndex: isPrintProcess ? 0 : 2
+            property int backSwipeIndex: isPrintProcess ? PrintPage.BasePage : PrintPage.StartPrintConfirm
             smooth: false
             visible: false
 
@@ -657,8 +664,8 @@ Item {
             storage.updatePrintFileList("?root_internal?")
             activeDrawer = printPage.sortingDrawer
             setDrawerState(true)
-            if(printSwipeView.currentIndex != 1) {
-                printSwipeView.swipeToItem(1)
+            if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
+                printSwipeView.swipeToItem(PrintPage.FileBrowser)
             }
             copyingFilePopup.close()
         }

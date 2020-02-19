@@ -69,18 +69,26 @@ Item {
         doneByTimeString = endTime.toLocaleTimeString(Qt.locale().name)
     }
 
+    enum SwipeIndex {
+        Page0,
+        Page1,
+        Page2,
+        Page3,
+        Page4
+    }
+
     SwipeView {
         id: printStatusSwipeView
         smooth: false
-        currentIndex: 0 // Should never be non zero
+        currentIndex: PrintStatusView.Page0
         anchors.fill: parent
         visible: true
 
-        // The second page of the Print Status is the Extruder Page
+        // The third page of the Print Status is the Extruder Page
         // with the Extruder Lifetime stats. Make sure these update
         // similar to the same way that the ExtruderForm.qml updates.
         onCurrentIndexChanged: {
-            if(currentIndex == 2) {
+            if(currentIndex == PrintStatusView.Page2) {
                 bot.getToolStats(0);
                 bot.getToolStats(1);
             }

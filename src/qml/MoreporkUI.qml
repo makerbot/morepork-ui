@@ -287,6 +287,16 @@ ApplicationWindow {
     }
     property bool experimentalExtruderAcknowledged: false
 
+    enum PageIndex {
+        BasePage,       // 0
+        PrintPage,      // 1
+        ExtruderPage,   // 2
+        SettingsPage,   // 3
+        InfoPage,       // 4
+        MaterialPage,   // 5
+        AdvancedPage    // 6
+    }
+
     Item {
         id: rootItem
         smooth: false
@@ -368,8 +378,8 @@ ApplicationWindow {
             function swipeToItem(itemToDisplayDefaultIndex) {
                 var prevIndex = mainSwipeView.currentIndex
                 mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-                if(itemToDisplayDefaultIndex === 0) {
-                    mainSwipeView.setCurrentIndex(0)
+                if(itemToDisplayDefaultIndex === MoreporkUI.BasePage) {
+                    mainSwipeView.setCurrentIndex(MoreporkUI.BasePage)
                     topBar.backButton.visible = false
                     if(!printPage.isPrintProcess) {
                         disableDrawer()
@@ -392,27 +402,27 @@ ApplicationWindow {
                     anchors.fill: parent
 
                     mainMenuIcon_print.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(1)
+                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                     }
 
                     mainMenuIcon_extruder.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(2)
+                        mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
                     }
 
                     mainMenuIcon_settings.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(3)
+                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     }
 
                     mainMenuIcon_info.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(4)
+                        mainSwipeView.swipeToItem(MoreporkUI.InfoPage)
                     }
 
                     mainMenuIcon_material.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(5)
+                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                     }
 
                     mainMenuIcon_advanced.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(6)
+                        mainSwipeView.swipeToItem(MoreporkUI.AdvancedPage)
                     }
                 }
             }
@@ -490,7 +500,7 @@ ApplicationWindow {
                 visible: false
 
                 function altBack() {
-                    mainSwipeView.swipeToItem(0)
+                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 }
 
                 AdvancedSettingsPage {
@@ -1460,11 +1470,11 @@ ApplicationWindow {
                                 update_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(mainSwipeView.currentIndex != 3) {
-                                    mainSwipeView.swipeToItem(3)
+                                if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
+                                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                                 }
-                                if(settingsPage.settingsSwipeView.currentIndex != 5) {
-                                    settingsPage.settingsSwipeView.swipeToItem(5)
+                                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.FirmwareUpdatePage) {
+                                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
                                 }
                                 firmwareUpdatePopup.close()
                             }
@@ -1680,11 +1690,11 @@ ApplicationWindow {
                             onClicked: {
                                 bot.buildPlateCleared()
                                 buildPlateClearPopup.close()
-                                if(mainSwipeView.currentIndex != 1) {
-                                    mainSwipeView.swipeToItem(1)
+                                if(mainSwipeView.currentIndex != MoreporkUI.PrintPage) {
+                                    mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                                 }
-                                if(printPage.printSwipeView.currentIndex != 0) {
-                                    printPage.printSwipeView.swipeToItem(0)
+                                if(printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
+                                    printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                                 }
                             }
                         }
@@ -1968,8 +1978,8 @@ ApplicationWindow {
                             anchors.fill: parent
                             onClicked: {
                                 extNotCalibratedPopup.close()
-                                mainSwipeView.swipeToItem(3)
-                                settingsPage.settingsSwipeView.swipeToItem(6)
+                                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
                             }
                         }
                     }
@@ -2757,10 +2767,10 @@ ApplicationWindow {
 
                             function resetDetailsAndGoToMaterialsPage() {
                                 printPage.resetPrintFileDetails()
-                                if(printPage.printSwipeView.currentIndex != 0) {
-                                    printPage.printSwipeView.setCurrentIndex(0)
+                                if(printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
+                                    printPage.printSwipeView.setCurrentIndex(PrintPage.BasePage)
                                 }
-                                mainSwipeView.swipeToItem(5)
+                                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                             }
 
                             onClicked: {
