@@ -190,5 +190,9 @@
         <file>ReportPrintAnalyticsComponentForm.qml</file>
         <file>DateSelector.qml</file>
         <file>DateSelectorForm.qml</file>
+        <file>CleanExtruderSettings.qml</file>
+        <file>CleanExtruderSettingsForm.qml</file>
+        <file>CleanExtruderTempSelector.qml</file>
+        <file>CleanExtruderTempSelectorForm.qml</file>
     </qresource>
 </RCC>
