@@ -141,7 +141,7 @@ Item {
         }
     }
 
-    CleanExtruderMaterialSelector {
+    CleanExtruderSettings {
         id: materialSelector
         visible: false
     }
