@@ -20,7 +20,7 @@ ListView {
         smooth: false
         antialiasing: false
         onClicked: {
-            bot.cleanNozzles([parseInt(temperatureText, 10)])
+            startCleaning([parseInt(temperatureText, 10)])
         }
     }
     footer:

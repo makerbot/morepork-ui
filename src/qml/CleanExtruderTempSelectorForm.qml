@@ -148,7 +148,7 @@ Item {
             onClicked: {
                 var temp = 160 + temperatureTumbler.currentIndex*5
                 cleanExtrudersSelectMaterialSwipeView.swipeToItem(0)
-                bot.cleanNozzles([parseInt(temp, 10)])
+                startCleaning([parseInt(temp, 10)])
             }
             enabled: {
                 !temperatureTumbler.moving

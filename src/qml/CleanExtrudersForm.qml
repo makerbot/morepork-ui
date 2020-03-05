@@ -50,15 +50,6 @@ Item {
         }
     }
 
-    property variant nozzleCleaningTempList : [
-        {label: "pla", temperature : 190},
-        {label: "tough", temperature : 190},
-        {label: "petg", temperature : 190},
-        {label: "abs", temperature : 240},
-        {label: "asa", temperature : 240},
-        {label: "nylon", temperature : 190}
-    ]
-
     Image {
         id: image
         width: sourceSize.width

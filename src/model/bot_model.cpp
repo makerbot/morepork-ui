@@ -90,8 +90,12 @@ void BotModel::calibrateToolheads(QList<QString> axes) {
     }
 }
 
-void BotModel::doNozzleCleaning(bool do_clean) {
+void BotModel::doNozzleCleaning(bool do_clean, QList<int> temperature) {
     qDebug() << FL_STRM << "called with parameter: " << do_clean;
+    qDebug() << "Temperatures";
+    for(int i = 0; i < temperature.size(); i++) {
+        qDebug() << temperature.value(i);
+    }
 }
 
 void BotModel::acknowledgeNozzleCleaned() {
