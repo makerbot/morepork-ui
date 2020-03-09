@@ -262,6 +262,9 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         }
     } else {
         errorTypeReset();
+        CLEAR_ERROR(extruder, OOF)
+        CLEAR_ERROR(extruder, Jammed)
+        CLEAR_ERROR(filamentBay, OOF)
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);
