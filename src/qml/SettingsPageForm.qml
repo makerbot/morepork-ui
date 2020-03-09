@@ -321,6 +321,10 @@ Item {
             visible: false
 
             function altBack() {
+                if(toolheadCalibration.chooseMaterial) {
+                    toolheadCalibration.chooseMaterial = false
+                    return
+                }
                 if(!inFreStep) {
                     if(bot.process.type === ProcessType.CalibrationProcess &&
                        bot.process.isProcessCancellable) {
@@ -338,6 +342,10 @@ Item {
             }
 
             function skipFreStepAction() {
+                if(toolheadCalibration.chooseMaterial) {
+                    toolheadCalibration.chooseMaterial = false
+                    return
+                }
                 bot.cancel()
                 toolheadCalibration.state = "base state"
                 settingsSwipeView.swipeToItem(0)

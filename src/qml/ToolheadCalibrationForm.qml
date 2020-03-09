@@ -44,6 +44,8 @@ Item {
         }
     }
 
+    property bool chooseMaterial: false
+
     AnimatedImage {
         id: animated_image
         width: 400
@@ -162,6 +164,11 @@ Item {
         visible: false
     }
 
+    CleanExtruderSettings {
+        id: materialSelector
+        visible: false
+    }
+
     states: [
         State {
             name: "clean_nozzles"
@@ -170,7 +177,8 @@ Item {
                    bot.process.stateType == ProcessStateType.HeatingNozzle ||
                    bot.process.stateType == ProcessStateType.CleanNozzle ||
                    bot.process.stateType == ProcessStateType.FinishCleaning ||
-                   bot.process.stateType == ProcessStateType.CoolingNozzle)
+                   bot.process.stateType == ProcessStateType.CoolingNozzle) &&
+                  !chooseMaterial
 
             PropertyChanges {
                 target: animated_image
@@ -195,6 +203,48 @@ Item {
 
             PropertyChanges {
                 target: cleanExtruders
+                visible: true
+            }
+        },
+
+        State {
+            name: "choose_material"
+            when: bot.process.type == ProcessType.CalibrationProcess &&
+                  (bot.process.stateType == ProcessStateType.CheckNozzleClean ||
+                   bot.process.stateType == ProcessStateType.HeatingNozzle ||
+                   bot.process.stateType == ProcessStateType.CleanNozzle ||
+                   bot.process.stateType == ProcessStateType.FinishCleaning ||
+                   bot.process.stateType == ProcessStateType.CoolingNozzle) &&
+                   chooseMaterial
+
+            PropertyChanges {
+                target: animated_image
+                source: ""
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: header_image
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: mainItem
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: loadingIcon
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: cleanExtruders
+                visible: false
+            }
+
+            PropertyChanges {
+                target: materialSelector
                 visible: true
             }
         },

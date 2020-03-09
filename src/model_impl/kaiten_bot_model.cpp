@@ -57,7 +57,7 @@ class KaitenBotModel : public BotModel {
     void installFirmware();
     void installFirmwareFromPath(const QString file_path);
     void calibrateToolheads(QList<QString> axes);
-    void doNozzleCleaning(bool do_clean);
+    void doNozzleCleaning(bool do_clean, QList<int> temperature = {0,0});
     void acknowledgeNozzleCleaned();
     void buildPlateState(bool state);
     void query_status();
@@ -717,12 +717,26 @@ void KaitenBotModel::calibrateToolheads(QList<QString> axes){
     }
 }
 
-void KaitenBotModel::doNozzleCleaning(bool do_clean){
+void KaitenBotModel::doNozzleCleaning(bool do_clean, QList<int> temperature){
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["method"] = do_clean ? Json::Value("do_cleaning") : Json::Value("skip_cleaning");
+        if (do_clean) {
+            Json::Value json_args(Json::objectValue);
+            Json::Value temperature_list(Json::arrayValue);
+            for(int temp : temperature) {
+                if(temp > 0) {
+                    for(int i = 0; i < temperature.size(); i++) {
+                        temperature_list[i] = temperature.value(i);
+                    }
+                    json_args["temperature"] = Json::Value(temperature_list);
+                    break;
+                }
+            }
+            json_params["params"] = Json::Value(json_args);
+        }
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
