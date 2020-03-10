@@ -697,7 +697,7 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(errorCode)
+                    qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(lastReportedErrorCode)
                 }
             }
 
