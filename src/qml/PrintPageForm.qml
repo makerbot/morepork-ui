@@ -27,7 +27,6 @@ Item {
     property real layer_height_mm
     property string extruder_temp
     property string chamber_temp
-    property string buildplane_temp
     property string slicer_name
     property string readyByTime
     property int lastPrintTimeSec
@@ -178,7 +177,7 @@ Item {
         num_shells = file.numShells
         extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
                                               file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
-        buildplane_temp = file.buildplaneTempCelcius + "C"
+        chamber_temp = file.chamberTempCelcius + "C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
     }
@@ -201,7 +200,6 @@ Item {
         num_shells = ""
         extruder_temp = ""
         chamber_temp = ""
-        buildplane_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
     }
@@ -622,9 +620,9 @@ Item {
                 }
 
                 InfoItem {
-                    id: printInfo_buildplaneTemperature
-                    labelText: qsTr("Buildplane Temperature")
-                    dataText: buildplane_temp
+                    id: printInfo_chamberTemperature
+                    labelText: qsTr("Chamber Temperature")
+                    dataText: chamber_temp
                 }
 
                 InfoItem {
