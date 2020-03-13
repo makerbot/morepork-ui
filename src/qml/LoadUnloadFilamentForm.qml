@@ -72,7 +72,7 @@ Item {
     // ready.
     function materialValidityCheck() {
         var bay = ((bayID == 1) ? bay1 : bay2)
-        if(bay.isMaterialValid) {
+        if(settings.getSkipFilamentNags || bay.isMaterialValid) {
             isMaterialValid = true
             return true
         }

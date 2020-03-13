@@ -79,10 +79,13 @@ PrintPageForm {
         }
 
         if(startPrintUnknownSliceGenuineMaterial ||
-           startPrintGenuineSliceUnknownMaterial ||
-           startPrintMaterialMismatch ||
            startPrintWithInsufficientModelMaterial ||
-           startPrintWithInsufficientSupportMaterial) {
+           startPrintWithInsufficientSupportMaterial ||
+           (!settings.getSkipFilamentNags &&
+            (startPrintGenuineSliceUnknownMaterial ||
+            startPrintMaterialMismatch
+           ))
+        ) {
             return false
         }
         else {
