@@ -76,6 +76,10 @@ void SettingsInterface::setLanguageCode(const QString language_code) {
     writeSettings();
 }
 
+bool SettingsInterface::getSkipFilamentNags() {
+    return cached_settings_["skip_filament_nags"].asBool();
+}
+
 bool SettingsInterface::getAllowInternalStorage() {
     return cached_settings_["allow_internal_storage"].asBool();
 }
