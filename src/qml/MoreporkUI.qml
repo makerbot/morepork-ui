@@ -2935,9 +2935,9 @@ ApplicationWindow {
                 id: columnLayout_exp_ext_popup
                 width: 590
                 height: children.height
-                spacing: 25
+                spacing: 15
                 anchors.top: parent.top
-                anchors.topMargin: 115
+                anchors.topMargin: 95
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
@@ -2955,11 +2955,14 @@ ApplicationWindow {
                     id: description_text_exp_ext_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
+                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" + 
                              "partners and recommended print settings. Material should\n" +
                              "be loaded through the AUX port under the removable cover\n" +
                              "on the top left of the printer. Make sure that the extruders\n" +
-                             "are calibrated before printing.")
+                             "are calibrated before printing. The Experimental Extruder is\n" +
+                             "an experimental product and is not covered under warranty\n" +
+                             "or MakerCare."
+                            )
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
