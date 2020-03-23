@@ -71,6 +71,8 @@ Item {
         }
         else {
             startLoadUnloadFromUI = false
+            materialWarningPopup.close()
+            cancelLoadUnloadPopup.close()
         }
     }
 
