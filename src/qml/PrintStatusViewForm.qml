@@ -262,13 +262,18 @@ Item {
                     id: print_again_button
                     buttonWidth: 290
                     buttonHeight: 50
-                    label: qsTr("RETRY TEST PRINT")
-                    visible: {
+                    label: {
                         if(inFreStep) {
-                            bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed
+                            qsTr("RETRY TEST PRINT")
+                        } else {
+                            qsTr("PRINT AGAIN")
                         }
-                        else {
+                    }
+                    visible: {
+                        if(inFreStep || (printFromUI && !browsingUsbStorage)) {
+                            bot.process.stateType == ProcessStateType.Completed ||
+                            bot.process.stateType == ProcessStateType.Failed
+                        } else {
                             false
                         }
                     }

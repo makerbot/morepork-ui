@@ -89,7 +89,6 @@ Item {
             if(!printFromUI) {
                 getPrintDetailsTimer.start() //for prints started from repl
             }
-            printFromUI = false //reset when the print actually starts
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -200,6 +199,7 @@ Item {
         extruder_temp = ""
         chamber_temp = ""
         slicer_name = ""
+        printFromUI = false
         startPrintWithUnknownMaterials = false
     }
 
