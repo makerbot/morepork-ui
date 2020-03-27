@@ -33,6 +33,7 @@ Item {
                 filamentPresentProperty.value: bot.infoToolheadAFilamentPresent
                 currentTempProperty.value: bot.infoToolheadACurrentTemp
                 targetTempProperty.value: bot.infoToolheadATargetTemp
+                tempOffsetProperty.value: (bot.infoToolheadATempOffset).toFixed(2)
                 encoderTicksProperty.value: bot.infoToolheadAEncoderTicks
                 activeFanRpmProperty.value: bot.infoToolheadAActiveFanRPM
                 gradientFanRpmProperty.value: bot.infoToolheadAGradientFanRPM
@@ -48,6 +49,7 @@ Item {
                 filamentPresentProperty.value: bot.infoToolheadBFilamentPresent
                 currentTempProperty.value: bot.infoToolheadBCurrentTemp
                 targetTempProperty.value: bot.infoToolheadBTargetTemp
+                tempOffsetProperty.value: (bot.infoToolheadBTempOffset).toFixed(2)
                 encoderTicksProperty.value: bot.infoToolheadBEncoderTicks
                 activeFanRpmProperty.value: bot.infoToolheadBActiveFanRPM
                 gradientFanRpmProperty.value: bot.infoToolheadBGradientFanRPM

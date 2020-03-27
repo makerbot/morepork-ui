@@ -11,6 +11,7 @@ Item {
     property alias filamentPresentProperty: filamentPresentProperty
     property alias currentTempProperty: currentTempProperty
     property alias targetTempProperty: targetTempProperty
+    property alias tempOffsetProperty: tempOffsetProperty
     property alias encoderTicksProperty: encoderTicksProperty
     property alias activeFanRpmProperty: activeFanRpmProperty
     property alias gradientFanRpmProperty: gradientFanRpmProperty
@@ -58,6 +59,11 @@ Item {
         AdvancedInfoElement {
             id: targetTempProperty
             label: qsTr("TARGET TEMP.")
+        }
+
+        AdvancedInfoElement {
+            id: tempOffsetProperty
+            label: qsTr("TEMP OFFSET")
         }
 
         AdvancedInfoElement {
