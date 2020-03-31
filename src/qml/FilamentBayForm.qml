@@ -293,7 +293,7 @@ Item {
                 ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]
                 break;
             case ExtruderType.MK14_COMP:
-                ["NYLON CF"]
+                ["NYLON CF", "ABS"]
                 break;
             default:
                 []
