@@ -1371,6 +1371,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_HOT); \
                 } else if (kExtruderTypeStr == "mk14_e") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_EXP); \
+                } else if (kExtruderTypeStr == "mk14_c") { \
+                    extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_COMP); \
                 } else { \
                     extruder ## EXT_SYM ## TypeReset(); \
                 } \

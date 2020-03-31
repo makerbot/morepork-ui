@@ -288,6 +288,7 @@ ApplicationWindow {
     // or atleast until single extruder support is launched to public?
     property bool extruderComboMismatch: {
         (bot.extruderAType == ExtruderType.MK14 && bot.extruderBType == ExtruderType.MK14_HOT) ||
+        (bot.extruderAType == ExtruderType.MK14_COMP && bot.extruderBType == ExtruderType.MK14_HOT) ||
         (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14)
     }
 
