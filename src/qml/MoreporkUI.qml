@@ -297,6 +297,12 @@ ApplicationWindow {
     }
     property bool experimentalExtruderAcknowledged: false
 
+    property bool moistureSensitiveMaterialDetected: {
+        (materialPage.bay1.isMaterialMoistureSensitive ||
+         materialPage.bay2.isMaterialMoistureSensitive
+    }
+    property bool materialMoistureWarningAcknowledged: false
+
     Item {
         id: rootItem
         smooth: false
@@ -2972,6 +2978,62 @@ ApplicationWindow {
                              "are calibrated before printing. The Experimental Extruder is\n" +
                              "an experimental product and is not covered under warranty\n" +
                              "or MakerCare."
+                            )
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: defaultFont.name
+                    font.pixelSize: 18
+                    font.letterSpacing: 1
+                    lineHeight: 1.3
+                }
+            }
+        }
+
+        CustomPopup {
+            id: materialMoistureWarningPopup
+            popupWidth: 720
+            popupHeight: 305
+            visible: !materialMoistureWarningAcknowledged &&
+                     moistureSensitiveMaterialDetected
+            showOneButton: true
+            full_button_text: qsTr("OK")
+            full_button.onClicked: {
+                materialMoistureWarningAcknowledged = true
+                materialMoistureWarningPopup.close()
+            }
+
+            ColumnLayout {
+                id: columnLayout_moist_warn_popup
+                width: 590
+                height: children.height
+                spacing: 25
+                anchors.top: parent.top
+                anchors.topMargin: 120
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text_moist_warn_popup
+                    color: "#cbcbcb"
+                    text: qsTr("MOISTURE SENSITIVE MATERIAL DETECTED")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_moist_warn_popup
+                    color: "#cbcbcb"
+                    text: {
+                        qsTr("Some material is prone to absorbing moisture from the air. If exposed for\n" +
+                             "more than 15 minutes, you may need to run the material drying routine\n" +
+                             "located in settings to the material. After it is dry, always keep the\n" +
+                             "material in the material bay, an airtight bag or case"
                             )
                     }
                     horizontalAlignment: Text.AlignHCenter
