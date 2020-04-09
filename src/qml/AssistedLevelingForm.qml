@@ -713,7 +713,7 @@ Item {
             PropertyChanges {
                 target: startDoneButton
                 buttonWidth: 120
-                label: qsTr("DONE")
+                label: qsTr("BEGIN Z CALIBRATION")
                 opacity: 1
                 disable_button: false
             }

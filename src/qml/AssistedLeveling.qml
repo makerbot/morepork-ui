@@ -17,6 +17,11 @@ AssistedLevelingForm {
                         mainSwipeView.swipeToItem(0)
                         fre.gotoNextStep(currentFreStep)
                     }
+                    else {
+                        mainSwipeView.swipeToItem(3)
+                        settingsPage.settingsSwipeView.swipeToItem(6)
+                        bot.calibrateToolheads(["z"])
+                    }
                 }
                 else {
                     bot.assistedLevel()
