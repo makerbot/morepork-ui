@@ -255,11 +255,15 @@ Item {
     }
 
     property bool isUnknownMaterial: {
-        usingExperimentalExtruder ? false : filamentMaterialName == "UNKNOWN"
+        (usingExperimentalExtruder ||
+         settings.getSkipFilamentNags) ?
+              false :
+              filamentMaterialName == "UNKNOWN"
     }
 
     property bool isMaterialValid: {
-        usingExperimentalExtruder ?
+        (usingExperimentalExtruder ||
+         settings.getSkipFilamentNags) ?
               true :
               (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
     }
