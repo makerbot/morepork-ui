@@ -243,6 +243,10 @@ void BotModel::ignoreError(const int index, const QList<int> error, const bool i
     qDebug() << ignored;
 }
 
+void BotModel::handshake() {
+    qDebug() << FL_STRM << "called";
+}
+
 
 class DummyBotModel : public BotModel {
   public:

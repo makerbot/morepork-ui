@@ -21,7 +21,7 @@ Item {
     property alias koreaDFSScreen: koreaDFSScreen
 
     property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
-    property alias signInPage: signInPage
+    property alias authorizeAccountPage: authorizeAccountPage
 
     property alias buttonDeauthorizeAccounts: buttonDeauthorizeAccounts
     property alias deauthorizeAccountsPopup: deauthorizeAccountsPopup
@@ -258,8 +258,8 @@ Item {
             smooth: false
             visible: false
 
-            SignInPage {
-                id: signInPage
+            AuthorizeAccountPage {
+                id: authorizeAccountPage
             }
         }
 

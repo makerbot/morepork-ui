@@ -93,6 +93,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void submitPrintFeedback(bool success);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
+    Q_INVOKABLE virtual void handshake();
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -104,6 +105,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(MachineType, machineType, Fire)
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
+    MODEL_PROP(QString, iserial, "Unknown")
+    MODEL_PROP(QString, type, "Unknown")
     MODEL_PROP(bool, firmwareUpdateAvailable, false)
     MODEL_PROP(QString, firmwareUpdateVersion, "Unknown")
     MODEL_PROP(QString, firmwareUpdateReleaseDate, "Unknown")

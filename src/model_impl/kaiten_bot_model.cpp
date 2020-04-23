@@ -39,6 +39,7 @@ class KaitenBotModel : public BotModel {
     void cameraStateUpdate(const Json::Value & state);
     void cloudServicesInfoUpdate(const Json::Value &result);
     void getCalibrationOffsetsUpdate(const Json::Value & result);
+    void handshakeUpdate(const Json::Value &result);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -94,6 +95,7 @@ class KaitenBotModel : public BotModel {
     void cleanNozzles(const QList<int> temperature = {0,0});
     void submitPrintFeedback(bool success);
     void ignoreError(const int index, const QList<int> error, const bool ignored);
+    void handshake();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -409,6 +411,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<GetCalibrationOffsetsCallback> m_getCalibrationOffsetsCb;
+
+    class HandshakeCallback : public JsonRpcCallback {
+      public:
+        HandshakeCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->handshakeUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<HandshakeCallback> m_handshakeUpdateCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -482,6 +495,10 @@ void KaitenBotModel::acknowledgeSafeToRemoveUsb() {
 void KaitenBotModel::systemTimeUpdate(const Json::Value &time_update) {
     UPDATE_STRING_PROP(systemTime, time_update["system_time"]);
     UPDATE_STRING_PROP(timeZone, time_update["time_zone"]);
+}
+
+void KaitenBotModel::handshakeUpdate(const Json::Value &result) {
+    UPDATE_STRING_PROP(iserial, result["iserial"]);
 }
 
 void KaitenBotModel::cancel(){
@@ -1185,6 +1202,18 @@ void KaitenBotModel::ignoreError(const int index, const QList<int> error, const 
     }
 }
 
+void KaitenBotModel::handshake(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        conn->jsonrpc.invoke("handshake", json_params, m_handshakeUpdateCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -1216,6 +1245,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_cloudServicesInfoCb(new CloudServicesInfoCallback(this)),
         m_setAnalyticsCb(new SetAnalyticsCallback(this)),
         m_getCalibrationOffsetsCb(new GetCalibrationOffsetsCallback(this)),
+        m_handshakeUpdateCb(new HandshakeCallback(this)),
         m_cameraState(new CameraStateNotification(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
@@ -1323,7 +1353,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
         info["current_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
-
+    UPDATE_STRING_PROP(type, info["machine_type"]);
     const Json::Value &kMachinetype = info["machine_type"];
     if (kMachinetype.isString()) {
         const QString kMachineTypeStr = kMachinetype.asString().c_str();

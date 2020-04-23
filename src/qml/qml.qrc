@@ -194,5 +194,9 @@
         <file>CleanExtruderSettingsForm.qml</file>
         <file>CleanExtruderTempSelector.qml</file>
         <file>CleanExtruderTempSelectorForm.qml</file>
+        <file>AuthorizeAccountPage.qml</file>
+        <file>AuthorizeAccountPageForm.qml</file>
+        <file>AuthorizeAccountWithCode.qml</file>
+        <file>AuthorizeAccountWithCodeForm.qml</file>
     </qresource>
 </RCC>
