@@ -8,6 +8,10 @@ AuthorizeAccountPageForm {
 
     buttonLoginToMakerbotAccount.onClicked: {
         authorizeAccountSwipeView.swipeToItem(2)
+        if(inFreStep) {
+            signInPage.signInSwipeView.swipeToItem(1)
+            signInPage.usernameTextField.forceActiveFocus()
+        }
     }
 
     function backToSelectAuthMethod() {

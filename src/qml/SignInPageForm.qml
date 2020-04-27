@@ -135,15 +135,9 @@ Item {
                 usernameTextField.clear()
                 if(!inFreStep) {
                     signInSwipeView.swipeToItem(0)
+                } else {
+                    authorizeAccountSwipeView.swipeToItem(0)
                 }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                backToSettings()
-                mainSwipeView.swipeToItem(0)
             }
 
             Item {

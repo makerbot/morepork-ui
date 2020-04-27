@@ -255,8 +255,23 @@ Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                authorizeAccountPage.backToSettings()
+                mainSwipeView.swipeToItem(0)
+            }
 
             AuthorizeAccountPage {
                 id: authorizeAccountPage

@@ -33,7 +33,15 @@ Item {
                 return;
             }
             authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex))
+            if(itemToDisplayDefaultIndex == 0) {
+                // When we swipe to the 0th index of this page set
+                // the current item as the settings page item that
+                // holds this page since we want the back button to
+                // use the settings items altBack()
+                setCurrentItem(settingsSwipeView.itemAt(4))
+            } else {
+                setCurrentItem(authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex))
+            }
             authorizeAccountSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
             authorizeAccountSwipeView.itemAt(prevIndex).visible = false
         }
