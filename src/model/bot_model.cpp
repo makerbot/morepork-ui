@@ -243,6 +243,14 @@ void BotModel::ignoreError(const int index, const QList<int> error, const bool i
     qDebug() << ignored;
 }
 
+void BotModel::annealPrint() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::startAnnealing(const int temperature, const float time) {
+    qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
+}
+
 
 class DummyBotModel : public BotModel {
   public:

@@ -194,5 +194,11 @@
         <file>CleanExtruderSettingsForm.qml</file>
         <file>CleanExtruderTempSelector.qml</file>
         <file>CleanExtruderTempSelectorForm.qml</file>
+        <file>AnnealPrint.qml</file>
+        <file>AnnealPrintForm.qml</file>
+        <file>MaterialButton.qml</file>
+        <file>MaterialButtonForm.qml</file>
+        <file>ListSelector.qml</file>
+        <file>ListSelectorForm.qml</file>
     </qresource>
 </RCC>

@@ -23,6 +23,8 @@ Item {
 
     property alias buttonDryMaterial: buttonDryMaterial
 
+    property alias buttonAnnealPrint: buttonAnnealPrint
+
     property alias buttonCopyLogs: buttonCopyLogs
 
     property alias copyingLogsPopup: copyingLogsPopup
@@ -167,6 +169,13 @@ Item {
                         id: buttonDryMaterial
                         buttonImage.source: "qrc:/img/icon_dry_material.png"
                         buttonText.text: qsTr("DRY MATERIAL")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonAnnealPrint
+                        buttonImage.source: "qrc:/img/icon_anneal_print.png"
+                        buttonText.text: qsTr("ANNEAL PRINT")
                         enabled: !isProcessRunning()
                     }
 
@@ -420,6 +429,39 @@ Item {
 
             CleanExtruders {
                 id: cleanExtruders
+                onProcessDone: {
+                    state = "base state"
+                    if(advancedSettingsSwipeView.currentIndex != 0) {
+                        advancedSettingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
+        }
+
+        //advancedSettingsSwipeView.index = 10
+        Item {
+            id: annealPrintItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: 0
+            property bool hasAltBack: true
+            property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(bot.process.type == ProcessType.AnnealPrintProcess) {
+                    bot.cancel()
+                    annealPrint.state = "cancelling"
+                } else {
+                    annealPrint.state = "base state"
+                    if(advancedSettingsSwipeView.currentIndex != 0) {
+                        advancedSettingsSwipeView.swipeToItem(0)
+                    }
+                }
+            }
+
+            AnnealPrint {
+                id: annealPrint
                 onProcessDone: {
                     state = "base state"
                     if(advancedSettingsSwipeView.currentIndex != 0) {

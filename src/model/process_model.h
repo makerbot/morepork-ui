@@ -21,6 +21,7 @@ class ProcessModel : public BaseModel {
         ZipLogsProcess,
         DryingCycleProcess,
         NozzleCleaningProcess,
+        AnnealPrintProcess,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -63,7 +64,9 @@ class ProcessModel : public BaseModel {
         RemoveBuildPlate,
         PositioningBuildPlate, // Drying Cycle Process states
         WaitingForSpool,
-        DryingSpool
+        DryingSpool,
+        WaitingForPart, // Anneal print process states
+        AnnealingPrint
     };
     //MOREPORK_QML_ENUM
     enum ErrorType {
