@@ -247,6 +247,9 @@ Item {
         case 15:
             "TPU"
             break;
+        case 16:
+            "NYLON-12 CF"
+            break;
         case 0:
         default:
             "UNKNOWN"
