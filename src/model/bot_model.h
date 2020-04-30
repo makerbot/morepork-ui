@@ -93,6 +93,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void submitPrintFeedback(bool success);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
+    Q_INVOKABLE virtual void annealPrint();
+    Q_INVOKABLE virtual void startAnnealing(const int temperature, const float time);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();

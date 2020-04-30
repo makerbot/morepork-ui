@@ -34,6 +34,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::DryingCycleProcess);
         else if (kNameStr == "NozzleCleaningProcess")
             typeSet(ProcessType::NozzleCleaningProcess);
+        else if (kNameStr == "AnnealPrintProcess")
+            typeSet(ProcessType::AnnealPrintProcess);
         else
             typeSet(ProcessType::None);
     }
@@ -157,6 +159,13 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
         else if (kStepStr == "drying_spool")
             stateTypeSet(ProcessStateType::DryingSpool);
+        // Anneal Print States
+        // see morepork-kaiten/kaiten/src/kaiten/processes/annealprintprocess.py
+        else if (kStepStr == "waiting_for_part")
+            stateTypeSet(ProcessStateType::WaitingForPart);
+        // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
+        else if (kStepStr == "annealing_print")
+            stateTypeSet(ProcessStateType::AnnealingPrint);
         else
             stateTypeReset();
     }
