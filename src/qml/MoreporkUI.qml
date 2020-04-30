@@ -2931,7 +2931,7 @@ ApplicationWindow {
         CustomPopup {
             id: experimentalExtruderPopup
             popupWidth: 720
-            popupHeight: 305
+            popupHeight: 350
             visible: !experimentalExtruderAcknowledged &&
                      experimentalExtruderInstalled
             showOneButton: true
@@ -2945,7 +2945,7 @@ ApplicationWindow {
                 id: columnLayout_exp_ext_popup
                 width: 590
                 height: children.height
-                spacing: 15
+                spacing: 20
                 anchors.top: parent.top
                 anchors.topMargin: 95
                 anchors.horizontalCenter: parent.horizontalCenter
