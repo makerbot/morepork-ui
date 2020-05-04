@@ -158,7 +158,7 @@ Item {
                 color: "#ffffff"
                 font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: 36
+                font.pixelSize: (bot.extruderAType == ExtruderType.MK14_COMP) ? 26 : 36
                 font.letterSpacing: 2
             }
 
