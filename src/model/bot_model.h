@@ -27,7 +27,8 @@ class BotModel : public BaseModel {
         NONE,
         MK14,
         MK14_HOT,
-        MK14_EXP
+        MK14_EXP,
+        MK14_COMP
     };
 
     // MOREPORK_QML_ENUM
@@ -94,6 +95,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void submitPrintFeedback(bool success);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
     Q_INVOKABLE virtual void handshake();
+    Q_INVOKABLE virtual void annealPrint();
+    Q_INVOKABLE virtual void startAnnealing(const int temperature, const float time);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();

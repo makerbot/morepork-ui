@@ -12,10 +12,6 @@ AdvancedSettingsPageForm {
         advancedSettingsSwipeView.swipeToItem(2)
     }
 
-    buttonDryMaterial.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(8)
-    }
-
     buttonAssistedLeveling.onClicked: {
         advancedSettingsSwipeView.swipeToItem(3)
     }
@@ -78,7 +74,15 @@ AdvancedSettingsPageForm {
         advancedSettingsSwipeView.swipeToItem(7)
     }
 
+    buttonDryMaterial.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(8)
+    }
+
     buttonCleanExtruders.onClicked: {
         advancedSettingsSwipeView.swipeToItem(9)
+    }
+
+    buttonAnnealPrint.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(10)
     }
 }

@@ -247,6 +247,13 @@ void BotModel::handshake() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::annealPrint() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::startAnnealing(const int temperature, const float time) {
+    qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
+}
 
 class DummyBotModel : public BotModel {
   public:

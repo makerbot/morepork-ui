@@ -96,6 +96,8 @@ class KaitenBotModel : public BotModel {
     void submitPrintFeedback(bool success);
     void ignoreError(const int index, const QList<int> error, const bool ignored);
     void handshake();
+    void annealPrint();
+    void startAnnealing(const int temperature, const float time);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1214,6 +1216,32 @@ void KaitenBotModel::handshake(){
     }
 }
 
+void KaitenBotModel::annealPrint() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("anneal_print", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::startAnnealing(const int temperature, const float time){
+    try{
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("start_annealing");
+        Json::Value json_args(Json::objectValue);
+        json_args["temperature"] = Json::Value(temperature);
+        json_args["duration"] = Json::Value(time);
+        json_params["params"] = Json::Value(json_args);
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -1401,6 +1429,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_HOT); \
                 } else if (kExtruderTypeStr == "mk14_e") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_EXP); \
+                } else if (kExtruderTypeStr == "mk14_c") { \
+                    extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_COMP); \
                 } else { \
                     extruder ## EXT_SYM ## TypeReset(); \
                 } \

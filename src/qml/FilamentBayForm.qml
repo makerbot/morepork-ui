@@ -239,13 +239,16 @@ Item {
             "PC-ABS"
             break;
         case 13:
-            "PC-ABS FR"
+            "PC-ABS-FR"
             break;
         case 14:
             "NYLON CF"
             break;
         case 15:
             "TPU"
+            break;
+        case 16:
+            "NYLON-12 CF"
             break;
         case 0:
         default:
@@ -294,7 +297,10 @@ Item {
                 ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "NYLON CF", "TPU"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]
+                ["ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                break;
+            case ExtruderType.MK14_COMP:
+                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF", "ABS", "ASA", "PC-ABS", "PC-ABS FR"]
                 break;
             default:
                 []
