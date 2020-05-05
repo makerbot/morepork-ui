@@ -85,7 +85,7 @@ Item {
                             "qrc:/img/extruder_exp_attached.png"
                             break;
                         case ExtruderType.MK14_COMP:
-                            "qrc:/img/extruder_1_attached.png"
+                            "qrc:/img/extruder_1c_attached.png"
                             break;
                     }
                     break;
