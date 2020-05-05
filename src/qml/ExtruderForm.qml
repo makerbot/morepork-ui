@@ -84,6 +84,9 @@ Item {
                         case ExtruderType.MK14_EXP:
                             "qrc:/img/extruder_exp_attached.png"
                             break;
+                        case ExtruderType.MK14_COMP:
+                            "qrc:/img/extruder_1c_attached.png"
+                            break;
                     }
                     break;
                 case 2:
@@ -128,6 +131,8 @@ Item {
                                 break;
                             case ExtruderType.MK14_EXP:
                                 "LABS"
+                            case ExtruderType.MK14_COMP:
+                                "1C"
                             }
                             break;
                         case 2:

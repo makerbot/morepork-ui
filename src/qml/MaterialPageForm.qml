@@ -683,6 +683,9 @@ Item {
                                 case ExtruderType.MK14_HOT:
                                     qsTr("Only ABS and ASA model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
                                     break;
+                                case ExtruderType.MK14_COMP:
+                                    qsTr("Only NYLON CF model material is compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                    break;
                                 }
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
                                 switch (bot.extruderBType) {
