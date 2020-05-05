@@ -9,6 +9,8 @@ Item {
     property alias expireOTPTimer: expireOTPTimer
     property var expires: new Date()
     property string time_left: "0:00"
+    property bool otp_expired: false
+    property alias getOTPButton: getOTPButton
 
     Timer {
         id: checkAuthTimer
@@ -30,9 +32,9 @@ Item {
                 var s = dt.getSeconds()
                 time_left = dt.getMinutes() + ":" + (s > 10 ? s : "0" + s)
             } else {
+                otp_expired = true
                 checkAuthTimer.stop()
                 expireOTPTimer.stop()
-                beginAuthWithCode()
             }
         }
     }
@@ -48,31 +50,17 @@ Item {
         font.family: defaultFont.name
         font.weight: Font.Light
         font.pixelSize: 140
-    }
-
-    Text {
-        id: expires_in_text
-        width: 155
-        color: "#cbcbcb"
-        text: qsTr("Expires In %1").arg(time_left)
-        anchors.right: parent.right
-        anchors.rightMargin: 50
-        font.pixelSize: 18
-        anchors.top: otp_text.bottom
-        font.family: defaultFont.name
-        font.weight: Font.Light
-        wrapMode: Text.WordWrap
-        anchors.topMargin: 10
-        font.letterSpacing: 1
+        opacity: otp_expired ? 0.2 : 1
     }
 
     Text {
         id: otp_instructions_text
         width: 700
         color: "#cbcbcb"
-        text: qsTr("To add this printer to your account visit my.makerbot.com or " +
-                   "download the MakerBot Connect application. Then press the 'Add " +
-                   "a Printer' button and choose 'Authorize With Printer Code'.")
+        text: qsTr("To add this printer to your account visit MakerBot.com/authorize " +
+                   "and enter the code above. ") +
+              (otp_expired ? qsTr("This code has expired.") :
+                             qsTr("This code is valid for %1.").arg(time_left))
         horizontalAlignment: Text.AlignHCenter
         wrapMode: Text.WordWrap
         anchors.top: otp_text.bottom
@@ -83,5 +71,15 @@ Item {
         font.pixelSize: 18
         font.letterSpacing: 1
         lineHeight: 1.2
+    }
+
+    RoundedButton {
+        id: getOTPButton
+        label: qsTr("GET NEW CODE")
+        buttonHeight: 50
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: otp_instructions_text.bottom
+        anchors.topMargin: 30
+        visible: otp_expired
     }
 }

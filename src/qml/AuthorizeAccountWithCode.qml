@@ -25,6 +25,7 @@ AuthorizeAccountWithCodeForm {
     }
 
     function getOTP(otp, polling_token) {
+        authorizeAccountWithCodePage.otp_expired = false
         closePopup()
         network.onInitiateAuthWithCodeSucceeded.disconnect(getOTP)
         authorizeAccountWithCodePage.otp = otp
@@ -39,5 +40,11 @@ AuthorizeAccountWithCodeForm {
     function getOTPFailed() {
         disconnectHandlers()
         showFailedToConnectPopup()
+    }
+
+    getOTPButton {
+        button_mouseArea.onClicked: {
+            beginAuthWithCode()
+        }
     }
 }
