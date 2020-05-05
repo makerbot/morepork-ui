@@ -132,7 +132,7 @@ Item {
                             case ExtruderType.MK14_EXP:
                                 "LABS"
                             case ExtruderType.MK14_COMP:
-                                "COMPOSITE"
+                                "1C"
                             }
                             break;
                         case 2:
@@ -158,7 +158,7 @@ Item {
                 color: "#ffffff"
                 font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: (bot.extruderAType == ExtruderType.MK14_COMP) ? 26 : 36
+                font.pixelSize: 36
                 font.letterSpacing: 2
             }
 
