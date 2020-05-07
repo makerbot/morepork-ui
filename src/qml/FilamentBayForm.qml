@@ -266,38 +266,12 @@ Item {
     }
 
     property var moistureSensitiveMaterialsList: {
-        switch(filamentBayID) {
-        case 1:
-            switch (bot.extruderAType) {
-            case ExtruderType.MK14:
-                ["NYLON", "NYLON CF"]
-                break;
-            default:
-                []
-                break;
-            }
-            break;
-        case 2:
-            switch (bot.extruderBType) {
-            case ExtruderType.MK14:
-                ["PVA"]
-                break;
-            default:
-                []
-                break;
-            }
-            break;
-        default:
-            []
-            break;
+        ["NYLON", "NYLON CF","PVA"]
     }
 
     property bool isMaterialMoistureSensitive: {
-        (usingExperimentalExtruder ||
-         settings.getSkipFilamentNags) ?
-            false :
-                moistureSensitiveMaterialsList.indexOf(
-                    filamentMaterialName) >= 0
+        moistureSensitiveMaterialsList.indexOf(
+            filamentMaterialName) >= 0
     }
 
     property bool isMaterialValid: {

@@ -57,6 +57,12 @@ Item {
             if(isSpoolDetailsReady) {
                 if(materialValidityCheck()) {
                     bot.acknowledgeMaterial(true)
+
+                    // "new" material was just validated, ensure that if
+                    // it is a moisture sensitive material, it will get
+                    // acknowledgement
+                    materialMoistureWarningAcknowledged = false
+
                 } else {
                     isMaterialValid = false
                 }
