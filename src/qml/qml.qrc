@@ -194,6 +194,10 @@
         <file>CleanExtruderSettingsForm.qml</file>
         <file>CleanExtruderTempSelector.qml</file>
         <file>CleanExtruderTempSelectorForm.qml</file>
+        <file>AuthorizeAccountPage.qml</file>
+        <file>AuthorizeAccountPageForm.qml</file>
+        <file>AuthorizeAccountWithCode.qml</file>
+        <file>AuthorizeAccountWithCodeForm.qml</file>
         <file>AnnealPrint.qml</file>
         <file>AnnealPrintForm.qml</file>
         <file>MaterialButton.qml</file>

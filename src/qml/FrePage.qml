@@ -70,8 +70,6 @@ FrePageForm {
                 inFreStep = true
                 mainSwipeView.swipeToItem(3)
                 settingsPage.settingsSwipeView.swipeToItem(4)
-                settingsPage.signInPage.signInSwipeView.swipeToItem(1)
-                settingsPage.signInPage.usernameTextField.forceActiveFocus()
             } else if(state == "attach_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(2)

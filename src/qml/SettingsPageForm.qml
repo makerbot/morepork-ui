@@ -21,7 +21,7 @@ Item {
     property alias koreaDFSScreen: koreaDFSScreen
 
     property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
-    property alias signInPage: signInPage
+    property alias authorizeAccountPage: authorizeAccountPage
 
     property alias buttonDeauthorizeAccounts: buttonDeauthorizeAccounts
     property alias deauthorizeAccountsPopup: deauthorizeAccountsPopup
@@ -256,11 +256,26 @@ Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
 
-            SignInPage {
-                id: signInPage
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                authorizeAccountPage.backToSettings()
+                mainSwipeView.swipeToItem(0)
+            }
+
+            AuthorizeAccountPage {
+                id: authorizeAccountPage
             }
         }
 
