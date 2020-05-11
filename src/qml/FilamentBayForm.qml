@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ExtruderTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: filamentBayBaseItem
@@ -300,7 +301,13 @@ Item {
                 ["ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 break;
             case ExtruderType.MK14_COMP:
-                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF", "ABS", "ASA", "PC-ABS", "PC-ABS FR"]
+                if(bot.machineType == MachineType.Fire) {
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF"]
+                } else if(bot.machineType == MachineType.Lava) {
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF", "ABS", "ASA", "PC-ABS", "PC-ABS FR"]
+                } else {
+                    []
+                }
                 break;
             default:
                 []
