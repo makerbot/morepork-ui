@@ -40,8 +40,10 @@ Item {
         var current_month = date_split[1] // 09
         var current_day = date_split[2] //10
 
-        dateTumbler.currentIndex = parseInt(current_day, 10) - 1
+        // Days count depends on month, so month should be assigned
+        // first to not affect the date tumbler.
         monthTumbler.currentIndex = parseInt(current_month, 10) - 1
+        dateTumbler.currentIndex = parseInt(current_day, 10) - 1
         yearTumbler.currentIndex = parseInt(current_year, 10) - 2000
     }
 
