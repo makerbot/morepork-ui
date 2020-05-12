@@ -40,6 +40,9 @@ Item {
                         }
                     }
                     break;
+                case ProcessStateType.LevelingFailed:
+                    state = "leveling_failed"
+                    break;
                 case ProcessStateType.Cancelling:
                     state = "cancelling"
                     break;
