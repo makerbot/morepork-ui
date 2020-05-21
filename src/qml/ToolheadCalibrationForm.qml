@@ -13,6 +13,7 @@ Item {
     smooth: false
     antialiasing: false
     property alias actionButton: actionButton
+    property alias action2Button: action2Button
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     property alias continueButton: continue_mouseArea
     property alias stopButton: stop_mouseArea
@@ -138,13 +139,25 @@ Item {
 
         RoundedButton {
             id: actionButton
-            label: qsTr("BEGIN CALIBRATION")
+            label: qsTr("BEGIN XYZ CALIBRATION")
             buttonWidth: 310
             buttonHeight: 50
             anchors.left: parent.left
             anchors.leftMargin: 0
             anchors.top: subtitle.bottom
             anchors.topMargin: 25
+            opacity: 1.0
+        }
+
+        RoundedButton {
+            id: action2Button
+            label: qsTr("BEGIN Z CALIBRATION")
+            buttonWidth: 310
+            buttonHeight: 50
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: actionButton.bottom
+            anchors.topMargin: 15
             opacity: 1.0
         }
     }
@@ -297,6 +310,11 @@ Item {
                 label: qsTr("BUILD PLATE IS REMOVED")
                 opacity: 1.0
             }
+
+            PropertyChanges {
+                target: action2Button
+                opacity: 0
+            }
         },
 
         State {
@@ -348,6 +366,11 @@ Item {
                 buttonWidth: 410
                 opacity: 1.0
             }
+
+            PropertyChanges {
+                target: action2Button
+                opacity: 0
+            }
         },
         State {
             name: "calibrating"
@@ -392,6 +415,11 @@ Item {
 
             PropertyChanges {
                 target: actionButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: action2Button
                 opacity: 0
             }
         },
@@ -445,6 +473,11 @@ Item {
                 buttonWidth: 125
                 opacity: 1.0
             }
+
+            PropertyChanges {
+                target: action2Button
+                opacity: 0
+            }
         },
 
         State {
@@ -488,6 +521,11 @@ Item {
 
             PropertyChanges {
                 target: actionButton
+                opacity: 0
+            }
+
+            PropertyChanges {
+                target: action2Button
                 opacity: 0
             }
         }

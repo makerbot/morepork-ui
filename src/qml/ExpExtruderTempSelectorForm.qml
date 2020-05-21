@@ -39,7 +39,7 @@ Item {
             height: 500
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
-            model: 29
+            model: 44
             delegate: delegateComponent
 
             Text {
