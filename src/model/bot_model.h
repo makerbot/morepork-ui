@@ -285,7 +285,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, infoToolheadATempOffset, 0.0)
     MODEL_PROP(int, infoToolheadAEncoderTicks, -999)
     MODEL_PROP(int, infoToolheadAActiveFanRPM, -999)
+    MODEL_PROP(int, infoToolheadAActiveFanFailSecs, 0)
     MODEL_PROP(int, infoToolheadAGradientFanRPM, -999)
+    MODEL_PROP(int, infoToolheadAGradientFanFailSecs, 0)
     MODEL_PROP(float, infoToolheadAHESValue, -999.999)
     MODEL_PROP(QString, infoToolheadAError, "0")
 
@@ -298,7 +300,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, infoToolheadBTempOffset, 0.0)
     MODEL_PROP(int, infoToolheadBEncoderTicks, -999)
     MODEL_PROP(int, infoToolheadBActiveFanRPM, -999)
+    MODEL_PROP(int, infoToolheadBActiveFanFailSecs, 0)
     MODEL_PROP(int, infoToolheadBGradientFanRPM, -999)
+    MODEL_PROP(int, infoToolheadBGradientFanFailSecs, 0)
     MODEL_PROP(float, infoToolheadBHESValue, -999.999)
     MODEL_PROP(QString, infoToolheadBError, "0")
 

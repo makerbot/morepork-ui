@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 800
-    height: 400
+    height: 450
 
     ColumnLayout {
         anchors.topMargin: 10
@@ -36,7 +36,9 @@ Item {
                 tempOffsetProperty.value: (bot.infoToolheadATempOffset).toFixed(2)
                 encoderTicksProperty.value: bot.infoToolheadAEncoderTicks
                 activeFanRpmProperty.value: bot.infoToolheadAActiveFanRPM
+                activeFanFailSecsProperty.value: bot.infoToolheadAActiveFanFailSecs
                 gradientFanRpmProperty.value: bot.infoToolheadAGradientFanRPM
+                gradientFanFailSecsProperty.value: bot.infoToolheadAGradientFanFailSecs
                 hesValueProperty.value: bot.infoToolheadAHESValue
                 jamEnabledProperty.value: bot.infoToolheadAFilamentJamEnabled
                 errorCodeProperty.value: bot.infoToolheadAError
@@ -52,7 +54,9 @@ Item {
                 tempOffsetProperty.value: (bot.infoToolheadBTempOffset).toFixed(2)
                 encoderTicksProperty.value: bot.infoToolheadBEncoderTicks
                 activeFanRpmProperty.value: bot.infoToolheadBActiveFanRPM
+                activeFanFailSecsProperty.value: bot.infoToolheadBActiveFanFailSecs
                 gradientFanRpmProperty.value: bot.infoToolheadBGradientFanRPM
+                gradientFanFailSecsProperty.value: bot.infoToolheadBGradientFanFailSecs
                 hesValueProperty.value: bot.infoToolheadBHESValue
                 jamEnabledProperty.value: bot.infoToolheadBFilamentJamEnabled
                 errorCodeProperty.value: bot.infoToolheadBError
