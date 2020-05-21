@@ -131,8 +131,10 @@ Item {
                                 break;
                             case ExtruderType.MK14_EXP:
                                 "LABS"
+                                break;
                             case ExtruderType.MK14_COMP:
                                 "1C"
+                                break;
                             }
                             break;
                         case 2:
