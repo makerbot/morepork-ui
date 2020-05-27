@@ -5,7 +5,6 @@ Item {
     width: 22
     height: 22
     smooth: false
-    anchors.verticalCenter: parent.verticalCenter
 
     property int filamentBayID: 0
     property bool spoolPresent: {

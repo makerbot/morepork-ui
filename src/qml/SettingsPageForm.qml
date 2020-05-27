@@ -483,11 +483,11 @@ Item {
 
                 TitleText {
                     text: qsTr("SHUT DOWN PRINTER")
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 BodyText{
                     text: qsTr("Are you sure you want to shut down the printer?")
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }

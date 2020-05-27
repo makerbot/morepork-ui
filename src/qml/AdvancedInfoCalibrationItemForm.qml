@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 800
-    height: 200
+    height: 180
 
     ColumnLayout {
         anchors.bottomMargin: 10
@@ -23,8 +23,6 @@ Item {
         RowLayout {
             id: calibration_rowLayout
             spacing: 0
-            anchors.top: heading.bottom
-            anchors.topMargin: 15
 
             AdvancedInfoCalibrationElement {
                 id: toolheadA

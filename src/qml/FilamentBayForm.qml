@@ -116,42 +116,42 @@ Item {
     property string filamentColor: {
         if(usingExperimentalExtruder) {
             expExtruderColor
-            return;
-        }
-        switch(filamentBayID) {
-        case 1:
-            Qt.rgba(bot.spoolAColorRGB[0]/255,
-                    bot.spoolAColorRGB[1]/255,
-                    bot.spoolAColorRGB[2]/255)
-            break;
-        case 2:
-            Qt.rgba(bot.spoolBColorRGB[0]/255,
-                    bot.spoolBColorRGB[1]/255,
-                    bot.spoolBColorRGB[2]/255)
-            break;
-        default:
-            "#000000"
-            break;
+        } else {
+            switch(filamentBayID) {
+            case 1:
+                Qt.rgba(bot.spoolAColorRGB[0]/255,
+                        bot.spoolAColorRGB[1]/255,
+                        bot.spoolAColorRGB[2]/255)
+                break;
+            case 2:
+                Qt.rgba(bot.spoolBColorRGB[0]/255,
+                        bot.spoolBColorRGB[1]/255,
+                        bot.spoolBColorRGB[2]/255)
+                break;
+            default:
+                "#000000"
+                break;
+            }
         }
     }
 
     property int filamentPercent: {
         if(usingExperimentalExtruder) {
             100
-            return;
-        }
-        switch(filamentBayID) {
-        case 1:
-            (bot.spoolAAmountRemaining/
-            bot.spoolAOriginalAmount) * 100
-            break;
-        case 2:
-            (bot.spoolBAmountRemaining/
-            bot.spoolBOriginalAmount) * 100
-            break;
-        default:
-            0
-            break;
+        } else {
+            switch(filamentBayID) {
+            case 1:
+                (bot.spoolAAmountRemaining/
+                bot.spoolAOriginalAmount) * 100
+                break;
+            case 2:
+                (bot.spoolBAmountRemaining/
+                bot.spoolBOriginalAmount) * 100
+                break;
+            default:
+                0
+                break;
+            }
         }
     }
 
@@ -499,6 +499,7 @@ Item {
                     id: filament_icon
                     filamentBayID: filamentBayBaseItem.filamentBayID
                     opacity: spoolPresent ? 1 : 0
+                    Layout.alignment: Qt.AlignVCenter
                 }
 
                 Text {

@@ -47,15 +47,15 @@ Item {
                                 parent.fillPercent*0.06283185, false);
                     context.lineTo(centreX, centreY);
                     context.fill();
-                    return;
+                } else {
+                    //0.06283185 = PI*2/100
+                    context.arc(centreX, centreY, parent.width*0.40, 0,
+                                parent.fillPercent*0.06283185, false);
+                    context.lineWidth = 12;
+                    context.lineCap = "round";
+                    context.strokeStyle = parent.fillColor;
+                    context.stroke()
                 }
-                //0.06283185 = PI*2/100
-                context.arc(centreX, centreY, parent.width*0.40, 0,
-                            parent.fillPercent*0.06283185, false);
-                context.lineWidth = 12;
-                context.lineCap = "round";
-                context.strokeStyle = parent.fillColor;
-                context.stroke()
             }
         }
     }

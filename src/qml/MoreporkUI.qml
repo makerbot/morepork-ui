@@ -1803,7 +1803,6 @@ ApplicationWindow {
 
                     TitleText {
                         text: qsTr("WRONG EXTRUDER TYPE DETECTED")
-                        anchors.horizontalCenter: parent.horizontalCenter
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                     BodyText{
@@ -1842,7 +1841,6 @@ ApplicationWindow {
                                 }
                             }
                         }
-                        anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -1873,7 +1871,6 @@ ApplicationWindow {
 
                     TitleText {
                         text: "CARRIAGE COMMUNICATION ERROR"
-                        anchors.horizontalCenter: parent.horizontalCenter
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                     BodyText{
@@ -1882,7 +1879,6 @@ ApplicationWindow {
                             "Try restarting the printer. If this happens again, please\n"+
                             "contact MakerBot support."
                         }
-                        anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -1981,6 +1977,14 @@ ApplicationWindow {
                                 mainSwipeView.swipeToItem(3)
                                 settingsPage.settingsSwipeView.swipeToItem(6)
                             }
+                            onPressed: {
+                                calib_text.color = "#000000"
+                                calib_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                calib_text.color = "#ffffff"
+                                calib_rectangle.color = "#00000000"
+                            }
                         }
                     }
 
@@ -2012,26 +2016,29 @@ ApplicationWindow {
                             onClicked: {
                                 extNotCalibratedPopup.close()
                             }
+                            onPressed: {
+                                cancel_calib_text.color = "#000000"
+                                cancel_calib_rectangle.color = "#ffffff"
+                            }
+                            onReleased: {
+                                cancel_calib_text.color = "#ffffff"
+                                cancel_calib_rectangle.color = "#00000000"
+                            }
                         }
                     }
                 }
                 ColumnLayout {
+                    height: 140
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    height: 150
-                    anchors.top: parent.top
+                    anchors.verticalCenterOffset: -20
 
                     TitleText {
-                        anchors.top: parent.top
-                        anchors.topMargin: 40
                         font.weight: Font.Bold
                         text: "CALIBRATION REQUIRED"
-                        anchors.horizontalCenter: parent.horizontalCenter
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                     BodyText {
-                        anchors.top: parent.top
-                        anchors.topMargin: 90
                         font.weight: Font.Light
                         wrapMode: Text.WordWrap
                         font.family: defaultFont.name
@@ -2043,7 +2050,6 @@ ApplicationWindow {
                             "Be sure the extruders are latched into place "+
                             "before\ncalibrating."
                         }
-                        anchors.horizontalCenter: parent.horizontalCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

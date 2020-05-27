@@ -260,7 +260,6 @@ Item {
                     height: 100
                     smooth: false
                     spacing: 30
-                    anchors.top: divider_item1.bottom
 
                     ColumnLayout {
                         id: columnLayout1
