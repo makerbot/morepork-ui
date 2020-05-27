@@ -112,19 +112,19 @@ Item {
             visible: {
                 if(isLabsMaterial) {
                     false
-                    return;
+                } else {
+                    switch(filamentBayID) {
+                    case 1:
+                        bot.filamentBayATagPresent
+                        break;
+                    case 2:
+                        bot.filamentBayBTagPresent
+                        break;
+                    default:
+                        false
+                        break;
+                    }
                 }
-                switch(filamentBayID) {
-                     case 1:
-                         bot.filamentBayATagPresent
-                         break;
-                     case 2:
-                         bot.filamentBayBTagPresent
-                         break;
-                     default:
-                         false
-                         break;
-                     }
             }
             onPaint: {
                 var context = getContext("2d");

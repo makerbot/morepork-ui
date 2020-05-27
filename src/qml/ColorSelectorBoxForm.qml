@@ -6,7 +6,6 @@ Item {
     id: colorItem
     width: 400
     height: 100
-    anchors.horizontalCenter: parent.horizontalCenter
 
     property alias colorText: colorText.text
     property alias value: colorSpinBox.value

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 800
-    height: 300
+    height: 320
 
     ColumnLayout {
         anchors.bottomMargin: 30
@@ -23,8 +23,6 @@ Item {
         RowLayout {
             id: filamentBays_rowLayout
             spacing: 0
-            anchors.top: heading.bottom
-            anchors.topMargin: 15
 
             AdvancedInfoFilamentBayElement {
                 id: filamentBayA

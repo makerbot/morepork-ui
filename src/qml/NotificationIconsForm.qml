@@ -19,7 +19,6 @@ Item {
             width: 35
             height: 26
             smooth: false
-            anchors.verticalCenter: parent.verticalCenter
             opacity: isFreComplete || currentFreStep >= FreStep.AttachExtruders
 
             FilamentIcon {
@@ -28,6 +27,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 5
                 filamentBayID: 1
+                anchors.verticalCenter: parent.verticalCenter
             }
 
             FilamentIcon {
@@ -35,6 +35,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 20
                 filamentBayID: 2
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
@@ -43,7 +44,6 @@ Item {
             width: 26
             height: 26
             smooth: false
-            anchors.verticalCenter: parent.verticalCenter
 
             Image {
                 id: connection_type_image
