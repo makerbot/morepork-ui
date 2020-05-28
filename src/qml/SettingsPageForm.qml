@@ -259,7 +259,7 @@ Item {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
-            WiFiPageForm {
+            WiFiPage {
                 id: wifiPage
 
             }
