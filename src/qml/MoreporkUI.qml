@@ -27,6 +27,7 @@ ApplicationWindow {
     readonly property string th_disconnect_err_str: "13 "
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
+    property bool extrudersPresent: extruderAPresent && extruderBPresent
     property bool extrudersCalibrated: bot.extrudersCalibrated
     property bool skipAuthentication: false
     property bool isAuthenticated: false
@@ -155,14 +156,23 @@ ApplicationWindow {
         }
     }
 
-    onExtrudersCalibratedChanged: {
-        if(extrudersCalibrated) {
+    function calibratePopupDeterminant() {
+        if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
         }
-        // Do not open popup in FRE
-        if (!extrudersCalibrated && isFreComplete) {
+        // Do not open popup in FRE and both extruders must
+        // be present for this popup to open
+        if (!extrudersCalibrated && isFreComplete && extrudersPresent) {
             extNotCalibratedPopup.open()
         }
+    }
+
+    onExtrudersCalibratedChanged: {
+        calibratePopupDeterminant()
+    }
+
+    onExtrudersPresentChanged: {
+        calibratePopupDeterminant()
     }
 
     // When firmware is finished updating for an extruder, the progress doesn't
@@ -2931,7 +2941,7 @@ ApplicationWindow {
         CustomPopup {
             id: experimentalExtruderPopup
             popupWidth: 720
-            popupHeight: 305
+            popupHeight: 350
             visible: !experimentalExtruderAcknowledged &&
                      experimentalExtruderInstalled
             showOneButton: true
@@ -2945,9 +2955,9 @@ ApplicationWindow {
                 id: columnLayout_exp_ext_popup
                 width: 590
                 height: children.height
-                spacing: 25
+                spacing: 20
                 anchors.top: parent.top
-                anchors.topMargin: 115
+                anchors.topMargin: 95
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 Text {
@@ -2965,11 +2975,14 @@ ApplicationWindow {
                     id: description_text_exp_ext_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
+                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" + 
                              "partners and recommended print settings. Material should\n" +
                              "be loaded through the AUX port under the removable cover\n" +
                              "on the top left of the printer. Make sure that the extruders\n" +
-                             "are calibrated before printing.")
+                             "are calibrated before printing. The Experimental Extruder is\n" +
+                             "an experimental product and is not covered under warranty\n" +
+                             "or MakerCare."
+                            )
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true

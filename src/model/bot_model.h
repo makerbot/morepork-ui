@@ -27,7 +27,8 @@ class BotModel : public BaseModel {
         NONE,
         MK14,
         MK14_HOT,
-        MK14_EXP
+        MK14_EXP,
+        MK14_COMP
     };
 
     // MOREPORK_QML_ENUM
@@ -58,7 +59,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void installFirmware();
     Q_INVOKABLE virtual void installFirmwareFromPath(const QString file_path);
     Q_INVOKABLE virtual void calibrateToolheads(QList<QString> axes);
-    Q_INVOKABLE virtual void doNozzleCleaning(bool clean);
+    Q_INVOKABLE virtual void doNozzleCleaning(bool clean, QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void acknowledgeNozzleCleaned();
     Q_INVOKABLE virtual void buildPlateState(bool state);
     Q_INVOKABLE virtual void query_status();
@@ -93,6 +94,9 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void submitPrintFeedback(bool success);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
+    Q_INVOKABLE virtual void handshake();
+    Q_INVOKABLE virtual void annealPrint();
+    Q_INVOKABLE virtual void startAnnealing(const int temperature, const float time);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -104,6 +108,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(MachineType, machineType, Fire)
     MODEL_PROP(QString, name, "Unknown")
     MODEL_PROP(QString, version, "Unknown")
+    MODEL_PROP(QString, iserial, "Unknown")
+    MODEL_PROP(QString, type, "Unknown")
     MODEL_PROP(bool, firmwareUpdateAvailable, false)
     MODEL_PROP(QString, firmwareUpdateVersion, "Unknown")
     MODEL_PROP(QString, firmwareUpdateReleaseDate, "Unknown")
@@ -148,6 +154,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, noFilamentErrorDisabled, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
     MODEL_PROP(int, chamberTargetTemp, -999)
+    MODEL_PROP(int, buildplaneCurrentTemp, -999)
+    MODEL_PROP(int, buildplaneTargetTemp, -999)
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
@@ -274,6 +282,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, infoToolheadAFilamentJamEnabled, false)
     MODEL_PROP(int, infoToolheadACurrentTemp, -999)
     MODEL_PROP(int, infoToolheadATargetTemp, -999)
+    MODEL_PROP(float, infoToolheadATempOffset, 0.0)
     MODEL_PROP(int, infoToolheadAEncoderTicks, -999)
     MODEL_PROP(int, infoToolheadAActiveFanRPM, -999)
     MODEL_PROP(int, infoToolheadAGradientFanRPM, -999)
@@ -286,6 +295,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, infoToolheadBFilamentJamEnabled, false)
     MODEL_PROP(int, infoToolheadBCurrentTemp, -999)
     MODEL_PROP(int, infoToolheadBTargetTemp, -999)
+    MODEL_PROP(float, infoToolheadBTempOffset, 0.0)
     MODEL_PROP(int, infoToolheadBEncoderTicks, -999)
     MODEL_PROP(int, infoToolheadBActiveFanRPM, -999)
     MODEL_PROP(int, infoToolheadBGradientFanRPM, -999)

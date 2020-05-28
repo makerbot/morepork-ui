@@ -93,7 +93,8 @@ Item {
             anchors.leftMargin: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             fillMode: Image.PreserveAspectFit
-            source: (inFreStep && (typeof currentItem.skipFreStepAction === "function")) ?
+            source: currentItem.backIsCancel ||
+                    (inFreStep && (typeof currentItem.skipFreStepAction === "function")) ?
                         "qrc:/img/skip.png" :
                         "qrc:/img/back_button.png"
         }
@@ -276,6 +277,9 @@ Item {
                             case AdvancedSettingsPage.CleanExtrudersPage:
                                 qsTr("CLEAN EXTRUDERS")
                                 break;
+                            case 10:
+                                qsTr("ANNEAL PRINT")
+                                break;
                             default:
                                 qsTr("ADVANCED")
                                 break;
@@ -338,6 +342,9 @@ Item {
                             break;
                         case AdvancedSettingsPage.CleanExtrudersPage:
                             qsTr("CLEAN EXTRUDERS")
+                            break;
+                        case 10:
+                            qsTr("ANNEAL PRINT")
                             break;
                         default:
                             qsTr("ADVANCED")

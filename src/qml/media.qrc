@@ -41,6 +41,7 @@
       	<file alias="extruder_2_heating.png">images/extruder_2_heating.png</file>
 	<file alias="extruder_2XA_heating.png">images/extruder_2XA_heating.png</file>
 	<file alias="extruder_labs_heating.png">images/extruder_labs_heating.png</file>
+	<file alias="extruder_1c_heating.png">images/extruder_1c_heating.png</file>
       	<file alias="change_filament.png">images/change_filament.png</file>
       	<file alias="close.png">images/close.png</file>
       	<file alias="directory_icon.png">images/directory_icon.png</file>
@@ -61,6 +62,7 @@
 	<file alias="extruder_2_attached.png">images/extruder_2_attached.png</file>
 	<file alias="extruder_2XA_attached.png">images/extruder_2XA_attached.png</file>
 	<file alias="extruder_exp_attached.png">images/extruder_exp_attached.png</file>
+	<file alias="extruder_1c_attached.png">images/extruder_1c_attached.png</file>
 	<file alias="extruder_not_attached.png">images/extruder_not_attached.png</file>
 	<file alias="extruder_left.png">images/extruder_left.png</file>
 	<file alias="extruder_right.png">images/extruder_right.png</file>
@@ -94,6 +96,7 @@
 	<file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
 	<file alias="icon_clean_extruders.png">images/icon_clean_extruders.png</file>
 	<file alias="icon_dry_material.png">images/icon_dry_material.png</file>
+	<file alias="icon_anneal_print.png">images/icon_anneal_print.png</file>
 	<file alias="icon_power.png">images/icon_power.png</file>
 	<file alias="calib_extruders.png">images/calib_extruders.png</file>
 	<file alias="calib_extruders_XA.png">images/calib_extruders_XA.png</file>
@@ -145,5 +148,6 @@
         <file alias="exp_extruder_instructions.png">images/exp_extruder_instructions.png</file>
 	<file alias="dry_material.png">images/dry_material.png</file>
 	<file alias="dry_material_spool.png">images/dry_material_spool.png</file>
+	<file alias="anneal_print.png">images/anneal_print.png</file>
     </qresource>
 </RCC>

@@ -34,6 +34,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::DryingCycleProcess);
         else if (kNameStr == "NozzleCleaningProcess")
             typeSet(ProcessType::NozzleCleaningProcess);
+        else if (kNameStr == "AnnealPrintProcess")
+            typeSet(ProcessType::AnnealPrintProcess);
         else
             typeSet(ProcessType::None);
     }
@@ -126,6 +128,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::LevelingRight);
         else if (kStepStr == "finishing_level")
             stateTypeSet(ProcessStateType::LevelingComplete);
+        else if (kStepStr == "finishing_level_fail")
+            stateTypeSet(ProcessStateType::LevelingFailed);
         // Toolhead Calibration States
         // see morepork-kaiten/kaiten/src/kaiten/processes/nozzlecalibrationprocess.py
         else if (kStepStr == "check_if_nozzle_clean")
@@ -157,6 +161,13 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
         else if (kStepStr == "drying_spool")
             stateTypeSet(ProcessStateType::DryingSpool);
+        // Anneal Print States
+        // see morepork-kaiten/kaiten/src/kaiten/processes/annealprintprocess.py
+        else if (kStepStr == "waiting_for_part")
+            stateTypeSet(ProcessStateType::WaitingForPart);
+        // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
+        else if (kStepStr == "annealing_print")
+            stateTypeSet(ProcessStateType::AnnealingPrint);
         else
             stateTypeReset();
     }
@@ -262,6 +273,9 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         }
     } else {
         errorTypeReset();
+        CLEAR_ERROR(extruder, OOF)
+        CLEAR_ERROR(extruder, Jammed)
+        CLEAR_ERROR(filamentBay, OOF)
     }
 
     UPDATE_INT_PROP(printPercentage, proc["progress"]);

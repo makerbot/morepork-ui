@@ -90,8 +90,12 @@ void BotModel::calibrateToolheads(QList<QString> axes) {
     }
 }
 
-void BotModel::doNozzleCleaning(bool do_clean) {
+void BotModel::doNozzleCleaning(bool do_clean, QList<int> temperature) {
     qDebug() << FL_STRM << "called with parameter: " << do_clean;
+    qDebug() << "Temperatures";
+    for(int i = 0; i < temperature.size(); i++) {
+        qDebug() << temperature.value(i);
+    }
 }
 
 void BotModel::acknowledgeNozzleCleaned() {
@@ -239,6 +243,17 @@ void BotModel::ignoreError(const int index, const QList<int> error, const bool i
     qDebug() << ignored;
 }
 
+void BotModel::handshake() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::annealPrint() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::startAnnealing(const int temperature, const float time) {
+    qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
+}
 
 class DummyBotModel : public BotModel {
   public:

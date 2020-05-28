@@ -22,15 +22,6 @@ Item {
     property alias passwordField: passwordField
     property alias forgotPasswordButton: forgotPasswordButton
 
-    property alias signInPagePopup: signInPagePopup
-    property alias authorizingContents: authorizingContents
-    property alias noAccountContents: noAccountContents
-    property alias resetPasswordContents: resetPasswordContents
-    property alias signInFailedContents: signInFailedContents
-    property alias signInSucceededContents: signInSucceededContents
-
-    property string username: ""
-
     enum PageIndex {
         BasePage,
         UsernamePage,
@@ -62,8 +53,8 @@ Item {
         // SignInPage.BasePage
         Item {
             id: authorizeAccountView
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
+            property var backSwiper: authorizeAccountSwipeView
+            property int backSwipeIndex: 0
             smooth: false
             visible: true
 
@@ -147,17 +138,12 @@ Item {
             visible: false
 
             function altBack() {
+                usernameTextField.clear()
                 if(!inFreStep) {
-                    signInSwipeView.swipeToItem(SignInPage.BasePage)
+                    signInSwipeView.swipeToItem(0)
+                } else {
+                    authorizeAccountSwipeView.swipeToItem(0)
                 }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                signInPage.backToSettings()
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             Item {
@@ -363,12 +349,6 @@ Item {
         }
     }
 
-    ModalPopup {
-        id: signInPagePopup
-        height: 275
-        closePolicy: Popup.NoAutoClose
-    }
-
     Item {
         id: inputPanelContainer
         smooth: false
@@ -387,187 +367,6 @@ Item {
             smooth: false
             anchors.fill: parent
             active: true
-        }
-    }
-
-    Component {
-        id: noAccountContents
-
-        Item {
-            anchors.fill: parent
-            Text {
-                id: noAccountText
-                width: 600
-                text: qsTr("PLEASE VISIT MAKERBOT.COM TO\nCREATE AN ACCOUNT.")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                horizontalAlignment: Text.AlignHCenter
-                antialiasing: false
-                smooth: false
-                font.letterSpacing: 3
-                wrapMode: Text.WordWrap
-                color: "#e6e6e6"
-                font.family: defaultFont.name
-                font.pixelSize: 24
-                font.weight: Font.Bold
-                lineHeight: 1.4
-                visible: true
-            }
-        }
-    }
-
-    Component {
-        id: resetPasswordContents
-
-        Item {
-            anchors.fill: parent
-            Text {
-                id: resetPasswordText
-                width: 600
-                text: qsTr("VISIT MAKERBOT.COM TO RESET YOUR PASSWORD")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                horizontalAlignment: Text.AlignHCenter
-                antialiasing: false
-                smooth: false
-                font.letterSpacing: 3
-                wrapMode: Text.WordWrap
-                color: "#e6e6e6"
-                font.family: defaultFont.name
-                font.pixelSize: 24
-                font.weight: Font.Bold
-                lineHeight: 1.4
-                visible: true
-            }
-        }
-    }
-
-    Component {
-        id: authorizingContents
-
-        Item {
-            anchors.fill: parent
-            Text {
-                id: authorizingText
-                text: qsTr("AUTHORIZING ACCOUNT")
-                anchors.top: parent.top
-                anchors.topMargin: 60
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-                antialiasing: false
-                smooth: false
-                font.letterSpacing: 3
-                wrapMode: Text.WordWrap
-                color: "#e6e6e6"
-                font.family: defaultFont.name
-                font.pixelSize: 24
-                font.weight: Font.Bold
-                lineHeight: 1.2
-                visible: true
-            }
-
-            BusySpinner {
-                id: authorizingWaitingSpinner
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: authorizingText.bottom
-                anchors.topMargin: 40
-                spinnerActive: true
-                spinnerSize: 64
-            }
-        }
-    }
-
-    Component {
-        id: signInFailedContents
-
-        Item {
-            anchors.fill: parent
-            Text {
-                id: signInFailedText
-                width: 600
-                text: qsTr("AUTHENTICATION ERROR")
-                anchors.top: parent.top
-                anchors.topMargin: 60
-                anchors.horizontalCenter: parent.horizontalCenter
-                horizontalAlignment: Text.AlignHCenter
-                antialiasing: false
-                smooth: false
-                font.letterSpacing: 3
-                wrapMode: Text.WordWrap
-                color: "#e6e6e6"
-                font.family: defaultFont.name
-                font.pixelSize: 24
-                font.weight: Font.Bold
-                lineHeight: 1.2
-                visible: true
-            }
-
-            Text {
-                id: signInFailedBody
-                color: "#cbcbcb"
-                text: qsTr("The username or password did not match. Please try again.")
-                anchors.top: signInFailedText.bottom
-                anchors.topMargin: 30
-                anchors.horizontalCenter: parent.horizontalCenter
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 20
-                lineHeight: 1.3
-                visible: true
-            }
-        }
-    }
-
-    Component {
-        id: signInSucceededContents
-
-        Item {
-            anchors.fill: parent
-            Image {
-                id: authCompleteImage
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/img/account_auth_complete.png"
-                anchors.left: parent.left
-                anchors.leftMargin: 50
-            }
-            Text {
-                id: signInSucceededTitle
-                text: qsTr("AUTHENTICATION\nCOMPLETE")
-                anchors.left: authCompleteImage.right
-                anchors.leftMargin: 70
-                anchors.top: authCompleteImage.top
-                anchors.topMargin: 15
-                antialiasing: false
-                smooth: false
-                font.letterSpacing: 3
-                wrapMode: Text.WordWrap
-                color: "#e6e6e6"
-                font.family: defaultFont.name
-                font.pixelSize: 24
-                font.weight: Font.Bold
-                lineHeight: 1.4
-                visible: true
-            }
-
-            Text {
-                id: signInSucceededBody
-                color: "#cbcbcb"
-                text: qsTr("<b>%1</b><br>is now authenticated to this printer.").arg(username)
-                anchors.left: authCompleteImage.right
-                anchors.leftMargin: 70
-                anchors.bottom: authCompleteImage.bottom
-                anchors.bottomMargin: 10
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 20
-                font.letterSpacing: 1
-                lineHeight: 1.3
-                visible: true
-            }
         }
     }
 }

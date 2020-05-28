@@ -81,4 +81,8 @@ AdvancedSettingsPageForm {
     buttonCleanExtruders.onClicked: {
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.CleanExtrudersPage)
     }
+
+    buttonAnnealPrint.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(10)
+    }
 }

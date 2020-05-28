@@ -277,6 +277,7 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
                   meta_data->extruder_temperature[0],
                   meta_data->extruder_temperature[1],
                   meta_data->chamber_temperature,
+                  meta_data->buildplane_target_temperature,
                   meta_data->shells,
                   meta_data->layer_height,
                   meta_data->infill_density,
@@ -476,14 +477,12 @@ void MoreporkStorage::updateMaterialNames(QString &name) {
         name = "petg";
     } else if(name == "sr30") {
         name = "sr-30";
-    } else if(name == "pc-abs") {
-        name = "pc-abs";
-    } else if(name == "pc-abs-fr") {
-        name = "pc-abs fr";
     } else if(name == "im-pla-esd") {
         name = "esd tough";
     } else if(name == "nylon-cf") {
         name = "nylon cf";
+    } else if(name == "nylon12-cf") {
+        name = "nylon-12 cf";
     } else if(name == "generic_model") {
         name = "unknown";
     }

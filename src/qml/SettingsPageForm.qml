@@ -21,7 +21,7 @@ Item {
     property alias koreaDFSScreen: koreaDFSScreen
 
     property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
-    property alias signInPage: signInPage
+    property alias authorizeAccountPage: authorizeAccountPage
 
     property alias buttonDeauthorizeAccounts: buttonDeauthorizeAccounts
     property alias deauthorizeAccountsPopup: deauthorizeAccountsPopup
@@ -164,6 +164,7 @@ Item {
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
                         buttonText.text: qsTr("CALIBRATE EXTRUDERS")
                         enabled: !isProcessRunning()
+                        buttonNeedsAction: !extrudersCalibrated && extrudersPresent
                     }
 
                     MenuButton {
@@ -268,12 +269,27 @@ Item {
         Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
+            property int backSwipeIndex: 0
+            property bool hasAltBack: true
             smooth: false
             visible: false
 
-            SignInPage {
-                id: signInPage
+            function altBack() {
+                if(!inFreStep) {
+                    settingsSwipeView.swipeToItem(0)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                authorizeAccountPage.backToSettings()
+                mainSwipeView.swipeToItem(0)
+            }
+
+            AuthorizeAccountPage {
+                id: authorizeAccountPage
             }
         }
 
@@ -335,6 +351,10 @@ Item {
             visible: false
 
             function altBack() {
+                if(toolheadCalibration.chooseMaterial) {
+                    toolheadCalibration.chooseMaterial = false
+                    return
+                }
                 if(!inFreStep) {
                     if(bot.process.type === ProcessType.CalibrationProcess &&
                        bot.process.isProcessCancellable) {
@@ -352,6 +372,10 @@ Item {
             }
 
             function skipFreStepAction() {
+                if(toolheadCalibration.chooseMaterial) {
+                    toolheadCalibration.chooseMaterial = false
+                    return
+                }
                 bot.cancel()
                 toolheadCalibration.state = "base state"
                 settingsSwipeView.swipeToItem(SettingsPage.BasePage)

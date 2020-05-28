@@ -3,6 +3,7 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ExtruderTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: filamentBayBaseItem
@@ -239,13 +240,16 @@ Item {
             "PC-ABS"
             break;
         case 13:
-            "PC-ABS FR"
+            "PC-ABS-FR"
             break;
         case 14:
             "NYLON CF"
             break;
         case 15:
             "TPU"
+            break;
+        case 16:
+            "NYLON-12 CF"
             break;
         case 0:
         default:
@@ -255,11 +259,15 @@ Item {
     }
 
     property bool isUnknownMaterial: {
-        usingExperimentalExtruder ? false : filamentMaterialName == "UNKNOWN"
+        (usingExperimentalExtruder ||
+         settings.getSkipFilamentNags) ?
+              false :
+              filamentMaterialName == "UNKNOWN"
     }
 
     property bool isMaterialValid: {
-        usingExperimentalExtruder ?
+        (usingExperimentalExtruder ||
+         settings.getSkipFilamentNags) ?
               true :
               (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
     }
@@ -290,7 +298,16 @@ Item {
                 ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "NYLON CF", "TPU"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS", "ASA", "PC-ABS", "PC-ABS FR"]
+                ["ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                break;
+            case ExtruderType.MK14_COMP:
+                if(bot.machineType == MachineType.Fire) {
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF"]
+                } else if(bot.machineType == MachineType.Lava) {
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF", "ABS", "ASA", "PC-ABS", "PC-ABS FR"]
+                } else {
+                    []
+                }
                 break;
             default:
                 []

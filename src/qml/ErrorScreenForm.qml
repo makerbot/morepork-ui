@@ -402,6 +402,7 @@ Item {
                         switch(bot.extruderAType) {
                         case ExtruderType.MK14:
                         case ExtruderType.MK14_EXP:
+                        case ExtruderType.MK14_COMP:
                             "qrc:/img/error_filament_jam_1.png"
                             break;
                         case ExtruderType.MK14_HOT:
@@ -697,7 +698,7 @@ Item {
             PropertyChanges {
                 target: errorMessageDescription
                 text: {
-                    qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(errorCode)
+                    qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(lastReportedErrorCode)
                 }
             }
 
