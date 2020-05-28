@@ -54,7 +54,7 @@ Item {
         Item {
             id: authorizeAccountView
             property var backSwiper: authorizeAccountSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
             smooth: false
             visible: true
 
@@ -140,9 +140,9 @@ Item {
             function altBack() {
                 usernameTextField.clear()
                 if(!inFreStep) {
-                    signInSwipeView.swipeToItem(0)
+                    signInSwipeView.swipeToItem(SignInPage.BasePage)
                 } else {
-                    authorizeAccountSwipeView.swipeToItem(0)
+                    authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
                 }
             }
 

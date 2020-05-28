@@ -269,14 +269,14 @@ Item {
         Item {
             id: accountsItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(0)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -285,7 +285,7 @@ Item {
 
             function skipFreStepAction() {
                 authorizeAccountPage.backToSettings()
-                mainSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             AuthorizeAccountPage {

@@ -66,7 +66,6 @@ AdvancedSettingsPageForm {
 
     buttonRaiseLowerBuildPlate.onClicked: {
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.RaiseLowerBuildPlatePage)
-
     }
 
     buttonAnalytics.onClicked: {
@@ -83,6 +82,6 @@ AdvancedSettingsPageForm {
     }
 
     buttonAnnealPrint.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(10)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AnnealPrintPage)
     }
 }

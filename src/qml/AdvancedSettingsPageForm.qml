@@ -98,7 +98,8 @@ Item {
         RaiseLowerBuildPlatePage,   // 6
         ShareAnalyticsPage,         // 7
         DryMaterialPage,            // 8
-        CleanExtrudersPage          // 9
+        CleanExtrudersPage,         // 9
+        AnnealPrintPage             // 10
     }
 
     SwipeView {
@@ -465,11 +466,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 10
+        // AdvancedSettingsPage.AnnealPrintPage
         Item {
             id: annealPrintItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
             property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
             smooth: false
@@ -481,8 +482,8 @@ Item {
                     annealPrint.state = "cancelling"
                 } else {
                     annealPrint.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
@@ -491,8 +492,8 @@ Item {
                 id: annealPrint
                 onProcessDone: {
                     state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }

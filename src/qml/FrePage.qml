@@ -68,8 +68,8 @@ FrePageForm {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.TimePage)
             } else if(state == "log_in") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(4)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.AuthorizeAccountsPage)
             } else if(state == "attach_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)

@@ -404,7 +404,7 @@ ApplicationWindow {
                 mainSwipeView.itemAt(prevIndex).visible = false
             }
 
-            // mainSwipeView.index = 0
+            // MoreporkUI.BasePage
             Item {
                 smooth: false
                 MainMenu {
@@ -437,7 +437,7 @@ ApplicationWindow {
                 }
             }
 
-            // mainSwipeView.index = 1
+            // MoreporkUI.PrintPage
             Item {
                 property alias defaultItem: printPage.defaultItem
                 smooth: false
@@ -449,7 +449,7 @@ ApplicationWindow {
                 }
             }
 
-            // mainSwipeView.index = 2
+            // MoreporkUI.ExtruderPage
             Item {
                 property int defaultIndex: 2
                 property alias defaultItem: extruderPage.defaultItem
@@ -461,7 +461,7 @@ ApplicationWindow {
                 }
             }
 
-            // mainSwipeView.index = 3
+            // MoreporkUI.SettingsPage
             Item {
                 property int defaultIndex: 3
                 property alias defaultItem: settingsPage.defaultItem
@@ -475,7 +475,7 @@ ApplicationWindow {
                 }
             }
 
-            // mainSwipeView.index = 4
+            // MoreporkUI.InfoPage
             Item {
                 property int defaultIndex: 4
                 property alias defaultItem: infoPage.defaultItem
@@ -488,7 +488,7 @@ ApplicationWindow {
                 }
             }
 
-            // mainSwipeView.index = 5
+            // MoreporkUI.MaterialPage
             Item {
                 property int defaultIndex: 5
                 property alias defaultItem: materialPage.defaultItem
@@ -501,7 +501,7 @@ ApplicationWindow {
                 }
             }
 
-            // mainSwipeView.index = 6
+            // MoreporkUI.AdvancedPage
             Item {
                 property int defaultIndex: 6
                 property alias defaultItem: advancedPage.defaultItem
