@@ -23,7 +23,7 @@ Item {
     property bool isForgetEnabled: false
 
     RefreshButton {
-        visible: (wifiSwipeView.currentIndex === 0)
+        visible: (wifiSwipeView.currentIndex === WiFiPage.ChooseWifi)
         enabled: (bot.net.wifiState !== WifiState.Searching);
 
         button_mouseArea.onClicked: {
@@ -40,8 +40,8 @@ Item {
             if(wifiPopup.opened){
                 wifiPopup.close()
             }
-            if(wifiSwipeView.currentIndex != 0) {
-                wifiSwipeView.swipeToItem(0)
+            if(wifiSwipeView.currentIndex != WiFiPage.ChooseWifi) {
+                wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
             }
             bot.scanWifi(true)
             passwordField.clear()
@@ -67,8 +67,8 @@ Item {
         id: wifiFreStepComplete
         interval: 2000
         onTriggered: {
-            settingsPage.settingsSwipeView.swipeToItem(0)
-            mainSwipeView.swipeToItem(0)
+            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             if(isfirmwareUpdateAvailable) {
                 fre.gotoNextStep(currentFreStep)
             }
@@ -78,10 +78,15 @@ Item {
         }
     }
 
+    enum SwipeIndex {
+        ChooseWifi,
+        EnterPassword
+    }
+
     SwipeView {
         id: wifiSwipeView
         smooth: false
-        currentIndex: 0 // Should never be non zero
+        currentIndex: WiFiPage.ChooseWifi
         anchors.fill: parent
         interactive: false
 
@@ -93,19 +98,19 @@ Item {
             wifiSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // settingsSwipeView.index = 0
+        // WiFiPage.ChooseWIFI
         Item {
             id: itemChooseWifi
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: true
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(0)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -113,8 +118,8 @@ Item {
             }
 
             function skipFreStepAction() {
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             // When the bot is not connected to wifi and the user
@@ -219,7 +224,7 @@ Item {
                                                 "", selectedWifiName)
                             }
                             else if(!selectedWifiSaved) {
-                                wifiSwipeView.swipeToItem(1)
+                                wifiSwipeView.swipeToItem(WiFiPage.EnterPassword)
                                 passwordField.forceActiveFocus()
                             }
                         }
@@ -237,12 +242,12 @@ Item {
             }
         }
 
-        // settingsSwipeView.index = 1
+        // WiFiPage.EnterPassword
         Item {
             id: itemEnterPassword
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: wifiSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: WiFiPage.ChooseWifi
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -250,7 +255,7 @@ Item {
             function altBack() {
                 passwordField.clear()
                 showPassword.checked = false
-                wifiSwipeView.swipeToItem(0)
+                wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
             }
 
             Item {
@@ -373,8 +378,8 @@ Item {
                 id: inputPanelContainer
                 smooth: false
                 antialiasing: false
-                visible: settingsSwipeView.currentIndex == 3 &&
-                         wifiSwipeView.currentIndex == 1
+                visible: settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
+                         wifiSwipeView.currentIndex == WiFiPage.EnterPassword
                 x: -30
                 y: parent.height - inputPanel.height
                 width: 860

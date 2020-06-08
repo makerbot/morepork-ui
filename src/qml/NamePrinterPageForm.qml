@@ -13,22 +13,27 @@ Item {
     property alias namePrinterSwipeView: namePrinterSwipeView
     property alias nameField: nameField
 
+    enum SwipeIndex {
+        EnterName,
+        ConfirmName
+    }
+
     SwipeView {
         id: namePrinterSwipeView
         smooth: false
-        currentIndex: 0 // Should never be non zero
+        currentIndex: NamePrinterPage.EnterName
         anchors.fill: parent
         interactive: false
 
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = namePrinterSwipeView.currentIndex
             namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == 0) {
+            if(itemToDisplayDefaultIndex == NamePrinterPage.EnterName) {
                 // When we swipe to the 0th index of this page set
                 // the current item as the settings page item that
                 // holds this page since we want the back button to
                 // use the settings items altBack()
-                setCurrentItem(settingsSwipeView.itemAt(2))
+                setCurrentItem(settingsSwipeView.itemAt(SettingsPage.ChangePrinterNamePage))
             } else {
                 setCurrentItem(namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex))
             }
@@ -36,12 +41,12 @@ Item {
             namePrinterSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // namePrinterSwipeView.index = 0
+        // NamePrinterPage.EnterName
         Item {
             id: itemNamePrinter
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: true
 
@@ -104,7 +109,7 @@ Item {
                     buttonWidth: 160
                     buttonHeight: 50
                     button_mouseArea.onClicked: {
-                        namePrinterSwipeView.swipeToItem(1)
+                        namePrinterSwipeView.swipeToItem(NamePrinterPage.ConfirmName)
                     }
                 }
             }
@@ -113,8 +118,8 @@ Item {
                 id: inputPanelContainer
                 smooth: false
                 antialiasing: false
-                visible: settingsSwipeView.currentIndex == 2 &&
-                         namePrinterSwipeView.currentIndex == 0
+                visible: settingsSwipeView.currentIndex == SettingsPage.ChangePrinterNamePage &&
+                         namePrinterSwipeView.currentIndex == NamePrinterPage.EnterName
                 x: -30
                 y: parent.height - inputPanel.height + 22
                 width: 860
@@ -130,17 +135,18 @@ Item {
             }
         }
 
+        // NamePrinterPage.ConfirmName
         Item {
             id: itemConfirmName
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: namePrinterSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: NamePrinterPage.EnterName
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
-                namePrinterSwipeView.swipeToItem(0)
+                namePrinterSwipeView.swipeToItem(NamePrinterPage.EnterName)
                 namePrinter.nameField.forceActiveFocus()
             }
 
@@ -209,10 +215,10 @@ Item {
                         else {
                             bot.changeMachineName(nameField.text)
                         }
-                        namePrinterSwipeView.swipeToItem(0)
-                        settingsSwipeView.swipeToItem(0)
+                        namePrinterSwipeView.swipeToItem(NamePrinterPage.EnterName)
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         if(inFreStep) {
-                            mainSwipeView.swipeToItem(0)
+                            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                             fre.gotoNextStep(currentFreStep)
                         }
                     }

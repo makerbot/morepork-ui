@@ -14,9 +14,14 @@ Item {
     property alias attach_extruder_next_button: attach_extruder_next_button
     smooth: false
 
+    enum PageIndex {
+        BasePage,           // 0
+        AttachExtruderPage  // 1
+    }
+
     SwipeView {
         id: extruderSwipeView
-        currentIndex: 0
+        currentIndex: ExtruderPage.BasePage
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -29,7 +34,7 @@ Item {
             extruderSwipeView.itemAt(prevIndex).visible = false
         }
 
-        //extruderSwipeView.index = 0
+        // ExtruderPage.BasePage
         Item {
             id: itemExtruder
             property var backSwiper: mainSwipeView
@@ -89,7 +94,7 @@ Item {
             }
         }
 
-        //extruderSwipeView.index = 1
+        // ExtruderPage.AttachExtruderPage
         Item {
             id: itemAttachExtruder
             property var backSwiper: extruderSwipeView

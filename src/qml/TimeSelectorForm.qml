@@ -260,9 +260,9 @@ Item {
             onClicked: {
                 setTime()
                 if(inFreStep) {
-                    timeSwipeView.swipeToItem(0)
-                    settingsSwipeView.swipeToItem(0)
-                    mainSwipeView.swipeToItem(0)
+                    timeSwipeView.swipeToItem(TimePage.SetDate)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                     if(isNetworkConnectionAvailable) {
                         // Go to login to makerbot account step
                         // only if network connection is available
@@ -273,8 +273,8 @@ Item {
                     }
                 }
                 else {
-                    timeSwipeView.swipeToItem(0)
-                    settingsSwipeView.swipeToItem(0)
+                    timeSwipeView.swipeToItem(TimePage.SetDate)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
             enabled: {

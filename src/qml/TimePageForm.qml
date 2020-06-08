@@ -12,9 +12,15 @@ Item {
     property alias timeSelectorPage: timeSelectorPage
     property alias timeSwipeView: timeSwipeView
 
+    enum SwipeIndex {
+        SetDate,
+        SetTimeZone,
+        SetTime
+    }
+
     SwipeView {
         id: timeSwipeView
-        currentIndex: 0
+        currentIndex: TimePage.SetDate
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -22,12 +28,12 @@ Item {
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = timeSwipeView.currentIndex
             timeSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == 0) {
+            if(itemToDisplayDefaultIndex == TimePage.SetDate) {
                 // When we swipe to the 0th index of this page set
                 // the current item as the settings page item that
                 // holds this page since we want the back button to
                 // use the settings item's altBack()
-                setCurrentItem(settingsSwipeView.itemAt(7))
+                setCurrentItem(settingsSwipeView.itemAt(SettingsPage.TimePage))
             } else {
                 setCurrentItem(timeSwipeView.itemAt(itemToDisplayDefaultIndex))
             }
@@ -35,11 +41,11 @@ Item {
             timeSwipeView.itemAt(prevIndex).visible = false
         }
 
-        //timeSwipeView.index = 0
+        // TimePage.SetDate
         Item {
             id: itemSetDate
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: true
 
@@ -49,11 +55,11 @@ Item {
             }
         }
 
-        //timeSwipeView.index = 1
+        // TimePage.SetTimeZone
         Item {
             id: itemSetTimeZone
             property var backSwiper: timeSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: TimePage.SetDate
             smooth: false
             visible: true
 
@@ -63,11 +69,11 @@ Item {
             }
         }
 
-        //timeSwipeView.index = 2
+        // TimePage.SetTime
         Item {
             id: itemSetTime
             property var backSwiper: timeSwipeView
-            property int backSwipeIndex: 1
+            property int backSwipeIndex: TimePage.SetTimeZone
             smooth: false
             visible: false
 

@@ -10,13 +10,20 @@ Item {
 
     property alias startPrintSwipeView: startPrintSwipeView
 
+    enum SwipeIndex {
+        BasePage,
+        PrintFileDetails,
+        PrintFilePreview
+    }
+
     SwipeView {
         id: startPrintSwipeView
         smooth: false
-        currentIndex: 0 // Should never be non zero
+        currentIndex: StartPrintPage.BasePage
         anchors.fill: parent
         visible: true
 
+        // StartPrintPage.BasePage
         Item {
             id: startPrintPage1
             width: 800
@@ -79,7 +86,7 @@ Item {
                             height: 80
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.verticalCenter: parent.verticalCenter
-                            onClicked: printSwipeView.swipeToItem(3)
+                            onClicked: printSwipeView.swipeToItem(PrintPage.FileInfoPage)
                         }
                     }
                 }
@@ -200,6 +207,7 @@ Item {
             }
         }
 
+        // StartPrintPage.PrintFileDetails
         Item {
             id: startPrintPage2
             width: 800
@@ -443,6 +451,7 @@ Item {
             }
         }
 
+        // StartPrintPage.PrintFilePreview
         Item {
             id: startPrintPage3
             width: 800

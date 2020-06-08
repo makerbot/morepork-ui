@@ -142,7 +142,7 @@ PrintPageForm {
         activeDrawer = printPage.printingDrawer
         bot.print(fileName)
         printFromUI = true
-        printSwipeView.swipeToItem(0)
+        printSwipeView.swipeToItem(PrintPage.BasePage)
     }
 
     function clearErrors() {
@@ -176,27 +176,27 @@ PrintPageForm {
     printingDrawer.buttonChangeFilament.onClicked: {
         if(!printingDrawer.buttonChangeFilament.disableButton) {
             if(bot.process.stateType == ProcessStateType.Paused) {
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
+                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
                 }
-                if(mainSwipeView.currentIndex != 5) {
-                    mainSwipeView.swipeToItem(5)
+                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
+                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 }
-                if(settingsPage.settingsSwipeView.currentIndex != 0) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(0)
+                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
                 }
                 printingDrawer.close()
             }
             else if(bot.process.stateType == ProcessStateType.Printing) {
                 bot.pauseResumePrint("suspend")
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
+                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
                 }
-                if(mainSwipeView.currentIndex != 5) {
-                    mainSwipeView.swipeToItem(5)
+                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
+                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 }
-                if(settingsPage.settingsSwipeView.currentIndex != 0) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(0)
+                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
                 }
                 printingDrawer.close()
             }
@@ -237,14 +237,13 @@ PrintPageForm {
 
     reviewTestPrint.continueButton.button_mouseArea.onClicked: {
         fre.gotoNextStep(currentFreStep)
-        mainSwipeView.swipeToItem(0)
+        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
         printStatusView.testPrintComplete = false
     }
 
     reviewTestPrint.calibrateButton.button_mouseArea.onClicked: {
         fre.setFreStep(FreStep.CalibrateExtruders)
-        mainSwipeView.swipeToItem(0)
+        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
         printStatusView.testPrintComplete = false
     }
-
 }

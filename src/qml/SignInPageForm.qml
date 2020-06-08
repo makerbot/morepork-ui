@@ -22,10 +22,16 @@ Item {
     property alias passwordField: passwordField
     property alias forgotPasswordButton: forgotPasswordButton
 
+    enum PageIndex {
+        BasePage,
+        UsernamePage,
+        PasswordPage
+    }
+
     SwipeView {
         id: signInSwipeView
         smooth: false
-        currentIndex: 0
+        currentIndex: SignInPage.BasePage
         anchors.fill: parent
         interactive: false
 
@@ -36,7 +42,7 @@ Item {
             }
             // Skip showing the first page when we swipe through to
             // the second page while in the fre.
-            if(itemToDisplayDefaultIndex == 1 && inFreStep) {
+            if(itemToDisplayDefaultIndex == SignInPage.UsernamePage && inFreStep) {
                 authorizeAccountView.visible = false
             }
             signInSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
@@ -44,11 +50,11 @@ Item {
             signInSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
         }
 
-        // settingsSwipeView.index = 0
+        // SignInPage.BasePage
         Item {
             id: authorizeAccountView
             property var backSwiper: authorizeAccountSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
             smooth: false
             visible: true
 
@@ -122,11 +128,11 @@ Item {
             }
         }
 
-        // settingsSwipeView.index = 1
+        // SignInPage.UsernamePage
         Item {
             id: enterUsernameView
             property var backSwiper: signInSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SignInPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -134,9 +140,9 @@ Item {
             function altBack() {
                 usernameTextField.clear()
                 if(!inFreStep) {
-                    signInSwipeView.swipeToItem(0)
+                    signInSwipeView.swipeToItem(SignInPage.BasePage)
                 } else {
-                    authorizeAccountSwipeView.swipeToItem(0)
+                    authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
                 }
             }
 
@@ -218,11 +224,11 @@ Item {
             }
         }
 
-        // idx = 2
+        // SignInPage.PasswordPage
         Item {
             id: enterPasswordView
             property var backSwiper: signInSwipeView
-            property int backSwipeIndex: 1
+            property int backSwipeIndex: SignInPage.UsernamePage
             smooth: false
             visible: false
             property bool hasAltBack: true
@@ -230,7 +236,7 @@ Item {
             function altBack() {
                 passwordField.clear()
                 showPassword.checked = false
-                signInSwipeView.swipeToItem(1)
+                signInSwipeView.swipeToItem(SignInPage.UsernamePage)
                 usernameTextField.forceActiveFocus()
             }
 
@@ -347,9 +353,9 @@ Item {
         id: inputPanelContainer
         smooth: false
         antialiasing: false
-        visible: settingsSwipeView.currentIndex == 4 &&
-                 (signInSwipeView.currentIndex == 1 ||
-                  signInSwipeView.currentIndex == 2)
+        visible: settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
+                 (signInSwipeView.currentIndex == SignInPage.UsernamePage ||
+                  signInSwipeView.currentIndex == SignInPage.PasswordPage)
         x: -30
         y: inputPanel && parent ? parent.height - inputPanel.height : 0
         z: 1
