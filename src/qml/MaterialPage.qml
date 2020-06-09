@@ -81,7 +81,7 @@ MaterialPageForm {
         } else if(isExtruderFilamentPresent(extruderID)) {
             // Always allow purge and unload while paused
             return true
-        } else if(isUsingExpExtruder(extruderID) || settings.getSkipFilamentNags) {
+        } else if(isUsingExpExtruder(extruderID) || settings.getSkipFilamentNags()) {
             // Allow loading mid-print for experimental extruders without any material checks
             return true
         } else {
