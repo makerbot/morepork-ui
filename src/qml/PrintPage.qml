@@ -151,6 +151,15 @@ PrintPageForm {
         }
     }
 
+    function showPrintTip() {
+        if(settings.getShowNylonCFAnnealPrintTip() &&
+           print_model_material == "nylon-cf" ||
+           print_model_material == "nylon-12-cf" &&
+           support_extruder_used) {
+            nylonCFPrintTipPopup.open()
+        }
+    }
+
     printingDrawer.buttonCancelPrint.onClicked: {
         printingDrawer.close()
         if(inFreStep) {

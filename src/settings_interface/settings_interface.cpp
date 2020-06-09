@@ -88,3 +88,17 @@ void SettingsInterface::setAllowInternalStorage(bool allow) {
     cached_settings_["allow_internal_storage"] = allow;
     writeSettings();
 }
+
+bool SettingsInterface::getShowNylonCFAnnealPrintTip() {
+    return cached_settings_["show_nylon_cf_anneal_print_tip"].asBool();
+}
+
+void SettingsInterface::setShowNylonCFAnnealPrintTip(bool show) {
+    cached_settings_["show_nylon_cf_anneal_print_tip"] = show;
+    writeSettings();
+}
+
+void SettingsInterface::resetPreferences() {
+    cached_settings_["show_nylon_cf_anneal_print_tip"] = true;
+    writeSettings();
+}

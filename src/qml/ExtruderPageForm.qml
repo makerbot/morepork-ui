@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: extruderPage
@@ -422,9 +423,28 @@ Item {
                     PropertyChanges {
                         target: step3
                         bulletNumber: qsTr("3")
-                        bulletText: itemAttachExtruder.extruder == 1 ?
-                                        qsTr("Insert the Model 1 Extruder into\nSlot 1") :
-                                        qsTr("Insert the Support 2 Extruder into\nSlot 2")
+                        bulletText: {
+                            if(itemAttachExtruder.extruder == 1) {
+                                if(bot.machineType == MachineType.Fire) {
+                                    qsTr("Insert a Model 1A or 1C Extruder into\nSlot 1")
+                                } else if(bot.machineType == MachineType.Lava) {
+                                    qsTr("Insert a Model 1A, 1X or 1C Extruder into\nSlot 1")
+                                }
+                            } else if(itemAttachExtruder.extruder == 2) {
+                                if(bot.extruderAType == ExtruderType.MK14) {
+                                    qsTr("Insert a Support 2A Extruder into\nSlot 2")
+                                } else if(bot.extruderAType == ExtruderType.MK14_HOT) {
+                                    qsTr("Insert a Support 2X Extruder into\nSlot 2")
+                                } else if(bot.extruderAType == ExtruderType.MK14_EXP ||
+                                          bot.extruderAType == ExtruderType.MK14_COMP) {
+                                    if(bot.machineType == MachineType.Fire) {
+                                        qsTr("Insert a Support 2A Extruder into\nSlot 2")
+                                    } else if(bot.machineType == MachineType.Lava) {
+                                        qsTr("Insert a Support 2A or 2X Extruder into\nSlot 2")
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     PropertyChanges {

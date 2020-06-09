@@ -46,6 +46,7 @@ Item {
     property alias printErrorScreen: errorScreen
     readonly property int waitToCoolTemperature: 70
     property bool isFileCopying: storage.fileIsCopying
+    property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
@@ -91,6 +92,7 @@ Item {
             }
             printFromUI = false //reset when the print actually starts
             printStatusView.feedbackSubmitted = false // Reset when print starts
+            showPrintTip()
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(0)
@@ -110,6 +112,7 @@ Item {
         if(isPrintFileValid) {
             storage.updateCurrentThing()
             getPrintFileDetails(storage.currentThing)
+            showPrintTip()
         }
     }
 
@@ -483,6 +486,7 @@ Item {
                             }
                             else {
                                 setDrawerState(false)
+                                startPrintInstructionsItem.acknowledged = false
                                 printSwipeView.swipeToItem(2)
                             }
                         }
@@ -535,6 +539,11 @@ Item {
                 setDrawerState(false)
                 printSwipeView.swipeToItem(0)
                 mainSwipeView.swipeToItem(0)
+            }
+
+            StartPrintSpecialInstructions {
+                id: startPrintInstructionsItem
+                z: 1
             }
 
             StartPrintPage {
@@ -725,6 +734,58 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 value: (storage.fileCopyProgress).toFixed(2)
                 visible: isFileCopying
+            }
+        }
+    }
+
+    CustomPopup {
+        id: nylonCFPrintTipPopup
+        popupWidth: 720
+        popupHeight: 275
+        showTwoButtons: true
+        left_button_text: qsTr("OK")
+        left_button.onClicked: {
+            nylonCFPrintTipPopup.close()
+        }
+
+        right_button_text: qsTr("DON'T REMIND ME AGAIN")
+        right_button.onClicked: {
+            settings.setShowNylonCFAnnealPrintTip(false)
+            nylonCFPrintTipPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_nylon_cf_print_tip_popup
+            width: 650
+            height: 150
+            anchors.top: parent.top
+            anchors.topMargin: 125
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: title_nylon_cf_print_tip_popup
+                color: "#cbcbcb"
+                text: qsTr("NYLON CARBON FIBER TIP")
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            Text {
+                id: description_nylon_cf_print_tip_popup
+                color: "#cbcbcb"
+                text: qsTr("After dissolving the support material away, annealing your print will remove any moisture from it and enhance its strength. Just place the print in the build chamber and tap settings > anneal print.")
+                horizontalAlignment: Text.AlignHCenter
+                Layout.maximumWidth: 575
+                //Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: defaultFont.name
+                font.pixelSize: 18
+                lineHeight: 1.1
             }
         }
     }

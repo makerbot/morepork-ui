@@ -35,6 +35,9 @@ class SettingsInterface : public QObject {
       Q_INVOKABLE bool getSkipFilamentNags();
       Q_INVOKABLE void setLanguageCode(const QString language_code);
       Q_INVOKABLE void setAllowInternalStorage(bool allow);
+      Q_INVOKABLE bool getShowNylonCFAnnealPrintTip();
+      Q_INVOKABLE void setShowNylonCFAnnealPrintTip(bool show);
+      Q_INVOKABLE void resetPreferences();
   private:
       std::string default_file_, override_file_;
       void initialize(void);

@@ -1,5 +1,6 @@
 {
     "allow_internal_storage": false,
     "language_code": "en_GB",
-    "skip_filament_nags": false
+    "skip_filament_nags": false,
+    "show_nylon_cf_anneal_print_tip": true
 }

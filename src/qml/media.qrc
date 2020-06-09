@@ -149,5 +149,6 @@
 	<file alias="dry_material.png">images/dry_material.png</file>
 	<file alias="dry_material_spool.png">images/dry_material_spool.png</file>
 	<file alias="anneal_print.png">images/anneal_print.png</file>
+	<file alias="apply_glue_build_plate.png">images/apply_glue_build_plate.png</file>
     </qresource>
 </RCC>
