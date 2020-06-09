@@ -26,7 +26,7 @@ ErrorScreenForm {
     }
 
     function loadPurgeFromErrorScreen() {
-        if(isExtruderAError() && (materialPage.bay1.usingExperimentalExtruder || settings.getSkipFilamentNags)) {
+        if(isExtruderAError() && (materialPage.bay1.usingExperimentalExtruder || settings.getSkipFilamentNags())) {
             materialPage.isLoadFilament = true
             materialPage.materialSwipeView.swipeToItem(1)
             return;
