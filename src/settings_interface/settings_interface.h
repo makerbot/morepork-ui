@@ -37,6 +37,8 @@ class SettingsInterface : public QObject {
       Q_INVOKABLE void setAllowInternalStorage(bool allow);
       Q_INVOKABLE bool getShowNylonCFAnnealPrintTip();
       Q_INVOKABLE void setShowNylonCFAnnealPrintTip(bool show);
+      Q_INVOKABLE bool getShowApplyGlueOnBuildPlateTip(QString material);
+      Q_INVOKABLE void setShowApplyGlueOnBuildPlateTip(QString material, bool show);
       Q_INVOKABLE void resetPreferences();
   private:
       std::string default_file_, override_file_;

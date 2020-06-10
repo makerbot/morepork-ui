@@ -7,12 +7,16 @@ Item {
     width: 800
     height: 440
 
-    property var materials: ["nylon-cf", "nylon-12-cf", "petg"]
     property alias nextButton: nextButton
+    property alias dontShowButton: dontShowButton
     property bool acknowledged: false
-    visible: (materials.indexOf(print_model_material) >= 0) &&
-             !acknowledged &&
-             inFreStep
+    visible: {
+        if(acknowledged) {
+            false
+        } else {
+            settings.getShowApplyGlueOnBuildPlateTip(print_model_material)
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -31,7 +35,7 @@ Item {
 
     ColumnLayout {
         id: instructionsContainer
-        height: 275
+        height: 330
         anchors.left: image.right
         anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
@@ -49,7 +53,7 @@ Item {
             font.weight: Font.Bold
             antialiasing: false
             smooth: false
-            lineHeight: 1.4
+            lineHeight: 1.2
         }
 
         Text {
@@ -61,18 +65,26 @@ Item {
             font.family: defaultFont.name
             font.pixelSize: 20
             font.weight: Font.Light
-            lineHeight: 1.3
+            lineHeight: 1.2
             antialiasing: false
             smooth: false
         }
 
         RoundedButton {
             id: nextButton
-            buttonWidth: 200
             buttonHeight: 50
-            label_width: 200
-            label_size: 20
-            label: qsTr("NEXT")
+            label: qsTr("CONTINUE")
+        }
+
+        Item {
+            id: emptySpacingItem
+            height: 5
+        }
+
+        RoundedButton {
+            id: dontShowButton
+            buttonHeight: 50
+            label: qsTr("DON'T SHOW ME AGAIN")
         }
     }
     states: [
