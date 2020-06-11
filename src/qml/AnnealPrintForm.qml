@@ -21,7 +21,7 @@ Item {
         if(bot.process.type == ProcessType.AnnealPrintProcess) {
             switch(currentStep) {
                 case ProcessStateType.WaitingForPart:
-                    state = "waiting_for_part"
+                    state = "choose_material"
                     break;
                 case ProcessStateType.Loading:
                 case ProcessStateType.AnnealingPrint:
@@ -116,16 +116,15 @@ Item {
             font.weight: Font.Light
             text: qsTr("Annealing your print will remove any moisture and " +
                        "can enhance its mechanical properties. Remove the " +
-                       "support material before annealing. The build plate " +
-                       "will reset its position by moving all the way up " +
-                       "and then down.")
+                       "support material before annealing. " +
+                       "Place your print in the build chamber. ")
             lineHeight: 1.2
             opacity: 1.0
         }
 
         RoundedButton {
             id: actionButton
-            label: qsTr("MOVE BUILD PLATE")
+            label: qsTr("CHOOSE MATERIAL")
             buttonWidth: 310
             buttonHeight: 50
             anchors.left: parent.left
@@ -202,72 +201,6 @@ Item {
     }
 
     states: [
-        State {
-            name: "positioning_build_plate"
-            when: bot.process.type == ProcessType.AnnealPrintProcess &&
-                  bot.process.stateType == ProcessStateType.PositioningBuildPlate
-
-            PropertyChanges {
-                target: image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("BUILD PLATE MOVING INTO PLACE")
-                anchors.topMargin: 40
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("The build plate is moving into position.")
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                visible: true
-            }
-
-            PropertyChanges {
-                target: materialSelector
-                visible: false
-            }
-        },
-        State {
-            name: "waiting_for_part"
-
-            PropertyChanges {
-                target: image
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("INSERT PRINT INTO BUILD CHAMBER")
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Open the door and place the print you want to anneal " +
-                           "in the build chamber. Be sure the support material has " +
-                           "been removed")
-            }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("CHOOSE MATERIAL")
-            }
-
-            PropertyChanges {
-                target: materialSelector
-                visible: false
-            }
-        },
         State {
             name: "choose_material"
 
