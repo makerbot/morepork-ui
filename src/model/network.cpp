@@ -83,7 +83,7 @@ void Network::initiateAuthWithCode(QString printer_id,
                                    QString printer_type,
                                    QString printer_ip) {
     QNetworkRequest request;
-    request.setUrl(QUrl("https://cloudauth.mbot.me/session"));
+    request.setUrl(QUrl("https://cloudauth.makerbot.com/session"));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       QString("application/json"));
 
@@ -100,7 +100,7 @@ void Network::initiateAuthWithCode(QString printer_id,
 }
 
 void Network::handleRespInitiateAuthWithCode() {
-    if (m_reply->error() != QNetworkReply::NoError ) {
+    if (m_reply->error() != QNetworkReply::NoError) {
         emit InitiateAuthWithCodeFailed();
         qWarning() << "Error No: " << m_reply->error() << "for url: " << m_reply->url().toString();
         qWarning() << "Request failed, " << m_reply->errorString();
@@ -111,7 +111,6 @@ void Network::handleRespInitiateAuthWithCode() {
     }
 
     QString data = m_reply->readAll();
-    LOG(info) << data.toStdString().c_str();
     QJsonDocument json_resp = QJsonDocument::fromJson(data.toUtf8());
     if (!json_resp.isNull() && json_resp.isObject()) {
         QString otp = json_resp["oneTimePassword"].toString();
@@ -127,7 +126,7 @@ void Network::handleRespInitiateAuthWithCode() {
 
 void Network::checkAuthWithCode(QString otp, QString polling_token) {
     QNetworkRequest request;
-    request.setUrl(QUrl("https://cloudauth.mbot.me/session/" + otp));
+    request.setUrl(QUrl("https://cloudauth.makerbot.com/session/" + otp));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       QString("application/json"));
     request.setRawHeader(QByteArray("Authorization"),
