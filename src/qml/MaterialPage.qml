@@ -108,6 +108,15 @@ MaterialPageForm {
         setDrawerState(true)
     }
 
+    function maybeShowMoistureWarningPopup(bayID) {
+        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
+                                bay2.filamentMaterialName)
+        var materials = ["PVA", "NYLON-CF", "NYLON-12-CF"]
+        if(materials.indexOf(current_mat) >= 0) {
+            moistureWarningPopup.open()
+        }
+    }
+
     bay1 {
         loadButton {
             button_mouseArea.onClicked: {
