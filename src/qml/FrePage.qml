@@ -3,12 +3,18 @@ import FreStepEnum 1.0
 import WifiStateEnum 1.0
 
 FrePageForm {
+    function getTestPrint() {
+        // We could use the spool journal to determine the loaded material
+        // but sticking with this way that we use everywhere else currently.
+        var model_mat = materialPage.bay1.filamentMaterialName.toLowerCase()
+        var support_mat = materialPage.bay2.filamentMaterialName.toLowerCase()
+        var test_print_string = model_mat + "_" + support_mat
+        storage.getTestPrint(test_print_string)
+    }
+
     function startTestPrint() {
         printPage.printFromUI = true
-        // We could use the spool journal to determine the
-        // loaded material but sticking with this way that
-        // we use everywhere else currently.
-        storage.getTestPrint(materialPage.bay1.filamentMaterialName.toLowerCase())
+        getTestPrint()
         printPage.getPrintFileDetails(storage.currentThing)
         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)

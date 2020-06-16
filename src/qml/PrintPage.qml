@@ -31,7 +31,7 @@ PrintPageForm {
         // Single extruder prints
         if(model_extruder_used && !support_extruder_used) {
             if (materialPage.bay1.usingExperimentalExtruder ||
-                settings.getSkipFilamentNags) {
+                settings.getSkipFilamentNags()) {
                 // Empty case, flag no errors!
             } else if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
                     print_model_material) {
@@ -62,7 +62,7 @@ PrintPageForm {
             // Since slices aren't
             if((!modelMaterialOK && // Skip model checking if approved earlier
                 !materialPage.bay1.usingExperimentalExtruder && // Skip model checking if exp. extruder used
-                !settings.getSkipFilamentNags && // Skip model checking if internal developers are trying something
+                !settings.getSkipFilamentNags() && // Skip model checking if internal developers are trying something
                  materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) ||
                 (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material)) {
                 startPrintMaterialMismatch = true
@@ -148,6 +148,15 @@ PrintPageForm {
     function clearErrors() {
         if(printErrorScreen.lastReportedErrorType != ErrorType.NoError) {
             printErrorScreen.acknowledgeError()
+        }
+    }
+
+    function showPrintTip() {
+        if(settings.getShowNylonCFAnnealPrintTip() &&
+           print_model_material == "nylon-cf" ||
+           print_model_material == "nylon-12-cf" &&
+           support_extruder_used) {
+            nylonCFPrintTipPopup.open()
         }
     }
 

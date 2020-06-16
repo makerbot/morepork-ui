@@ -81,7 +81,7 @@ MaterialPageForm {
         } else if(isExtruderFilamentPresent(extruderID)) {
             // Always allow purge and unload while paused
             return true
-        } else if(isUsingExpExtruder(extruderID) || settings.getSkipFilamentNags) {
+        } else if(isUsingExpExtruder(extruderID) || settings.getSkipFilamentNags()) {
             // Allow loading mid-print for experimental extruders without any material checks
             return true
         } else {
@@ -106,6 +106,15 @@ MaterialPageForm {
         setDrawerState(false)
         activeDrawer = printPage.printingDrawer
         setDrawerState(true)
+    }
+
+    function maybeShowMoistureWarningPopup(bayID) {
+        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
+                                bay2.filamentMaterialName)
+        var materials = ["PVA", "NYLON-CF", "NYLON-12-CF"]
+        if(materials.indexOf(current_mat) >= 0) {
+            moistureWarningPopup.open()
+        }
     }
 
     bay1 {

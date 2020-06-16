@@ -71,6 +71,7 @@ Item {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
             fre.setFreStep(FreStep.Welcome)
+            settings.resetPreferences()
         }
     }
 

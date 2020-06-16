@@ -313,6 +313,7 @@ Item {
                         id: showPassword
                         checked: false
                         onPressed: passwordField.forceActiveFocus()
+                        Layout.alignment: Qt.AlignLeft
                     }
 
                     Text {
@@ -323,13 +324,13 @@ Item {
                         color: "#ffffff"
                         font.family: defaultFont.name
                         font.weight: Font.Light
-                        anchors.left: showPassword.right
+                        Layout.alignment: Qt.AlignLeft
                     }
 
                     Button {
                         id: forgotPasswordButton
-                        anchors.right: rowLayout.right
                         padding: 0
+                        Layout.alignment: Qt.AlignRight
 
                         contentItem: Text {
                             text: qsTr("Forgot Password?")

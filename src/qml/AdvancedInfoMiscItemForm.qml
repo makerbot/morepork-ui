@@ -19,8 +19,8 @@ Item {
     ColumnLayout {
         id: columnLayout
         anchors.top: heading.bottom
-        anchors.topMargin: 10
-        spacing: -2
+        anchors.topMargin: 15
+        spacing: 0
 
         AdvancedInfoElement {
             id: doorActivatedProperty
