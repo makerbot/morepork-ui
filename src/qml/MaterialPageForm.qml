@@ -43,6 +43,8 @@ Item {
     property bool isSpoolValidityCheckPending: bot.spoolValidityCheckPending
     property bool isMaterialMismatch: false
 
+    property alias moistureWarningPopup: moistureWarningPopup
+
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess &&
            !startLoadUnloadFromUI &&
@@ -956,6 +958,59 @@ Item {
                 lineHeight: 1.3
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+    }
+
+    CustomPopup {
+        id: moistureWarningPopup
+        popupWidth: 720
+        popupHeight: 320
+        showOneButton: true
+        full_button_text: qsTr("OK")
+        full_button.onClicked: {
+            moistureWarningPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_moisture_warning_popup
+            width: 590
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: 115
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: alert_text_moisture_warning_popup
+                color: "#cbcbcb"
+                text: qsTr("MOISTURE SENSITIVE MATERIAL DETECTED")
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            Text {
+                id: description_text_moisture_warning_popup
+                color: "#cbcbcb"
+                text: {
+                    qsTr("The detected material is prone to absorbing moisture " +
+                         "from the air. Always keep the material sealed in the " +
+                         "material bay, an air tight bag or case. If exposed for " +
+                         "more than 15 minutes, you can use the material drying " +
+                         "feature located in advanced settings on this printer.")
+                }
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: defaultFont.name
+                font.pixelSize: 18
+                font.letterSpacing: 1
+                lineHeight: 1.3
             }
         }
     }
