@@ -71,6 +71,7 @@ Item {
                 mainSwipeView.swipeToItem(0)
             }
             fre.setFreStep(FreStep.Welcome)
+            settings.resetPreferences()
         }
     }
 

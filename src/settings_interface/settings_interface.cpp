@@ -88,3 +88,31 @@ void SettingsInterface::setAllowInternalStorage(bool allow) {
     cached_settings_["allow_internal_storage"] = allow;
     writeSettings();
 }
+
+bool SettingsInterface::getShowNylonCFAnnealPrintTip() {
+    return cached_settings_["show_nylon_cf_anneal_print_tip"].asBool();
+}
+
+void SettingsInterface::setShowNylonCFAnnealPrintTip(bool show) {
+    cached_settings_["show_nylon_cf_anneal_print_tip"] = show;
+    writeSettings();
+}
+
+void SettingsInterface::setShowApplyGlueOnBuildPlateTip(QString material, bool show) {
+    cached_settings_["show_apply_glue_on_build_plate_tip"][material.toStdString()] = show;
+    writeSettings();
+}
+
+bool SettingsInterface::getShowApplyGlueOnBuildPlateTip(QString material) {
+    const Json::Value &val = cached_settings_["show_apply_glue_on_build_plate_tip"];
+    return val.get(material.toStdString(), false).asBool();
+}
+
+void SettingsInterface::resetPreferences() {
+    cached_settings_["show_nylon_cf_anneal_print_tip"] = true;
+    Json::Value &val = cached_settings_["show_apply_glue_on_build_plate_tip"];
+    for(const auto &key : val.getMemberNames()) {
+        val[key] = true;
+    }
+    writeSettings();
+}
