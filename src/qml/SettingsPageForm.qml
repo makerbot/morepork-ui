@@ -164,7 +164,6 @@ Item {
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
                         buttonText.text: qsTr("CALIBRATE EXTRUDERS")
                         enabled: !isProcessRunning()
-                        buttonNeedsAction: !extrudersCalibrated && extrudersPresent
                     }
 
                     MenuButton {
