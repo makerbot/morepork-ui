@@ -27,25 +27,30 @@ Item {
 
     ColumnLayout {
         id: columnLayout
-        anchors.fill: parent
+        anchors.top: image.top
+        anchors.topMargin: 285
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: children.height
+        spacing: 20
 
         Text {
             id: text1
-            width: 500
+            Layout.maximumWidth: 700
             color: "#cbcbcb"
-            text: qsTr("The support material should be centered inside the outer square and easily\nseparated when the raft is removed. If not, run the extruder calibration again.\nFor more detailed info visit Makerbot.com/Calibration")
+            text: qsTr("The support material should be centered inside the outer square and easily separated when the raft is removed. If not, run the extruder calibration again. For more detailed info visit Makerbot.com/Calibration")
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            Layout.fillWidth: true
             font.weight: Font.Light
             wrapMode: Text.WordWrap
             font.family: defaultFont.name
             font.pixelSize: 20
-            lineHeight: 1.5
+            lineHeight: 1.3
         }
 
-        Item {
-            id: buttons_item
+        RowLayout {
+            id: buttonsContainer
+            spacing: 50
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             RoundedButton {
                 id: calibrate_button
@@ -53,21 +58,14 @@ Item {
                 buttonHeight: 50
                 label: qsTr("CALIBRATE AGAIN")
                 visible: true
-                anchors.left: parent.left
-                anchors.leftMargin: 155
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 32
             }
+
             RoundedButton {
                 id: continue_button
                 buttonWidth: 170
                 buttonHeight: 50
                 label: qsTr("CONTINUE")
                 visible: true
-                anchors.right: parent.right
-                anchors.rightMargin: 155
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 32
             }
         }
     }
