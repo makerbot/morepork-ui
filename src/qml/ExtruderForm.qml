@@ -195,26 +195,24 @@ Item {
                 font.pixelSize: 16
             }
 
-            Item {
+            ColumnLayout {
                 id: extruderStats
                 anchors.top: extruderType_text.bottom
-                width: 135
-                height: 45
+                width: 180
+                height: 40
                 anchors.topMargin: 15
                 opacity: !extruderPresent ? 0.4 : 1
 
-                ColumnLayout {
-                    id: columnLayout
-                    width: 100
-                    height: 40
-                    anchors.left: parent.left
-                    anchors.leftMargin: 0
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing: 9
+                Item {
+                    id: temperatureItem
+                    width: parent.width
+                    height: children.height
 
                     Text {
                         id: temperature_label
                         text: qsTr("TEMPERATURE")
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
                         antialiasing: false
                         smooth: false
                         color: "#cbcbcb"
@@ -225,8 +223,10 @@ Item {
                     }
 
                     Text {
-                        id: usage_label
-                        text: qsTr("USAGE")
+                        id: temperature_text
+                        text: extruderTemperature + "C"
+                        anchors.right: parent.right
+                        anchors.rightMargin: 0
                         antialiasing: false
                         smooth: false
                         color: "#cbcbcb"
@@ -237,21 +237,16 @@ Item {
                     }
                 }
 
-                ColumnLayout {
-                    id: columnLayout1
-                    width: 30
-                    height: 40
-                    anchors.right: parent.right
-                    anchors.rightMargin: 0
-                    anchors.verticalCenter: parent.verticalCenter
-                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                    spacing: 9
+                Item {
+                    id: usageItem
+                    width: parent.width
+                    height: children.height
 
                     Text {
-                        id: temperature_text
-                        text: extruderTemperature + "C"
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
+                        id: usage_label
+                        text: qsTr("USAGE")
+                        anchors.left: parent.left
+                        anchors.leftMargin: 0
                         antialiasing: false
                         smooth: false
                         color: "#cbcbcb"
@@ -264,8 +259,8 @@ Item {
                     Text {
                         id: usage_text
                         text: extruderUsage + "mm"
-                        Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
-                        horizontalAlignment: Text.AlignRight
+                        anchors.right: parent.right
+                        anchors.rightMargin: 0
                         antialiasing: false
                         smooth: false
                         color: "#cbcbcb"
