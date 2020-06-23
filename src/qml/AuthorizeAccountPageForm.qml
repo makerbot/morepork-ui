@@ -20,9 +20,15 @@ Item {
     smooth: false
     anchors.fill: parent
 
+    enum PageIndex {
+        ChooseAuthMethod,
+        AuthorizeWithCode,
+        AuthorizeWithCredentials
+    }
+
     SwipeView {
         id: authorizeAccountSwipeView
-        currentIndex: 0
+        currentIndex: AuthorizeAccountPage.ChooseAuthMethod
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -33,12 +39,12 @@ Item {
                 return;
             }
             authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == 0) {
+            if(itemToDisplayDefaultIndex == AuthorizeAccountPage.ChooseAuthMethod) {
                 // When we swipe to the 0th index of this page set
                 // the current item as the settings page item that
                 // holds this page since we want the back button to
                 // use the settings items altBack()
-                setCurrentItem(settingsSwipeView.itemAt(4))
+                setCurrentItem(settingsSwipeView.itemAt(SettingsPage.AuthorizeAccountsPage))
             } else {
                 setCurrentItem(authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex))
             }
@@ -46,12 +52,12 @@ Item {
             authorizeAccountSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // authorizeAccountSwipeView.index = 0
+        // AuthorizeAccountPage.ChooseAuthMethod
         Item {
             id: itemSelectAuthorizeMethod
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: true
 
@@ -86,11 +92,12 @@ Item {
             }
         }
 
+        // AuthorizeAccountPage.AuthorizeWithCode
         Item {
             id: authorizeWithCodeItem
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: authorizeAccountSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -99,7 +106,7 @@ Item {
                 authorizeAccountWithCodePage.disconnectHandlers()
                 authorizeAccountWithCodePage.checkAuthTimer.stop()
                 authorizeAccountWithCodePage.expireOTPTimer.stop()
-                authorizeAccountSwipeView.swipeToItem(0)
+                authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
             }
 
             AuthorizeAccountWithCode {
@@ -107,10 +114,11 @@ Item {
             }
         }
 
+        // AuthorizeAccountPage.AuthorizeWithCredentials
         Item {
             id: loginToAccountItem
             property var backSwiper: authorizeAccountSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
             smooth: false
             visible: false
 

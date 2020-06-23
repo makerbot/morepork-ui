@@ -3,24 +3,30 @@ import FreStepEnum 1.0
 import WifiStateEnum 1.0
 
 FrePageForm {
+    function getTestPrint() {
+        // We could use the spool journal to determine the loaded material
+        // but sticking with this way that we use everywhere else currently.
+        var model_mat = materialPage.bay1.filamentMaterialName.toLowerCase()
+        var support_mat = materialPage.bay2.filamentMaterialName.toLowerCase()
+        var test_print_string = model_mat + "_" + support_mat
+        storage.getTestPrint(test_print_string)
+    }
+
     function startTestPrint() {
         printPage.printFromUI = true
-        // We could use the spool journal to determine the
-        // loaded material but sticking with this way that
-        // we use everywhere else currently.
-        storage.getTestPrint(materialPage.bay1.filamentMaterialName.toLowerCase())
+        getTestPrint()
         printPage.getPrintFileDetails(storage.currentThing)
-        mainSwipeView.swipeToItem(1)
-        printPage.printSwipeView.swipeToItem(2)
+        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+        printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
 
     function startFreMaterialLoad() {
-        mainSwipeView.swipeToItem(5)
+        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true
         materialPage.enableMaterialDrawer()
         bot.loadFilament(0, false, false)
-        materialPage.materialSwipeView.swipeToItem(2)
+        materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
     continueButton {
@@ -49,41 +55,41 @@ FrePageForm {
                     bot.toggleWifi(true)
                     bot.net.setWifiState(WifiState.Searching)
                     bot.scanWifi(true)
-                    mainSwipeView.swipeToItem(3)
-                    settingsPage.settingsSwipeView.swipeToItem(3)
+                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.WifiPage)
                 }
             } else if(state == "software_update") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(5)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
             } else if(state == "name_printer") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(2)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ChangePrinterNamePage)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "set_time_date") {
                 inFreStep = true
                 bot.getSystemTime()
-                mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(7)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.TimePage)
             } else if(state == "log_in") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(4)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.AuthorizeAccountsPage)
             } else if(state == "attach_extruders") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(2)
+                mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
                 extruderPage.itemAttachExtruder.extruder = 1
                 extruderPage.itemAttachExtruder.state = "base state"
-                extruderPage.extruderSwipeView.swipeToItem(1)
+                extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
             } else if(state == "level_build_plate") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(6)
-                advancedPage.advancedSettingsSwipeView.swipeToItem(3)
+                mainSwipeView.swipeToItem(MoreporkUI.AdvancedPage)
+                advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AssistedLevelingPage)
             } else if(state == "calibrate_extruders") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(3)
-                settingsPage.settingsSwipeView.swipeToItem(6)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad()

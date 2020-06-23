@@ -23,13 +23,10 @@ Item {
     ColumnLayout {
         Text {
             id: title
-
             text: ""
             color: "#ffffff"
             font.letterSpacing: 1
             font.bold: true
-            anchors.horizontalCenterOffset: 0
-            anchors.horizontalCenter: parent.horizontalCenter
             font.pixelSize: 15
         }
 

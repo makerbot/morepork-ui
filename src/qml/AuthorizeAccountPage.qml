@@ -3,13 +3,13 @@ import QtQuick 2.10
 AuthorizeAccountPageForm {
     buttonAuthorizeWithCode.onClicked: {
         authorizeAccountWithCodePage.beginAuthWithCode()
-        authorizeAccountSwipeView.swipeToItem(1)
+        authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCode)
     }
 
     buttonLoginToMakerbotAccount.onClicked: {
-        authorizeAccountSwipeView.swipeToItem(2)
+        authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCredentials)
         if(inFreStep) {
-            signInPage.signInSwipeView.swipeToItem(1)
+            signInPage.signInSwipeView.swipeToItem(SignInPage.UsernamePage)
             signInPage.usernameTextField.forceActiveFocus()
         }
     }
@@ -18,18 +18,18 @@ AuthorizeAccountPageForm {
         closePopup()
         authorizeAccountWithCodePage.checkAuthTimer.stop()
         authorizeAccountWithCodePage.expireOTPTimer.stop()
-        authorizeAccountSwipeView.swipeToItem(0)
+        authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
     }
 
     function backToSettings() {
         signInPage.usernameTextField.clear()
         signInPage.passwordField.clear()
         signInPage.showPassword.checked = false
-        signInPage.signInSwipeView.swipeToItem(0)
+        signInPage.signInSwipeView.swipeToItem(SignInPage.BasePage)
         authorizeAccountWithCodePage.checkAuthTimer.stop()
         authorizeAccountWithCodePage.expireOTPTimer.stop()
-        authorizeAccountSwipeView.swipeToItem(0)
-        settingsSwipeView.swipeToItem(0)
+        authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
+        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
     }
 
     function closePopup() {
@@ -82,7 +82,7 @@ AuthorizeAccountPageForm {
         onTriggered: {
             closePopup()
             backToSettings()
-            mainSwipeView.swipeToItem(0)
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             fre.gotoNextStep(currentFreStep)
         }
     }

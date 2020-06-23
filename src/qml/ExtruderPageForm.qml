@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: extruderPage
@@ -14,9 +15,14 @@ Item {
     property alias attach_extruder_next_button: attach_extruder_next_button
     smooth: false
 
+    enum PageIndex {
+        BasePage,           // 0
+        AttachExtruderPage  // 1
+    }
+
     SwipeView {
         id: extruderSwipeView
-        currentIndex: 0
+        currentIndex: ExtruderPage.BasePage
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -29,7 +35,7 @@ Item {
             extruderSwipeView.itemAt(prevIndex).visible = false
         }
 
-        //extruderSwipeView.index = 0
+        // ExtruderPage.BasePage
         Item {
             id: itemExtruder
             property var backSwiper: mainSwipeView
@@ -89,7 +95,7 @@ Item {
             }
         }
 
-        //extruderSwipeView.index = 1
+        // ExtruderPage.AttachExtruderPage
         Item {
             id: itemAttachExtruder
             property var backSwiper: extruderSwipeView
@@ -422,9 +428,28 @@ Item {
                     PropertyChanges {
                         target: step3
                         bulletNumber: qsTr("3")
-                        bulletText: itemAttachExtruder.extruder == 1 ?
-                                        qsTr("Insert the Model 1 Extruder into\nSlot 1") :
-                                        qsTr("Insert the Support 2 Extruder into\nSlot 2")
+                        bulletText: {
+                            if(itemAttachExtruder.extruder == 1) {
+                                if(bot.machineType == MachineType.Fire) {
+                                    qsTr("Insert a Model 1A or 1C Extruder into\nSlot 1")
+                                } else if(bot.machineType == MachineType.Lava) {
+                                    qsTr("Insert a Model 1A, 1X or 1C Extruder into\nSlot 1")
+                                }
+                            } else if(itemAttachExtruder.extruder == 2) {
+                                if(bot.extruderAType == ExtruderType.MK14) {
+                                    qsTr("Insert a Support 2A Extruder into\nSlot 2")
+                                } else if(bot.extruderAType == ExtruderType.MK14_HOT) {
+                                    qsTr("Insert a Support 2X Extruder into\nSlot 2")
+                                } else if(bot.extruderAType == ExtruderType.MK14_EXP ||
+                                          bot.extruderAType == ExtruderType.MK14_COMP) {
+                                    if(bot.machineType == MachineType.Fire) {
+                                        qsTr("Insert a Support 2A Extruder into\nSlot 2")
+                                    } else if(bot.machineType == MachineType.Lava) {
+                                        qsTr("Insert a Support 2A or 2X Extruder into\nSlot 2")
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     PropertyChanges {

@@ -1,5 +1,11 @@
 {
     "allow_internal_storage": false,
     "language_code": "en_GB",
-    "skip_filament_nags": false
+    "skip_filament_nags": false,
+    "show_nylon_cf_anneal_print_tip": true,
+    "show_apply_glue_on_build_plate_tip": {
+        "nylon-cf": true,
+        "nylon-12-cf": true,
+        "petg": true
+    }
 }

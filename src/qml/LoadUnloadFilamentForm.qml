@@ -40,7 +40,17 @@ Item {
                     if(materialWarningPopup.opened) {
                         materialWarningPopup.close()
                     }
+                    // When loading only check for moisture alert when
+                    // the material is valid and we aren't purging
+                    // (i.e. the spool is already in place on the filament
+                    // bay)
+                    if(!extruderFilamentSwitch) {
+                        maybeShowMoistureWarningPopup(bayID)
+                    }
                 }
+            } else if(bot.process.type == ProcessType.Unload) {
+                // Always check for moisture alert when unloading.
+                maybeShowMoistureWarningPopup(bayID)
             }
         }
     }
@@ -57,6 +67,9 @@ Item {
             if(isSpoolDetailsReady) {
                 if(materialValidityCheck()) {
                     bot.acknowledgeMaterial(true)
+                    // Check for moisture alert anytime a valid
+                    // material is placed on the bay when loading.
+                    maybeShowMoistureWarningPopup(bayID)
                 } else {
                     isMaterialValid = false
                 }

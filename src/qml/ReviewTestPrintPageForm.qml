@@ -42,13 +42,10 @@ Item {
             font.family: defaultFont.name
             font.pixelSize: 20
             lineHeight: 1.5
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 100
         }
 
         Item {
             id: buttons_item
-            anchors.fill: parent
 
             RoundedButton {
                 id: calibrate_button

@@ -3,7 +3,7 @@ import QtQuick 2.10
 SignInPageForm {
     addAccountButton {
         button_mouseArea.onClicked: {
-            signInSwipeView.swipeToItem(1)
+            signInSwipeView.swipeToItem(SignInPage.UsernamePage)
             usernameTextField.forceActiveFocus()
         }
     }
@@ -18,7 +18,7 @@ SignInPageForm {
     enteredUsernameButton {
         button_mouseArea.onClicked: {
             username = usernameTextField.text
-            signInSwipeView.swipeToItem(2)
+            signInSwipeView.swipeToItem(SignInPage.PasswordPage)
             passwordField.forceActiveFocus()
         }
     }

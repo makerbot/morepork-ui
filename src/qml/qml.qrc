@@ -204,5 +204,7 @@
         <file>MaterialButtonForm.qml</file>
         <file>ListSelector.qml</file>
         <file>ListSelectorForm.qml</file>
+        <file>StartPrintSpecialInstructions.qml</file>
+        <file>StartPrintSpecialInstructionsForm.qml</file>
     </qresource>
 </RCC>

@@ -330,7 +330,7 @@ Item {
         button_mouseArea {
             onClicked: {
                 setTime()
-                timeSwipeView.swipeToItem(1)
+                timeSwipeView.swipeToItem(TimePage.SetTimeZone)
             }
             enabled: {
                 !monthTumbler.moving && !dateTumbler.moving && !yearTumbler.moving

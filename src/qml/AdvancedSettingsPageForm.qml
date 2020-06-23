@@ -58,19 +58,20 @@ Item {
         onTriggered: {
             resetFactoryConfirmPopup.close()
             // Reset all screen positions
-            if(settingsPage.settingsSwipeView.currentIndex != 0) {
-                settingsPage.settingsSwipeView.swipeToItem(0)
+            if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
-            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != 0) {
-                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(0)
+            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
             }
-            if(advancedPage.advancedSettingsSwipeView.currentIndex != 0) {
-                advancedPage.advancedSettingsSwipeView.swipeToItem(0)
+            if(advancedPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
             }
-            if(mainSwipeView.currentIndex != 0) {
-                mainSwipeView.swipeToItem(0)
+            if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
             fre.setFreStep(FreStep.Welcome)
+            settings.resetPreferences()
         }
     }
 
@@ -88,9 +89,23 @@ Item {
         }
     }
 
+    enum PageIndex {
+        BasePage,                   // 0
+        AdvancedInfoPage,           // 1
+        PreheatPage,                // 2
+        AssistedLevelingPage,       // 3
+        SpoolInfoPage,              // 4
+        ColorSwatchPage,            // 5
+        RaiseLowerBuildPlatePage,   // 6
+        ShareAnalyticsPage,         // 7
+        DryMaterialPage,            // 8
+        CleanExtrudersPage,         // 9
+        AnnealPrintPage             // 10
+    }
+
     SwipeView {
         id: advancedSettingsSwipeView
-        currentIndex: 0
+        currentIndex: AdvancedSettingsPage.BasePage
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -106,19 +121,33 @@ Item {
             advancedSettingsSwipeView.itemAt(prevIndex).visible = false
         }
 
-        //advancedSettingsSwipeView.index = 0
+        // AdvancedSettingsPage.BasePage
         Item {
             id: itemAdvancedSettings
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: {
-                if(mainSwipeView.currentIndex == 6) {
+                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
                     mainSwipeView
                 }
-                else if(mainSwipeView.currentIndex == 3) {
+                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
                     settingsPage.settingsSwipeView
                 }
+                else {
+                    mainSwipeView
+                }
             }
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: {
+                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
+                    MoreporkUI.BasePage
+                }
+                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
+                    SettingsPage.BasePage
+                }
+                else {
+                    MoreporkUI.BasePage
+                }
+            }
+
             smooth: false
             visible: true
 
@@ -249,11 +278,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 1
+        // AdvancedSettingsPage.AdvancedInfoPage
         Item {
             id: advancedInfoItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -262,11 +291,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 2
+        // AdvancedSettingsPage.PreheatPage
         Item {
             id: preheatItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -275,12 +304,12 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 3
+        // AdvancedSettingsPage.AssistedLevelingPage
         Item {
             id: itemAssistedLeveling
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -292,8 +321,8 @@ Item {
                     }
                     else {
                         assistedLevel.state = "base state"
-                        if(advancedSettingsSwipeView.currentIndex != 0) {
-                            advancedSettingsSwipeView.swipeToItem(0)
+                        if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                            advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                         }
                     }
                 }
@@ -305,8 +334,8 @@ Item {
             function skipFreStepAction() {
                 bot.cancel()
                 assistedLevel.state = "cancelling"
-                advancedSettingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             AssistedLeveling {
@@ -317,18 +346,18 @@ Item {
 
                 onProcessDone: {
                     state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
         }
 
-        //advancedSettingsSwipeView.index = 4
+        // AdvancedSettingsPage.SpoolInfoPage
         Item {
             id: spoolInfoItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -337,11 +366,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 5
+        // AdvancedSettingsPage.ColorSwatchPage
         Item {
             id: colorSwatchItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -350,11 +379,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 6
+        // AdvancedSettingsPage.RaiseLowerBuildPlatePage
         Item {
             id: raiseLowerBuildPlateItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -363,11 +392,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 7
+        // AdvancedSettingsPage.ShareAnalyticsPage
         Item {
             id: analyticsItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -376,11 +405,11 @@ Item {
             }
         }
 
-        //advancedSettingsSwipeView.index = 8
+        // AdvancedSettingsPage.DryMaterialPage
         Item {
             id: dryMaterialItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -390,8 +419,8 @@ Item {
                     dryMaterial.cancelDryingCyclePopup.open()
                 } else {
                     dryMaterial.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
@@ -400,18 +429,18 @@ Item {
                 id: dryMaterial
                 onProcessDone: {
                     state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
         }
 
-        //advancedSettingsSwipeView.index = 9
+        // AdvancedSettingsPage.CleanExtrudersPage
         Item {
             id: cleanExtrudersItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -421,8 +450,8 @@ Item {
                     cleanExtruders.cancelCleanExtrudersPopup.open()
                 } else {
                     cleanExtruders.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
@@ -431,18 +460,18 @@ Item {
                 id: cleanExtruders
                 onProcessDone: {
                     state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
         }
 
-        //advancedSettingsSwipeView.index = 10
+        // AdvancedSettingsPage.AnnealPrintPage
         Item {
             id: annealPrintItem
             property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: 0
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
             property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
             smooth: false
@@ -454,8 +483,8 @@ Item {
                     annealPrint.state = "cancelling"
                 } else {
                     annealPrint.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }
@@ -464,8 +493,8 @@ Item {
                 id: annealPrint
                 onProcessDone: {
                     state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != 0) {
-                        advancedSettingsSwipeView.swipeToItem(0)
+                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
             }

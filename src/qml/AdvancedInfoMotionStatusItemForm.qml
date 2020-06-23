@@ -8,8 +8,8 @@ Item {
 
     ColumnLayout {
         id: columnLayout
-        anchors.bottomMargin: 40
-        spacing: -1.5
+        anchors.bottomMargin: 30
+        spacing: 0
         anchors.fill: parent
 
         Text {

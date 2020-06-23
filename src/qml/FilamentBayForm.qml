@@ -116,42 +116,42 @@ Item {
     property string filamentColor: {
         if(usingExperimentalExtruder) {
             expExtruderColor
-            return;
-        }
-        switch(filamentBayID) {
-        case 1:
-            Qt.rgba(bot.spoolAColorRGB[0]/255,
-                    bot.spoolAColorRGB[1]/255,
-                    bot.spoolAColorRGB[2]/255)
-            break;
-        case 2:
-            Qt.rgba(bot.spoolBColorRGB[0]/255,
-                    bot.spoolBColorRGB[1]/255,
-                    bot.spoolBColorRGB[2]/255)
-            break;
-        default:
-            "#000000"
-            break;
+        } else {
+            switch(filamentBayID) {
+            case 1:
+                Qt.rgba(bot.spoolAColorRGB[0]/255,
+                        bot.spoolAColorRGB[1]/255,
+                        bot.spoolAColorRGB[2]/255)
+                break;
+            case 2:
+                Qt.rgba(bot.spoolBColorRGB[0]/255,
+                        bot.spoolBColorRGB[1]/255,
+                        bot.spoolBColorRGB[2]/255)
+                break;
+            default:
+                "#000000"
+                break;
+            }
         }
     }
 
     property int filamentPercent: {
         if(usingExperimentalExtruder) {
             100
-            return;
-        }
-        switch(filamentBayID) {
-        case 1:
-            (bot.spoolAAmountRemaining/
-            bot.spoolAOriginalAmount) * 100
-            break;
-        case 2:
-            (bot.spoolBAmountRemaining/
-            bot.spoolBOriginalAmount) * 100
-            break;
-        default:
-            0
-            break;
+        } else {
+            switch(filamentBayID) {
+            case 1:
+                (bot.spoolAAmountRemaining/
+                bot.spoolAOriginalAmount) * 100
+                break;
+            case 2:
+                (bot.spoolBAmountRemaining/
+                bot.spoolBOriginalAmount) * 100
+                break;
+            default:
+                0
+                break;
+            }
         }
     }
 
@@ -243,13 +243,13 @@ Item {
             "PC-ABS-FR"
             break;
         case 14:
-            "NYLON CF"
+            "NYLON-CF"
             break;
         case 15:
             "TPU"
             break;
         case 16:
-            "NYLON-12 CF"
+            "NYLON-12-CF"
             break;
         case 0:
         default:
@@ -260,14 +260,14 @@ Item {
 
     property bool isUnknownMaterial: {
         (usingExperimentalExtruder ||
-         settings.getSkipFilamentNags) ?
+         settings.getSkipFilamentNags()) ?
               false :
               filamentMaterialName == "UNKNOWN"
     }
 
     property bool isMaterialValid: {
         (usingExperimentalExtruder ||
-         settings.getSkipFilamentNags) ?
+         settings.getSkipFilamentNags()) ?
               true :
               (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
     }
@@ -295,16 +295,16 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "NYLON CF", "TPU"]
+                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU"]
                 break;
             case ExtruderType.MK14_HOT:
                 ["ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 break;
             case ExtruderType.MK14_COMP:
                 if(bot.machineType == MachineType.Fire) {
-                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF"]
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
                 } else if(bot.machineType == MachineType.Lava) {
-                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON CF", "NYLON-12 CF", "ABS", "ASA", "PC-ABS", "PC-ABS FR"]
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 } else {
                     []
                 }
@@ -499,6 +499,7 @@ Item {
                     id: filament_icon
                     filamentBayID: filamentBayBaseItem.filamentBayID
                     opacity: spoolPresent ? 1 : 0
+                    Layout.alignment: Qt.AlignVCenter
                 }
 
                 Text {

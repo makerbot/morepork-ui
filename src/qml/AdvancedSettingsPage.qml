@@ -5,15 +5,15 @@ import ProcessStateTypeEnum 1.0
 AdvancedSettingsPageForm {
     buttonAdvancedInfo.onClicked: {
         bot.query_status()
-        advancedSettingsSwipeView.swipeToItem(1)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AdvancedInfoPage)
     }
 
     buttonPreheat.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(2)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.PreheatPage)
     }
 
     buttonAssistedLeveling.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(3)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AssistedLevelingPage)
     }
 
     buttonCopyLogs.onClicked: {
@@ -55,34 +55,33 @@ AdvancedSettingsPageForm {
     }
 
     buttonSpoolInfo.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(4)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.SpoolInfoPage)
         // TODO(shirley): is there a better place to call this?
         spoolInfoPage.init();
     }
 
     buttonColorSwatch.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(5)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ColorSwatchPage)
     }
 
     buttonRaiseLowerBuildPlate.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(6)
-
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.RaiseLowerBuildPlatePage)
     }
 
     buttonAnalytics.onClicked: {
         bot.getCloudServicesInfo()
-        advancedSettingsSwipeView.swipeToItem(7)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ShareAnalyticsPage)
     }
 
     buttonDryMaterial.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(8)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.DryMaterialPage)
     }
 
     buttonCleanExtruders.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(9)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.CleanExtrudersPage)
     }
 
     buttonAnnealPrint.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(10)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AnnealPrintPage)
     }
 }

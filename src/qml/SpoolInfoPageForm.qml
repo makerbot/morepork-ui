@@ -25,13 +25,11 @@ Item {
         SpoolInfoColumn {
             id: spoolAInfo
             index: 0
-            anchors.top: parent.top
         }
 
         SpoolInfoColumn {
             id: spoolBInfo
             index: 1
-            anchors.top: parent.top
         }
     }
 }

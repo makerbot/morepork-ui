@@ -7,7 +7,7 @@ Item {
     height: 450
 
     ColumnLayout {
-        anchors.topMargin: 10
+        anchors.bottomMargin: 30
         anchors.fill: parent
 
         Text {
@@ -23,8 +23,6 @@ Item {
         RowLayout {
             id: toolheads_rowLayout
             spacing: 0
-            anchors.top: heading.bottom
-            anchors.topMargin: 15
 
             AdvancedInfoToolheadElement {
                 id: toolheadA

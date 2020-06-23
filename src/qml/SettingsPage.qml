@@ -7,11 +7,11 @@ import WifiStateEnum 1.0
 SettingsPageForm {
 
     buttonPrinterInfo.onClicked: {
-        settingsSwipeView.swipeToItem(1)
+        settingsSwipeView.swipeToItem(SettingsPage.PrinterInfoPage)
     }
 
     buttonChangePrinterName.onClicked: {
-        settingsSwipeView.swipeToItem(2)
+        settingsSwipeView.swipeToItem(SettingsPage.ChangePrinterNamePage)
         namePrinter.nameField.forceActiveFocus()
     }
 
@@ -25,7 +25,7 @@ SettingsPageForm {
             bot.net.setWifiState(WifiState.Searching)
             bot.scanWifi(true)
         }
-        settingsSwipeView.swipeToItem(3)
+        settingsSwipeView.swipeToItem(SettingsPage.WifiPage)
     }
 
     Timer {
@@ -34,7 +34,7 @@ SettingsPageForm {
         onTriggered: {
             if(buttonWiFi.pressed) {
                 dfs.loadDFSSetting()
-                settingsSwipeView.swipeToItem(10)
+                settingsSwipeView.swipeToItem(SettingsPage.KoreaDFSSecretPage)
                 koreaDFSScreen.passwordField.forceActiveFocus()
             }
         }
@@ -51,7 +51,7 @@ SettingsPageForm {
     }
 
     buttonAuthorizeAccounts.onClicked: {
-        settingsSwipeView.swipeToItem(4)
+        settingsSwipeView.swipeToItem(SettingsPage.AuthorizeAccountsPage)
     }
 
     buttonDeauthorizeAccounts.onClicked: {
@@ -60,25 +60,25 @@ SettingsPageForm {
 
     buttonFirmwareUpdate.onClicked: {
         bot.firmwareUpdateCheck(false)
-        settingsSwipeView.swipeToItem(5)
+        settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
     }
 
     buttonCalibrateToolhead.onClicked: {
-        settingsSwipeView.swipeToItem(6)
-    }
-
-    buttonChangeLanguage.onClicked: {
-        languageSelector.currentLocale = Qt.locale().name
-        settingsSwipeView.swipeToItem(9)
+        settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
     }
 
     buttonTime.onClicked: {
         bot.getSystemTime()
-        settingsSwipeView.swipeToItem(7)
+        settingsSwipeView.swipeToItem(SettingsPage.TimePage)
     }
 
     buttonAdvancedSettings.onClicked: {
-        settingsSwipeView.swipeToItem(8)
+        settingsSwipeView.swipeToItem(SettingsPage.AdvancedSettingsPage)
+    }
+
+    buttonChangeLanguage.onClicked: {
+        languageSelector.currentLocale = Qt.locale().name
+        settingsSwipeView.swipeToItem(SettingsPage.ChangeLanguagePage)
     }
 
     buttonShutdown.onClicked: {

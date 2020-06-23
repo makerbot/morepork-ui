@@ -55,6 +55,11 @@ Item {
         materialSwipeView.swipeToItem(2)
     }
 
+    enum SwipeIndex {
+        SelectMaterialPage,
+        SelectTemperaturePage
+    }
+
     SwipeView {
         id: selectMaterialSwipeView
         currentIndex: 0
