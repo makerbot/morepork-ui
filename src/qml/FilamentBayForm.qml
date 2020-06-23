@@ -416,6 +416,13 @@ Item {
             font.pixelSize: 18
             smooth: false
             antialiasing: false
+            scale: {
+                if(width > 125) {
+                    0.75
+                } else {
+                    1
+                }
+            }
         }
 
         ColumnLayout {
