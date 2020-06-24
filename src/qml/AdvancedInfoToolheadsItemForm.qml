@@ -7,7 +7,7 @@ Item {
     height: 450
 
     ColumnLayout {
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: 65
         anchors.fill: parent
 
         Text {
