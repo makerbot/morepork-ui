@@ -14,7 +14,9 @@ Item {
     property alias tempOffsetProperty: tempOffsetProperty
     property alias encoderTicksProperty: encoderTicksProperty
     property alias activeFanRpmProperty: activeFanRpmProperty
+    property alias activeFanFailSecsProperty: activeFanFailSecsProperty
     property alias gradientFanRpmProperty: gradientFanRpmProperty
+    property alias gradientFanFailSecsProperty: gradientFanFailSecsProperty
     property alias hesValueProperty: hesValueProperty
     property alias jamEnabledProperty: jamEnabledProperty
     property alias errorCodeProperty: errorCodeProperty
@@ -77,8 +79,18 @@ Item {
         }
 
         AdvancedInfoElement {
+            id: activeFanFailSecsProperty
+            label: qsTr("AC. FAN FAIL SECS")
+        }
+
+        AdvancedInfoElement {
             id: gradientFanRpmProperty
             label: qsTr("GRADIENT FAN RPM")
+        }
+
+        AdvancedInfoElement {
+            id: gradientFanFailSecsProperty
+            label: qsTr("GR. FAN FAIL SECS")
         }
 
         AdvancedInfoElement {

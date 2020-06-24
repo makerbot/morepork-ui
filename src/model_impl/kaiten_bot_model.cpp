@@ -1810,7 +1810,9 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                                  kToolheadA["scaled_temperature_offset"].asFloat()/100.00);
                UPDATE_INT_PROP(infoToolheadAEncoderTicks, kToolheadA["encoder_ticks"]);
                UPDATE_INT_PROP(infoToolheadAActiveFanRPM, kToolheadA["active_fan_rpm"]);
+               UPDATE_INT_PROP(infoToolheadAActiveFanFailSecs, kToolheadA["active_fan_fail_secs"]);
                UPDATE_INT_PROP(infoToolheadAGradientFanRPM, kToolheadA["gradient_fan_rpm"]);
+               UPDATE_INT_PROP(infoToolheadAGradientFanFailSecs, kToolheadA["gradient_fan_fail_secs"]);
                UPDATE_FLOAT_PROP(infoToolheadAHESValue, kToolheadA["hes_value"]);
 
                const Json::Value &kErrList = kToolheadA["error"];
@@ -1836,7 +1838,9 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
                                  kToolheadB["scaled_temperature_offset"].asFloat()/100.00);
                UPDATE_INT_PROP(infoToolheadBEncoderTicks, kToolheadB["encoder_ticks"]);
                UPDATE_INT_PROP(infoToolheadBActiveFanRPM, kToolheadB["active_fan_rpm"]);
+               UPDATE_INT_PROP(infoToolheadBActiveFanFailSecs, kToolheadB["active_fan_fail_secs"]);
                UPDATE_INT_PROP(infoToolheadBGradientFanRPM, kToolheadB["gradient_fan_rpm"]);
+               UPDATE_INT_PROP(infoToolheadBGradientFanFailSecs, kToolheadB["gradient_fan_fail_secs"]);
                UPDATE_FLOAT_PROP(infoToolheadBHESValue, kToolheadB["hes_value"]);
 
                const Json::Value &kErrList = kToolheadB["error"];
