@@ -1389,6 +1389,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             machineTypeSet(MachineType::Fire);
         } else if (kMachineTypeStr == "lava") {
             machineTypeSet(MachineType::Lava);
+        } else if (kMachineTypeStr == "magma") {
+            machineTypeSet(MachineType::Magma);
         } else {
             machineTypeReset();
         }

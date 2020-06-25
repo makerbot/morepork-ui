@@ -19,7 +19,8 @@ class BotModel : public BaseModel {
     // MOREPORK_QML_ENUM
     enum MachineType {
         Fire,
-        Lava
+        Lava,
+        Magma
     };
 
     // MOREPORK_QML_ENUM

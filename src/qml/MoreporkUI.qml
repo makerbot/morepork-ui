@@ -275,6 +275,8 @@ ApplicationWindow {
             "Method"
         } else if (bot.machineType == MachineType.Lava) {
             "Method X"
+        } else if (bot.machineType == MachineType.Magma) {
+            "Method XL"
         }
     }
 
@@ -1836,7 +1838,7 @@ ApplicationWindow {
                                 } else {
                                     ""
                                 }
-                            } else if (bot.machineType == MachineType.Lava) {
+                            } else {
                                 // Hot bot (V2) supports both mk14 and mk14_hot extruders.
                                 if (wrongExtruderPopup.modelExtWrong) {
                                     qsTr("Please insert a Model 1A or Model 1XA Performance\n" +
