@@ -205,6 +205,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
                 error_source_idx = error_source_idx_jv.asInt();
                 UPDATE_INT_PROP(errorSource, error_source_idx);
             }
+            UPDATE_STRING_PROP(currentTools, error_source_jv["current_tool"]);
+            UPDATE_STRING_PROP(fileTools, error_source_jv["file_tool"]);
         }
 
         #define UPDATE_ERROR(COMP, ERR) \
@@ -263,6 +265,9 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             case 1041:
                 errorTypeSet(ErrorType::ExtruderOutOfFilament);
                 UPDATE_ERROR(extruder, OOF)
+                break;
+            case 1048:
+                errorTypeSet(ErrorType::ToolMismatch);
                 break;
             case 1049:
                 errorTypeSet(ErrorType::IncompatibleSlice);
