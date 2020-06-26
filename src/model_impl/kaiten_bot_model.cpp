@@ -1421,6 +1421,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             const Json::Value &kExtruderType = kExtruder ## EXT_SYM["tool_name"]; \
             if (kExtruderType.isString()) { \
                 const QString kExtruderTypeStr = kExtruderType.asString().c_str(); \
+                extruder ## EXT_SYM ## TypeStrSet(kExtruderTypeStr); \
                 if (kExtruderTypeStr == "mk14" || \
                     kExtruderTypeStr == "mk14_s") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14); \
@@ -1436,6 +1437,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 } \
             } else { \
                 extruder ## EXT_SYM ## TypeReset(); \
+                extruder ## EXT_SYM ## TypeStrReset(); \
             } \
  \
             const Json::Value &kErrList = kExtruder ## EXT_SYM["error"]; \

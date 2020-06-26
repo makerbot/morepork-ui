@@ -343,7 +343,8 @@ class MoreporkStorage : public QObject {
     // with marketing names for simplicity.
     void updateMaterialNames(QString &material);
 
-    Q_INVOKABLE void getTestPrint(QString material);
+    Q_INVOKABLE void getTestPrint(const QString test_print_dir,
+                                  const QString test_print_name);
 
   private:
     QFileSystemWatcher *storage_watcher_;
