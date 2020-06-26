@@ -84,6 +84,7 @@ class ProcessModel : public BaseModel {
         HeaterNotReachingTemp,
         BadHESCalibrationFail,
         ExtruderOutOfFilament,
+        ToolMismatch,
         IncompatibleSlice,
         OtherError
     };
@@ -115,6 +116,10 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, elapsedTime, 0)
     MODEL_PROP(int, errorSource, 0)
     MODEL_PROP(int, errorCode, 0)
+    // Properties for holding tool names for tool mismatch
+    // error in print process.
+    MODEL_PROP(QString, currentTools, "Unknown")
+    MODEL_PROP(QString, fileTools, "Unknown")
     MODEL_PROP(ErrorType, errorType, NoError)
     MODEL_PROP(int, targetHesUpper, 3800)
     MODEL_PROP(int, targetHesLower, 3400)
