@@ -5,6 +5,19 @@ import ProcessStateTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 
 ErrorScreenForm {
+    function formatExtruderNames(ext) {
+        // This is terrible
+        // Goes from 'Model 1A Performance Extruder' to
+        // 'Model 1A'
+        var tools = ext.split('/ ')
+        function getShortName(t) {
+            return t.split(" ").slice(0, 2).join(" ")
+        }
+        return (getShortName(tools[0]) +
+                '/ ' +
+                getShortName(tools[1]))
+    }
+
     function acknowledgeError() {
         lastReportedErrorCode = 0
         lastReportedErrorType = ErrorType.NoError

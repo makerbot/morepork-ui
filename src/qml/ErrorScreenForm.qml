@@ -108,6 +108,11 @@ Item {
                     state = "chamber_fan_failure"
                 }
                 break;
+            case ErrorType.ToolMismatch:
+                if(lastReportedProcessType == ProcessType.Print) {
+                    state = "tool_mismatch"
+                }
+                break;
             case ErrorType.IncompatibleSlice:
                 if(lastReportedProcessType == ProcessType.Print) {
                     state = "incompatible_slice"
@@ -877,6 +882,36 @@ Item {
             PropertyChanges {
                 target: errorMessageContainer
                 anchors.verticalCenterOffset: -15
+            }
+        },
+
+        State {
+            name: "tool_mismatch"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: errorMessageTitle
+                text: qsTr("EXTRUDER MISMATCH")
+            }
+
+            PropertyChanges {
+                target: errorMessageDescription
+                text: qsTr("This .Makerbot was prepared for a\ndifferent set of extruders.\n\n" +
+                           "Extruders Attached -\n%1\nExtruders Required -\n%2\n\nPlease " +
+                           "export it again for the\nattached extruders. (Error %3)").
+                arg(formatExtruderNames(bot.process.currentTools)).
+                arg(formatExtruderNames(bot.process.fileTools)).
+                arg(lastReportedErrorCode)
+            }
+
+            PropertyChanges {
+                target: button1
+                label: qsTr("OK")
+            }
+
+            PropertyChanges {
+                target: errorMessageContainer
+                anchors.verticalCenterOffset: -50
             }
         }
     ]
