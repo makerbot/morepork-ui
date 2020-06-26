@@ -305,7 +305,7 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
 #endif
 }
 
-void MoreporkStorage::updateCurrentThing() {
+bool MoreporkStorage::updateCurrentThing() {
     const QString dir_path = CURRENT_THING_PATH;
     if(QDir(dir_path).exists()) {
         QDirIterator current_thing_dir(dir_path, QDir::Files |
@@ -318,11 +318,13 @@ void MoreporkStorage::updateCurrentThing() {
             }
             if(current_thing != nullptr) {
                 currentThingSet(current_thing);
+                return true;
             } else {
                 currentThingReset();
             }
         }
     }
+    return false;
 }
 
 
