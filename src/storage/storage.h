@@ -319,7 +319,7 @@ class MoreporkStorage : public QObject {
     QList<QObject*> printFileList() const;
     void printFileListSet(const QList<QObject*> &print_file_list);
     void printFileListReset();
-    Q_INVOKABLE void updateCurrentThing();
+    Q_INVOKABLE bool updateCurrentThing();
     Q_PROPERTY(PrintFileInfo* currentThing
       READ currentThing
       WRITE currentThingSet
