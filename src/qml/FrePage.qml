@@ -8,8 +8,10 @@ FrePageForm {
         // but sticking with this way that we use everywhere else currently.
         var model_mat = materialPage.bay1.filamentMaterialName.toLowerCase()
         var support_mat = materialPage.bay2.filamentMaterialName.toLowerCase()
-        var test_print_string = model_mat + "_" + support_mat
-        storage.getTestPrint(test_print_string)
+        var test_print_name_string = model_mat + "_" + support_mat
+        var test_print_dir_string = bot.extruderATypeStr + "/" +
+                                    bot.extruderBTypeStr + "/"
+        storage.getTestPrint(test_print_dir_string, test_print_name_string)
     }
 
     function startTestPrint() {

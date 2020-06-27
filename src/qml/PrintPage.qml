@@ -160,6 +160,12 @@ PrintPageForm {
         }
     }
 
+    function updateCurrentThing() {
+        if(storage.updateCurrentThing()) {
+            getPrintFileDetails(storage.currentThing)
+        }
+    }
+
     printingDrawer.buttonCancelPrint.onClicked: {
         printingDrawer.close()
         if(inFreStep) {

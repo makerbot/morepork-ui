@@ -236,9 +236,10 @@ void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
   }
 }
 
-void MoreporkStorage::getTestPrint(const QString material) {
-    const QString test_print = TEST_PRINT_FILE_PREFIX + material + ".makerbot";
-    const QString path = TEST_PRINT_PATH + test_print;
+void MoreporkStorage::getTestPrint(const QString test_print_dir,
+                                   const QString test_print_name) {
+    const QString test_print = TEST_PRINT_FILE_PREFIX + test_print_name + ".makerbot";
+    const QString path = TEST_PRINT_PATH + test_print_dir + test_print;
     const QFileInfo kFileInfo = QFileInfo(path);
 
     PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
@@ -305,7 +306,7 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
 #endif
 }
 
-void MoreporkStorage::updateCurrentThing() {
+bool MoreporkStorage::updateCurrentThing() {
     const QString dir_path = CURRENT_THING_PATH;
     if(QDir(dir_path).exists()) {
         QDirIterator current_thing_dir(dir_path, QDir::Files |
@@ -318,11 +319,13 @@ void MoreporkStorage::updateCurrentThing() {
             }
             if(current_thing != nullptr) {
                 currentThingSet(current_thing);
+                return true;
             } else {
                 currentThingReset();
             }
         }
     }
+    return false;
 }
 
 

@@ -110,8 +110,7 @@ Item {
     property bool isPrintFileValid: bot.process.printFileValid
     onIsPrintFileValidChanged: {
         if(isPrintFileValid) {
-            storage.updateCurrentThing()
-            getPrintFileDetails(storage.currentThing)
+            updateCurrentThing()
             showPrintTip()
         }
     }
@@ -120,8 +119,7 @@ Item {
         id: getPrintDetailsTimer
         interval: 3000
         onTriggered: {
-            storage.updateCurrentThing()
-            getPrintFileDetails(storage.currentThing)
+            updateCurrentThing()
             this.stop()
         }
     }
