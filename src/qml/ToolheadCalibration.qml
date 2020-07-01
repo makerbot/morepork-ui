@@ -25,6 +25,12 @@ ToolheadCalibrationForm {
         }
     }
 
+    action2Button {
+        button_mouseArea.onClicked: {
+            bot.calibrateToolheads(["z"])
+        }
+    }
+
     stopButton {
         onClicked: {
             bot.cancel()
