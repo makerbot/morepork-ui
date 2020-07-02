@@ -303,10 +303,8 @@ Item {
             case ExtruderType.MK14_COMP:
                 if(bot.machineType == MachineType.Fire) {
                     ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
-                } else if(bot.machineType == MachineType.Lava) {
-                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 } else {
-                    []
+                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 }
                 break;
             default:

@@ -62,6 +62,10 @@ Item {
                     qsTr("Choose another folder or visit MakerBot.com/MethodXFW to\n" +
                         "download the latest firmware. Drag the file onto a usb\n" +
                         "stick and insert it into the front of the printer.")
+                } else if (bot.machineType == MachineType.Magma) {
+                    qsTr("Choose another folder or visit MakerBot.com/MethodXLFW to\n" +
+                        "download the latest firmware. Drag the file onto a usb\n" +
+                        "stick and insert it into the front of the printer.")
                 }
             }
             anchors.top: parent.bottom

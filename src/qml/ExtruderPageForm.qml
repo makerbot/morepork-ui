@@ -432,7 +432,7 @@ Item {
                             if(itemAttachExtruder.extruder == 1) {
                                 if(bot.machineType == MachineType.Fire) {
                                     qsTr("Insert a Model 1A or 1C Extruder into\nSlot 1")
-                                } else if(bot.machineType == MachineType.Lava) {
+                                } else {
                                     qsTr("Insert a Model 1A, 1X or 1C Extruder into\nSlot 1")
                                 }
                             } else if(itemAttachExtruder.extruder == 2) {
@@ -444,7 +444,7 @@ Item {
                                           bot.extruderAType == ExtruderType.MK14_COMP) {
                                     if(bot.machineType == MachineType.Fire) {
                                         qsTr("Insert a Support 2A Extruder into\nSlot 2")
-                                    } else if(bot.machineType == MachineType.Lava) {
+                                    } else {
                                         qsTr("Insert a Support 2A or 2X Extruder into\nSlot 2")
                                     }
                                 }

@@ -183,6 +183,8 @@ Item {
                 annealPartTemperatureListMethod
             } else if(bot.machineType == MachineType.Lava) {
                 annealPartTemperatureListMethodX
+            } else if(bot.machineType == MachineType.Magma) {
+                annealPartTemperatureListMethodX
             }
         }
 

@@ -452,6 +452,8 @@ Item {
 
                     } else if (bot.machineType == MachineType.Lava) {
                         qsTr("Visit MakerBot.com/MethodXFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
+                    } else if (bot.machineType == MachineType.Magma) {
+                        qsTr("Visit MakerBot.com/MethodXLFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
                     }
 
                 }
