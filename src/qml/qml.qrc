@@ -206,5 +206,7 @@
         <file>ListSelectorForm.qml</file>
         <file>StartPrintSpecialInstructions.qml</file>
         <file>StartPrintSpecialInstructionsForm.qml</file>
+        <file>UserAssistedLoadInstructions.qml</file>
+        <file>UserAssistedLoadInstructionsForm.qml</file>
     </qresource>
 </RCC>

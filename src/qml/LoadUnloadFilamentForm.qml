@@ -243,6 +243,12 @@ Item {
         visible: false
     }
 
+    UserAssistedLoadInstructions {
+        id: userAssistedLoadInstructions
+        z: 1
+        visible: false
+    }
+
     Image {
         id: static_image
         width: 400
@@ -429,6 +435,11 @@ Item {
             }
 
             PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: shouldUserAssistLoading(bayID)
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: {
                     qsTr("%1 DETECTED").arg(materialName)
@@ -481,6 +492,11 @@ Item {
             PropertyChanges {
                 target: expExtruderInstructions
                 visible: false
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: shouldUserAssistLoading(bayID)
             }
 
             PropertyChanges {
@@ -565,6 +581,11 @@ Item {
                     targetTemperature > 0 &&
                     ((currentTemperature + 30) >= targetTemperature)
                 }
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: false
             }
 
             PropertyChanges {
@@ -665,6 +686,11 @@ Item {
             }
 
             PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: qsTr("EXTRUSION CONFIRMATION")
                 anchors.topMargin: 120
@@ -724,6 +750,11 @@ Item {
 
             PropertyChanges {
                 target: expExtruderInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
                 visible: false
             }
 
@@ -789,6 +820,11 @@ Item {
 
             PropertyChanges {
                 target: expExtruderInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
                 visible: false
             }
 
@@ -955,6 +991,11 @@ Item {
             }
 
             PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_instruction_text
                 text: qsTr("REWIND SPOOL")
                 anchors.topMargin: 120
@@ -1028,6 +1069,11 @@ Item {
 
             PropertyChanges {
                 target: expExtruderInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
                 visible: false
             }
 
