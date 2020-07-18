@@ -463,7 +463,7 @@ void KaitenBotModel::unknownMatWarningUpdate(const Json::Value &request){
             if(kWarningTypeStr == "top_loading") {
                 topLoadingWarningSet(true);
             }
-            else if(kWarningTypeStr == "assist_loading") {
+            else if(kWarningTypeStr == "assisted_loading") {
                 spoolValidityCheckPendingSet(true);
             }
         }
