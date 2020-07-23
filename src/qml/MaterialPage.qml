@@ -72,8 +72,16 @@ MaterialPageForm {
             // Can never load without an extruder
             return false
         } else if(bot.process.type == ProcessType.None) {
-            // Always allow loading while idle (material mismatch blocking occurs
-            // after starting the process)
+            // Kaiten loads the material config for the spool in the bay before starting
+            // the load process. If the material is unsupported it wont start the loading
+            // process. So the UI should not allow the user to start loading in this case
+            // when it will certainly fail.
+            // Mismatch blocking on the UI can still happen once the load pocess is running
+            // and an incompatible material is then placed on the bay, but in that case the
+            // situation is reversible and the user can choose to cancel or use a different
+            // material to proceed with the loading.
+            var bay = (extruderID == 1 ? bay1 : bay2)
+            if(bay.spoolPresent && !bay.isMaterialValid) {return false}
             return true
         } else if(!printPage.isPrintProcess || bot.process.stateType != ProcessStateType.Paused) {
             // During a paused print is the only non-idle state that allows filament change
