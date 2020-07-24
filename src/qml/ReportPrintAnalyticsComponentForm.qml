@@ -7,6 +7,14 @@ Item {
     width: 400
     height: 100
 
+    property var print_defects: {"warping_from_buildplate": false,
+                                 "stringiness": false,
+                                 "gaps_in_walls": false,
+                                 "bad_layer_alignment": false,
+                                 "small_feature_defects": false,
+                                 "frequent_extruder_jams": false,
+                                 "other": false}
+
     Text {
         id: titleText
         color: "#cbcbcb"
@@ -33,7 +41,8 @@ Item {
             button_mouseArea.onClicked: {
                 printFeedbackAcknowledgementPopup.open()
                 printFeedbackAcknowledgementPopup.feedbackGood = true
-                bot.submitPrintFeedback(true)
+                bot.submitPrintFeedback(true, print_defects)
+                feedbackSubmitted = true
             }
         }
 
@@ -43,9 +52,7 @@ Item {
             buttonHeight: 50
             label: qsTr("FAILURE")
             button_mouseArea.onClicked: {
-                printFeedbackAcknowledgementPopup.open()
-                printFeedbackAcknowledgementPopup.feedbackGood = false
-                bot.submitPrintFeedback(false)
+                failureFeedbackSelected = true
             }
         }
     }

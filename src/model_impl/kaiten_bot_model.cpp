@@ -10,6 +10,7 @@
 #include <sstream>
 
 #include <QJSEngine>
+#include <QVariantMap>
 
 #include "impl_util.h"
 #include "kaiten_net_model.h"
@@ -93,7 +94,7 @@ class KaitenBotModel : public BotModel {
     void startDrying(const int temperature, const float time);
     void get_calibration_offsets();
     void cleanNozzles(const QList<int> temperature = {0,0});
-    void submitPrintFeedback(bool success);
+    void submitPrintFeedback(bool success, const QVariantMap failure_map);
     void ignoreError(const int index, const QList<int> error, const bool ignored);
     void handshake();
     void annealPrint();
@@ -1169,7 +1170,7 @@ void KaitenBotModel::cleanNozzles(const QList<int> temperature) {
     }
 }
 
-void KaitenBotModel::submitPrintFeedback(bool success) {
+void KaitenBotModel::submitPrintFeedback(bool success, const QVariantMap failure_map) {
     try {
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
@@ -1177,6 +1178,17 @@ void KaitenBotModel::submitPrintFeedback(bool success) {
         json_params["method"] = Json::Value("submit_print_feedback");
         Json::Value json_args(Json::objectValue);
         json_args["success"] = Json::Value(success);
+        // print defects selected by user
+        Json::Value json_print_defects(Json::objectValue);
+        json_print_defects["warping_from_buildplate"] = Json::Value(failure_map["warping_from_buildplate"].toBool());
+        json_print_defects["stringiness"] = Json::Value(failure_map["stringiness"].toBool());
+        json_print_defects["gaps_in_walls"] = Json::Value(failure_map["gaps_in_walls"].toBool());
+        json_print_defects["bad_layer_alignment"] = Json::Value(failure_map["bad_layer_alignment"].toBool());
+        json_print_defects["small_feature_defects"] = Json::Value(failure_map["small_feature_defects"].toBool());
+        json_print_defects["frequent_extruder_jams"] = Json::Value(failure_map["frequent_extruder_jams"].toBool());
+        json_print_defects["other"] = Json::Value(failure_map["other"].toBool());
+        json_args["print_defects"] = Json::Value(json_print_defects);
+        qDebug() << FL_STRM << "json_args: " << json_args;
         json_params["params"] = Json::Value(json_args);
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
