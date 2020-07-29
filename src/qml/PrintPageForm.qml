@@ -92,6 +92,7 @@ Item {
             }
             printFromUI = false //reset when the print actually starts
             printStatusView.feedbackSubmitted = false // Reset when print starts
+            printStatusView.failureFeedbackSelected = false // Reset when print starts
             showPrintTip()
         }
         else {
@@ -377,6 +378,13 @@ Item {
             ReviewTestPrintPage {
                 id: reviewTestPrint
                 visible: inFreStep && printStatusView.testPrintComplete
+            }
+
+            PrintFeedbackComponent {
+                id: printFeedback
+                visible: bot.process.stateType == ProcessStateType.Completed &&
+                         !printStatusView.feedbackSubmitted &&
+                         printStatusView.failureFeedbackSelected
             }
         }
 

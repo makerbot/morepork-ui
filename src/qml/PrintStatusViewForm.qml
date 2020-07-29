@@ -30,6 +30,7 @@ Item {
     property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
     property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
     property bool feedbackSubmitted: false
+    property bool failureFeedbackSelected: false
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -927,7 +928,6 @@ Item {
             printFeedbackAcknowledgementPopup.close()
         }
         onOpened: {
-            feedbackSubmitted = true
             autoClosePopup.start()
         }
         onClosed: {

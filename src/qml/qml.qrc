@@ -208,5 +208,9 @@
         <file>StartPrintSpecialInstructionsForm.qml</file>
         <file>UserAssistedLoadInstructions.qml</file>
         <file>UserAssistedLoadInstructionsForm.qml</file>
+        <file>PrintFeedbackComponent.qml</file>
+        <file>PrintFeedbackComponentForm.qml</file>
+        <file>CustomCheckboxForm.qml</file>
+        <file>CustomCheckbox.qml</file>
     </qresource>
 </RCC>

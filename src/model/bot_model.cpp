@@ -231,8 +231,8 @@ void BotModel::cleanNozzles(const QList<int> temperature) {
     }
 }
 
-void BotModel::submitPrintFeedback(bool success) {
-    qDebug() << FL_STRM << "called with parameter: " << success;
+void BotModel::submitPrintFeedback(bool success, const QVariantMap failure_map) {
+    qDebug() << FL_STRM << "called with parameters: " << success << " " << failure_map;
 }
 
 void BotModel::ignoreError(const int index, const QList<int> error, const bool ignored) {

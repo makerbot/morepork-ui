@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QList>
 #include <QDebug>
+#include <QVariantMap>
 
 #include "base_model.h"
 #include "net_model.h"
@@ -93,7 +94,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void startDrying(const int temperature, const float time);
     Q_INVOKABLE virtual void get_calibration_offsets();
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
-    Q_INVOKABLE virtual void submitPrintFeedback(bool success);
+    Q_INVOKABLE virtual void submitPrintFeedback(bool success, const QVariantMap failure_map);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
     Q_INVOKABLE virtual void handshake();
     Q_INVOKABLE virtual void annealPrint();
