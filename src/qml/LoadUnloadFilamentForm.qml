@@ -702,10 +702,10 @@ Item {
             PropertyChanges {
                 target: instruction_description_text
                 text: {
-                    qsTr("Look inside of the printer and wait until you see material begin to extrude." +
-                           (shouldUserAssistPurging(bayID) ?
-                             ("\n\n%1 may require assistance to extrude. ").arg(materialName) +
-                             ("If you don't see the filament extruding, gently push it in at the filament bay slot.").arg(materialName) :
+                    qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
+                           ((shouldUserAssistPurging(bayID) ?
+                             qsTr("\n\n%1 may require assistance to extrude. ").arg(materialName) +
+                             qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
                                 ""))
                 }
                 anchors.topMargin: 25
