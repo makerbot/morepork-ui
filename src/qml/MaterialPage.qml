@@ -125,10 +125,17 @@ MaterialPageForm {
         }
     }
 
-    function shouldUserAssistLoading(bayID) {
+    function shouldUserAssistDrawerLoading(bayID) {
         var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
                                 bay2.filamentMaterialName)
         var materials = ["TPU", "NYLON-CF", "NYLON-12-CF"]
+        return (materials.indexOf(current_mat) >= 0)
+    }
+
+    function shouldUserAssistPurging(bayID) {
+        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
+                                bay2.filamentMaterialName)
+        var materials = ["NYLON-CF", "NYLON-12-CF"]
         return (materials.indexOf(current_mat) >= 0)
     }
 
