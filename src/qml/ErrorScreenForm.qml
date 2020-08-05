@@ -440,10 +440,17 @@ Item {
 
             PropertyChanges {
                 target: errorMessageDescription
-                text: qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.").arg(
+                text: {
+                    qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.%2").arg(
                     (bot.process.extruderAJammed ?
                                     qsTr("Model Extruder 1") :
-                                    qsTr("Support Extruder 2")))
+                                    qsTr("Support Extruder 2"))).
+                    arg((materialPage.shouldUserAssistPurging(bot.process.errorSource+1) ?
+                             (qsTr("\n%1 may require manual\nassistance for purging.").arg((((bot.process.errorSource+1) == 1) ?
+                                                                                                materialPage.bay1 :
+                                                                                                materialPage.bay2).printMaterialName.toUpperCase())) :
+                         ("")))
+                }
             }
 
             PropertyChanges {
