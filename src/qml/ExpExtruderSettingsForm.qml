@@ -21,7 +21,9 @@ Item {
         {label: "asa",      load : 245, unload : 245},
         {label: "nylon",    load : 220, unload : 180},
         {label: "pc-abs",   load : 245, unload : 245},
-        {label: "pc-abs-fr",load : 245, unload : 245}
+        {label: "pc-abs-fr",load : 245, unload : 245},
+        {label: "nylon-cf", load : 250, unload : 250},
+        {label: "nylon-12-cf",load : 250, unload : 250}
     ]
 
     function startLoadUnloadExpExtruder(temperature) {
