@@ -481,7 +481,7 @@ void MoreporkStorage::updateMaterialNames(QString &name) {
     } else if(name == "sr30") {
         name = "sr-30";
     } else if(name == "im-pla-esd") {
-        name = "esd tough";
+        name = "esd-tough";
     } else if(name == "nylon12-cf") {
         name = "nylon-12-cf";
     } else if(name == "generic_model") {
