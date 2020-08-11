@@ -295,16 +295,16 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU"]
+                ["PLA", "Tough", "PETG", "NYLON", "TPU"]
                 break;
             case ExtruderType.MK14_HOT:
                 ["ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 break;
             case ExtruderType.MK14_COMP:
                 if(bot.machineType == MachineType.Fire) {
-                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
+                    ["PLA", "Tough", "PETG", "ESD-Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
                 } else {
-                    ["PLA", "Tough", "PETG", "ESD Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                    ["PLA", "Tough", "PETG", "ESD-Tough", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
                 }
                 break;
             default:
