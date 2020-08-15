@@ -271,6 +271,10 @@ Item {
 
             function altBack() {
                 if(!inFreStep) {
+                    if(printStatusView.failureFeedbackSelected) {
+                        printStatusView.failureFeedbackSelected = false
+                        return
+                    }
                     mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 }
                 else {
@@ -378,13 +382,6 @@ Item {
             ReviewTestPrintPage {
                 id: reviewTestPrint
                 visible: inFreStep && printStatusView.testPrintComplete
-            }
-
-            PrintFeedbackComponent {
-                id: printFeedback
-                visible: bot.process.stateType == ProcessStateType.Completed &&
-                         !printStatusView.feedbackSubmitted &&
-                         printStatusView.failureFeedbackSelected
             }
         }
 

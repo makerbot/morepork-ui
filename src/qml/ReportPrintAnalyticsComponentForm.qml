@@ -7,14 +7,6 @@ Item {
     width: 400
     height: 100
 
-    property var print_defects: {"warping_from_buildplate": false,
-                                 "stringiness": false,
-                                 "gaps_in_walls": false,
-                                 "bad_layer_alignment": false,
-                                 "small_feature_defects": false,
-                                 "frequent_extruder_jams": false,
-                                 "other": false}
-
     Text {
         id: titleText
         color: "#cbcbcb"
@@ -53,6 +45,13 @@ Item {
             label: qsTr("FAILURE")
             button_mouseArea.onClicked: {
                 failureFeedbackSelected = true
+                // Make a deep copy of the print defects dict. template which will
+                // be updated in the print feedback component with the selected
+                // defects.
+                // This is absolutely uneccessary, if only the analytics guys
+                // don't insist on sending the full defects dict. even for print
+                // success feedback.
+                printFeedback.defects = JSON.parse(JSON.stringify(print_defects))
             }
         }
     }

@@ -31,6 +31,18 @@ Item {
     property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
     property bool feedbackSubmitted: false
     property bool failureFeedbackSelected: false
+
+    // Defects template dict. that will sent for all feedback. Even success.
+    // Ideally we should be building a list of defects and just sending that.
+    property var print_defects: {"warping_from_buildplate": false,
+                                 "stringiness": false,
+                                 "gaps_in_walls": false,
+                                 "bad_layer_alignment": false,
+                                 "small_feature_defects": false,
+                                 "frequent_extruder_jams": false,
+                                 "other": false}
+    property alias reportAnalytics: reportAnalytics
+    property alias printFeedback: printFeedback
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -76,6 +88,14 @@ Item {
         Page2,
         Page3,
         Page4
+    }
+
+    PrintFeedbackComponent {
+        id: printFeedback
+        visible: bot.process.stateType == ProcessStateType.Completed &&
+                 !feedbackSubmitted &&
+                 failureFeedbackSelected
+        z: 1
     }
 
     SwipeView {
