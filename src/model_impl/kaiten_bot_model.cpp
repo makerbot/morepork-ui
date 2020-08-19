@@ -11,6 +11,7 @@
 
 #include <QJSEngine>
 #include <QVariantMap>
+#include <QJsonDocument>
 
 #include "impl_util.h"
 #include "kaiten_net_model.h"
@@ -1178,17 +1179,16 @@ void KaitenBotModel::submitPrintFeedback(bool success, const QVariantMap failure
         json_params["method"] = Json::Value("submit_print_feedback");
         Json::Value json_args(Json::objectValue);
         json_args["success"] = Json::Value(success);
-        // print defects selected by user
-        Json::Value json_print_defects(Json::objectValue);
-        json_print_defects["warping_from_buildplate"] = Json::Value(failure_map["warping_from_buildplate"].toBool());
-        json_print_defects["stringiness"] = Json::Value(failure_map["stringiness"].toBool());
-        json_print_defects["gaps_in_walls"] = Json::Value(failure_map["gaps_in_walls"].toBool());
-        json_print_defects["bad_layer_alignment"] = Json::Value(failure_map["bad_layer_alignment"].toBool());
-        json_print_defects["small_feature_defects"] = Json::Value(failure_map["small_feature_defects"].toBool());
-        json_print_defects["frequent_extruder_jams"] = Json::Value(failure_map["frequent_extruder_jams"].toBool());
-        json_print_defects["other"] = Json::Value(failure_map["other"].toBool());
-        json_args["print_defects"] = Json::Value(json_print_defects);
-        qDebug() << FL_STRM << "json_args: " << json_args;
+
+        const std::string json_str = QJsonDocument::fromVariant(failure_map).
+                                        toJson(QJsonDocument::Compact).
+                                            toStdString().c_str();
+        Json::Value print_defects;
+        Json::Reader reader;
+        reader.parse(json_str, print_defects);
+
+        json_args["print_defects"] = print_defects;
+
         json_params["params"] = Json::Value(json_args);
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }

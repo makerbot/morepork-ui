@@ -210,7 +210,7 @@
         <file>UserAssistedLoadInstructionsForm.qml</file>
         <file>PrintFeedbackComponent.qml</file>
         <file>PrintFeedbackComponentForm.qml</file>
-        <file>CustomCheckboxForm.qml</file>
-        <file>CustomCheckbox.qml</file>
+        <file>FeedbackButton.qml</file>
+        <file>FeedbackButtonForm.qml</file>
     </qresource>
 </RCC>
