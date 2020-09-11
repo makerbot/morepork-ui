@@ -231,7 +231,7 @@ Item {
             "ASA"
             break;
         case 10:
-            "ESD Tough"
+            "ESD-Tough"
             break;
         case 11:
             "NYLON"
