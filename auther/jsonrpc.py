@@ -81,9 +81,7 @@ class JsonRpc(asyncio.Protocol):
     """
     def __init__(self, open_cb, close_cb):
         """
-        @param log: logging object
-        @param loop: The asyncio event loop for executing methods
-	@param open_cb: Invoked when the connection is opened
+        @param open_cb: Invoked when the connection is opened
         @param close_cb: Invoked when the connection is closed
         """
         self._log = logging.getLogger('JsonRpc')
@@ -193,7 +191,7 @@ class JsonRpc(asyncio.Protocol):
             else:
                 response_blob['result'] = parsed['result']
             coro = self._jobs[parsed['id']](response_blob)
-            asyncio.async(coro)
+            asyncio.ensure_future(coro)
             self._jobs.pop(parsed['id'])
         else:
             pass #self._log.debug("Response not in jobs dict: %r", parsed)
@@ -486,7 +484,7 @@ class JsonRpc(asyncio.Protocol):
             kwargs = self._fix_kwargs(kwargs)
             result = func(*args, **kwargs)
             if asyncio.iscoroutine(result):
-                task = asyncio.async(result)
+                task = asyncio.ensure_future(result)
                 task.add_done_callback(task_callback)
 
     def _invoke_callback_method(self, _id, func, args, kwargs, guard):
