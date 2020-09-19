@@ -303,10 +303,9 @@ Item {
                 visible: extruderPresent
                 Text {
                     id: filamentMaterial_text
-                    Layout.maximumWidth: attachButton.width
+                    Layout.maximumWidth: 165
                     elide: Text.ElideRight
-                    maximumLineCount: 3
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    maximumLineCount: 2
                     text: {
                         if(spoolPresent) {
                             switch(extruderID) {
