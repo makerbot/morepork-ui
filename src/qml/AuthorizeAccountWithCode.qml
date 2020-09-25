@@ -2,7 +2,6 @@ import QtQuick 2.10
 
 AuthorizeAccountWithCodeForm {
     function beginAuthWithCode() {
-        bot.handshake()
         showConnectingPopup()
         network.onInitiateAuthWithCodeSucceeded.connect(getOTP)
         network.onCheckAuthWithCodeSucceeded.connect(authorized)
