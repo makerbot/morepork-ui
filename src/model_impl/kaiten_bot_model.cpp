@@ -1890,6 +1890,7 @@ void KaitenBotModel::connected() {
     // TODO: Kaiten codegen?
     m_conn->jsonrpc.invoke("get_system_information", Json::Value(), m_sysInfoCb);
     m_conn->jsonrpc.invoke("network_state", Json::Value(), m_netStateCb);
+    m_conn->jsonrpc.invoke("handshake", Json::Value(), m_handshakeUpdateCb);
     // Get spool info for bay indicies 0 and 1
     Json::Value jval_param(Json::objectValue);
     for (int i = 0; i < 2; ++i) {
