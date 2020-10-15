@@ -989,7 +989,7 @@ Item {
                     if(printFeedbackAcknowledgementPopup.feedbackGood) {
                         qsTr("Thanks for providing feedback. This will help us make improvements to your printer.")
                     } else {
-                        qsTr("We are sorry that your print had trouble. Be sure that the extruders are calibrated and the material has not absorbed moisture. If problems continue please visit support.makerbot.com")
+                        qsTr("We are sorry that your print had trouble. If problems continue, please visit support.makerbot.com")
                     }
                 }
                 horizontalAlignment: Text.AlignHCenter
