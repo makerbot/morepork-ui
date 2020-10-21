@@ -348,7 +348,8 @@ Item {
     property bool usingExperimentalExtruder: {
         switch(filamentBayID) {
         case 1:
-            bot.extruderAType == ExtruderType.MK14_EXP
+            bot.extruderAType == ExtruderType.MK14_EXP ||
+            bot.extruderAType == ExtruderType.MK14_HOT_E
             break;
         case 2:
             false

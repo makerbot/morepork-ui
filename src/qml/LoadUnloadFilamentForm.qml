@@ -640,6 +640,9 @@ Item {
                         case ExtruderType.MK14_COMP:
                             "qrc:/img/extruder_1c_heating.png"
                             break;
+                        case ExtruderType.MK14_HOT_E:
+                            "qrc:/img/extruder_labs_1_ht_heating.png"
+                            break;
                         }
                     } else if(bayID == 2) {
                         switch(bot.extruderBType) {

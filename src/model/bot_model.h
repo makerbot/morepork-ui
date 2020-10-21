@@ -30,7 +30,8 @@ class BotModel : public BaseModel {
         MK14,
         MK14_HOT,
         MK14_EXP,
-        MK14_COMP
+        MK14_COMP,
+        MK14_HOT_E
     };
 
     // MOREPORK_QML_ENUM
