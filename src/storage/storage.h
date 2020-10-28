@@ -22,6 +22,7 @@
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define USB_STORAGE_DEV_BY_PATH QString()
+#define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY QString()
 #define LEGACY_USB_DEV_BY_PATH QString()
 #ifdef SETTINGS_FILE_DIR
 #define MACHINE_PID_PATH SETTINGS_FILE_DIR + std::string("/mock_PID")
@@ -35,6 +36,8 @@
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define USB_STORAGE_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
+#define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY \
+QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1.1:1.0-scsi-0:0:0:0")
 // TODO(chris): Remove this when we no longer need to support rev B boards
 #define LEGACY_USB_DEV_BY_PATH \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")

@@ -415,7 +415,8 @@ void MoreporkStorage::newSortType(){
 
 
 void MoreporkStorage::updateUsbStorageConnected(){
-  const bool kUsbStorConnected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists();
+  const bool kUsbStorConnected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists() ||
+                      QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY).exists();
   const bool kUsbLegacyConnected = QFileInfo(LEGACY_USB_DEV_BY_PATH).exists();
   usbStorageConnectedSet(kUsbStorConnected || kUsbLegacyConnected);
   if (!kUsbStorConnected) {
