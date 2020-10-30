@@ -1,15 +1,26 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ExtruderTypeEnum 1.0
 
 Item {
     anchors.fill: parent
+
+    property int baseTemperature: {
+        if(bot.extruderAType == ExtruderType.MK14_EXP) {
+            160 // Range -- 160-300
+        } else if(bot.extruderAType == ExtruderType.MK14_HOT_E) {
+            300 // Range -- 300-370
+        } else {
+            0
+        }
+    }
 
     property alias setTempButton: setTempButton
     property alias temperatureTumbler: temperatureTumbler
 
     function formatText(modelData) {
-        return ((160 + modelData*5).toString())
+        return ((baseTemperature + modelData*5).toString())
     }
 
     Component {
@@ -39,7 +50,15 @@ Item {
             height: 500
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
-            model: 29
+            model: {
+                if(bot.extruderAType == ExtruderType.MK14_EXP) {
+                    29
+                } else if(bot.extruderAType == ExtruderType.MK14_HOT_E) {
+                    15
+                } else {
+                    1
+                }
+            }
             delegate: delegateComponent
 
             Text {
@@ -147,7 +166,7 @@ Item {
 
         button_mouseArea {
             onClicked: {
-                var temp = 160 + temperatureTumbler.currentIndex*5
+                var temp = temperatureTumbler.currentItem.text
                 startLoadUnloadExpExtruder(parseInt(temp, 10))
             }
             enabled: {

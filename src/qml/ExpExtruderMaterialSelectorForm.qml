@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import ExtruderTypeEnum 1.0
 
 ListView {
     property string process: isLoadFilament ? "load" : "unload"
@@ -12,7 +13,13 @@ ListView {
     orientation: ListView.Vertical
     flickableDirection: Flickable.VerticalFlick
     ScrollBar.vertical: ScrollBar {}
-    model: expMaterialsList
+    model: {
+        if(bot.extruderAType == ExtruderType.MK14_EXP) {
+            expMaterialsList
+        } else if(bot.extruderAType == ExtruderType.MK14_HOT_E) {
+            hTExpMaterialsList
+        }
+    }
     delegate:
         ExpExtruderMaterialButton {
         id: materialButton
