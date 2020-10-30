@@ -32,8 +32,8 @@ Item {
 
     function startLoadUnloadExpExtruder(temperature) {
         if(!isUsingExpExtruder(1)) {
-            selectMaterialSwipeView.swipeToItem(0)
-            materialSwipeView.swipeToItem(0)
+            selectMaterialSwipeView.swipeToItem(ExpExtruderSettings.SelectMaterialPage)
+            materialSwipeView.swipeToItem(MaterialPage.BasePage)
             return;
         }
         startLoadUnloadFromUI = true
@@ -62,8 +62,8 @@ Item {
             }
         }
         loadUnloadFilamentProcess.state = "preheating"
-        selectMaterialSwipeView.swipeToItem(0)
-        materialSwipeView.swipeToItem(2)
+        selectMaterialSwipeView.swipeToItem(ExpExtruderSettings.SelectMaterialPage)
+        materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
     enum SwipeIndex {
