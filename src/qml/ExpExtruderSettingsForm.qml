@@ -26,7 +26,16 @@ Item {
         {label: "nylon-12-cf",load : 250, unload : 250}
     ]
 
+    property variant hTExpMaterialsList : [
+        {label: "pekk", load : 350, unload : 350}
+    ]
+
     function startLoadUnloadExpExtruder(temperature) {
+        if(!isUsingExpExtruder(1)) {
+            selectMaterialSwipeView.swipeToItem(ExpExtruderSettings.SelectMaterialPage)
+            materialSwipeView.swipeToItem(MaterialPage.BasePage)
+            return;
+        }
         startLoadUnloadFromUI = true
         enableMaterialDrawer()
         loadUnloadFilamentProcess.isExternalLoadUnload = true
@@ -53,8 +62,8 @@ Item {
             }
         }
         loadUnloadFilamentProcess.state = "preheating"
-        selectMaterialSwipeView.swipeToItem(0)
-        materialSwipeView.swipeToItem(2)
+        selectMaterialSwipeView.swipeToItem(ExpExtruderSettings.SelectMaterialPage)
+        materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
     enum SwipeIndex {

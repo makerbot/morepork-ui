@@ -108,7 +108,7 @@ MaterialPageForm {
     function resetStatesAfterLoadWhilePaused() {
         loadUnloadFilamentProcess.state = "base state"
         loadUnloadFilamentProcess.isExternalLoadUnload = false
-        materialSwipeView.swipeToItem(0)
+        materialSwipeView.swipeToItem(MaterialPage.BasePage)
         // If cancelled out of load/unload while in print process
         // enable print drawer to set UI back to printing state.
         setDrawerState(false)
@@ -144,7 +144,7 @@ MaterialPageForm {
             button_mouseArea.onClicked: {
                 if(experimentalExtruderInstalled) {
                     isLoadFilament = true
-                    materialSwipeView.swipeToItem(1)
+                    materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
                     return;
                 }
                 noExtruderPopupCheck(bay1.filamentBayID)
@@ -161,7 +161,7 @@ MaterialPageForm {
                 else {
                     bot.loadFilament(0, false, false)
                 }
-                materialSwipeView.swipeToItem(2)
+                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
             disable_button: !canLoadUnloadStart(bay1.filamentBayID)
         }
@@ -170,7 +170,7 @@ MaterialPageForm {
             button_mouseArea.onClicked: {
                 if(experimentalExtruderInstalled) {
                     isLoadFilament = false
-                    materialSwipeView.swipeToItem(1)
+                    materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
                     return;
                 }
                 noExtruderPopupCheck(bay1.filamentBayID)
@@ -191,7 +191,7 @@ MaterialPageForm {
                 // as 'preheating'. This isn't required for loading
                 // as the 'base state' is one of the loading screens.
                 loadUnloadFilamentProcess.state = "preheating"
-                materialSwipeView.swipeToItem(2)
+                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
             disable_button: !canLoadUnloadStart(bay1.filamentBayID) || !bay1.extruderFilamentPresent
         }
@@ -212,7 +212,7 @@ MaterialPageForm {
                 else {
                     bot.loadFilament(1, false, false)
                 }
-                materialSwipeView.swipeToItem(2)
+                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
             disable_button: !canLoadUnloadStart(bay2.filamentBayID)
         }
@@ -237,7 +237,7 @@ MaterialPageForm {
                 // as 'preheating'. This isn't required for loading
                 // as the 'base state' is one of the loading screens.
                 loadUnloadFilamentProcess.state = "preheating"
-                materialSwipeView.swipeToItem(2)
+                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
             disable_button: !canLoadUnloadStart(bay2.filamentBayID) || !bay2.extruderFilamentPresent
         }
@@ -278,7 +278,7 @@ MaterialPageForm {
             else if(bot.process.stateType == ProcessStateType.Paused) {
                 resetStatesAfterLoadWhilePaused()
                 // Goto the print page
-                mainSwipeView.swipeToItem(1)
+                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
             }
         }
         else if(bot.process.type == ProcessType.Load) {
@@ -286,7 +286,7 @@ MaterialPageForm {
             materialChangeCancelled = true
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"
-            materialSwipeView.swipeToItem(0)
+            materialSwipeView.swipeToItem(MaterialPage.BasePage)
             setDrawerState(false)
         }
         else if(bot.process.type == ProcessType.Unload) {
@@ -294,7 +294,7 @@ MaterialPageForm {
                 materialChangeCancelled = true
                 bot.cancel()
                 loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(0)
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 setDrawerState(false)
             }
             else {
@@ -304,7 +304,7 @@ MaterialPageForm {
         }
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
-            materialSwipeView.swipeToItem(0)
+            materialSwipeView.swipeToItem(MaterialPage.BasePage)
             setDrawerState(false)
         }
     }
@@ -318,10 +318,10 @@ MaterialPageForm {
         materialChangeCancelled = true
         bot.cancel()
         loadUnloadFilamentProcess.state = "base state"
-        materialSwipeView.swipeToItem(0)
+        materialSwipeView.swipeToItem(MaterialPage.BasePage)
         setDrawerState(false)
         if(inFreStep) {
-            mainSwipeView.swipeToItem(0)
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             inFreStep = false
         }
         materialWarningPopup.close()
@@ -329,9 +329,9 @@ MaterialPageForm {
 
     attach_extruder_mouseArea_no_extruder_popup.onClicked: {
         noExtruderPopup.close()
-        mainSwipeView.swipeToItem(2)
+        mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
         extruderPage.itemAttachExtruder.extruder = extruderIDnoExtruderPopup
-        extruderPage.extruderSwipeView.swipeToItem(1)
+        extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
     }
 
     cancel_mouseArea_no_extruder_popup.onClicked: {
