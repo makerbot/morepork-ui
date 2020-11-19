@@ -339,6 +339,11 @@ ApplicationWindow {
                      connectionState == ConnectionState.Connected
         }
 
+        HeatShieldInstructions {
+            anchors.fill: parent
+            z: 2
+        }
+
         Drawer {
             id: backSwipe
             width: rootAppWindow.width

@@ -212,5 +212,7 @@
         <file>PrintFeedbackComponentForm.qml</file>
         <file>FeedbackButton.qml</file>
         <file>FeedbackButtonForm.qml</file>
+        <file>HeatShieldInstructions.qml</file>
+        <file>HeatShieldInstructionsForm.qml</file>
     </qresource>
 </RCC>
