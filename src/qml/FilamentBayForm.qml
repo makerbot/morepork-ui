@@ -318,7 +318,7 @@ Item {
                 ["PVA"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["SR-30"]
+                ["SR-30", "HIPS"]
                 break;
             default:
                 []
