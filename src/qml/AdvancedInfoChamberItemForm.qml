@@ -31,25 +31,25 @@ Item {
 
         AdvancedInfoElement {
             id: currentTempProperty
-            label: qsTr("CHAMBER CURR. TEMP.")
+            label: qsTr("CHAMBER TEMP.")
             value: bot.infoChamberCurrentTemp
         }
 
         AdvancedInfoElement {
             id: targetTempProperty
-            label: qsTr("CHAMBER TGT TEMP.")
+            label: qsTr("CHAMBER TARGET")
             value: bot.infoChamberTargetTemp
         }
 
         AdvancedInfoElement {
             id: buildplaneTempProperty
-            label: qsTr("BUILDPLANE CURR. TEMP.")
+            label: qsTr("BUILDPLANE TEMP.")
             value: bot.buildplaneCurrentTemp
         }
 
         AdvancedInfoElement {
             id: buildplaneTargetTempProperty
-            label: qsTr("BUILDPLANE TGT.")
+            label: qsTr("BUILDPLANE TARGET")
             value: bot.buildplaneTargetTemp
         }
 
