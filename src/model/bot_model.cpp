@@ -255,6 +255,10 @@ void BotModel::startAnnealing(const int temperature, const float time) {
     qDebug() << FL_STRM << "called with parameters: " << temperature << " " << time;
 }
 
+void BotModel::getAccessoriesStatus() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

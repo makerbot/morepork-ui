@@ -42,6 +42,7 @@ class KaitenBotModel : public BotModel {
     void cloudServicesInfoUpdate(const Json::Value &result);
     void getCalibrationOffsetsUpdate(const Json::Value & result);
     void handshakeUpdate(const Json::Value &result);
+    void accessoriesStatusUpdate(const Json::Value &result);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -100,6 +101,7 @@ class KaitenBotModel : public BotModel {
     void handshake();
     void annealPrint();
     void startAnnealing(const int temperature, const float time);
+    void getAccessoriesStatus();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -426,6 +428,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<HandshakeCallback> m_handshakeUpdateCb;
+
+    class AccessoriesStatusCallback : public JsonRpcCallback {
+      public:
+        AccessoriesStatusCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->accessoriesStatusUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<AccessoriesStatusCallback> m_accessoriesStatusCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -1255,6 +1268,18 @@ void KaitenBotModel::startAnnealing(const int temperature, const float time){
     }
 }
 
+void KaitenBotModel::getAccessoriesStatus() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        conn->jsonrpc.invoke("get_accessories_status", json_params, m_accessoriesStatusCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -1563,6 +1588,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             extruderAJamDetectionDisabledReset();
         }
 
+      const Json::Value &accessories = info["accessories"];
+      accessoriesStatusUpdate(accessories);
 
       // TODO(chris): This bit is a mess...
       const Json::Value & version_dict = info["firmware_version"];
@@ -1885,6 +1912,16 @@ void KaitenBotModel::getCalibrationOffsetsUpdate(const Json::Value &result) {
         UPDATE_FLOAT_PROP(offsetBX, result["b"]["x"]);
         UPDATE_FLOAT_PROP(offsetBY, result["b"]["y"]);
         UPDATE_FLOAT_PROP(offsetBZ, result["b"]["z"]);
+    }
+}
+
+void KaitenBotModel::accessoriesStatusUpdate(const Json::Value &result) {
+    if (result.isObject()) {
+        const Json::Value &oyster = result["oyster"];
+        hepaFilterConnectedSet(oyster["connected"].asBool());
+        UPDATE_INT_PROP(hepaFanRPM, oyster["fan_rpm"]);
+        UPDATE_INT_PROP(hepaFanFault, oyster["fan_fault"]);
+        UPDATE_INT_PROP(hepaErrorCode, oyster["error"]);
     }
 }
 

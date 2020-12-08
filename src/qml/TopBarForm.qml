@@ -21,19 +21,11 @@ Item {
     signal backClicked()
     signal drawerDownClicked()
 
-    Item {
-        id: itemNotificationIcons
-        width: 100
-        height: 40
-        smooth: false
+    NotificationIcons {
+        id: notificationIcons
         z: 2
         anchors.right: parent.right
-        anchors.rightMargin: 3
-
-        NotificationIcons {
-            id: notificationIcons
-            anchors.fill: parent
-        }
+        anchors.rightMargin: 0
     }
 
     LinearGradient {
