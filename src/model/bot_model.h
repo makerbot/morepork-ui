@@ -100,6 +100,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void handshake();
     Q_INVOKABLE virtual void annealPrint();
     Q_INVOKABLE virtual void startAnnealing(const int temperature, const float time);
+    Q_INVOKABLE virtual void getAccessoriesStatus();
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -335,6 +336,13 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, offsetBX, -999.999)
     MODEL_PROP(float, offsetBY, -999.999)
     MODEL_PROP(float, offsetBZ, -999.999)
+
+    // Accessories
+    // Oyster - HEPA Filter Lid
+    MODEL_PROP(bool, hepaFilterConnected, false)
+    MODEL_PROP(int, hepaFanRPM, -999)
+    MODEL_PROP(int, hepaFanFault, -999)
+    MODEL_PROP(int, hepaErrorCode, -999)
 
   protected:
     BotModel();
