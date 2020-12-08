@@ -299,6 +299,13 @@ ApplicationWindow {
     }
     property bool experimentalExtruderAcknowledged: false
 
+    property bool hepaErrorAcknowledged: false
+    property bool hepaConnected: bot.hepaFilterConnected
+
+    onHepaConnectedChanged: {
+        hepaErrorAcknowledged = false
+    }
+
     enum PageIndex {
         BasePage,       // 0
         PrintPage,      // 1
@@ -2996,6 +3003,67 @@ ApplicationWindow {
                              "an experimental product and is not covered under warranty\n" +
                              "or MakerCare."
                             )
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: defaultFont.name
+                    font.pixelSize: 18
+                    font.letterSpacing: 1
+                    lineHeight: 1.3
+                }
+            }
+        }
+
+        CustomPopup {
+            id: hepaFilterErrorPopup
+            popupWidth: 720
+            popupHeight: 280
+            visible: (bot.hepaErrorCode > 0) && !hepaErrorAcknowledged
+            showOneButton: true
+            full_button_text: qsTr("OK")
+            full_button.onClicked: {
+                hepaErrorAcknowledged = true
+                hepaFilterErrorPopup.close()
+            }
+            left_button_text: "CONTINUE PRINTING"
+            right_button_text: "PAUSE PRINTING"
+            left_button.onClicked: {
+                hepaErrorAcknowledged = true
+                hepaFilterErrorPopup.close()
+            }
+            right_button.onClicked: {
+                bot.pauseResumePrint("suspend")
+            }
+
+            ColumnLayout {
+                id: columnLayout_hepa_error_popup
+                width: 650
+                height: children.height
+                spacing: 20
+                anchors.top: parent.top
+                anchors.topMargin: 160
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text_hepa_error_popup
+                    color: "#cbcbcb"
+                    text: qsTr("AIR FILTER ERROR")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_hepa_error_popup
+                    color: "#cbcbcb"
+                    text: {
+                        qsTr("There seems to be something wrong with the filter. Error Code %1\n" +
+                             "Visit support.makerbot.com to learn more.").arg(bot.hepaErrorCode)
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
