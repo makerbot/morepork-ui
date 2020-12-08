@@ -155,5 +155,6 @@
 	<file alias="user_assisted_load.png">images/user_assisted_load.png</file>
 	<file alias="install_heat_shield.gif">images/install_heat_shield.gif</file>
 	<file alias="remove_heat_shield.gif">images/remove_heat_shield.gif</file>
+	<file alias="hepa_filter.png">images/hepa_filter.png</file>
     </qresource>
 </RCC>
