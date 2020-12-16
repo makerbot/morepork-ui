@@ -12,6 +12,8 @@ Item {
     antialiasing: false
     property alias cancelDryingCyclePopup: cancelDryingCyclePopup
     property alias actionButton: actionButton
+    property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
+    property alias buildplateClearedButtonArea: buildplateClearedButtonArea
     property real timeLeftHours: bot.process.timeRemaining/3600
     property int currentStep: bot.process.stateType
     signal processDone
@@ -542,6 +544,193 @@ Item {
                 font.pixelSize: 18
                 font.letterSpacing: 1
                 lineHeight: 1.3
+            }
+        }
+    }
+
+    CustomPopup {
+        id: dryConfirmBuildPlateClearPopup
+        width: 800
+        height: 480
+        modal: true
+        dim: false
+        focus: true
+        parent: overlay
+        closePolicy: Popup.CloseOnPressOutside
+        background: Rectangle {
+            id: popupBackgroundDim2
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            opacity: 0.5
+            anchors.fill: parent
+        }
+        enter: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        }
+        exit: Transition {
+                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        }
+        onOpened: {
+            start_dry_text.color = "#000000"
+            start_dry_rectangle.color = "#ffffff"
+        }
+
+        Rectangle {
+            id: basePopupItem2
+            color: "#000000"
+            rotation: rootItem.rotation == 180 ? 180 : 0
+            width: 720
+            height: 220
+            radius: 10
+            border.width: 2
+            border.color: "#ffffff"
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Rectangle {
+                id: horizontal_divider2
+                width: 720
+                height: 2
+                color: "#ffffff"
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 72
+            }
+
+            Rectangle {
+                id: vertical_divider2
+                x: 359
+                y: 328
+                width: 2
+                height: 72
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Item {
+                id: buttonBar1
+                width: 720
+                height: 72
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 0
+
+                Rectangle {
+                    id: start_dry_rectangle
+                    x: 0
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: start_dry_text
+                        color: "#ffffff"
+                        text: qsTr("BUILD PLATE CLEARED")
+                        Layout.fillHeight: false
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.fillWidth: false
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: defaultFont.name
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: buildplateClearedButtonArea
+                        anchors.fill: parent
+                        onPressed: {
+                            start_dry_text.color = "#000000"
+                            start_dry_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            start_dry_text.color = "#ffffff"
+                            start_dry_rectangle.color = "#00000000"
+                        }
+                        onClicked: {
+                            bot.buildPlateCleared()
+                            dryConfirmBuildPlateClearPopup.close()
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id: cancel_dry_rectangle
+                    x: 360
+                    y: 0
+                    width: 360
+                    height: 72
+                    color: "#00000000"
+                    radius: 10
+
+                    Text {
+                        id: cancel_dry_text
+                        color: "#ffffff"
+                        text: qsTr("CANCEL")
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: defaultFont.name
+                        font.pixelSize: 18
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
+
+                    MouseArea {
+                        id: cancel_dry_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            cancel_dry_text.color = "#000000"
+                            cancel_dry_rectangle.color = "#ffffff"
+                        }
+                        onReleased: {
+                            cancel_dry_text.color = "#ffffff"
+                            cancel_dry_rectangle.color = "#00000000"
+                        }
+                        onClicked: {
+                            bot.cancel()
+                            dryConfirmBuildPlateClearPopup.close()
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: columnLayout2
+                width: 590
+                height: 100
+                anchors.top: parent.top
+                anchors.topMargin: 25
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: clear_build_plate_text
+                    color: "#cbcbcb"
+                    text: qsTr("CLEAR BUILD PLATE")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: clear_build_plate_desc_text
+                    color: "#cbcbcb"
+                    text: qsTr("Please be sure your build plate is clear.")
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: defaultFont.name
+                    font.pixelSize: 18
+                    lineHeight: 1.3
+                }
             }
         }
     }
