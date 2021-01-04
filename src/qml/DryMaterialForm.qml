@@ -550,20 +550,6 @@ Item {
 
     CustomPopup {
         id: dryConfirmBuildPlateClearPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.CloseOnPressOutside
-        background: Rectangle {
-            id: popupBackgroundDim2
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
-        }
         enter: Transition {
                 NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
         }
@@ -594,19 +580,6 @@ Item {
                 color: "#ffffff"
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 72
-            }
-
-            Rectangle {
-                id: vertical_divider2
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             Item {
