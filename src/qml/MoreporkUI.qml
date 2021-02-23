@@ -265,6 +265,10 @@ ApplicationWindow {
         return (bot.process.type != ProcessType.None)
     }
 
+    function isFilterConnected() {
+        return bot.hepaFilterConnected
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"

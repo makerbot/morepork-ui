@@ -10,6 +10,7 @@ Item {
     id: settingsPage
     property alias settingsSwipeView: settingsSwipeView
     property alias advancedSettingsPage: advancedSettingsPage
+    property alias cleanAirSettingsPage: cleanAirSettingsPage
     property alias defaultItem: itemSettings
 
     property alias buttonPrinterInfo: buttonPrinterInfo
@@ -39,6 +40,8 @@ Item {
 
     property alias buttonAdvancedSettings: buttonAdvancedSettings
 
+    property alias buttonCleanAirSettings: buttonCleanAirSettings
+
     property alias buttonShutdown: buttonShutdown
     property alias shutdownPopup: shutdownPopup
 
@@ -59,7 +62,8 @@ Item {
         TimePage,                   // 7
         AdvancedSettingsPage,       // 8
         ChangeLanguagePage,         // 9
-        KoreaDFSSecretPage          // 10
+        KoreaDFSSecretPage,          // 10
+        CleanAirSettingsPage
     }
 
     SwipeView {
@@ -183,6 +187,17 @@ Item {
                         buttonImage.source: "qrc:/img/icon_preheat.png"
                         buttonText.text: qsTr("ADVANCED")
                     }
+
+                    MenuButton {
+                        id: buttonCleanAirSettings
+                        buttonImage.source: "qrc:/img/hepa_filter.png"
+                        buttonImage.anchors.leftMargin: 30
+                        buttonText.text: qsTr("CLEAN AIR SETTINGS")
+                        buttonText.anchors.leftMargin: 38
+                        alertImage: "qrc:/img/filter_change_required.png"
+                        buttonNeedsAction: bot.hepaFilterChangeRequired
+                    }
+
 
                     MenuButton {
                         id: buttonShutdown
@@ -475,6 +490,19 @@ Item {
 
             KoreaDFSScreenForm {
                 id: koreaDFSScreen
+            }
+        }
+
+        // SettingsPage.CleanAirSettingsPage
+        Item {
+            id: cleanAirSettingsItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: SettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            CleanAirSettingsPageForm {
+                id: cleanAirSettingsPage
             }
         }
     }

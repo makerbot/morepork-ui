@@ -259,6 +259,14 @@ void BotModel::getAccessoriesStatus() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::getFilterHours() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::resetFilterHours() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

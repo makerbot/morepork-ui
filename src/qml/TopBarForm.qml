@@ -280,6 +280,9 @@ Item {
                         case SettingsPage.ChangeLanguagePage:
                             qsTr("SET PRINTER LANGUAGE")
                             break;
+                        case SettingsPage.CleanAirSettingsPage:
+                            qsTr("CLEAN AIR SETTINGS")
+                            break;
                         default:
                             qsTr("SETTINGS")
                             break;
