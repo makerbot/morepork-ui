@@ -142,8 +142,7 @@ Item {
                 label_size: 18
                 label: qsTr("RESET FILTER")
                 button_mouseArea.onClicked: {
-                    bot.resetFilterHours()
-                    cleanAirSettingsSwipeView.swipeToItem(0)
+                    hepaFilterResetPopup.open()
                 }
             }
 

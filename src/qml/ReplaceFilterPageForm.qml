@@ -93,6 +93,8 @@ Item {
                     }
                     else if (itemReplaceFilter.state == "step_5") {
                         bot.resetFilterHours()
+                        bot.hepaFilterPrintHours = 0
+                        bot.hepaFilterChangeRequired = false
                         cleanAirSettingsSwipeView.swipeToItem(0)
                         itemReplaceFilter.state = "done"
                     }

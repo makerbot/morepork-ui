@@ -8,6 +8,8 @@ Item {
     height: 40
     smooth: false
 
+    property alias hepa_filter_image: hepa_filter_image
+
     Item {
         id: hepaFilter_item
         width: 26
@@ -23,7 +25,7 @@ Item {
             smooth: true
             anchors.fill: parent
             visible: bot.hepaFilterConnected
-            source: "qrc:/img/hepa_filter.png"
+            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_filter.png" : "qrc:/img/hepa_filter.png"
         }
     }
 

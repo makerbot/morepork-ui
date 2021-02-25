@@ -3081,5 +3081,62 @@ ApplicationWindow {
                 }
             }
         }
+
+        CustomPopup {
+            id: hepaFilterResetPopup
+            popupWidth: 720
+            popupHeight: 280
+            visible: false
+            showTwoButtons: true
+            left_button_text: "YES"
+            right_button_text: "NO"
+            left_button.onClicked: {
+                bot.resetFilterHours()
+                bot.hepaFilterPrintHours = 0
+                bot.hepaFilterChangeRequired = false
+                hepaFilterResetPopup.close()
+            }
+            right_button.onClicked: {
+                hepaFilterResetPopup.close()
+            }
+
+            ColumnLayout {
+                id: columnLayout_hepa_reset_popup
+                width: 650
+                height: children.height
+                spacing: 20
+                anchors.top: parent.top
+                anchors.topMargin: 160
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text_hepa_reset_popup
+                    color: "#cbcbcb"
+                    text: qsTr("ARE YOU SURE?")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_hepa_reset_popup
+                    color: "#cbcbcb"
+                    text: {
+                        qsTr("Resetting the filter hours assumes that the filter has been replaced.")
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: defaultFont.name
+                    font.pixelSize: 18
+                    font.letterSpacing: 1
+                    lineHeight: 1.3
+                }
+            }
+        }
     }
 }
