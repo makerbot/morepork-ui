@@ -128,8 +128,25 @@ Item {
             smooth: false
             visible: false
 
-            ReplaceFilterPage {
+            property bool hasAltBack: true
 
+            function altBack() {
+                if (replaceFilterPage.itemReplaceFilter.state == "done")
+                    cleanAirSettingsSwipeView.swipeToItem(0)
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
+                    replaceFilterPage.itemReplaceFilter.state = "done"
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
+                    replaceFilterPage.itemReplaceFilter.state = "step_2"
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
+                    replaceFilterPage.itemReplaceFilter.state = "step_3"
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_5")
+                    replaceFilterPage.itemReplaceFilter.state = "step_4"
+                else
+                    cleanAirSettingsSwipeView.swipeToItem(0)
+            }
+
+            ReplaceFilterPage {
+                id: replaceFilterPage
             }
         }
     }
