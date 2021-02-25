@@ -155,6 +155,13 @@
 	<file alias="user_assisted_load.png">images/user_assisted_load.png</file>
 	<file alias="install_heat_shield.gif">images/install_heat_shield.gif</file>
 	<file alias="remove_heat_shield.gif">images/remove_heat_shield.gif</file>
+	<file alias="yellow_hepa_filter.png">images/yellow_hepa_filter.png</file>
 	<file alias="hepa_filter.png">images/hepa_filter.png</file>
+	<file alias="step_1_replace_filter.png">images/step_1_replace_filter.png</file>
+	<file alias="step_2_remove_cables.png">images/step_2_remove_cables.png</file>
+	<file alias="step_3_remove_electronics.png">images/step_3_remove_electronics.png</file>
+	<file alias="step_4_remove_filter.png">images/step_4_remove_filter.png</file>
+	<file alias="filter.png">images/filter.png</file>
+	<file alias="filter_change_required.png">images/filter_change_required.png</file>
     </qresource>
 </RCC>
