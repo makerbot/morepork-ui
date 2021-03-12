@@ -19,13 +19,14 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
 
-        Image {
+        AnimatedImage {
             id: hepa_filter_image
-            antialiasing: true
-            smooth: true
+            smooth: false
             anchors.fill: parent
+            opacity: 1
             visible: bot.hepaFilterConnected
-            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_filter.png" : "qrc:/img/hepa_filter.png"
+            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/hepa_filter_solid.gif"
+            cache: false
         }
     }
 

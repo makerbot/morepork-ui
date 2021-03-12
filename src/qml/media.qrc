@@ -163,5 +163,7 @@
 	<file alias="step_4_remove_filter.png">images/step_4_remove_filter.png</file>
 	<file alias="filter.png">images/filter.png</file>
 	<file alias="filter_change_required.png">images/filter_change_required.png</file>
+	<file alias="yellow_hepa_blink.gif">images/yellow_hepa_blink.gif</file>
+	<file alias="hepa_filter_solid.gif">images/hepa_filter_solid.gif</file>
     </qresource>
 </RCC>

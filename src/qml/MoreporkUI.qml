@@ -3088,15 +3088,15 @@ ApplicationWindow {
             popupHeight: 280
             visible: false
             showTwoButtons: true
-            left_button_text: "YES"
-            right_button_text: "NO"
-            left_button.onClicked: {
+            left_button_text: "CANCEL PROCEDURE"
+            right_button_text: "CONTINUE PROCEDURE"
+            right_button.onClicked: {
                 bot.resetFilterHours()
                 bot.hepaFilterPrintHours = 0
                 bot.hepaFilterChangeRequired = false
                 hepaFilterResetPopup.close()
             }
-            right_button.onClicked: {
+            left_button.onClicked: {
                 hepaFilterResetPopup.close()
             }
 
@@ -3112,7 +3112,7 @@ ApplicationWindow {
                 Text {
                     id: alert_text_hepa_reset_popup
                     color: "#cbcbcb"
-                    text: qsTr("ARE YOU SURE?")
+                    text: qsTr("RESET FILTER?")
                     font.letterSpacing: 3
                     Layout.alignment: Qt.AlignHCenter
                     font.family: defaultFont.name
@@ -3124,7 +3124,7 @@ ApplicationWindow {
                     id: description_text_hepa_reset_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Resetting the filter hours assumes that the filter has been replaced.")
+                        qsTr("Doing this assumes a new filter has been installed.")
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
