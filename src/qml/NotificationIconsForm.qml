@@ -25,7 +25,7 @@ Item {
             anchors.fill: parent
             opacity: 1
             visible: bot.hepaFilterConnected
-            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/hepa_filter_solid.gif"
+            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/white_hepa_no_blink.gif"
             cache: false
         }
     }
