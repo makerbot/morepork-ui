@@ -673,7 +673,7 @@ Item {
                         Text {
                             id: chamber_temp_label
                             color: "#cbcbcb"
-                            text: qsTr("chamber TEMP")
+                            text: qsTr("CHAMBER TEMP")
                             antialiasing: false
                             smooth: false
                             font.pixelSize: 18
