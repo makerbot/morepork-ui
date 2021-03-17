@@ -45,3 +45,21 @@ void NetModel::WiFiListSet(QList<QObject*> &wifi_list) {
 void NetModel::WiFiListReset() {
     wifi_list_.clear();
 }
+
+QList<QObject*> NetModel::PrintQueue() const {
+  return print_queue_;
+}
+
+
+void NetModel::PrintQueueSet(const QList<QObject*> &print_queue) {
+  auto temp = print_queue_;
+  print_queue_ = print_queue;
+  emit PrintQueueChanged();
+  qDeleteAll(temp);
+  temp.clear();
+}
+
+
+void NetModel::PrintQueueReset() {
+  print_queue_.clear();
+}

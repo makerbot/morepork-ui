@@ -43,6 +43,7 @@ class KaitenBotModel : public BotModel {
     void getCalibrationOffsetsUpdate(const Json::Value & result);
     void handshakeUpdate(const Json::Value &result);
     void accessoriesStatusUpdate(const Json::Value &result);
+    void printQueueUpdate(const Json::Value &queue);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
@@ -439,6 +440,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<AccessoriesStatusCallback> m_accessoriesStatusCb;
+
+    class PrintQueueNotificatiion : public JsonRpcNotification {
+      public:
+        PrintQueueNotificatiion(KaitenBotModel * bot) : m_bot(bot) {}
+        void invoke(const Json::Value &params) override {
+            m_bot->printQueueUpdate(params);
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<PrintQueueNotificatiion> m_printQueueNot;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -1311,7 +1323,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_setAnalyticsCb(new SetAnalyticsCallback(this)),
         m_getCalibrationOffsetsCb(new GetCalibrationOffsetsCallback(this)),
         m_handshakeUpdateCb(new HandshakeCallback(this)),
-        m_cameraState(new CameraStateNotification(this)) {
+        m_cameraState(new CameraStateNotification(this)),
+        m_printQueueNot(new PrintQueueNotificatiion(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1330,6 +1343,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
     conn->jsonrpc.addMethod("extruder_change", m_extChange);
     conn->jsonrpc.addMethod("spool_change", m_spoolChange);
     conn->jsonrpc.addMethod("camera_state", m_cameraState);
+    conn->jsonrpc.addMethod("print_queue_notification", m_printQueueNot);
 
     connect(conn, &LocalJsonRpc::connected, this, &KaitenBotModel::connected);
     connect(conn, &LocalJsonRpc::disconnected, this, &KaitenBotModel::disconnected);
@@ -1411,6 +1425,10 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
 
 void KaitenBotModel::cameraStateUpdate(const Json::Value &state) {
     UPDATE_STRING_PROP(cameraState, state["state"]);
+}
+
+void KaitenBotModel::printQueueUpdate(const Json::Value &queue) {
+    dynamic_cast<KaitenNetModel*>(m_net.data())->printQueueUpdate(queue);
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
