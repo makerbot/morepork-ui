@@ -8,6 +8,8 @@ Item {
     height: 40
     smooth: false
 
+    property alias hepa_filter_image: hepa_filter_image
+
     Item {
         id: hepaFilter_item
         width: 26
@@ -17,13 +19,14 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
 
-        Image {
+        AnimatedImage {
             id: hepa_filter_image
-            antialiasing: true
-            smooth: true
+            smooth: false
             anchors.fill: parent
+            opacity: 1
             visible: bot.hepaFilterConnected
-            source: "qrc:/img/hepa_filter.png"
+            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/white_hepa_no_blink.gif"
+            cache: false
         }
     }
 

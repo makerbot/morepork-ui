@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: 300
+    height: 240
 
     ColumnLayout {
         id: columnLayout
@@ -31,26 +31,14 @@ Item {
 
         AdvancedInfoElement {
             id: currentTempProperty
-            label: qsTr("CHAMBER TEMP.")
+            label: qsTr("CURRENT TEMP.")
             value: bot.infoChamberCurrentTemp
         }
 
         AdvancedInfoElement {
             id: targetTempProperty
-            label: qsTr("CHAMBER TARGET")
+            label: qsTr("TARGET TEMP.")
             value: bot.infoChamberTargetTemp
-        }
-
-        AdvancedInfoElement {
-            id: buildplaneTempProperty
-            label: qsTr("BUILDPLANE TEMP.")
-            value: bot.buildplaneCurrentTemp
-        }
-
-        AdvancedInfoElement {
-            id: buildplaneTargetTempProperty
-            label: qsTr("BUILDPLANE TARGET")
-            value: bot.buildplaneTargetTemp
         }
 
         AdvancedInfoElement {
