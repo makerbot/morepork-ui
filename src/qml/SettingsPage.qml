@@ -81,6 +81,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(SettingsPage.ChangeLanguagePage)
     }
 
+    buttonCleanAirSettings.onClicked: {
+        settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+    }
+
     buttonShutdown.onClicked: {
         shutdownPopup.left_text.text = qsTr("CANCEL")
         shutdownPopup.right_text.text = qsTr("SHUT DOWN")

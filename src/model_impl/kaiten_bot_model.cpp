@@ -39,6 +39,7 @@ class KaitenBotModel : public BotModel {
     void extChangeUpdate(const Json::Value & params);
     void spoolChangeUpdate(const Json::Value & spool_info);
     void cameraStateUpdate(const Json::Value & state);
+    void filterHoursUpdate(const Json::Value & result);
     void cloudServicesInfoUpdate(const Json::Value &result);
     void getCalibrationOffsetsUpdate(const Json::Value & result);
     void handshakeUpdate(const Json::Value &result);
@@ -103,6 +104,8 @@ class KaitenBotModel : public BotModel {
     void annealPrint();
     void startAnnealing(const int temperature, const float time);
     void getAccessoriesStatus();
+    void getFilterHours();
+    void resetFilterHours();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -451,6 +454,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<PrintQueueNotificatiion> m_printQueueNot;
+
+    class FilterHoursCallback : public JsonRpcCallback {
+      public:
+        FilterHoursCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value &resp) override {
+            m_bot->filterHoursUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<FilterHoursCallback> m_filterHoursCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -1292,6 +1306,33 @@ void KaitenBotModel::getAccessoriesStatus() {
     }
 }
 
+
+void KaitenBotModel::getFilterHours() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        conn->jsonrpc.invoke("get_oyster_print_hours", json_params, m_filterHoursCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::resetFilterHours() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["machine_func"] = Json::Value("reset_oyster_print_hours");
+        json_params["params"] = Json::Value();
+        conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -1324,7 +1365,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_getCalibrationOffsetsCb(new GetCalibrationOffsetsCallback(this)),
         m_handshakeUpdateCb(new HandshakeCallback(this)),
         m_cameraState(new CameraStateNotification(this)),
-        m_printQueueNot(new PrintQueueNotificatiion(this)) {
+        m_printQueueNot(new PrintQueueNotificatiion(this)),
+        m_filterHoursCb(new FilterHoursCallback(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1429,6 +1471,13 @@ void KaitenBotModel::cameraStateUpdate(const Json::Value &state) {
 
 void KaitenBotModel::printQueueUpdate(const Json::Value &queue) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->printQueueUpdate(queue);
+}
+
+void KaitenBotModel::filterHoursUpdate(const Json::Value &result) {
+    if (result.isObject()) {
+        UPDATE_INT_PROP(hepaFilterPrintHours, result["current_print_hours"]);
+        UPDATE_INT_PROP(hepaFilterMaxHours, result["max_print_hours"]);
+    }
 }
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
@@ -1940,6 +1989,7 @@ void KaitenBotModel::accessoriesStatusUpdate(const Json::Value &result) {
         UPDATE_INT_PROP(hepaFanRPM, oyster["fan_rpm"]);
         UPDATE_INT_PROP(hepaFanFault, oyster["fan_fault"]);
         UPDATE_INT_PROP(hepaErrorCode, oyster["error"]);
+        hepaFilterChangeRequiredSet(oyster["filter_change_required"].asBool());
     }
 }
 

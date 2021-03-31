@@ -101,6 +101,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void annealPrint();
     Q_INVOKABLE virtual void startAnnealing(const int temperature, const float time);
     Q_INVOKABLE virtual void getAccessoriesStatus();
+    Q_INVOKABLE virtual void getFilterHours();
+    Q_INVOKABLE virtual void resetFilterHours();
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -343,6 +345,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, hepaFanRPM, -999)
     MODEL_PROP(int, hepaFanFault, -999)
     MODEL_PROP(int, hepaErrorCode, -999)
+    MODEL_PROP(bool, hepaFilterChangeRequired, false)
+    MODEL_PROP(int, hepaFilterPrintHours, -999)
+    MODEL_PROP(int, hepaFilterMaxHours, 1000)
 
   protected:
     BotModel();

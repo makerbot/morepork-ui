@@ -214,5 +214,11 @@
         <file>FeedbackButtonForm.qml</file>
         <file>HeatShieldInstructions.qml</file>
         <file>HeatShieldInstructionsForm.qml</file>
+        <file>CleanAirSettingsPage.qml</file>
+        <file>CleanAirSettingsPageForm.qml</file>
+        <file>FilterStatusPage.qml</file>
+        <file>FilterStatusPageForm.qml</file>
+        <file>ReplaceFilterPage.qml</file>
+        <file>ReplaceFilterPageForm.qml</file>
     </qresource>
 </RCC>

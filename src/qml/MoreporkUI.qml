@@ -265,6 +265,10 @@ ApplicationWindow {
         return (bot.process.type != ProcessType.None)
     }
 
+    function isFilterConnected() {
+        return bot.hepaFilterConnected
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"
@@ -3064,6 +3068,63 @@ ApplicationWindow {
                     text: {
                         qsTr("There seems to be something wrong with the filter. Error Code %1\n" +
                              "Visit support.makerbot.com to learn more.").arg(bot.hepaErrorCode)
+                    }
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.weight: Font.Light
+                    wrapMode: Text.WordWrap
+                    font.family: defaultFont.name
+                    font.pixelSize: 18
+                    font.letterSpacing: 1
+                    lineHeight: 1.3
+                }
+            }
+        }
+
+        CustomPopup {
+            id: hepaFilterResetPopup
+            popupWidth: 720
+            popupHeight: 280
+            visible: false
+            showTwoButtons: true
+            left_button_text: "CANCEL PROCEDURE"
+            right_button_text: "CONTINUE PROCEDURE"
+            right_button.onClicked: {
+                bot.resetFilterHours()
+                bot.hepaFilterPrintHours = 0
+                bot.hepaFilterChangeRequired = false
+                hepaFilterResetPopup.close()
+            }
+            left_button.onClicked: {
+                hepaFilterResetPopup.close()
+            }
+
+            ColumnLayout {
+                id: columnLayout_hepa_reset_popup
+                width: 650
+                height: children.height
+                spacing: 20
+                anchors.top: parent.top
+                anchors.topMargin: 160
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    id: alert_text_hepa_reset_popup
+                    color: "#cbcbcb"
+                    text: qsTr("RESET FILTER?")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
+                }
+
+                Text {
+                    id: description_text_hepa_reset_popup
+                    color: "#cbcbcb"
+                    text: {
+                        qsTr("Doing this assumes a new filter has been installed.")
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
