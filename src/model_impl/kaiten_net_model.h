@@ -12,6 +12,7 @@ class KaitenNetModel : public NetModel {
     void netUpdate(const Json::Value & state);
     void wifiUpdate(const Json::Value &result);
     void cloudServicesInfoUpdate(const Json::Value &result);
+    void printQueueUpdate(const Json::Value &queue);
 };
 
 #endif  // _SRC_KAITEN_NET_MODEL_H

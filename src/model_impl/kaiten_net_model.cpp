@@ -108,3 +108,29 @@ void KaitenNetModel::cloudServicesInfoUpdate(const Json::Value &result) {
         }
     }
 }
+
+void KaitenNetModel::printQueueUpdate(const Json::Value &queue) {
+    if (queue.isArray() && queue.size() > 0) {
+        QList<QObject*> print_queue_list;
+        print_queue_list.clear();
+
+        for (Json::Value print : queue) {
+            if (print.isObject() && !print.empty()) {
+                QString filename = print["filename"].asString().c_str();
+                QString job_id = print["job_id"].asString().c_str();
+                QString token = print["token"].asString().c_str();
+                QString url_prefix = print["url_prefix"].asString().c_str();
+                print_queue_list.append(new QueuedPrintInfo(filename, job_id,
+                                                    token, url_prefix));
+            }
+        }
+
+        if (print_queue_list.empty()) {
+            printQueueEmptyReset();
+            PrintQueueReset();
+        } else {
+            printQueueEmptySet(false);
+            PrintQueueSet(print_queue_list);
+        }
+    }
+}

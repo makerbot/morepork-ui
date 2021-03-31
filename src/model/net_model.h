@@ -44,6 +44,45 @@ signals:
     void WiFiInfoChanged();
 };
 
+class QueuedPrintInfo : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QString fileName READ fileName NOTIFY infoChanged)
+    Q_PROPERTY(QString jobId READ jobId NOTIFY infoChanged)
+    Q_PROPERTY(QString token READ token NOTIFY infoChanged)
+    Q_PROPERTY(QString urlPrefix READ urlPrefix NOTIFY infoChanged)
+
+    QString filename_, job_id_, token_, url_prefix_;
+public:
+    QueuedPrintInfo(QObject *parent = 0) : QObject(parent) {}
+    QueuedPrintInfo(const QString &filename,
+                    const QString &job_id,
+                    const QString &token,
+                    const QString &url_prefix) :
+                    filename_(filename),
+                    job_id_(job_id),
+                    token_(token),
+                    url_prefix_(url_prefix) {}
+
+    QString fileName() const {
+        return filename_;
+    }
+
+    QString jobId() const {
+        return job_id_;
+    }
+
+    QString token() const {
+        return token_;
+    }
+
+    QString urlPrefix() const {
+        return url_prefix_;
+    }
+
+signals:
+    void infoChanged();
+};
+
 class NetModel : public BaseModel {
   public:
     //MOREPORK_QML_ENUM
@@ -79,6 +118,16 @@ class NetModel : public BaseModel {
     void WiFiListReset();
     Q_INVOKABLE void setWifiState(WifiState state);
 
+    QList<QObject*> print_queue_;
+    Q_PROPERTY(QList<QObject*> PrintQueue
+             READ PrintQueue
+             WRITE PrintQueueSet
+             RESET PrintQueueReset
+             NOTIFY PrintQueueChanged)
+    QList<QObject*> PrintQueue() const;
+    void PrintQueueSet(const QList<QObject*> &print_queue);
+    void PrintQueueReset();
+
   private:
     Q_OBJECT
 
@@ -94,12 +143,14 @@ class NetModel : public BaseModel {
     MODEL_PROP(WifiState, wifiState, NotConnected)
     MODEL_PROP(WifiError, wifiError, NoError)
     MODEL_PROP(bool, analyticsEnabled, false)
+    MODEL_PROP(bool, printQueueEmpty, true)
 
   public:
     NetModel();
 
   signals:
     void WiFiListChanged();
+    void PrintQueueChanged();
 };
 
 #endif  // _SRC_NET_MODEL_H

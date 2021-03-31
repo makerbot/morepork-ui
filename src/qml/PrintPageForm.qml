@@ -240,6 +240,7 @@ Item {
     enum SwipeIndex {
         BasePage,
         FileBrowser,
+        PrintQueueBrowser,
         StartPrintConfirm,
         FileInfoPage
     }
@@ -339,6 +340,17 @@ Item {
                                 setDrawerState(true)
                                 printSwipeView.swipeToItem(PrintPage.FileBrowser)
                             }
+                        }
+                    }
+
+                    StorageTypeButton {
+                        id: buttonQueuedPrints
+                        storageThumbnail.source: "qrc:/img/usb_icon.png"
+                        storageName: qsTr("QUEUED PRINTS")
+                        storageDescription: qsTr("PRINTS QUEUED ON THE CLOUD")
+                        enabled: !bot.net.printQueueEmpty
+                        onClicked: {
+                            printSwipeView.swipeToItem(PrintPage.PrintQueueBrowser)
                         }
                     }
                 }
@@ -517,6 +529,61 @@ Item {
                 FileOptionsPopupMenu {
                     id: optionsMenu
 
+                }
+            }
+        }
+
+        // PrintPage.PrintQueueBrowser
+        Item {
+            id: itemPrintQueue
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: printSwipeView
+            property int backSwipeIndex: PrintPage.BasePage
+            smooth: false
+            visible: false
+
+            ListView {
+                id: printQeueuList
+                smooth: false
+                anchors.fill: parent
+                boundsBehavior: Flickable.DragOverBounds
+                spacing: 1
+                orientation: ListView.Vertical
+                flickableDirection: Flickable.VerticalFlick
+                ScrollBar.vertical: ScrollBar {}
+                visible: true
+                model: bot.net.PrintQueue
+                delegate:
+                    FileButton {
+                    id: queuedPrintFilebutton
+                    smooth: false
+                    antialiasing: false
+                    fileThumbnail.source: "qrc:/img/file_no_preview_small.png"
+                    filenameText {
+                        anchors.topMargin: 0
+                        font {
+                            letterSpacing: 2
+                            weight: Font.Light
+                            pointSize: 12
+                        }
+                        text: {
+                            model.modelData.fileName + "\n" +
+                            model.modelData.jobId + "\n" +
+                            model.modelData.token + "\n" +
+                            model.modelData.urlPrefix
+                        }
+                    }
+                    fileDesc_rowLayout.visible: false
+                    filePrintTime.text: "-"
+                    fileMaterial.text: "-"
+                    materialError.visible: false
+                    onClicked: {
+
+                    }
+
+                    onPressAndHold: {
+
+                    }
                 }
             }
         }
