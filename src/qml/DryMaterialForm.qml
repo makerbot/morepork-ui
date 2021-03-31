@@ -12,6 +12,8 @@ Item {
     antialiasing: false
     property alias cancelDryingCyclePopup: cancelDryingCyclePopup
     property alias actionButton: actionButton
+    property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
+    property alias left_button: dryConfirmBuildPlateClearPopup.left_button
     property real timeLeftHours: bot.process.timeRemaining/3600
     property int currentStep: bot.process.stateType
     signal processDone
@@ -541,6 +543,58 @@ Item {
                 font.family: defaultFont.name
                 font.pixelSize: 18
                 font.letterSpacing: 1
+                lineHeight: 1.3
+            }
+        }
+    }
+
+    CustomPopup {
+        id: dryConfirmBuildPlateClearPopup
+        popupWidth: 720
+        popupHeight: 220
+
+        showTwoButtons: true
+        left_button_text: qsTr("BUILD PLATE CLEARED")
+        left_button.onClicked: {
+            bot.buildPlateCleared()
+            dryConfirmBuildPlateClearPopup.close()
+        }
+        right_button_text: qsTr("CANCEL")
+        right_button.onClicked: {
+            bot.cancel()
+            dryConfirmBuildPlateClearPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_clear_build_plate_popup
+            width: 590
+            height: 100
+            anchors.top: parent.top
+            anchors.topMargin: 135
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: clear_build_plate_text
+                color: "#cbcbcb"
+                text: qsTr("CLEAR BUILD PLATE")
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            Text {
+                id: clear_build_plate_desc_text
+                color: "#cbcbcb"
+                text: qsTr("Please be sure your build plate is clear.")
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: defaultFont.name
+                font.pixelSize: 18
                 lineHeight: 1.3
             }
         }
