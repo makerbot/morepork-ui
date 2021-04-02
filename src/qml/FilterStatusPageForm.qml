@@ -57,7 +57,7 @@ Item {
             Text {
                 id: instruction_text
                 color: "#cbcbcb"
-                text: bot.hepaFilterMaxHours
+                text: qsTr((bot.hepaFilterMaxHours).toFixed(2)) + qsTr(" HOURS")
                 anchors.top: main_text.bottom
                 anchors.topMargin: 10
                 anchors.left: step_image.right
@@ -103,7 +103,7 @@ Item {
             Text {
                 id: instruction_text_2
                 color: "#cbcbcb"
-                text: bot.hepaFilterPrintHours
+                text: qsTr((bot.hepaFilterPrintHours).toFixed(2)) + qsTr(" HOURS")
                 anchors.top: main_text_2.bottom
                 anchors.topMargin: 10
                 anchors.left: step_image.right
