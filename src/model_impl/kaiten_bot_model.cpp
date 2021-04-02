@@ -1314,6 +1314,7 @@ void KaitenBotModel::resetFilterHours() {
         Json::Value json_params(Json::objectValue);
         json_params["machine_func"] = Json::Value("reset_oyster_print_hours");
         json_params["params"] = Json::Value();
+        json_params["ignore_tool_errors"] = Json::Value(true);
         conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
