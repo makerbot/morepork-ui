@@ -1326,6 +1326,7 @@ void KaitenBotModel::resetFilterHours() {
         Json::Value json_params(Json::objectValue);
         json_params["machine_func"] = Json::Value("reset_oyster_print_hours");
         json_params["params"] = Json::Value();
+        json_params["ignore_tool_errors"] = Json::Value(true);
         conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
@@ -1475,8 +1476,8 @@ void KaitenBotModel::printQueueUpdate(const Json::Value &queue) {
 
 void KaitenBotModel::filterHoursUpdate(const Json::Value &result) {
     if (result.isObject()) {
-        UPDATE_INT_PROP(hepaFilterPrintHours, result["current_print_hours"]);
-        UPDATE_INT_PROP(hepaFilterMaxHours, result["max_print_hours"]);
+        UPDATE_FLOAT_PROP(hepaFilterPrintHours, result["current_print_hours"].asFloat());
+        UPDATE_FLOAT_PROP(hepaFilterMaxHours, result["max_print_hours"].asFloat());
     }
 }
 

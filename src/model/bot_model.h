@@ -346,8 +346,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, hepaFanFault, -999)
     MODEL_PROP(int, hepaErrorCode, -999)
     MODEL_PROP(bool, hepaFilterChangeRequired, false)
-    MODEL_PROP(int, hepaFilterPrintHours, -999)
-    MODEL_PROP(int, hepaFilterMaxHours, 1000)
+    MODEL_PROP(float, hepaFilterPrintHours, -999.99)
+    MODEL_PROP(float, hepaFilterMaxHours, 1000.00)
 
   protected:
     BotModel();
