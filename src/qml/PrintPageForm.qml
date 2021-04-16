@@ -28,6 +28,9 @@ Item {
     property string extruder_temp
     property string chamber_temp
     property string slicer_name
+    property string print_job_id
+    property string print_token
+    property string print_url_prefix
     property string readyByTime
     property int lastPrintTimeSec
     property alias printingDrawer: printingDrawer
@@ -47,6 +50,7 @@ Item {
     readonly property int waitToCoolTemperature: 70
     property bool isFileCopying: storage.fileIsCopying
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
+    property bool browsingPrintQueue: false
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
@@ -87,6 +91,10 @@ Item {
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
             setDrawerState(true)
+            if(printFromQueueState == PrintPage.WaitingToStartPrint) {
+                checkStartQueuedPrintTimeout.stop()
+                printQueuePopup.close()
+            }
             if(!printFromUI) {
                 getPrintDetailsTimer.start() //for prints started from repl
             }
@@ -184,6 +192,48 @@ Item {
         getPrintTimes(printTimeSec)
     }
 
+    function disconnectHandlers() {
+        print_queue.onFetchMetadataSuccessful.disconnect(getQueuedPrintFileDetails)
+        print_queue.onFetchMetadataFailed.disconnect(fetchMetadataFailed)
+        print_queue.onFetchMetadataCancelled.disconnect(fetchMetadataCancelled)
+    }
+
+    function getQueuedPrintFileDetails(meta) {
+        disconnectHandlers()
+        var printTimeSec = meta['duration_s']
+        model_extruder_used = meta['extrusion_distances_mm'][0] > 0 ? true : false
+        support_extruder_used = meta['extrusion_distances_mm'][1] > 0 ? true : false
+        print_model_material = meta['materials'][0]
+        print_support_material = meta['materials'][1]
+        print_material = !support_extruder_used ?
+                            meta['materials'][0] :
+                            meta['materials'][0] + "+" + meta['materials'][1]
+        model_mass = meta['extrusion_masses_g'][0] < 1000 ?
+                        meta['extrusion_masses_g'][0].toFixed(1) + " g" :
+                        (meta['extrusion_masses_g'][0] * 0.001).toFixed(1) + " Kg"
+        support_mass = meta['extrusion_masses_g'][1] < 1000 ?
+                        meta['extrusion_masses_g'][1].toFixed(1) + " g" :
+                        (meta['extrusion_masses_g'][1] * 0.001).toFixed(1) + " Kg"
+        modelMaterialRequired = (meta['extrusion_masses_g'][0]/1000).toFixed(3)
+        supportMaterialRequired = (meta['extrusion_masses_g'][1]/1000).toFixed(3)
+        extruder_temp = !support_extruder_used ?
+                            meta['extruder_temperatures'][0] + "C" :
+                            meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
+        chamber_temp = meta['chamber_temperature'] + "C"
+        getPrintTimes(printTimeSec)
+        printQueuePopup.close()
+        printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+    }
+
+    function fetchMetadataFailed() {
+        disconnectHandlers()
+        printFromQueueState = PrintPage.FailedToGetPrintDetails
+    }
+
+    function fetchMetadataCancelled() {
+        disconnectHandlers()
+    }
+
     function resetPrintFileDetails() {
         fileName = ""
         file_name = ""
@@ -204,6 +254,9 @@ Item {
         chamber_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
+        print_job_id = ""
+        print_token = ""
+        print_url_prefix = ""
     }
 
     // Compute print time, print end time & get them in string format for UI.
@@ -243,6 +296,34 @@ Item {
         PrintQueueBrowser,
         StartPrintConfirm,
         FileInfoPage
+    }
+
+    enum QueuedPrintState {
+        None,
+        FetchingPrintDetails,
+        FailedToGetPrintDetails,
+        WaitingToStartPrint,
+        FailedToStartPrint
+    }
+
+    property int printFromQueueState: PrintPage.None
+    onPrintFromQueueStateChanged: {
+        if(printFromQueueState != PrintPage.None) {
+            printQueuePopup.open()
+        }
+        if(printFromQueueState == PrintPage.WaitingToStartPrint) {
+            checkStartQueuedPrintTimeout.start()
+        }
+    }
+
+    Timer {
+        id: checkStartQueuedPrintTimeout
+        interval: 30000
+        onTriggered: {
+            if(printFromQueueState == PrintPage.WaitingToStartPrint) {
+                printFromQueueState = PrintPage.FailedToStartPrint
+            }
+        }
     }
 
     SwipeView {
@@ -345,10 +426,9 @@ Item {
 
                     StorageTypeButton {
                         id: buttonQueuedPrints
-                        storageThumbnail.source: "qrc:/img/usb_icon.png"
-                        storageName: qsTr("QUEUED PRINTS")
-                        storageDescription: qsTr("PRINTS QUEUED ON THE CLOUD")
-                        enabled: !bot.net.printQueueEmpty
+                        storageThumbnail.source: "qrc:/img/directory_icon.png"
+                        storageName: qsTr("CLOUD QUEUE")
+                        storageDescription: qsTr("FILES FROM MAKERBOT CLOUD")
                         onClicked: {
                             printSwipeView.swipeToItem(PrintPage.PrintQueueBrowser)
                         }
@@ -399,7 +479,7 @@ Item {
 
         // PrintPage.FileBrowser
         Item {
-            id: itemPrintStorage
+            id: itemFileBrowser
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: PrintPage.BasePage
@@ -502,6 +582,7 @@ Item {
                             storage.updatePrintFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
+                            browsingPrintQueue = false
                             getPrintFileDetails(model.modelData)
                             if(!startPrintMaterialCheck()) {
                                 startPrintErrorsPopup.open()
@@ -542,8 +623,36 @@ Item {
             smooth: false
             visible: false
 
+            Text {
+                id: noPrintsInQueueText
+                color: "#ffffff"
+                font.weight: Font.Bold
+                text: qsTr("NO PRINT JOBS IN QUEUE")
+                horizontalAlignment: Text.AlignHCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -40
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 19
+                font.letterSpacing: 2
+                visible: bot.net.printQueueEmpty
+
+                Text {
+                    color: "#ffffff"
+                    font.family: "Antennae"
+                    font.weight: Font.Light
+                    text: qsTr("Use MakerBot CloudPrint to add to your printer's queue.")
+                    anchors.top: parent.bottom
+                    anchors.topMargin: 15
+                    horizontalAlignment: Text.AlignHCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    font.pixelSize: 17
+                    font.letterSpacing: 1
+                    lineHeight: 1.4
+                }
+            }
+
             ListView {
-                id: printQeueuList
+                id: printQueueList
                 smooth: false
                 anchors.fill: parent
                 boundsBehavior: Flickable.DragOverBounds
@@ -559,26 +668,24 @@ Item {
                     smooth: false
                     antialiasing: false
                     fileThumbnail.source: "qrc:/img/file_no_preview_small.png"
-                    filenameText {
-                        anchors.topMargin: 0
-                        font {
-                            letterSpacing: 2
-                            weight: Font.Light
-                            pointSize: 12
-                        }
-                        text: {
-                            model.modelData.fileName + "\n" +
-                            model.modelData.jobId + "\n" +
-                            model.modelData.token + "\n" +
-                            model.modelData.urlPrefix
-                        }
-                    }
-                    fileDesc_rowLayout.visible: false
+                    filenameText.text: model.modelData.fileName
+                    fileDesc_rowLayout.visible: true
                     filePrintTime.text: "-"
                     fileMaterial.text: "-"
                     materialError.visible: false
                     onClicked: {
-
+                        printFromQueueState = PrintPage.FetchingPrintDetails
+                        file_name = model.modelData.fileName
+                        print_job_id = model.modelData.jobId
+                        print_token = model.modelData.token
+                        print_url_prefix = model.modelData.urlPrefix
+                        browsingPrintQueue = true
+                        print_queue.onFetchMetadataSuccessful.connect(getQueuedPrintFileDetails)
+                        print_queue.onFetchMetadataFailed.connect(fetchMetadataFailed)
+                        print_queue.onFetchMetadataCancelled.connect(fetchMetadataCancelled)
+                        print_queue.fetchPrintMetadata(model.modelData.urlPrefix,
+                                                       model.modelData.jobId,
+                                                       model.modelData.token)
                     }
 
                     onPressAndHold: {
@@ -590,10 +697,14 @@ Item {
 
         // PrintPage.StartPrintConfirm
         Item {
-            id: itemPrintFileOpt
+            id: itemStartPrint
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
-            property int backSwipeIndex: isPrintProcess ? PrintPage.BasePage : PrintPage.FileBrowser
+            property int backSwipeIndex: isPrintProcess ?
+                                             PrintPage.BasePage :
+                                             browsingPrintQueue ?
+                                                 PrintPage.PrintQueueBrowser :
+                                                 PrintPage.FileBrowser
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -601,9 +712,12 @@ Item {
             function altBack() {
                 if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
-                    resetPrintFileDetails()
-                    setDrawerState(true)
+                    if(!browsingPrintQueue) {
+                        resetPrintFileDetails()
+                        setDrawerState(true)
+                    }
                     currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
+                    browsingPrintQueue = false
                 }
                 else {
                     skipFreStepPopup.open()
@@ -864,6 +978,145 @@ Item {
                 font.pixelSize: 18
                 lineHeight: 1.1
             }
+        }
+    }
+
+    CustomPopup {
+        id: printQueuePopup
+        popupWidth: 720
+        popupHeight: 320
+        visible: false
+        showOneButton: {
+            if(printFromQueueState == PrintPage.FetchingPrintDetails ||
+               printFromQueueState == PrintPage.FailedToStartPrint ||
+               printFromQueueState == PrintPage.FailedToGetPrintDetails) {
+                true
+            } else if(printFromQueueState == PrintPage.WaitingToStartPrint) {
+                false
+            }
+        }
+        full_button_text: {
+            if(printFromQueueState == PrintPage.FetchingPrintDetails) {
+                "CANCEL"
+            } else if(printFromQueueState == PrintPage.FailedToStartPrint ||
+                      printFromQueueState == PrintPage.FailedToGetPrintDetails) {
+                "OK"
+            }
+        }
+        full_button.onClicked: {
+            if(printFromQueueState == PrintPage.FetchingPrintDetails) {
+                print_queue.cancelRequest(print_url_prefix, print_job_id)
+            }
+            printQueuePopup.close()
+        }
+        onClosed: {
+            printFromQueueState = PrintPage.None
+        }
+
+        ColumnLayout {
+            id: columnLayout_print_queue_popup
+            width: 650
+            height: children.height
+            spacing: 35
+            anchors.top: parent.top
+            anchors.topMargin: 140
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            BusySpinner {
+                id: waitingSpinner
+                spinnerActive: true
+                spinnerSize: 64
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            Text {
+                id: alert_text_print_queue_popup
+                color: "#cbcbcb"
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            states: [
+                State {
+                    name: "fetching_print_details"
+                    when: printFromQueueState == PrintPage.FetchingPrintDetails
+
+                    PropertyChanges {
+                        target: columnLayout_print_queue_popup
+                        anchors.topMargin: 140
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_print_queue_popup
+                        text: qsTr("LOADING PRINT DETAILS...")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: true
+                    }
+                },
+                State {
+                    name: "failed_to_get_print_details"
+                    when: printFromQueueState == PrintPage.FailedToGetPrintDetails
+
+                    PropertyChanges {
+                        target: columnLayout_print_queue_popup
+                        anchors.topMargin: 180
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Failed to get print details.")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: false
+                    }
+                },
+                State {
+                    name: "waiting_to_start_print"
+                    when: printFromQueueState == PrintPage.WaitingToStartPrint
+
+                    PropertyChanges {
+                        target: columnLayout_print_queue_popup
+                        anchors.topMargin: 160
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Please wait. Your print will start<br>momentarily...")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: true
+                    }
+                },
+                State {
+                    name: "failed_to_start_print"
+                    when: printFromQueueState == PrintPage.FailedToStartPrint
+
+                    PropertyChanges {
+                        target: columnLayout_print_queue_popup
+                        anchors.topMargin: 180
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Failed to start the print.")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: false
+                    }
+                }
+            ]
         }
     }
 }

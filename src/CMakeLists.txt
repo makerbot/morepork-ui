@@ -55,7 +55,8 @@ set(SOURCES
     storage/storage.cpp
     settings_interface/settings_interface.cpp
     storage/disk_manager.cpp
-    dfs/dfs_settings.cpp)
+    dfs/dfs_settings.cpp
+    print_queue/print_queue.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
@@ -84,7 +85,8 @@ set(MOREPORK_UI_HEADERS
     storage/progress_copy.h
     settings_interface/settings_interface.h
     storage/disk_manager.h
-    dfs/dfs_settings.h)
+    dfs/dfs_settings.h
+    print_queue/print_queue.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})

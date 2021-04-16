@@ -40,7 +40,15 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 100
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image://thumbnail/" + fileName
+                source: {
+                    if(browsingPrintQueue) {
+                        "image://print_queue/" + print_url_prefix + "+" +
+                                                 print_job_id + "+" +
+                                                 print_token
+                    } else {
+                        "image://thumbnail/" + fileName
+                    }
+                }
             }
 
             Item {
@@ -173,11 +181,18 @@ Item {
                     buttonHeight: 50
                     label: inFreStep ? qsTr("START TEST PRINT") : qsTr("START PRINT")
                     button_mouseArea.onClicked: {
-                        if(startPrintCheck()){
-                            startPrint()
-                        }
-                        else {
-                            startPrintErrorsPopup.open()
+                        if(!browsingPrintQueue) {
+                            if(startPrintCheck()){
+                                startPrint()
+                            }
+                            else {
+                                startPrintErrorsPopup.open()
+                            }
+                        } else {
+                            print_queue.startQueuedPrint(print_url_prefix,
+                                                         print_job_id,
+                                                         print_token)
+                            printFromQueueState = PrintPage.WaitingToStartPrint
                         }
                     }
                 }
@@ -189,6 +204,7 @@ Item {
                     label: "···"
                     label_size: 30
                     visible: !inFreStep
+                    disable_button: browsingPrintQueue
                     anchors.top: materialBay2.bottom
                     anchors.topMargin: 28
                     anchors.left: startPrintButton.right
@@ -224,7 +240,15 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: 100
                 anchors.verticalCenter: parent.verticalCenter
-                source: "image://thumbnail/" + fileName
+                source: {
+                    if(browsingPrintQueue) {
+                        "image://print_queue/" + print_url_prefix + "+" +
+                                                 print_job_id + "+" +
+                                                 print_token
+                    } else {
+                        "image://thumbnail/" + fileName
+                    }
+                }
             }
 
             ColumnLayout {
@@ -500,7 +524,15 @@ Item {
                             anchors.fill: parent
                             sourceSize.width: 960
                             sourceSize.height: 1460
-                            source: "image://thumbnail/" + fileName
+                            source: {
+                                if(browsingPrintQueue) {
+                                    "image://print_queue/" + print_url_prefix + "+" +
+                                                             print_job_id + "+" +
+                                                             print_token
+                                } else {
+                                    "image://thumbnail/" + fileName
+                                }
+                            }
                             MouseArea {
                                 anchors.fill: parent
                                 onDoubleClicked: {
