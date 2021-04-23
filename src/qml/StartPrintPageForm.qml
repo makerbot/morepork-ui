@@ -32,23 +32,15 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            Image {
+            ImageWithFeedback {
                 id: model_image1
-                smooth: false
-                sourceSize.width: 212
-                sourceSize.height: 300
+                width: 212
+                height: 300
                 anchors.left: parent.left
                 anchors.leftMargin: 100
+                asynchronous: true
                 anchors.verticalCenter: parent.verticalCenter
-                source: {
-                    if(browsingPrintQueue) {
-                        "image://print_queue/" + print_url_prefix + "+" +
-                                                 print_job_id + "+" +
-                                                 print_token
-                    } else {
-                        "image://thumbnail/" + fileName
-                    }
-                }
+                loadingSpinnerSize: 48
             }
 
             Item {
@@ -181,14 +173,14 @@ Item {
                     buttonHeight: 50
                     label: inFreStep ? qsTr("START TEST PRINT") : qsTr("START PRINT")
                     button_mouseArea.onClicked: {
-                        if(!browsingPrintQueue) {
+                        if(startPrintSource == PrintPage.FromLocal) {
                             if(startPrintCheck()){
                                 startPrint()
                             }
                             else {
                                 startPrintErrorsPopup.open()
                             }
-                        } else {
+                        } else if(startPrintSource == PrintPage.FromPrintQueue) {
                             print_queue.startQueuedPrint(print_url_prefix,
                                                          print_job_id,
                                                          print_token)
@@ -204,7 +196,7 @@ Item {
                     label: "···"
                     label_size: 30
                     visible: !inFreStep
-                    disable_button: browsingPrintQueue
+                    disable_button: startPrintSource == PrintPage.FromPrintQueue
                     anchors.top: materialBay2.bottom
                     anchors.topMargin: 28
                     anchors.left: startPrintButton.right
@@ -232,23 +224,15 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            Image {
+            ImageWithFeedback {
                 id: model_image2
-                smooth: false
-                sourceSize.width: 212
-                sourceSize.height: 300
+                width: 212
+                height: 300
+                asynchronous: true
                 anchors.left: parent.left
                 anchors.leftMargin: 100
                 anchors.verticalCenter: parent.verticalCenter
-                source: {
-                    if(browsingPrintQueue) {
-                        "image://print_queue/" + print_url_prefix + "+" +
-                                                 print_job_id + "+" +
-                                                 print_token
-                    } else {
-                        "image://thumbnail/" + fileName
-                    }
-                }
+                loadingSpinnerSize: 48
             }
 
             ColumnLayout {
@@ -520,19 +504,16 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
                         color: "transparent"
-                        Image {
-                            anchors.fill: parent
+
+                        ImageWithFeedback {
+                            id: largeThumbnail
+                            mipmap: true
                             sourceSize.width: 960
                             sourceSize.height: 1460
-                            source: {
-                                if(browsingPrintQueue) {
-                                    "image://print_queue/" + print_url_prefix + "+" +
-                                                             print_job_id + "+" +
-                                                             print_token
-                                } else {
-                                    "image://thumbnail/" + fileName
-                                }
-                            }
+                            anchors.fill: parent
+                            asynchronous: true
+                            loadingSpinnerSize: 48
+
                             MouseArea {
                                 anchors.fill: parent
                                 onDoubleClicked: {

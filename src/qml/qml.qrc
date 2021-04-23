@@ -220,5 +220,7 @@
         <file>FilterStatusPageForm.qml</file>
         <file>ReplaceFilterPage.qml</file>
         <file>ReplaceFilterPageForm.qml</file>
+        <file>ImageWithFeedback.qml</file>
+        <file>ImageWithFeedbackForm.qml</file>
     </qresource>
 </RCC>

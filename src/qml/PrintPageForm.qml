@@ -50,7 +50,6 @@ Item {
     readonly property int waitToCoolTemperature: 70
     property bool isFileCopying: storage.fileIsCopying
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
-    property bool browsingPrintQueue: false
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
@@ -102,6 +101,7 @@ Item {
             printStatusView.feedbackSubmitted = false // Reset when print starts
             printStatusView.failureFeedbackSelected = false // Reset when print starts
             showPrintTip()
+            startPrintSource = PrintPage.None
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
@@ -138,10 +138,7 @@ Item {
 
     onIsPrintFinishedChanged: {
         if(isPrintFinished) {
-            var timeElapsed = new Date("", "", "", "", "", bot.process.elapsedTime)
-            print_time = timeElapsed.getDate() != 31 ? timeElapsed.getDate() + "D " + timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
-                                                       timeElapsed.getHours() != 0 ? timeElapsed.getHours() + "HR " + timeElapsed.getMinutes() + "M" :
-                                                                                     timeElapsed.getMinutes() + "M"
+            print_time = getTimeInDaysHoursMins(bot.process.elapsedTime)
         }
     }
 
@@ -163,6 +160,13 @@ Item {
             waitToCoolChamber.waitToCoolChamberScreenVisible = true
             waitToCoolChamber.startTimer()
         }
+    }
+
+    function getTimeInDaysHoursMins(seconds) {
+        var time = new Date("", "", "", "", "", seconds)
+        return (time.getDate() != 31 ? time.getDate() + "D " + time.getHours() + "HR " + time.getMinutes() + "M" :
+                                       time.getHours() != 0 ? time.getHours() + "HR " + time.getMinutes() + "M" :
+                                                              time.getMinutes() + "M")
     }
 
     function getPrintFileDetails(file) {
@@ -198,8 +202,10 @@ Item {
         print_queue.onFetchMetadataCancelled.disconnect(fetchMetadataCancelled)
     }
 
-    function getQueuedPrintFileDetails(meta) {
-        disconnectHandlers()
+    function getQueuedPrintFileDetails(meta, shouldDisconnectHandlers = true) {
+        if(shouldDisconnectHandlers) {
+            disconnectHandlers()
+        }
         var printTimeSec = meta['duration_s']
         model_extruder_used = meta['extrusion_distances_mm'][0] > 0 ? true : false
         support_extruder_used = meta['extrusion_distances_mm'][1] > 0 ? true : false
@@ -222,6 +228,7 @@ Item {
         chamber_temp = meta['chamber_temperature'] + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
+        startPrintSource = PrintPage.FromPrintQueue
         printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
 
@@ -264,10 +271,7 @@ Item {
     // at the end of a print to get new end time.
     function getPrintTimes(printTimeSec) {
         lastPrintTimeSec = printTimeSec
-        var timeLeft = new Date("", "", "", "", "", printTimeSec)
-        print_time = timeLeft.getDate() != 31 ? timeLeft.getDate() + "D " + timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
-                                                timeLeft.getHours() != 0 ? timeLeft.getHours() + "HR " + timeLeft.getMinutes() + "M" :
-                                                                           timeLeft.getMinutes() + "M"
+        print_time = getTimeInDaysHoursMins(printTimeSec)
         var currentTime = new Date()
         var endMS = currentTime.getTime() + printTimeSec*1000
         var endTime = new Date()
@@ -306,6 +310,13 @@ Item {
         FailedToStartPrint
     }
 
+    property int startPrintSource: PrintPage.None
+    enum StartPrintSource {
+        None,
+        FromLocal,
+        FromPrintQueue
+    }
+
     property int printFromQueueState: PrintPage.None
     onPrintFromQueueStateChanged: {
         if(printFromQueueState != PrintPage.None) {
@@ -335,6 +346,9 @@ Item {
 
         function swipeToItem(itemToDisplayDefaultIndex) {
             var prevIndex = printSwipeView.currentIndex
+            if (prevIndex == itemToDisplayDefaultIndex) {
+                return;
+            }
             printSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
             setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
             printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
@@ -582,12 +596,12 @@ Item {
                             storage.updatePrintFileList(model.modelData.filePath + "/" + model.modelData.fileName)
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
-                            browsingPrintQueue = false
                             getPrintFileDetails(model.modelData)
                             if(!startPrintMaterialCheck()) {
                                 startPrintErrorsPopup.open()
                             }
                             else {
+                                startPrintSource = PrintPage.FromLocal
                                 setDrawerState(false)
                                 startPrintInstructionsItem.acknowledged = false
                                 printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
@@ -662,34 +676,103 @@ Item {
                 ScrollBar.vertical: ScrollBar {}
                 visible: true
                 model: bot.net.PrintQueue
+                onModelChanged: {
+                    // Reset the meta cache when the print queue list changes.
+                    for(var job in cachedMeta) {
+                        delete cachedMeta[job]
+                    }
+                }
+
+                property var cachedMeta: ({})
                 delegate:
                     FileButton {
                     id: queuedPrintFilebutton
                     smooth: false
                     antialiasing: false
-                    fileThumbnail.source: "qrc:/img/file_no_preview_small.png"
+                    fileThumbnail.source: {
+                        "image://async/" + model.modelData.urlPrefix + "+" +
+                                                 model.modelData.jobId + "+" +
+                                                 model.modelData.token
+                    }
+                    fileThumbnail.asynchronous: true
                     filenameText.text: model.modelData.fileName
                     fileDesc_rowLayout.visible: true
                     filePrintTime.text: "-"
                     fileMaterial.text: "-"
+                    onHasMetaChanged: {
+                        if(hasMeta) {
+                            filePrintTime.text = getTimeInDaysHoursMins(metaData['duration_s'])
+                            fileMaterial.text = metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1] ?
+                                                metaData['materials'][0] + "+" + metaData['materials'][1] :
+                                                metaData['materials'][0]
+                        }
+                    }
+
                     materialError.visible: false
                     onClicked: {
-                        printFromQueueState = PrintPage.FetchingPrintDetails
                         file_name = model.modelData.fileName
                         print_job_id = model.modelData.jobId
                         print_token = model.modelData.token
                         print_url_prefix = model.modelData.urlPrefix
-                        browsingPrintQueue = true
-                        print_queue.onFetchMetadataSuccessful.connect(getQueuedPrintFileDetails)
-                        print_queue.onFetchMetadataFailed.connect(fetchMetadataFailed)
-                        print_queue.onFetchMetadataCancelled.connect(fetchMetadataCancelled)
-                        print_queue.fetchPrintMetadata(model.modelData.urlPrefix,
-                                                       model.modelData.jobId,
-                                                       model.modelData.token)
+                        if(!hasMeta) {
+                            // Blocking fetch for one file. This is probably no longer
+                            // required and can use the async call as well.
+                            printFromQueueState = PrintPage.FetchingPrintDetails
+                            print_queue.onFetchMetadataSuccessful.connect(getQueuedPrintFileDetails)
+                            print_queue.onFetchMetadataFailed.connect(fetchMetadataFailed)
+                            print_queue.onFetchMetadataCancelled.connect(fetchMetadataCancelled)
+                            print_queue.fetchPrintMetadata(model.modelData.urlPrefix,
+                                                           model.modelData.jobId,
+                                                           model.modelData.token)
+                        } else {
+                            // Meta already downloaded by async fetch, so go directly to
+                            // the start print page. Images in the start print page are
+                            // separately fetched asynchronously.
+                            getQueuedPrintFileDetails(metaData, false)
+                        }
                     }
 
-                    onPressAndHold: {
+                    Component.onCompleted: {
+                        // Since components are dynamically created and destroyed based
+                        // on whether they are currently visible in the viewport, we dont
+                        // want to be fetching the metadata repeatedly, just because
+                        // we're scrolling up and down through the list, so we check whether
+                        // we have cached this print job's meta to quickly load from.
+                        if(model.modelData.jobId in printQueueList.cachedMeta) {
+                            metaData = printQueueList.cachedMeta[model.modelData.jobId]
+                            hasMeta = true
+                            metaCached = true
+                        }
+                        // Asynchronously fetch the metadata for this print job, if we
+                        // can't find it in the cache. Since listview does lazy loading
+                        // of elements the async requests are only made when neccessary.
+                        // i.e when the elements come into the viewport.
+                        if(!hasMeta) {
+                            // This creates a new thread and returns immediately,
+                            // The callback is executed once the thread finishes
+                            // running.
+                            print_queue.asyncFetchMeta(model.modelData.urlPrefix,
+                                                  model.modelData.jobId,
+                                                  model.modelData.token,
+                                                  function(response) {
+                                                      if(response["success"]) {
+                                                          metaData = response["meta"]
+                                                          hasMeta = true
+                                                      }
+                                                  })
+                        }
+                    }
 
+                    Component.onDestruction: {
+                        // Whenever a print job's button goes out of view the component
+                        // might be destroyed. So we check whether its metadata has
+                        // already been downloaded and cache it, if it hasn't already
+                        // been.
+                        // The metadata cache is cleared anytime the print queue list
+                        // chnages. (see onModelChanged())
+                        if(hasMeta && !metaCached) {
+                            printQueueList.cachedMeta[model.modelData.jobId] = metaData
+                        }
                     }
                 }
             }
@@ -702,7 +785,7 @@ Item {
             property var backSwiper: printSwipeView
             property int backSwipeIndex: isPrintProcess ?
                                              PrintPage.BasePage :
-                                             browsingPrintQueue ?
+                                             startPrintSource == PrintPage.FromPrintQueue ?
                                                  PrintPage.PrintQueueBrowser :
                                                  PrintPage.FileBrowser
             property bool hasAltBack: true
@@ -712,12 +795,12 @@ Item {
             function altBack() {
                 if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
-                    if(!browsingPrintQueue) {
+                    if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()
                         setDrawerState(true)
                     }
                     currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
-                    browsingPrintQueue = false
+                    startPrintSource = PrintPage.None
                 }
                 else {
                     skipFreStepPopup.open()
@@ -1065,7 +1148,7 @@ Item {
 
                     PropertyChanges {
                         target: columnLayout_print_queue_popup
-                        anchors.topMargin: 180
+                        anchors.topMargin: 185
                     }
 
                     PropertyChanges {
@@ -1089,7 +1172,7 @@ Item {
 
                     PropertyChanges {
                         target: alert_text_print_queue_popup
-                        text: qsTr("Please wait. Your print will start<br>momentarily...")
+                        text: qsTr("Your print will start momentarily...")
                     }
 
                     PropertyChanges {

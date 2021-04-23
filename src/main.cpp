@@ -41,6 +41,7 @@ void msgHandler(QtMsgType type,
 #include "storage/disk_manager.h"
 #include "dfs/dfs_settings.h"
 #include "print_queue/print_queue.h"
+#include "print_queue/asyncimageprovider.h"
 
 int main(int argc, char ** argv) {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
@@ -94,8 +95,7 @@ int main(int argc, char ** argv) {
 
     qmlRegisterType<PrintFileInfo>("PrintFileObject", 1, 0, "PrintFileInfo");
     engine.addImageProvider(QLatin1String("thumbnail"), new ThumbnailPixmapProvider);
-    engine.addImageProvider(QLatin1String("print_queue"),
-                            new PrintQueueImageLoader(&print_queue));
+    engine.addImageProvider(QLatin1String("async"), new AsyncImageProvider);
 
     engine.load(MOREPORK_UI_QML_MAIN);
 

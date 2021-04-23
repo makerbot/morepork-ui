@@ -1,0 +1,30 @@
+import QtQuick 2.12
+
+Image {
+    id: image_with_feedback
+    property alias loadingSpinnerSize: spinner.spinnerSize
+
+    asynchronous: true
+    smooth: false
+    sourceSize.width: width
+    sourceSize.height: height
+    source: {
+        if(startPrintSource == PrintPage.FromPrintQueue) {
+            "image://async/" + print_url_prefix + "+" +
+                                     print_job_id + "+" +
+                                     print_token
+        } else if(startPrintSource == PrintPage.FromLocal) {
+            "image://thumbnail/" + fileName
+        } else {
+            ""
+        }
+    }
+
+    BusySpinner {
+        id: spinner
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        spinnerSize: 64
+        spinnerActive: image_with_feedback.status == Image.Loading
+    }
+}

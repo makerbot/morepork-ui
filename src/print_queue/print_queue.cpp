@@ -1,8 +1,11 @@
 #include "print_queue.h"
+#include <QtConcurrent/QtConcurrent>
+#include <QFuture>
 
 PrintQueue::PrintQueue(QNetworkAccessManager *nam)
     : nam(nam),
       metaReply_(nullptr) {
+    QThreadPool::globalInstance()->setMaxThreadCount(16);
 }
 
 void PrintQueue::fetchPrintMetadata(QString urlPrefix, QString jobId, QString token) {
@@ -17,7 +20,6 @@ void PrintQueue::fetchPrintMetadata(QString urlPrefix, QString jobId, QString to
 
     QNetworkRequest request;
     request.setUrl(QUrl(urlPrefix + jobId + "/info/meta.json"));
-
     request.setRawHeader(QByteArray("Authorization"),
                          QByteArray(QString("Bearer " + token).toUtf8()));
 
@@ -82,44 +84,55 @@ void PrintQueue::startQueuedPrint(QString urlPrefix, QString jobId, QString toke
     nam->post(request, QString("").toUtf8());
 }
 
-QPixmap PrintQueueImageLoader::requestPixmap(const QString &id, QSize *size,
-                      const QSize &requestedSize) {
-    QStringList list = id.split("+");
-    QString urlPrefix = list[0];
-    QString jobId = list[1];
-    QString token = list[2];
+void PrintQueue::asyncFetchMeta(QString urlPrefix, QString jobId, QString token,
+                            const QJSValue &callback) {
+    auto *watcher = new QFutureWatcher<QVariant>(this);
+        QObject::connect(watcher, &QFutureWatcher<QVariant>::finished,
+                         this, [this, watcher, callback]() {
+            QVariant res = watcher->result();
+            QJSValue cb(callback); // non-const copy
+            QJSEngine *engine = qjsEngine(this);
+            cb.call(QJSValueList {engine->toScriptValue(res)});
+            watcher->deleteLater();
+        });
+        watcher->setFuture(QtConcurrent::run(this, &PrintQueue::fetchMeta,
+                                             urlPrefix, jobId, token));
+}
 
-    QString thumbnail_name;
-    switch(requestedSize.width()) {
-    case ImageWidth::Small:
-        thumbnail_name = "thumbnail_140x106.png";
-        break;
-    case ImageWidth::Medium:
-        thumbnail_name = "thumbnail_212x300.png";
-        break;
-    case ImageWidth::Large:
-        thumbnail_name = "thumbnail_960x1460.png";
-        break;
-    default:
-        thumbnail_name = "thumbnail_140x106.png";
-        break;
-    }
+QVariant PrintQueue::fetchMeta(QString urlPrefix, QString jobId, QString token) {
     // To temporarily address cloudprint bug -
     // https://makerbot.atlassian.net/browse/AB-1885
     urlPrefix = "https://cloudprint.mbot.me/api/queue/jobs/";
 
-    QNetworkRequest request;
-    request.setUrl(QUrl(urlPrefix + jobId + "/info/" + thumbnail_name));
+    QNetworkRequest request(QUrl(urlPrefix + jobId + "/info/meta.json"));
     request.setRawHeader(QByteArray("Authorization"),
                          QByteArray(QString("Bearer " + token).toUtf8()));
 
-    imageReply_ = printQueue_->nam->get(request);
+    QNetworkAccessManager n;
+    QNetworkReply *reply = n.get(request);
+
+    connect(&n, &QNetworkAccessManager::sslErrors,
+            reply, [=]{reply->ignoreSslErrors();});
 
     QEventLoop loop;
-    QObject::connect(imageReply_, SIGNAL(finished()), &loop, SLOT(quit()));
+    QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
-    QImage image = QImage::fromData(imageReply_->readAll());
-    imageReply_->deleteLater();
-    return QPixmap::fromImage(image);
+    QVariantMap response;
+    response["success"] = false;
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Error No: " << reply->error() << "for url: " << reply->url().toString();
+        qWarning() << "Request failed, " << reply->errorString();
+        reply->deleteLater();
+        return response;
+    }
+
+    QString data = reply->readAll();
+    QJsonDocument meta_json = QJsonDocument::fromJson(data.toUtf8());
+    if (!meta_json.isNull() && meta_json.isObject()) {
+        response["success"] = true;
+        response["meta"] = meta_json.toVariant();
+    }
+    reply->deleteLater();
+    return response;
 }

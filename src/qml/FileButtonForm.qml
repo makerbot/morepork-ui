@@ -18,6 +18,9 @@ Button {
     property alias materialError: materialErrorAlertIcon
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
+    property var metaData
+    property bool hasMeta: false
+    property  bool metaCached: false
 
     background:
         Rectangle {
@@ -36,17 +39,16 @@ Button {
         smooth: false
     }
 
-    Image {
+    ImageWithFeedback {
         id: fileThumbnail
-        sourceSize.width: 140
-        sourceSize.height: 106
-        asynchronous: true
-        smooth: false
+        width: 140
+        height: 106
         antialiasing: false
         fillMode: Image.PreserveAspectFit
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 25
+        loadingSpinnerSize: 32
     }
 
     Item {
