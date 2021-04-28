@@ -56,7 +56,8 @@ set(SOURCES
     settings_interface/settings_interface.cpp
     storage/disk_manager.cpp
     dfs/dfs_settings.cpp
-    print_queue/print_queue.cpp)
+    print_queue/print_queue.cpp
+    print_queue/asyncimageprovider.cpp)
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
@@ -86,7 +87,8 @@ set(MOREPORK_UI_HEADERS
     settings_interface/settings_interface.h
     storage/disk_manager.h
     dfs/dfs_settings.h
-    print_queue/print_queue.h)
+    print_queue/print_queue.h
+    print_queue/asyncimageprovider.h)
 
 if(NOT ${QT_CREATOR_BUILD})
     list(APPEND SOURCES ${MODEL_IMPL_SOURCES})
