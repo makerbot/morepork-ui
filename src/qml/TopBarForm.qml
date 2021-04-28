@@ -190,6 +190,7 @@ Item {
                         switch(printPage.printSwipeView.currentIndex) {
                         case PrintPage.BasePage:
                         case PrintPage.FileBrowser:
+                        case PrintPage.PrintQueueBrowser:
                             qsTr("CHOOSE A FILE")
                             break;
                         case PrintPage.StartPrintConfirm:
