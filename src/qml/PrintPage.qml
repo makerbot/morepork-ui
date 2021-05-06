@@ -59,12 +59,11 @@ PrintPageForm {
                     modelMaterialOK = true
                 }
             }
-            // Since slices aren't
-            if((!modelMaterialOK && // Skip model checking if approved earlier
-                !materialPage.bay1.usingExperimentalExtruder && // Skip model checking if exp. extruder used
-                !settings.getSkipFilamentNags() && // Skip model checking if internal developers are trying something
-                 materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) ||
-                (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material)) {
+            if(!settings.getSkipFilamentNags() && // Skip all mismatch checking for internal use
+               ((!modelMaterialOK && // Skip model checking if approved earlier
+                 !materialPage.bay1.usingExperimentalExtruder && // Skip model checking if exp. extruder used
+                  materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) ||
+                 (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material))) {
                 startPrintMaterialMismatch = true
             }
             // Disable material quantity check before print for now
