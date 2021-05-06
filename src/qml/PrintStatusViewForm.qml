@@ -196,6 +196,8 @@ Item {
                     font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 18
+                    elide: Text.ElideMiddle
+                    Layout.preferredWidth: parent.width - 40
                 }
 
                 Text {
@@ -245,6 +247,8 @@ Item {
                     font.family: defaultFont.name
                     font.weight: Font.Light
                     font.pixelSize: 18
+                    elide: Text.ElideMiddle
+                    Layout.preferredWidth: parent.width - 40
                 }
 
                 Text {
@@ -386,6 +390,8 @@ Item {
                     font.family: defaultFont.name
                     font.weight: Font.Bold
                     font.pixelSize: 20
+                    Layout.preferredWidth: parent.width
+                    elide: Text.ElideMiddle
                 }
 
                 Item {
@@ -812,6 +818,7 @@ Item {
                     id: fileName_text3
                     color: "#ffffff"
                     text: fileName_
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -819,6 +826,8 @@ Item {
                     font.pixelSize: 15
                     font.weight: Font.Bold
                     font.letterSpacing: 3
+                    Layout.preferredWidth: page3.width - 80
+                    elide: Text.ElideMiddle
                 }
             }
         }
@@ -876,6 +885,8 @@ Item {
                             font.family: defaultFont.name
                             font.weight: Font.Bold
                             font.letterSpacing: 3
+                            width: page4.width - 200
+                            elide: Text.ElideMiddle
                         }
 
                         Text {
