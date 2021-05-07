@@ -33,7 +33,6 @@ ListView {
         antialiasing: false
         onClicked: {
             bot.startDrying(parseInt(model.modelData["temperature"], 10), model.modelData["time"])
-            doChooseMaterial = false
         }
     }
 }

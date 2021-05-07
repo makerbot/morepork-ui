@@ -28,6 +28,7 @@ Item {
                     break;
                 case ProcessStateType.Loading:
                 case ProcessStateType.DryingSpool:
+                    doChooseMaterial = false
                     state = "drying_spool"
                     break;
                 case ProcessStateType.Done:
