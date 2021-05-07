@@ -18,6 +18,7 @@ Item {
     property int currentStep: bot.process.stateType
     signal processDone
     property bool hasFailed: bot.process.errorCode !== 0
+    property bool doChooseMaterial: false
 
     onCurrentStepChanged: {
         if(bot.process.type == ProcessType.DryingCycleProcess) {
@@ -27,6 +28,7 @@ Item {
                     break;
                 case ProcessStateType.Loading:
                 case ProcessStateType.DryingSpool:
+                    doChooseMaterial = false
                     state = "drying_spool"
                     break;
                 case ProcessStateType.Done:
@@ -140,6 +142,17 @@ Item {
             anchors.top: subtitle.bottom
             anchors.topMargin: 25
             opacity: 1.0
+            button_mouseArea.onClicked: {
+                if (bot.process.type != ProcessType.DryingCycleProcess) {
+                    dryConfirmBuildPlateClearPopup.open()
+                } else {
+                    if(currentStep == ProcessStateType.WaitingForSpool) {
+                        doChooseMaterial = true
+                    } else if(currentStep == ProcessStateType.Done) {
+                        processDone()
+                    }
+                }
+            }
         }
 
         ColumnLayout {
@@ -257,6 +270,7 @@ Item {
         },
         State {
             name: "choose_material"
+            when: doChooseMaterial
 
             PropertyChanges {
                 target: image
