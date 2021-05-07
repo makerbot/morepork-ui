@@ -222,5 +222,7 @@
         <file>ReplaceFilterPageForm.qml</file>
         <file>ImageWithFeedback.qml</file>
         <file>ImageWithFeedbackForm.qml</file>
+        <file>ThumbnailImage.qml</file>
+        <file>ThumbnailImageForm.qml</file>
     </qresource>
 </RCC>
