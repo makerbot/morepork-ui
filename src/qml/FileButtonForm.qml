@@ -39,7 +39,7 @@ Button {
         smooth: false
     }
 
-    ImageWithFeedback {
+    ThumbnailImage {
         id: fileThumbnail
         width: 140
         height: 106
@@ -48,7 +48,6 @@ Button {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: 25
-        loadingSpinnerSize: 32
     }
 
     Item {
