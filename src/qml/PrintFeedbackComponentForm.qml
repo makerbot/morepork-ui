@@ -104,7 +104,6 @@ Item {
             printFeedbackAcknowledgementPopup.open()
             printFeedbackAcknowledgementPopup.feedbackGood = false
             bot.submitPrintFeedback(false, defects)
-            feedbackSubmitted = true
         }
     }
 }

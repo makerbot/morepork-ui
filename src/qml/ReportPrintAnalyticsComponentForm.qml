@@ -34,7 +34,6 @@ Item {
                 printFeedbackAcknowledgementPopup.open()
                 printFeedbackAcknowledgementPopup.feedbackGood = true
                 bot.submitPrintFeedback(true, print_defects)
-                feedbackSubmitted = true
             }
         }
 
