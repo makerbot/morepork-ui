@@ -40,7 +40,7 @@ Item {
 
             Text {
                 id: main_text
-                color: "#cbcbcb"
+                color: "#ffffff"
                 text: qsTr("REPLACE FILTER")
                 anchors.top: parent.top
                 anchors.topMargin: 80
@@ -49,7 +49,7 @@ Item {
                 font.letterSpacing: 2
                 font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: 21
+                font.pixelSize: 20
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
@@ -57,15 +57,15 @@ Item {
 
             Text {
                 id: instruction_text
-                color: "#cbcbcb"
+                color: "#ffffff"
                 text: qsTr("This procedure will allow you to\nreplace your filter.")
                 anchors.top: main_text.bottom
                 anchors.topMargin: 20
                 anchors.left: step_image.right
                 anchors.leftMargin: 30
-                font.letterSpacing: 2
                 font.family: defaultFont.name
-                font.pixelSize: 12
+                font.pixelSize: 18
+                font.weight: Font.Light
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
@@ -74,7 +74,7 @@ Item {
             RoundedButton {
                 id: replace_filter_next_button
                 buttonWidth: 125
-                buttonHeight: 40
+                buttonHeight: 45
                 anchors.top: instruction_text.bottom
                 anchors.topMargin: 20
                 anchors.left: step_image.right
