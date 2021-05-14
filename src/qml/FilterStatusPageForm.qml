@@ -1,54 +1,49 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import ProcessTypeEnum 1.0
-import ExtruderTypeEnum 1.0
-import MachineTypeEnum 1.0
 
 Item {
     id: filterStatusPage
     smooth: false
+    visible: true
+    width: 800
+    height: 420
 
-    property alias itemFilterStatus: itemFilterStatus
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+    }
 
-    Item {
-        id: itemFilterStatus
-        smooth: false
+    Image {
+        id: step_image
+        width: sourceSize.width
+        height: sourceSize.height
+        anchors.left: parent.left
+        anchors.leftMargin: 60
+        anchors.verticalCenter: parent.verticalCenter
+        source: "qrc:/img/filter.png"
         visible: true
-        width: 400
-        height: 420
+        cache: false
+        smooth: false
+    }
 
-        Rectangle {
-            id: filterStatus
-            anchors.fill: parent
-            color: "#000000"
-            opacity: 1
+    ColumnLayout {
+        spacing: 30
+        anchors.left: step_image.right
+        anchors.leftMargin: 50
+        anchors.verticalCenter: step_image.verticalCenter
+        anchors.verticalCenterOffset: -25
 
-            Image {
-                id: step_image
-                width: sourceSize.width
-                height: sourceSize.height
-                anchors.left: parent.left
-                anchors.leftMargin: 60
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/img/filter.png"
-                visible: true
-                cache: false
-                smooth: false
-            }
-
+        ColumnLayout {
+            spacing: 8
             Text {
                 id: main_text
-                color: "#cbcbcb"
-                text: qsTr("FILTER LIFETIME")
-                anchors.top: parent.top
-                anchors.topMargin: 50
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
+                color: "#ffffff"
+                text: qsTr("ESTIMATED FILTER LIFETIME")
                 font.letterSpacing: 2
                 font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: 21
+                font.pixelSize: 18
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
@@ -56,32 +51,28 @@ Item {
 
             Text {
                 id: instruction_text
-                color: "#cbcbcb"
+                color: "#ffffff"
                 text: qsTr((bot.hepaFilterMaxHours).toFixed(2)) + qsTr(" HOURS")
-                anchors.top: main_text.bottom
-                anchors.topMargin: 10
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
                 font.letterSpacing: 2
                 font.family: defaultFont.name
-                font.pixelSize: 12
+                font.pixelSize: 16
+                font.weight: Font.Light
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
             }
+        }
 
+        ColumnLayout {
+            spacing: 8
             Text {
                 id: main_text_2
-                color: "#cbcbcb"
+                color: "#ffffff"
                 text: qsTr("FILTER STATUS")
-                anchors.top: instruction_text.top
-                anchors.topMargin: 30
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
                 font.letterSpacing: 2
                 font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: 21
+                font.pixelSize: 18
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
@@ -93,6 +84,7 @@ Item {
                     anchors.left: parent.right
                     anchors.leftMargin: 20
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: -3
                     source: "qrc:/img/filter_change_required.png"
                     visible: bot.hepaFilterChangeRequired
                     cache: false
@@ -102,51 +94,57 @@ Item {
 
             Text {
                 id: instruction_text_2
-                color: "#cbcbcb"
+                color: "#ffffff"
                 text: qsTr((bot.hepaFilterPrintHours).toFixed(2)) + qsTr(" HOURS")
-                anchors.top: main_text_2.bottom
-                anchors.topMargin: 10
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
                 font.letterSpacing: 2
                 font.family: defaultFont.name
-                font.pixelSize: 12
+                font.pixelSize: 16
+                font.weight: Font.Light
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
             }
+        }
 
+        ColumnLayout {
+            spacing: 20
             RoundedButton {
                 id: replace_filter_button
                 buttonWidth: 125
-                buttonHeight: 40
-                anchors.top: instruction_text_2.bottom
-                anchors.topMargin: 40
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
+                buttonHeight: 45
                 label_size: 18
                 label: qsTr("REPLACE FILTER")
                 button_mouseArea.onClicked: {
-                    cleanAirSettingsSwipeView.swipeToItem(2)
+                    cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.ReplaceFilterPage)
                 }
             }
 
             RoundedButton {
                 id: reset_filter_button
                 buttonWidth: 125
-                buttonHeight: 40
-                anchors.top: replace_filter_button.bottom
-                anchors.topMargin: 20
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
+                buttonHeight: 45
                 label_size: 18
                 label: qsTr("RESET FILTER")
                 button_mouseArea.onClicked: {
                     hepaFilterResetPopup.open()
                 }
             }
-
         }
     }
 
+    Text {
+        id: disclaimer_text
+        color: "#ffffff"
+        text: qsTr("Filter lifetime is dependent upon multiple factors, including but not limited to<br>materials being printed, temperatures used, and airflow.")
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20
+        anchors.horizontalCenter: parent.horizontalCenter
+        font.letterSpacing: 1
+        font.family: defaultFont.name
+        font.pixelSize: 16
+        font.weight: Font.Light
+        lineHeight: 1.2
+        smooth: false
+        antialiasing: false
+    }
 }
