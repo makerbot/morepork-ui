@@ -29,7 +29,6 @@ Item {
     property bool testPrintComplete: false
     property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
     property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
-    property bool feedbackSubmitted: false
     property bool failureFeedbackSelected: false
 
     // Defects template dict. that will sent for all feedback. Even success.
@@ -93,7 +92,7 @@ Item {
     PrintFeedbackComponent {
         id: printFeedback
         visible: bot.process.stateType == ProcessStateType.Completed &&
-                 !feedbackSubmitted &&
+                 !bot.process.printFeedbackReported &&
                  failureFeedbackSelected
         z: 1
     }
@@ -134,7 +133,7 @@ Item {
                 width: 400
                 height: {
                     if(bot.process.stateType == ProcessStateType.Completed) {
-                        feedbackSubmitted ? 245 : 320
+                        bot.process.printFeedbackReported ? 245 : 320
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         210
                     } else {
@@ -346,7 +345,7 @@ Item {
                 ReportPrintAnalyticsComponent {
                     id: reportAnalytics
                     visible: bot.process.stateType == ProcessStateType.Completed &&
-                             !feedbackSubmitted
+                             !bot.process.printFeedbackReported
                 }
             }
         }

@@ -316,9 +316,14 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         completeReset();
     }
 
-
     UPDATE_INT_PROP(timeRemaining, proc["time_remaining"]);
     UPDATE_INT_PROP(elapsedTime, proc["elapsed_time"]);
+
+    if(!proc["reported_success"].empty()) {
+        printFeedbackReportedSet(true);
+    } else {
+        printFeedbackReportedReset();
+    }
     activeSet(true);
 }
 
