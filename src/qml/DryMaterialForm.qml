@@ -19,6 +19,7 @@ Item {
     signal processDone
     property bool hasFailed: bot.process.errorCode !== 0
     property bool doChooseMaterial: false
+    property bool hasFinished: false
 
     onCurrentStepChanged: {
         if(bot.process.type == ProcessType.DryingCycleProcess) {
@@ -36,10 +37,13 @@ Item {
                        state != "drying_failed" &&
                        state != "base state") {
                         state = "drying_complete"
+                        hasFinished = true
                     }
                     break;
                 case ProcessStateType.Cancelling:
                     state = "cancelling"
+                    doChooseMaterial = false
+                    hasFinished = false
                     break;
             }
         } else if(bot.process.type == ProcessType.None) {
@@ -52,6 +56,7 @@ Item {
     onHasFailedChanged: {
         if(bot.process.type == ProcessType.DryingCycleProcess) {
             state = "drying_failed"
+            hasFinished = true
         }
     }
 
@@ -144,12 +149,18 @@ Item {
             opacity: 1.0
             button_mouseArea.onClicked: {
                 if (bot.process.type != ProcessType.DryingCycleProcess) {
-                    dryConfirmBuildPlateClearPopup.open()
+                    if (!hasFinished) {
+                        dryConfirmBuildPlateClearPopup.open()
+                    } else {
+                        processDone()
+                        hasFinished = false
+                    }
                 } else {
                     if(currentStep == ProcessStateType.WaitingForSpool) {
                         doChooseMaterial = true
                     } else if(currentStep == ProcessStateType.Done) {
                         processDone()
+                        hasFinished = false
                     }
                 }
             }
