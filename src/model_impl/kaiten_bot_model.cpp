@@ -1580,6 +1580,14 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(chamberErrorCode, kChamberA["error"])
           }
         }
+        const Json::Value & kHeatedBuildPlate = kToolheads["heated_build_plate"];
+        if(kHeatedBuildPlate.isArray() && kHeatedBuildPlate.size() > 0){
+          const Json::Value & kHeatedBuildPlateA = kHeatedBuildPlate[0];
+          if(kHeatedBuildPlateA.isObject()){
+            UPDATE_INT_PROP(hbpCurrentTemp, kHeatedBuildPlateA["current_temperature"])
+            UPDATE_INT_PROP(hbpTargetTemp, kHeatedBuildPlateA["target_temperature"])
+          }
+        }
       }
       // Update filament bay status variables
       const Json::Value &kFilamentBay = info["filamentbays"];
