@@ -3,9 +3,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
 Item {
-    id: printFeedback
-    width: parent.width
-    height: parent.height
+    id: failurePrintFeedback
+    anchors.fill: parent
 
     Rectangle {
         anchors.fill: parent
@@ -104,6 +103,7 @@ Item {
             printFeedbackAcknowledgementPopup.open()
             printFeedbackAcknowledgementPopup.feedbackGood = false
             bot.submitPrintFeedback(false, defects)
+            acknowledgePrint()
         }
     }
 }

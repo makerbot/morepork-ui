@@ -98,8 +98,7 @@ Item {
                 getPrintDetailsTimer.start() //for prints started from repl
             }
             printFromUI = false //reset when the print actually starts
-            printStatusView.feedbackSubmitted = false // Reset when print starts
-            printStatusView.failureFeedbackSelected = false // Reset when print starts
+            printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false // Reset when print starts
             showPrintTip()
             startPrintSource = PrintPage.None
         }
@@ -367,8 +366,8 @@ Item {
 
             function altBack() {
                 if(!inFreStep) {
-                    if(printStatusView.failureFeedbackSelected) {
-                        printStatusView.failureFeedbackSelected = false
+                    if(printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
+                        printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
                         return
                     }
                     mainSwipeView.swipeToItem(MoreporkUI.BasePage)
@@ -1200,6 +1199,74 @@ Item {
                     }
                 }
             ]
+        }
+    }
+
+    CustomPopup {
+        id: printFeedbackAcknowledgementPopup
+        popupWidth: 720
+        popupHeight: 275
+        showOneButton: true
+        full_button_text: qsTr("OK")
+        full_button.onClicked: {
+            printFeedbackAcknowledgementPopup.close()
+            acknowledgePrint()
+        }
+        onOpened: {
+            autoClosePopup.start()
+        }
+        onClosed: {
+            autoClosePopup.stop()
+        }
+
+        property bool feedbackGood: true
+
+        Timer {
+            id: autoClosePopup
+            interval: 7000
+            onTriggered: printFeedbackAcknowledgementPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_printFeedbackAcknowledgementPopup
+            width: 590
+            height: children.height
+            spacing: 20
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -30
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Text {
+                id: alert_text_printFeedbackAcknowledgementPopup
+                color: "#cbcbcb"
+                text: qsTr("FEEDBACK SUBMITTED")
+                font.letterSpacing: 3
+                Layout.alignment: Qt.AlignHCenter
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                font.pixelSize: 20
+            }
+
+            Text {
+                id: description_text_printFeedbackAcknowledgementPopup
+                color: "#cbcbcb"
+                text: {
+                    if(printFeedbackAcknowledgementPopup.feedbackGood) {
+                        qsTr("Thanks for providing feedback. This will help us make improvements to your printer.")
+                    } else {
+                        qsTr("We are sorry that your print had trouble. If problems continue, please visit support.makerbot.com")
+                    }
+                }
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                font.family: defaultFont.name
+                font.pixelSize: 18
+                font.letterSpacing: 1
+                lineHeight: 1.3
+            }
         }
     }
 }
