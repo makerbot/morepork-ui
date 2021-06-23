@@ -74,6 +74,7 @@ int main(int argc, char ** argv) {
 
     QQmlApplicationEngine engine;
     UiTranslator ui_trans(&engine);
+    ui_trans.selectLanguage(settings.getLanguageCode());
     engine.rootContext()->setContextProperty("bot", bot.data());
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("translate", (QObject*)&ui_trans);
