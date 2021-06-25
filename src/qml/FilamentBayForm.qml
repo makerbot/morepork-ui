@@ -251,6 +251,12 @@ Item {
         case 16:
             "NYLON-12-CF"
             break;
+        case 17:
+            "RapidRinse"
+            break;
+        case 18:
+            "ABS-R"
+            break;
         case 0:
         default:
             "UNKNOWN"
@@ -298,13 +304,13 @@ Item {
                 ["PLA", "Tough", "PETG", "NYLON", "TPU"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                ["ABS", "ASA", "PC-ABS", "PC-ABS-FR", "ABS-R"]
                 break;
             case ExtruderType.MK14_COMP:
                 if(bot.machineType == MachineType.Fire) {
                     ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
                 } else {
-                    ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                    ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR", "ABS-R"]
                 }
                 break;
             default:
@@ -318,7 +324,7 @@ Item {
                 ["PVA"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["SR-30", "HIPS"]
+                ["SR-30", "HIPS", "RapidRinse"]
                 break;
             default:
                 []
