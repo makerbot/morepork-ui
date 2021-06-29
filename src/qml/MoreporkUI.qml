@@ -75,9 +75,6 @@ ApplicationWindow {
         case FreStep.SetTimeDate:
             freScreen.state = "set_time_date"
             break;
-        case FreStep.LoginMbAccount:
-            freScreen.state = "log_in"
-            break;
         case FreStep.AttachExtruders:
             freScreen.state = "attach_extruders"
             break;
@@ -92,6 +89,9 @@ ApplicationWindow {
             break;
         case FreStep.TestPrint:
             freScreen.state = "test_print"
+            break;
+        case FreStep.LoginMbAccount:
+            freScreen.state = "log_in"
             break;
         case FreStep.SetupComplete:
             freScreen.state = "setup_complete"
@@ -685,7 +685,14 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 skipFreStepPopup.close()
-                                currentItem.skipFreStepAction()
+                                // Login step has a flow within the FRE screen unlike
+                                // other steps, so it doesnt require the skip function
+                                // like the other steps. The skip function brings the
+                                // user back to the main FRE screen, undoing the UI
+                                // navigations, resetting states etc.
+                                if(currentFreStep != FreStep.LoginMbAccount) {
+                                    currentItem.skipFreStepAction()
+                                }
                                 if(currentFreStep == FreStep.AttachExtruders ||
                                    currentFreStep == FreStep.LevelBuildPlate ||
                                    currentFreStep == FreStep.CalibrateExtruders ||
@@ -702,16 +709,6 @@ ApplicationWindow {
                                     }
                                     else {
                                         fre.setFreStep(FreStep.NamePrinter)
-                                    }
-                                }
-                                else if(currentFreStep == FreStep.SetTimeDate) {
-                                    if(isNetworkConnectionAvailable) {
-                                        // Go to login to makerbot account step
-                                        // only if network connection is available
-                                        fre.gotoNextStep(currentFreStep)
-                                    }
-                                    else {
-                                        fre.setFreStep(FreStep.AttachExtruders)
                                     }
                                 }
                                 else {
@@ -789,9 +786,6 @@ ApplicationWindow {
                             case FreStep.SetTimeDate:
                                 qsTr("SKIP SETTING TIME?")
                                 break;
-                            case FreStep.LoginMbAccount:
-                                qsTr("SKIP ACCOUNT SIGN IN?")
-                                break;
                             case FreStep.AttachExtruders:
                                 qsTr("SKIP ATTACHING EXTRUDERS?")
                                 break;
@@ -806,6 +800,9 @@ ApplicationWindow {
                                 break;
                             case FreStep.TestPrint:
                                 qsTr("SKIP TEST PRINT?")
+                                break;
+                            case FreStep.LoginMbAccount:
+                                qsTr("SKIP ACCOUNT SIGN IN?")
                                 break;
                             case FreStep.SetupComplete:
                                 ""
@@ -844,9 +841,6 @@ ApplicationWindow {
                             case FreStep.SetTimeDate:
                                 qsTr("You can set the time later from the printer settings menu.")
                                 break;
-                            case FreStep.LoginMbAccount:
-                                qsTr("By signing in, this printer will automatically appear in your list of printers on any signed in device.")
-                                break;
                             case FreStep.AttachExtruders:
                                 qsTr("Extruders are required to use the printer.")
                                 break;
@@ -861,6 +855,9 @@ ApplicationWindow {
                                 break;
                             case FreStep.TestPrint:
                                 qsTr("A test print is a small print that ensures the printer is working properly.")
+                                break;
+                            case FreStep.LoginMbAccount:
+                                qsTr("By signing in, this printer will automatically appear in your list of printers on any signed in device.")
                                 break;
                             case FreStep.SetupComplete:
                                 ""

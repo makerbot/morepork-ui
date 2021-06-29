@@ -263,14 +263,7 @@ Item {
                     timeSwipeView.swipeToItem(TimePage.SetDate)
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                    if(isNetworkConnectionAvailable) {
-                        // Go to login to makerbot account step
-                        // only if network connection is available
-                        fre.gotoNextStep(currentFreStep)
-                    }
-                    else {
-                        fre.setFreStep(FreStep.AttachExtruders)
-                    }
+                    fre.gotoNextStep(currentFreStep)
                 }
                 else {
                     timeSwipeView.swipeToItem(TimePage.SetDate)

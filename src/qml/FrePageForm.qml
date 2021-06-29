@@ -30,7 +30,11 @@ Item {
         id: instructions_item
         width: 400
         height: 300
-        visible: true
+        visible: {
+            // Login step has it's own flow within the FRE unlike the
+            // other steps which use the same template.
+            currentFreStep != FreStep.LoginMbAccount
+        }
         anchors.left: parent.left
         anchors.leftMargin: 400
         anchors.verticalCenter: parent.verticalCenter
@@ -65,9 +69,7 @@ Item {
             anchors.top: subtitle_text.bottom
             anchors.topMargin: 30
             label: qsTr("BEGIN SETUP")
-            label_width: 210
             buttonHeight: 50
-            buttonWidth: 210
         }
     }
 
@@ -124,8 +126,8 @@ Item {
                 Text {
                     id: text1
                     color: parent.color
-                    text: qsTr("SETUP")
-                    font.letterSpacing: 1
+                    text: qsTr("SET UP")
+                    font.letterSpacing: 2
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -146,8 +148,8 @@ Item {
                 Text {
                     id: text2
                     color: parent.color
-                    text: qsTr("LOG IN")
-                    font.letterSpacing: 1
+                    text: qsTr("EXTRUDERS")
+                    font.letterSpacing: 2
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -168,8 +170,8 @@ Item {
                 Text {
                     id: text3
                     color: parent.color
-                    text: qsTr("EXTRUDERS")
-                    font.letterSpacing: 1
+                    text: qsTr("MATERIAL")
+                    font.letterSpacing: 2
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -190,8 +192,8 @@ Item {
                 Text {
                     id: text4
                     color: parent.color
-                    text: qsTr("MATERIAL")
-                    font.letterSpacing: 1
+                    text: qsTr("PRINT")
+                    font.letterSpacing: 2
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -212,8 +214,8 @@ Item {
                 Text {
                     id: text5
                     color: parent.color
-                    text: qsTr("PRINT")
-                    font.letterSpacing: 1
+                    text: qsTr("CONNECT")
+                    font.letterSpacing: 2
                     anchors.top: parent.bottom
                     anchors.topMargin: 18
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -224,6 +226,15 @@ Item {
             }
         }
     }
+
+    FreAuthorizeWithCode {
+        id: authorizeWithCode
+        anchors.top: parent.top
+        anchors.topMargin: 40
+        anchors.horizontalCenter: parent.horizontalCenter
+        visible: currentFreStep == FreStep.LoginMbAccount
+    }
+
     states: [
         State {
             name: "wifi_setup"
@@ -248,8 +259,6 @@ Item {
                         qsTr("WI-FI SETUP")
                     }
                 }
-                lineHeight: 1.2
-                font.pixelSize: 28
                 anchors.topMargin: 25
             }
 
@@ -267,15 +276,6 @@ Item {
 
             PropertyChanges {
                 target: continueButton
-                label_width: 300
-                buttonWidth: {
-                    if(isNetworkConnectionAvailable) {
-                        175
-                    }
-                    else {
-                        300
-                    }
-                }
                 label: {
                     if(isNetworkConnectionAvailable) {
                         qsTr("CONTINUE")
@@ -284,7 +284,6 @@ Item {
                         qsTr("CHOOSE NETWORK")
                     }
                 }
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -328,8 +327,6 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: qsTr("PRINTER SOFTWARE UPDATE AVAILABLE")
-                lineHeight: 1.2
-                font.pixelSize: 28
                 anchors.topMargin: 25
             }
 
@@ -340,10 +337,7 @@ Item {
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
-                buttonWidth: 175
                 label: qsTr("CONTINUE")
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -387,8 +381,6 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: qsTr("NAME PRINTER")
-                lineHeight: 1.2
-                font.pixelSize: 28
                 anchors.topMargin: 25
             }
 
@@ -399,10 +391,7 @@ Item {
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
-                buttonWidth: 175
                 label: qsTr("CONTINUE")
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -446,8 +435,6 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: qsTr("SET THE PRINTER'S CLOCK")
-                lineHeight: 1.2
-                font.pixelSize: 28
                 anchors.topMargin: 25
             }
 
@@ -458,10 +445,7 @@ Item {
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
-                buttonWidth: 175
                 label: qsTr("CONTINUE")
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -490,7 +474,7 @@ Item {
             }
         },
         State {
-            name: "log_in"
+            name: "attach_extruders"
 
             PropertyChanges {
                 target: bot_image
@@ -504,23 +488,13 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: qsTr("LOG IN")
-                lineHeight: 1.2
-                font.pixelSize: 28
+                text: qsTr("ATTACH EXTRUDERS")
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: subtitle_text
-                text: qsTr("Log in to add this printer to your MakerBot account.")
-            }
-
-            PropertyChanges {
                 target: continueButton
-                label_width: 175
                 label: qsTr("CONTINUE")
-                buttonWidth: 175
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -557,70 +531,6 @@ Item {
                 target: endStep
                 position: 0.469
             }
-        },
-        State {
-            name: "attach_extruders"
-
-            PropertyChanges {
-                target: bot_image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
-                text: qsTr("ATTACH EXTRUDERS")
-                lineHeight: 1.2
-                font.pixelSize: 28
-                anchors.topMargin: 25
-            }
-
-            PropertyChanges {
-                target: continueButton
-                label_width: 175
-                label: qsTr("CONTINUE")
-                buttonWidth: 190
-                anchors.topMargin: 30
-            }
-
-            PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
-            }
-
-            PropertyChanges {
-                target: rectangle3
-                color: "#ffffff"
-            }
-
-            PropertyChanges {
-                target: rectangle4
-                color: "#595959"
-            }
-
-            PropertyChanges {
-                target: rectangle5
-                color: "#595959"
-            }
-
-            PropertyChanges {
-                target: progress_item
-                visible: true
-            }
-
-            PropertyChanges {
-                target: midStep
-                position: 0.499
-            }
-
-            PropertyChanges {
-                target: endStep
-                position: 0.637
-            }
 
             PropertyChanges {
                 target: subtitle_text
@@ -643,17 +553,12 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: qsTr("LEVEL BUILD PLATFORM")
-                lineHeight: 1.2
-                font.pixelSize: 28
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
                 label: qsTr("CONTINUE")
-                buttonWidth: 190
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -663,7 +568,7 @@ Item {
 
             PropertyChanges {
                 target: rectangle3
-                color: "#ffffff"
+                color: "#595959"
             }
 
             PropertyChanges {
@@ -683,12 +588,12 @@ Item {
 
             PropertyChanges {
                 target: midStep
-                position: 0.499
+                position: 0.334
             }
 
             PropertyChanges {
                 target: endStep
-                position: 0.637
+                position: 0.469
             }
 
             PropertyChanges {
@@ -712,17 +617,76 @@ Item {
             PropertyChanges {
                 target: title_text
                 text: qsTr("CALIBRATE EXTRUDERS")
-                lineHeight: 1.2
-                font.pixelSize: 28
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
                 label: qsTr("CONTINUE")
-                buttonWidth: 190
-                anchors.topMargin: 30
+            }
+
+            PropertyChanges {
+                target: rectangle2
+                color: "#ffffff"
+            }
+
+            PropertyChanges {
+                target: rectangle3
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle4
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: rectangle5
+                color: "#595959"
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.334
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.469
+            }
+
+            PropertyChanges {
+                target: subtitle_text
+                text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
+            }
+        },
+        State {
+            name: "load_material"
+
+            PropertyChanges {
+                target: bot_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: instructions_item
+                anchors.leftMargin: 50
+            }
+
+            PropertyChanges {
+                target: title_text
+                text: qsTr("LOAD MATERIAL")
+                anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: continueButton
+                label: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -762,11 +726,11 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
+                text: qsTr("Follow the on screen steps to load material into each bay.")
             }
         },
         State {
-            name: "load_material"
+            name: "test_print"
 
             PropertyChanges {
                 target: bot_image
@@ -780,18 +744,13 @@ Item {
 
             PropertyChanges {
                 target: title_text
-                text: qsTr("LOAD MATERIAL")
-                lineHeight: 1.2
-                font.pixelSize: 28
+                text: qsTr("READY TO PRINT")
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: continueButton
-                label_width: 175
                 label: qsTr("CONTINUE")
-                buttonWidth: 175
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -831,11 +790,11 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: qsTr("Follow the on screen steps to load material into each bay.")
+                text: qsTr("Start a test print to ensure the printer is set up correctly.")
             }
         },
         State {
-            name: "test_print"
+            name: "log_in"
 
             PropertyChanges {
                 target: bot_image
@@ -845,22 +804,6 @@ Item {
             PropertyChanges {
                 target: instructions_item
                 anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
-                text: qsTr("READY TO PRINT")
-                lineHeight: 1.2
-                font.pixelSize: 28
-                anchors.topMargin: 25
-            }
-
-            PropertyChanges {
-                target: continueButton
-                label_width: 175
-                label: qsTr("CONTINUE")
-                buttonWidth: 175
-                anchors.topMargin: 30
             }
 
             PropertyChanges {
@@ -897,11 +840,6 @@ Item {
                 target: endStep
                 position: 0.968
             }
-
-            PropertyChanges {
-                target: subtitle_text
-                text: qsTr("Start a test print to ensure the printer is set up correctly.")
-            }
         },
         State {
             name: "setup_complete"
@@ -921,14 +859,12 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: qsTr("Download MakerBot Print to\nprepare your own files for\nthis printer.")
+                text: qsTr("Download the MakerBot Print<br>desktop app to prepare your<br>own files for this printer.")
                 anchors.topMargin: 20
             }
 
             PropertyChanges {
                 target: continueButton
-                buttonWidth: 110
-                label_width: 110
                 label: qsTr("DONE")
             }
 
