@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import MachineTypeEnum 1.0
 
 Item {
     width: 400
@@ -51,6 +52,20 @@ Item {
             label: qsTr("CAMERA STATE")
             value_anchors.leftMargin: value == "Unknown" ? 25 : -25
             value: bot.cameraState
+        }
+
+        AdvancedInfoElement {
+            id: hbpCurrentTempProperty
+            label: qsTr("HBP CURR. TEMP.")
+            value: bot.hbpCurrentTemp
+            visible: bot.machineType == MachineType.Magma
+        }
+
+        AdvancedInfoElement {
+            id: hbpTargetTempProperty
+            label: qsTr("HBP TGT. TEMP.")
+            value: bot.hbpTargetTemp
+            visible: bot.machineType == MachineType.Magma
         }
     }
 }

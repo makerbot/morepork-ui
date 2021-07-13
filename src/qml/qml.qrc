@@ -224,5 +224,7 @@
         <file>ImageWithFeedbackForm.qml</file>
         <file>ThumbnailImage.qml</file>
         <file>ThumbnailImageForm.qml</file>
+        <file>FreAuthorizeWithCode.qml</file>
+        <file>FreAuthorizeWithCodeForm.qml</file>
     </qresource>
 </RCC>

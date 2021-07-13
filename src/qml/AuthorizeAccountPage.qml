@@ -8,10 +8,6 @@ AuthorizeAccountPageForm {
 
     buttonLoginToMakerbotAccount.onClicked: {
         authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCredentials)
-        if(inFreStep) {
-            signInPage.signInSwipeView.swipeToItem(SignInPage.UsernamePage)
-            signInPage.usernameTextField.forceActiveFocus()
-        }
     }
 
     function backToSelectAuthMethod() {
@@ -69,22 +65,7 @@ AuthorizeAccountPageForm {
     function showSignInSucceededPopup() {
         authorizeAccountPopup.state = "authorization_successful"
         authorizeAccountPopup.open()
-        if(inFreStep) {
-            signInFreStepComplete.start()
-        } else {
-            closeAuthCompletePopupTimer.start()
-        }
-    }
-
-    Timer {
-        id: signInFreStepComplete
-        interval: 5000
-        onTriggered: {
-            closePopup()
-            backToSettings()
-            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            fre.gotoNextStep(currentFreStep)
-        }
+        closeAuthCompletePopupTimer.start()
     }
 
     Timer {

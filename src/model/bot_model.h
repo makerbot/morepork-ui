@@ -165,6 +165,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, buildplaneCurrentTemp, -999)
     MODEL_PROP(int, buildplaneTargetTemp, -999)
     MODEL_PROP(int, chamberErrorCode, 0)
+    MODEL_PROP(int, hbpCurrentTemp, -999)
+    MODEL_PROP(int, hbpTargetTemp, -999)
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)

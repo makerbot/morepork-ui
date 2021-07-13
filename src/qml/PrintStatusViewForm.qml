@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: printStatusPage
@@ -656,6 +657,20 @@ Item {
                             font.letterSpacing: 3
                             font.wordSpacing: 2
                         }
+
+                        Text {
+                            id: hbp_temp_label
+                            color: "#cbcbcb"
+                            text: qsTr("HEATED BP TEMP")
+                            antialiasing: false
+                            smooth: false
+                            font.pixelSize: 18
+                            font.family: defaultFont.name
+                            font.weight: Font.Light
+                            font.letterSpacing: 3
+                            font.wordSpacing: 2
+                            visible: bot.machineType == MachineType.Magma
+                        }
                     }
 
                     ColumnLayout {
@@ -723,6 +738,19 @@ Item {
                             font.pixelSize: 18
                             font.weight: Font.Bold
                             font.letterSpacing: 3
+                        }
+
+                        Text {
+                            id: hbp_temp_text
+                            color: "#ffffff"
+                            text: qsTr("%1C").arg(bot.hbpCurrentTemp)
+                            antialiasing: false
+                            smooth: false
+                            font.family: defaultFont.name
+                            font.pixelSize: 18
+                            font.weight: Font.Bold
+                            font.letterSpacing: 3
+                            visible: bot.machineType == MachineType.Magma
                         }
                     }
                 }

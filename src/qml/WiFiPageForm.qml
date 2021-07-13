@@ -45,7 +45,7 @@ Item {
             }
             bot.scanWifi(true)
             passwordField.clear()
-            if(inFreStep) {
+            if(inFreStep && currentFreStep == FreStep.SetupWifi) {
                 wifiFreStepComplete.start()
                 bot.firmwareUpdateCheck(false)
             }
