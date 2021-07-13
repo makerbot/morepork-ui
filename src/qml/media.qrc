@@ -164,6 +164,8 @@
 	<file alias="filter_change_required.png">images/filter_change_required.png</file>
 	<file alias="yellow_hepa_blink.gif">images/yellow_hepa_blink.gif</file>
 	<file alias="white_hepa_no_blink.gif">images/white_hepa_no_blink.gif</file>
+	<file alias="print_feedback_thumbs_up.png">images/print_feedback_thumbs_up.png</file>
+	<file alias="print_feedback_thumbs_down.png">images/print_feedback_thumbs_down.png</file>
 	<file alias="refresh_otp.png">images/refresh_otp.png</file>
     </qresource>
 </RCC>

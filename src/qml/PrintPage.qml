@@ -165,6 +165,19 @@ PrintPageForm {
         }
     }
 
+    function acknowledgePrint() {
+        if(bot.process.stateType == ProcessStateType.Failed) {
+            bot.done("acknowledge_failure")
+        }
+        else if(bot.process.stateType == ProcessStateType.Completed) {
+            bot.done("acknowledge_completed")
+        }
+        if(inFreStep) {
+            printStatusView.testPrintComplete = true
+        }
+        resetPrintFileDetails()
+    }
+
     printingDrawer.buttonCancelPrint.onClicked: {
         printingDrawer.close()
         if(inFreStep) {

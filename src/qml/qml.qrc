@@ -186,8 +186,8 @@
         <file>AdvancedInfoCalibrationItemForm.qml</file>
         <file>AdvancedInfoCalibrationElementForm.qml</file>
         <file>AdvancedInfoCalibrationElement.qml</file>
-        <file>ReportPrintAnalyticsComponent.qml</file>
-        <file>ReportPrintAnalyticsComponentForm.qml</file>
+        <file>AcknowledgePrintFinished.qml</file>
+        <file>AcknowledgePrintFinishedForm.qml</file>
         <file>DateSelector.qml</file>
         <file>DateSelectorForm.qml</file>
         <file>CleanExtruderSettings.qml</file>
@@ -208,8 +208,8 @@
         <file>StartPrintSpecialInstructionsForm.qml</file>
         <file>UserAssistedLoadInstructions.qml</file>
         <file>UserAssistedLoadInstructionsForm.qml</file>
-        <file>PrintFeedbackComponent.qml</file>
-        <file>PrintFeedbackComponentForm.qml</file>
+        <file>FailurePrintFeedback.qml</file>
+        <file>FailurePrintFeedbackForm.qml</file>
         <file>FeedbackButton.qml</file>
         <file>FeedbackButtonForm.qml</file>
         <file>HeatShieldInstructions.qml</file>

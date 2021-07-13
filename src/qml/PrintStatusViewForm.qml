@@ -30,19 +30,8 @@ Item {
     property bool testPrintComplete: false
     property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
     property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
-    property bool failureFeedbackSelected: false
 
-    // Defects template dict. that will sent for all feedback. Even success.
-    // Ideally we should be building a list of defects and just sending that.
-    property var print_defects: {"warping_from_buildplate": false,
-                                 "stringiness": false,
-                                 "gaps_in_walls": false,
-                                 "bad_layer_alignment": false,
-                                 "small_feature_defects": false,
-                                 "frequent_extruder_jams": false,
-                                 "other": false}
-    property alias reportAnalytics: reportAnalytics
-    property alias printFeedback: printFeedback
+    property alias acknowledgePrintFinished: acknowledgePrintFinished
     onTimeLeftMinutesChanged: updateTime()
 
     function updateTime() {
@@ -90,11 +79,11 @@ Item {
         Page4
     }
 
-    PrintFeedbackComponent {
-        id: printFeedback
+    FailurePrintFeedback {
+        id: failurePrintFeedback
         visible: bot.process.stateType == ProcessStateType.Completed &&
                  !bot.process.printFeedbackReported &&
-                 failureFeedbackSelected
+                 acknowledgePrintFinished.failureFeedbackSelected
         z: 1
     }
 
@@ -132,19 +121,20 @@ Item {
             ColumnLayout {
                 id: columnLayout_page0
                 width: 400
-                height: {
-                    if(bot.process.stateType == ProcessStateType.Completed) {
-                        bot.process.printFeedbackReported ? 245 : 320
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        210
-                    } else {
-                        110
-                    }
-                }
+                height: children.height
                 smooth: false
                 anchors.left: parent.left
                 anchors.leftMargin: 400
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: {
+                    if(acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
+                       acknowledgePrintFinished.state == "print_failed") {
+                        50
+                    } else {
+                        0
+                    }
+                }
+                spacing: 20
 
                 Text {
                     id: status_text0
@@ -317,36 +307,15 @@ Item {
                         if(!disable_button) {
                             printAgain = true
                             printPage.getPrintTimes(printPage.lastPrintTimeSec)
-                            printPage.printSwipeView.swipeToItem(2)
+                            printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
                         }
                     }
                 }
 
-                RoundedButton {
-                    id: done_button
-                    buttonWidth: 100
-                    buttonHeight: 50
-                    label: qsTr("DONE")
+                AcknowledgePrintFinished {
+                    id: acknowledgePrintFinished
                     visible: bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed
-                    button_mouseArea.onClicked: {
-                        if(bot.process.stateType == ProcessStateType.Failed) {
-                            bot.done("acknowledge_failure")
-                        }
-                        else if(bot.process.stateType == ProcessStateType.Completed) {
-                            bot.done("acknowledge_completed")
-                        }
-                        if(inFreStep) {
-                            testPrintComplete = true
-                        }
-                        printPage.resetPrintFileDetails()
-                    }
-                }
-
-                ReportPrintAnalyticsComponent {
-                    id: reportAnalytics
-                    visible: bot.process.stateType == ProcessStateType.Completed &&
-                             !bot.process.printFeedbackReported
                 }
             }
         }
@@ -972,73 +941,6 @@ Item {
                 ColorAnimation {
                     duration: 200
                 }
-            }
-        }
-    }
-
-    CustomPopup {
-        id: printFeedbackAcknowledgementPopup
-        popupWidth: 720
-        popupHeight: 275
-        showOneButton: true
-        full_button_text: qsTr("OK")
-        full_button.onClicked: {
-            printFeedbackAcknowledgementPopup.close()
-        }
-        onOpened: {
-            autoClosePopup.start()
-        }
-        onClosed: {
-            autoClosePopup.stop()
-        }
-
-        property bool feedbackGood: true
-
-        Timer {
-            id: autoClosePopup
-            interval: 7000
-            onTriggered: printFeedbackAcknowledgementPopup.close()
-        }
-
-        ColumnLayout {
-            id: columnLayout_printFeedbackAcknowledgementPopup
-            width: 590
-            height: children.height
-            spacing: 20
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -30
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            Text {
-                id: alert_text_printFeedbackAcknowledgementPopup
-                color: "#cbcbcb"
-                text: qsTr("FEEDBACK SUBMITTED")
-                font.letterSpacing: 3
-                Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
-            }
-
-            Text {
-                id: description_text_printFeedbackAcknowledgementPopup
-                color: "#cbcbcb"
-                text: {
-                    if(printFeedbackAcknowledgementPopup.feedbackGood) {
-                        qsTr("Thanks for providing feedback. This will help us make improvements to your printer.")
-                    } else {
-                        qsTr("We are sorry that your print had trouble. If problems continue, please visit support.makerbot.com")
-                    }
-                }
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
             }
         }
     }
