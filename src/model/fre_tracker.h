@@ -21,12 +21,12 @@ class FreTracker : public BaseModel {
         SoftwareUpdate,
         NamePrinter,
         SetTimeDate,
-        LoginMbAccount,
         AttachExtruders,
         LevelBuildPlate,
         CalibrateExtruders,
         LoadMaterial,
         TestPrint,
+        LoginMbAccount,
         SetupComplete,
         FreComplete
     };
@@ -53,12 +53,12 @@ class FreTracker : public BaseModel {
         "software_update",
         "name_prnter",
         "set_time_date",
-        "login_mb_account",
         "attach_extruders",
         "level_build_plate",
         "calibrate_extruders",
         "load_material",
         "test_print",
+        "login_mb_account",
         "setup_complete",
         "fre_complete"
     };

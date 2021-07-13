@@ -58,8 +58,6 @@ void FreTracker::initialize() {
                     currentFreStepSet(FreStep::NamePrinter);
                 } else if (step == "set_time_date") {
                     currentFreStepSet(FreStep::SetTimeDate);
-                } else if (step == "login_mb_account") {
-                    currentFreStepSet(FreStep::LoginMbAccount);
                 } else if (step == "attach_extruders") {
                     currentFreStepSet(FreStep::AttachExtruders);
                 } else if (step == "level_build_plate") {
@@ -70,6 +68,8 @@ void FreTracker::initialize() {
                     currentFreStepSet(FreStep::LoadMaterial);
                 } else if (step == "test_print") {
                     currentFreStepSet(FreStep::TestPrint);
+                } else if (step == "login_mb_account") {
+                    currentFreStepSet(FreStep::LoginMbAccount);
                 } else if (step == "setup_complete") {
                     currentFreStepSet(FreStep::SetupComplete);
                 } else if (step == "fre_complete") {

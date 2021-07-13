@@ -74,10 +74,6 @@ FrePageForm {
                 bot.getSystemTime()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.TimePage)
-            } else if(state == "log_in") {
-                inFreStep = true
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.AuthorizeAccountsPage)
             } else if(state == "attach_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
@@ -98,6 +94,8 @@ FrePageForm {
             } else if(state == "test_print") {
                 inFreStep = true
                 startTestPrint()
+            } else if(state == "log_in") {
+                // login has a separate flow within the fre screen.
             } else if(state == "setup_complete") {
                 fre.setFreStep(FreStep.FreComplete)
             } else {

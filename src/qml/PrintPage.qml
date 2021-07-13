@@ -250,7 +250,14 @@ PrintPageForm {
     }
 
     reviewTestPrint.continueButton.button_mouseArea.onClicked: {
-        fre.gotoNextStep(currentFreStep)
+        if(isNetworkConnectionAvailable) {
+            // Go to login to makerbot account step
+            // only if network connection is available
+            fre.gotoNextStep(currentFreStep)
+        }
+        else {
+            fre.setFreStep(FreStep.SetupComplete)
+        }
         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
         printStatusView.testPrintComplete = false
     }
