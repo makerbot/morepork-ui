@@ -39,7 +39,9 @@ New QML files are automatically handled by the CMakeLists.txt, but new C++ files
 The translation files and the scripts to generate them are located in /src//translations
 
 1.) Run 'update_ts_files.sh' in /src/translations. This will generate/update the .ts files in the translations directory. One file per language will be generated. The .ts file is just a template file containing all the strings on the UI. It also has other metadata like the filename, line # for the strings.
+
 2.) Hand over the .ts files to the translators who will add the actual translations to them and send back the updated files.
+
 3.) Replace the old .ts files with the received files and run 'generate_qm_files.sh' to generate the .qm files. The qm files are runtime translation files in binary format which are used by qt internally for loading translations quickly. Qt cannot directly use the .ts files and requires the .qm files for translations support.
 
 See https://doc.qt.io/qt-5/qtlinguist-index.html
