@@ -14,9 +14,6 @@ void PrintQueue::fetchPrintMetadata(QString urlPrefix, QString jobId, QString to
         emit FetchMetadataFailed();
         return;
     }
-    // To temporarily address cloudprint bug -
-    // https://makerbot.atlassian.net/browse/AB-1885
-    urlPrefix = "https://cloudprint.mbot.me/api/queue/jobs/";
 
     QNetworkRequest request;
     request.setUrl(QUrl(urlPrefix + jobId + "/info/meta.json"));
@@ -55,9 +52,6 @@ void PrintQueue::handleResponseFetchMetadata() {
 }
 
 void PrintQueue::cancelRequest(QString urlPrefix, QString jobId) {
-    // To temporarily address cloudprint bug -
-    // https://makerbot.atlassian.net/browse/AB-1885
-    urlPrefix = "https://cloudprint.mbot.me/api/queue/jobs/";
     if(metaReply_) {
         cancelledRequest_ = QUrl(urlPrefix + jobId + "/info/meta.json");
         metaReply_->abort();
@@ -72,9 +66,6 @@ void PrintQueue::cleanup() {
 }
 
 void PrintQueue::startQueuedPrint(QString urlPrefix, QString jobId, QString token) {
-    // To temporarily address cloudprint bug -
-    // https://makerbot.atlassian.net/browse/AB-1885
-    urlPrefix = "https://cloudprint.mbot.me/api/queue/jobs/";
     QNetworkRequest request;
     request.setUrl(QUrl(urlPrefix + jobId + "/start"));
 
@@ -100,10 +91,6 @@ void PrintQueue::asyncFetchMeta(QString urlPrefix, QString jobId, QString token,
 }
 
 QVariant PrintQueue::fetchMeta(QString urlPrefix, QString jobId, QString token) {
-    // To temporarily address cloudprint bug -
-    // https://makerbot.atlassian.net/browse/AB-1885
-    urlPrefix = "https://cloudprint.mbot.me/api/queue/jobs/";
-
     QNetworkRequest request(QUrl(urlPrefix + jobId + "/info/meta.json"));
     request.setRawHeader(QByteArray("Authorization"),
                          QByteArray(QString("Bearer " + token).toUtf8()));
