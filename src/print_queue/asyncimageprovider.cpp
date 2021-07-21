@@ -50,9 +50,6 @@ void AsyncImageResponseRunnable::run() {
         error_image = "file_no_preview_medium.png";
         break;
     }
-    // To temporarily address cloudprint bug -
-    // https://makerbot.atlassian.net/browse/AB-1885
-    urlPrefix = "https://cloudprint.mbot.me/api/queue/jobs/";
 
     QNetworkReply *reply = nullptr;
     QNetworkRequest request(QUrl(urlPrefix + jobId + "/info/" + thumbnail_name));
