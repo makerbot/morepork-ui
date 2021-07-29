@@ -16,6 +16,7 @@ FrePageForm {
 
     function startTestPrint() {
         printPage.printFromUI = true
+        printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
         printPage.getPrintFileDetails(storage.currentThing)
         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
