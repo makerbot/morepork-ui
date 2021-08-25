@@ -25,7 +25,7 @@ Item {
         if(bot.process.type == ProcessType.DryingCycleProcess) {
             switch(currentStep) {
                 case ProcessStateType.WaitingForSpool:
-                    state = "waiting_for_spool"
+                    state = "dry_kit_instructions_1"
                     break;
                 case ProcessStateType.Loading:
                 case ProcessStateType.DryingSpool:
@@ -61,20 +61,18 @@ Item {
     }
 
     property variant dryingMaterialsListMethod : [
-        {label: "pla", temperature : 45, time : 4},
-        {label: "tough", temperature : 45, time : 4},
-        {label: "pva", temperature : 45, time : 16},
-        {label: "abs/asa/sr30", temperature : 60, time : 4},
-        {label: "petg", temperature : 60, time : 2}
+        {label: "pva", temperature : 60, time : 24},
+        {label: "nylon || nylon cf || nylon 12 cf || petg", temperature : 60, time : 24},
+        {label: "pla || tough", temperature : 45, time : 24}
     ]
 
     property variant dryingMaterialsListMethodX : [
-        {label: "pla", temperature : 45, time : 4},
-        {label: "tough", temperature : 45, time : 4},
-        {label: "pva", temperature : 45, time : 16},
-        {label: "abs/asa/sr30", temperature : 60, time : 4},
-        {label: "petg", temperature : 60, time : 2},
-        {label: "nylon", temperature : 80, time : 8}
+        {label: "sr30", temperature : 0, time : 0},
+        {label: "pva", temperature : 70, time : 24},
+        {label: "rapidrinse", temperature : 50, time : 24},
+        {label: "nylon || nylon cf || nylon 12 cf", temperature : 70, time : 24},
+        {label: "abs || asa || pc-abs || petg", temperature : 60, time : 24},
+        {label: "pla || tough", temperature : 45, time : 24}
     ]
 
     Image {
@@ -132,14 +130,14 @@ Item {
             font.family: defaultFont.name
             font.pixelSize: 18
             font.weight: Font.Light
-            text: qsTr("If material is printing poorly, this may be due to moisture uptake. Method's built-in heaters can dry the material for improved print quality. Be sure the build plate is empty.")
+            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.\nThis procedure will allow you to dry\nmaterials for improved print quality,\nusing METHOD’s built-in heaters\nPlease sure the build plate is empty.")
             lineHeight: 1.2
             opacity: 1.0
         }
 
         RoundedButton {
             id: actionButton
-            label: qsTr("RAISE BUILD PLATE")
+            label: qsTr("START")
             buttonWidth: 310
             buttonHeight: 50
             anchors.left: parent.left
@@ -157,13 +155,38 @@ Item {
                     }
                 } else {
                     if(currentStep == ProcessStateType.WaitingForSpool) {
-                        doChooseMaterial = true
+                        if(dryMaterialPage.state == "dry_kit_instructions_1") {
+                            dryMaterialPage.state = "dry_kit_instructions_2"
+                        }
+                        else if(dryMaterialPage.state == "dry_kit_instructions_2") {
+                            dryMaterialPage.state = "waiting_for_spool"
+                        }
+                        else if(dryMaterialPage.state == "waiting_for_spool") {
+                            doChooseMaterial = true
+                        }
                     } else if(currentStep == ProcessStateType.Done) {
                         processDone()
                         hasFinished = false
                     }
                 }
             }
+        }
+
+        Text {
+            id: under_button_text
+            width: 350
+            wrapMode: Text.WordWrap
+            anchors.top: actionButton.bottom
+            anchors.topMargin: 20
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            color: "#e6e6e6"
+            font.family: defaultFont.name
+            font.pixelSize: 18
+            font.weight: Font.Light
+            text: qsTr("")
+            lineHeight: 1.2
+            opacity: 1.0
         }
 
         ColumnLayout {
@@ -251,6 +274,69 @@ Item {
             }
         },
         State {
+            name: "dry_kit_instructions_1"
+
+            PropertyChanges {
+                target: image
+                source: "qrc:/img/replace_desiccant.png"
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: title
+                text: qsTr("REPLACE DESICCANT")
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: qsTr("SPOOL TYPE A\nRemove cap and insert one 70g bag\nRe-attach cap to spool\n\nSPOOL TYPE B\nRemove puck from spool\nRemove cap and insert one 30g bag\nRe-attach cap and puck to spool")
+            }
+
+            PropertyChanges {
+                target: actionButton
+                button_text.text: qsTr("NEXT")
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
+        },
+        State {
+            name: "dry_kit_instructions_2"
+
+            PropertyChanges {
+                target: image
+                source: "qrc:/img/spool_bag.png"
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: title
+                text: qsTr("PLACE SPOOL IN BAG")
+            }
+
+            PropertyChanges {
+                target: subtitle
+                text: qsTr("Confirm your re-usable Mylar storage\nbag has no holes.\n\nPlace spool in bag and add additional\nfresh bags of dessicant before sealing.")
+            }
+
+            PropertyChanges {
+                target: actionButton
+                button_text.text: qsTr("NEXT")
+            }
+
+            PropertyChanges {
+                target: under_button_text
+                text: qsTr("For additional mylar bags and desiccant, purchase the MATERIAL DRY KIT at store.makerbot.com")
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
+        },
+        State {
             name: "waiting_for_spool"
 
             PropertyChanges {
@@ -261,7 +347,7 @@ Item {
 
             PropertyChanges {
                 target: title
-                text: qsTr("PLACE THE MATERIAL SPOOL ON THE BUILD PLATE")
+                text: qsTr("PLACE THE SEALED BAG ON BUILD PLATE")
             }
 
             PropertyChanges {
@@ -271,7 +357,7 @@ Item {
 
             PropertyChanges {
                 target: actionButton
-                button_text.text: qsTr("CHOOSE MATERIAL")
+                button_text.text: qsTr("SELECT MATERIAL")
             }
 
             PropertyChanges {
@@ -354,7 +440,7 @@ Item {
 
             PropertyChanges {
                 target: chamber_temperature_text
-                text: bot.chamberCurrentTemp + "°C"
+                text: bot.chamberCurrentTemp + "°C" + " | " + bot.chamberTargetTemp + "°C"
             }
 
             PropertyChanges {
@@ -548,7 +634,7 @@ Item {
             Text {
                 id: alert_text_copy_file_popup
                 color: "#cbcbcb"
-                text: qsTr("STOP DRYING CYCLE")
+                text: qsTr("EXIT PROCEDURE")
                 font.letterSpacing: 3
                 Layout.alignment: Qt.AlignHCenter
                 font.family: defaultFont.name
@@ -559,7 +645,7 @@ Item {
             Text {
                 id: description_text_copy_file_popup
                 color: "#cbcbcb"
-                text: qsTr("Are you sure you want to exit the drying process?\nThe material may still contain some moisture.")
+                text: qsTr("Are you sure you want to cancel and exit the procedure?")
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -579,14 +665,13 @@ Item {
         popupHeight: 220
 
         showTwoButtons: true
-        left_button_text: qsTr("BUILD PLATE CLEARED")
+        left_button_text: qsTr("CONFIRM")
         left_button.onClicked: {
             bot.buildPlateCleared()
             dryConfirmBuildPlateClearPopup.close()
         }
-        right_button_text: qsTr("CANCEL")
+        right_button_text: qsTr("BACK")
         right_button.onClicked: {
-            bot.cancel()
             dryConfirmBuildPlateClearPopup.close()
         }
 
@@ -612,7 +697,7 @@ Item {
             Text {
                 id: clear_build_plate_desc_text
                 color: "#cbcbcb"
-                text: qsTr("Please be sure your build plate is clear.")
+                text: qsTr("Check to make sure the printer build plate is empty.")
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

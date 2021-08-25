@@ -167,5 +167,7 @@
 	<file alias="print_feedback_thumbs_up.png">images/print_feedback_thumbs_up.png</file>
 	<file alias="print_feedback_thumbs_down.png">images/print_feedback_thumbs_down.png</file>
 	<file alias="refresh_otp.png">images/refresh_otp.png</file>
+	<file alias="replace_desiccant.png">images/replace_desiccant.png</file>
+	<file alias="spool_bag.png">images/spool_bag.png</file>
     </qresource>
 </RCC>

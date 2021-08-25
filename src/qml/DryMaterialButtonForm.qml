@@ -48,14 +48,14 @@ Button {
     Text {
         id: temperatureAndTimeText
         text: "999 C | 999 HR"
-        anchors.right: parent.right
-        anchors.rightMargin: 25
+        anchors.top: materialNameText.bottom
+        anchors.topMargin: 5
+        anchors.left: parent.left
+        anchors.leftMargin: 40
         anchors.verticalCenter: parent.verticalCenter
         font.family: defaultFont.name
         font.letterSpacing: 3
-        font.weight: Font.Bold
-        font.pointSize: 14
-        font.capitalization: Font.AllUppercase
+        font.pointSize: 8
         color: "#ffffff"
         smooth: false
         antialiasing: false

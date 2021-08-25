@@ -411,12 +411,25 @@ Item {
             property var backSwiper: advancedSettingsSwipeView
             property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
+            property bool backIsCancel: bot.process.type == ProcessType.DryingCycleProcess &&
+                                        dryMaterial.state != "choose_material" &&
+                                        dryMaterial.state != "waiting_for_spool" &&
+                                        dryMaterial.state != "dry_kit_instructions_2"
             smooth: false
             visible: false
 
             function altBack() {
                 if(bot.process.type == ProcessType.DryingCycleProcess) {
-                    dryMaterial.cancelDryingCyclePopup.open()
+                    if(dryMaterial.state == "choose_material") {
+                        dryMaterial.state = "waiting_for_spool"
+                        dryMaterial.doChooseMaterial = false
+                    }
+                    else if(dryMaterial.state == "waiting_for_spool")
+                        dryMaterial.state = "dry_kit_instructions_2"
+                    else if(dryMaterial.state == "dry_kit_instructions_2")
+                        dryMaterial.state = "dry_kit_instructions_1"
+                    else
+                        dryMaterial.cancelDryingCyclePopup.open()
                 } else {
                     dryMaterial.state = "base state"
                     if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
