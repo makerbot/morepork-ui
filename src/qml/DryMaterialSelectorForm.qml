@@ -12,6 +12,7 @@ ListView {
     orientation: ListView.Vertical
     flickableDirection: Flickable.VerticalFlick
     ScrollBar.vertical: ScrollBar {}
+
     model: {
         if(bot.machineType == MachineType.Fire) {
             dryingMaterialsListMethod
@@ -25,9 +26,14 @@ ListView {
     delegate:
         DryMaterialButton {
         id: materialButton
+        enabled: model.modelData["temperature"] != 0
+        opacity: model.modelData["temperature"] != 0 ? 1 : 0.3
         materialNameText: model.modelData["label"]
         temperatureAndTimeText: {
-            model.modelData["temperature"] + "°C | " + model.modelData["time"] + "HR"
+            if (model.modelData["temperature"] != 0)
+                model.modelData["temperature"] + "°C for " + model.modelData["time"] + " hours"
+            else
+                "Not available, this material can be damaged by drying."
         }
         smooth: false
         antialiasing: false
