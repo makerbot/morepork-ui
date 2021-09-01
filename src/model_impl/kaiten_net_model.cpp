@@ -110,7 +110,7 @@ void KaitenNetModel::cloudServicesInfoUpdate(const Json::Value &result) {
 }
 
 void KaitenNetModel::printQueueUpdate(const Json::Value &queue) {
-    if (queue.isArray() && queue.size() > 0) {
+    if (queue.isArray()) {
         QList<QObject*> print_queue_list;
         print_queue_list.clear();
 
