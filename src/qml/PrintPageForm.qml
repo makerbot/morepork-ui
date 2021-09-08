@@ -227,8 +227,13 @@ Item {
         chamber_temp = meta['chamber_temperature'] + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
-        startPrintSource = PrintPage.FromPrintQueue
-        printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+        if(!startPrintMaterialCheck()) {
+            startPrintErrorsPopup.open()
+        }
+        else {
+            startPrintSource = PrintPage.FromPrintQueue
+            printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+        }
     }
 
     function fetchMetadataFailed() {
