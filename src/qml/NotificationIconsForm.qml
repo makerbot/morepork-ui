@@ -10,6 +10,67 @@ Item {
 
     property alias hepa_filter_image: hepa_filter_image
 
+    Timer {
+        id: uiTimeTimer
+        interval: 60000 // once every minute
+        repeat: true
+        running: true
+        onTriggered: {
+            bot.getSystemTime()
+            var systemTime = bot.systemTime
+            if (systemTime.indexOf(" ") < 0) {
+                // not ready for parsing; do nothing
+                return
+            }
+            // 2018-09-10 18:04:16
+            var time_elements = systemTime.split(" ")
+            var date_element = time_elements[0] // 2018-09-10
+            var time_element = time_elements[1] // 18:04:16
+            var time_split = time_element.split(":")
+            var current_hour = time_split[0] // 18
+            var current_minute = time_split[1] // 04
+            var current_second = time_split[2] // 16
+            var date_split = date_element.split("-")
+            // var current_year = date_split[0] // 2018
+            var current_month = date_split[1] // 09
+            var current_day = date_split[2] //10
+
+            var monthDayText = current_month + "/" + current_day
+            current_hour = (current_hour == 0 ? 12 : current_hour)
+            var hourMinuteText = current_hour + ":" + current_minute
+
+            textDateTime.text = monthDayText + "\n" + hourMinuteText
+        }
+    }
+
+    Item {
+        id: dateTimeText
+        z: 3
+        anchors.rightMargin: 0
+        anchors.topMargin: 0
+        height: barHeight
+        smooth: false
+        anchors.right: hepaFilter_item.left
+        anchors.top: parent.top
+
+        Text {
+            id: textDateTime
+            color: "#a0a0a0"
+            text: "--/--\n--:--"
+            antialiasing: false
+            smooth: false
+            font.capitalization: Font.AllUppercase
+            font.family: defaultFont.name
+            font.letterSpacing: 0
+            font.weight: Font.Light
+            font.pixelSize: 12
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignRight
+            anchors.top: parent.top
+            anchors.right: parent.right
+        }
+    }
+
     Item {
         id: hepaFilter_item
         width: 26
