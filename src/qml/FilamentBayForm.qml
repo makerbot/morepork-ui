@@ -225,7 +225,7 @@ Item {
             "PVA-M"
             break;
         case 8:
-            "SR30"
+            "SR-30"
             break;
         case 9:
             "ASA"
@@ -324,7 +324,7 @@ Item {
                 ["PVA"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["SR30", "HIPS", "RapidRinse"]
+                ["SR-30", "HIPS", "RapidRinse"]
                 break;
             default:
                 []

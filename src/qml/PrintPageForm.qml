@@ -208,8 +208,8 @@ Item {
         var printTimeSec = meta['duration_s']
         model_extruder_used = meta['extrusion_distances_mm'][0] > 0 ? true : false
         support_extruder_used = meta['extrusion_distances_mm'][1] > 0 ? true : false
-        print_model_material = meta['materials'][0]
-        print_support_material = meta['materials'][1]
+        print_model_material = storage.updateMaterialNames(meta['materials'][0])
+        print_support_material = storage.updateMaterialNames(meta['materials'][1])
         print_material = !support_extruder_used ?
                             meta['materials'][0] :
                             meta['materials'][0] + "+" + meta['materials'][1]
