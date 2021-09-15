@@ -9,6 +9,53 @@ Item {
     smooth: false
 
     property alias hepa_filter_image: hepa_filter_image
+    property string timeSeconds: "00"
+    property string oldSeparatorString: " "
+
+    Timer {
+        id: secondsUpdater
+        interval: 100 // 10x per second
+        repeat: true
+        running: true
+        onTriggered: {
+            timeSeconds = new Date().toLocaleString(Qt.locale(), "ss")
+            // 2-on, 2-off
+            var newSeparatorString = (((timeSeconds % 4) < 2) ? ":" : " ")
+            if (newSeparatorString != oldSeparatorString) {
+                oldSeparatorString =  newSeparatorString
+                var formatString = "M/d H" + oldSeparatorString + "mm"
+                textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
+            }
+        }
+    }
+
+    Item {
+        id: dateTimeText
+        z: 3
+        anchors.rightMargin: 0
+        anchors.topMargin: 11
+        height: barHeight
+        smooth: false
+        anchors.right: hepaFilter_item.left
+        anchors.top: parent.top
+
+        Text {
+            id: textDateTime
+            color: "#a0a0a0"
+            text: "--/--\n--:--"
+            antialiasing: false
+            smooth: false
+            font.capitalization: Font.AllUppercase
+            font.family: defaultFont.name
+            font.letterSpacing: 0
+            font.weight: Font.Light
+            font.pixelSize: 18
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignRight
+            anchors.top: parent.top
+            anchors.right: parent.right
+        }
+    }
 
     Item {
         id: hepaFilter_item
