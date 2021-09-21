@@ -347,7 +347,7 @@ class MoreporkStorage : public QObject {
     // throughout fw/toolpath) to user facing (marketing) names
     // displayed on the printer UI. All comparisons on UI happen
     // with marketing names for simplicity.
-    void updateMaterialNames(QString &material);
+    Q_INVOKABLE QString updateMaterialNames(QString material);
 
     Q_INVOKABLE void getTestPrint(const QString test_print_dir,
                                   const QString test_print_name);

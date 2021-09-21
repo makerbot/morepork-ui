@@ -256,10 +256,10 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
     MakerbotFileMetaReader file_meta_reader(kFileInfo);
     if(file_meta_reader.loadMetadata()) {
         auto &meta_data = file_meta_reader.meta_data_;
-        QString material_name_a = QString::fromStdString(meta_data->material[0]);
-        updateMaterialNames(material_name_a);
-        QString material_name_b = QString::fromStdString(meta_data->material[1]);
-        updateMaterialNames(material_name_b);
+        QString material_name_a = updateMaterialNames(
+                QString::fromStdString(meta_data->material[0]));
+        QString material_name_b = updateMaterialNames(
+                QString::fromStdString(meta_data->material[1]));
         return
             // e.g. "/tmp/archive.tar.gz"
             new PrintFileInfo(
@@ -475,7 +475,7 @@ void MoreporkStorage::backStackClear(){
   back_dir_stack_.clear();
 }
 
-void MoreporkStorage::updateMaterialNames(QString &name) {
+QString MoreporkStorage::updateMaterialNames(QString name) {
     if(name == "im-pla") {
         name = "tough";
     } else if(name == "pet") {
@@ -493,4 +493,5 @@ void MoreporkStorage::updateMaterialNames(QString &name) {
     } else if(name == "generic_model") {
         name = "unknown";
     }
+    return name;
 }
