@@ -19,7 +19,6 @@ Item {
     property alias notificationIcons: notificationIcons
     property alias text_printerName: textPrinterName
     signal backClicked()
-    signal drawerDownClicked()
 
     NotificationIcons {
         id: notificationIcons

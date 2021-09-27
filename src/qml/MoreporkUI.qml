@@ -229,11 +229,9 @@ ApplicationWindow {
            activeDrawer == printPage.sortingDrawer) {
             activeDrawer.interactive = state
             if(state) {
-                topBar.drawerDownClicked.connect(activeDrawer.open)
             }
             else {
                 activeDrawer.close()
-                topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
         }
     }
@@ -257,7 +255,6 @@ ApplicationWindow {
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
             activeDrawer.interactive = false
-            topBar.drawerDownClicked.disconnect(activeDrawer.open)
         }
     }
 
