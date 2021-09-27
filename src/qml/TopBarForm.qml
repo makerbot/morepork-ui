@@ -379,17 +379,5 @@ Item {
             source: "qrc:/img/arrow_19pix.png"
             fillMode: Image.PreserveAspectFit
         }
-
-        MouseArea {
-            id: mouseAreaTopDrawerDown
-            x: 301
-            y: 40
-            width: 40
-            height: 60
-            smooth: false
-            anchors.fill: parent
-            z: 2
-            onClicked: drawerDownClicked()
-        }
     }
 }
