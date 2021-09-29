@@ -14,7 +14,6 @@ Item {
     height: topFadeIn.height
     smooth: false
     property alias topFadeIn: topFadeIn
-    property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
     property alias text_printerName: textPrinterName
@@ -363,20 +362,6 @@ Item {
             font.pixelSize: 22
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-        }
-
-        Image {
-            id: imageDrawerArrow
-            y: 227
-            height: 25
-            smooth: false
-            anchors.left: textPrinterName.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: textPrinterName.verticalCenter
-            rotation: -90
-            z: 1
-            source: "qrc:/img/arrow_19pix.png"
-            fillMode: Image.PreserveAspectFit
         }
     }
 }

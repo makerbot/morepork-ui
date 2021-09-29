@@ -15,7 +15,6 @@ ApplicationWindow {
     property alias mainSwipeView: mainSwipeView
     property alias topBar: topBar
     property var currentItem: mainMenu
-    property var activeDrawer
     property bool authRequest: bot.isAuthRequestPending
     property bool installUnsignedFwRequest: bot.isInstallUnsignedFwRequestPending
     property bool updatingExtruderFirmware: bot.updatingExtruderFirmware
@@ -222,20 +221,6 @@ ApplicationWindow {
         }
     }
 
-    function setDrawerState(state) {
-        topBar.imageDrawerArrow.visible = state
-        if(activeDrawer == printPage.printingDrawer ||
-           activeDrawer == materialPage.materialPageDrawer ||
-           activeDrawer == printPage.sortingDrawer) {
-            activeDrawer.interactive = state
-            if(state) {
-            }
-            else {
-                activeDrawer.close()
-            }
-        }
-    }
-
     function setCurrentItem(currentItem_) {
         currentItem = currentItem_
     }
@@ -246,15 +231,6 @@ ApplicationWindow {
         }
         else {
             currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
-        }
-    }
-
-    function disableDrawer() {
-        topBar.imageDrawerArrow.visible = false
-        if(activeDrawer == printPage.printingDrawer ||
-           activeDrawer == materialPage.materialPageDrawer ||
-           activeDrawer == printPage.sortingDrawer) {
-            activeDrawer.interactive = false
         }
     }
 
@@ -373,7 +349,6 @@ ApplicationWindow {
             width: parent.width
             smooth: false
             backButton.visible: false
-            imageDrawerArrow.visible: false
             visible: mainSwipeView.visible
 
             onBackClicked: {
@@ -406,9 +381,6 @@ ApplicationWindow {
                 if(itemToDisplayDefaultIndex === MoreporkUI.BasePage) {
                     mainSwipeView.setCurrentIndex(MoreporkUI.BasePage)
                     topBar.backButton.visible = false
-                    if(!printPage.isPrintProcess) {
-                        disableDrawer()
-                    }
                 }
                 else {
                     mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem.visible = true

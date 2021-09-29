@@ -33,10 +33,6 @@ Item {
     property string print_url_prefix
     property string readyByTime
     property int lastPrintTimeSec
-    property alias printingDrawer: printingDrawer
-    property alias sortingDrawer: sortingDrawer
-    property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
-    property alias buttonPausePrint: printingDrawer.buttonPausePrint
     property alias defaultItem: itemPrintStorageOpt
     property alias buttonUsbStorage: buttonUsbStorage
     property alias buttonInternalStorage: buttonInternalStorage
@@ -66,7 +62,6 @@ Item {
         if(!storage.usbStorageConnected) {
             if(printSwipeView.currentIndex != PrintPage.BasePage &&
                     browsingUsbStorage) {
-                setDrawerState(false)
                 printSwipeView.swipeToItem(PrintPage.BasePage)
             }
             if(safeToRemoveUsbPopup.opened) {
@@ -87,9 +82,6 @@ Item {
             if(printSwipeView.currentIndex != PrintPage.BasePage) {
                 printSwipeView.swipeToItem(PrintPage.BasePage)
             }
-            setDrawerState(false)
-            activeDrawer = printPage.printingDrawer
-            setDrawerState(true)
             if(printFromQueueState == PrintPage.WaitingToStartPrint) {
                 checkStartQueuedPrintTimeout.stop()
                 printQueuePopup.close()
@@ -104,7 +96,6 @@ Item {
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-            setDrawerState(false)
             // Only reset at end of 'Print Process'
             // if 'Print Again' option isn't used
             if(!printAgain) {
@@ -290,14 +281,6 @@ Item {
         readyByTime = doneByTimeString + " " + doneByMeridianString + " " + doneByDayString
     }
 
-    PrintingDrawer {
-        id: printingDrawer
-    }
-
-    SortDrawer {
-        id: sortingDrawer
-    }
-
     enum SwipeIndex {
         BasePage,
         FileBrowser,
@@ -418,8 +401,6 @@ Item {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
                             storage.updatePrintFileList("?root_internal?")
-                            activeDrawer = printPage.sortingDrawer
-                            setDrawerState(true)
                             printSwipeView.swipeToItem(PrintPage.FileBrowser)
                         }
                     }
@@ -435,8 +416,6 @@ Item {
                                 browsingUsbStorage = true
                                 storage.setStorageFileType(StorageFileType.Print)
                                 storage.updatePrintFileList("?root_usb?")
-                                activeDrawer = printPage.sortingDrawer
-                                setDrawerState(true)
                                 printSwipeView.swipeToItem(PrintPage.FileBrowser)
                             }
                         }
@@ -512,7 +491,6 @@ Item {
                     storage.updatePrintFileList(backDir)
                 }
                 else {
-                    setDrawerState(false)
                     printSwipeView.swipeToItem(PrintPage.BasePage)
                 }
             }
@@ -606,7 +584,6 @@ Item {
                             }
                             else {
                                 startPrintSource = PrintPage.FromLocal
-                                setDrawerState(false)
                                 startPrintInstructionsItem.acknowledged = false
                                 printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
                             }
@@ -801,7 +778,6 @@ Item {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()
-                        setDrawerState(true)
                     }
                     currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
                     startPrintSource = PrintPage.None
@@ -814,7 +790,6 @@ Item {
             function skipFreStepAction() {
                 startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                 resetPrintFileDetails()
-                setDrawerState(false)
                 printSwipeView.swipeToItem(PrintPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
@@ -942,8 +917,6 @@ Item {
             browsingUsbStorage = false
             storage.setStorageFileType(StorageFileType.Print)
             storage.updatePrintFileList("?root_internal?")
-            activeDrawer = printPage.sortingDrawer
-            setDrawerState(true)
             if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
                 printSwipeView.swipeToItem(PrintPage.FileBrowser)
             }

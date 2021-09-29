@@ -37,7 +37,6 @@ Item {
             return;
         }
         startLoadUnloadFromUI = true
-        enableMaterialDrawer()
         loadUnloadFilamentProcess.isExternalLoadUnload = true
         loadUnloadFilamentProcess.lastHeatingTemperature = temperature
         if(isLoadFilament) {

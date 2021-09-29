@@ -138,7 +138,6 @@ PrintPageForm {
     function startPrint() {
         clearErrors()
         storage.backStackClear()
-        activeDrawer = printPage.printingDrawer
         bot.print(fileName)
         printFromUI = true
         printSwipeView.swipeToItem(PrintPage.BasePage)
@@ -176,90 +175,6 @@ PrintPageForm {
             printStatusView.testPrintComplete = true
         }
         resetPrintFileDetails()
-    }
-
-    printingDrawer.buttonCancelPrint.onClicked: {
-        printingDrawer.close()
-        if(inFreStep) {
-            skipFreStepPopup.open()
-            return;
-        }
-        cancelPrintPopup.open()
-    }
-
-    printingDrawer.buttonPausePrint.onClicked: {
-        if(!printingDrawer.buttonPausePrint.disableButton) {
-            clearErrors()
-            if(bot.process.stateType == ProcessStateType.Printing) {
-                bot.pauseResumePrint("suspend")
-            }
-            else if(bot.process.stateType == ProcessStateType.Paused) {
-                bot.pauseResumePrint("resume")
-            }
-            printingDrawer.close()
-        }
-    }
-
-    printingDrawer.buttonChangeFilament.onClicked: {
-        if(!printingDrawer.buttonChangeFilament.disableButton) {
-            if(bot.process.stateType == ProcessStateType.Paused) {
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                }
-                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                }
-                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
-                }
-                printingDrawer.close()
-            }
-            else if(bot.process.stateType == ProcessStateType.Printing) {
-                bot.pauseResumePrint("suspend")
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                }
-                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                }
-                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
-                }
-                printingDrawer.close()
-            }
-        }
-    }
-
-    printingDrawer.buttonClose.onClicked: {
-        printingDrawer.close()
-    }
-
-    sortingDrawer.buttonSortAZ.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = "qrc:/img/check_circle_small.png"
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
-        storage.sortType = StorageSortType.Alphabetic
-        sortingDrawer.close()
-    }
-
-    sortingDrawer.buttonSortDateAdded.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = ""
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = "qrc:/img/check_circle_small.png"
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
-        storage.sortType = StorageSortType.DateAdded
-        sortingDrawer.close()
-    }
-
-    sortingDrawer.buttonSortPrintTime.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = ""
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = "qrc:/img/check_circle_small.png"
-        storage.sortType = StorageSortType.PrintTime
-        sortingDrawer.close()
-    }
-
-    sortingDrawer.buttonClose.onClicked: {
-        sortingDrawer.close()
     }
 
     reviewTestPrint.continueButton.button_mouseArea.onClicked: {

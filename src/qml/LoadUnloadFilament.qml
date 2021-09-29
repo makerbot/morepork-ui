@@ -34,7 +34,6 @@ LoadUnloadFilamentForm {
                             startLoadUnloadFromUI = true
                             isLoadFilament = true
                             bot.loadFilament(1, false, false)
-                            setDrawerState(true)
                             materialSwipeView.swipeToItem(2)
                         } else if(bayID == 2) {
                             fre.gotoNextStep(currentFreStep)

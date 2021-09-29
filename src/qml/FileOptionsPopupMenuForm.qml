@@ -32,7 +32,6 @@ PopupMenu {
                 storage.deletePrintFile(fileName)
                 if(printSwipeView.currentIndex != 1) {
                     printSwipeView.swipeToItem(1)
-                    setDrawerState(true)
                 }
             }
         }
@@ -45,7 +44,6 @@ PopupMenu {
             storage.deletePrintFile(fileName)
             if(printSwipeView.currentIndex != 1) {
                 printSwipeView.swipeToItem(1)
-                setDrawerState(true)
             }
         }
         enabled: browsingUsbStorage

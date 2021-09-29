@@ -11,7 +11,6 @@
         <file>MainMenuIconForm.qml</file>
         <file>PrintPage.qml</file>
         <file>PrintPageForm.qml</file>
-        <file>PrintingDrawer.qml</file>
         <file>ExtruderPage.qml</file>
         <file>ExtruderPageForm.qml</file>
         <file>SettingsPage.qml</file>
@@ -38,12 +37,8 @@
         <file>LoadUnloadFilamentForm.qml</file>
         <file>FileButton.qml</file>
         <file>FileButtonForm.qml</file>
-        <file>MaterialPageDrawer.qml</file>
-        <file>MaterialPageDrawerForm.qml</file>
         <file>RoundedButton.qml</file>
         <file>RoundedButtonForm.qml</file>
-        <file>SortDrawer.qml</file>
-        <file>SortDrawerForm.qml</file>
         <file>FirmwareUpdatePage.qml</file>
         <file>FirmwareUpdatePageForm.qml</file>
         <file>MaterialIcon.qml</file>

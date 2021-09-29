@@ -31,7 +31,6 @@ Item {
     property alias materialWarningPopup: materialWarningPopup
     property alias ok_unk_mat_loading_mouseArea: ok_mat_warning_mouseArea
 
-    property alias materialPageDrawer: materialPageDrawer
     property bool isLoadFilament: false
     property bool startLoadUnloadFromUI: false
     property bool isLoadUnloadProcess: bot.process.type == ProcessType.Load ||
@@ -55,7 +54,6 @@ Item {
             if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage){
                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }
-            enableMaterialDrawer()
             if(materialSwipeView.currentIndex != MaterialPage.LoadUnloadPage){
                 materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
@@ -183,11 +181,6 @@ Item {
             if(bot.process.stateType == ProcessStateType.Paused) {
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                // If cancelled out of load/unload while in print process
-                // enable print drawer to set UI back to printing state.
-                setDrawerState(false)
-                activeDrawer = printPage.printingDrawer
-                setDrawerState(true)
             }
             else {
                 cancelLoadUnloadPopup.open()
@@ -200,12 +193,7 @@ Item {
             loadUnloadFilamentProcess.state = "base state"
             loadUnloadFilamentProcess.isExternalLoadUnload = false
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setDrawerState(false)
         }
-    }
-
-    MaterialPageDrawer {
-        id: materialPageDrawer
     }
 
     enum PageIndex {
@@ -298,7 +286,6 @@ Item {
                 bot.cancel()
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                setDrawerState(false)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -328,13 +315,9 @@ Item {
                     state = "base state"
                     isExternalLoadUnload = false
                     materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                    setDrawerState(false)
                     // If load/unload process completes successfully while,
-                    // in print process enable print drawer to set UI back,
-                    // to printing state.
+                    // in print process go back to the print page
                     if(printPage.isPrintProcess) {
-                        activeDrawer = printPage.printingDrawer
-                        setDrawerState(true)
                         // Go to print page directly after loading or
                         // unloading during a print.
                         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)

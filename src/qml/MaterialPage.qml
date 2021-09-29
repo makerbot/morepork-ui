@@ -20,12 +20,6 @@ MaterialPageForm {
     // This flag is used to prevent this UI behavior.
     property bool materialChangeCancelled: false
 
-    function enableMaterialDrawer() {
-        setDrawerState(false)
-        activeDrawer = materialPage.materialPageDrawer
-        setDrawerState(true)
-    }
-
     function noExtruderPopupCheck(extruderID) {
         if(extruderID == 1 && !bot.extruderAPresent) {
             extruderIDnoExtruderPopup = extruderID
@@ -109,11 +103,6 @@ MaterialPageForm {
         loadUnloadFilamentProcess.state = "base state"
         loadUnloadFilamentProcess.isExternalLoadUnload = false
         materialSwipeView.swipeToItem(MaterialPage.BasePage)
-        // If cancelled out of load/unload while in print process
-        // enable print drawer to set UI back to printing state.
-        setDrawerState(false)
-        activeDrawer = printPage.printingDrawer
-        setDrawerState(true)
     }
 
     function maybeShowMoistureWarningPopup(bayID) {
@@ -150,7 +139,6 @@ MaterialPageForm {
                 noExtruderPopupCheck(bay1.filamentBayID)
                 startLoadUnloadFromUI = true
                 isLoadFilament = true
-                enableMaterialDrawer()
                 // loadFilament(int tool_index, bool external, bool whilePrinitng)
                 // if load/unload happens while in print process
                 // i.e. while print paused, set whilePrinting to true
@@ -176,7 +164,6 @@ MaterialPageForm {
                 noExtruderPopupCheck(bay1.filamentBayID)
                 startLoadUnloadFromUI = true
                 isLoadFilament = false
-                enableMaterialDrawer()
                 // unloadFilament(int tool_index, bool external, bool whilePrinitng)
                 if(printPage.isPrintProcess &&
                    bot.process.stateType == ProcessStateType.Paused) {
@@ -203,7 +190,6 @@ MaterialPageForm {
                 noExtruderPopupCheck(bay2.filamentBayID)
                 startLoadUnloadFromUI = true
                 isLoadFilament = true
-                enableMaterialDrawer()
                 // loadFilament(int tool_index, bool external, bool whilePrinitng)
                 if(printPage.isPrintProcess &&
                    bot.process.stateType == ProcessStateType.Paused) {
@@ -222,7 +208,6 @@ MaterialPageForm {
                 noExtruderPopupCheck(bay2.filamentBayID)
                 startLoadUnloadFromUI = true
                 isLoadFilament = false
-                enableMaterialDrawer()
                 // unloadFilament(int tool_index, bool external, bool whilePrinitng)
                 if(printPage.isPrintProcess &&
                    bot.process.stateType == ProcessStateType.Paused) {
@@ -287,7 +272,6 @@ MaterialPageForm {
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setDrawerState(false)
         }
         else if(bot.process.type == ProcessType.Unload) {
             if(bot.process.isProcessCancellable) {
@@ -295,7 +279,6 @@ MaterialPageForm {
                 bot.cancel()
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                setDrawerState(false)
             }
             else {
                 waitUntilUnloadedPopup.open()
@@ -305,7 +288,6 @@ MaterialPageForm {
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setDrawerState(false)
         }
     }
 
@@ -319,7 +301,6 @@ MaterialPageForm {
         bot.cancel()
         loadUnloadFilamentProcess.state = "base state"
         materialSwipeView.swipeToItem(MaterialPage.BasePage)
-        setDrawerState(false)
         if(inFreStep) {
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             inFreStep = false
@@ -336,27 +317,5 @@ MaterialPageForm {
 
     cancel_mouseArea_no_extruder_popup.onClicked: {
         noExtruderPopup.close()
-    }
-
-    materialPageDrawer.buttonCancelMaterialChange.onClicked: {
-        materialPageDrawer.close()
-        if(!inFreStep) {
-            exitMaterialChange()
-        }
-        else {
-            if(bot.process.type == ProcessType.Load ||
-               bot.process.type == ProcessType.Unload) {
-                skipFreStepPopup.open()
-            }
-            else {
-                if(bot.process.type == ProcessType.Print) {
-                    cancelLoadUnloadPopup.open()
-                }
-            }
-        }
-    }
-
-    materialPageDrawer.buttonResume.onClicked: {
-        materialPageDrawer.close()
     }
 }

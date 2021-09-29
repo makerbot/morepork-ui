@@ -176,11 +176,6 @@ Item {
                 if(materialChangeCancelled) {
                     state = "base state"
                     materialSwipeView.swipeToItem(0)
-                    // If cancelled out of load/unload while in print process
-                    // enable print drawer to set UI back to printing state.
-                    setDrawerState(false)
-                    activeDrawer = printPage.printingDrawer
-                    setDrawerState(true)
                     if(inFreStep &&
                        bot.process.type == ProcessType.Print) {
                         mainSwipeView.swipeToItem(1)
@@ -281,8 +276,7 @@ Item {
                   loadUnloadForm.state == "loaded_filament" ||
                   loadUnloadForm.state == "unloaded_filament") &&
                  (!materialWarningPopup.opened &&
-                  !cancelLoadUnloadPopup.opened &&
-                  !materialPageDrawer.opened)
+                  !cancelLoadUnloadPopup.opened)
         opacity: 1
         smooth: false
     }

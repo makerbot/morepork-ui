@@ -27,7 +27,6 @@ FrePageForm {
         mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true
-        materialPage.enableMaterialDrawer()
         bot.loadFilament(0, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
