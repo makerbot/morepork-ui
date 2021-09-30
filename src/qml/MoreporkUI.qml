@@ -227,7 +227,10 @@ ApplicationWindow {
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
-            activeDrawer.interactive = state
+            // Patch to disable swiping of the drawer, which appears
+            // to eliminate glitchy back button issues that present
+            // themselves on some units.
+            // activeDrawer.interactive = state
             if(state) {
                 topBar.drawerDownClicked.connect(activeDrawer.open)
             }
