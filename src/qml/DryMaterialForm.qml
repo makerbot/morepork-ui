@@ -69,7 +69,7 @@ Item {
     property variant dryingMaterialsListMethodX : [
         {label: "sr30", temperature : 0, time : 0},
         {label: "pva", temperature : 70, time : 24},
-        {label: "rapidrinse", temperature : 50, time : 24},
+        {label: "rapidrinse", temperature : 70, time : 24},
         {label: "nylon || nylon cf || nylon 12 cf", temperature : 70, time : 24},
         {label: "abs || asa || pc-abs || petg", temperature : 60, time : 24},
         {label: "pla || tough", temperature : 45, time : 24}
