@@ -232,9 +232,9 @@ Item {
             }
 
             TimeZoneButton {
-                id: buttonTimeZone_CTT
-                timeZoneCode: qsTr("CTT")
-                timeZoneName: qsTr("CHINA TAIWAN TIME")
+                id: buttonTimeZone_CHN
+                timeZoneCode: qsTr("CHN")
+                timeZoneName: qsTr("CHINA STANDARD TIME")
                 timeZoneGMTReference: qsTr("GMT+8:00")
                 timeZonePathName: "Etc/GMT+8"
             }
