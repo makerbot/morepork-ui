@@ -1,4 +1,4 @@
-import QtQuick 2.10
+import QtQuick 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
@@ -321,6 +321,41 @@ ApplicationWindow {
         InfoPage,       // 4
         MaterialPage,   // 5
         AdvancedPage    // 6
+    }
+
+    Item {
+       id: showTouchItem
+       z: 10
+       anchors.fill: parent
+       PointHandler {
+            id: pointHandler
+            acceptedDevices: PointerDevice.TouchScreen | PointerDevice.Mouse
+            target: Rectangle {
+                parent: showTouchItem
+                color: "red"
+                visible: pointHandler.active
+                x: pointHandler.point.position.x - width / 2
+                y: pointHandler.point.position.y - height / 2
+                width: 30
+                height: width
+                radius: width / 2
+            }
+        }
+
+       PointHandler {
+            id: pointHandler1
+            acceptedDevices: PointerDevice.TouchScreen | PointerDevice.Mouse
+            target: Rectangle {
+                parent: showTouchItem
+                color: "green"
+                visible: pointHandler1.active
+                x: pointHandler1.point.position.x - width / 2
+                y: pointHandler1.point.position.y - height / 2
+                width: 30
+                height: width
+                radius: width / 2
+            }
+        }
     }
 
     Item {

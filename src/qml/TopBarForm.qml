@@ -21,6 +21,36 @@ Item {
     signal backClicked()
     signal drawerDownClicked()
 
+    RowLayout {
+        z: 2
+        height: 40
+        spacing: 2
+        anchors.right: parent.right
+        anchors.rightMargin: 100
+        anchors.top: parent.top
+        anchors.topMargin: 0
+
+        Text {
+            text: Math.floor(pointHandler1.point.position.x) + " x " + Math.floor(pointHandler1.point.position.y)
+            antialiasing: false
+            smooth: false
+            font.family: defaultFont.name
+            font.weight: Font.Light
+            font.pixelSize: 21
+            color: "green"
+        }
+
+        Text {
+            text: Math.floor(pointHandler.point.position.x) + " x " + Math.floor(pointHandler.point.position.y)
+            antialiasing: false
+            smooth: false
+            font.family: defaultFont.name
+            font.weight: Font.Light
+            font.pixelSize: 21
+            color: "red"
+        }
+    }
+
     NotificationIcons {
         id: notificationIcons
         z: 2
