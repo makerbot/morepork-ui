@@ -358,18 +358,29 @@ ApplicationWindow {
             z: 2
         }
 
-        Drawer {
-            id: backSwipe
-            width: rootAppWindow.width
-            height: rootAppWindow.height
-            edge: rootItem.rotation == 180 ? Qt.RightEdge : Qt.LeftEdge
-            dim: false
-            opacity: 0
-            interactive: mainSwipeView.currentIndex
-            onOpened: {
-                position = 0
-                goBack()
-                close()
+        Flickable {
+            id: backSwipeHandler
+            z: 1
+            height: 420
+            width: 20
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            flickableDirection: Flickable.HorizontalFlick
+            interactive:  mainSwipeView.currentIndex
+            onFlickStarted: {
+                if (horizontalVelocity < 0) {
+                    returnToBounds()
+                    goBack()
+                }
+            }
+
+            boundsMovement: Flickable.StopAtBounds
+            pressDelay: 0
+
+            rebound: Transition {
+                NumberAnimation {
+                    duration: 0
+                }
             }
         }
 
@@ -398,9 +409,7 @@ ApplicationWindow {
             anchors.fill: parent
             anchors.topMargin: topBar.barHeight
             interactive: false
-            transform: Translate {
-                x: backSwipe.position * mainSwipeView.width * 1.5
-            }
+
             property alias materialPage: materialPage
             smooth: false
             visible: connectionState == ConnectionState.Connected &&
