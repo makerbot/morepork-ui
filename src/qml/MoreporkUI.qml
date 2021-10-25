@@ -365,7 +365,7 @@ ApplicationWindow {
             edge: rootItem.rotation == 180 ? Qt.RightEdge : Qt.LeftEdge
             dim: false
             opacity: 0
-            interactive: mainSwipeView.currentIndex
+            interactive: false
             onOpened: {
                 position = 0
                 goBack()
