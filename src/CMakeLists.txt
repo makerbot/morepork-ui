@@ -52,6 +52,7 @@ set(SOURCES
     model/logger.cpp
     model/network.cpp
     model/fre_tracker.cpp
+    model/ui_event_logger.cpp
     storage/storage.cpp
     settings_interface/settings_interface.cpp
     storage/disk_manager.cpp
@@ -82,6 +83,7 @@ set(MOREPORK_UI_HEADERS
     model/process_model.h
     model/network.h
     model/fre_tracker.h
+    model/ui_event_logger.h
     storage/storage.h
     storage/progress_copy.h
     settings_interface/settings_interface.h

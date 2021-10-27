@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "logging.h"
 #include "network.h"
+#include "model/ui_event_logger.h"
 
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
@@ -69,6 +70,7 @@ int main(int argc, char ** argv) {
     SettingsInterface settings;
     DiskManager disk_manager;
     DFSSettings dfs_settings;
+    QObject events_log = dynamic_cast<QObject>(UiEventLogger::GetInstance);
 
     QLocale::setDefault(QLocale(settings.getLanguageCode()));
 
@@ -99,6 +101,10 @@ int main(int argc, char ** argv) {
     engine.addImageProvider(QLatin1String("async"), new AsyncImageProvider);
 
     engine.load(MOREPORK_UI_QML_MAIN);
+
+    engine.rootContext()->setContextProperty("events_log", (QObject*)&events_log);
+    qmlRegisterSingletonType<UiEventLogger>("events_log", 1, 0, "UiEventLogger",
+        UiEventLogger::GetInstance);
 
     QObject *rootObject = engine.rootObjects().first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");

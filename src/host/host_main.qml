@@ -14,6 +14,8 @@ QtObject {
         Model {
             anchors.fill: parent
         }
+
+       Component.onCompleted: UiEventLogger.beginUiLogging(Window)
     }
 
     property var uiWindow: Ui.MoreporkUI {
