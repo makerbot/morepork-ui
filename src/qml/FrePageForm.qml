@@ -859,7 +859,7 @@ Item {
 
             PropertyChanges {
                 target: subtitle_text
-                text: qsTr("Download the MakerBot Print<br>desktop app to prepare your<br>own files for this printer.")
+                text: qsTr("Log onto MakerBot CloudPrint<br>to prepare your own files for this<br>printer.")
                 anchors.topMargin: 20
             }
 
