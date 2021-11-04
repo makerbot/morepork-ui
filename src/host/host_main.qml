@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Window 2.2
 import "../qml" as Ui
+// import events_logging 1.0
 
 QtObject {
     property var modelWindow: Window {
@@ -15,7 +16,6 @@ QtObject {
             anchors.fill: parent
         }
 
-       Component.onCompleted: UiEventLogger.beginUiLogging(Window)
     }
 
     property var uiWindow: Ui.MoreporkUI {
@@ -23,5 +23,7 @@ QtObject {
         y: 0
         title: "The morepork UI"
     }
+
+    // Component.onCompleted: UiEventLogger.beginUiLogging(modelWindow)
 }
 

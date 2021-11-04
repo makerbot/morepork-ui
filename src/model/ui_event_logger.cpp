@@ -21,7 +21,7 @@ void UiEventLogger::beginUiEventLogging(QObject *obj) {
 bool UiEventLogger::eventFilter(QObject *obj, QEvent *event) {
     // todo(william): make this toggleable to avoid spamming the logs
     if(1) {
-        qInfo() << "UIEVENTLOGGER";
+        // qInfo() << "UIEVENTLOGGER";
         switch(event->type()) {
             case QEvent::MouseButtonPress: {
                 QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -29,6 +29,18 @@ bool UiEventLogger::eventFilter(QObject *obj, QEvent *event) {
                     mouseEvent->globalX() << "," <<
                     mouseEvent->globalY() << "]";
                 break;
+            }
+            case QEvent::MetaCall: {
+                break; // we're not interested in these
+            }
+            case QEvent::UpdateRequest: {
+                break; // we're not interested in these
+            }
+            case QEvent::Timer: {
+                break; // we're not interested in these
+            }
+            case QEvent::SockAct: {
+                break; // we're not interested in these
             }
             default: {
                 qInfo() << "Unknown event type: [" << obj << "] got [" <<

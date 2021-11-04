@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import UiEventLogger 1.0
 
 Item {
     id: advancedInfo
@@ -67,4 +68,6 @@ Item {
             }
         }
     }
+
+    Component.onCompleted: UiEventLogger.beginUiLogging(advancedInfo)
 }

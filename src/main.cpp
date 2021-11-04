@@ -70,7 +70,7 @@ int main(int argc, char ** argv) {
     SettingsInterface settings;
     DiskManager disk_manager;
     DFSSettings dfs_settings;
-    QObject events_log = dynamic_cast<QObject>(UiEventLogger::GetInstance);
+    // QObject * events_log = UiEventLogger::GetInstance(0, 0);
 
     QLocale::setDefault(QLocale(settings.getLanguageCode()));
 
@@ -102,9 +102,13 @@ int main(int argc, char ** argv) {
 
     engine.load(MOREPORK_UI_QML_MAIN);
 
-    engine.rootContext()->setContextProperty("events_log", (QObject*)&events_log);
-    qmlRegisterSingletonType<UiEventLogger>("events_log", 1, 0, "UiEventLogger",
+    // engine.rootContext()->setContextProperty("UiEventLogger", (QObject*)&events_log);
+    // engine.rootContext()->setContextProperty("UiEventLogger", UiEventLogger::GetInstance);
+    qmlRegisterSingletonType<UiEventLogger>("model/ui_event_logger.h", 1, 0, "UiEventLogger",
         UiEventLogger::GetInstance);
+
+    // super-spammy, not easy to filter:
+    // qapp.installEventFilter(events_log);
 
     QObject *rootObject = engine.rootObjects().first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
