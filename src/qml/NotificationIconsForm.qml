@@ -37,7 +37,6 @@ Item {
             var time_divider = (((current_second % 4) > 1)?":":" ")
 
             var monthDayText = current_month + "/" + current_day
-            current_hour = (current_hour == 0 ? 12 : current_hour)
             var hourMinuteText = current_hour + time_divider + current_minute
 
             textDateTime.text = monthDayText + " " + hourMinuteText
