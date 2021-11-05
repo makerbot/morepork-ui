@@ -11,6 +11,31 @@
 #include <QFileInfo>
 #include <QDir>
 #include <jsonrpc/jsonrpc.h>
+#include "logging.h"
+
+// A simple wrapper class for JsonRpc that just additionally logs kaiten
+// method calls.
+class JsonRpcWrapper : public JsonRpc {
+  public:
+    explicit JsonRpcWrapper() :
+      JsonRpc() {}
+
+    inline JSONRPC_API void invoke(const std::string &methodName,
+          const Json::Value &params, std::weak_ptr<JsonRpcCallback> callback) {
+      auto &list = m_sensitive_methods;
+      LOG(info) << "Invoking method " << methodName << " with params " <<
+        (std::find(std::begin(list), std::end(list), methodName) != std::end(list) ?
+            "<REDACTED>" : "\n" + params.toStyledString());
+      JsonRpc::invoke(methodName, params, callback);
+    }
+
+    // Methods for which parameters include sensitive content like
+    // passwords, tokens which shouldn't be logged.
+    const std::vector<std::string> m_sensitive_methods {
+      "wifi_connect",
+      "add_makerbot_account"
+    };
+};
 
 /// Connect to a local unix domain socket and attach a jsonrpc
 /// object to that object.
@@ -22,7 +47,7 @@ class LocalJsonRpc : public QObject {
 
     /// The jsonrpc object that will (eventually) be connected to the socket
     /// Invokations while we are not connected are silently dropped.
-    JsonRpc jsonrpc;
+    JsonRpcWrapper jsonrpc;
 
   signals:
     /// This event is fired whenever the socket controlled by this class
