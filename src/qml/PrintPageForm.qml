@@ -707,8 +707,8 @@ Item {
                         if(hasMeta) {
                             filePrintTime.text = getTimeInDaysHoursMins(metaData['duration_s'])
                             fileMaterial.text = metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1] ?
-                                                metaData['materials'][0] + "+" + metaData['materials'][1] :
-                                                metaData['materials'][0]
+                                                storage.updateMaterialNames(metaData['materials'][0]) + "+" + storage.updateMaterialNames(metaData['materials'][1]) :
+                                                storage.updateMaterialNames(metaData['materials'][0])
                         }
                     }
 
