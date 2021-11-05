@@ -12,7 +12,7 @@ Item {
 
     Timer {
         id: uiTimeTimer
-        interval: 60000 // once every minute
+        interval: 100 // 10x times every second, or else the blinking time separator feels "off" or "bad"
         repeat: true
         running: true
         onTriggered: {
@@ -34,20 +34,21 @@ Item {
             // var current_year = date_split[0] // 2018
             var current_month = date_split[1] // 09
             var current_day = date_split[2] //10
+            var time_divider = (((current_second % 4) > 1)?":":" ")
 
             var monthDayText = current_month + "/" + current_day
             current_hour = (current_hour == 0 ? 12 : current_hour)
-            var hourMinuteText = current_hour + ":" + current_minute
+            var hourMinuteText = current_hour + time_divider + current_minute
 
-            textDateTime.text = monthDayText + "\n" + hourMinuteText
+            textDateTime.text = monthDayText + " " + hourMinuteText
         }
     }
 
     Item {
         id: dateTimeText
         z: 3
-        anchors.rightMargin: 0
-        anchors.topMargin: 0
+        anchors.rightMargin: 7
+        anchors.topMargin: 13
         height: barHeight
         smooth: false
         anchors.right: hepaFilter_item.left
@@ -55,15 +56,15 @@ Item {
 
         Text {
             id: textDateTime
-            color: "#a0a0a0"
-            text: "--/--\n--:--"
+            color: "#5F5F5F"
+            text: "--/-- --:--"
             antialiasing: false
             smooth: false
             font.capitalization: Font.AllUppercase
             font.family: defaultFont.name
             font.letterSpacing: 0
             font.weight: Font.Light
-            font.pixelSize: 12
+            font.pixelSize: 16
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignRight
             anchors.top: parent.top
