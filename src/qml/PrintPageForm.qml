@@ -211,8 +211,8 @@ Item {
         print_model_material = storage.updateMaterialNames(meta['materials'][0])
         print_support_material = storage.updateMaterialNames(meta['materials'][1])
         print_material = !support_extruder_used ?
-                            meta['materials'][0] :
-                            meta['materials'][0] + "+" + meta['materials'][1]
+                            print_model_material :
+                            print_model_material + "+" + print_support_material
         model_mass = meta['extrusion_masses_g'][0] < 1000 ?
                         meta['extrusion_masses_g'][0].toFixed(1) + " g" :
                         (meta['extrusion_masses_g'][0] * 0.001).toFixed(1) + " Kg"
@@ -707,8 +707,8 @@ Item {
                         if(hasMeta) {
                             filePrintTime.text = getTimeInDaysHoursMins(metaData['duration_s'])
                             fileMaterial.text = metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1] ?
-                                                metaData['materials'][0] + "+" + metaData['materials'][1] :
-                                                metaData['materials'][0]
+                                                storage.updateMaterialNames(metaData['materials'][0]) + "+" + storage.updateMaterialNames(metaData['materials'][1]) :
+                                                storage.updateMaterialNames(metaData['materials'][0])
                         }
                     }
 
