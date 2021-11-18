@@ -68,5 +68,14 @@ Item {
                 baseRectangle.border.color = "#00000000"
             }
         }
+
+        Component.onCompleted: {
+            mouseArea.onClicked.connect(uiLogMMIBtn)
+        }
+
+        function uiLogMMIBtn() {
+            console.log("MMI [[" + textIconDesc.text + "]] clicked")
+        }
+
     }
 }

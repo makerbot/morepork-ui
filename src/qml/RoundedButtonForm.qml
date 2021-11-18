@@ -64,4 +64,12 @@ Rectangle {
         preventStealing: true
         enabled: !disable_button
     }
+
+    Component.onCompleted: {
+        button_mouseArea.onClicked.connect(uiLogBtn)
+    }
+
+    function uiLogBtn() {
+        console.log("RB [(" + label + ")] clicked")
+    }
 }
