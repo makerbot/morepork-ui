@@ -127,10 +127,9 @@ void KaitenNetModel::printQueueUpdate(const Json::Value &queue) {
 
         if (print_queue_list.empty()) {
             printQueueEmptyReset();
-            PrintQueueReset();
         } else {
             printQueueEmptySet(false);
-            PrintQueueSet(print_queue_list);
         }
+        PrintQueueSet(print_queue_list);
     }
 }
