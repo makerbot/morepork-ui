@@ -31,7 +31,24 @@
 void msgHandler(QtMsgType type,
                 const QMessageLogContext & context,
                 const QString &msg) {
-    LOG(info) << msg.toStdString();
+    boost::log::trivial::severity_level level;
+    switch (type) {
+      case QtDebugMsg:
+        level = boost::log::trivial::debug;
+        break;
+      case QtInfoMsg:
+        level = boost::log::trivial::info;
+        break;
+      case QtWarningMsg:
+        level = boost::log::trivial::warning;
+        break;
+      default:
+        level = boost::log::trivial::error;
+        break;
+    }
+    BOOST_LOG_SEV(Logging::GeneralLog(), level) << "[" << (context.file?:"")
+        << ":" << context.line << ":" << (context.function?:"") << "]\n"
+        << msg.toStdString();
 }
 #endif
 #include "fre_tracker.h"
