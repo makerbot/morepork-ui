@@ -81,7 +81,7 @@ Popup {
                     Text {
                         id: full_text
                         color: "#ffffff"
-                        text: qsTr("FULL TEXT")
+                        text: qsTr("CANCEL")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -93,7 +93,8 @@ Popup {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "CPFB [_" + full_button_text + "_]"
                         id: full_button
                         anchors.fill: parent
                         onPressed: {
@@ -104,14 +105,6 @@ Popup {
                             full_button_rectangle.color = "#00000000"
                             full_button_text.color = "#ffffff"
                         }
-                    }
-
-                    Component.onCompleted: {
-                        full_button.onClicked.connect(uiLogFullBtn)
-                    }
-
-                    function uiLogFullBtn() {
-                        console.log("CPFB [_" + full_button_text + "_] clicked")
                     }
                 }
             }
@@ -156,7 +149,8 @@ Popup {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "CPLB [_" + left_button_text + "|]"
                         id: left_button
                         anchors.fill: parent
                         onPressed: {
@@ -169,14 +163,6 @@ Popup {
                             left_text.color = "#ffffff"
                             left_rectangle.color = "#00000000"
                         }
-                    }
-
-                    Component.onCompleted: {
-                        left_button.onClicked.connect(uiLogLeftBtn)
-                    }
-
-                    function uiLogLeftBtn() {
-                        console.log("CPLB [_" + left_button_text + "|] clicked")
                     }
                 }
 
@@ -203,7 +189,8 @@ Popup {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText:"CPRB [|" + right_button_text + "_]"
                         id: right_button
                         anchors.fill: parent
                         onPressed: {
@@ -214,14 +201,6 @@ Popup {
                             right_text.color = "#ffffff"
                             right_rectangle.color = "#00000000"
                         }
-                    }
-
-                    Component.onCompleted: {
-                        right_button.onClicked.connect(uiLogRightBtn)
-                    }
-
-                    function uiLogRightBtn() {
-                        console.log("CPRB [|" + right_button_text + "_] clicked")
                     }
                 }
             }

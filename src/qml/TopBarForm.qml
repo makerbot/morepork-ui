@@ -63,7 +63,8 @@ Item {
         anchors.topMargin: 0
         z: 2
 
-        MouseArea {
+        LoggingMouseArea {
+            logText: "[<back_button<]"
             id: mouseArea_back
             height: topFadeIn.height
             smooth: false
@@ -397,7 +398,8 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
 
-            MouseArea {
+            LoggingMouseArea {
+                logText: "[^TopDrawerDown^]"
                 id: mouseAreaTopDrawerDown
                 x: 301
                 y: 40

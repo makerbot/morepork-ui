@@ -682,7 +682,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buttonBarFre: [" + skip_text.text + "]"
                             id: skip_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -752,7 +753,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buttonBarFre: [" + continue_text.text + "]"
                             id: continue_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1079,7 +1081,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "authenticatePrinterPopup: [_" + dismiss_text.text + "|]"
                             id: dismiss_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1125,7 +1128,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "authenticatePrinterPopup: [|" + authenticate_text.text + "_]"
                             id: authenticate_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1289,7 +1293,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "installUnsignedFwBasePopupItem: [_" + install_text.text + "|]"
                             id: install_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1331,7 +1336,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "installUnsignedFwBasePopupItem: [|" + cancel_text.text + "_]"
                             id: cancel_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1448,7 +1454,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "firmwareUpdatePopup [_" + dismiss_text1.text + "|]"
                             id: notnow_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1495,7 +1502,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "firmwareUpdatePopup [|" + update_text.text + "_]"
                             id: update_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1609,7 +1617,8 @@ ApplicationWindow {
                         font.pixelSize: 18
                         visible: viewReleaseNotes ? false : true
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "firmwareUpdatePopup [" + firmware_description_text2.text + "]"
                             anchors.fill: parent
                             visible: skipFirmwareUpdate ? false : true
                             onClicked: {
@@ -1713,7 +1722,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buildPlateClearPopup [_" + start_print_text.text + "|]"
                             id: start_print_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1759,7 +1769,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buildPlateClearPopup [|" + cancel_print_text.text + "_]"
                             id: cancel_print_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -2006,7 +2017,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "extNotCalibratedPopup [_" + calib_text.text + "|]"
                             id: calib_mouseArea
                             anchors.fill: parent
                             onClicked: {
@@ -2047,7 +2059,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "extNotCalibratedPopup [|" + cancel_calib_text.text + "_]"
                             id: cancel_calib_mouseArea
                             anchors.fill: parent
                             onClicked: {
@@ -2300,7 +2313,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "cancelPrintPopup [_" + cancel_text_cancel_print_popup.text + "|]"
                             id: cancel_mouseArea_cancel_print_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2341,7 +2355,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "cancelPrintPopup [|" + continue_text_cancel_print_popup.text + "_]"
                             id: continue_mouseArea_cancel_print_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2470,7 +2485,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "safeToRemoveUsbPopup [" + ok_text_remove_usb_popup.text + "]"
                             id: ok_mouseArea_remove_usb_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2584,7 +2600,8 @@ ApplicationWindow {
                              !printPage.startPrintBuildDoorOpen &&
                              !printPage.startPrintTopLidOpen
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "startPrintErrorsPopup [X]"
                         id: closePopup_start_print_errors_popup
                         anchors.fill: parent
                         onClicked: startPrintErrorsPopup.close()
@@ -2652,7 +2669,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "startPrintErrorsPopup [_" + full_text_start_print_errors_popup.text + "_]"
                             id: full_mouseArea_start_print_errors_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2715,7 +2733,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "startPrintErrorsPopup [_" + left_text_start_print_errors_popup.text + "|]"
                             id: left_mouseArea_start_print_errors_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2796,7 +2815,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "startPrintErrorsPopup [|" + right_text_start_print_errors_popup.text + "_]"
                             id: right_mouseArea_start_print_errors_popup
                             anchors.fill: parent
                             onPressed: {

@@ -54,7 +54,8 @@ Item {
             font.pixelSize: 22
         }
 
-        MouseArea {
+        LoggingMouseArea {
+            logText: "MMI [[" + textIconDesc.text + "]]"
             id: mouseArea
             anchors.fill: parent
             smooth: false
@@ -68,14 +69,5 @@ Item {
                 baseRectangle.border.color = "#00000000"
             }
         }
-
-        Component.onCompleted: {
-            mouseArea.onClicked.connect(uiLogMMIBtn)
-        }
-
-        function uiLogMMIBtn() {
-            console.log("MMI [[" + textIconDesc.text + "]] clicked")
-        }
-
     }
 }

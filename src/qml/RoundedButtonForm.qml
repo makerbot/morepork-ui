@@ -53,7 +53,8 @@ Rectangle {
         lineHeight: 1.5
     }
 
-    MouseArea {
+    LoggingMouseArea {
+        logText: "RB [(" + label + ")]"
         id: button_mouseArea
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -63,13 +64,5 @@ Rectangle {
         antialiasing: false
         preventStealing: true
         enabled: !disable_button
-    }
-
-    Component.onCompleted: {
-        button_mouseArea.onClicked.connect(uiLogBtn)
-    }
-
-    function uiLogBtn() {
-        console.log("RB [(" + label + ")] clicked")
     }
 }

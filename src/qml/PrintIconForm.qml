@@ -186,7 +186,8 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            MouseArea {
+            LoggingMouseArea {
+                logText: "printing - action_circle: [?action image?]"
                 id: action_mouseArea
                 smooth: false
                 anchors.fill: parent
