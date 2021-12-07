@@ -226,5 +226,6 @@
         <file>ThumbnailImageForm.qml</file>
         <file>FreAuthorizeWithCode.qml</file>
         <file>FreAuthorizeWithCodeForm.qml</file>
+        <file>LoggingItem.qml</file>
     </qresource>
 </RCC>

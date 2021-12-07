@@ -1,7 +1,8 @@
 import QtQuick 2.10
 import ProcessStateTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "PrintIcon"
     id: item1
     width: 250
     height: 265

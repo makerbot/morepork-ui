@@ -96,7 +96,8 @@ Item {
         }
 
         // ExtruderPage.AttachExtruderPage
-        Item {
+        LoggingItem {
+            itemName: "ExtruderPage.AttachExtruderPage"
             id: itemAttachExtruder
             property var backSwiper: extruderSwipeView
             property int backSwipeIndex: 0

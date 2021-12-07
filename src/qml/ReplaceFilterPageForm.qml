@@ -12,7 +12,8 @@ Item {
     property alias itemReplaceFilter: itemReplaceFilter
     property alias replace_filter_next_button: replace_filter_next_button
 
-    Item {
+    LoggingItem {
+        itemName: "ReplaceFilterPage.itemReplaceFilter"
         id: itemReplaceFilter
         smooth: false
         visible: true
