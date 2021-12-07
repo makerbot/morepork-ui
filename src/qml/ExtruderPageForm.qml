@@ -177,7 +177,7 @@ Item {
                         else if(itemAttachExtruder.state == "base state") {
                             if(bot.chamberErrorCode == 48) {
                                 qsTr("CLOSE CHAMBER DOOR")
-                            } if(bot.chamberErrorCode == 45) {
+                            } else if(bot.chamberErrorCode == 45) {
                                 qsTr("REMOVE TOP LID")
                             } else if(bot.chamberErrorCode == 0) {
                                 qsTr("REMOVE TOP LID")
