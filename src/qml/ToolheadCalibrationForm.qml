@@ -494,7 +494,8 @@ LoggingItem {
         }
     ]
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelCalibration"
         id: cancelCalibrationPopup
         width: 800
         height: 480

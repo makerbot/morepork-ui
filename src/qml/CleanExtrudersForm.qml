@@ -375,6 +375,7 @@ LoggingItem {
     ]
 
     CustomPopup {
+        popupName: "CancelCleanExtruders"
         id: cancelCleanExtrudersPopup
         popupWidth: 720
         popupHeight: 250

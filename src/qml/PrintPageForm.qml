@@ -923,6 +923,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "CopyFileToInternalStorage"
         id: copyingFilePopup
         popupWidth: 720
         popupHeight: 265
@@ -1017,6 +1018,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "NylonCFPrintTip"
         id: nylonCFPrintTipPopup
         popupWidth: 720
         popupHeight: 275
@@ -1069,6 +1071,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "CloudPrintQueue"
         id: printQueuePopup
         popupWidth: 720
         popupHeight: 320
@@ -1208,6 +1211,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "PrintFeedbackAcknowledgement"
         id: printFeedbackAcknowledgementPopup
         popupWidth: 720
         popupHeight: 275

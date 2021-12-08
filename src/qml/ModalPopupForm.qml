@@ -2,7 +2,7 @@ import QtQuick 2.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-Popup {
+LoggingPopup {
     property alias popup: popup
     property alias left_text: left_text
     property alias left_mouseArea: left_mouseArea

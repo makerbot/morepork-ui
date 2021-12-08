@@ -514,6 +514,7 @@ Item {
     }
 
     ModalPopup {
+        popupName: "Shutdown"
         id: shutdownPopup
         visible: false
         popup_contents.contentItem: Item {
@@ -534,7 +535,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "DeauthorizeAccounts"
         id: deauthorizeAccountsPopup
         width: 800
         height: 480

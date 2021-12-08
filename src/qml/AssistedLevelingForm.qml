@@ -810,7 +810,8 @@ LoggingItem {
         }
     ]
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelAssistedLeveling"
         id: cancelAssistedLevelingPopup
         width: 800
         height: 480

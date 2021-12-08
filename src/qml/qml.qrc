@@ -227,5 +227,6 @@
         <file>FreAuthorizeWithCode.qml</file>
         <file>FreAuthorizeWithCodeForm.qml</file>
         <file>LoggingItem.qml</file>
+        <file>LoggingPopup.qml</file>
     </qresource>
 </RCC>

@@ -515,6 +515,7 @@ Item {
     }
 
     BusyPopup {
+        popupName: "CopyingLogs"
         property bool initialized: false
         property bool zipLogsInProgress: false
         property string logBundlePath: ""
@@ -525,6 +526,7 @@ Item {
     }
 
     ModalPopup {
+        popupName: "CopyingLogsCompleted"
         property bool succeeded: false
 
         id: copyLogsFinishedPopup
@@ -541,7 +543,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "ResetToFactory"
         id: resetFactoryConfirmPopup
         width: 800
         height: 480

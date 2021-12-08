@@ -344,7 +344,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "NoExtruders"
         id: noExtruderPopup
         width: 800
         height: 480
@@ -523,7 +524,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "MaterialWarning"
         id: materialWarningPopup
         width: 800
         height: 480
@@ -729,7 +731,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelLoadUnload"
         id: cancelLoadUnloadPopup
         width: 800
         height: 480
@@ -914,7 +917,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "WaitUntilUnloaded"
         id: waitUntilUnloadedPopup
         width: 800
         height: 480
@@ -969,6 +973,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "MoistureSensitiveMaterialAlert"
         id: moistureWarningPopup
         popupWidth: 720
         popupHeight: 320

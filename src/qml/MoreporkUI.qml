@@ -542,7 +542,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "SkipFreStep"
             id: skipFreStepPopup
             width: 800
             height: 480
@@ -885,7 +886,8 @@ ApplicationWindow {
             }
         }
         
-        Popup {
+        LoggingPopup {
+            popupName: "AuthenticatePrinter"
             id: authenticatePrinterPopup
             width: 800
             height: 480
@@ -1143,7 +1145,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "InstallUnsignedFirmware"
             id: installUnsignedFwPopup
             width: 800
             height: 480
@@ -1343,7 +1346,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "FirmwareUpdateNotification"
             id: firmwareUpdatePopup
             width: 800
             height: 480
@@ -1612,7 +1616,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "ClearBuildPlate"
             id: buildPlateClearPopup
             width: 800
             height: 480
@@ -1806,6 +1811,7 @@ ApplicationWindow {
         }
 
         ModalPopup {
+            popupName: "ExtruderMismatch"
             // tool_type_correct flag is sent in system notification by
             // kaiten which determines the "correctness" by looking through
             // printer settings.json under 'supported_tool_types' key.
@@ -1879,6 +1885,7 @@ ApplicationWindow {
 
         // Modal Popup for Toolhead Disconnected/FFC Cable Disconnected
         ModalPopup {
+            popupName: "CarriageCommunicationError"
             /* When the toolhead disconnects, the Kaiten's Bot Model's
                extruderXErrorCode the toolhead error disconnect error
                code followed by a space.
@@ -1915,7 +1922,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
             width: 800
             height: 480
@@ -2086,7 +2094,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "UpdatingExtruderFirmware"
             id: updatingExtruderFirmwarePopup
             width: 800
             height: 480
@@ -2203,7 +2212,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "CancelPrint"
             id: cancelPrintPopup
             width: 800
             height: 480
@@ -2386,7 +2396,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "SafeToRemoveUsb"
             id: safeToRemoveUsbPopup
             width: 800
             height: 480
@@ -2502,7 +2513,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "StartPrintError"
             id: startPrintErrorsPopup
             width: 800
             height: 480
@@ -2963,6 +2975,7 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            popupName: "LabsExtruderDetected"
             id: experimentalExtruderPopup
             popupWidth: 720
             popupHeight: 350
@@ -3022,6 +3035,7 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            popupName: "HepaFilterError"
             id: hepaFilterErrorPopup
             popupWidth: 720
             popupHeight: 280
@@ -3083,6 +3097,7 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            popupName: "HepaFilterReset"
             id: hepaFilterResetPopup
             popupWidth: 720
             popupHeight: 280

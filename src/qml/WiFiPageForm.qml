@@ -395,7 +395,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "Wifi"
         id: wifiPopup
         width: 800
         height: 480

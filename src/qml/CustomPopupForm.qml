@@ -2,7 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
-Popup {
+LoggingPopup {
     id: popup
     width: 800
     height: 480

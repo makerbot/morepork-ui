@@ -607,6 +607,7 @@ LoggingItem {
     ]
 
     CustomPopup {
+        popupName: "CancelDryingCycle"
         id: cancelDryingCyclePopup
         popupWidth: 720
         popupHeight: 265
@@ -661,6 +662,7 @@ LoggingItem {
     }
 
     CustomPopup {
+        popupName: "DryingCycleClearBuildPlate"
         id: dryConfirmBuildPlateClearPopup
         popupWidth: 720
         popupHeight: 220

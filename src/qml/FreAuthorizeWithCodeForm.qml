@@ -331,6 +331,7 @@ LoggingItem {
     ]
 
     CustomPopup {
+        popupName: "FreAuthorizeWithCode"
         id: freAuthorizeWithCode_popup
         showOneButton: false
         showTwoButtons: false
