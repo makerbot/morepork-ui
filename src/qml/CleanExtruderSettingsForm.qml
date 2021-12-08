@@ -27,9 +27,14 @@ Item {
         {label: "nylon", temperature : 190}
     ]
 
+    enum SwipeIndex {
+        MaterialSelector,
+        TemperatureSelector
+    }
+
     SwipeView {
         id: cleanExtrudersSelectMaterialSwipeView
-        currentIndex: 0
+        currentIndex: CleanExtruderSettings.MaterialSelector
         smooth: false
         anchors.fill: parent
         interactive: false
@@ -43,10 +48,10 @@ Item {
             if(itemToDisplayDefaultIndex == 0) {
                 if(bot.process.type == ProcessType.CalibrationProcess) {
                     // Use back button action specific to calibration process UI
-                    setCurrentItem(settingsPage.settingsSwipeView.itemAt(6))
+                    setCurrentItem(settingsPage.settingsSwipeView.itemAt(SettingsPage.CalibrateExtrudersPage))
                 } else {
                     // Use back button action specific to Nozzle cleaning process UI
-                    setCurrentItem(advancedSettingsSwipeView.itemAt(9))
+                    setCurrentItem(advancedSettingsSwipeView.itemAt(AdvancedSettingsPage.CleanExtrudersPage))
                 }
             } else {
                 setCurrentItem(cleanExtrudersSelectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex))
@@ -55,7 +60,7 @@ Item {
             cleanExtrudersSelectMaterialSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // cleanExtrudersSelectMaterialSwipeView.index = 0
+        // CleanExtruderSettings.MaterialSelector
         Item {
             id: itemCleanExtrudersSelectMaterial
             smooth: false
@@ -67,7 +72,7 @@ Item {
             }
         }
 
-        // cleanExtrudersSelectMaterialSwipeView.index = 1
+        // CleanExtruderSettings.TemperatureSelector
         Item {
             id: itemCleanExtrudersSelectCustomTemperature
             property var backSwiper: cleanExtrudersSelectMaterialSwipeView

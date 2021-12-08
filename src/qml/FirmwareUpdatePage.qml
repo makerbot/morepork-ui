@@ -13,8 +13,8 @@ FirmwareUpdatePageForm {
             if(!inFreStep) {
                 goBack()
             } else {
-                settingsSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 fre.gotoNextStep(currentFreStep)
             }
             break;

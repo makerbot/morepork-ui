@@ -62,7 +62,7 @@ Item {
                     button_mouseArea.onClicked: {
                         itemAttachExtruder.extruder = extruderID
                         itemAttachExtruder.state = "base state"
-                        extruderSwipeView.swipeToItem(1)
+                        extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
                     }
                 }
             }
@@ -89,7 +89,7 @@ Item {
                     button_mouseArea.onClicked: {
                         itemAttachExtruder.extruder = extruderID
                         itemAttachExtruder.state = "base state"
-                        extruderSwipeView.swipeToItem(1)
+                        extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
                     }
                 }
             }
@@ -122,7 +122,7 @@ Item {
             function altBack() {
                 if(!inFreStep) {
                     itemAttachExtruder.state = "base state"
-                    extruderSwipeView.swipeToItem(0)
+                    extruderSwipeView.swipeToItem(ExtruderPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -130,8 +130,8 @@ Item {
             }
 
             function skipFreStepAction() {
-                extruderSwipeView.swipeToItem(0)
-                mainSwipeView.swipeToItem(0)
+                extruderSwipeView.swipeToItem(ExtruderPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             Rectangle {
@@ -265,7 +265,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 source: ""
                 playing: {
-                    extruderSwipeView.currentIndex == 1 &&
+                    extruderSwipeView.currentIndex == ExtruderPage.AttachExtruderPage &&
                     (itemAttachExtruder.state == "attach_extruder_step1" ||
                      itemAttachExtruder.state == "attach_extruder_step2" ||
                      itemAttachExtruder.state == "attach_swivel_clips")

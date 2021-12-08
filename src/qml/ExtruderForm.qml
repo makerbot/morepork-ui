@@ -356,7 +356,7 @@ Item {
                 opacity: !extruderPresent ? 0.4 : 1
                 button_mouseArea.onClicked: {
                     if(!disable_button)
-                        mainSwipeView.swipeToItem(5)
+                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 }
             }
 

@@ -95,7 +95,7 @@ Item {
                         bot.resetFilterHours()
                         bot.hepaFilterPrintHours = 0
                         bot.hepaFilterChangeRequired = false
-                        cleanAirSettingsSwipeView.swipeToItem(0)
+                        cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
                         itemReplaceFilter.state = "done"
                     }
                     else {

@@ -132,7 +132,7 @@ Item {
 
             function altBack() {
                 if (replaceFilterPage.itemReplaceFilter.state == "done")
-                    cleanAirSettingsSwipeView.swipeToItem(0)
+                    cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
                 else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
                     replaceFilterPage.itemReplaceFilter.state = "done"
                 else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
@@ -142,7 +142,7 @@ Item {
                 else if (replaceFilterPage.itemReplaceFilter.state == "step_5")
                     replaceFilterPage.itemReplaceFilter.state = "step_4"
                 else
-                    cleanAirSettingsSwipeView.swipeToItem(0)
+                    cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
             }
 
             ReplaceFilterPage {

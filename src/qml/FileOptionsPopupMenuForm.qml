@@ -30,8 +30,8 @@ PopupMenu {
             }
             else {
                 storage.deletePrintFile(fileName)
-                if(printSwipeView.currentIndex != 1) {
-                    printSwipeView.swipeToItem(1)
+                if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
+                    printSwipeView.swipeToItem(PrintPage.FileBrowser)
                     setDrawerState(true)
                 }
             }
@@ -43,8 +43,8 @@ PopupMenu {
         label: qsTr("Delete file")
         onClicked: {
             storage.deletePrintFile(fileName)
-            if(printSwipeView.currentIndex != 1) {
-                printSwipeView.swipeToItem(1)
+            if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
+                printSwipeView.swipeToItem(PrintPage.FileBrowser)
                 setDrawerState(true)
             }
         }

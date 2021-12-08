@@ -6,7 +6,7 @@ TimeZoneSelectorForm {
         interval: 1500
         onTriggered: {
             bot.getSystemTime()
-            timeSwipeView.swipeToItem(2)
+            timeSwipeView.swipeToItem(TimePage.SetTime)
         }
     }
 
