@@ -226,5 +226,7 @@
         <file>ThumbnailImageForm.qml</file>
         <file>FreAuthorizeWithCode.qml</file>
         <file>FreAuthorizeWithCodeForm.qml</file>
+        <file>LoggingMouseArea.qml</file>
+        <file>LoggingMouseAreaForm.qml</file>
     </qresource>
 </RCC>

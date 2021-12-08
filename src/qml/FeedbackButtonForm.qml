@@ -61,7 +61,8 @@ Rectangle {
         lineHeight: 1.5
     }
 
-    MouseArea {
+    LoggingMouseArea {
+        logText: "FeedbackBtn: [(" + label + ")]"
         id: button_mouseArea
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

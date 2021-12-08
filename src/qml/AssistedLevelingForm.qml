@@ -897,7 +897,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelAssistedLevelingPopup: [" + cancel_leveling_text.text + "]"
                         id: cancel_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -933,7 +934,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelAssistedLevelingPopup: [" + continue_leveling_text.text + "]"
                         id: continue_mouseArea
                         anchors.fill: parent
                         onPressed: {

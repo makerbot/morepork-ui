@@ -585,7 +585,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelCalibrationPopup: [_" + stop_calib_text.text + "|]"
                         id: stop_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -623,7 +624,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelCalibrationPopup: [|" + continue_calib_text.text + "_]"
                         id: continue_mouseArea
                         anchors.fill: parent
                         onPressed: {

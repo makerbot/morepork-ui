@@ -130,7 +130,8 @@ Item {
             anchors.top: parent.top
             anchors.topMargin: 0
 
-            MouseArea {
+            LoggingMouseArea {
+                logText: "[" + release_notes_text.text + "]"
                 id: viewReleaseNotesMouseArea
                 anchors.fill: parent
                 onClicked: {

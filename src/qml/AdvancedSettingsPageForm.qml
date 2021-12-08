@@ -637,7 +637,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[" + yes_text.text + "]"
                         id: yes_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -677,7 +678,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "reset_to_factory: [" + no_text.text + "]"
                         id: no_mouseArea
                         anchors.fill: parent
                         onPressed: {

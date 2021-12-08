@@ -16,7 +16,7 @@ Popup {
     property alias popupWidth: popupContainer.width
     property alias popupHeight: popupContainer.height
     property alias full_button: full_button
-    property alias full_button_text: full_button_text.text
+    property alias full_button_text: full_text.text
     property alias left_button: left_button
     property alias left_button_text: left_text.text
     property alias right_button: right_button
@@ -79,7 +79,7 @@ Popup {
                     radius: 10
 
                     Text {
-                        id: full_button_text
+                        id: full_text
                         color: "#ffffff"
                         text: qsTr("CANCEL")
                         Layout.fillHeight: false
@@ -93,7 +93,8 @@ Popup {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "CPFB [_" + full_button_text + "_]"
                         id: full_button
                         anchors.fill: parent
                         onPressed: {
@@ -148,7 +149,8 @@ Popup {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "CPLB [_" + left_button_text + "|]"
                         id: left_button
                         anchors.fill: parent
                         onPressed: {
@@ -187,7 +189,8 @@ Popup {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText:"CPRB [|" + right_button_text + "_]"
                         id: right_button
                         anchors.fill: parent
                         onPressed: {

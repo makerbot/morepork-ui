@@ -122,7 +122,8 @@ Popup {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                MouseArea {
+                LoggingMouseArea {
+                    logText: "MdPF: [_" + left_text.text + "|]"
                     id: left_mouseArea
                     anchors.fill: parent
                     onPressed: {
@@ -158,7 +159,8 @@ Popup {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                MouseArea {
+                LoggingMouseArea {
+                    logText: "MdPF: [|" + right_text.text + "_]"
                     id: right_mouseArea
                     anchors.fill: parent
                     onPressed: {
@@ -196,7 +198,8 @@ Popup {
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                MouseArea {
+                LoggingMouseArea {
+                    logText: "MdPF: [_" + full_button_text.text + "_]"
                     id: full_button_mouseArea
                     anchors.fill: parent
                     onPressed: {
