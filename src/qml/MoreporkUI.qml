@@ -241,6 +241,10 @@ ApplicationWindow {
         }
     }
 
+    function setDateTimeTextVisible(state) {
+        topBar.dateTimeText.visible = state
+    }
+
     function setCurrentItem(currentItem_) {
         currentItem = currentItem_
     }

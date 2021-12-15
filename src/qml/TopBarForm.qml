@@ -18,8 +18,28 @@ Item {
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
     property alias text_printerName: textPrinterName
+    property alias dateTimeText: dateTimeText
+    property string timeSeconds: "00"
+    property string oldSeparatorString: " "
     signal backClicked()
     signal drawerDownClicked()
+
+    Timer {
+        id: secondsUpdater
+        interval: 100 // 10x per second hides time interval misses better than exactly 1x per second
+        repeat: true
+        running: true
+        onTriggered: {
+            timeSeconds = new Date().toLocaleString(Qt.locale(), "ss")
+            // 2-on, 2-off hides time interval misses better than 1-on, 1-off
+            var newSeparatorString = (((timeSeconds % 4) < 2) ? ":" : " ")
+            if (newSeparatorString != oldSeparatorString) {
+                oldSeparatorString =  newSeparatorString
+                var formatString = "M/d H" + oldSeparatorString + "mm"
+                textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
+            }
+        }
+    }
 
     NotificationIcons {
         id: notificationIcons
@@ -109,9 +129,39 @@ Item {
         }
     }
 
+    Item {
+        id: dateTimeText
+        z: 3
+        anchors.leftMargin: 48
+        anchors.topMargin: 11
+        anchors.left: backButton.left
+        anchors.top: parent.top
+        height: parent.height
+        width: 125
+        smooth: false
+        visible: settings.getDateTimeTextEnabled()
+
+        Text {
+            id: textDateTime
+            color: "#a0a0a0"
+            text: "--/-- --:--"
+            antialiasing: false
+            smooth: false
+            font.capitalization: Font.AllUppercase
+            font.family: defaultFont.name
+            font.letterSpacing: 0
+            font.weight: Font.Light
+            font.pixelSize: 18
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignRight
+            anchors.top: parent.top
+            anchors.left: parent.left
+        }
+    }
+
     Flickable {
         id: drawerDownSwipeHandler
-        z: 3
+        z: 4
         height: parent.height
         anchors.top: parent.top
         anchors.left: backButton.right
