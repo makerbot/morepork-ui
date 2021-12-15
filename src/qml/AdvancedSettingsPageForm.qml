@@ -274,6 +274,31 @@ Item {
                         buttonImage.source: "qrc:/img/icon_printer_info.png"
                         buttonText.text: qsTr("ANALYTICS")
                     }
+
+                    MenuButton {
+                        id: buttonSupportMode
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: "SUPPORT MODE"
+
+                        SlidingSwitch {
+                            id: switchToggleSupportMode
+                            checked: settings.getDateTimeTextEnabled()
+                            enabled: parent.enabled
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 50
+                            onClicked: {
+                                if(switchToggleSupportMode.checked) {
+                                    settings.setDateTimeTextEnabled(true)
+                                    setDateTimeTextVisible(true)
+                                }
+                                else if(!switchToggleSupportMode.checked) {
+                                    settings.setDateTimeTextEnabled(false)
+                                    setDateTimeTextVisible(false)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
