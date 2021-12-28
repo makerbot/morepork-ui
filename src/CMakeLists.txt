@@ -197,6 +197,3 @@ if(NOT ${QT_CREATOR_BUILD})
 	    DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/test_prints")
 endif()
-
-# Read qml qrc file, parse out all qml file names, and install them
-add_subdirectory(qml)

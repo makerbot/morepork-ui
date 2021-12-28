@@ -25,7 +25,7 @@
 #else
 #include "model_impl/kaiten_bot_model.h"
 #include "model_impl/bot_logger.h"
-#define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/MoreporkUI.qml"
+#define MOREPORK_UI_QML_MAIN QUrl("qrc:/qml/MoreporkUI.qml")
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
 #define MOREPORK_LOGGER makeBotLogger()
 void msgHandler(QtMsgType type,
