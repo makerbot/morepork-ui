@@ -34,31 +34,31 @@ ExtruderPageForm {
         if(itemAttachExtruder.state == "close_top_lid") {
             // done or run calibration
             itemAttachExtruder.state = "base state"
-            if(extruderSwipeView.currentIndex != 0) {
-                extruderSwipeView.swipeToItem(0)
+            if(extruderSwipeView.currentIndex != ExtruderPage.BasePage) {
+                extruderSwipeView.swipeToItem(ExtruderPage.BasePage)
             }
 
             if (!inFreStep) {
                 if (bot.process.type == ProcessType.None) {
                     // go to calibrate screen
-                    if(mainSwipeView.currentIndex != 3) {
-                        mainSwipeView.swipeToItem(3)
+                    if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
+                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     }
-                    if(settingsPage.settingsSwipeView.currentIndex != 6) {
-                        settingsPage.settingsSwipeView.swipeToItem(6)
+                    if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.CalibrateExtrudersPage) {
+                        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
                     }
                 } else if (bot.process.type == ProcessType.Print) {
                     // go to print screen
                     bot.pauseResumePrint("resume");
-                    if (mainSwipeView.currentIndex != 1) {
-                        mainSwipeView.swipeToItem(1)
+                    if (mainSwipeView.currentIndex != MoreporkUI.PrintPage) {
+                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                     }
-                    if (printPage.printSwipeView.currentIndex != 0) {
-                        printPage.printSwipeView.swipeToItem(0);
+                    if (printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
+                        printPage.printSwipeView.swipeToItem(PrintPage.BasePage);
                     }
                 }
             } else {
-                mainSwipeView.swipeToItem(0)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 fre.gotoNextStep(currentFreStep)
             }
         } else if(itemAttachExtruder.state == "base state") {

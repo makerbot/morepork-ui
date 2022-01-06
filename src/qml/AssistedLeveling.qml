@@ -14,12 +14,12 @@ AssistedLevelingForm {
                    state == "leveling_failed") {
                     processDone()
                     if(inFreStep) {
-                        mainSwipeView.swipeToItem(0)
+                        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                         fre.gotoNextStep(currentFreStep)
                     }
                     else {
-                        mainSwipeView.swipeToItem(3)
-                        settingsPage.settingsSwipeView.swipeToItem(6)
+                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
                         bot.calibrateToolheads(["z"])
                     }
                 }

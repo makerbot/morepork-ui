@@ -175,7 +175,7 @@ Item {
                 delayedEnableRetryButton()
                 if(materialChangeCancelled) {
                     state = "base state"
-                    materialSwipeView.swipeToItem(0)
+                    materialSwipeView.swipeToItem(MaterialPage.BasePage)
                     // If cancelled out of load/unload while in print process
                     // enable print drawer to set UI back to printing state.
                     setDrawerState(false)
@@ -183,7 +183,7 @@ Item {
                     setDrawerState(true)
                     if(inFreStep &&
                        bot.process.type == ProcessType.Print) {
-                        mainSwipeView.swipeToItem(1)
+                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                     }
                 }
                 else {

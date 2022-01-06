@@ -39,7 +39,7 @@ ListView {
         smooth: false
         antialiasing: false
         onClicked: {
-            cleanExtrudersSelectMaterialSwipeView.swipeToItem(1)
+            cleanExtrudersSelectMaterialSwipeView.swipeToItem(CleanExtruderSettings.TemperatureSelector)
         }
     }
 }
