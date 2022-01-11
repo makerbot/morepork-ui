@@ -228,5 +228,15 @@
         <file>FreAuthorizeWithCodeForm.qml</file>
         <file>LoggingMouseArea.qml</file>
         <file>LoggingMouseAreaForm.qml</file>
+        <file>TextHuge.qml</file>
+        <file>TextHugeForm.qml</file>
+        <file>TextHeadline.qml</file>
+        <file>TextHeadlineForm.qml</file>
+        <file>TextBody.qml</file>
+        <file>TextBodyForm.qml</file>
+        <file>TextSubheader.qml</file>
+        <file>TextSubheaderForm.qml</file>
+        <file>ButtonRectangle.qml</file>
+        <file>ButtonRectangleForm.qml</file>
     </qresource>
 </RCC>
