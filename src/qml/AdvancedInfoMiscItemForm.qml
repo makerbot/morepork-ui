@@ -57,7 +57,7 @@ Item {
         AdvancedInfoElement {
             id: hbpCurrentTempProperty
             label: qsTr("HBP CURR. TEMP.")
-            value: bot.hbpCurrentTemp
+            value: Math.floor(bot.hbpCurrentTemp)
             visible: bot.machineType == MachineType.Magma
         }
 
