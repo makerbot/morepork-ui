@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
 
 Text {
     enum Style {
@@ -8,6 +9,7 @@ Text {
     }
     property int style: TextBody.Base
     id: textBody
+    Layout.fillWidth: true
     text: "text-base"
     font.family: "Roboto"
     font.styleName: "Light"
@@ -42,6 +44,7 @@ Text {
         }
     }
     lineHeightMode: Text.FixedHeight
+    wrapMode: Text.WordWrap
     lineHeight: {
         switch(style) {
         case TextBody.Base:
@@ -57,6 +60,5 @@ Text {
             20
         }
     }
-    horizontalAlignment: Text.AlignHCenter
     color: Qt.rgba(255, 255, 255, 0.8)
 }

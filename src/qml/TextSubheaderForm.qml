@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
 
 Text {
     enum Style {
@@ -7,6 +8,7 @@ Text {
     }
     property int style: TextSubheader.Base
     id: textSubheader
+    Layout.fillWidth: true
     text: "Subheader"
     font.family: "Antenna"
     font.pixelSize: 16

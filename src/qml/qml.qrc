@@ -236,7 +236,17 @@
         <file>TextBodyForm.qml</file>
         <file>TextSubheader.qml</file>
         <file>TextSubheaderForm.qml</file>
-        <file>ButtonRectangle.qml</file>
-        <file>ButtonRectangleForm.qml</file>
+        <file>ButtonRectanglePrimary.qml</file>
+        <file>ButtonRectanglePrimaryForm.qml</file>
+        <file>ButtonRoundPrintIcon.qml</file>
+        <file>ButtonRoundPrintIconForm.qml</file>
+        <file>ContentRightSide.qml</file>
+        <file>ContentRightSideForm.qml</file>
+        <file>ButtonRectangleSecondary.qml</file>
+        <file>ButtonRectangleSecondaryForm.qml</file>
+        <file>ButtonRectangleBase.qml</file>
+        <file>ButtonRectangleBaseForm.qml</file>
+        <file>NumberedSteps.qml</file>
+        <file>NumberedStepsForm.qml</file>
     </qresource>
 </RCC>

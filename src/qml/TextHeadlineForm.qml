@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
 
 Text {
     enum Style {
@@ -7,6 +8,7 @@ Text {
     }
     property int style: TextHeadline.Base
     id: textHeadline
+    Layout.fillWidth: true
     text: "HEADLINE"
     font.family: "Antenna"
     font.styleName: "Light"
@@ -35,6 +37,8 @@ Text {
         }
     }
     font.weight: Font.Bold
+    font.capitalization: Font.AllUppercase
+    wrapMode: Text.WordWrap
     lineHeightMode: Text.FixedHeight
     lineHeight: {
         switch(style) {
@@ -48,6 +52,5 @@ Text {
             24
         }
     }
-    horizontalAlignment: Text.AlignHCenter
     color: Qt.rgba(255, 255, 255, 0.8)
 }

@@ -1,18 +1,25 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQuick.Layouts 1.12
 
 Button {
     id: control
     width: 360
+    Layout.preferredWidth: 360
     height: 52
     text: qsTr("Button")
     antialiasing: true
     flat: true
-    property alias label: text
+
+    property string logKey: "ButtonRectangleBase"
+    property alias color: backgroundElement.color
+    property alias textColor: textElement.color
+    property alias border: backgroundElement.border
 
     contentItem: Text {
+        id: textElement
         text: control.text
-        font: "Antenna"
+        font.family: "Antenna"
         font.pixelSize: 17
         font.weight: Font.Bold
         font.letterSpacing: 3.2
@@ -26,9 +33,9 @@ Button {
     }
 
     background: Rectangle {
+        id: backgroundElement
         implicitWidth: 136
         implicitHeight: 52
-        color: enabled ? (control.down ? "#B2B2B2" : "#FFFFFF") : "#808080"
         radius: 5
     }
 
@@ -37,6 +44,6 @@ Button {
     }
 
     function logClick() {
-        console.log("ButtonRectangle " + label + " clicked")
+        console.log(logKey + " " + text + " clicked")
     }
 }
