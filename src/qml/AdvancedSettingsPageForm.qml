@@ -277,8 +277,8 @@ Item {
 
                     MenuButton {
                         id: buttonSupportMode
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: "SUPPORT MODE"
+                        buttonImage.source: "qrc:/img/icon_time_and_date.png"
+                        buttonText.text: "SHOW CURRENT TIME"
 
                         SlidingSwitch {
                             id: switchToggleSupportMode
