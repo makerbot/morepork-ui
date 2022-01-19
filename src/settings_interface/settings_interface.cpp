@@ -108,6 +108,15 @@ bool SettingsInterface::getShowApplyGlueOnBuildPlateTip(QString material) {
     return val.get(material.toStdString(), false).asBool();
 }
 
+bool SettingsInterface::getDateTimeTextEnabled() {
+    return cached_settings_["date_time_text_enabled"].asBool();
+}
+
+void SettingsInterface::setDateTimeTextEnabled(bool enabled) {
+    cached_settings_["date_time_text_enabled"] = enabled;
+    writeSettings();
+}
+
 void SettingsInterface::resetPreferences() {
     cached_settings_["show_nylon_cf_anneal_print_tip"] = true;
     Json::Value &val = cached_settings_["show_apply_glue_on_build_plate_tip"];
