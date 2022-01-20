@@ -13,6 +13,8 @@ Item {
     property alias defaultItem: itemAdvancedSettings
     property alias advancedSettingsSwipeView: advancedSettingsSwipeView
 
+    property alias buttonTestScreen: buttonTestScreen
+
     property alias buttonAdvancedInfo: buttonAdvancedInfo
 
     property alias buttonPreheat: buttonPreheat
@@ -100,7 +102,8 @@ Item {
         ShareAnalyticsPage,         // 7
         DryMaterialPage,            // 8
         CleanExtrudersPage,         // 9
-        AnnealPrintPage             // 10
+        AnnealPrintPage,            // 10
+        TestScreenPage              // 11
     }
 
     SwipeView {
@@ -166,6 +169,12 @@ Item {
                     anchors.left: parent.left
                     anchors.top: parent.top
                     spacing: 0
+
+                    MenuButton {
+                        id: buttonTestScreen
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: qsTr("TEST SCREEN")
+                    }
 
                     MenuButton {
                         id: buttonAdvancedInfo
@@ -510,6 +519,19 @@ Item {
                         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
+            }
+        }
+
+        // AdvancedSettingsPage.TestScreenPage
+        Item {
+            id: testScreenItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            TestScreen {
+
             }
         }
     }

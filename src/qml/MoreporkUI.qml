@@ -327,6 +327,74 @@ ApplicationWindow {
        id: showTouchItem
        z: 10
        anchors.fill: parent
+
+       visible: {
+           (settingsPage.settingsSwipeView.currentIndex == SettingsPage.AdvancedSettingsPage &&
+           settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex == AdvancedSettingsPage.TestScreenPage)
+           ||
+           (advancedPage.advancedSettingsSwipeView.currentIndex == AdvancedSettingsPage.TestScreenPage)
+       }
+
+       Repeater {
+           model: 22
+           Rectangle {
+               x: index * 37
+               height: 480
+               width: 1
+               color: "#ffffff"
+               opacity: 0.4
+
+               Text {
+                   text: 5 * index
+                   anchors.left: parent.left
+                   anchors.leftMargin: 3
+                   font.pixelSize: 11
+                   color: "#ffffff"
+               }
+           }
+       }
+
+       Repeater {
+           model: 14
+           Rectangle {
+               y: index * 37
+               height: 1
+               width: 800
+               color: "#ffffff"
+               opacity: 0.4
+
+               Text {
+                   text: 5 * index
+                   anchors.bottom: parent.top
+                   anchors.bottomMargin: 1
+                   anchors.left: parent.left
+                   anchors.leftMargin: 3
+                   font.pixelSize: 11
+                   color: "#ffffff"
+               }
+           }
+       }
+
+       Rectangle {
+           id: traceTouchItem
+           anchors.fill: parent
+           color: "#00000000"
+           property int xpos
+           property int ypos
+           Canvas {
+               id: myCanvas
+               anchors.fill: parent
+               renderTarget: Canvas.FramebufferObject
+       //        renderStrategy: Canvas.Threaded
+
+               onPaint: {
+                   var ctx = getContext('2d')
+                   ctx.fillStyle = "green"
+                   ctx.fillRect(traceTouchItem.xpos-1, traceTouchItem.ypos-1, 3, 3)
+               }
+           }
+       }
+
        PointHandler {
             id: pointHandler
             acceptedDevices: PointerDevice.TouchScreen | PointerDevice.Mouse
@@ -336,7 +404,7 @@ ApplicationWindow {
                 visible: pointHandler.active
                 x: pointHandler.point.position.x - width / 2
                 y: pointHandler.point.position.y - height / 2
-                width: 30
+                width: 20
                 height: width
                 radius: width / 2
             }
@@ -351,11 +419,24 @@ ApplicationWindow {
                 visible: pointHandler1.active
                 x: pointHandler1.point.position.x - width / 2
                 y: pointHandler1.point.position.y - height / 2
-                width: 30
+                width: 20
                 height: width
                 radius: width / 2
             }
+            onPointChanged: {
+                traceTouchItem.xpos = pointHandler1.point.position.x
+                traceTouchItem.ypos = pointHandler1.point.position.y
+                myCanvas.requestPaint()
+            }
         }
+
+       TapHandler {
+           onDoubleTapped: {
+               var ctx = myCanvas.getContext('2d')
+               ctx.reset()
+               myCanvas.requestPaint()
+           }
+       }
     }
 
     Item {
