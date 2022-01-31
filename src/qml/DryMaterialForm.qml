@@ -211,7 +211,7 @@ Item {
             }
 
             Text {
-                id: chamber_temperature_text
+                id: buildplane_temperature_text
                 text: "999"
                 font.family: defaultFont.name
                 color: "#ffffff"
@@ -439,8 +439,8 @@ Item {
             }
 
             PropertyChanges {
-                target: chamber_temperature_text
-                text: bot.chamberCurrentTemp + "°C" + " | " + bot.chamberTargetTemp + "°C"
+                target: buildplane_temperature_text
+                text: bot.buildplaneCurrentTemp + "°C" + " | " + bot.buildplaneTargetTemp + "°C"
             }
 
             PropertyChanges {
