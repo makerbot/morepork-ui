@@ -393,36 +393,23 @@ ApplicationWindow {
                      !isFreComplete && !inFreStep
         }
 
-        SwipeView {
+        LoggingSwipeView {
             id: mainSwipeView
-            anchors.fill: parent
             anchors.topMargin: topBar.barHeight
-            interactive: false
             transform: Translate {
                 x: backSwipe.position * mainSwipeView.width * 1.5
             }
             property alias materialPage: materialPage
-            smooth: false
             visible: connectionState == ConnectionState.Connected &&
                      !freScreen.visible
 
-            function swipeToItem(itemToDisplayDefaultIndex) {
-                var prevIndex = mainSwipeView.currentIndex
-                mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-                if(itemToDisplayDefaultIndex === MoreporkUI.BasePage) {
-                    mainSwipeView.setCurrentIndex(MoreporkUI.BasePage)
+            function customEntryCheck(swipeToIndex) {
+                if(swipeToIndex === MoreporkUI.BasePage) {
                     topBar.backButton.visible = false
-                    if(!printPage.isPrintProcess) {
-                        disableDrawer()
-                    }
-                }
-                else {
-                    mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem.visible = true
-                    setCurrentItem(mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem)
-                    mainSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
+                    if(!printPage.isPrintProcess) disableDrawer()
+                } else {
                     topBar.backButton.visible = true
                 }
-                mainSwipeView.itemAt(prevIndex).visible = false
             }
 
             // MoreporkUI.BasePage
@@ -460,9 +447,30 @@ ApplicationWindow {
 
             // MoreporkUI.PrintPage
             Item {
-                property alias defaultItem: printPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
+                property bool hasAltBack: true
                 smooth: false
                 visible: false
+
+                function altBack() {
+                    if(!inFreStep) {
+                        if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
+                            printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
+                            return
+                        }
+                        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                    }
+                    else {
+                        skipFreStepPopup.open()
+                    }
+                }
+
+                function skipFreStepAction() {
+                    printPage.printStatusView.testPrintComplete = false
+                    bot.cancel()
+                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                }
                 PrintPage {
                     id: printPage
                     smooth: false
@@ -472,8 +480,8 @@ ApplicationWindow {
 
             // MoreporkUI.ExtruderPage
             Item {
-                property int defaultIndex: 2
-                property alias defaultItem: extruderPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 ExtruderPage {
@@ -484,8 +492,8 @@ ApplicationWindow {
 
             // MoreporkUI.SettingsPage
             Item {
-                property int defaultIndex: 3
-                property alias defaultItem: settingsPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 SettingsPage {
@@ -498,8 +506,8 @@ ApplicationWindow {
 
             // MoreporkUI.InfoPage
             Item {
-                property int defaultIndex: 4
-                property alias defaultItem: infoPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 InfoPage {
@@ -511,8 +519,8 @@ ApplicationWindow {
 
             // MoreporkUI.MaterialPage
             Item {
-                property int defaultIndex: 5
-                property alias defaultItem: materialPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 MaterialPage {
@@ -524,20 +532,14 @@ ApplicationWindow {
 
             // MoreporkUI.AdvancedPage
             Item {
-                property int defaultIndex: 6
-                property alias defaultItem: advancedPage.defaultItem
-                property bool hasAltBack: true
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
-
-                function altBack() {
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                }
 
                 AdvancedSettingsPage {
                     id: advancedPage
                     anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
-
                 }
             }
         }

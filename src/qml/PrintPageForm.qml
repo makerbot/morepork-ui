@@ -37,7 +37,6 @@ Item {
     property alias sortingDrawer: sortingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
-    property alias defaultItem: itemPrintStorageOpt
     property alias buttonUsbStorage: buttonUsbStorage
     property alias buttonInternalStorage: buttonInternalStorage
     property bool browsingUsbStorage: false
@@ -341,22 +340,19 @@ Item {
         }
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: printSwipeView
-        smooth: false
         currentIndex: PrintPage.BasePage
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = printSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == PrintPage.BasePage) {
+                // When swiping to the 0th index of this swipeview set the
+                // mainSwipeView page item that holds this page as the current
+                // item since we want the back button to use the mainSwipeView
+                // items' altBack()
+                setCurrentItem(mainSwipeView.itemAt(MoreporkUI.PrintPage))
+                return true
             }
-            printSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
-            printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            printSwipeView.itemAt(prevIndex).visible = false
         }
 
         // PrintPage.BasePage
@@ -365,28 +361,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
-            property bool hasAltBack: true
             smooth: false
-            visible: false
-
-            function altBack() {
-                if(!inFreStep) {
-                    if(printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
-                        printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
-                        return
-                    }
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                printStatusView.testPrintComplete = false
-                bot.cancel()
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            }
 
             Flickable {
                 id: flickableStorageOpt

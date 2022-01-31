@@ -12,7 +12,6 @@ Item {
     smooth: false
     property alias bay1: bay1
     property alias bay2: bay2
-    property alias defaultItem: itemFilamentBay
     property alias materialSwipeView: materialSwipeView
     property alias expExtruderSettingsPage: expExtruderSettingsPage
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
@@ -214,20 +213,12 @@ Item {
         LoadUnloadPage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: materialSwipeView
         currentIndex: MaterialPage.BasePage
         smooth: false
         anchors.fill: parent
         interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = materialSwipeView.currentIndex
-            materialSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(materialSwipeView.itemAt(itemToDisplayDefaultIndex))
-            materialSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            materialSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // MaterialPage.BasePage
         Item {
@@ -236,7 +227,6 @@ Item {
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
-            visible: true
 
             FilamentBay {
                 id: bay1

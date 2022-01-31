@@ -10,7 +10,6 @@ Item {
     height: 440
     smooth: false
 
-    property alias defaultItem: itemCleanAirSettings
     property alias cleanAirSettingsSwipeView: cleanAirSettingsSwipeView
 
     property alias buttonFilterStatus: buttonFilterStatus
@@ -22,50 +21,16 @@ Item {
         ReplaceFilterPage           // 2
     }
     
-    SwipeView {
+    LoggingSwipeView {
         id: cleanAirSettingsSwipeView
         currentIndex: CleanAirSettingsPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = cleanAirSettingsSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            cleanAirSettingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(cleanAirSettingsSwipeView.itemAt(itemToDisplayDefaultIndex))
-            cleanAirSettingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            cleanAirSettingsSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // CleanAirSettingsPage.BasePage
         Item {
             id: itemCleanAirSettings
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    mainSwipeView
-                }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    settingsPage.settingsSwipeView
-                }
-                else {
-                    mainSwipeView
-                }
-            }
-            property int backSwipeIndex: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    MoreporkUI.BasePage
-                }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    SettingsPage.BasePage
-                }
-                else {
-                    MoreporkUI.BasePage
-                }
-            }
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: SettingsPage.BasePage
 
             smooth: false
             visible: true

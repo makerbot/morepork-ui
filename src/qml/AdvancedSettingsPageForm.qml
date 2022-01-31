@@ -10,7 +10,6 @@ Item {
     smooth: false
     anchors.fill: parent
 
-    property alias defaultItem: itemAdvancedSettings
     property alias advancedSettingsSwipeView: advancedSettingsSwipeView
 
     property alias buttonAdvancedInfo: buttonAdvancedInfo
@@ -103,23 +102,9 @@ Item {
         AnnealPrintPage             // 10
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: advancedSettingsSwipeView
         currentIndex: AdvancedSettingsPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = advancedSettingsSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            advancedSettingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(advancedSettingsSwipeView.itemAt(itemToDisplayDefaultIndex))
-            advancedSettingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            advancedSettingsSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // AdvancedSettingsPage.BasePage
         Item {
@@ -149,7 +134,6 @@ Item {
             }
 
             smooth: false
-            visible: true
 
             Flickable {
                 id: flickableAdvancedSettings

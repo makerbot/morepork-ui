@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
-    property alias defaultItem: baseItem
     smooth: false
     width: 800
     height: 440
@@ -12,8 +11,6 @@ Item {
     Item {
         id: baseItem
         anchors.fill: parent
-        property var backSwiper: mainSwipeView
-        property int backSwipeIndex: 0
 
         Text {
             anchors.left: parent.left
