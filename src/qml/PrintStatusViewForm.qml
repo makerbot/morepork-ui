@@ -203,7 +203,7 @@ Item {
                             } else if(bot.extruderATargetTemp > 0) {
                                 qsTr("HEATING UP EXTRUDER")
                             } else {
-                                qsTr("HEATING UP CHAMBER")
+                                qsTr("HEATING UP BUILDPLANE")
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -257,7 +257,7 @@ Item {
                                      (qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp)) :
                                      "\n"))
                             } else {
-                                (qsTr("%1 C").arg(bot.chamberCurrentTemp) + " | " + qsTr("%1 C").arg(bot.chamberTargetTemp))
+                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -646,9 +646,9 @@ Item {
                         }
 
                         Text {
-                            id: chamber_temp_label
+                            id: buildplane_temp_label
                             color: "#cbcbcb"
-                            text: qsTr("CHAMBER TEMP")
+                            text: qsTr("BUILDPLANE TEMP")
                             antialiasing: false
                             smooth: false
                             font.pixelSize: 18
@@ -729,9 +729,9 @@ Item {
                         }
 
                         Text {
-                            id: chamber_temp_text
+                            id: buildplane_temp_text
                             color: "#ffffff"
-                            text: qsTr("%1C").arg(bot.chamberCurrentTemp)
+                            text: qsTr("%1C").arg(bot.buildplaneCurrentTemp)
                             antialiasing: false
                             smooth: false
                             font.family: defaultFont.name

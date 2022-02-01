@@ -26,7 +26,7 @@ Item {
     property int num_shells
     property real layer_height_mm
     property string extruder_temp
-    property string chamber_temp
+    property string buildplane_temp
     property string slicer_name
     property string print_job_id
     property string print_token
@@ -155,7 +155,7 @@ Item {
                                bot.process.stateType == ProcessStateType.Failed ||
                                bot.process.stateType == ProcessStateType.Cancelling
     onIsPrintDoneChanged: {
-        if(isPrintDone && bot.chamberCurrentTemp > waitToCoolTemperature) {
+        if(isPrintDone && bot.buildplaneCurrentTemp > waitToCoolTemperature) {
             waitToCoolChamber.waitToCoolChamberScreenVisible = true
             waitToCoolChamber.startTimer()
         }
@@ -190,7 +190,7 @@ Item {
         num_shells = file.numShells
         extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
                                               file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
-        chamber_temp = file.chamberTempCelcius + "C"
+        buildplane_temp = file.buildplaneTempCelcius + "C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
     }
@@ -224,7 +224,7 @@ Item {
         extruder_temp = !support_extruder_used ?
                             meta['extruder_temperatures'][0] + "C" :
                             meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
-        chamber_temp = meta['chamber_temperature'] + "C"
+        buildplane_temp = meta['buildplane_target_temperature'] + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
         if(!startPrintMaterialCheck()) {
@@ -262,7 +262,7 @@ Item {
         supportMaterialRequired = 0.0
         num_shells = ""
         extruder_temp = ""
-        chamber_temp = ""
+        buildplane_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
         print_job_id = ""
@@ -761,6 +761,18 @@ Item {
                                                   function(response) {
                                                       if(response["success"]) {
                                                           metaData = response["meta"]
+                                                          if ("build_plane_temperature" in metaData) {
+                                                              metaData["buildplane_target_temperature"] =
+                                                                  metaData["build_plane_temperature"]
+                                                              delete metaData["build_plane_temperature"]
+                                                          } else {
+                                                              // Backwards compatibility, in case the user somehow lost
+                                                              // the .stl, and only has older .makerbot files on hand.
+                                                              metaData["buildplane_target_temperature"] =
+                                                                  (metaData["chamber_temperature"] > 40) ?
+                                                                  Math.round((metaData["chamber_temperature"] * 1.333) - 13) :
+                                                                  metaData["chamber_temperature"]
+                                                          }
                                                           hasMeta = true
                                                       }
                                                   })
@@ -907,9 +919,9 @@ Item {
                 }
 
                 InfoItem {
-                    id: printInfo_chamberTemperature
-                    labelText: qsTr("Chamber Temperature")
-                    dataText: chamber_temp
+                    id: printInfo_buildplaneTemperature
+                    labelText: qsTr("Buildplane Temperature")
+                    dataText: buildplane_temp
                 }
 
                 InfoItem {
