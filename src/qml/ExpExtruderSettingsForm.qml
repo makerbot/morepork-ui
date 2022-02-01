@@ -74,7 +74,7 @@ Item {
         id: selectMaterialSwipeView
         currentIndex: 0
 
-        // selectMaterialSwipeView.index = 0
+        // ExpExtruderSettings.SelectMaterialPage
         Item {
             id: itemSelectMaterial
             property var backSwiper: materialSwipeView
@@ -88,7 +88,7 @@ Item {
             }
         }
 
-        // selectMaterialSwipeView.index = 1
+        // ExpExtruderSettings.SelectTemperaturePage
         Item {
             id: itemSelectCustomTemperature
             property var backSwiper: selectMaterialSwipeView

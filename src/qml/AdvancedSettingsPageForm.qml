@@ -258,6 +258,31 @@ Item {
                         buttonImage.source: "qrc:/img/icon_printer_info.png"
                         buttonText.text: qsTr("ANALYTICS")
                     }
+
+                    MenuButton {
+                        id: buttonSupportMode
+                        buttonImage.source: "qrc:/img/icon_time_and_date.png"
+                        buttonText.text: "SHOW CURRENT TIME"
+
+                        SlidingSwitch {
+                            id: switchToggleSupportMode
+                            checked: settings.getDateTimeTextEnabled()
+                            enabled: parent.enabled
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 50
+                            onClicked: {
+                                if(switchToggleSupportMode.checked) {
+                                    settings.setDateTimeTextEnabled(true)
+                                    setDateTimeTextVisible(true)
+                                }
+                                else if(!switchToggleSupportMode.checked) {
+                                    settings.setDateTimeTextEnabled(false)
+                                    setDateTimeTextVisible(false)
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -624,7 +649,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[" + yes_text.text + "]"
                         id: yes_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -664,7 +690,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "reset_to_factory: [" + no_text.text + "]"
                         id: no_mouseArea
                         anchors.fill: parent
                         onPressed: {

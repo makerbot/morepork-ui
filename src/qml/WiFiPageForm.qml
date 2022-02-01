@@ -493,7 +493,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "wifi_popup: [_" + left_text.text + "|]"
                         id: left_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -541,7 +542,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "wifi_popup: [|" + right_text.text + "_]"
                         id: right_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -605,7 +607,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "wifi_popup: [_" + full_button_text.text + "_]"
                         id: full_button_mouseArea
                         anchors.fill: parent
                         onPressed: {

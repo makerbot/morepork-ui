@@ -35,10 +35,10 @@ LoadUnloadFilamentForm {
                             isLoadFilament = true
                             bot.loadFilament(1, false, false)
                             setDrawerState(true)
-                            materialSwipeView.swipeToItem(2)
+                            materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
                         } else if(bayID == 2) {
                             fre.gotoNextStep(currentFreStep)
-                            mainSwipeView.swipeToItem(0)
+                            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                             inFreStep = false
                         }
                     }

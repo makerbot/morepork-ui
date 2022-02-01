@@ -14,7 +14,7 @@ ToolheadCalibrationForm {
             else if(state == "calibration_finished") {
                 processDone()
                 if(inFreStep) {
-                    mainSwipeView.swipeToItem(0)
+                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                     fre.gotoNextStep(currentFreStep)
                 }
             }

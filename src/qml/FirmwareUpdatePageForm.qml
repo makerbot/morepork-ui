@@ -18,11 +18,11 @@ LoggingItem {
     property bool isFwUpdProcess: bot.process.type == ProcessType.FirmwareUpdate
     onIsFwUpdProcessChanged: {
         if(isFwUpdProcess) {
-            if(mainSwipeView.currentIndex != 3) {
-                mainSwipeView.swipeToItem(3)
+            if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
             }
-            if(settingsSwipeView.currentIndex != 5) {
-                settingsSwipeView.swipeToItem(5)
+            if(settingsSwipeView.currentIndex != SettingsPage.FirmwareUpdatePage) {
+                settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
             }
         }
     }
@@ -131,7 +131,8 @@ LoggingItem {
             anchors.top: parent.top
             anchors.topMargin: 0
 
-            MouseArea {
+            LoggingMouseArea {
+                logText: "[" + release_notes_text.text + "]"
                 id: viewReleaseNotesMouseArea
                 anchors.fill: parent
                 onClicked: {

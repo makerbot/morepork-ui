@@ -229,5 +229,27 @@
         <file>LoggingItem.qml</file>
         <file>LoggingPopup.qml</file>
         <file>LoggingSwipeView.qml</file>
+        <file>LoggingMouseArea.qml</file>
+        <file>LoggingMouseAreaForm.qml</file>
+        <file>TextHuge.qml</file>
+        <file>TextHugeForm.qml</file>
+        <file>TextHeadline.qml</file>
+        <file>TextHeadlineForm.qml</file>
+        <file>TextBody.qml</file>
+        <file>TextBodyForm.qml</file>
+        <file>TextSubheader.qml</file>
+        <file>TextSubheaderForm.qml</file>
+        <file>ButtonRectanglePrimary.qml</file>
+        <file>ButtonRectanglePrimaryForm.qml</file>
+        <file>ButtonRoundPrintIcon.qml</file>
+        <file>ButtonRoundPrintIconForm.qml</file>
+        <file>ContentRightSide.qml</file>
+        <file>ContentRightSideForm.qml</file>
+        <file>ButtonRectangleSecondary.qml</file>
+        <file>ButtonRectangleSecondaryForm.qml</file>
+        <file>ButtonRectangleBase.qml</file>
+        <file>ButtonRectangleBaseForm.qml</file>
+        <file>NumberedSteps.qml</file>
+        <file>NumberedStepsForm.qml</file>
     </qresource>
 </RCC>

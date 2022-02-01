@@ -38,7 +38,7 @@ ListView {
         smooth: false
         antialiasing: false
         onClicked: {
-            selectMaterialSwipeView.swipeToItem(1)
+            selectMaterialSwipeView.swipeToItem(ExpExtruderSettings.SelectTemperaturePage)
         }
     }
 }

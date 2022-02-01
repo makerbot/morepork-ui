@@ -141,4 +141,13 @@ Button {
             source: "qrc:/img/arrow_19pix.png"
         }
     }
+
+    Component.onCompleted: {
+        this.onClicked.connect(uiLogSTBtn)
+    }
+
+    function uiLogSTBtn() {
+        console.log("STB [=" + storageName + "=] clicked")
+    }
+
 }

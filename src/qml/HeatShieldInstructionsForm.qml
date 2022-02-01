@@ -62,7 +62,8 @@ LoggingItem {
     Rectangle {
         anchors.fill: parent
         color: "#000000"
-        MouseArea {
+        LoggingMouseArea {
+            logText: "heatShieldWarningAcknowledged [?MouseArea?]"
             anchors.fill: parent
             preventStealing: true
         }

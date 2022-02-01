@@ -423,7 +423,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "no_extruder_popup: [_" + cancel_text_no_extruder_popup.text +"|]"
                         id: cancel_mouseArea_no_extruder_popup
                         anchors.fill: parent
                         onPressed: {
@@ -459,7 +460,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "no_extruder_popup: [|" + attach_extruder_text_no_extruder_popup.text +"_]"
                         id: attach_extruder_mouseArea_no_extruder_popup
                         anchors.fill: parent
                         onPressed: {
@@ -610,7 +612,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "material_warning_popup: [OK]"
                         id: ok_mat_warning_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -810,7 +813,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[_" + cancel_loading_text.text + "|]"
                         id: cancel_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -846,7 +850,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[|" + continue_loading_text.text + "_]"
                         id: continue_mouseArea
                         anchors.fill: parent
                         onPressed: {

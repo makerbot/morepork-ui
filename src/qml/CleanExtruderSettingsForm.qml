@@ -26,9 +26,14 @@ Item {
         {label: "nylon", temperature : 190}
     ]
 
+    enum SwipeIndex {
+        MaterialSelector,
+        TemperatureSelector
+    }
+
     LoggingSwipeView {
         id: cleanExtrudersSelectMaterialSwipeView
-        currentIndex: 0
+        currentIndex: CleanExtruderSettings.MaterialSelector
 
         function customSetCurrentItem(swipeToIndex) {
             if(swipeToIndex == 0) {
@@ -43,7 +48,7 @@ Item {
             }
         }
 
-        // cleanExtrudersSelectMaterialSwipeView.index = 0
+        // CleanExtruderSettings.MaterialSelector
         Item {
             id: itemCleanExtrudersSelectMaterial
             smooth: false
@@ -55,7 +60,7 @@ Item {
             }
         }
 
-        // cleanExtrudersSelectMaterialSwipeView.index = 1
+        // CleanExtruderSettings.TemperatureSelector
         Item {
             id: itemCleanExtrudersSelectCustomTemperature
             property var backSwiper: cleanExtrudersSelectMaterialSwipeView

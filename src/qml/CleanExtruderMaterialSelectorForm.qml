@@ -22,6 +22,15 @@ ListView {
         onClicked: {
             startCleaning([parseInt(temperatureText, 10)])
         }
+
+        Component.onCompleted: {
+            this.onClicked.connect(uiLogClBtn)
+        }
+
+        function uiLogClBtn() {
+            console.log("MLB [=" + materialNameText + "=] clicked")
+        }
+
     }
     footer:
         ExpExtruderMaterialButton {
@@ -30,7 +39,7 @@ ListView {
         smooth: false
         antialiasing: false
         onClicked: {
-            cleanExtrudersSelectMaterialSwipeView.swipeToItem(1)
+            cleanExtrudersSelectMaterialSwipeView.swipeToItem(CleanExtruderSettings.TemperatureSelector)
         }
     }
 }

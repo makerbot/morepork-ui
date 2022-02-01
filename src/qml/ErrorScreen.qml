@@ -27,8 +27,8 @@ ErrorScreenForm {
         if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
             printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
         }
-        if(mainSwipeView.currentIndex != 0) {
-            mainSwipeView.swipeToItem(0)
+        if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
         }
     }
 
@@ -41,7 +41,7 @@ ErrorScreenForm {
     function loadPurgeFromErrorScreen() {
         if(isExtruderAError() && (materialPage.bay1.usingExperimentalExtruder || settings.getSkipFilamentNags())) {
             materialPage.isLoadFilament = true
-            materialPage.materialSwipeView.swipeToItem(1)
+            materialPage.materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
             return;
         }
         materialPage.startLoadUnloadFromUI = true
@@ -55,13 +55,13 @@ ErrorScreenForm {
         } else {
             bot.loadFilament(1, false, true)
         }
-        materialPage.materialSwipeView.swipeToItem(2)
+        materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
     function unloadFromErrorScreen() {
         if(isExtruderAError() && materialPage.bay1.usingExperimentalExtruder) {
             materialPage.isLoadFilament = false
-            materialPage.materialSwipeView.swipeToItem(1)
+            materialPage.materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
             return;
         }
         materialPage.startLoadUnloadFromUI = true
@@ -74,7 +74,7 @@ ErrorScreenForm {
             bot.unloadFilament(1, true, true)
         }
         materialPage.loadUnloadFilamentProcess.state = "preheating"
-        materialPage.materialSwipeView.swipeToItem(2)
+        materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
     button1 {
@@ -148,7 +148,7 @@ ErrorScreenForm {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Purge
                         resetSwipeViews()
-                        mainSwipeView.swipeToItem(5)
+                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         loadPurgeFromErrorScreen()
                     }
                 }
@@ -156,7 +156,7 @@ ErrorScreenForm {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Load material
                         resetSwipeViews()
-                        mainSwipeView.swipeToItem(5)
+                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         loadPurgeFromErrorScreen()
                     }
                 }
@@ -165,7 +165,7 @@ ErrorScreenForm {
                         if(bot.extruderAType == ExtruderType.MK14_EXP) {
                             acknowledgeError()
                             resetSwipeViews()
-                            mainSwipeView.swipeToItem(5)
+                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         } else {
                             state = "extruder_oof_error_state2"
                         }
@@ -175,16 +175,16 @@ ErrorScreenForm {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Load material
                         resetSwipeViews()
-                        mainSwipeView.swipeToItem(5)
+                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         loadPurgeFromErrorScreen()
                     }
                 } else if (state == "no_tool_connected") {
                     resetSwipeViews()
-                    mainSwipeView.swipeToItem(2)
+                    mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
                     // sigh
                     extruderPage.itemAttachExtruder.extruder = bot.process.errorSource + 1
                     extruderPage.itemAttachExtruder.state = "base state"
-                    extruderPage.extruderSwipeView.swipeToItem(1)
+                    extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
                 }
                 else if(state == "generic_error") {
                     // just clear the error
@@ -220,7 +220,7 @@ ErrorScreenForm {
                     if(bot.process.stateType == ProcessStateType.Paused) {
                         // Unload
                         resetSwipeViews()
-                        mainSwipeView.swipeToItem(5)
+                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         unloadFromErrorScreen()
                     }
                 }

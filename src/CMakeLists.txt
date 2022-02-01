@@ -160,6 +160,7 @@ if(NOT ${QT_CREATOR_BUILD})
         Boost::chrono
         pthread
       )
+    target_compile_options(morepork_ui PRIVATE -g)
 else()
     if(${HAVE_LIBTINYTHING})
         target_link_libraries(morepork_ui JsonCpp::jsoncpp TinyThing::tinything)
@@ -174,7 +175,33 @@ if(NOT ${QT_CREATOR_BUILD})
     set_target_properties(morepork_ui PROPERTIES
         LINK_FLAGS "-Wl,-rpath-link=${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
 
-    install(TARGETS morepork_ui DESTINATION ${BIN_INSTALL_DIR})
+    # We compiled morepork_ui with debug symbols, but we only want to install
+    # with debug symbols to staging.  The binary is also huge because of all
+    # of the images/animations bundled into it, so we strip the rodata section
+    # that contains all of these from staging and hope it doesn't affect debug.
+    set(strip_path "${CMAKE_BINARY_DIR}/morepork_ui.strip")
+    set(debug_path "${CMAKE_BINARY_DIR}/morepork_ui.debug")
+    add_custom_command(TARGET morepork_ui POST_BUILD
+        COMMAND ${CMAKE_STRIP} --strip-unneeded -o "${strip_path}"
+            "$<TARGET_FILE:morepork_ui>"
+        COMMAND ${CMAKE_OBJCOPY} -R .rodata
+            "$<TARGET_FILE:morepork_ui>" "${debug_path}")
+    install(
+        FILES "${strip_path}"
+        DESTINATION "${BIN_INSTALL_DIR}"
+        RENAME morepork_ui
+        PERMISSIONS
+            OWNER_EXECUTE OWNER_WRITE OWNER_READ
+            GROUP_EXECUTE GROUP_READ
+            WORLD_EXECUTE WORLD_READ)
+    install(
+        FILES "${debug_path}"
+        DESTINATION "${STAGING_BIN_INSTALL_DIR}"
+        RENAME morepork_ui
+        PERMISSIONS
+            OWNER_EXECUTE OWNER_WRITE OWNER_READ
+            GROUP_EXECUTE GROUP_READ
+            WORLD_EXECUTE WORLD_READ)
 
     install(DIRECTORY "${MoreporkUI_SOURCE_DIR}/fonts" DESTINATION
         "${ROOT_INSTALL_DIR}/usr/lib")
@@ -197,6 +224,3 @@ if(NOT ${QT_CREATOR_BUILD})
 	    DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/test_prints")
 endif()
-
-# Read qml qrc file, parse out all qml file names, and install them
-add_subdirectory(qml)

@@ -18,8 +18,28 @@ Item {
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
     property alias text_printerName: textPrinterName
+    property alias dateTimeText: dateTimeText
+    property string timeSeconds: "00"
+    property string oldSeparatorString: " "
     signal backClicked()
     signal drawerDownClicked()
+
+    Timer {
+        id: secondsUpdater
+        interval: 100 // 10x per second hides time interval misses better than exactly 1x per second
+        repeat: true
+        running: true
+        onTriggered: {
+            timeSeconds = new Date().toLocaleString(Qt.locale(), "ss")
+            // 2-on, 2-off hides time interval misses better than 1-on, 1-off
+            var newSeparatorString = (((timeSeconds % 4) < 2) ? ":" : " ")
+            if (newSeparatorString != oldSeparatorString) {
+                oldSeparatorString =  newSeparatorString
+                var formatString = "M/d H" + oldSeparatorString + "mm"
+                textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
+            }
+        }
+    }
 
     NotificationIcons {
         id: notificationIcons
@@ -63,7 +83,8 @@ Item {
         anchors.topMargin: 0
         z: 2
 
-        MouseArea {
+        LoggingMouseArea {
+            logText: "[<back_button<]"
             id: mouseArea_back
             height: topFadeIn.height
             smooth: false
@@ -110,145 +131,261 @@ Item {
     }
 
     Item {
-        id: itemPrinterName
-        height: barHeight
-        smooth: false
-        z: 1
+        id: dateTimeText
+        z: 3
+        anchors.leftMargin: 48
+        anchors.topMargin: 11
+        anchors.left: backButton.left
         anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.left: parent.left
+        height: parent.height
+        width: 125
+        smooth: false
+        visible: settings.getDateTimeTextEnabled()
 
         Text {
-            id: textPrinterName
+            id: textDateTime
             color: "#a0a0a0"
-            text: {
-                switch(bot.process.type) {
-                case ProcessType.Print:
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.Loading:
-                        qsTr("LOADING")
-                        break;
-                    case ProcessStateType.Printing:
-                        qsTr("PRINTING")
-                        break;
-                    case ProcessStateType.Pausing:
-                        qsTr("PAUSING")
-                        break;
-                    case ProcessStateType.Resuming:
-                        qsTr("RESUMING")
-                        break;
-                    case ProcessStateType.Paused:
-                        qsTr("PAUSED")
-                        break;
-                    case ProcessStateType.Failed:
-                        qsTr("FAILED")
-                        break;
-                    case ProcessStateType.Completed:
-                        qsTr("PRINT COMPLETE")
-                        break;
-                    }
-                    break;
-                case ProcessType.Load:
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.Preheating:
-                        qsTr("PREHEATING")
-                        break;
-                    case ProcessStateType.Extrusion:
-                        qsTr("EXTRUDING")
-                        break;
-                    case ProcessStateType.Stopping:
-                    case ProcessStateType.Done:
-                        qsTr("MATERIAL LOADED")
-                        break;
-                    default:
-                        qsTr("LOAD MATERIAL")
-                        break;
-                    }
-                    break;
-                case ProcessType.Unload:
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.Preheating:
-                        qsTr("PREHEATING")
-                        break;
-                    case ProcessStateType.UnloadingFilament:
-                        qsTr("UNLOADING MATERIAL")
-                        break;
-                    case ProcessStateType.Done:
-                        qsTr("MATERIAL UNLOADED")
-                        break;
-                    default:
-                        qsTr("UNLOAD MATERIAL")
-                        break;
-                    }
-                    break;
-                default:
-                    switch(mainSwipeView.currentIndex) {
-                    case MoreporkUI.BasePage:
-                        bot.name
-                        break;
-                    case MoreporkUI.PrintPage:
-                        switch(printPage.printSwipeView.currentIndex) {
-                        case PrintPage.BasePage:
-                        case PrintPage.FileBrowser:
-                        case PrintPage.PrintQueueBrowser:
-                            qsTr("CHOOSE A FILE")
+            text: "--/-- --:--"
+            antialiasing: false
+            smooth: false
+            font.capitalization: Font.AllUppercase
+            font.family: defaultFont.name
+            font.letterSpacing: 0
+            font.weight: Font.Light
+            font.pixelSize: 18
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignRight
+            anchors.top: parent.top
+            anchors.left: parent.left
+        }
+    }
+
+    Flickable {
+        id: drawerDownSwipeHandler
+        z: 4
+        height: parent.height
+        anchors.top: parent.top
+        anchors.left: backButton.right
+        anchors.right: notificationIcons.left
+        flickableDirection: Flickable.VerticalFlick
+        onFlickStarted: {
+            if (verticalVelocity < 0) drawerDownClicked()
+        }
+        boundsMovement: Flickable.StopAtBounds
+        pressDelay: 0
+
+        // Flickable absorbs touch events and only propagates them to
+        // its children which is why the center title area which is clickable
+        // (to open the drawers) is a child of the flickable.
+        Item {
+            id: itemPrinterName
+            height: barHeight
+            smooth: false
+            z: 1
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.left: parent.left
+
+            Text {
+                id: textPrinterName
+                color: "#a0a0a0"
+                text: {
+                    switch(bot.process.type) {
+                    case ProcessType.Print:
+                        switch(bot.process.stateType) {
+                        case ProcessStateType.Loading:
+                            qsTr("LOADING")
                             break;
-                        case PrintPage.StartPrintConfirm:
-                            qsTr("PRINT")
+                        case ProcessStateType.Printing:
+                            qsTr("PRINTING")
                             break;
-                        case PrintPage.FileInfoPage:
-                            qsTr("FILE INFORMATION")
+                        case ProcessStateType.Pausing:
+                            qsTr("PAUSING")
+                            break;
+                        case ProcessStateType.Resuming:
+                            qsTr("RESUMING")
+                            break;
+                        case ProcessStateType.Paused:
+                            qsTr("PAUSED")
+                            break;
+                        case ProcessStateType.Failed:
+                            qsTr("FAILED")
+                            break;
+                        case ProcessStateType.Completed:
+                            qsTr("PRINT COMPLETE")
                             break;
                         }
                         break;
-                    case MoreporkUI.ExtruderPage:
-                        switch(extruderPage.extruderSwipeView.currentIndex) {
-                        case ExtruderPage.BasePage:
-                            qsTr("EXTRUDERS")
+                    case ProcessType.Load:
+                        switch(bot.process.stateType) {
+                        case ProcessStateType.Preheating:
+                            qsTr("PREHEATING")
                             break;
-                        case ExtruderPage.AttachExtruderPage:
-                            qsTr("ATTACHING EXTRUDERS")
+                        case ProcessStateType.Extrusion:
+                            qsTr("EXTRUDING")
+                            break;
+                        case ProcessStateType.Stopping:
+                        case ProcessStateType.Done:
+                            qsTr("MATERIAL LOADED")
                             break;
                         default:
-                            qsTr("EXTRUDERS")
+                            qsTr("LOAD MATERIAL")
                             break;
                         }
                         break;
-                    case MoreporkUI.SettingsPage:
-                        switch(settingsPage.settingsSwipeView.currentIndex) {
-                        case SettingsPage.PrinterInfoPage:
-                            qsTr("%1 INFO").arg(bot.name)
+                    case ProcessType.Unload:
+                        switch(bot.process.stateType) {
+                        case ProcessStateType.Preheating:
+                            qsTr("PREHEATING")
                             break;
-                        case SettingsPage.ChangePrinterNamePage:
-                            qsTr("CHANGE PRINTER NAME")
+                        case ProcessStateType.UnloadingFilament:
+                            qsTr("UNLOADING MATERIAL")
                             break;
-                        case SettingsPage.WifiPage:
-                            qsTr("CHOOSE WIFI NETWORK")
+                        case ProcessStateType.Done:
+                            qsTr("MATERIAL UNLOADED")
                             break;
-                        case SettingsPage.AuthorizeAccountsPage:
-                            qsTr("AUTHORIZE MAKERBOT ACCOUNT")
+                        default:
+                            qsTr("UNLOAD MATERIAL")
                             break;
-                        case SettingsPage.FirmwareUpdatePage:
-                            qsTr("SOFTWARE UPDATE")
+                        }
+                        break;
+                    default:
+                        switch(mainSwipeView.currentIndex) {
+                        case MoreporkUI.BasePage:
+                            bot.name
                             break;
-                        case SettingsPage.CalibrateExtrudersPage:
-                            qsTr("CALIBRATE EXTRUDERS")
-                            break;
-                        case SettingsPage.TimePage:
-                            switch(settingsPage.timePage.timeSwipeView.currentIndex) {
-                            case TimePage.SetDate:
-                                qsTr("ENTER TODAY'S DATE")
+                        case MoreporkUI.PrintPage:
+                            switch(printPage.printSwipeView.currentIndex) {
+                            case PrintPage.BasePage:
+                            case PrintPage.FileBrowser:
+                            case PrintPage.PrintQueueBrowser:
+                                qsTr("CHOOSE A FILE")
                                 break;
-                            case TimePage.SetTimeZone:
-                                qsTr("SET TIME ZONE")
+                            case PrintPage.StartPrintConfirm:
+                                qsTr("PRINT")
                                 break;
-                            case TimePage.SetTime:
-                                qsTr("SET CURRENT TIME")
+                            case PrintPage.FileInfoPage:
+                                qsTr("FILE INFORMATION")
                                 break;
                             }
                             break;
-                        case SettingsPage.AdvancedSettingsPage:
-                            switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
+                        case MoreporkUI.ExtruderPage:
+                            switch(extruderPage.extruderSwipeView.currentIndex) {
+                            case ExtruderPage.BasePage:
+                                qsTr("EXTRUDERS")
+                                break;
+                            case ExtruderPage.AttachExtruderPage:
+                                qsTr("ATTACHING EXTRUDERS")
+                                break;
+                            default:
+                                qsTr("EXTRUDERS")
+                                break;
+                            }
+                            break;
+                        case MoreporkUI.SettingsPage:
+                            switch(settingsPage.settingsSwipeView.currentIndex) {
+                            case SettingsPage.PrinterInfoPage:
+                                qsTr("%1 INFO").arg(bot.name)
+                                break;
+                            case SettingsPage.ChangePrinterNamePage:
+                                qsTr("CHANGE PRINTER NAME")
+                                break;
+                            case SettingsPage.WifiPage:
+                                qsTr("CHOOSE WIFI NETWORK")
+                                break;
+                            case SettingsPage.AuthorizeAccountsPage:
+                                qsTr("AUTHORIZE MAKERBOT ACCOUNT")
+                                break;
+                            case SettingsPage.FirmwareUpdatePage:
+                                qsTr("SOFTWARE UPDATE")
+                                break;
+                            case SettingsPage.CalibrateExtrudersPage:
+                                qsTr("CALIBRATE EXTRUDERS")
+                                break;
+                            case SettingsPage.TimePage:
+                                switch(settingsPage.timePage.timeSwipeView.currentIndex) {
+                                case TimePage.SetDate:
+                                    qsTr("ENTER TODAY'S DATE")
+                                    break;
+                                case TimePage.SetTimeZone:
+                                    qsTr("SET TIME ZONE")
+                                    break;
+                                case TimePage.SetTime:
+                                    qsTr("SET CURRENT TIME")
+                                    break;
+                                }
+                                break;
+                            case SettingsPage.AdvancedSettingsPage:
+                                switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
+                                case AdvancedSettingsPage.AdvancedInfoPage:
+                                    qsTr("%1 SENSOR INFO").arg(bot.name)
+                                    break;
+                                case AdvancedSettingsPage.PreheatPage:
+                                    qsTr("PREHEAT")
+                                    break;
+                                case AdvancedSettingsPage.AssistedLevelingPage:
+                                    qsTr("ASSISTED LEVELING")
+                                    break;
+                                case AdvancedSettingsPage.RaiseLowerBuildPlatePage:
+                                    qsTr("RAISE/LOWER BUILD PLATE")
+                                    break;
+                                case AdvancedSettingsPage.ShareAnalyticsPage:
+                                    qsTr("ANALYTICS")
+                                    break;
+                                case AdvancedSettingsPage.DryMaterialPage:
+                                    qsTr("DRYING CYCLE")
+                                    break;
+                                case AdvancedSettingsPage.CleanExtrudersPage:
+                                    qsTr("CLEAN EXTRUDERS")
+                                    break;
+                                case 10:
+                                    qsTr("ANNEAL PRINT")
+                                    break;
+                                default:
+                                    qsTr("ADVANCED")
+                                    break;
+                                }
+                                break;
+                            case SettingsPage.ChangeLanguagePage:
+                                qsTr("SET PRINTER LANGUAGE")
+                                break;
+                            case SettingsPage.CleanAirSettingsPage:
+                                qsTr("CLEAN AIR SETTINGS")
+                                break;
+                            default:
+                                qsTr("SETTINGS")
+                                break;
+                            }
+                            break;
+                        case MoreporkUI.InfoPage:
+                            qsTr("INFO")
+                            break;
+                        case MoreporkUI.MaterialPage:
+                            switch(materialPage.materialSwipeView.currentIndex) {
+                            case MaterialPage.BasePage:
+                                qsTr("MATERIAL")
+                                break;
+                            case MaterialPage.ExpExtruderSettingsPage:
+                                switch(materialPage.expExtruderSettingsPage.selectMaterialSwipeView.currentIndex) {
+                                    case ExpExtruderSettings.SelectMaterialPage:
+                                    qsTr("CHOOSE BASE MATERIAL")
+                                    break;
+                                    case ExpExtruderSettings.SelectTemperaturePage:
+                                    qsTr("CHOOSE TEMPERATURE")
+                                    break;
+                                }
+                                break;
+                            default:
+                                qsTr("MATERIAL")
+                                break;
+                            }
+                            break;
+                        case MoreporkUI.AdvancedPage:
+                            // This bit is repeated from above, but making it a function
+                            // returning a string doesn't seem to be updating the title
+                            // dynamically when the advanced page is reached through the
+                            // settings page.
+                            switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
                             case AdvancedSettingsPage.AdvancedInfoPage:
                                 qsTr("%1 SENSOR INFO").arg(bot.name)
                                 break;
@@ -278,118 +415,51 @@ Item {
                                 break;
                             }
                             break;
-                        case SettingsPage.ChangeLanguagePage:
-                            qsTr("SET PRINTER LANGUAGE")
-                            break;
-                        case SettingsPage.CleanAirSettingsPage:
-                            qsTr("CLEAN AIR SETTINGS")
-                            break;
                         default:
-                            qsTr("SETTINGS")
+                            bot.name
                             break;
                         }
-                        break;
-                    case MoreporkUI.InfoPage:
-                        qsTr("INFO")
-                        break;
-                    case MoreporkUI.MaterialPage:
-                        switch(materialPage.materialSwipeView.currentIndex) {
-                        case MaterialPage.BasePage:
-                            qsTr("MATERIAL")
-                            break;
-                        case MaterialPage.ExpExtruderSettingsPage:
-                            switch(materialPage.expExtruderSettingsPage.selectMaterialSwipeView.currentIndex) {
-                                case ExpExtruderSettings.SelectMaterialPage:
-                                qsTr("CHOOSE BASE MATERIAL")
-                                break;
-                                case ExpExtruderSettings.SelectTemperaturePage:
-                                qsTr("CHOOSE TEMPERATURE")
-                                break;
-                            }
-                            break;
-                        default:
-                            qsTr("MATERIAL")
-                            break;
-                        }
-                        break;
-                    case MoreporkUI.AdvancedPage:
-                        // This bit is repeated from above, but making it a function
-                        // returning a string doesn't seem to be updating the title
-                        // dynamically when the advanced page is reached through the
-                        // settings page.
-                        switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
-                        case AdvancedSettingsPage.AdvancedInfoPage:
-                            qsTr("%1 SENSOR INFO").arg(bot.name)
-                            break;
-                        case AdvancedSettingsPage.PreheatPage:
-                            qsTr("PREHEAT")
-                            break;
-                        case AdvancedSettingsPage.AssistedLevelingPage:
-                            qsTr("ASSISTED LEVELING")
-                            break;
-                        case AdvancedSettingsPage.RaiseLowerBuildPlatePage:
-                            qsTr("RAISE/LOWER BUILD PLATE")
-                            break;
-                        case AdvancedSettingsPage.ShareAnalyticsPage:
-                            qsTr("ANALYTICS")
-                            break;
-                        case AdvancedSettingsPage.DryMaterialPage:
-                            qsTr("DRYING CYCLE")
-                            break;
-                        case AdvancedSettingsPage.CleanExtrudersPage:
-                            qsTr("CLEAN EXTRUDERS")
-                            break;
-                        case 10:
-                            qsTr("ANNEAL PRINT")
-                            break;
-                        default:
-                            qsTr("ADVANCED")
-                            break;
-                        }
-                        break;
-                    default:
-                        bot.name
                         break;
                     }
-                    break;
                 }
+                font.capitalization: Font.AllUppercase
+                antialiasing: false
+                smooth: false
+                verticalAlignment: Text.AlignVCenter
+                font.family: defaultFont.name
+                font.letterSpacing: 3
+                font.weight: Font.Light
+                font.pixelSize: 22
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
             }
-            font.capitalization: Font.AllUppercase
-            antialiasing: false
-            smooth: false
-            verticalAlignment: Text.AlignVCenter
-            font.family: defaultFont.name
-            font.letterSpacing: 3
-            font.weight: Font.Light
-            font.pixelSize: 22
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
-        }
 
-        Image {
-            id: imageDrawerArrow
-            y: 227
-            height: 25
-            smooth: false
-            anchors.left: textPrinterName.right
-            anchors.leftMargin: 10
-            anchors.verticalCenter: textPrinterName.verticalCenter
-            rotation: -90
-            z: 1
-            source: "qrc:/img/arrow_19pix.png"
-            fillMode: Image.PreserveAspectFit
-        }
+            Image {
+                id: imageDrawerArrow
+                y: 227
+                height: 25
+                smooth: false
+                anchors.left: textPrinterName.right
+                anchors.leftMargin: 10
+                anchors.verticalCenter: textPrinterName.verticalCenter
+                rotation: -90
+                z: 1
+                source: "qrc:/img/arrow_19pix.png"
+                fillMode: Image.PreserveAspectFit
+            }
 
-        MouseArea {
-            id: mouseAreaTopDrawerDown
-            x: 301
-            y: 40
-            width: 40
-            height: 60
-            smooth: false
-            anchors.fill: parent
-            z: 2
-            onClicked: drawerDownClicked()
+            LoggingMouseArea {
+                logText: "[^TopDrawerDown^]"
+                id: mouseAreaTopDrawerDown
+                x: 301
+                y: 40
+                width: 40
+                height: 60
+                smooth: false
+                anchors.fill: parent
+                z: 2
+                onClicked: drawerDownClicked()
+            }
         }
     }
 }

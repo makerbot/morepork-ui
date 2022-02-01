@@ -617,7 +617,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "deauth_accounts: [_" + remove_accounts_text_deauth_accounts.text + "|]"
                         id: remove_accounts_mouseArea_deauth_accounts
                         anchors.fill: parent
                         onPressed: {
@@ -658,7 +659,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "deauth_accounts: [|" + cancel_text_deauth_accounts.text + "_]"
                         id: cancel_mouseArea_deauth_accounts
                         anchors.fill: parent
                         onPressed: {
