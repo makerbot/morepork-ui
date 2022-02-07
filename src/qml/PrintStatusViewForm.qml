@@ -203,7 +203,7 @@ Item {
                             } else if(bot.extruderATargetTemp > 0) {
                                 qsTr("HEATING UP EXTRUDER")
                             } else {
-                                qsTr("HEATING UP BUILDPLANE")
+                                qsTr("HEATING UP CHAMBER")
                             }
                             break;
                         case ProcessStateType.Printing:
