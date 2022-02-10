@@ -551,6 +551,7 @@ Item {
 
     ModalPopup {
         property bool succeeded: false
+        property int errorcode: 0
 
         id: copyLogsFinishedPopup
         visible: false
@@ -562,6 +563,27 @@ Item {
                             qsTr("FAILED TO COPY LOGS TO USB")
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+            }
+            BodyText{
+                visible: !(copyLogsFinishedPopup.succeeded)
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                color: copyLogsFinishedPopup.succeeded ? "#ffffff" : "#ff0000"
+                font.pixelSize: 18
+
+                text: (copyLogsFinishedPopup.errorcode == 1051) ?
+                      qsTr("\n\n\nINSUFFICIENT USB SPACE - REMOVE FILES AND TRY AGAIN") :
+                      qsTr("\n\n\nERROR CODE: " + copyLogsFinishedPopup.errorcode)
+
+                Image {
+                    id: copyLogsFinishedPopupAlertIcon
+                    height: sourceSize.height / 2
+                    width: sourceSize.width / 2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: -70
+                    source: "qrc:/img/error.png"
+                }
             }
         }
     }
