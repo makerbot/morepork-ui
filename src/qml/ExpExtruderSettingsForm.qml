@@ -72,6 +72,7 @@ Item {
 
     LoggingSwipeView {
         id: selectMaterialSwipeView
+        logName: "selectMaterialSwipeView"
         currentIndex: 0
 
         // ExpExtruderSettings.SelectMaterialPage

@@ -19,10 +19,8 @@ Item {
 
     LoggingSwipeView {
         id: koreaDFScreenSwipeView
-        smooth: false
+        logName: "koreaDFScreenSwipeView"
         currentIndex: 0 // Should never be non zero
-        anchors.fill: parent
-        interactive: false
 
         // settingsSwipeView.index = 0
         Item {

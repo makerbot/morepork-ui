@@ -342,6 +342,7 @@ Item {
 
     LoggingSwipeView {
         id: printSwipeView
+        logName: "printSwipeView"
         currentIndex: PrintPage.BasePage
 
         function customSetCurrentItem(swipeToIndex) {

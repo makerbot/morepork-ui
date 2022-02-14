@@ -33,6 +33,7 @@ Item {
 
     LoggingSwipeView {
         id: cleanExtrudersSelectMaterialSwipeView
+        logName: "cleanExtrudersSelectMaterialSwipeView"
         currentIndex: CleanExtruderSettings.MaterialSelector
 
         function customSetCurrentItem(swipeToIndex) {

@@ -19,6 +19,7 @@ Item {
 
     LoggingSwipeView {
         id: namePrinterSwipeView
+        logName: "namePrinterSwipeView"
         currentIndex: NamePrinterPage.EnterName
 
         function customSetCurrentItem(swipeToIndex) {

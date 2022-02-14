@@ -207,7 +207,7 @@ Item {
         id: materialPageDrawer
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,
         ExpExtruderSettingsPage,
         LoadUnloadPage
@@ -215,10 +215,8 @@ Item {
 
     LoggingSwipeView {
         id: materialSwipeView
+        logName: "materialSwipeView"
         currentIndex: MaterialPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
 
         // MaterialPage.BasePage
         Item {

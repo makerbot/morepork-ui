@@ -15,7 +15,7 @@ Item {
     property alias buttonFilterStatus: buttonFilterStatus
     property alias buttonReplaceFilter: buttonReplaceFilter
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         FilterStatusPage,           // 1
         ReplaceFilterPage           // 2
@@ -23,6 +23,7 @@ Item {
     
     LoggingSwipeView {
         id: cleanAirSettingsSwipeView
+        logName: "cleanAirSettingsSwipeView"
         currentIndex: CleanAirSettingsPage.BasePage
 
         // CleanAirSettingsPage.BasePage

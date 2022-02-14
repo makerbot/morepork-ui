@@ -14,13 +14,14 @@ Item {
     property alias attach_extruder_next_button: attach_extruder_next_button
     smooth: false
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,           // 0
         AttachExtruderPage  // 1
     }
 
     LoggingSwipeView {
         id: extruderSwipeView
+        logName: "extruderSwipeView"
         currentIndex: ExtruderPage.BasePage
 
         // ExtruderPage.BasePage

@@ -21,7 +21,7 @@ Item {
     property alias passwordField: passwordField
     property alias forgotPasswordButton: forgotPasswordButton
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,
         UsernamePage,
         PasswordPage
@@ -29,6 +29,7 @@ Item {
 
     LoggingSwipeView {
         id: signInSwipeView
+        logName: "signInSwipeView"
         currentIndex: SignInPage.BasePage
 
         function customEntryCheck(swipeToIndex) {

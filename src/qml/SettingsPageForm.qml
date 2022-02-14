@@ -50,7 +50,7 @@ Item {
 
     smooth: false
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         PrinterInfoPage,            // 1
         ChangePrinterNamePage,      // 2
@@ -67,6 +67,7 @@ Item {
 
     LoggingSwipeView {
         id: settingsSwipeView
+        logName: "settingsSwipeView"
         currentIndex: SettingsPage.BasePage
 
         // SettingsPage.BasePage

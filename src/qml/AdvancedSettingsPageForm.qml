@@ -88,7 +88,7 @@ Item {
         }
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         AdvancedInfoPage,           // 1
         PreheatPage,                // 2
@@ -104,6 +104,7 @@ Item {
 
     LoggingSwipeView {
         id: advancedSettingsSwipeView
+        logName: "advancedSettingsSwipeView"
         currentIndex: AdvancedSettingsPage.BasePage
 
         // AdvancedSettingsPage.BasePage

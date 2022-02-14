@@ -19,6 +19,7 @@ Item {
 
     LoggingSwipeView {
         id: timeSwipeView
+        logName: "timeSwipeView"
         currentIndex: TimePage.SetDate
 
         function customSetCurrentItem(swipeToIndex) {

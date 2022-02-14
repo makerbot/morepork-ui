@@ -84,6 +84,7 @@ Item {
 
     LoggingSwipeView {
         id: wifiSwipeView
+        logName: "wifiSwipeView"
         currentIndex: WiFiPage.ChooseWifi
 
         // WiFiPage.ChooseWIFI

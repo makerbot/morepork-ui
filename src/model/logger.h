@@ -14,6 +14,7 @@ class Logger : public QObject {
     Q_OBJECT
   public:
     Logger();
+    Q_INVOKABLE QString getEnumName(QObject *object, QString name, int index) const;
 
   protected:
     Q_INVOKABLE virtual void info(QString msg);

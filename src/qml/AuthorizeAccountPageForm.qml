@@ -19,7 +19,7 @@ Item {
     smooth: false
     anchors.fill: parent
 
-    enum PageIndex {
+    enum SwipeIndex {
         ChooseAuthMethod,
         AuthorizeWithCode,
         AuthorizeWithCredentials
@@ -27,6 +27,7 @@ Item {
 
     LoggingSwipeView {
         id: authorizeAccountSwipeView
+        logName: "authorizeAccountSwipeView"
         currentIndex: AuthorizeAccountPage.ChooseAuthMethod
 
         function customSetCurrentItem(swipeToIndex) {

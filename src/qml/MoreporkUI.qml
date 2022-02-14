@@ -317,7 +317,7 @@ ApplicationWindow {
         hepaErrorAcknowledged = false
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,       // 0
         PrintPage,      // 1
         ExtruderPage,   // 2
@@ -410,8 +410,9 @@ ApplicationWindow {
 
         LoggingSwipeView {
             id: mainSwipeView
+            itemWithEnum: rootAppWindow
+            logName: "mainSwipeView"
             anchors.topMargin: topBar.barHeight
-            interactive: false
 
             property alias materialPage: materialPage
             visible: connectionState == ConnectionState.Connected &&
