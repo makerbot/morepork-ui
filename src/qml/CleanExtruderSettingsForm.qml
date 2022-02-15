@@ -13,7 +13,6 @@ Item {
     height: 440
     smooth: false
 
-    property alias defaultItem: itemCleanExtrudersSelectMaterial
     property alias cleanExtruderMaterialSelectorPage: cleanExtruderMaterialSelectorPage
     property alias cleanExtruderTempSelectorPage: cleanExtruderTempSelectorPage
     property alias cleanExtrudersSelectMaterialSwipeView: cleanExtrudersSelectMaterialSwipeView
@@ -32,20 +31,13 @@ Item {
         TemperatureSelector
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: cleanExtrudersSelectMaterialSwipeView
+        logName: "cleanExtrudersSelectMaterialSwipeView"
         currentIndex: CleanExtruderSettings.MaterialSelector
-        smooth: false
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = cleanExtrudersSelectMaterialSwipeView.currentIndex
-            cleanExtrudersSelectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            if(itemToDisplayDefaultIndex == 0) {
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == 0) {
                 if(bot.process.type == ProcessType.CalibrationProcess) {
                     // Use back button action specific to calibration process UI
                     setCurrentItem(settingsPage.settingsSwipeView.itemAt(SettingsPage.CalibrateExtrudersPage))
@@ -53,11 +45,8 @@ Item {
                     // Use back button action specific to Nozzle cleaning process UI
                     setCurrentItem(advancedSettingsSwipeView.itemAt(AdvancedSettingsPage.CleanExtrudersPage))
                 }
-            } else {
-                setCurrentItem(cleanExtrudersSelectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex))
+                return true
             }
-            cleanExtrudersSelectMaterialSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            cleanExtrudersSelectMaterialSwipeView.itemAt(prevIndex).visible = false
         }
 
         // CleanExtruderSettings.MaterialSelector

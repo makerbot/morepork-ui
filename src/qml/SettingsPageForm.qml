@@ -11,7 +11,6 @@ Item {
     property alias settingsSwipeView: settingsSwipeView
     property alias advancedSettingsPage: advancedSettingsPage
     property alias cleanAirSettingsPage: cleanAirSettingsPage
-    property alias defaultItem: itemSettings
 
     property alias buttonPrinterInfo: buttonPrinterInfo
 
@@ -51,7 +50,7 @@ Item {
 
     smooth: false
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         PrinterInfoPage,            // 1
         ChangePrinterNamePage,      // 2
@@ -66,23 +65,10 @@ Item {
         CleanAirSettingsPage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: settingsSwipeView
+        logName: "settingsSwipeView"
         currentIndex: SettingsPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = settingsSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            settingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(settingsSwipeView.itemAt(itemToDisplayDefaultIndex))
-            settingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            settingsSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // SettingsPage.BasePage
         Item {
@@ -91,7 +77,6 @@ Item {
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
-            visible: false
 
             Flickable {
                 id: flickableSettings
@@ -514,6 +499,7 @@ Item {
     }
 
     ModalPopup {
+        popupName: "Shutdown"
         id: shutdownPopup
         visible: false
         popup_contents.contentItem: Item {
@@ -534,7 +520,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "DeauthorizeAccounts"
         id: deauthorizeAccountsPopup
         width: 800
         height: 480

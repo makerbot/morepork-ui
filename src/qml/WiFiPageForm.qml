@@ -11,7 +11,6 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
-    property alias defaultItem: itemChooseWifi
     property alias wifiSwipeView: wifiSwipeView
 
     property int wifiError: bot.net.wifiError
@@ -83,20 +82,10 @@ Item {
         EnterPassword
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: wifiSwipeView
-        smooth: false
+        logName: "wifiSwipeView"
         currentIndex: WiFiPage.ChooseWifi
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = wifiSwipeView.currentIndex
-            wifiSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(wifiSwipeView.itemAt(itemToDisplayDefaultIndex))
-            wifiSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            wifiSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // WiFiPage.ChooseWIFI
         Item {
@@ -395,7 +384,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "Wifi"
         id: wifiPopup
         width: 800
         height: 480

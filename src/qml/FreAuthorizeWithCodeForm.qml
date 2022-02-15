@@ -3,7 +3,8 @@ import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.12
 import QtQuick.Layouts 1.3
 
-Item {
+LoggingItem {
+    itemName: "FreAuthorizeWithCode"
     id: freAuthWithCode
     width: 750
     height: 320
@@ -330,6 +331,7 @@ Item {
     ]
 
     CustomPopup {
+        popupName: "FreAuthorizeWithCode"
         id: freAuthorizeWithCode_popup
         showOneButton: false
         showTwoButtons: false

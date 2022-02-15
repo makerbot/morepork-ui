@@ -6,7 +6,8 @@ import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "ToolheadCalibration"
     id: calibrationPage
     width: 800
     height: 440
@@ -493,7 +494,8 @@ Item {
         }
     ]
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelCalibration"
         id: cancelCalibrationPopup
         width: 800
         height: 480

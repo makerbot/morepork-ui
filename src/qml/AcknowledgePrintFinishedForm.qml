@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.12
 import ProcessStateTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "AcknowledgePrintFinished"
     id: element
     width: 300
     height: 165

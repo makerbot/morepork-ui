@@ -7,7 +7,8 @@ import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "LoadUnloadFilament"
     id: loadUnloadForm
     width: 800
     height: 420

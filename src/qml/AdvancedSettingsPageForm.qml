@@ -10,7 +10,6 @@ Item {
     smooth: false
     anchors.fill: parent
 
-    property alias defaultItem: itemAdvancedSettings
     property alias advancedSettingsSwipeView: advancedSettingsSwipeView
 
     property alias buttonAdvancedInfo: buttonAdvancedInfo
@@ -89,7 +88,7 @@ Item {
         }
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         AdvancedInfoPage,           // 1
         PreheatPage,                // 2
@@ -103,23 +102,10 @@ Item {
         AnnealPrintPage             // 10
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: advancedSettingsSwipeView
+        logName: "advancedSettingsSwipeView"
         currentIndex: AdvancedSettingsPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = advancedSettingsSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            advancedSettingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(advancedSettingsSwipeView.itemAt(itemToDisplayDefaultIndex))
-            advancedSettingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            advancedSettingsSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // AdvancedSettingsPage.BasePage
         Item {
@@ -149,7 +135,6 @@ Item {
             }
 
             smooth: false
-            visible: true
 
             Flickable {
                 id: flickableAdvancedSettings
@@ -540,6 +525,7 @@ Item {
     }
 
     BusyPopup {
+        popupName: "CopyingLogs"
         property bool initialized: false
         property bool zipLogsInProgress: false
         property string logBundlePath: ""
@@ -550,6 +536,7 @@ Item {
     }
 
     ModalPopup {
+        popupName: "CopyingLogsCompleted"
         property bool succeeded: false
 
         id: copyLogsFinishedPopup
@@ -566,7 +553,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "ResetToFactory"
         id: resetFactoryConfirmPopup
         width: 800
         height: 480

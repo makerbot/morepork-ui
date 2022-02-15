@@ -3,7 +3,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ExtruderTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "HeatShieldInstructions"
     property bool heatShieldWarningAcknowledged: false
     property bool extruderAttached: bot.extruderAPresent
     property int lastAttachedExtruder: ExtruderType.None

@@ -8,7 +8,6 @@ Item {
     height: 440
     smooth: false
 
-    property alias defaultItem: itemSelectMaterial
     property alias materialSelectorPage: materialSelectorPage
     property alias tempSelectorPage: tempSelectorPage
     property alias selectMaterialSwipeView: selectMaterialSwipeView
@@ -71,23 +70,10 @@ Item {
         SelectTemperaturePage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: selectMaterialSwipeView
+        logName: "selectMaterialSwipeView"
         currentIndex: 0
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = selectMaterialSwipeView.currentIndex
-            selectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(selectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex))
-            if(prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            selectMaterialSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            selectMaterialSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // ExpExtruderSettings.SelectMaterialPage
         Item {

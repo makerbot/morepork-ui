@@ -5,7 +5,8 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import MachineTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "FirmwareUpdatePage"
     id: item1
     width: 800
     height: 440

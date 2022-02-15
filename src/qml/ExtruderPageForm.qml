@@ -7,7 +7,6 @@ import MachineTypeEnum 1.0
 
 Item {
     id: extruderPage
-    property alias defaultItem: itemExtruder
     property alias extruderSwipeView: extruderSwipeView
     property bool isTopLidOpen: bot.chamberErrorCode == 45
     property alias itemAttachExtruder: itemAttachExtruder
@@ -15,25 +14,15 @@ Item {
     property alias attach_extruder_next_button: attach_extruder_next_button
     smooth: false
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,           // 0
         AttachExtruderPage  // 1
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: extruderSwipeView
+        logName: "extruderSwipeView"
         currentIndex: ExtruderPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = extruderSwipeView.currentIndex
-            extruderSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(extruderSwipeView.itemAt(itemToDisplayDefaultIndex))
-            extruderSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            extruderSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // ExtruderPage.BasePage
         Item {
@@ -41,7 +30,6 @@ Item {
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
             smooth: false
-            visible: false
 
             Extruder {
                 id: extruder1
@@ -96,7 +84,8 @@ Item {
         }
 
         // ExtruderPage.AttachExtruderPage
-        Item {
+        LoggingItem {
+            itemName: "ExtruderPage.AttachExtruderPage"
             id: itemAttachExtruder
             property var backSwiper: extruderSwipeView
             property int backSwipeIndex: 0

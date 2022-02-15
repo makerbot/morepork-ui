@@ -128,7 +128,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "CopyingFirmware"
         id: copyingFirmwareFilePopup
         width: 800
         height: 480
