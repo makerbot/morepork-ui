@@ -9,6 +9,8 @@ import MachineTypeEnum 1.0
 
 Item {
     id: materialPage
+    width: 800
+    height: 408
     smooth: false
     property alias bay1: bay1
     property alias bay2: bay2
@@ -217,6 +219,7 @@ Item {
         id: materialSwipeView
         logName: "materialSwipeView"
         currentIndex: MaterialPage.BasePage
+        anchors.fill: parent
 
         // MaterialPage.BasePage
         Item {
@@ -226,20 +229,19 @@ Item {
             property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
 
-            FilamentBay {
-                id: bay1
-                visible: true
-                anchors.top: parent.top
-                anchors.topMargin: 25
-                filamentBayID: 1
-            }
-
-            FilamentBay {
-                id: bay2
-                visible: true
-                anchors.top: parent.top
-                anchors.topMargin: 225
-                filamentBayID: 2
+            RowLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 43
+                    FilamentBay {
+                        id: bay1
+                        visible: true
+                        filamentBayID: 1
+                    }
+                    FilamentBay {
+                        id: bay2
+                        visible: true
+                        filamentBayID: 2
+                    }
             }
         }
 

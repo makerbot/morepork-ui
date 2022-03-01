@@ -267,6 +267,36 @@ void BotModel::resetFilterHours() {
     qDebug() << FL_STRM << "called";
 }
 
+QStringList BotModel::extruderASupportedMaterials() {
+    return m_extruderASupportedMaterials;
+}
+
+void BotModel::extruderASupportedMaterialsSet(QStringList &materials) {
+    auto temp = materials;
+    m_extruderASupportedMaterials = materials;
+    emit extruderASupportedMaterialsChanged();
+    temp.clear();
+}
+
+void BotModel::extruderASupportedMaterialsReset() {
+    m_extruderASupportedMaterials.clear();
+}
+
+QStringList BotModel::extruderBSupportedMaterials() {
+    return m_extruderBSupportedMaterials;
+}
+
+void BotModel::extruderBSupportedMaterialsSet(QStringList &materials) {
+    auto temp = materials;
+    m_extruderBSupportedMaterials = materials;
+    emit extruderBSupportedMaterialsChanged();
+    temp.clear();
+}
+
+void BotModel::extruderBSupportedMaterialsReset() {
+    m_extruderBSupportedMaterials.clear();
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

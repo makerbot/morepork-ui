@@ -251,5 +251,9 @@
         <file>ButtonRectangleBaseForm.qml</file>
         <file>NumberedSteps.qml</file>
         <file>NumberedStepsForm.qml</file>
+        <file>ExtruderStatus.qml</file>
+        <file>ExtruderStatusForm.qml</file>
+        <file>MaterialStatus.qml</file>
+        <file>MaterialStatusForm.qml</file>
     </qresource>
 </RCC>

@@ -141,7 +141,7 @@ MaterialPageForm {
 
     bay1 {
         loadButton {
-            button_mouseArea.onClicked: {
+            onClicked: {
                 if(experimentalExtruderInstalled) {
                     isLoadFilament = true
                     materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
@@ -163,11 +163,11 @@ MaterialPageForm {
                 }
                 materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
-            disable_button: !canLoadUnloadStart(bay1.filamentBayID)
+            enabled: canLoadUnloadStart(bay1.filamentBayID)
         }
 
         unloadButton {
-            button_mouseArea.onClicked: {
+            onClicked: {
                 if(experimentalExtruderInstalled) {
                     isLoadFilament = false
                     materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
@@ -193,13 +193,13 @@ MaterialPageForm {
                 loadUnloadFilamentProcess.state = "preheating"
                 materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
-            disable_button: !canLoadUnloadStart(bay1.filamentBayID) || !bay1.extruderFilamentPresent
+            enabled: canLoadUnloadStart(bay1.filamentBayID) && bay1.extruderFilamentPresent
         }
     }
 
     bay2 {
         loadButton {
-            button_mouseArea.onClicked: {
+            onClicked: {
                 noExtruderPopupCheck(bay2.filamentBayID)
                 startLoadUnloadFromUI = true
                 isLoadFilament = true
@@ -214,11 +214,11 @@ MaterialPageForm {
                 }
                 materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
-            disable_button: !canLoadUnloadStart(bay2.filamentBayID)
+            enabled: canLoadUnloadStart(bay2.filamentBayID)
         }
 
         unloadButton {
-            button_mouseArea.onClicked: {
+            onClicked: {
                 noExtruderPopupCheck(bay2.filamentBayID)
                 startLoadUnloadFromUI = true
                 isLoadFilament = false
@@ -239,7 +239,7 @@ MaterialPageForm {
                 loadUnloadFilamentProcess.state = "preheating"
                 materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
             }
-            disable_button: !canLoadUnloadStart(bay2.filamentBayID) || !bay2.extruderFilamentPresent
+            enabled: canLoadUnloadStart(bay2.filamentBayID) && bay2.extruderFilamentPresent
         }
     }
 

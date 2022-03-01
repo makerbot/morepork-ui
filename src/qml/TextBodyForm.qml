@@ -9,7 +9,6 @@ Text {
     }
     property int style: TextBody.Base
     id: textBody
-    Layout.fillWidth: true
     text: "text-base"
     font.family: "Roboto"
     font.styleName: "Light"

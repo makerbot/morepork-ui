@@ -106,6 +106,12 @@ class BotModel : public BaseModel {
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
+    QStringList extruderASupportedMaterials();
+    void extruderASupportedMaterialsSet(QStringList &materials);
+    void extruderASupportedMaterialsReset();
+    QStringList extruderBSupportedMaterials();
+    void extruderBSupportedMaterialsSet(QStringList &materials);
+    void extruderBSupportedMaterialsReset();
 
   private:
     Q_OBJECT
@@ -150,6 +156,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderAToolheadDisconnect, false)
     MODEL_PROP(bool, extruderACalibrated, true)
     MODEL_PROP(bool, extruderAJamDetectionDisabled, false)
+    QStringList m_extruderASupportedMaterials;
+    Q_PROPERTY(QStringList extruderASupportedMaterials
+               READ extruderASupportedMaterials
+               WRITE extruderASupportedMaterialsSet
+               RESET extruderASupportedMaterialsReset
+               NOTIFY extruderASupportedMaterialsChanged)
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)
@@ -158,6 +170,12 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, extruderBErrorCode, 0)
     MODEL_PROP(bool, extruderBToolheadDisconnect, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
+    QStringList m_extruderBSupportedMaterials;
+    Q_PROPERTY(QStringList extruderBSupportedMaterials
+               READ extruderBSupportedMaterials
+               WRITE extruderBSupportedMaterialsSet
+               RESET extruderBSupportedMaterialsReset
+               NOTIFY extruderBSupportedMaterialsChanged)
     MODEL_PROP(bool, extrudersCalibrated, true)
     MODEL_PROP(bool, noFilamentErrorDisabled, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
@@ -356,7 +374,8 @@ class BotModel : public BaseModel {
 
   signals:
     void firmwareReleaseNotesListChanged();
-
+    void extruderASupportedMaterialsChanged();
+    void extruderBSupportedMaterialsChanged();
 };
 
 // Make a dummy implementation of the API with all submodels filled in.

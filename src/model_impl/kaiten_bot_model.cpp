@@ -1394,18 +1394,33 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
 }
 
 void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
-    const Json::Value &calibrated = params["config"]["calibrated"];
-    if(params["index"] == 0) {
-        if (calibrated.isBool()) {
-            extruderACalibratedSet(calibrated.asBool());
-        }
+#define UPDATE_EXTRUDER_CONFIG(EXT_SYM) \
+    { \
+      const Json::Value &calibrated = params["config"]["calibrated"]; \
+      if (calibrated.isBool()) { \
+          extruder ## EXT_SYM ## CalibratedSet(calibrated.asBool()); \
+      } \
+      const Json::Value &supported_materials = params["config"]["supported_materials"]; \
+      if(supported_materials.isArray() && supported_materials.size() > 0) { \
+        QStringList materials; \
+        for(const Json::Value mat : supported_materials) { \
+          if(mat.isString()) { \
+             materials.append(QString::fromStdString(mat.asString()));\
+          } \
+        } \
+        extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
+      } \
+      extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated()); \
     }
-    else if(params["index"] == 1) {
-        if (calibrated.isBool()) {
-            extruderBCalibratedSet(calibrated.asBool());
-        }
+    switch (params["index"].asInt()) {
+      case 0:
+          UPDATE_EXTRUDER_CONFIG(A);
+          break;
+      case 1:
+          UPDATE_EXTRUDER_CONFIG(B);
+          break;
     }
-    extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated());
+#undef UPDATE_EXTRUDER_CONFIG
 }
 
 void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
