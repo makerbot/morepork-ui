@@ -49,7 +49,7 @@ class KaitenBotModel : public BotModel {
     void pauseResumePrint(QString action);
     void print(QString file_name);
     void done(QString acknowledge_result);
-    void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
     void assistedLevel();
@@ -596,7 +596,7 @@ void KaitenBotModel::done(QString acknowledge_result){
     }
 }
 
-void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature){
+void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature, QString material){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         qDebug() << FL_STRM << "external: " << external;;
@@ -609,6 +609,10 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
                 temperature_list[i] = (temperature.value(i));
             }
             json_params["temperature_settings"] = Json::Value(temperature_list);
+        }
+
+        if(material != "None") {
+          json_params["material"] = Json::Value(material.toStdString());
         }
 
         if(!whilePrinting) {
@@ -1400,16 +1404,6 @@ void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
       if (calibrated.isBool()) { \
           extruder ## EXT_SYM ## CalibratedSet(calibrated.asBool()); \
       } \
-      const Json::Value &supported_materials = params["config"]["supported_materials"]; \
-      if(supported_materials.isArray() && supported_materials.size() > 0) { \
-        QStringList materials; \
-        for(const Json::Value mat : supported_materials) { \
-          if(mat.isString()) { \
-             materials.append(QString::fromStdString(mat.asString()));\
-          } \
-        } \
-        extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
-      } \
       extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated()); \
     }
     switch (params["index"].asInt()) {
@@ -1577,6 +1571,14 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             } else { \
               extruder ## EXT_SYM ## ErrorCodeReset(); \
             } \
+            const Json::Value &supported_materials = kExtruder ## EXT_SYM["supported_materials"]; \
+            if(supported_materials.isArray()) { \
+              QStringList materials = {}; \
+              for(const Json::Value mat : supported_materials) { \
+                materials.append(mat.asString().c_str()); \
+              } \
+              extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
+            } \
           }
           EXTRUDER_VAR_UPDATE(A)
           EXTRUDER_VAR_UPDATE(B)
@@ -1604,6 +1606,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           }
         }
       }
+      hasFilamentBaySet(info["has_filament_bay"].asBool());
       // Update filament bay status variables
       const Json::Value &kFilamentBay = info["filamentbays"];
       if(kFilamentBay.isArray()){
@@ -1681,6 +1684,16 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
       const Json::Value &accessories = info["accessories"];
       accessoriesStatusUpdate(accessories);
+
+      const Json::Value &configured_materials = info["configured_materials"];
+      if(configured_materials.isArray()) {
+        QStringList materials;
+        for(const Json::Value mat : configured_materials) {
+          if(mat.empty()) materials.append("None");
+          else if(mat.isString()) materials.append(mat.asString().c_str());
+        }
+        configuredMaterialsSet(materials);
+      }
 
       // TODO(chris): This bit is a mess...
       const Json::Value & version_dict = info["firmware_version"];

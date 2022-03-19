@@ -13,14 +13,14 @@ ListView {
     ScrollBar.vertical: ScrollBar {}
     model: nozzleCleaningTempList
     delegate:
-        ExpExtruderMaterialButton {
+        MaterialButton {
         id: materialButton
         materialNameText: model.modelData["label"]
-        temperatureText: model.modelData["temperature"] + "°C"
+        materialInfoText: model.modelData["temperature"] + "°C"
         smooth: false
         antialiasing: false
         onClicked: {
-            startCleaning([parseInt(temperatureText, 10)])
+            startCleaning([parseInt(materialInfoText, 10)])
         }
 
         Component.onCompleted: {
@@ -30,12 +30,11 @@ ListView {
         function uiLogClBtn() {
             console.log("MLB [=" + materialNameText + "=] clicked")
         }
-
     }
     footer:
-        ExpExtruderMaterialButton {
+        MaterialButton {
         materialNameText: qsTr("ENTER CUSTOM TEMPERATURE")
-        temperatureText: ""
+        materialInfoText: ""
         smooth: false
         antialiasing: false
         onClicked: {

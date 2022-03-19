@@ -143,7 +143,6 @@ Item {
             anchors.top: parent.bottom
             anchors.topMargin: 0
         }
-
     }
 
     RoundedButton {
@@ -167,7 +166,7 @@ Item {
         button_mouseArea {
             onClicked: {
                 var temp = temperatureTumbler.currentItem.text
-                startLoadUnloadExpExtruder(parseInt(temp, 10))
+                startLoadUnloadCustomTemperature(toolIdx, parseInt(temp, 10))
             }
             enabled: {
                 !temperatureTumbler.moving

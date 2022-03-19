@@ -96,9 +96,8 @@ Item {
     states: [
         State {
             name: "no_material"
-            when: !spoolPresent
-//   || (bot.machineType == MachineType.Magma &&)
-//     Magma Case -- no material information in persistent settings
+            when: (bot.hasFilamentBay && !spoolPresent) ||
+                  (!bot.hasFilamentBay && bot.configuredMaterials[filamentBayID - 1] == "None")
 
             PropertyChanges {
                 target: error_image
@@ -136,8 +135,8 @@ Item {
         },
         State {
             name: "rfid_not_present_material_known"
-            when: bot.machineType == MachineType.Magma
-            // && MAGMA case -- material information in persistent settings
+            when: !bot.hasFilamentBay && bot.configuredMaterials[filamentBayID - 1] != "None"
+
             PropertyChanges {
                 target: error_image
                 visible: false

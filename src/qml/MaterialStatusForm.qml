@@ -31,10 +31,10 @@ Item {
                     style: TextBody.ExtraLarge
                     font.weight: Font.Bold
                     text: {
-                        if(usingExperimentalExtruder) {
-                            "LABS"
-                        } else if(spoolPresent && !isUnknownMaterial) {
+                        if(spoolPresent && !isUnknownMaterial) {
                             filamentMaterialName.toUpperCase()
+                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) && bot.configuredMaterials[filamentBayID - 1] != "None") {
+                            (storage.updateMaterialNames(bot.configuredMaterials[filamentBayID-1])).toUpperCase()
                         } else {
                             qsTr("NOT DETECTED")
                         }
@@ -103,7 +103,7 @@ Item {
         },
         State {
             name: "extruder_present_material_details_unknown"
-            when: extruderPresent && bot.machineType == MachineType.Magma
+            when: extruderPresent && !bot.hasFilamentBay
 
             PropertyChanges {
                 target: rowLayout
@@ -117,8 +117,7 @@ Item {
         },
         State {
             name: "extruder_present_material_details_known"
-            when: (extruderPresent && (bot.machineType == MachineType.Fire ||
-                                      bot.machineType == MachineType.Lava))
+            when: extruderPresent && bot.hasFilamentBay
 
             PropertyChanges {
                 target: rowLayout

@@ -365,12 +365,12 @@ Item {
                             case MaterialPage.BasePage:
                                 qsTr("MATERIAL")
                                 break;
-                            case MaterialPage.ExpExtruderSettingsPage:
-                                switch(materialPage.expExtruderSettingsPage.selectMaterialSwipeView.currentIndex) {
-                                    case ExpExtruderSettings.SelectMaterialPage:
+                            case MaterialPage.LoadMaterialSettingsPage:
+                                switch(materialPage.loadMaterialSettingsPage.selectMaterialSwipeView.currentIndex) {
+                                    case LoadMaterialSettings.SelectMaterialPage:
                                     qsTr("CHOOSE BASE MATERIAL")
                                     break;
-                                    case ExpExtruderSettings.SelectTemperaturePage:
+                                    case LoadMaterialSettings.SelectTemperaturePage:
                                     qsTr("CHOOSE TEMPERATURE")
                                     break;
                                 }

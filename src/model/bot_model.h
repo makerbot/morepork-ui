@@ -50,9 +50,11 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
     Q_INVOKABLE virtual void done(QString acknowledge_result);
-    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external,
+            bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void loadFilamentStop();
-    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external,
+            bool whilePrinting, QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void acknowledge_level();
     Q_INVOKABLE virtual void continue_leveling();
@@ -106,12 +108,6 @@ class BotModel : public BaseModel {
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
-    QStringList extruderASupportedMaterials();
-    void extruderASupportedMaterialsSet(QStringList &materials);
-    void extruderASupportedMaterialsReset();
-    QStringList extruderBSupportedMaterials();
-    void extruderBSupportedMaterialsSet(QStringList &materials);
-    void extruderBSupportedMaterialsReset();
 
   private:
     Q_OBJECT
@@ -156,12 +152,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderAToolheadDisconnect, false)
     MODEL_PROP(bool, extruderACalibrated, true)
     MODEL_PROP(bool, extruderAJamDetectionDisabled, false)
-    QStringList m_extruderASupportedMaterials;
-    Q_PROPERTY(QStringList extruderASupportedMaterials
-               READ extruderASupportedMaterials
-               WRITE extruderASupportedMaterialsSet
-               RESET extruderASupportedMaterialsReset
-               NOTIFY extruderASupportedMaterialsChanged)
+    MODEL_PROP(QStringList, extruderASupportedMaterials, {"None"})
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)
@@ -170,12 +161,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, extruderBErrorCode, 0)
     MODEL_PROP(bool, extruderBToolheadDisconnect, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
-    QStringList m_extruderBSupportedMaterials;
-    Q_PROPERTY(QStringList extruderBSupportedMaterials
-               READ extruderBSupportedMaterials
-               WRITE extruderBSupportedMaterialsSet
-               RESET extruderBSupportedMaterialsReset
-               NOTIFY extruderBSupportedMaterialsChanged)
+    MODEL_PROP(QStringList, extruderBSupportedMaterials, {"None"})
     MODEL_PROP(bool, extrudersCalibrated, true)
     MODEL_PROP(bool, noFilamentErrorDisabled, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
@@ -185,6 +171,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
+    MODEL_PROP(bool, hasFilamentBay, false)
+    MODEL_PROP(QStringList, configuredMaterials, {"None"})
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)
@@ -374,8 +362,6 @@ class BotModel : public BaseModel {
 
   signals:
     void firmwareReleaseNotesListChanged();
-    void extruderASupportedMaterialsChanged();
-    void extruderBSupportedMaterialsChanged();
 };
 
 // Make a dummy implementation of the API with all submodels filled in.

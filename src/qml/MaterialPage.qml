@@ -26,17 +26,6 @@ MaterialPageForm {
         setDrawerState(true)
     }
 
-    function noExtruderPopupCheck(extruderID) {
-        if(extruderID == 1 && !bot.extruderAPresent) {
-            extruderIDnoExtruderPopup = extruderID
-            noExtruderPopup.open()
-        }
-        else if(extruderID == 2 && !bot.extruderBPresent) {
-            extruderIDnoExtruderPopup = extruderID
-            noExtruderPopup.open()
-        }
-    }
-
     function isExtruderPresent(extruderID) {
         if(extruderID == 1) {
             return bot.extruderAPresent
@@ -89,7 +78,7 @@ MaterialPageForm {
         } else if(isExtruderFilamentPresent(extruderID)) {
             // Always allow purge and unload while paused
             return true
-        } else if(isUsingExpExtruder(extruderID) || settings.getSkipFilamentNags()) {
+        } else if(isUsingExpExtruder(extruderID) || settings.getSkipFilamentNags() || !bot.hasFilamentBay) {
             // Allow loading mid-print for experimental extruders without any material checks
             return true
         } else {
@@ -139,59 +128,84 @@ MaterialPageForm {
         return (materials.indexOf(current_mat) >= 0)
     }
 
+    function shouldSelectMaterial(tool_idx) {
+        return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.configuredMaterials[tool_idx] == "None")
+    }
+
+    function load(tool_idx, external, temperature=0, material="None") {
+        toolIdx = tool_idx
+        isLoadFilament = true
+        startLoadUnloadFromUI = true
+        enableMaterialDrawer()
+        var while_printing = (printPage.isPrintProcess &&
+                bot.process.stateType == ProcessStateType.Paused)
+        if(while_printing && isUsingExpExtruder(tool_idx+1)) {
+            // When using experimental extruder, loading
+            // mid-print should use external loading.
+            external = true
+        }
+
+        if(temperature > 0) {
+            loadUnloadFilamentProcess.isExternalLoadUnload = true
+            loadUnloadFilamentProcess.lastHeatingTemperature = temperature
+            var temp_list = [0,0]
+            temp_list[tool_idx] = temperature
+            bot.loadFilament(tool_idx, external, while_printing, temp_list)
+            loadMaterialSettingsPage.selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
+        } else if(material != "None") {
+            bot.loadFilament(tool_idx, external, while_printing, [0,0], material)
+        } else {
+            bot.loadFilament(tool_idx, external, while_printing)
+        }
+        loadUnloadFilamentProcess.state = "preheating"
+        materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+    }
+
+    function unload(tool_idx, external, temperature=0) {
+        startLoadUnloadFromUI = true
+        isLoadFilament = false
+        enableMaterialDrawer()
+        var while_printing = (printPage.isPrintProcess &&
+                bot.process.stateType == ProcessStateType.Paused)
+        if(temperature > 0) {
+            loadUnloadFilamentProcess.isExternalLoadUnload = true
+            loadUnloadFilamentProcess.lastHeatingTemperature = temperature
+            var temp_list = [0,0]
+            temp_list[tool_idx] = temperature
+            bot.unloadFilament(tool_idx, external, while_printing, temp_list)
+            loadMaterialSettingsPage.selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
+        } else {
+            bot.unloadFilament(tool_idx, external, while_printing)
+        }
+        loadUnloadFilamentProcess.state = "preheating"
+        materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+    }
+
     bay1 {
         loadButton {
             onClicked: {
-                if(experimentalExtruderInstalled) {
+                toolIdx = 0
+                if(shouldSelectMaterial(toolIdx)) {
                     isLoadFilament = true
-                    materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
-                    return;
+                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return
                 }
-                noExtruderPopupCheck(bay1.filamentBayID)
-                startLoadUnloadFromUI = true
-                isLoadFilament = true
-                enableMaterialDrawer()
-                // loadFilament(int tool_index, bool external, bool whilePrinitng)
-                // if load/unload happens while in print process
-                // i.e. while print paused, set whilePrinting to true
-                if(printPage.isPrintProcess &&
-                   bot.process.stateType == ProcessStateType.Paused) {
-                    bot.loadFilament(0, false, true)
-                }
-                else {
-                    bot.loadFilament(0, false, false)
-                }
-                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+                load(toolIdx, false)
             }
             enabled: canLoadUnloadStart(bay1.filamentBayID)
         }
 
+        purgeButton {
+            onClicked: {
+                toolIdx = 0
+                load(toolIdx, false)
+            }
+        }
+
         unloadButton {
             onClicked: {
-                if(experimentalExtruderInstalled) {
-                    isLoadFilament = false
-                    materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
-                    return;
-                }
-                noExtruderPopupCheck(bay1.filamentBayID)
-                startLoadUnloadFromUI = true
-                isLoadFilament = false
-                enableMaterialDrawer()
-                // unloadFilament(int tool_index, bool external, bool whilePrinitng)
-                if(printPage.isPrintProcess &&
-                   bot.process.stateType == ProcessStateType.Paused) {
-                    bot.unloadFilament(0, true, true)
-                }
-                else {
-                    bot.unloadFilament(0, true, false)
-                }
-                // We move explicitly to the 'preheating' state to
-                // avoid letting the UI show the 'base state' for
-                // sometime until kaiten reports the current step
-                // as 'preheating'. This isn't required for loading
-                // as the 'base state' is one of the loading screens.
-                loadUnloadFilamentProcess.state = "preheating"
-                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+                toolIdx = 0
+                unload(toolIdx, true)
             }
             enabled: canLoadUnloadStart(bay1.filamentBayID) && bay1.extruderFilamentPresent
         }
@@ -200,44 +214,28 @@ MaterialPageForm {
     bay2 {
         loadButton {
             onClicked: {
-                noExtruderPopupCheck(bay2.filamentBayID)
-                startLoadUnloadFromUI = true
-                isLoadFilament = true
-                enableMaterialDrawer()
-                // loadFilament(int tool_index, bool external, bool whilePrinitng)
-                if(printPage.isPrintProcess &&
-                   bot.process.stateType == ProcessStateType.Paused) {
-                    bot.loadFilament(1, false, true)
+                toolIdx = 1
+                if(shouldSelectMaterial(toolIdx)) {
+                    isLoadFilament = true
+                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return
                 }
-                else {
-                    bot.loadFilament(1, false, false)
-                }
-                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+                load(toolIdx, false)
             }
             enabled: canLoadUnloadStart(bay2.filamentBayID)
         }
 
+        purgeButton {
+            onClicked: {
+                toolIdx = 1
+                load(toolIdx, false)
+            }
+        }
+
         unloadButton {
             onClicked: {
-                noExtruderPopupCheck(bay2.filamentBayID)
-                startLoadUnloadFromUI = true
-                isLoadFilament = false
-                enableMaterialDrawer()
-                // unloadFilament(int tool_index, bool external, bool whilePrinitng)
-                if(printPage.isPrintProcess &&
-                   bot.process.stateType == ProcessStateType.Paused) {
-                    bot.unloadFilament(1, true, true)
-                }
-                else {
-                    bot.unloadFilament(1, true, false)
-                }
-                // We move explicitly to the 'preheating' state to
-                // avoid letting the UI show the 'base state' for
-                // sometime until kaiten reports the current step
-                // as 'preheating'. This isn't required for loading
-                // as the 'base state' is one of the loading screens.
-                loadUnloadFilamentProcess.state = "preheating"
-                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+                toolIdx = 1
+                unload(toolIdx, true)
             }
             enabled: canLoadUnloadStart(bay2.filamentBayID) && bay2.extruderFilamentPresent
         }
@@ -325,17 +323,6 @@ MaterialPageForm {
             inFreStep = false
         }
         materialWarningPopup.close()
-    }
-
-    attach_extruder_mouseArea_no_extruder_popup.onClicked: {
-        noExtruderPopup.close()
-        mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
-        extruderPage.itemAttachExtruder.extruder = extruderIDnoExtruderPopup
-        extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
-    }
-
-    cancel_mouseArea_no_extruder_popup.onClicked: {
-        noExtruderPopup.close()
     }
 
     materialPageDrawer.buttonCancelMaterialChange.onClicked: {

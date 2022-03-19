@@ -38,8 +38,8 @@ void BotModel::done(QString acknowledge_result) {
     qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
 }
 
-void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " external: " << external << " whilePrinting: " << whilePrinting;
+void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature, QString material) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " material: " << material << " external: " << external << " whilePrinting: " << whilePrinting;
 }
 
 void BotModel::loadFilamentStop() {
@@ -265,36 +265,6 @@ void BotModel::getFilterHours() {
 
 void BotModel::resetFilterHours() {
     qDebug() << FL_STRM << "called";
-}
-
-QStringList BotModel::extruderASupportedMaterials() {
-    return m_extruderASupportedMaterials;
-}
-
-void BotModel::extruderASupportedMaterialsSet(QStringList &materials) {
-    auto temp = materials;
-    m_extruderASupportedMaterials = materials;
-    emit extruderASupportedMaterialsChanged();
-    temp.clear();
-}
-
-void BotModel::extruderASupportedMaterialsReset() {
-    m_extruderASupportedMaterials.clear();
-}
-
-QStringList BotModel::extruderBSupportedMaterials() {
-    return m_extruderBSupportedMaterials;
-}
-
-void BotModel::extruderBSupportedMaterialsSet(QStringList &materials) {
-    auto temp = materials;
-    m_extruderBSupportedMaterials = materials;
-    emit extruderBSupportedMaterialsChanged();
-    temp.clear();
-}
-
-void BotModel::extruderBSupportedMaterialsReset() {
-    m_extruderBSupportedMaterials.clear();
 }
 
 class DummyBotModel : public BotModel {

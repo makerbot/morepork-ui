@@ -13,6 +13,7 @@ Item {
     antialiasing: false
     property alias loadButton: loadButton
     property alias unloadButton: unloadButton
+    property alias purgeButton: purgeButton
 
     property int filamentBayID: 0
 
@@ -276,21 +277,28 @@ Item {
         ColumnLayout {
             width: 300
             height: 60
-            spacing: 30
+            spacing: 16
             smooth: false
             antialiasing: false
 
             ButtonRectanglePrimary {
                 id: loadButton
-                text: extruderFilamentPresent ?
-                           qsTr("PURGE") : qsTr("LOAD")
+                text: qsTr("LOAD")
                 logKey: text
+                visible: !extruderFilamentPresent
             }
 
-            ButtonRectanglePrimary {
+            ButtonRectangleSecondary {
                 id: unloadButton
                 text: qsTr("UNLOAD")
                 logKey: text
+            }
+
+            ButtonRectangleSecondary {
+                id: purgeButton
+                text: qsTr("PURGE")
+                logKey: text
+                visible: extruderFilamentPresent
             }
         }
     }
