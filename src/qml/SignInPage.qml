@@ -17,6 +17,7 @@ SignInPageForm {
 
     enteredUsernameButton {
         button_mouseArea.onClicked: {
+            bot.pause_touchlog()
             username = usernameTextField.text
             signInSwipeView.swipeToItem(SignInPage.PasswordPage)
             passwordField.forceActiveFocus()
@@ -25,6 +26,7 @@ SignInPageForm {
 
     forgotPasswordButton {
         onClicked: {
+            bot.pause_touchlog()
             showResetPasswordPopup()
             passwordField.forceActiveFocus()
         }

@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #include <memory>
 #include <sstream>
@@ -75,6 +76,9 @@ class KaitenBotModel : public BotModel {
     void disconnectWifi(QString path);
     void forgetWifi(QString path);
     void addMakerbotAccount(QString username, QString makerbot_token);
+    void signal_touchlog(int sig);
+    void pause_touchlog();
+    void resume_touchlog();
     void zipLogs(QString path);
     void forceSyncFile(QString path);
     void changeMachineName(QString new_name);
@@ -953,6 +957,40 @@ void KaitenBotModel::addMakerbotAccount(QString username, QString makerbot_token
                 std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::signal_touchlog(int sig) {
+    // ToDo(William): probably slower than trawling through /proc
+    // directly, but it's definitely less code to maintain
+    uint found_pid_i;
+    FILE * popen_result = popen("pidof -s touch_log", "r");
+    fscanf(popen_result, "%d", &found_pid_i);
+    pclose(popen_result);
+
+    // this sends the passed-in signal (hopefully only SIGUSR1/SIGUSR2
+    // - though the other side was written to only listen for those 2
+    // signals) to the running "touch_log" process
+    kill(found_pid_i, sig);
+}
+
+void KaitenBotModel::pause_touchlog() {
+    try {
+        signal_touchlog(SIGUSR1);
+        LOG(info) << "pause_touchlog()";
+    }
+    catch(JsonRpcInvalidOutputStream &e) {
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::resume_touchlog() {
+    try {
+        signal_touchlog(SIGUSR2);
+        LOG(info) << "resume_touchlog()";
+    }
+    catch(JsonRpcInvalidOutputStream &e) {
         qWarning() << FFL_STRM << e.what();
     }
 }
