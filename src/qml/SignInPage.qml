@@ -17,16 +17,15 @@ SignInPageForm {
 
     enteredUsernameButton {
         button_mouseArea.onClicked: {
-            bot.pause_touchlog()
             username = usernameTextField.text
             signInSwipeView.swipeToItem(SignInPage.PasswordPage)
             passwordField.forceActiveFocus()
+            bot.pause_touchlog()
         }
     }
 
     forgotPasswordButton {
         onClicked: {
-            bot.pause_touchlog()
             showResetPasswordPopup()
             passwordField.forceActiveFocus()
         }
@@ -63,6 +62,7 @@ SignInPageForm {
 
             showAuthorizingPopup();
             network.authenticateWithCredentials(username, password);
+            bot.resume_touchlog()
         }
     }
 }
