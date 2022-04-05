@@ -541,7 +541,6 @@ ApplicationWindow {
                 MaterialPage {
                     id: materialPage
                     smooth: false
-                    anchors.fill: parent
                 }
             }
 

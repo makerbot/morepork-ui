@@ -41,7 +41,7 @@ ErrorScreenForm {
     function loadPurgeFromErrorScreen() {
         if(isExtruderAError() && (materialPage.bay1.usingExperimentalExtruder || settings.getSkipFilamentNags())) {
             materialPage.isLoadFilament = true
-            materialPage.materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
+            materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
             return;
         }
         materialPage.startLoadUnloadFromUI = true
@@ -61,7 +61,7 @@ ErrorScreenForm {
     function unloadFromErrorScreen() {
         if(isExtruderAError() && materialPage.bay1.usingExperimentalExtruder) {
             materialPage.isLoadFilament = false
-            materialPage.materialSwipeView.swipeToItem(MaterialPage.ExpExtruderSettingsPage)
+            materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
             return;
         }
         materialPage.startLoadUnloadFromUI = true

@@ -38,8 +38,8 @@ void BotModel::done(QString acknowledge_result) {
     qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
 }
 
-void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " external: " << external << " whilePrinting: " << whilePrinting;
+void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature, QString material) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " material: " << material << " external: " << external << " whilePrinting: " << whilePrinting;
 }
 
 void BotModel::loadFilamentStop() {
@@ -266,6 +266,11 @@ void BotModel::getFilterHours() {
 void BotModel::resetFilterHours() {
     qDebug() << FL_STRM << "called";
 }
+
+void BotModel::getExtrudersConfigs() {
+    qDebug() << FL_STRM << "called";
+}
+
 
 class DummyBotModel : public BotModel {
   public:

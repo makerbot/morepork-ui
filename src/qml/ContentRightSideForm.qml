@@ -37,6 +37,7 @@ Item {
                 id: textBody
                 style: TextBody.Base
                 font.weight: Font.Normal
+                Layout.fillWidth: true
                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id purus feugiat sed nisi, quam. Orci, in eu interdum erat purus, proin."
             }
         }

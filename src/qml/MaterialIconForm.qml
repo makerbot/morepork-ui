@@ -1,57 +1,91 @@
 import QtQuick 2.10
+import MachineTypeEnum 1.0
 
 Item {
-    id: materialIcon
-    width: 164
-    height: 164
+    id: matIcon
+    width: 100
+    height: 100
     smooth: false
 
     Rectangle {
-        id: base_circle
+        color: "#000000"
         anchors.fill: parent
-        color: "#00000000"
-        radius: 82
-        antialiasing: false
-        smooth: false
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        visible: true
-        border.width: 4
-        border.color: "#c4c4c4"
-        property int fillPercent: filamentPercent
-        property string fillColor: filamentColor
+    }
 
-        onFillPercentChanged: canvas.requestPaint()
-        onFillColorChanged: canvas.requestPaint()
+    Image {
+        id: error_image
+        source: "qrc:/img/extruder_material_error.png"
+        width: sourceSize.width
+        height: sourceSize.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+    }
 
-        Canvas {
-            id: canvas
-            smooth: true
-            antialiasing: true
-            rotation: -90
-            anchors.fill: parent
-            visible: {
-                usingExperimentalExtruder ? true : spoolPresent
-            }
-            onPaint: {
-                var context = getContext("2d");
-                context.reset();
-                var centreX = parent.width * 0.5;
-                var centreY = parent.height * 0.5;
-                context.beginPath();
-                if(usingExperimentalExtruder) {
-                    context.fillStyle = parent.fillColor;
-                    context.moveTo(centreX, centreY);
+    Item {
+        id: material_status_icon
+        anchors.fill: parent
+
+        Rectangle {
+            id: outer_ring
+            width: 87.5
+            height: 87.5
+            radius: width/2
+            color: "#00000000"
+            border.color: "#ffffff"
+            border.width: 3
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Rectangle {
+             id: inner_ring
+             width: 37.5
+             height: 37.5
+             radius: width/2
+             color: "#00000000"
+             border.color: "#ffffff"
+             border.width: 3
+             anchors.horizontalCenter: parent.horizontalCenter
+             anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Rectangle {
+            id: filament_extension
+            width: 3
+            height: outer_ring.radius
+            color: "#ffffff"
+            anchors.top: outer_ring.top
+            anchors.left: outer_ring.left
+        }
+
+        Rectangle {
+            id: material_amount_ring
+            anchors.fill: outer_ring
+            color: "#00000000"
+            antialiasing: false
+            smooth: false
+            property int fillPercent: filamentPercent
+            property string fillColor: filamentColor
+
+            onFillPercentChanged: canvas.requestPaint()
+            onFillColorChanged: canvas.requestPaint()
+
+            Canvas {
+                id: canvas
+                smooth: true
+                antialiasing: true
+                rotation: -90
+                anchors.fill: parent
+                onPaint: {
+                    var context = getContext("2d");
+                    context.reset();
+                    var centreX = parent.width * 0.5;
+                    var centreY = parent.height * 0.5;
+                    context.beginPath();
                     //0.06283185 = PI*2/100
-                    context.arc(centreX, centreY, parent.width*0.40, 0,
+                    context.arc(centreX, centreY, parent.width*0.35, 0,
                                 parent.fillPercent*0.06283185, false);
-                    context.lineTo(centreX, centreY);
-                    context.fill();
-                } else {
-                    //0.06283185 = PI*2/100
-                    context.arc(centreX, centreY, parent.width*0.40, 0,
-                                parent.fillPercent*0.06283185, false);
-                    context.lineWidth = 12;
+                    context.lineWidth = 10;
                     context.lineCap = "round";
                     context.strokeStyle = parent.fillColor;
                     context.stroke()
@@ -59,4 +93,64 @@ Item {
             }
         }
     }
+    states: [
+        State {
+            name: "no_material"
+            when: (bot.hasFilamentBay && !spoolPresent) ||
+                  (!bot.hasFilamentBay && bot.loadedFilaments[filamentBayID - 1] == "None")
+
+            PropertyChanges {
+                target: error_image
+                visible: true
+            }
+
+            PropertyChanges {
+                target: material_status_icon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: material_amount_ring
+                visible: false
+            }
+        },
+        State {
+            name: "rfid_present_material_known"
+            when: spoolPresent
+
+            PropertyChanges {
+                target: error_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: material_status_icon
+                visible: true
+            }
+
+            PropertyChanges {
+                target: material_amount_ring
+                visible: true
+            }
+        },
+        State {
+            name: "rfid_not_present_material_known"
+            when: !bot.hasFilamentBay && bot.loadedFilaments[filamentBayID - 1] != "None"
+
+            PropertyChanges {
+                target: error_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: material_status_icon
+                visible: true
+            }
+
+            PropertyChanges {
+                target: material_amount_ring
+                visible: false
+            }
+        }
+    ]
 }

@@ -45,11 +45,12 @@ class KaitenBotModel : public BotModel {
     void handshakeUpdate(const Json::Value &result);
     void accessoriesStatusUpdate(const Json::Value &result);
     void printQueueUpdate(const Json::Value &queue);
+    void extrudersConfigsUpdate(const Json::Value &result);
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
     void done(QString acknowledge_result);
-    void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void loadFilamentStop();
     void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
     void assistedLevel();
@@ -106,6 +107,7 @@ class KaitenBotModel : public BotModel {
     void getAccessoriesStatus();
     void getFilterHours();
     void resetFilterHours();
+    void getExtrudersConfigs();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -465,6 +467,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<FilterHoursCallback> m_filterHoursCb;
+
+    class ExtrudersConfigsCallback : public JsonRpcCallback {
+      public:
+        ExtrudersConfigsCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value &resp) override {
+            m_bot->extrudersConfigsUpdate(MakerBot::SafeJson::get_arr(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<ExtrudersConfigsCallback> m_extrudersConfigsCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -544,6 +557,26 @@ void KaitenBotModel::handshakeUpdate(const Json::Value &result) {
     UPDATE_STRING_PROP(iserial, result["iserial"]);
 }
 
+void KaitenBotModel::extrudersConfigsUpdate(const Json::Value &result) {
+  LOG(info) << result;
+#define UPDATE_EXTRUDER_PROPS(IDX, EXT_SYM) \
+  if(result.isArray()) { \
+    const Json::Value &supported_materials = result[IDX]["supported_materials"]; \
+    if(supported_materials.isArray()) { \
+      QStringList materials = {}; \
+      for(const Json::Value mat : supported_materials) { \
+        materials.append(mat.asString().c_str()); \
+      } \
+      extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
+    } \
+  } \
+
+  UPDATE_EXTRUDER_PROPS(0, A);
+  UPDATE_EXTRUDER_PROPS(1, B);
+#undef UPDATE_EXTRUDER_PROPS
+}
+
+
 void KaitenBotModel::cancel(){
     try{
         qDebug() << FL_STRM << "called";
@@ -596,7 +629,7 @@ void KaitenBotModel::done(QString acknowledge_result){
     }
 }
 
-void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature){
+void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature, QString material){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         qDebug() << FL_STRM << "external: " << external;;
@@ -609,6 +642,10 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
                 temperature_list[i] = (temperature.value(i));
             }
             json_params["temperature_settings"] = Json::Value(temperature_list);
+        }
+
+        if(material != "None") {
+          json_params["material"] = Json::Value(material.toStdString());
         }
 
         if(!whilePrinting) {
@@ -1319,6 +1356,18 @@ void KaitenBotModel::getFilterHours() {
     }
 }
 
+void KaitenBotModel::getExtrudersConfigs() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        conn->jsonrpc.invoke("get_extruders_configs", Json::Value(), m_extrudersConfigsCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 void KaitenBotModel::resetFilterHours() {
     try{
         qDebug() << FL_STRM << "called";
@@ -1367,7 +1416,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_handshakeUpdateCb(new HandshakeCallback(this)),
         m_cameraState(new CameraStateNotification(this)),
         m_printQueueNot(new PrintQueueNotificatiion(this)),
-        m_filterHoursCb(new FilterHoursCallback(this)) {
+        m_filterHoursCb(new FilterHoursCallback(this)),
+        m_extrudersConfigsCb(new ExtrudersConfigsCallback(this)) {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
@@ -1394,18 +1444,31 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
 }
 
 void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
-    const Json::Value &calibrated = params["config"]["calibrated"];
-    if(params["index"] == 0) {
-        if (calibrated.isBool()) {
-            extruderACalibratedSet(calibrated.asBool());
-        }
+#define UPDATE_EXTRUDER_CONFIG(EXT_SYM) \
+    { \
+      const Json::Value &calibrated = params["config"]["calibrated"]; \
+      if (calibrated.isBool()) { \
+          extruder ## EXT_SYM ## CalibratedSet(calibrated.asBool()); \
+      } \
+      extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated()); \
+      const Json::Value &supported_materials = params["config"]["supported_materials"]; \
+      if(supported_materials.isArray()) { \
+        QStringList materials = {}; \
+        for(const Json::Value mat : supported_materials) { \
+          materials.append(mat.asString().c_str()); \
+        } \
+        extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
+      } \
     }
-    else if(params["index"] == 1) {
-        if (calibrated.isBool()) {
-            extruderBCalibratedSet(calibrated.asBool());
-        }
+    switch (params["index"].asInt()) {
+      case 0:
+          UPDATE_EXTRUDER_CONFIG(A);
+          break;
+      case 1:
+          UPDATE_EXTRUDER_CONFIG(B);
+          break;
     }
-    extrudersCalibratedSet(extruderACalibrated() && extruderBCalibrated());
+#undef UPDATE_EXTRUDER_CONFIG
 }
 
 void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
@@ -1589,6 +1652,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           }
         }
       }
+      hasFilamentBaySet(info["has_filament_bay"].asBool());
       // Update filament bay status variables
       const Json::Value &kFilamentBay = info["filamentbays"];
       if(kFilamentBay.isArray()){
@@ -1666,6 +1730,16 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
       const Json::Value &accessories = info["accessories"];
       accessoriesStatusUpdate(accessories);
+
+      const Json::Value &loaded_filaments = info["loaded_filaments"];
+      if(loaded_filaments.isArray()) {
+        QStringList materials;
+        for(const Json::Value mat : loaded_filaments) {
+          if(mat.empty()) materials.append("None");
+          else if(mat.isString()) materials.append(mat.asString().c_str());
+        }
+        loadedFilamentsSet(materials);
+      }
 
       // TODO(chris): This bit is a mess...
       const Json::Value & version_dict = info["firmware_version"];
@@ -2019,6 +2093,7 @@ void KaitenBotModel::connected() {
     Json::Value json_params(Json::objectValue);
     json_params["notify"] = Json::Value(true);
     m_conn->jsonrpc.invoke("check_notify_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
+    m_conn->jsonrpc.invoke("get_extruders_configs", Json::Value(), m_extrudersConfigsCb);
 
     stateSet(ConnectionState::Connected);
 }

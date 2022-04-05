@@ -8,7 +8,6 @@ Text {
     }
     property int style: TextSubheader.Base
     id: textSubheader
-    Layout.fillWidth: true
     text: "Subheader"
     font.family: "Antenna"
     font.pixelSize: 16
