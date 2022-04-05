@@ -105,6 +105,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getAccessoriesStatus();
     Q_INVOKABLE virtual void getFilterHours();
     Q_INVOKABLE virtual void resetFilterHours();
+    Q_INVOKABLE virtual void getExtrudersConfigs();
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
@@ -172,7 +173,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
     MODEL_PROP(bool, hasFilamentBay, false)
-    MODEL_PROP(QStringList, configuredMaterials, {"None"})
+    MODEL_PROP(QStringList, loadedFilaments, {"None"})
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)

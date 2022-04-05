@@ -129,7 +129,7 @@ MaterialPageForm {
     }
 
     function shouldSelectMaterial(tool_idx) {
-        return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.configuredMaterials[tool_idx] == "None")
+        return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.loadedFilaments[tool_idx] == "None")
     }
 
     function load(tool_idx, external, temperature=0, material="None") {

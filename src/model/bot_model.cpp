@@ -267,6 +267,11 @@ void BotModel::resetFilterHours() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::getExtrudersConfigs() {
+    qDebug() << FL_STRM << "called";
+}
+
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

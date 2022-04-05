@@ -33,8 +33,8 @@ Item {
                     text: {
                         if(spoolPresent && !isUnknownMaterial) {
                             filamentMaterialName.toUpperCase()
-                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) && bot.configuredMaterials[filamentBayID - 1] != "None") {
-                            (storage.updateMaterialNames(bot.configuredMaterials[filamentBayID-1])).toUpperCase()
+                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) && bot.loadedFilaments[filamentBayID - 1] != "None") {
+                            (storage.updateMaterialNames(bot.loadedFilaments[filamentBayID-1])).toUpperCase()
                         } else {
                             qsTr("NOT DETECTED")
                         }
