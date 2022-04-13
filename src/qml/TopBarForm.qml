@@ -214,6 +214,9 @@ Item {
                         case ProcessStateType.Completed:
                             qsTr("PRINT COMPLETE")
                             break;
+                        case ProcessStateType.Cancelled:
+                            qsTr("PRINT CANCELLED")
+                            break;
                         }
                         break;
                     case ProcessType.Load:

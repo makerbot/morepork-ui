@@ -73,6 +73,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Failed);
         else if (kStepStr == "completed")
             stateTypeSet(ProcessStateType::Completed);
+        else if (kStepStr == "cancelled")
+            stateTypeSet(ProcessStateType::Cancelled);
         // 'Load' and 'Unload' states (steps)
         // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
         else if (kStepStr == "preheating" ||

@@ -100,10 +100,7 @@ Item {
         buttonHeight: 50
         label: qsTr("SUBMIT FEEDBACK")
         button_mouseArea.onClicked: {
-            printFeedbackAcknowledgementPopup.open()
-            printFeedbackAcknowledgementPopup.feedbackGood = false
-            bot.submitPrintFeedback(false, defects)
-            acknowledgePrint()
+            acknowledgePrintFinished.submitFeedbackAndAcknowledge(false)
         }
     }
 }

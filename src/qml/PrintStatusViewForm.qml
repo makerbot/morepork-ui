@@ -81,7 +81,8 @@ Item {
 
     FailurePrintFeedback {
         id: failurePrintFeedback
-        visible: bot.process.stateType == ProcessStateType.Completed &&
+        visible: (bot.process.stateType == ProcessStateType.Completed ||
+                 bot.process.stateType == ProcessStateType.Cancelled) &&
                  !bot.process.printFeedbackReported &&
                  acknowledgePrintFinished.failureFeedbackSelected
         z: 1
@@ -134,7 +135,13 @@ Item {
                         0
                     }
                 }
-                spacing: 20
+                spacing: {
+                    if(bot.process.stateType == ProcessStateType.Cancelled) {
+                        -10
+                    } else {
+                        20
+                    }
+                }
 
                 Text {
                     id: status_text0
@@ -163,6 +170,9 @@ Item {
                             break;
                         case ProcessStateType.Failed:
                             qsTr("PRINT FAILED")
+                            break;
+                        case ProcessStateType.Cancelled:
+                            qsTr("PRINT CANCELLED")
                             break;
                         case ProcessStateType.Cancelling:
                             qsTr("CANCELLING")
@@ -315,7 +325,8 @@ Item {
                 AcknowledgePrintFinished {
                     id: acknowledgePrintFinished
                     visible: bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed
+                             bot.process.stateType == ProcessStateType.Failed ||
+                             bot.process.stateType == ProcessStateType.Cancelled
                 }
             }
         }
