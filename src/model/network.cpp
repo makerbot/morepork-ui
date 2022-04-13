@@ -21,7 +21,7 @@ void Network::authenticateWithCredentials(QString username, QString password) {
 
     // TODO(shirley): move these to a config
     QNetworkRequest req(QStringLiteral(
-            "https://www.thingiverse.com/login/oauth/access_token"));
+            "https://staging.thingiverse.com/login/oauth/access_token"));
     req.setHeader(
             QNetworkRequest::ContentTypeHeader,
             QStringLiteral("application/x-www-form-urlencoded"));
@@ -83,7 +83,7 @@ void Network::initiateAuthWithCode(QString printer_id,
                                    QString printer_type,
                                    QString printer_ip) {
     QNetworkRequest request;
-    request.setUrl(QUrl("https://cloudauth.makerbot.com/session"));
+    request.setUrl(QUrl("https://cloudauth.mbot.me/session"));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       QString("application/json"));
 
@@ -126,7 +126,7 @@ void Network::handleRespInitiateAuthWithCode() {
 
 void Network::checkAuthWithCode(QString otp, QString polling_token) {
     QNetworkRequest request;
-    request.setUrl(QUrl("https://cloudauth.makerbot.com/session/" + otp));
+    request.setUrl(QUrl("https://cloudauth.mbot.me/session/" + otp));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       QString("application/json"));
     request.setRawHeader(QByteArray("Authorization"),
