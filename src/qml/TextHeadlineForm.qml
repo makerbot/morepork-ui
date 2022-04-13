@@ -8,7 +8,6 @@ Text {
     }
     property int style: TextHeadline.Base
     id: textHeadline
-    Layout.fillWidth: true
     text: "HEADLINE"
     font.family: "Antenna"
     font.styleName: "Light"
