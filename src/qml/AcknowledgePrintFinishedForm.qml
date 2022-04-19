@@ -14,13 +14,28 @@ LoggingItem {
 
     // Defects template dict. that will sent for all feedback. Even success.
     // Ideally we should be building a list of defects and just sending that.
-    property var print_defects: {"warping_from_buildplate": false,
+    property var print_defects_template: {"warping_from_buildplate": false,
                                  "stringiness": false,
                                  "gaps_in_walls": false,
                                  "bad_layer_alignment": false,
                                  "small_feature_defects": false,
                                  "frequent_extruder_jams": false,
-                                 "other": false}
+                                 "other": false,
+                                 "non_failure_other": false}
+
+    property var defects: ({})
+
+    function updateFeedbackDict(key, selected) {
+        defects[key] = selected
+    }
+
+    function submitFeedbackAndAcknowledge(success) {
+        printFeedbackAcknowledgementPopup.open()
+        printFeedbackAcknowledgementPopup.feedbackGood = success
+        bot.submitPrintFeedback(success,
+                         (success ? print_defects_template : defects))
+        acknowledgePrint()
+    }
 
     Text {
         id: titleText
@@ -36,8 +51,34 @@ LoggingItem {
         font.pixelSize: 18
     }
 
+    ColumnLayout {
+        id: buttonContainerPrintCancelled
+        anchors.top: titleText.bottom
+        anchors.topMargin: 20
+        spacing: 20
+
+        ButtonRectangleSecondary {
+            text: qsTr("PRINT FAILURE")
+            logKey: text
+            onClicked: {
+                failureFeedbackSelected = true
+                defects = JSON.parse(JSON.stringify(print_defects))
+            }
+        }
+
+        ButtonRectangleSecondary {
+            text: qsTr("OTHER")
+            logKey: text
+            onClicked: {
+                defects = JSON.parse(JSON.stringify(print_defects_template))
+                updateFeedbackDict("non_failure_other", true)
+                submitFeedbackAndAcknowledge(false)
+            }
+        }
+    }
+
     RowLayout {
-        id: buttonContainer
+        id: buttonContainerPrintCompleted
         anchors.top: titleText.bottom
         anchors.topMargin: 20
         spacing: 35
@@ -58,7 +99,7 @@ LoggingItem {
                     // This is absolutely uneccessary, if only the analytics guys
                     // don't insist on sending the full defects dict. even for print
                     // success feedback.
-                    failurePrintFeedback.defects = JSON.parse(JSON.stringify(print_defects))
+                    defects = JSON.parse(JSON.stringify(print_defects_template))
                 }
 
                 Image {
@@ -85,10 +126,7 @@ LoggingItem {
                 forceButtonWidth: true
 
                 button_mouseArea.onClicked: {
-                    printFeedbackAcknowledgementPopup.open()
-                    printFeedbackAcknowledgementPopup.feedbackGood = true
-                    bot.submitPrintFeedback(true, print_defects)
-                    acknowledgePrint()
+                    submitFeedbackAndAcknowledge(true)
                 }
 
                 Image {
@@ -126,14 +164,29 @@ LoggingItem {
                   !bot.process.printFeedbackReported
 
             PropertyChanges {
-                target: buttonContainer
+                target: titleText
+                text: qsTr("DID THE PRINT SUCCEED?")
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCompleted
                 anchors.top: titleText.bottom
                 anchors.topMargin: 20
             }
 
             PropertyChanges {
+                target: feedbackButtons
+                visible: true
+            }
+
+            PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("SKIP")
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCancelled
+                visible: false
             }
         },
         State {
@@ -158,7 +211,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: buttonContainer
+                target: buttonContainerPrintCompleted
                 anchors.top: element.top
                 anchors.topMargin: 0
             }
@@ -171,6 +224,26 @@ LoggingItem {
             PropertyChanges {
                 target: feedbackButtons
                 visible: false
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCancelled
+                visible: false
+            }
+        },
+        State {
+            name: "print_cancelled"
+            when: bot.process.stateType == ProcessStateType.Cancelled
+
+            PropertyChanges {
+                target: buttonContainerPrintCompleted
+                visible: false
+            }
+
+            PropertyChanges {
+                target: titleText
+                text: qsTr("WHY WAS THIS PRINT CANCELLED?")
+                font.pixelSize: 16
             }
         }
     ]

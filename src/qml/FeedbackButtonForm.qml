@@ -35,10 +35,11 @@ Rectangle {
     Layout.preferredHeight: height
     Layout.preferredWidth: width
 
-    property bool resetState: printStatusPage.failureFeedbackSelected
+    property bool resetState: acknowledgePrintFinished.failureFeedbackSelected
     onResetStateChanged: {
         if(resetState) {
             selected = false
+            acknowledgePrintFinished.updateFeedbackDict(key, selected)
         }
     }
 
@@ -75,7 +76,7 @@ Rectangle {
         onClicked: {
             if(selected) { selected = false }
             else { selected = true }
-            updateFeedbackDict(key, selected)
+            acknowledgePrintFinished.updateFeedbackDict(key, selected)
         }
     }
 }

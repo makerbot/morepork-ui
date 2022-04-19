@@ -33,6 +33,7 @@ LoggingItem {
                 "#3183AF"
                 break;
             case ProcessStateType.Failed:
+            case ProcessStateType.Cancelled:
                 "#F79125"
                 break;
             default:
@@ -81,7 +82,8 @@ LoggingItem {
                       bot.process.stateType == ProcessStateType.CleaningUp ||
                       bot.process.stateType == ProcessStateType.Done || // Part of cancelling step
                       bot.process.stateType == ProcessStateType.Failed ||
-                      bot.process.stateType == ProcessStateType.Completed)
+                      bot.process.stateType == ProcessStateType.Completed ||
+                      bot.process.stateType == ProcessStateType.Cancelled)
 
             RotationAnimator {
                 target: status_image
@@ -306,7 +308,8 @@ LoggingItem {
         },
         State {
             name: "print_failed_state"
-            when: bot.process.stateType == ProcessStateType.Failed
+            when: bot.process.stateType == ProcessStateType.Failed ||
+                  bot.process.stateType == ProcessStateType.Cancelled
 
             PropertyChanges {
                 target: loading_or_paused_image

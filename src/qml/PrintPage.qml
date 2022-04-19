@@ -172,6 +172,9 @@ PrintPageForm {
         else if(bot.process.stateType == ProcessStateType.Completed) {
             bot.done("acknowledge_completed")
         }
+        else if(bot.process.stateType == ProcessStateType.Cancelled) {
+            bot.done("acknowledge_failure")
+        }
         if(inFreStep) {
             printStatusView.testPrintComplete = true
         }
