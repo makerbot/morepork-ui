@@ -498,24 +498,44 @@ Item {
         onTriggered: deauthorizeAccountsPopup.close()
     }
 
-    ModalPopup {
+    CustomPopup {
         popupName: "Shutdown"
         id: shutdownPopup
+        popupWidth: 715
+        popupHeight: 275
         visible: false
-        popup_contents.contentItem: Item {
-            anchors.fill: parent
-            ColumnLayout {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+        showTwoButtons: true
+        left_button_text: qsTr("BACK")
+        right_button_text: qsTr("CONFIRM")
+        right_button.onClicked: {
+            bot.shutdown()
+        }
 
-                TitleText {
-                    text: qsTr("SHUT DOWN PRINTER")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                BodyText{
-                    text: qsTr("Are you sure you want to shut down the printer?")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
+        left_button.onClicked: {
+            shutdownPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_shutdown_popup
+            width: 650
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: 125
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Image {
+                width: 63
+                height: 63
+                source: "qrc:/img/extruder_material_error.png"
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextHeadline {
+                text: qsTr("SHUT DOWN?")
+                font.weight: Font.Bold
+                font.styleName: "Normal"
+                Layout.alignment: Qt.AlignHCenter
             }
         }
     }
