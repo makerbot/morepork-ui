@@ -1607,6 +1607,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 } else { \
                     extruder ## EXT_SYM ## TypeReset(); \
                 } \
+                UPDATE_INT_PROP(extruder ## EXT_SYM ## Subtype, kExtruder ## EXT_SYM["tool_subtype"]) \
             } else { \
                 extruder ## EXT_SYM ## TypeReset(); \
                 extruder ## EXT_SYM ## TypeStrReset(); \
