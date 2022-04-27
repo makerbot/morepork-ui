@@ -181,7 +181,13 @@ Item {
                 if(bot.machineType == MachineType.Fire) {
                     ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
                 } else {
-                    ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                    if (bot.extruderASubtype == 0) {
+                        ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                    } else if (bot.extruderASubtype == 1) {
+                        ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR"]
+                    } else if (bot.extruderASubtype >= 2) {
+                        ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR", "ABS-R"]
+                    }
                 }
                 break;
             default:
