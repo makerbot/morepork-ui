@@ -46,9 +46,9 @@ void msgHandler(QtMsgType type,
         level = boost::log::trivial::error;
         break;
     }
-    BOOST_LOG_SEV(Logging::GeneralLog(), level) << "[" << (context.file?:"")
-        << ":" << context.line << ":" << (context.function?:"") << "]\n"
-        << msg.toStdString();
+    BOOST_LOG_SEV(Logging::general::get(), level) << "[ui] ["
+        << (context.file?:"") << ":" << context.line << ":"
+        << (context.function?:"") << "]\n" << msg.toStdString();
 }
 #endif
 #include "fre_tracker.h"
