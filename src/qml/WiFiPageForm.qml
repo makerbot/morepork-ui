@@ -213,7 +213,6 @@ Item {
                                                 "", selectedWifiName)
                             }
                             else if(!selectedWifiSaved) {
-                                bot.pause_touchlog()
                                 wifiSwipeView.swipeToItem(WiFiPage.EnterPassword)
                                 passwordField.forceActiveFocus()
                             }
@@ -243,7 +242,6 @@ Item {
             visible: false
 
             function altBack() {
-                bot.resume_touchlog()
                 passwordField.clear()
                 showPassword.checked = false
                 wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
@@ -381,6 +379,14 @@ Item {
                     antialiasing: false
                     smooth: false
                     anchors.fill: parent
+                }
+                onVisibleChanged: {
+                    if (visible) {
+                        bot.pause_touchlog()
+                    }
+                    if (!visible) {
+                        bot.resume_touchlog()
+                    }
                 }
             }
         }
