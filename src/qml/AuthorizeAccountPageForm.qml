@@ -147,12 +147,16 @@ Item {
         full_button.onClicked: {
             if(state == "no_account") {
                 authorizeAccountPopup.close()
+                bot.pause_touchlog()
             } else if(state == "reset_password") {
                 authorizeAccountPopup.close()
+                bot.pause_touchlog()
             } else if(state == "authorization_failed") {
                 authorizeAccountPopup.close()
+                bot.pause_touchlog()
             } else if(state == "failed_to_get_otp") {
                 backToSelectAuthMethod()
+                bot.resume_touchlog()
             }
         }
 

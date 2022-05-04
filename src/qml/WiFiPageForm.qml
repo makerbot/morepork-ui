@@ -213,6 +213,7 @@ Item {
                                                 "", selectedWifiName)
                             }
                             else if(!selectedWifiSaved) {
+                                bot.pause_touchlog()
                                 wifiSwipeView.swipeToItem(WiFiPage.EnterPassword)
                                 passwordField.forceActiveFocus()
                             }
@@ -242,6 +243,7 @@ Item {
             visible: false
 
             function altBack() {
+                bot.resume_touchlog()
                 passwordField.clear()
                 showPassword.checked = false
                 wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
@@ -311,6 +313,7 @@ Item {
                     buttonWidth: 160
                     buttonHeight: 50
                     button_mouseArea.onClicked: {
+                        bot.resume_touchlog()
                         bot.net.setWifiState(WifiState.Connecting)
                         wifiPopup.open()
                         bot.connectWifi(selectedWifiPath,
@@ -565,6 +568,7 @@ Item {
                         }
                         onClicked: {
                             if(isForgetEnabled || bot.net.wifiState == WifiState.Disconnecting) {
+                                bot.resume_touchlog()
                                 wifiPopup.close()
                             }
                         }
@@ -631,6 +635,7 @@ Item {
                         onClicked: {
                             if(bot.net.wifiState == WifiState.Connecting) {
                                 wifiPopup.close()
+                                bot.pause_touchlog()
                             }
                             else if(bot.net.wifiError == WifiError.ConnectFailed) {
                                 bot.net.setWifiState(WifiState.Connecting)
@@ -640,9 +645,11 @@ Item {
                             }
                             else if(bot.net.wifiError == WifiError.InvalidPassword) {
                                 wifiPopup.close()
+                                bot.pause_touchlog()
                             }
                             if(wifiPopup.opened) {
                                 wifiPopup.close()
+                                bot.pause_touchlog()
                             }
                         }
                     }

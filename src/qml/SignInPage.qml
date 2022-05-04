@@ -20,6 +20,7 @@ SignInPageForm {
             username = usernameTextField.text
             signInSwipeView.swipeToItem(SignInPage.PasswordPage)
             passwordField.forceActiveFocus()
+            bot.pause_touchlog()
         }
     }
 
@@ -61,6 +62,7 @@ SignInPageForm {
 
             showAuthorizingPopup();
             network.authenticateWithCredentials(username, password);
+            bot.resume_touchlog()
         }
     }
 }

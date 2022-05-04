@@ -224,6 +224,7 @@ Item {
             property bool hasAltBack: true
 
             function altBack() {
+                bot.resume_touchlog()
                 passwordField.clear()
                 showPassword.checked = false
                 signInSwipeView.swipeToItem(SignInPage.UsernamePage)
