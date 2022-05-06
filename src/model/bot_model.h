@@ -76,6 +76,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void connectWifi(QString path, QString password, QString name);
     Q_INVOKABLE virtual void forgetWifi(QString path);
     Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
+    Q_INVOKABLE virtual void pause_touchlog();
+    Q_INVOKABLE virtual void resume_touchlog();
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);

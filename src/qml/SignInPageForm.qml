@@ -359,5 +359,14 @@ Item {
             anchors.fill: parent
             active: true
         }
+
+        onVisibleChanged: {
+            if (visible) {
+                bot.pause_touchlog()
+            }
+            if (!visible) {
+                bot.resume_touchlog()
+            }
+        }
     }
 }

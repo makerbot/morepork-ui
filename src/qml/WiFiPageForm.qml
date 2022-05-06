@@ -380,6 +380,14 @@ Item {
                     smooth: false
                     anchors.fill: parent
                 }
+                onVisibleChanged: {
+                    if (visible) {
+                        bot.pause_touchlog()
+                    }
+                    if (!visible) {
+                        bot.resume_touchlog()
+                    }
+                }
             }
         }
     }

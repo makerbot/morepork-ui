@@ -143,6 +143,14 @@ void BotModel::addMakerbotAccount(QString username, QString makerbot_token) {
              << username << "; " <<  makerbot_token;
 }
 
+void BotModel::pause_touchlog() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::resume_touchlog() {
+    qDebug() << FL_STRM << "called";
+}
+
 void BotModel::zipLogs(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
