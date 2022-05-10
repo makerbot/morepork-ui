@@ -141,6 +141,8 @@ class BotModel : public BaseModel {
     //                properties to it's own sub model.
     MODEL_PROP(ExtruderType, extruderAType, NONE)
     MODEL_PROP(ExtruderType, extruderBType, NONE)
+    MODEL_PROP(int, extruderASubtype, 0)
+    MODEL_PROP(int, extruderBSubtype, 0)
     MODEL_PROP(QString, extruderATypeStr, "mk14")
     MODEL_PROP(QString, extruderBTypeStr, "mk14_s")
     MODEL_PROP(bool, updatingExtruderFirmware, false)
