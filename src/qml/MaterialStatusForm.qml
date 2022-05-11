@@ -31,7 +31,7 @@ Item {
                     style: TextBody.ExtraLarge
                     font.weight: Font.Bold
                     text: {
-                        if(spoolPresent && !isUnknownMaterial) {
+                        if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
                             filamentMaterialName.toUpperCase()
                         } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) && bot.loadedFilaments[filamentBayID - 1] != "None") {
                             (storage.updateMaterialNames(bot.loadedFilaments[filamentBayID-1])).toUpperCase()
