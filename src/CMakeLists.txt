@@ -61,7 +61,6 @@ set(SOURCES
 
 # These are not used QtCreator build
 set(MODEL_IMPL_SOURCES
-    logging.cpp
     model_impl/kaiten_net_model.cpp
     model_impl/kaiten_process_model.cpp
     model_impl/kaiten_bot_model.cpp
