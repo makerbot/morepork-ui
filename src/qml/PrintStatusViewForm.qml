@@ -210,6 +210,10 @@ Item {
                                 qsTr("WAITING FOR PRINT FILE")
                             } else if(bot.process.stepStr == "transfer") {
                                 qsTr("TRANSFERRING PRINT FILE")
+                            } else if(bot.process.stepStr == "heating_chamber") {
+                                qsTr("HEATING UP CHAMBER")
+                            } else if(bot.process.stepStr == "heating_build_platform") {
+                                qsTr("HEATING UP BUILD PLATFORM")
                             } else if(bot.extruderATargetTemp > 0) {
                                 qsTr("HEATING UP EXTRUDER")
                             } else {
@@ -261,6 +265,10 @@ Item {
                                 ""
                             } else if(bot.process.stepStr == "transfer") {
                                 bot.process.printPercentage + "%"
+                            } else if(bot.process.stepStr == "heating_chamber") {
+                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
+                            } else if(bot.process.stepStr == "heating_build_platform") {
+                                (qsTr("%1 C").arg(Math.floor(bot.hbpCurrentTemp)) + " | " + qsTr("%1 C").arg(bot.hbpTargetTemp))
                             } else if(bot.extruderATargetTemp > 0) {
                                 (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderATargetTemp) +
                                  (support_extruder_used_ ?
