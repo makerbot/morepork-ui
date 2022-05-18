@@ -52,6 +52,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         if (kStepStr == "initializing" ||
             kStepStr == "initial_heating" ||
             kStepStr == "heating_chamber" ||
+            kStepStr == "heating_build_platform" ||
             kStepStr == "final_heating" ||
             kStepStr == "cooling" ||
             kStepStr == "cooling_resuming" ||
