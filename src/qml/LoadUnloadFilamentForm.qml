@@ -134,12 +134,10 @@ LoggingItem {
         if (currentState != ProcessStateType.UnloadingFilament) {
             doingAutoUnload = false
         }
-
         switch(currentState) {
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
             snipMaterialAlertAcknowledged = false
-
             delayedEnableRetryButton()
             // (sorry)
             if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
@@ -147,7 +145,6 @@ LoggingItem {
                 state = "error"
             }
             else if(bot.process.type == ProcessType.Load) {
-
                 // Cancelling Load/Unload ends with 'done' step
                 // but the UI shouldn't go into load/unload
                 // successful state, but to the default state.
