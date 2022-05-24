@@ -152,17 +152,25 @@ LoggingItem {
                     state = "loaded_filament"
                 }
                 else {
-                    // Moving to default state is handled in cnacel
+                    // Moving to default state is handled in cancel
                     // button onClicked action, we just reset the
                     // cancelled flag here.
                     materialChangeCancelled = false
                 }
             }
             else if(bot.process.type == ProcessType.Unload) {
-                // We cant' cancel out of unloading so we don't
-                // need the UI state logic like in the 'Load'
-                // process above.
-                state = "unloaded_filament"
+                // Cancelling Load/Unload ends with 'done' step
+                // but the UI shouldn't go into load/unload
+                // successful state, but to the default state.
+                if(!materialChangeCancelled) {
+                    state = "unloaded_filament"
+                }
+                else {
+                    // Moving to default state is handled in cancel
+                    // button onClicked action, we just reset the
+                    // cancelled flag here.
+                    materialChangeCancelled = false
+                }
             }
             //The case when loading/unloading is stopped by user
             //in the middle of print process. Then the bot goes to
@@ -235,7 +243,7 @@ LoggingItem {
         id: snipMaterial
         z: 1
         anchors.verticalCenterOffset: -20
-        visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload
+        visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload && !bayFilamentSwitch
     }
 
     ExpExtruderInstructionsScreen {
