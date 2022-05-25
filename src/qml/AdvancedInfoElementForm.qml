@@ -4,6 +4,7 @@ Item {
     width: 400
     height: 25
 
+    property alias label_element: label
     property alias label: label.text
     property alias label_width: label.width
     property alias value: value.text
