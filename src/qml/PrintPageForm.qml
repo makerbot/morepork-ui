@@ -896,8 +896,10 @@ Item {
 
                 InfoItem {
                     id: printInfo_buildplaneTemperature
-                    labelText: qsTr("Buildplane Temperature")
+                    labelText: qsTr("Chamber Temp. (Build Plane)")
                     dataText: buildplane_temp
+                    labelElement.font.pixelSize: 16
+                    labelElement.font.letterSpacing: 2
                 }
 
                 InfoItem {
