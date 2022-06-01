@@ -22,6 +22,28 @@ void BotModel::firmwareReleaseNotesListReset() {
     m_firmwareReleaseNotes.clear();
 }
 
+QString BotModel::getMaterialName(QString apiName) {
+    if(apiName == "im-pla") {
+        return "Tough";
+    } else if(apiName == "pet") {
+        return "PETG";
+    } else if(apiName == "sr30") {
+        return "SR-30";
+    } else if(apiName == "im-pla-esd") {
+        return "ESD";
+    } else if(apiName == "nylon12-cf") {
+        return "NYLON-12-cf";
+    } else if(apiName == "wss1") {
+        return "RapidRinse";
+    } else if(apiName == "abs-wss1") {
+        return "ABS-R";
+    } else if(apiName == "generic_model") {
+        return "UNKNOWN";
+    } else {
+        return apiName.toUpper();
+    }
+}
+
 void BotModel::cancel() {
     qDebug() << FL_STRM << "called";
 }

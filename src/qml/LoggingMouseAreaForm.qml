@@ -8,6 +8,6 @@ MouseArea {
     }
 
     function logClick() {
-        console.log(logText + " clicked")
+        console.info(logText + " clicked")
     }
 }

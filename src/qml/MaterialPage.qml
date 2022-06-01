@@ -83,7 +83,7 @@ MaterialPageForm {
             return true
         } else {
             // Disallow loading in any case where we would not start a print
-            var bay_material = ((extruderID == 1)? bay1 : bay2).filamentMaterialName.toLowerCase()
+            var bay_material = ((extruderID == 1)? bay1 : bay2).filamentMaterial
             var print_material = (extruderID == 1)? printPage.print_model_material :
                                                     printPage.print_support_material
             if(print_material == "unknown") {
@@ -106,30 +106,30 @@ MaterialPageForm {
     }
 
     function maybeShowMoistureWarningPopup(bayID) {
-        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
-                                bay2.filamentMaterialName)
-        var materials = ["PVA", "NYLON-CF", "NYLON-12-CF"]
+        var current_mat = (bayID == 1 ? bay1.filamentMaterial :
+                                bay2.filamentMaterial)
+        var materials = ["pva", "nylon-cf", "nylon12-cf"]
         if(materials.indexOf(current_mat) >= 0) {
             moistureWarningPopup.open()
         }
     }
 
     function shouldUserAssistDrawerLoading(bayID) {
-        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
-                                bay2.filamentMaterialName)
-        var materials = ["TPU", "NYLON-CF", "NYLON-12-CF"]
+        var current_mat = (bayID == 1 ? bay1.filamentMaterial :
+                                bay2.filamentMaterial)
+        var materials = ["tpu", "nylon-cf", "nylon12-cf"]
         return (materials.indexOf(current_mat) >= 0)
     }
 
     function shouldUserAssistPurging(bayID) {
-        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
-                                bay2.filamentMaterialName)
-        var materials = ["NYLON-CF", "NYLON-12-CF"]
+        var current_mat = (bayID == 1 ? bay1.filamentMaterial :
+                                bay2.filamentMaterial)
+        var materials = ["nylon-cf", "nylon12-cf"]
         return (materials.indexOf(current_mat) >= 0)
     }
 
     function shouldSelectMaterial(tool_idx) {
-        return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.loadedFilaments[tool_idx] == "None")
+        return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.loadedMaterials[tool_idx] == "unknown")
     }
 
     function load(tool_idx, external, temperature=0, material="None") {

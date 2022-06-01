@@ -97,7 +97,7 @@ Item {
         State {
             name: "no_material"
             when: (bot.hasFilamentBay && !spoolPresent) ||
-                  (!bot.hasFilamentBay && bot.loadedFilaments[filamentBayID - 1] == "None")
+                  (!bot.hasFilamentBay && bot.loadedMaterials[filamentBayID - 1] == "unknown")
 
             PropertyChanges {
                 target: error_image
@@ -135,7 +135,7 @@ Item {
         },
         State {
             name: "rfid_not_present_material_known"
-            when: !bot.hasFilamentBay && bot.loadedFilaments[filamentBayID - 1] != "None"
+            when: !bot.hasFilamentBay && bot.loadedMaterials[filamentBayID - 1] != "unknown"
 
             PropertyChanges {
                 target: error_image

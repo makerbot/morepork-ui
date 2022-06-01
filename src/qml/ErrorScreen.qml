@@ -111,8 +111,8 @@ ErrorScreenForm {
                         // matches the print material which is the same logic used in the
                         // material page.
                         isExtruderAError() ?
-                            printPage.print_model_material != materialPage.bay1.filamentMaterialName.toLowerCase() :
-                            printPage.print_support_material != materialPage.bay2.filamentMaterialName.toLowerCase()
+                            printPage.print_model_material != materialPage.bay1.filamentMaterial :
+                            printPage.print_support_material != materialPage.bay2.filamentMaterial
                     }
                 }
             }

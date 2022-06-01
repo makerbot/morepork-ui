@@ -71,7 +71,7 @@ ListSelector {
     delegate:
         MaterialButton {
         id: materialButton
-        materialNameText: storage.updateMaterialNames(model.modelData)
+        materialNameText: bot.getMaterialName(model.modelData)
         materialInfoText: ""
         smooth: false
         antialiasing: false

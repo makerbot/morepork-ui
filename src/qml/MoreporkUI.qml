@@ -2948,13 +2948,13 @@ ApplicationWindow {
                             else if(printPage.startPrintMaterialMismatch) {
                                 (materialPage.bay1.usingExperimentalExtruder ?
                                         qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_support_material.toUpperCase()) :
+                                                    printPage.print_support_material_name) :
                                         qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
-                                                    printPage.print_model_material.toUpperCase()) +
+                                                    printPage.print_model_material_name) +
                                                 (!printPage.support_extruder_used ?
                                                     "." :
                                                     (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_support_material.toUpperCase()))) +
+                                                    printPage.print_support_material_name))) +
                                 qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
                             }
                             else if(printPage.startPrintGenuineSliceUnknownMaterial) {
@@ -2970,10 +2970,10 @@ ApplicationWindow {
                             }
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
-                                     printPage.print_model_material.toUpperCase()) +
+                                     printPage.print_model_material_name) +
                                  (printPage.support_extruder_used ?
                                             qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
-                                                 printPage.print_support_material.toUpperCase()) :
+                                                 printPage.print_support_material_name) :
                                             qsTr(".")) +
                                   qsTr("\nThis printer is optimized for genuine MakerBot materials.")
                             }
@@ -2981,8 +2981,8 @@ ApplicationWindow {
                                     printPage.startPrintWithInsufficientSupportMaterial) {
                                 var insufficientModel = printPage.startPrintWithInsufficientModelMaterial
                                 var insufficientSupport = printPage.startPrintWithInsufficientSupportMaterial
-                                var modelMatStr = printPage.print_model_material.toUpperCase()
-                                var supportMatStr = printPage.print_support_material.toUpperCase()
+                                var modelMatStr = printPage.print_model_material_name
+                                var supportMatStr = printPage.print_support_material_name
                                 qsTr("There may not be enough <b>%1").arg(
                                      (insufficientModel && insufficientSupport) ?
                                          qsTr("%1</b> and <b>%2</b>").arg(modelMatStr).arg(supportMatStr) :

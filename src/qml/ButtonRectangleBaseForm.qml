@@ -44,6 +44,6 @@ Button {
     }
 
     function logClick() {
-        console.log(logKey + " " + text + " clicked")
+        console.info(logKey + " " + text + " clicked")
     }
 }

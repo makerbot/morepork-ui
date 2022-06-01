@@ -33,8 +33,7 @@ PrintPageForm {
             if (materialPage.bay1.usingExperimentalExtruder ||
                 settings.getSkipFilamentNags()) {
                 // Empty case, flag no errors!
-            } else if(materialPage.bay1.filamentMaterialName.toLowerCase() !=
-                    print_model_material) {
+            } else if(materialPage.bay1.filamentMaterial != print_model_material) {
                 startPrintMaterialMismatch = true
             }
              // Disable material quantity check before print for now
@@ -52,7 +51,7 @@ PrintPageForm {
                 } else if(print_model_material == "unknown" && materialPage.bay1.isMaterialValid) {
                     startPrintUnknownSliceGenuineMaterial = true
                     modelMaterialOK = true
-                } else if(materialPage.bay1.checkSliceValid(print_model_material.toUpperCase()) &&
+                } else if(materialPage.bay1.checkSliceValid(print_model_material) &&
                           materialPage.bay1.isUnknownMaterial) {
                     startPrintGenuineSliceUnknownMaterial = true
                 } else if(print_model_material == "unknown" && materialPage.bay1.isUnknownMaterial) {
@@ -62,8 +61,8 @@ PrintPageForm {
             if(!settings.getSkipFilamentNags() && // Skip all mismatch checking for internal use
                ((!modelMaterialOK && // Skip model checking if approved earlier
                  !materialPage.bay1.usingExperimentalExtruder && // Skip model checking if exp. extruder used
-                  materialPage.bay1.filamentMaterialName.toLowerCase() != print_model_material) ||
-                 (materialPage.bay2.filamentMaterialName.toLowerCase() != print_support_material))) {
+                  materialPage.bay1.filamentMaterial != print_model_material) ||
+                 (materialPage.bay2.filamentMaterial != print_support_material))) {
                 startPrintMaterialMismatch = true
             }
             // Disable material quantity check before print for now
@@ -153,7 +152,7 @@ PrintPageForm {
     function showPrintTip() {
         if(settings.getShowNylonCFAnnealPrintTip() &&
            print_model_material == "nylon-cf" ||
-           print_model_material == "nylon-12-cf" &&
+           print_model_material == "nylon12-cf" &&
            support_extruder_used) {
             nylonCFPrintTipPopup.open()
         }
