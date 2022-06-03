@@ -185,7 +185,9 @@ MaterialPageForm {
         loadButton {
             onClicked: {
                 toolIdx = 0
-                if(shouldSelectMaterial(toolIdx)) {
+                var while_printing = (printPage.isPrintProcess &&
+                        bot.process.stateType == ProcessStateType.Paused)
+                if(shouldSelectMaterial(toolIdx) && !while_printing) {
                     isLoadFilament = true
                     materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
                     return

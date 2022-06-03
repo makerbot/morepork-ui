@@ -322,8 +322,13 @@ Item {
                         activeDrawer = printPage.printingDrawer
                         setDrawerState(true)
                         // Go to print page directly after loading or
-                        // unloading during a print.
-                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                        // back to material page after unloading during a print.
+                        if(!isLoadFilament) {
+                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                        }
+                        else {
+                            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                        }
                     }
                 }
             }
