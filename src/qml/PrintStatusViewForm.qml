@@ -68,7 +68,7 @@ Item {
             doneByDayString = qsTr("DONE TODAY BY")
         }
 
-        doneByTimeString = endTime.toLocaleTimeString(Qt.locale().name)
+        doneByTimeString = endTime.toLocaleTimeString(Qt.locale(),"hh:mm")
     }
 
     enum SwipeIndex {
@@ -599,14 +599,14 @@ Item {
                 }
 
                 RowLayout {
-                    id: rowLayout2
+                    id: row_extruder_info
                     width: 100
                     height: 100
                     smooth: false
-                    spacing: 45
+                    spacing: 35
 
                     ColumnLayout {
-                        id: columnLayout3
+                        id: column_labels_1
                         width: 100
                         height: 100
                         smooth: false
@@ -663,36 +663,10 @@ Item {
                             font.letterSpacing: 3
                             font.wordSpacing: 2
                         }
-
-                        Text {
-                            id: buildplane_temp_label
-                            color: "#cbcbcb"
-                            text: qsTr("CHAMBER TEMP. (BUILD PLANE)")
-                            antialiasing: false
-                            smooth: false
-                            font.pixelSize: 14
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 1
-                        }
-
-                        Text {
-                            id: hbp_temp_label
-                            color: "#cbcbcb"
-                            text: qsTr("HEATED BP TEMP")
-                            antialiasing: false
-                            smooth: false
-                            font.pixelSize: 18
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
-                            visible: bot.machineType == MachineType.Magma
-                        }
                     }
 
                     ColumnLayout {
-                        id: columnLayout4
+                        id: column_text_1
                         width: 100
                         height: 100
                         smooth: false
@@ -745,6 +719,65 @@ Item {
                             font.weight: Font.Bold
                             font.letterSpacing: 3
                         }
+                    }
+                }
+                // Add some space here for Magma, due to addition
+                // of hbp temp in the info
+                Item {
+                    id: divider_item3
+                    width: 200
+                    height: 5
+                    smooth: false
+                    visible: bot.machineType == MachineType.Magma
+                }
+
+                RowLayout {
+                    id: row_buildplane_info
+                    width: 100
+                    height: 100
+                    smooth: false
+                    spacing: 18
+
+                    ColumnLayout {
+                        id: column_labels_2
+                        width: 100
+                        height: 100
+                        smooth: false
+                        spacing: 10
+
+                        Text {
+                            id: buildplane_temp_label
+                            color: "#cbcbcb"
+                            text: qsTr("CHAMBER TEMP. (BUILD PLANE)")
+                            antialiasing: false
+                            smooth: false
+                            font.pixelSize: 16
+                            font.family: defaultFont.name
+                            font.weight: Font.Light
+                            font.letterSpacing: 1
+                        }
+
+                        Text {
+                            id: hbp_temp_label
+                            color: "#cbcbcb"
+                            text: qsTr("HEATED BP TEMP")
+                            antialiasing: false
+                            smooth: false
+                            font.pixelSize: 18
+                            font.family: defaultFont.name
+                            font.weight: Font.Light
+                            font.letterSpacing: 3
+                            font.wordSpacing: 2
+                            visible: bot.machineType == MachineType.Magma
+                        }
+                    }
+
+                    ColumnLayout {
+                        id: column_text_2
+                        width: 100
+                        height: 100
+                        smooth: false
+                        spacing: 10
 
                         Text {
                             id: buildplane_temp_text
@@ -794,6 +827,7 @@ Item {
                     id: done_by_label0
                     color: "#cbcbcb"
                     text: doneByDayString
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -801,24 +835,30 @@ Item {
                     font.pixelSize: 15
                     font.weight: Font.Light
                     font.letterSpacing: 3
+                    Layout.preferredWidth: page3.width - 80
+                    elide: Text.ElideMiddle
                 }
 
                 Text {
                     id: end_time_text
                     color: "#ffffff"
                     text: doneByTimeString
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     font.pixelSize: 145
                     font.family: defaultFont.name
                     font.weight: Font.Light
                     font.letterSpacing: 3
+                    Layout.preferredWidth: page3.width - 80
+                    elide: Text.ElideMiddle
                 }
 
                 Text {
                     id: printer_name_is_printing_text
                     color: "#cbcbcb"
                     text: qsTr("%1 IS PRINTING").arg(printerName)
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -826,6 +866,8 @@ Item {
                     font.pixelSize: 15
                     font.weight: Font.Light
                     font.letterSpacing: 3
+                    Layout.preferredWidth: page3.width - 80
+                    elide: Text.ElideMiddle
                 }
 
                 Text {
