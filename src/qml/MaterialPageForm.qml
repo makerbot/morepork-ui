@@ -41,6 +41,8 @@ Item {
     property bool isMaterialMismatch: false
 
     property alias moistureWarningPopup: moistureWarningPopup
+    property alias uncapped1CExtruderAlert: uncapped1CExtruderAlert
+    property bool restartPendingAfterExtruderReprogram: false
 
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess &&
@@ -832,6 +834,144 @@ Item {
                 font.letterSpacing: 1
                 lineHeight: 1.3
             }
+        }
+    }
+
+    CustomPopup {
+        popupName: "Uncapped1CExtruderAlert"
+        id: uncapped1CExtruderAlert
+        popupWidth: 750
+        popupHeight: {
+            if(popupState == "reprogrammed" || popupState == "restart_pending") {
+                300
+            } else {
+                400
+            }
+        }
+        property string popupState: "base state"
+        showTwoButtons: true
+        left_button_text: {
+            if(popupState == "base state" || popupState == "reprogrammed") {
+                qsTr("BACK")
+            }
+        }
+        left_button.onClicked: {
+            uncapped1CExtruderAlert.close()
+            if(popupState == "reprogrammed") {
+                restartPendingAfterExtruderReprogram = true
+            }
+        }
+
+        right_button_text: {
+            if(popupState == "base state") {
+                qsTr("CONFIRM")
+            } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
+                qsTr("RESTART NOW")
+            }
+        }
+
+        right_button.onClicked: {
+            if(popupState == "base state") {
+                // 0x00050002 = 327682 (mk14c, subtype 2)
+                bot.writeExtruderEeprom(0, 1, 327682, false)
+                popupState = "reprogrammed"
+            } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
+                bot.reboot()
+            }
+        }
+
+        onClosed: {
+            popupState = "base state"
+        }
+
+        ColumnLayout {
+            id: columnLayout_uncapped_1c_extruder_popup
+            width: 650
+            height: 320
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 0
+
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                source: "qrc:/img/extruder_material_error.png"
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextHeadline {
+                id: title
+                text: qsTr("NOZZLE CAP INSTALLED?")
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
+                id: description
+                text: qsTr("<b>1C Extruder</b> requires a nozzle cap for " +
+                           "<b>ABS-R</b>. Have you installed the nozzle cap?" +
+                           "<br><br>\"CONFIRM\" will reprogram the extruder. " +
+                           "You will need to restart the printer afterwards." +
+                           "<br><br>Please call our Customer Support team to " +
+                           "have a cap shipped for you to upgrade.")
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            states: [
+                State {
+                    name: "reprogrammed"
+                    when: uncapped1CExtruderAlert.popupState == "reprogrammed"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_complete_small.png"
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("REPROGRAMMED SUCCESSFULLY")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("You will need to restart the printer before using this extruder.")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_uncapped_1c_extruder_popup
+                        height: 200
+                        anchors.topMargin: 80
+                    }
+                },
+                State {
+                    name: "restart_pending"
+                    when: uncapped1CExtruderAlert.popupState == "restart_pending"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/extruder_material_error.png"
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("RESTART REQUIRED")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("You will need to restart the printer before using this extruder.")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_uncapped_1c_extruder_popup
+                        height: 200
+                        anchors.topMargin: 80
+                    }
+                }
+            ]
         }
     }
 }

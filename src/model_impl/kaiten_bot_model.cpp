@@ -93,6 +93,7 @@ class KaitenBotModel : public BotModel {
     void moveAxisToEndstop(QString axis, float distance, float speed);
     void resetSpoolProperties(const int bay_index);
     void shutdown();
+    void reboot();
     bool checkError(const Json::Value error_list, const int error_code);
     void getToolStats(const int index);
     void toolStatsUpdate(const Json::Value & res, const int index);
@@ -112,6 +113,7 @@ class KaitenBotModel : public BotModel {
     void getFilterHours();
     void resetFilterHours();
     void getExtrudersConfigs();
+    void writeExtruderEeprom(int index, int address, int data, bool debug);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1421,6 +1423,30 @@ void KaitenBotModel::resetFilterHours() {
     }
 }
 
+void KaitenBotModel::writeExtruderEeprom(int index, int address, int data, bool debug) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        Json::Value mach_params(Json::objectValue);
+
+        mach_params["index"] = Json::Value(index);
+        mach_params["address"] = Json::Value(address);
+        mach_params["data"] = Json::Value(data);
+        mach_params["debug"] = Json::Value(debug);
+        json_params["machine_func"] = Json::Value("write_extruder_eeprom");
+        json_params["params"] = std::move(mach_params);
+        json_params["ignore_tool_errors"] = Json::Value(true);
+
+        conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -2158,6 +2184,10 @@ void KaitenBotModel::forceSyncFile(QString path) {
 
 void KaitenBotModel::shutdown() {
     system("poweroff");
+}
+
+void KaitenBotModel::reboot() {
+    system("reboot");
 }
 
 BotModel * makeKaitenBotModel(const char * socketpath) {
