@@ -62,7 +62,7 @@ LoggingItem {
             logKey: text
             onClicked: {
                 failureFeedbackSelected = true
-                defects = JSON.parse(JSON.stringify(print_defects))
+                defects = JSON.parse(JSON.stringify(print_defects_template))
             }
         }
 
