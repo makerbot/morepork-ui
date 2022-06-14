@@ -454,7 +454,7 @@ LoggingItem {
                     if (bot.hasFilamentBay) {
                         qsTr("%1 DETECTED").arg(materialName)
                     } else {
-                        qsTr("LOADING FILAMENT").arg(materialName)
+                        qsTr("LOADING FILAMENT")
                     }
                 }
             }

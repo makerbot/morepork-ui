@@ -32,7 +32,7 @@ QString BotModel::getMaterialName(QString apiName) {
     } else if(apiName == "im-pla-esd") {
         return "ESD";
     } else if(apiName == "nylon12-cf") {
-        return "NYLON-12-cf";
+        return "NYLON-12-CF";
     } else if(apiName == "wss1") {
         return "RapidRinse";
     } else if(apiName == "abs-wss1") {
