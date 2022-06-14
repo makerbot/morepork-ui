@@ -283,9 +283,9 @@ void BotModel::getExtrudersConfigs() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::writeExtruderEeprom(int index, int address, int data, bool debug) {
+void BotModel::writeExtruderEeprom(int index, int address, int data) {
     qDebug() << FL_STRM << "called with parameters: " << "index " << index <<
-                " address" << address << " data" << data << " debug" << debug;
+                " address" << address << " data" << data;
 }
 
 

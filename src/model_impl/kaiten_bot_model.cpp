@@ -113,7 +113,7 @@ class KaitenBotModel : public BotModel {
     void getFilterHours();
     void resetFilterHours();
     void getExtrudersConfigs();
-    void writeExtruderEeprom(int index, int address, int data, bool debug);
+    void writeExtruderEeprom(int index, int address, int data);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1423,7 +1423,7 @@ void KaitenBotModel::resetFilterHours() {
     }
 }
 
-void KaitenBotModel::writeExtruderEeprom(int index, int address, int data, bool debug) {
+void KaitenBotModel::writeExtruderEeprom(int index, int address, int data) {
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
@@ -1434,7 +1434,6 @@ void KaitenBotModel::writeExtruderEeprom(int index, int address, int data, bool 
         mach_params["index"] = Json::Value(index);
         mach_params["address"] = Json::Value(address);
         mach_params["data"] = Json::Value(data);
-        mach_params["debug"] = Json::Value(debug);
         json_params["machine_func"] = Json::Value("write_extruder_eeprom");
         json_params["params"] = std::move(mach_params);
         json_params["ignore_tool_errors"] = Json::Value(true);

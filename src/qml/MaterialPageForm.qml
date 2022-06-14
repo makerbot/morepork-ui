@@ -873,7 +873,7 @@ Item {
         right_button.onClicked: {
             if(popupState == "base state") {
                 // 0x00050002 = 327682 (mk14c, subtype 2)
-                bot.writeExtruderEeprom(0, 1, 327682, false)
+                bot.writeExtruderEeprom(0, 1, 327682)
                 popupState = "reprogrammed"
             } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
                 bot.reboot()
