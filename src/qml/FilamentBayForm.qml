@@ -31,7 +31,7 @@ Item {
     }
 
     property string filamentColor: {
-        if(usingExperimentalExtruder) {
+        if(!bot.hasFilamentBay || usingExperimentalExtruder) {
             expExtruderColor
         } else {
             switch(filamentBayID) {
@@ -53,7 +53,7 @@ Item {
     }
 
     property int filamentPercent: {
-        if(usingExperimentalExtruder) {
+        if(!bot.hasFilamentBay || usingExperimentalExtruder) {
             100
         } else {
             switch(filamentBayID) {
@@ -73,86 +73,38 @@ Item {
     }
 
     property string filamentMaterialName: {
-        switch(filamentMaterialCode) {
-        case 1:
-            "PLA"
-            break;
-        case 2:
-            "Tough"
-            break;
-        case 3:
-            "PVA"
-            break;
-        case 4:
-            "PETG"
-            break;
-        case 5:
-            "ABS"
-            break;
-        case 6:
-            "HIPS"
-            break;
-        case 7:
-            "PVA-M"
-            break;
-        case 8:
-            "SR-30"
-            break;
-        case 9:
-            "ASA"
-            break;
-        case 10:
-            "ESD"
-            break;
-        case 11:
-            "NYLON"
-            break;
-        case 12:
-            "PC-ABS"
-            break;
-        case 13:
-            "PC-ABS-FR"
-            break;
-        case 14:
-            "NYLON-CF"
-            break;
-        case 15:
-            "TPU"
-            break;
-        case 16:
-            "NYLON-12-CF"
-            break;
-        case 17:
-            "RapidRinse"
-            break;
-        case 18:
-            "ABS-R"
-            break;
-        case 0:
-        default:
-            "UNKNOWN"
-            break;
+        if (bot.hasFilamentBay) {
+            bot["spool%1MaterialName".arg(idxAsAxis)]
+        } else {
+            bot.loadedMaterialNames[filamentBayID - 1]
         }
     }
 
+    property string filamentMaterial: {
+        if (bot.hasFilamentBay) {
+            bot["spool%1Material".arg(idxAsAxis)]
+        } else {
+            bot.loadedMaterials[filamentBayID - 1]
+        }
+    }
+
+    property bool skipMaterialChecks: {
+        usingExperimentalExtruder || !bot.hasFilamentBay ||
+        settings.getSkipFilamentNags()
+    }
+
     property bool isUnknownMaterial: {
-        (usingExperimentalExtruder ||
-         settings.getSkipFilamentNags()) ?
-              false :
-              filamentMaterialName == "UNKNOWN"
+        !skipMaterialChecks && filamentMaterial == "unknown"
     }
 
     property bool isMaterialValid: {
-        (usingExperimentalExtruder ||
-         settings.getSkipFilamentNags()) ?
-              true :
-              (goodMaterialsList.indexOf(filamentMaterialName) >= 0)
+        skipMaterialChecks ||
+        goodMaterialsList.indexOf(filamentMaterial) >= 0
     }
 
     function checkSliceValid(material) {
-        return (usingExperimentalExtruder ?
-                    true :
-                    (goodMaterialsList.indexOf(material) >= 0))
+        return usingExperimentalExtruder ||
+            goodMaterialsList.indexOf(material) >= 0;
     }
 
     property var goodMaterialsList: {
@@ -172,16 +124,16 @@ Item {
         case 1:
             switch (bot.extruderAType) {
             case ExtruderType.MK14:
-                ["PLA", "Tough", "PETG", "NYLON", "TPU"]
+                ["pla", "im-pla", "pet", "nylon", "tpu"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["ABS", "ASA", "PC-ABS", "PC-ABS-FR", "ABS-R"]
+                ["abs", "asa", "pc-abs", "pc-abs-fr", "abs-wss1"]
                 break;
             case ExtruderType.MK14_COMP:
                 if(bot.machineType == MachineType.Fire) {
-                    ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF"]
+                    ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf"]
                 } else {
-                    ["PLA", "Tough", "PETG", "ESD", "NYLON", "TPU", "NYLON-CF", "NYLON-12-CF", "ABS", "ASA", "PC-ABS", "PC-ABS-FR", "ABS-R"]
+                    ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf", "abs", "asa", "pc-abs", "pc-abs-fr", "abs-wss1"]
                 }
                 break;
             default:
@@ -192,10 +144,10 @@ Item {
         case 2:
             switch (bot.extruderBType) {
             case ExtruderType.MK14:
-                ["PVA"]
+                ["pva"]
                 break;
             case ExtruderType.MK14_HOT:
-                ["SR-30", "HIPS", "RapidRinse"]
+                ["sr30", "hips", "wss1"]
                 break;
             default:
                 []
@@ -208,13 +160,27 @@ Item {
         }
     }
 
-    property string printMaterialName : {
+    property string printMaterial : {
         switch(filamentBayID) {
         case 1:
             printPage.print_model_material
             break;
         case 2:
             printPage.print_support_material
+            break;
+        default:
+            ""
+            break;
+        }
+    }
+
+    property string printMaterialName : {
+        switch(filamentBayID) {
+        case 1:
+            printPage.print_model_material_name
+            break;
+        case 2:
+            printPage.print_support_material_name
             break;
         default:
             ""
@@ -242,13 +208,9 @@ Item {
     property bool extruderPresent: bot["extruder%1Present".arg(idxAsAxis)]
     property int extruderTemperature: bot["extruder%1CurrentTemp".arg(idxAsAxis)]
     property bool spoolDetailsReady: bot["spool%1DetailsReady".arg(idxAsAxis)]
-    property string tagUID: bot["filamentBay%1TagUID".arg(idxAsAxis)]
-    property bool tagVerified: bot["filamentBay%1TagVerified".arg(idxAsAxis)]
-    property bool tagVerificationDone: bot["filamentBay%1TagVerificationDone".arg(idxAsAxis)]
     property bool spoolPresent: bot["filamentBay%1TagPresent".arg(idxAsAxis)]
     property bool extruderFilamentPresent: bot["extruder%1FilamentPresent".arg(idxAsAxis)]
     property string filamentColorName: bot["spool%1ColorName".arg(idxAsAxis)]
-    property int filamentMaterialCode: bot["spool%1Material".arg(idxAsAxis)]
     property real filamentLength: bot["spool%1AmountRemaining".arg(idxAsAxis)]/10
     // convert length from cm to mm, convert linear density from g/mm to kg/mm, multiply to yield mass in kg
     property real filamentQuantity: ((filamentLength*10) * (bot["spool%1LinearDensity".arg(idxAsAxis)]/1000)).toFixed(3)

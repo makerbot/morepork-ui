@@ -323,9 +323,12 @@ Item {
                     if(printPage.isPrintProcess) {
                         activeDrawer = printPage.printingDrawer
                         setDrawerState(true)
-                        // Go to print page directly after loading or
-                        // unloading during a print.
-                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                        // Go to print page directly after loading
+                        // but if unloading stay on material page
+                        if(isLoadFilament) {
+                            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+
+                        }
                     }
                 }
             }
@@ -459,8 +462,8 @@ Item {
                         if(isMaterialMismatch) {
                             if (loadUnloadFilamentProcess.currentActiveTool == 1) {
                                 if (bot.machineType != MachineType.Fire &&
-                                        (materialPage.bay1.filamentMaterialName == "ABS" ||
-                                         materialPage.bay1.filamentMaterialName == "ASA")) {
+                                        (materialPage.bay1.filamentMaterial == "abs" ||
+                                         materialPage.bay1.filamentMaterial == "asa")) {
                                     qsTr("UNSUPPORTED MATERIAL DETECTED")
                                 } else {
                                     qsTr("MODEL MATERIAL REQUIRED")
@@ -492,8 +495,8 @@ Item {
                                     // specific material. This warning can be made generic for
                                     // all such materials.
                                     if (bot.machineType != MachineType.Fire &&
-                                        (materialPage.bay1.filamentMaterialName == "ABS" ||
-                                         materialPage.bay1.filamentMaterialName == "ASA")) {
+                                        (materialPage.bay1.filamentMaterial == "abs" ||
+                                         materialPage.bay1.filamentMaterial == "asa")) {
                                         qsTr("Only PLA, Tough and PETG model material are compatible with a Model 1A Extruder. Insert a Model 1XA Extruder to print ABS or ASA.")
                                     } else {
                                         qsTr("Only PLA, Tough and PETG model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
@@ -503,7 +506,7 @@ Item {
                                     qsTr("Only ABS and ASA model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
                                     break;
                                 case ExtruderType.MK14_COMP:
-                                    qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.goodMaterialsList.join(", "))
+                                    qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.goodMaterialsList.map(bot.getMaterialName).join(", "))
                                     break;
                                 }
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {

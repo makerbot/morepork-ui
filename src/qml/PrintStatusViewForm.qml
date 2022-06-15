@@ -667,14 +667,13 @@ Item {
                         Text {
                             id: buildplane_temp_label
                             color: "#cbcbcb"
-                            text: qsTr("BUILDPLANE TEMP")
+                            text: qsTr("CHAMBER TEMP. (BUILD PLANE)")
                             antialiasing: false
                             smooth: false
-                            font.pixelSize: 18
+                            font.pixelSize: 14
                             font.family: defaultFont.name
                             font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
+                            font.letterSpacing: 1
                         }
 
                         Text {

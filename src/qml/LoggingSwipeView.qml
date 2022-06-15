@@ -49,6 +49,6 @@ SwipeView {
     }
 
     function logAction(action, idx) {
-        console.log(logName, action, log.getEnumName(itemWithEnum, "SwipeIndex", idx))
+        console.info(logName, action, log.getEnumName(itemWithEnum, "SwipeIndex", idx))
     }
 }

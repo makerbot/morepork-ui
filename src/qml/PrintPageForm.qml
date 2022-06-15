@@ -12,7 +12,6 @@ Item {
     property string fileName: "unknown.makerbot"
     property string file_name
     property string print_time
-    property string print_material
     property bool model_extruder_used
     property bool support_extruder_used
     property string print_model_material
@@ -56,6 +55,12 @@ Item {
             copyingFilePopup.open()
         }
     }
+
+    property string print_model_material_name: bot.getMaterialName(print_model_material)
+    property string print_support_material_name: bot.getMaterialName(print_support_material)
+    property string print_material:
+        (model_extruder_used? print_model_material_name : "") +
+        (support_extruder_used? "+" + print_support_material_name : "")
 
     property bool isFileCopySuccessful: storage.fileCopySucceeded
     property bool internalStorageFull: false
@@ -175,8 +180,6 @@ Item {
         support_extruder_used = file.extruderUsedB
         print_model_material = file.materialNameA
         print_support_material = file.materialNameB
-        print_material = !file.extruderUsedB ? file.materialNameA :
-                                               file.materialNameA + "+" + file.materialNameB
         uses_support = file.usesSupport ? "YES" : "NO"
         uses_raft = file.usesRaft ? "YES" : "NO"
         model_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
@@ -207,11 +210,8 @@ Item {
         var printTimeSec = meta['duration_s']
         model_extruder_used = meta['extrusion_distances_mm'][0] > 0 ? true : false
         support_extruder_used = meta['extrusion_distances_mm'][1] > 0 ? true : false
-        print_model_material = storage.updateMaterialNames(meta['materials'][0])
-        print_support_material = storage.updateMaterialNames(meta['materials'][1])
-        print_material = !support_extruder_used ?
-                            print_model_material :
-                            print_model_material + "+" + print_support_material
+        print_model_material = meta['materials'][0]
+        print_support_material = meta['materials'][1]
         model_mass = meta['extrusion_masses_g'][0] < 1000 ?
                         meta['extrusion_masses_g'][0].toFixed(1) + " g" :
                         (meta['extrusion_masses_g'][0] * 0.001).toFixed(1) + " Kg"
@@ -250,7 +250,6 @@ Item {
         print_time = ""
         model_extruder_used = false
         support_extruder_used = false
-        print_material = ""
         print_model_material = ""
         print_support_material = ""
         uses_support = ""
@@ -443,8 +442,8 @@ Item {
                 uses_support_: uses_support
                 uses_raft_: uses_raft
                 print_time_: print_time
-                print_model_material_: print_model_material
-                print_support_material_: print_support_material
+                print_model_material_: print_model_material_name
+                print_support_material_: print_support_material_name
                 model_extruder_used_: model_extruder_used
                 support_extruder_used_: support_extruder_used
             }
@@ -560,13 +559,13 @@ Item {
                     materialError.visible: {
                         if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
                             materialPage.bay1.usingExperimentalExtruder ?
-                                (model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase()) :
-                                (model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase() ||
-                                 model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase())
+                                (model.modelData.materialNameB != materialPage.bay2.filamentMaterial) :
+                                (model.modelData.materialNameA != materialPage.bay1.filamentMaterial ||
+                                 model.modelData.materialNameB != materialPage.bay2.filamentMaterial)
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
                             materialPage.bay1.usingExperimentalExtruder ?
                                     false :
-                                    model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()
+                                    model.modelData.materialNameA != materialPage.bay1.filamentMaterial
                         }
 
                     }
@@ -683,8 +682,8 @@ Item {
                         if(hasMeta) {
                             filePrintTime.text = getTimeInDaysHoursMins(metaData['duration_s'])
                             fileMaterial.text = metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1] ?
-                                                storage.updateMaterialNames(metaData['materials'][0]) + "+" + storage.updateMaterialNames(metaData['materials'][1]) :
-                                                storage.updateMaterialNames(metaData['materials'][0])
+                                                bot.getMaterialName(metaData['materials'][0]) + "+" + bot.getMaterialName(metaData['materials'][1]) :
+                                                bot.getMaterialName(metaData['materials'][0])
                         }
                     }
 
@@ -896,8 +895,10 @@ Item {
 
                 InfoItem {
                     id: printInfo_buildplaneTemperature
-                    labelText: qsTr("Buildplane Temperature")
+                    labelText: qsTr("Chamber Temp. (Build Plane)")
                     dataText: buildplane_temp
+                    labelElement.font.pixelSize: 16
+                    labelElement.font.letterSpacing: 2
                 }
 
                 InfoItem {

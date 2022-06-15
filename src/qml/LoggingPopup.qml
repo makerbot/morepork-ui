@@ -10,10 +10,10 @@ Popup {
     }
 
     function logOpened() {
-        console.log("Popup", popupName, "Opened")
+        console.info("Popup", popupName, "Opened")
     }
 
     function logClosed() {
-        console.log("Popup", popupName, "Closed")
+        console.info("Popup", popupName, "Closed")
     }
 }

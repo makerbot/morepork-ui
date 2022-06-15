@@ -390,7 +390,8 @@ class KaitenBotModel : public BotModel {
       public:
         UpdateSpoolInfoCallback(KaitenBotModel * bot) : m_bot(bot) {}
         void response(const Json::Value & resp) override {
-            m_bot->spoolChangeUpdate(resp);
+            m_bot->spoolChangeUpdate(
+                MakerBot::SafeJson::get_obj(resp, "result"));
         }
       private:
         KaitenBotModel *m_bot;
@@ -1534,13 +1535,10 @@ void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
 #undef UPDATE_EXTRUDER_CONFIG
 }
 
-void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
-    LOG(info) << spool_info;
-    // This function is called both from a notfication socket and as a callback.
-    // When spool_info comes from kaiten as a callback, the spool data exists
-    // within a key called "result".
-    const Json::Value & result = spool_info["result"];
-    const Json::Value & si = result.isObject() ? result : spool_info;
+void KaitenBotModel::spoolChangeUpdate(const Json::Value &si) {
+    // Note that si may be an empty object here if we don't have any
+    // filament bays.
+    LOG(info) << si;
     // We don't update amount remaining here. This comes as an ongoing update
     // via the system information packet (see above).
 #define UPDATE_SPOOL_INFO(BAY_SYM, BAY_IDX) \
@@ -1552,8 +1550,8 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
           UPDATE_INT_PROP(spool ## BAY_SYM ## Version, si["version"]); \
           UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingDate, \
               si["manufacturing_date"]); \
-          UPDATE_INT_PROP(spool ## BAY_SYM ## Material, \
-              si["material_type"]); \
+          UPDATE_STRING_PROP(spool ## BAY_SYM ## Material, \
+              si["material_name"]); \
           UPDATE_STRING_PROP(spool ## BAY_SYM ## SupplierCode, \
               si["supplier_code"]); \
           UPDATE_INT_PROP(spool ## BAY_SYM ## ManufacturingLotCode, \
@@ -1575,6 +1573,8 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &spool_info) {
               si["max_temperature"]); \
           UPDATE_FLOAT_PROP(spool ## BAY_SYM ## LinearDensity, \
               si["linear_density"]); \
+          spool ## BAY_SYM ## MaterialNameSet( \
+              getMaterialName(spool ## BAY_SYM ## Material())); \
           spool ## BAY_SYM ## DetailsReadySet(true); \
       } \
     }
@@ -1796,13 +1796,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       accessoriesStatusUpdate(accessories);
 
       const Json::Value &loaded_filaments = info["loaded_filaments"];
-      if(loaded_filaments.isArray()) {
-        QStringList materials;
-        for(const Json::Value mat : loaded_filaments) {
-          if(mat.empty()) materials.append("None");
-          else if(mat.isString()) materials.append(mat.asString().c_str());
-        }
-        loadedFilamentsSet(materials);
+      if (loaded_filaments.isArray()) {
+          QStringList materialsAPI, materialsDisplay;
+          for (const Json::Value mat : loaded_filaments) {
+              if (mat.empty()) {
+                  materialsAPI.append("unknown");
+                  materialsDisplay.append("UNKNOWN");
+              } else if (mat.isString()) {
+                  QString matAPI(mat.asString().c_str());
+                  materialsAPI.append(matAPI);
+                  materialsDisplay.append(getMaterialName(matAPI));
+              }
+          }
+          loadedMaterialsSet(materialsAPI);
+          loadedMaterialNamesSet(materialsDisplay);
       }
 
       // TODO(chris): This bit is a mess...
@@ -1911,6 +1918,7 @@ void KaitenBotModel::resetSpoolProperties(const int bay_index) {
     spool ## BAY_SYM ## VersionReset(); \
     spool ## BAY_SYM ## ManufacturingDateReset(); \
     spool ## BAY_SYM ## MaterialReset(); \
+    spool ## BAY_SYM ## MaterialNameReset(); \
     spool ## BAY_SYM ## SupplierCodeReset(); \
     spool ## BAY_SYM ## ManufacturingLotCodeReset(); \
     spool ## BAY_SYM ## OriginalAmountReset(); \

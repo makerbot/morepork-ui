@@ -117,7 +117,13 @@ int main(int argc, char ** argv) {
 
     engine.load(MOREPORK_UI_QML_MAIN);
 
-    QObject *rootObject = engine.rootObjects().first();
+    QList<QObject *> rootObjects = engine.rootObjects();
+    if (rootObjects.empty()) {
+        qCritical() << "Failed to find any root objects (QML parse error?)";
+        return -1;
+    }
+
+    QObject *rootObject = rootObjects.first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
     if(argc > 1 && std::string(argv[1]) == "--rotate_display_180")
         if (qmlObject)

@@ -92,8 +92,8 @@ LoggingItem {
         State {
             name: "apply_glue_to_bp"
             when: print_model_material == "nylon-cf" ||
-                  print_model_material == "nylon-12-cf" ||
-                  print_model_material == "petg"
+                  print_model_material == "nylon12-cf" ||
+                  print_model_material == "pet"
 
             PropertyChanges {
                 target: title_text
