@@ -91,6 +91,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void moveAxisToEndstop(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bay_index);
     Q_INVOKABLE virtual void shutdown();
+    Q_INVOKABLE virtual void reboot();
     Q_INVOKABLE virtual void getToolStats(const int index);
     Q_INVOKABLE virtual void setTimeZone(const QString time_zone);
     Q_INVOKABLE virtual void getCloudServicesInfo();
@@ -108,6 +109,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getFilterHours();
     Q_INVOKABLE virtual void resetFilterHours();
     Q_INVOKABLE virtual void getExtrudersConfigs();
+    Q_INVOKABLE virtual void writeExtruderEeprom(int index, int address, int data);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();

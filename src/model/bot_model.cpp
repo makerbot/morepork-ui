@@ -225,6 +225,10 @@ void BotModel::shutdown() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::reboot() {
+    qDebug() << FL_STRM << "called";
+}
+
 void BotModel::getToolStats(const int index) {
     qDebug() << FL_STRM << "called with parameter: " << index;
 }
@@ -299,6 +303,11 @@ void BotModel::resetFilterHours() {
 
 void BotModel::getExtrudersConfigs() {
     qDebug() << FL_STRM << "called";
+}
+
+void BotModel::writeExtruderEeprom(int index, int address, int data) {
+    qDebug() << FL_STRM << "called with parameters: " << "index " << index <<
+                " address" << address << " data" << data;
 }
 
 

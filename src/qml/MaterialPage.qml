@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 MaterialPageForm {
 
@@ -132,6 +133,28 @@ MaterialPageForm {
         return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.loadedMaterials[tool_idx] == "unknown")
     }
 
+    function checkForABSR(bayID) {
+        var current_mat = (bayID == 1 ? bay1.filamentMaterialName :
+                                bay2.filamentMaterialName)
+        if(current_mat == "ABS-R" &&
+           bot.extruderAType == ExtruderType.MK14_COMP &&
+           bot.extruderASubtype < 2) {
+            if(bot.process.type == ProcessType.Load) {
+                bot.cancel()
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
+            }
+            uncapped1CExtruderAlert.open()
+        }
+    }
+
+    function restartPendingCheck(tool_idx) {
+        if(restartPendingAfterExtruderReprogram && tool_idx == 0) {
+            uncapped1CExtruderAlert.open()
+            uncapped1CExtruderAlert.popupState = "restart_pending"
+            return true
+        }
+    }
+
     function load(tool_idx, external, temperature=0, material="None") {
         toolIdx = tool_idx
         isLoadFilament = true
@@ -185,6 +208,7 @@ MaterialPageForm {
         loadButton {
             onClicked: {
                 toolIdx = 0
+                if(restartPendingCheck(toolIdx)) { return }
                 var while_printing = (printPage.isPrintProcess &&
                         bot.process.stateType == ProcessStateType.Paused)
                 if(shouldSelectMaterial(toolIdx) && !while_printing) {

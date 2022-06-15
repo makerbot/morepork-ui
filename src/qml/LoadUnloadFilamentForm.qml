@@ -88,6 +88,7 @@ LoggingItem {
         var bay = ((bayID == 1) ? bay1 : bay2)
         if(bay.isMaterialValid) {
             isMaterialValid = true
+            checkForABSR(bayID)
             return true
         }
         else if(bay.isUnknownMaterial) {

@@ -133,11 +133,7 @@ Item {
                 if(bot.machineType == MachineType.Fire) {
                     ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf"]
                 } else {
-                    if (bot.extruderASubtype < 2) {
-                        ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf", "abs", "asa", "pc-abs", "pc-abs-fr"]
-                    } else {
-                        ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf", "abs", "asa", "pc-abs", "pc-abs-fr", "abs-wss1"]
-                    }
+                    ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf", "abs", "asa", "pc-abs", "pc-abs-fr", "abs-wss1"]
                 }
                 break;
             default:
