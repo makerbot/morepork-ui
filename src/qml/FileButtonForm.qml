@@ -149,7 +149,7 @@ Button {
     }
 
     function logClick() {
-        console.log("fileButton: [" + filenameText.text + "] clicked")
+        console.info("fileButton: [" + filenameText.text + "] clicked")
     }
 
 }

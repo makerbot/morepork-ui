@@ -95,7 +95,7 @@ Item {
         source: "qrc:/img/alert.png"
         visible: {
             if(filamentBayID == 1 &&
-               materialPage.bay1.filamentMaterialName.toLowerCase() == print_model_material ||
+               materialPage.bay1.filamentMaterial == print_model_material ||
                materialPage.bay1.usingExperimentalExtruder) {
                 // Disable material quantity check before print for now
                 // until the spool quantity reading becomes reliable
@@ -103,7 +103,7 @@ Item {
                 false
             }
             else if(filamentBayID == 2 &&
-                    materialPage.bay2.filamentMaterialName.toLowerCase() == print_support_material) {
+                    materialPage.bay2.filamentMaterial == print_support_material) {
                 // Disable material quantity check before print for now
                 // until the spool quantity reading becomes reliable
                 // && materialPage.bay2.filamentQuantity > materialRequired) {
@@ -133,7 +133,7 @@ Item {
             text: {
                 if(isLabsMaterial) {
                     qsTr("NOT USING BAY %1").arg(filamentBayID)
-                } else if(isSpoolPresent) {
+                } else if(isSpoolPresent || !bot.hasFilamentBay) {
                     materialName
                 } else {
                     qsTr("BAY %1").arg(filamentBayID)
@@ -191,7 +191,7 @@ Item {
             font.pixelSize: 18
             color: "#cbcbcb"
             lineHeight: 1.3
-            visible: !isSpoolPresent || isLabsMaterial
+            visible: bot.hasFilamentBay && (!isSpoolPresent || isLabsMaterial)
         }
 
         Text {

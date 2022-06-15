@@ -52,7 +52,7 @@ Button {
     }
 
     function logClick() {
-        console.log("MPB [[@]" + buttonText.text + "] clicked")
+        console.info("MPB [[@]" + buttonText.text + "] clicked")
     }
 
 }

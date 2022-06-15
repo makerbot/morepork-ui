@@ -41,6 +41,6 @@ Button {
     }
 
     function logClick() {
-        console.log("ButtonRoundPrintIcon " + text + " clicked")
+        console.info("ButtonRoundPrintIcon " + text + " clicked")
     }
 }

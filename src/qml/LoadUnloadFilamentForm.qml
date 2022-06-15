@@ -451,7 +451,11 @@ LoggingItem {
             PropertyChanges {
                 target: main_instruction_text
                 text: {
-                    qsTr("%1 DETECTED").arg(materialName)
+                    if (bot.hasFilamentBay) {
+                        qsTr("%1 DETECTED").arg(materialName)
+                    } else {
+                        qsTr("LOADING FILAMENT")
+                    }
                 }
             }
 

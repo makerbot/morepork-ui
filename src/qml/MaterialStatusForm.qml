@@ -33,8 +33,9 @@ Item {
                     text: {
                         if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
                             filamentMaterialName.toUpperCase()
-                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) && bot.loadedFilaments[filamentBayID - 1] != "None") {
-                            (storage.updateMaterialNames(bot.loadedFilaments[filamentBayID-1])).toUpperCase()
+                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) &&
+                                bot.loadedMaterials[filamentBayID - 1] != "unknown") {
+                            bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
                         } else {
                             qsTr("NOT DETECTED")
                         }
@@ -66,7 +67,7 @@ Item {
                            bot.process.stateType == ProcessStateType.Paused &&
                            !extruderFilamentPresent &&
                            !spoolPresent &&
-                           filamentMaterialName.toLowerCase() != printMaterialName) {
+                           filamentMaterial != printMaterial) {
                             qsTr("INSERT %1 TO CONTINUE").arg(printMaterialName)
                         } else if(spoolPresent) {
                             filamentColorName.toUpperCase()

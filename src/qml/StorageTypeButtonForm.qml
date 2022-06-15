@@ -147,7 +147,7 @@ Button {
     }
 
     function uiLogSTBtn() {
-        console.log("STB [=" + storageName + "=] clicked")
+        console.info("STB [=" + storageName + "=] clicked")
     }
 
 }

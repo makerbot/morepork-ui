@@ -81,7 +81,7 @@ Button {
     }
 
     function uiLogBtn() {
-        console.log("MB [=" + buttonText.text + "=] clicked")
+        console.info("MB [=" + buttonText.text + "=] clicked")
     }
 
 }

@@ -343,12 +343,6 @@ class MoreporkStorage : public QObject {
             const MoreporkStorage::StorageFileType type);
     void setMachinePid();
 
-    // Helper function to change internal material names (used
-    // throughout fw/toolpath) to user facing (marketing) names
-    // displayed on the printer UI. All comparisons on UI happen
-    // with marketing names for simplicity.
-    Q_INVOKABLE QString updateMaterialNames(QString material);
-
     Q_INVOKABLE void getTestPrint(const QString test_print_dir,
                                   const QString test_print_name);
 

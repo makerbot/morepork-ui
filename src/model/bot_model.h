@@ -112,6 +112,11 @@ class BotModel : public BaseModel {
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
 
+    // Helper function to change material API names (used for all
+    // compatibility checks) to user facing (marketing) names
+    // for display use only.
+    Q_INVOKABLE QString getMaterialName(QString material);
+
   private:
     Q_OBJECT
     SUBMODEL(NetModel, net)
@@ -177,7 +182,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
     MODEL_PROP(bool, hasFilamentBay, false)
-    MODEL_PROP(QStringList, loadedFilaments, {"None"})
+    MODEL_PROP(QStringList, loadedMaterials, {"unknown", "unknown"})
+    MODEL_PROP(QStringList, loadedMaterialNames, {"UNKNOWN", "UNKNOWN"})
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)
@@ -216,8 +222,10 @@ class BotModel : public BaseModel {
 
     // TODO(shirley) Should probably convert to string when mapping of codes to
     // filament type names is available
-    MODEL_PROP(int, spoolAMaterial, 0)
-    MODEL_PROP(int, spoolBMaterial, 0)
+    MODEL_PROP(QString, spoolAMaterial, "unknown")
+    MODEL_PROP(QString, spoolBMaterial, "unknown")
+    MODEL_PROP(QString, spoolAMaterialName, "UNKNOWN")
+    MODEL_PROP(QString, spoolBMaterialName, "UNKNOWN")
     MODEL_PROP(int, spoolAManufacturingDate, 0)
     MODEL_PROP(int, spoolBManufacturingDate, 0)
     MODEL_PROP(int, spoolAChecksum, 0)

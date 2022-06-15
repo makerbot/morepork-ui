@@ -10,7 +10,7 @@ Button {
     enabled: !(currentLocale == localeCode)
 
     onClicked: {
-        console.log("[=" + languageName + "=] clicked")
+        console.info("[=" + languageName + "=] clicked")
         itemSelectLanguage.loadingIcon.visible = true
         delay(500, function() {
             translate.selectLanguage(localeCode);

@@ -28,7 +28,7 @@ ListView {
         }
 
         function uiLogClBtn() {
-            console.log("MLB [=" + materialNameText + "=] clicked")
+            console.info("MLB [=" + materialNameText + "=] clicked")
         }
     }
     footer:
