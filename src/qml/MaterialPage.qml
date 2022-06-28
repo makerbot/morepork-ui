@@ -119,7 +119,7 @@ MaterialPageForm {
         var current_mat = (bayID == 1 ? bay1.filamentMaterial :
                                 bay2.filamentMaterial)
         var materials = ["tpu", "nylon-cf", "nylon12-cf"]
-        return (materials.indexOf(current_mat) >= 0)
+        return (materials.indexOf(current_mat) >= 0) && bot.hasFilamentBay
     }
 
     function shouldUserAssistPurging(bayID) {
