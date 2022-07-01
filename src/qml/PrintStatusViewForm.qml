@@ -68,7 +68,7 @@ Item {
             doneByDayString = qsTr("DONE TODAY BY")
         }
 
-        doneByTimeString = endTime.toLocaleTimeString(Qt.locale().name)
+        doneByTimeString = endTime.toLocaleTimeString(Qt.locale(),"hh:mm")
     }
 
     enum SwipeIndex {
@@ -598,177 +598,211 @@ Item {
                     smooth: false
                 }
 
-                RowLayout {
-                    id: rowLayout2
+                ColumnLayout {
+                    id: column_printer_info
                     width: 100
                     height: 100
                     smooth: false
-                    spacing: 45
+                    spacing: 10
 
-                    ColumnLayout {
-                        id: columnLayout3
+
+                    RowLayout {
+                        id: row_extruder_info
                         width: 100
                         height: 100
                         smooth: false
-                        spacing: 10
+                        spacing: 35
 
-                        Text {
-                            id: extruder1_temp_label
-                            color: "#cbcbcb"
-                            text: qsTr("EX 1 TEMP")
-                            antialiasing: false
+                        ColumnLayout {
+                            id: column_labels_1
+                            width: 100
+                            height: 100
                             smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
+                            spacing: 10
+
+                            Text {
+                                id: extruder1_temp_label
+                                color: "#cbcbcb"
+                                text: qsTr("EX 1 TEMP")
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Light
+                                font.letterSpacing: 3
+                                font.wordSpacing: 2
+                            }
+
+                            Text {
+                                id: extruder2_temp_label
+                                color: "#cbcbcb"
+                                text: qsTr("EX 2 TEMP")
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Light
+                                font.letterSpacing: 3
+                                font.wordSpacing: 2
+                            }
+
+                            Text {
+                                id: extruder1_life_label
+                                color: "#cbcbcb"
+                                text: qsTr("EX 1 LIFE")
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Light
+                                font.letterSpacing: 3
+                                font.wordSpacing: 2
+                            }
+
+                            Text {
+                                id: extruder2_life_label
+                                color: "#cbcbcb"
+                                text: qsTr("EX 2 LIFE")
+                                antialiasing: false
+                                smooth: false
+                                font.pixelSize: 18
+                                font.family: defaultFont.name
+                                font.weight: Font.Light
+                                font.letterSpacing: 3
+                                font.wordSpacing: 2
+                            }
                         }
 
-                        Text {
-                            id: extruder2_temp_label
-                            color: "#cbcbcb"
-                            text: qsTr("EX 2 TEMP")
-                            antialiasing: false
+                        ColumnLayout {
+                            id: column_text_1
+                            width: 100
+                            height: 100
                             smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
-                        }
+                            spacing: 10
 
-                        Text {
-                            id: extruder1_life_label
-                            color: "#cbcbcb"
-                            text: qsTr("EX 1 LIFE")
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
-                        }
+                            Text {
+                                id: extruder1_temp_text
+                                color: "#ffffff"
+                                text: qsTr("%1C").arg(bot.extruderACurrentTemp)
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                            }
 
-                        Text {
-                            id: extruder2_life_label
-                            color: "#cbcbcb"
-                            text: qsTr("EX 2 LIFE")
-                            antialiasing: false
-                            smooth: false
-                            font.pixelSize: 18
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
-                        }
+                            Text {
+                                id: extruder2_temp_text
+                                color: "#ffffff"
+                                text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                            }
 
-                        Text {
-                            id: buildplane_temp_label
-                            color: "#cbcbcb"
-                            text: qsTr("CHAMBER TEMP. (BUILD PLANE)")
-                            antialiasing: false
-                            smooth: false
-                            font.pixelSize: 14
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 1
-                        }
+                            Text {
+                                id: extruder1_life_text
+                                color: "#ffffff"
+                                text: qsTr("%1mm").arg(extruderAExtrusionDistance)
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                            }
 
-                        Text {
-                            id: hbp_temp_label
-                            color: "#cbcbcb"
-                            text: qsTr("HEATED BP TEMP")
-                            antialiasing: false
-                            smooth: false
-                            font.pixelSize: 18
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.wordSpacing: 2
-                            visible: bot.machineType == MachineType.Magma
+                            Text {
+                                id: extruder2_life_text
+                                color: "#ffffff"
+                                text: qsTr("%1mm").arg(extruderBExtrusionDistance)
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                            }
                         }
                     }
 
-                    ColumnLayout {
-                        id: columnLayout4
+                    RowLayout {
+                        id: row_buildplane_info
                         width: 100
                         height: 100
                         smooth: false
-                        spacing: 10
+                        spacing: 18
 
-                        Text {
-                            id: extruder1_temp_text
-                            color: "#ffffff"
-                            text: qsTr("%1C").arg(bot.extruderACurrentTemp)
-                            antialiasing: false
+
+                        ColumnLayout {
+                            id: column_labels_2
+                            width: 100
+                            height: 100
                             smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
+                            spacing: 10
+
+                            Text {
+                                id: buildplane_temp_label
+                                color: "#cbcbcb"
+                                text: qsTr("CHAMBER TEMP. (BUILD PLANE)")
+                                antialiasing: false
+                                smooth: false
+                                font.pixelSize: 16
+                                font.family: defaultFont.name
+                                font.weight: Font.Light
+                                font.letterSpacing: 1
+                            }
+
+                            Text {
+                                id: hbp_temp_label
+                                color: "#cbcbcb"
+                                text: qsTr("HEATED BP TEMP")
+                                antialiasing: false
+                                smooth: false
+                                font.pixelSize: 18
+                                font.family: defaultFont.name
+                                font.weight: Font.Light
+                                font.letterSpacing: 3
+                                font.wordSpacing: 2
+                                visible: bot.machineType == MachineType.Magma
+                            }
                         }
 
-                        Text {
-                            id: extruder2_temp_text
-                            color: "#ffffff"
-                            text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
-                            antialiasing: false
+                        ColumnLayout {
+                            id: column_text_2
+                            width: 100
+                            height: 100
                             smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                        }
+                            spacing: 10
 
-                        Text {
-                            id: extruder1_life_text
-                            color: "#ffffff"
-                            text: qsTr("%1mm").arg(extruderAExtrusionDistance)
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                        }
+                            Text {
+                                id: buildplane_temp_text
+                                color: "#ffffff"
+                                text: qsTr("%1C").arg(bot.buildplaneCurrentTemp)
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                            }
 
-                        Text {
-                            id: extruder2_life_text
-                            color: "#ffffff"
-                            text: qsTr("%1mm").arg(extruderBExtrusionDistance)
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                        }
-
-                        Text {
-                            id: buildplane_temp_text
-                            color: "#ffffff"
-                            text: qsTr("%1C").arg(bot.buildplaneCurrentTemp)
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                        }
-
-                        Text {
-                            id: hbp_temp_text
-                            color: "#ffffff"
-                            text: qsTr("%1C").arg(bot.hbpCurrentTemp)
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            visible: bot.machineType == MachineType.Magma
+                            Text {
+                                id: hbp_temp_text
+                                color: "#ffffff"
+                                text: qsTr("%1C").arg(bot.hbpCurrentTemp)
+                                antialiasing: false
+                                smooth: false
+                                font.family: defaultFont.name
+                                font.pixelSize: 18
+                                font.weight: Font.Bold
+                                font.letterSpacing: 3
+                                visible: bot.machineType == MachineType.Magma
+                            }
                         }
                     }
                 }
@@ -787,6 +821,7 @@ Item {
                 id: columnLayout_page3
                 smooth: false
                 spacing: 10
+                width: page3.width - 80
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -794,6 +829,7 @@ Item {
                     id: done_by_label0
                     color: "#cbcbcb"
                     text: doneByDayString
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -801,24 +837,28 @@ Item {
                     font.pixelSize: 15
                     font.weight: Font.Light
                     font.letterSpacing: 3
+                    elide: Text.ElideMiddle
                 }
 
                 Text {
                     id: end_time_text
                     color: "#ffffff"
                     text: doneByTimeString
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     font.pixelSize: 145
                     font.family: defaultFont.name
                     font.weight: Font.Light
                     font.letterSpacing: 3
+                    elide: Text.ElideMiddle
                 }
 
                 Text {
                     id: printer_name_is_printing_text
                     color: "#cbcbcb"
                     text: qsTr("%1 IS PRINTING").arg(printerName)
+                    horizontalAlignment: Text.AlignHCenter
                     antialiasing: false
                     smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -826,6 +866,7 @@ Item {
                     font.pixelSize: 15
                     font.weight: Font.Light
                     font.letterSpacing: 3
+                    elide: Text.ElideMiddle
                 }
 
                 Text {
@@ -840,7 +881,6 @@ Item {
                     font.pixelSize: 15
                     font.weight: Font.Bold
                     font.letterSpacing: 3
-                    Layout.preferredWidth: page3.width - 80
                     elide: Text.ElideMiddle
                 }
             }

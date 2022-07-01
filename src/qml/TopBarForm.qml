@@ -434,6 +434,7 @@ Item {
                 font.weight: Font.Light
                 font.pixelSize: 22
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: -20
                 anchors.verticalCenter: parent.verticalCenter
             }
 
