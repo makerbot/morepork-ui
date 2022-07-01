@@ -56,6 +56,13 @@ if(${CMAKE_CROSSCOMPILING} OR ${QT_CREATOR_BUILD})
     endif()
     add_subdirectory(src)
     add_subdirectory(settings)
+else()
+    enable_testing()
+    find_package(PythonInterp REQUIRED)
+    add_test(
+        NAME test_prints_check
+        COMMAND "${PYTHON_EXECUTABLE}"
+            "${CMAKE_SOURCE_DIR}/test_prints/check_prints.py")
 endif()
 
 if(NOT ${QT_CREATOR_BUILD})
