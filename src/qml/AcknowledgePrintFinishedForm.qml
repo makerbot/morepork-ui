@@ -180,13 +180,13 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: done_button
-                button_text.text: qsTr("SKIP")
+                target: buttonContainerPrintCancelled
+                visible: false
             }
 
             PropertyChanges {
-                target: buttonContainerPrintCancelled
-                visible: false
+                target: done_button
+                button_text.text: qsTr("SKIP")
             }
         },
         State {
@@ -200,12 +200,6 @@ LoggingItem {
             when: bot.process.stateType == ProcessStateType.Failed
 
             PropertyChanges {
-                target: done_button
-                button_text.text: qsTr("DONE")
-                border.width: 2
-            }
-
-            PropertyChanges {
                 target: titleText
                 visible: false
             }
@@ -217,8 +211,39 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: feedbackButtons
+                visible: false
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCancelled
+                visible: false
+            }
+
+            PropertyChanges {
+                target: done_button
+                button_text.text: qsTr("DONE")
+                border.width: 2
+            }
+
+            PropertyChanges {
                 target: element
                 height: 50
+            }
+        },
+        State {
+            name: "print_cancelled"
+            when: bot.process.stateType == ProcessStateType.Cancelled
+
+            PropertyChanges {
+                target: titleText
+                text: qsTr("WHY WAS THIS PRINT CANCELLED?")
+                font.pixelSize: 16
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCompleted
+                visible: false
             }
 
             PropertyChanges {
@@ -228,22 +253,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: buttonContainerPrintCancelled
-                visible: false
-            }
-        },
-        State {
-            name: "print_cancelled"
-            when: bot.process.stateType == ProcessStateType.Cancelled
-
-            PropertyChanges {
-                target: buttonContainerPrintCompleted
-                visible: false
-            }
-
-            PropertyChanges {
-                target: titleText
-                text: qsTr("WHY WAS THIS PRINT CANCELLED?")
-                font.pixelSize: 16
+                visible: true
             }
         }
     ]
