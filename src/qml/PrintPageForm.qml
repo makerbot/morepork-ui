@@ -178,8 +178,8 @@ Item {
         file_name = file.fileBaseName
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
-        print_model_material = file.materialNameA
-        print_support_material = file.materialNameB
+        print_model_material = file.materialA
+        print_support_material = file.materialB
         uses_support = file.usesSupport ? "YES" : "NO"
         uses_raft = file.usesRaft ? "YES" : "NO"
         model_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
@@ -551,21 +551,22 @@ Item {
                                             (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
                     fileMaterial.text: {
                         if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
-                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                            bot.getMaterialName(model.modelData.materialA) + "+" +
+                            bot.getMaterialName(model.modelData.materialB)
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
-                            model.modelData.materialNameA
+                            bot.getMaterialName(model.modelData.materialA)
                         }
                     }
                     materialError.visible: {
                         if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
                             materialPage.bay1.usingExperimentalExtruder ?
-                                (model.modelData.materialNameB != materialPage.bay2.filamentMaterial) :
-                                (model.modelData.materialNameA != materialPage.bay1.filamentMaterial ||
-                                 model.modelData.materialNameB != materialPage.bay2.filamentMaterial)
+                                (model.modelData.materialB != materialPage.bay2.filamentMaterial) :
+                                (model.modelData.materialA != materialPage.bay1.filamentMaterial ||
+                                 model.modelData.materialB != materialPage.bay2.filamentMaterial)
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
                             materialPage.bay1.usingExperimentalExtruder ?
                                     false :
-                                    model.modelData.materialNameA != materialPage.bay1.filamentMaterial
+                                    model.modelData.materialA != materialPage.bay1.filamentMaterial
                         }
 
                     }
@@ -687,7 +688,18 @@ Item {
                         }
                     }
 
-                    materialError.visible: false
+                    materialError.visible: {
+                        if (metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1]) {
+                            materialPage.bay1.usingExperimentalExtruder ?
+                                (metaData['materials'][1] != materialPage.bay2.filamentMaterial) :
+                                (metaData['materials'][0] != materialPage.bay1.filamentMaterial ||
+                                 metaData['materials'][1] != materialPage.bay2.filamentMaterial)
+                        } else if (metaData['extrusion_distances_mm'][0] && !metaData['extrusion_distances_mm'][1]) {
+                            materialPage.bay1.usingExperimentalExtruder ?
+                                    false :
+                                    metaData['materials'][0] != materialPage.bay1.filamentMaterial
+                        }
+                    }
                     onClicked: {
                         file_name = model.modelData.fileName
                         print_job_id = model.modelData.jobId
