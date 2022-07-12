@@ -72,8 +72,8 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(float timeEstimateSec READ timeEstimateSec NOTIFY fileInfoChanged)
   Q_PROPERTY(bool usesSupport READ usesSupport NOTIFY fileInfoChanged)
   Q_PROPERTY(bool usesRaft READ usesRaft NOTIFY fileInfoChanged)
-  Q_PROPERTY(QString materialNameA READ materialNameA NOTIFY fileInfoChanged)
-  Q_PROPERTY(QString materialNameB READ materialNameB NOTIFY fileInfoChanged)
+  Q_PROPERTY(QString materialA READ materialA NOTIFY fileInfoChanged)
+  Q_PROPERTY(QString materialB READ materialB NOTIFY fileInfoChanged)
   Q_PROPERTY(QString slicerName READ slicerName NOTIFY fileInfoChanged)
 
   QString file_name_, file_path_, file_base_name_;
@@ -85,7 +85,7 @@ class PrintFileInfo : public QObject {
       chamber_temp_celcius_, buildplane_temp_celcius_, num_shells_;
   float layer_height_mm_, infill_density_, time_estimate_sec_;
   bool uses_support_, uses_raft_;
-  QString material_name_a_, material_name_b_, slicer_name_;
+  QString material_a_, material_b_, slicer_name_;
 
   public:
     //MOREPORK_QML_ENUM
@@ -116,8 +116,8 @@ class PrintFileInfo : public QObject {
                   const float time_estimate_sec = 0.0f,
                   const bool uses_support = false,
                   const bool uses_raft = false,
-                  const QString &material_name_a = "null",
-                  const QString &material_name_b = "null",
+                  const QString &material_a = "null",
+                  const QString &material_b = "null",
                   const QString &slicer_name = "null",
                   QObject *parent = 0) :
                   QObject(parent),
@@ -140,8 +140,8 @@ class PrintFileInfo : public QObject {
                   time_estimate_sec_(time_estimate_sec),
                   uses_support_(uses_support),
                   uses_raft_(uses_raft),
-                  material_name_a_(material_name_a),
-                  material_name_b_(material_name_b),
+                  material_a_(material_a),
+                  material_b_(material_b),
                   slicer_name_(slicer_name) { }
 
     PrintFileInfo(const PrintFileInfo &rvalue) {
@@ -164,8 +164,8 @@ class PrintFileInfo : public QObject {
         time_estimate_sec_ = rvalue.time_estimate_sec_;
         uses_support_ = rvalue.uses_support_;
         uses_raft_ = rvalue.uses_raft_;
-        material_name_a_ = rvalue.material_name_a_;
-        material_name_b_ = rvalue.material_name_b_;
+        material_a_ = rvalue.material_a_;
+        material_b_ = rvalue.material_b_;
         slicer_name_ = rvalue.slicer_name_;
     }
 
@@ -190,8 +190,8 @@ class PrintFileInfo : public QObject {
                 rvalue.time_estimate_sec_,
                 rvalue.uses_support_,
                 rvalue. uses_raft_,
-                rvalue.material_name_a_,
-                rvalue.material_name_b_,
+                rvalue.material_a_,
+                rvalue.material_b_,
                 rvalue.slicer_name_);
         return *temp;
     }
@@ -253,11 +253,11 @@ class PrintFileInfo : public QObject {
     bool usesRaft() const {
         return uses_raft_;
     }
-    QString materialNameA() const {
-        return material_name_a_;
+    QString materialA() const {
+        return material_a_;
     }
-    QString materialNameB() const {
-        return material_name_b_;
+    QString materialB() const {
+        return material_b_;
     }
     QString slicerName() const {
         return slicer_name_;
