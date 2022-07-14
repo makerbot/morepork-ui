@@ -62,6 +62,8 @@ Item {
                     id: materialColor
                     style: TextBody.Base
                     font.weight: Font.Thin
+                    Layout.preferredWidth: parent.width
+                    wrapMode: Text.WordWrap
                     text: {
                         if(printPage.isPrintProcess &&
                            bot.process.stateType == ProcessStateType.Paused &&
