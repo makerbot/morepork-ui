@@ -75,4 +75,13 @@ Button {
             visible: buttonNeedsAction
         }
     }
+
+    Component.onCompleted: {
+        this.onClicked.connect(uiLogBtn)
+    }
+
+    function uiLogBtn() {
+        console.info("MB [=" + buttonText.text + "=] clicked")
+    }
+
 }

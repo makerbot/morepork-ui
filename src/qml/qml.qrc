@@ -160,14 +160,12 @@
         <file>WaitToCoolChamberScreenForm.qml</file>
         <file>KoreaDFSScreen.qml</file>
         <file>KoreaDFSScreenForm.qml</file>
-        <file>ExpExtruderSettings.qml</file>
-        <file>ExpExtruderSettingsForm.qml</file>
-        <file>ExpExtruderMaterialButton.qml</file>
-        <file>ExpExtruderMaterialButtonForm.qml</file>
-        <file>ExpExtruderMaterialSelector.qml</file>
-        <file>ExpExtruderMaterialSelectorForm.qml</file>
-        <file>ExpExtruderTempSelector.qml</file>
-        <file>ExpExtruderTempSelectorForm.qml</file>
+        <file>LoadMaterialSettings.qml</file>
+        <file>LoadMaterialSettingsForm.qml</file>
+        <file>LoadMaterialSelector.qml</file>
+        <file>LoadMaterialSelectorForm.qml</file>
+        <file>CustomTempSelector.qml</file>
+        <file>CustomTempSelectorForm.qml</file>
         <file>ExpExtruderInstructionsScreen.qml</file>
         <file>ExpExtruderInstructionsScreenForm.qml</file>
         <file>DryMaterial.qml</file>
@@ -228,5 +226,34 @@
         <file>FreAuthorizeWithCodeForm.qml</file>
         <file>TestScreen.qml</file>
         <file>TestScreenForm.qml</file>
+        <file>LoggingItem.qml</file>
+        <file>LoggingPopup.qml</file>
+        <file>LoggingSwipeView.qml</file>
+        <file>LoggingMouseArea.qml</file>
+        <file>LoggingMouseAreaForm.qml</file>
+        <file>TextHuge.qml</file>
+        <file>TextHugeForm.qml</file>
+        <file>TextHeadline.qml</file>
+        <file>TextHeadlineForm.qml</file>
+        <file>TextBody.qml</file>
+        <file>TextBodyForm.qml</file>
+        <file>TextSubheader.qml</file>
+        <file>TextSubheaderForm.qml</file>
+        <file>ButtonRectanglePrimary.qml</file>
+        <file>ButtonRectanglePrimaryForm.qml</file>
+        <file>ButtonRoundPrintIcon.qml</file>
+        <file>ButtonRoundPrintIconForm.qml</file>
+        <file>ContentRightSide.qml</file>
+        <file>ContentRightSideForm.qml</file>
+        <file>ButtonRectangleSecondary.qml</file>
+        <file>ButtonRectangleSecondaryForm.qml</file>
+        <file>ButtonRectangleBase.qml</file>
+        <file>ButtonRectangleBaseForm.qml</file>
+        <file>NumberedSteps.qml</file>
+        <file>NumberedStepsForm.qml</file>
+        <file>ExtruderStatus.qml</file>
+        <file>ExtruderStatusForm.qml</file>
+        <file>MaterialStatus.qml</file>
+        <file>MaterialStatusForm.qml</file>
     </qresource>
 </RCC>

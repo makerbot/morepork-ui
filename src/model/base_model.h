@@ -9,8 +9,10 @@
 
 // A Model Property is a Qt property that should only be modified from within
 // the bot model and which notifies on change.  Should be declared in a private
-// section to avoid silently privatizing whatever follows it.
-#define MODEL_PROP(TYPE, NAME, DEFAULT) \
+// section to avoid silently privatizing whatever follows it.  Note that we use
+// variable arguments so that we can pass in a default value that contains one
+// or more commas.
+#define MODEL_PROP(TYPE, NAME, ...) \
   private:\
     Q_PROPERTY(TYPE NAME READ NAME WRITE NAME ## Set RESET NAME ## Reset \
                NOTIFY NAME ## Changed) \
@@ -26,7 +28,7 @@
         } \
     } \
   public: \
-    inline void NAME ## Reset() { NAME ## Set(DEFAULT); } \
+    inline void NAME ## Reset() { NAME ## Set(__VA_ARGS__); } \
   private:
 
 

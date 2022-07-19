@@ -256,10 +256,8 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
     MakerbotFileMetaReader file_meta_reader(kFileInfo);
     if(file_meta_reader.loadMetadata()) {
         auto &meta_data = file_meta_reader.meta_data_;
-        QString material_name_a = updateMaterialNames(
-                QString::fromStdString(meta_data->material[0]));
-        QString material_name_b = updateMaterialNames(
-                QString::fromStdString(meta_data->material[1]));
+        QString material_a = QString::fromStdString(meta_data->material[0]);
+        QString material_b = QString::fromStdString(meta_data->material[1]);
         return
             // e.g. "/tmp/archive.tar.gz"
             new PrintFileInfo(
@@ -285,8 +283,8 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
                   meta_data->duration_s,
                   meta_data->uses_support,
                   meta_data->uses_raft,
-                  material_name_a,
-                  material_name_b,
+                  material_a,
+                  material_b,
                   QString::fromStdString(meta_data->slicer_name));
     } else {
         return
@@ -473,25 +471,4 @@ QString MoreporkStorage::backStackPop(){
 
 void MoreporkStorage::backStackClear(){
   back_dir_stack_.clear();
-}
-
-QString MoreporkStorage::updateMaterialNames(QString name) {
-    if(name == "im-pla") {
-        name = "tough";
-    } else if(name == "pet") {
-        name = "petg";
-    } else if(name == "sr30") {
-        name = "sr-30";
-    } else if(name == "im-pla-esd") {
-        name = "esd";
-    } else if(name == "nylon12-cf") {
-        name = "nylon-12-cf";
-    } else if(name == "wss1") {
-        name = "rapidrinse";
-    } else if(name == "abs-wss1") {
-        name = "abs-r";
-    } else if(name == "generic_model") {
-        name = "unknown";
-    }
-    return name;
 }

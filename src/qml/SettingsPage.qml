@@ -86,18 +86,6 @@ SettingsPageForm {
     }
 
     buttonShutdown.onClicked: {
-        shutdownPopup.left_text.text = qsTr("CANCEL")
-        shutdownPopup.right_text.text = qsTr("SHUT DOWN")
-        shutdownPopup.showButtonBar = true
-        shutdownPopup.showTwoButtons = true
-        shutdownPopup.open();
-    }
-
-    shutdownPopup.left_mouseArea.onClicked: {
-        shutdownPopup.close();
-    }
-
-    shutdownPopup.right_mouseArea.onClicked: {
-        bot.shutdown();
+        shutdownPopup.open()
     }
 }

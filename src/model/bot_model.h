@@ -50,9 +50,11 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
     Q_INVOKABLE virtual void done(QString acknowledge_result);
-    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external,
+            bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void loadFilamentStop();
-    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external,
+            bool whilePrinting, QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void acknowledge_level();
     Q_INVOKABLE virtual void continue_leveling();
@@ -74,6 +76,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void connectWifi(QString path, QString password, QString name);
     Q_INVOKABLE virtual void forgetWifi(QString path);
     Q_INVOKABLE virtual void addMakerbotAccount(QString username, QString makerbot_token);
+    Q_INVOKABLE virtual void pause_touchlog();
+    Q_INVOKABLE virtual void resume_touchlog();
     Q_INVOKABLE virtual void zipLogs(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
@@ -87,6 +91,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void moveAxisToEndstop(QString axis, float distance, float speed);
     Q_INVOKABLE virtual void resetSpoolProperties(const int bay_index);
     Q_INVOKABLE virtual void shutdown();
+    Q_INVOKABLE virtual void reboot();
     Q_INVOKABLE virtual void getToolStats(const int index);
     Q_INVOKABLE virtual void setTimeZone(const QString time_zone);
     Q_INVOKABLE virtual void getCloudServicesInfo();
@@ -103,9 +108,16 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void getAccessoriesStatus();
     Q_INVOKABLE virtual void getFilterHours();
     Q_INVOKABLE virtual void resetFilterHours();
+    Q_INVOKABLE virtual void getExtrudersConfigs();
+    Q_INVOKABLE virtual void writeExtruderEeprom(int index, int address, int data);
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
+
+    // Helper function to change material API names (used for all
+    // compatibility checks) to user facing (marketing) names
+    // for display use only.
+    Q_INVOKABLE QString getMaterialName(QString material);
 
   private:
     Q_OBJECT
@@ -136,6 +148,8 @@ class BotModel : public BaseModel {
     //                properties to it's own sub model.
     MODEL_PROP(ExtruderType, extruderAType, NONE)
     MODEL_PROP(ExtruderType, extruderBType, NONE)
+    MODEL_PROP(int, extruderASubtype, 0)
+    MODEL_PROP(int, extruderBSubtype, 0)
     MODEL_PROP(QString, extruderATypeStr, "mk14")
     MODEL_PROP(QString, extruderBTypeStr, "mk14_s")
     MODEL_PROP(bool, updatingExtruderFirmware, false)
@@ -150,6 +164,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, extruderAToolheadDisconnect, false)
     MODEL_PROP(bool, extruderACalibrated, true)
     MODEL_PROP(bool, extruderAJamDetectionDisabled, false)
+    MODEL_PROP(QStringList, extruderASupportedMaterials, {"None"})
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)
@@ -158,6 +173,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, extruderBErrorCode, 0)
     MODEL_PROP(bool, extruderBToolheadDisconnect, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
+    MODEL_PROP(QStringList, extruderBSupportedMaterials, {"None"})
     MODEL_PROP(bool, extrudersCalibrated, true)
     MODEL_PROP(bool, noFilamentErrorDisabled, false)
     MODEL_PROP(int, chamberCurrentTemp, -999)
@@ -167,6 +183,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
+    MODEL_PROP(bool, hasFilamentBay, false)
+    MODEL_PROP(QStringList, loadedMaterials, {"unknown", "unknown"})
+    MODEL_PROP(QStringList, loadedMaterialNames, {"UNKNOWN", "UNKNOWN"})
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)
@@ -205,8 +224,10 @@ class BotModel : public BaseModel {
 
     // TODO(shirley) Should probably convert to string when mapping of codes to
     // filament type names is available
-    MODEL_PROP(int, spoolAMaterial, 0)
-    MODEL_PROP(int, spoolBMaterial, 0)
+    MODEL_PROP(QString, spoolAMaterial, "unknown")
+    MODEL_PROP(QString, spoolBMaterial, "unknown")
+    MODEL_PROP(QString, spoolAMaterialName, "UNKNOWN")
+    MODEL_PROP(QString, spoolBMaterialName, "UNKNOWN")
     MODEL_PROP(int, spoolAManufacturingDate, 0)
     MODEL_PROP(int, spoolBManufacturingDate, 0)
     MODEL_PROP(int, spoolAChecksum, 0)
@@ -356,7 +377,6 @@ class BotModel : public BaseModel {
 
   signals:
     void firmwareReleaseNotesListChanged();
-
 };
 
 // Make a dummy implementation of the API with all submodels filled in.

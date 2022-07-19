@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.12
 import ProcessStateTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "AcknowledgePrintFinished"
     id: element
     width: 300
     height: 165
@@ -13,13 +14,28 @@ Item {
 
     // Defects template dict. that will sent for all feedback. Even success.
     // Ideally we should be building a list of defects and just sending that.
-    property var print_defects: {"warping_from_buildplate": false,
+    property var print_defects_template: {"warping_from_buildplate": false,
                                  "stringiness": false,
                                  "gaps_in_walls": false,
                                  "bad_layer_alignment": false,
                                  "small_feature_defects": false,
                                  "frequent_extruder_jams": false,
-                                 "other": false}
+                                 "other": false,
+                                 "non_failure_other": false}
+
+    property var defects: ({})
+
+    function updateFeedbackDict(key, selected) {
+        defects[key] = selected
+    }
+
+    function submitFeedbackAndAcknowledge(success) {
+        printFeedbackAcknowledgementPopup.open()
+        printFeedbackAcknowledgementPopup.feedbackGood = success
+        bot.submitPrintFeedback(success,
+                         (success ? print_defects_template : defects))
+        acknowledgePrint()
+    }
 
     Text {
         id: titleText
@@ -35,8 +51,34 @@ Item {
         font.pixelSize: 18
     }
 
+    ColumnLayout {
+        id: buttonContainerPrintCancelled
+        anchors.top: titleText.bottom
+        anchors.topMargin: 20
+        spacing: 20
+
+        ButtonRectangleSecondary {
+            text: qsTr("PRINT FAILURE")
+            logKey: text
+            onClicked: {
+                failureFeedbackSelected = true
+                defects = JSON.parse(JSON.stringify(print_defects_template))
+            }
+        }
+
+        ButtonRectangleSecondary {
+            text: qsTr("OTHER")
+            logKey: text
+            onClicked: {
+                defects = JSON.parse(JSON.stringify(print_defects_template))
+                updateFeedbackDict("non_failure_other", true)
+                submitFeedbackAndAcknowledge(false)
+            }
+        }
+    }
+
     RowLayout {
-        id: buttonContainer
+        id: buttonContainerPrintCompleted
         anchors.top: titleText.bottom
         anchors.topMargin: 20
         spacing: 35
@@ -57,7 +99,7 @@ Item {
                     // This is absolutely uneccessary, if only the analytics guys
                     // don't insist on sending the full defects dict. even for print
                     // success feedback.
-                    failurePrintFeedback.defects = JSON.parse(JSON.stringify(print_defects))
+                    defects = JSON.parse(JSON.stringify(print_defects_template))
                 }
 
                 Image {
@@ -84,10 +126,7 @@ Item {
                 forceButtonWidth: true
 
                 button_mouseArea.onClicked: {
-                    printFeedbackAcknowledgementPopup.open()
-                    printFeedbackAcknowledgementPopup.feedbackGood = true
-                    bot.submitPrintFeedback(true, print_defects)
-                    acknowledgePrint()
+                    submitFeedbackAndAcknowledge(true)
                 }
 
                 Image {
@@ -125,9 +164,24 @@ Item {
                   !bot.process.printFeedbackReported
 
             PropertyChanges {
-                target: buttonContainer
+                target: titleText
+                text: qsTr("DID THE PRINT SUCCEED?")
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCompleted
                 anchors.top: titleText.bottom
                 anchors.topMargin: 20
+            }
+
+            PropertyChanges {
+                target: feedbackButtons
+                visible: true
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCancelled
+                visible: false
             }
 
             PropertyChanges {
@@ -146,30 +200,60 @@ Item {
             when: bot.process.stateType == ProcessStateType.Failed
 
             PropertyChanges {
+                target: titleText
+                visible: false
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCompleted
+                anchors.top: element.top
+                anchors.topMargin: 0
+            }
+
+            PropertyChanges {
+                target: feedbackButtons
+                visible: false
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCancelled
+                visible: false
+            }
+
+            PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("DONE")
                 border.width: 2
             }
 
             PropertyChanges {
-                target: titleText
-                visible: false
-            }
-
-            PropertyChanges {
-                target: buttonContainer
-                anchors.top: element.top
-                anchors.topMargin: 0
-            }
-
-            PropertyChanges {
                 target: element
                 height: 50
+            }
+        },
+        State {
+            name: "print_cancelled"
+            when: bot.process.stateType == ProcessStateType.Cancelled
+
+            PropertyChanges {
+                target: titleText
+                text: qsTr("WHY WAS THIS PRINT CANCELLED?")
+                font.pixelSize: 16
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCompleted
+                visible: false
             }
 
             PropertyChanges {
                 target: feedbackButtons
                 visible: false
+            }
+
+            PropertyChanges {
+                target: buttonContainerPrintCancelled
+                visible: true
             }
         }
     ]

@@ -5,7 +5,6 @@ import QtQuick.Layouts 1.3
 Item {
     id: authorizeAccountPage
     property alias authorizeAccountSwipeView: authorizeAccountSwipeView
-    property alias defaultItem: itemSelectAuthorizeMethod
 
     property alias buttonAuthorizeWithCode: buttonAuthorizeWithCode
     property alias buttonLoginToMakerbotAccount: buttonLoginToMakerbotAccount
@@ -20,36 +19,26 @@ Item {
     smooth: false
     anchors.fill: parent
 
-    enum PageIndex {
+    enum SwipeIndex {
         ChooseAuthMethod,
         AuthorizeWithCode,
         AuthorizeWithCredentials
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: authorizeAccountSwipeView
+        logName: "authorizeAccountSwipeView"
         currentIndex: AuthorizeAccountPage.ChooseAuthMethod
-        smooth: false
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = authorizeAccountSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == AuthorizeAccountPage.ChooseAuthMethod) {
-                // When we swipe to the 0th index of this page set
-                // the current item as the settings page item that
-                // holds this page since we want the back button to
-                // use the settings items altBack()
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == AuthorizeAccountPage.ChooseAuthMethod) {
+                // When swiping to the 0th index of this swipeview set the
+                // settings page item that holds this page as the current
+                // item since we want the back button to use the settings
+                // items' altBack()
                 setCurrentItem(settingsSwipeView.itemAt(SettingsPage.AuthorizeAccountsPage))
-            } else {
-                setCurrentItem(authorizeAccountSwipeView.itemAt(itemToDisplayDefaultIndex))
+                return true
             }
-            authorizeAccountSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            authorizeAccountSwipeView.itemAt(prevIndex).visible = false
         }
 
         // AuthorizeAccountPage.ChooseAuthMethod
@@ -131,6 +120,7 @@ Item {
     // This popup is common for both methods of signing into
     // the printer.
     CustomPopup {
+        popupName: "AuthorizeAccount"
         id: authorizeAccountPopup
         popupWidth: 720
         popupHeight: 305

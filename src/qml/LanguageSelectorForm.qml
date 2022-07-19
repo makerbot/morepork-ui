@@ -9,6 +9,7 @@ Item {
     anchors.fill: parent
 
     property string currentLocale
+    property alias loadingIcon: loadingIcon
 
     Flickable {
         id: flickableSelectLanguage
@@ -86,5 +87,14 @@ Item {
                 localeCode: "es_ES"
             }
         }
+    }
+
+    LoadingIcon {
+        id: loadingIcon
+        anchors.verticalCenterOffset: -30
+        anchors.left: parent.left
+        anchors.leftMargin: 260
+        anchors.verticalCenter: parent.verticalCenter
+        visible: false
     }
 }

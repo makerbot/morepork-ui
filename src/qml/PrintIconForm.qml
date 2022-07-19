@@ -1,7 +1,8 @@
 import QtQuick 2.10
 import ProcessStateTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "PrintIcon"
     id: item1
     width: 250
     height: 265
@@ -32,6 +33,7 @@ Item {
                 "#3183AF"
                 break;
             case ProcessStateType.Failed:
+            case ProcessStateType.Cancelled:
                 "#F79125"
                 break;
             default:
@@ -80,7 +82,8 @@ Item {
                       bot.process.stateType == ProcessStateType.CleaningUp ||
                       bot.process.stateType == ProcessStateType.Done || // Part of cancelling step
                       bot.process.stateType == ProcessStateType.Failed ||
-                      bot.process.stateType == ProcessStateType.Completed)
+                      bot.process.stateType == ProcessStateType.Completed ||
+                      bot.process.stateType == ProcessStateType.Cancelled)
 
             RotationAnimator {
                 target: status_image
@@ -186,7 +189,8 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            MouseArea {
+            LoggingMouseArea {
+                logText: "printing - action_circle: [?action image?]"
                 id: action_mouseArea
                 smooth: false
                 anchors.fill: parent
@@ -304,7 +308,8 @@ Item {
         },
         State {
             name: "print_failed_state"
-            when: bot.process.stateType == ProcessStateType.Failed
+            when: bot.process.stateType == ProcessStateType.Failed ||
+                  bot.process.stateType == ProcessStateType.Cancelled
 
             PropertyChanges {
                 target: loading_or_paused_image

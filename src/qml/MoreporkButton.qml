@@ -46,4 +46,13 @@ Button {
         smooth: false
         antialiasing: false
     }
+
+    Component.onCompleted: {
+        this.onClicked.connect(logClick)
+    }
+
+    function logClick() {
+        console.info("MPB [[@]" + buttonText.text + "] clicked")
+    }
+
 }

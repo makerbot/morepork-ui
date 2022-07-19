@@ -42,6 +42,7 @@ AdvancedSettingsPageForm {
                         bot.forceSyncFile(copyingLogsPopup.logBundlePath)
                     }
                     copyLogsFinishedPopup.succeeded = succeeded;
+                    copyLogsFinishedPopup.errorcode = bot.process.errorCode;
                 } else {
                     copyingLogsPopup.zipLogsInProgress = false;
                 }

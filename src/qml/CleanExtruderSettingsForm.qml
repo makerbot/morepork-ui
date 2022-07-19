@@ -13,7 +13,6 @@ Item {
     height: 440
     smooth: false
 
-    property alias defaultItem: itemCleanExtrudersSelectMaterial
     property alias cleanExtruderMaterialSelectorPage: cleanExtruderMaterialSelectorPage
     property alias cleanExtruderTempSelectorPage: cleanExtruderTempSelectorPage
     property alias cleanExtrudersSelectMaterialSwipeView: cleanExtrudersSelectMaterialSwipeView
@@ -27,35 +26,30 @@ Item {
         {label: "nylon", temperature : 190}
     ]
 
-    SwipeView {
-        id: cleanExtrudersSelectMaterialSwipeView
-        currentIndex: 0
-        smooth: false
-        anchors.fill: parent
-        interactive: false
+    enum SwipeIndex {
+        MaterialSelector,
+        TemperatureSelector
+    }
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = cleanExtrudersSelectMaterialSwipeView.currentIndex
-            cleanExtrudersSelectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            if(itemToDisplayDefaultIndex == 0) {
+    LoggingSwipeView {
+        id: cleanExtrudersSelectMaterialSwipeView
+        logName: "cleanExtrudersSelectMaterialSwipeView"
+        currentIndex: CleanExtruderSettings.MaterialSelector
+
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == 0) {
                 if(bot.process.type == ProcessType.CalibrationProcess) {
                     // Use back button action specific to calibration process UI
-                    setCurrentItem(settingsPage.settingsSwipeView.itemAt(6))
+                    setCurrentItem(settingsPage.settingsSwipeView.itemAt(SettingsPage.CalibrateExtrudersPage))
                 } else {
                     // Use back button action specific to Nozzle cleaning process UI
-                    setCurrentItem(advancedSettingsSwipeView.itemAt(9))
+                    setCurrentItem(advancedSettingsSwipeView.itemAt(AdvancedSettingsPage.CleanExtrudersPage))
                 }
-            } else {
-                setCurrentItem(cleanExtrudersSelectMaterialSwipeView.itemAt(itemToDisplayDefaultIndex))
+                return true
             }
-            cleanExtrudersSelectMaterialSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            cleanExtrudersSelectMaterialSwipeView.itemAt(prevIndex).visible = false
         }
 
-        // cleanExtrudersSelectMaterialSwipeView.index = 0
+        // CleanExtruderSettings.MaterialSelector
         Item {
             id: itemCleanExtrudersSelectMaterial
             smooth: false
@@ -67,7 +61,7 @@ Item {
             }
         }
 
-        // cleanExtrudersSelectMaterialSwipeView.index = 1
+        // CleanExtruderSettings.TemperatureSelector
         Item {
             id: itemCleanExtrudersSelectCustomTemperature
             property var backSwiper: cleanExtrudersSelectMaterialSwipeView

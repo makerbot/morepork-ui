@@ -128,7 +128,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "CopyingFirmware"
         id: copyingFirmwareFilePopup
         width: 800
         height: 480
@@ -210,7 +211,8 @@ Item {
                        anchors.horizontalCenter: parent.horizontalCenter
                    }
 
-                   MouseArea {
+                   LoggingMouseArea {
+                       logText: "copyingFirmwareFilePopup: [" + full_button_text_copy_firmware_popup.text + "]"
                        id: full_button_mouseArea_copy_firmware_popup
                        anchors.fill: parent
                        onPressed: {

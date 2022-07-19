@@ -147,7 +147,7 @@ Item {
         button_mouseArea {
             onClicked: {
                 var temp = 160 + temperatureTumbler.currentIndex*5
-                cleanExtrudersSelectMaterialSwipeView.swipeToItem(0)
+                cleanExtrudersSelectMaterialSwipeView.swipeToItem(CleanExtruderSettings.MaterialSelector)
                 startCleaning([parseInt(temp, 10)])
             }
             enabled: {

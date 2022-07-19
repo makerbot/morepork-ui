@@ -81,7 +81,8 @@ Item {
                         smooth: false
                         source: "qrc:/img/info_icon_small.png"
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "start_print_swipe_view [[info_icon_sml]]"
                             width: 80
                             height: 80
                             anchors.horizontalCenter: parent.horizontalCenter
@@ -430,7 +431,7 @@ Item {
                         Text {
                             id: model_text
                             color: "#ffffff"
-                            text: qsTr("%1 %2").arg(model_mass).arg(print_model_material)
+                            text: qsTr("%1 %2").arg(model_mass).arg(print_model_material_name)
                             antialiasing: false
                             smooth: false
                             font.family: defaultFont.name
@@ -443,7 +444,7 @@ Item {
                         Text {
                             id: support_text
                             color: "#ffffff"
-                            text: qsTr("%1 %2").arg(support_mass).arg(print_support_material)
+                            text: qsTr("%1 %2").arg(support_mass).arg(print_support_material_name)
                             antialiasing: false
                             smooth: false
                             font.family: defaultFont.name
@@ -514,7 +515,8 @@ Item {
                             asynchronous: true
                             loadingSpinnerSize: 48
 
-                            MouseArea {
+                            LoggingMouseArea {
+                                logText: "flickable_print_preview: [[largeThumbnail]]"
                                 anchors.fill: parent
                                 onDoubleClicked: {
                                     flick.contentWidth = 960*0.5

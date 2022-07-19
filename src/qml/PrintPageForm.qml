@@ -12,7 +12,6 @@ Item {
     property string fileName: "unknown.makerbot"
     property string file_name
     property string print_time
-    property string print_material
     property bool model_extruder_used
     property bool support_extruder_used
     property string print_model_material
@@ -26,7 +25,7 @@ Item {
     property int num_shells
     property real layer_height_mm
     property string extruder_temp
-    property string chamber_temp
+    property string buildplane_temp
     property string slicer_name
     property string print_job_id
     property string print_token
@@ -37,7 +36,6 @@ Item {
     property alias sortingDrawer: sortingDrawer
     property alias buttonCancelPrint: printingDrawer.buttonCancelPrint
     property alias buttonPausePrint: printingDrawer.buttonPausePrint
-    property alias defaultItem: itemPrintStorageOpt
     property alias buttonUsbStorage: buttonUsbStorage
     property alias buttonInternalStorage: buttonInternalStorage
     property bool browsingUsbStorage: false
@@ -57,6 +55,12 @@ Item {
             copyingFilePopup.open()
         }
     }
+
+    property string print_model_material_name: bot.getMaterialName(print_model_material)
+    property string print_support_material_name: bot.getMaterialName(print_support_material)
+    property string print_material:
+        (model_extruder_used? print_model_material_name : "") +
+        (support_extruder_used? "+" + print_support_material_name : "")
 
     property bool isFileCopySuccessful: storage.fileCopySucceeded
     property bool internalStorageFull: false
@@ -155,7 +159,7 @@ Item {
                                bot.process.stateType == ProcessStateType.Failed ||
                                bot.process.stateType == ProcessStateType.Cancelling
     onIsPrintDoneChanged: {
-        if(isPrintDone && bot.chamberCurrentTemp > waitToCoolTemperature) {
+        if(isPrintDone && bot.buildplaneCurrentTemp > waitToCoolTemperature) {
             waitToCoolChamber.waitToCoolChamberScreenVisible = true
             waitToCoolChamber.startTimer()
         }
@@ -174,10 +178,8 @@ Item {
         file_name = file.fileBaseName
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
-        print_model_material = file.materialNameA
-        print_support_material = file.materialNameB
-        print_material = !file.extruderUsedB ? file.materialNameA :
-                                               file.materialNameA + "+" + file.materialNameB
+        print_model_material = file.materialA
+        print_support_material = file.materialB
         uses_support = file.usesSupport ? "YES" : "NO"
         uses_raft = file.usesRaft ? "YES" : "NO"
         model_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
@@ -190,7 +192,7 @@ Item {
         num_shells = file.numShells
         extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
                                               file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
-        chamber_temp = file.chamberTempCelcius + "C"
+        buildplane_temp = file.buildplaneTempCelcius + "C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
     }
@@ -208,11 +210,8 @@ Item {
         var printTimeSec = meta['duration_s']
         model_extruder_used = meta['extrusion_distances_mm'][0] > 0 ? true : false
         support_extruder_used = meta['extrusion_distances_mm'][1] > 0 ? true : false
-        print_model_material = storage.updateMaterialNames(meta['materials'][0])
-        print_support_material = storage.updateMaterialNames(meta['materials'][1])
-        print_material = !support_extruder_used ?
-                            print_model_material :
-                            print_model_material + "+" + print_support_material
+        print_model_material = meta['materials'][0]
+        print_support_material = meta['materials'][1]
         model_mass = meta['extrusion_masses_g'][0] < 1000 ?
                         meta['extrusion_masses_g'][0].toFixed(1) + " g" :
                         (meta['extrusion_masses_g'][0] * 0.001).toFixed(1) + " Kg"
@@ -224,7 +223,7 @@ Item {
         extruder_temp = !support_extruder_used ?
                             meta['extruder_temperatures'][0] + "C" :
                             meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
-        chamber_temp = meta['chamber_temperature'] + "C"
+        buildplane_temp = meta['buildplane_target_temperature'] + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
         if(!startPrintMaterialCheck()) {
@@ -251,7 +250,6 @@ Item {
         print_time = ""
         model_extruder_used = false
         support_extruder_used = false
-        print_material = ""
         print_model_material = ""
         print_support_material = ""
         uses_support = ""
@@ -262,7 +260,7 @@ Item {
         supportMaterialRequired = 0.0
         num_shells = ""
         extruder_temp = ""
-        chamber_temp = ""
+        buildplane_temp = ""
         slicer_name = ""
         startPrintWithUnknownMaterials = false
         print_job_id = ""
@@ -341,22 +339,20 @@ Item {
         }
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: printSwipeView
-        smooth: false
+        logName: "printSwipeView"
         currentIndex: PrintPage.BasePage
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = printSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == PrintPage.BasePage) {
+                // When swiping to the 0th index of this swipeview set the
+                // mainSwipeView page item that holds this page as the current
+                // item since we want the back button to use the mainSwipeView
+                // items' altBack()
+                setCurrentItem(mainSwipeView.itemAt(MoreporkUI.PrintPage))
+                return true
             }
-            printSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(printSwipeView.itemAt(itemToDisplayDefaultIndex))
-            printSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            printSwipeView.itemAt(prevIndex).visible = false
         }
 
         // PrintPage.BasePage
@@ -365,28 +361,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: 0
-            property bool hasAltBack: true
             smooth: false
-            visible: false
-
-            function altBack() {
-                if(!inFreStep) {
-                    if(printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
-                        printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
-                        return
-                    }
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                printStatusView.testPrintComplete = false
-                bot.cancel()
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            }
 
             Flickable {
                 id: flickableStorageOpt
@@ -467,8 +442,8 @@ Item {
                 uses_support_: uses_support
                 uses_raft_: uses_raft
                 print_time_: print_time
-                print_model_material_: print_model_material
-                print_support_material_: print_support_material
+                print_model_material_: print_model_material_name
+                print_support_material_: print_support_material_name
                 model_extruder_used_: model_extruder_used
                 support_extruder_used_: support_extruder_used
             }
@@ -576,21 +551,22 @@ Item {
                                             (printTimeHr != 0 ? printTimeHr + "HR " + printTimeMin + "M" : printTimeMin + "M")
                     fileMaterial.text: {
                         if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
-                            model.modelData.materialNameA + "+" + model.modelData.materialNameB
+                            bot.getMaterialName(model.modelData.materialA) + "+" +
+                            bot.getMaterialName(model.modelData.materialB)
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
-                            model.modelData.materialNameA
+                            bot.getMaterialName(model.modelData.materialA)
                         }
                     }
                     materialError.visible: {
                         if (model.modelData.extruderUsedA && model.modelData.extruderUsedB) {
                             materialPage.bay1.usingExperimentalExtruder ?
-                                (model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase()) :
-                                (model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase() ||
-                                 model.modelData.materialNameB != materialPage.bay2.filamentMaterialName.toLowerCase())
+                                (model.modelData.materialB != materialPage.bay2.filamentMaterial) :
+                                (model.modelData.materialA != materialPage.bay1.filamentMaterial ||
+                                 model.modelData.materialB != materialPage.bay2.filamentMaterial)
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
                             materialPage.bay1.usingExperimentalExtruder ?
                                     false :
-                                    model.modelData.materialNameA != materialPage.bay1.filamentMaterialName.toLowerCase()
+                                    model.modelData.materialA != materialPage.bay1.filamentMaterial
                         }
 
                     }
@@ -707,12 +683,23 @@ Item {
                         if(hasMeta) {
                             filePrintTime.text = getTimeInDaysHoursMins(metaData['duration_s'])
                             fileMaterial.text = metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1] ?
-                                                storage.updateMaterialNames(metaData['materials'][0]) + "+" + storage.updateMaterialNames(metaData['materials'][1]) :
-                                                storage.updateMaterialNames(metaData['materials'][0])
+                                                bot.getMaterialName(metaData['materials'][0]) + "+" + bot.getMaterialName(metaData['materials'][1]) :
+                                                bot.getMaterialName(metaData['materials'][0])
                         }
                     }
 
-                    materialError.visible: false
+                    materialError.visible: {
+                        if (metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1]) {
+                            materialPage.bay1.usingExperimentalExtruder ?
+                                (metaData['materials'][1] != materialPage.bay2.filamentMaterial) :
+                                (metaData['materials'][0] != materialPage.bay1.filamentMaterial ||
+                                 metaData['materials'][1] != materialPage.bay2.filamentMaterial)
+                        } else if (metaData['extrusion_distances_mm'][0] && !metaData['extrusion_distances_mm'][1]) {
+                            materialPage.bay1.usingExperimentalExtruder ?
+                                    false :
+                                    metaData['materials'][0] != materialPage.bay1.filamentMaterial
+                        }
+                    }
                     onClicked: {
                         file_name = model.modelData.fileName
                         print_job_id = model.modelData.jobId
@@ -761,6 +748,18 @@ Item {
                                                   function(response) {
                                                       if(response["success"]) {
                                                           metaData = response["meta"]
+                                                          if ("build_plane_temperature" in metaData) {
+                                                              metaData["buildplane_target_temperature"] =
+                                                                  metaData["build_plane_temperature"]
+                                                              delete metaData["build_plane_temperature"]
+                                                          } else {
+                                                              // Backwards compatibility, in case the user somehow lost
+                                                              // the .stl, and only has older .makerbot files on hand.
+                                                              metaData["buildplane_target_temperature"] =
+                                                                  (metaData["chamber_temperature"] > 40) ?
+                                                                  Math.round((metaData["chamber_temperature"] * 1.333) - 13) :
+                                                                  metaData["chamber_temperature"]
+                                                          }
                                                           hasMeta = true
                                                       }
                                                   })
@@ -907,9 +906,11 @@ Item {
                 }
 
                 InfoItem {
-                    id: printInfo_chamberTemperature
-                    labelText: qsTr("Chamber Temperature")
-                    dataText: chamber_temp
+                    id: printInfo_buildplaneTemperature
+                    labelText: qsTr("Chamber Temp. (Build Plane)")
+                    dataText: buildplane_temp
+                    labelElement.font.pixelSize: 16
+                    labelElement.font.letterSpacing: 2
                 }
 
                 InfoItem {
@@ -923,6 +924,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "CopyFileToInternalStorage"
         id: copyingFilePopup
         popupWidth: 720
         popupHeight: 265
@@ -1017,6 +1019,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "NylonCFPrintTip"
         id: nylonCFPrintTipPopup
         popupWidth: 720
         popupHeight: 275
@@ -1069,6 +1072,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "CloudPrintQueue"
         id: printQueuePopup
         popupWidth: 720
         popupHeight: 320
@@ -1208,6 +1212,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "PrintFeedbackAcknowledgement"
         id: printFeedbackAcknowledgementPopup
         popupWidth: 720
         popupHeight: 275

@@ -11,7 +11,6 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
-    property alias defaultItem: itemChooseWifi
     property alias wifiSwipeView: wifiSwipeView
 
     property int wifiError: bot.net.wifiError
@@ -83,20 +82,10 @@ Item {
         EnterPassword
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: wifiSwipeView
-        smooth: false
+        logName: "wifiSwipeView"
         currentIndex: WiFiPage.ChooseWifi
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = wifiSwipeView.currentIndex
-            wifiSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(wifiSwipeView.itemAt(itemToDisplayDefaultIndex))
-            wifiSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            wifiSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // WiFiPage.ChooseWIFI
         Item {
@@ -391,11 +380,20 @@ Item {
                     smooth: false
                     anchors.fill: parent
                 }
+                onVisibleChanged: {
+                    if (visible) {
+                        bot.pause_touchlog()
+                    }
+                    if (!visible) {
+                        bot.resume_touchlog()
+                    }
+                }
             }
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "Wifi"
         id: wifiPopup
         width: 800
         height: 480
@@ -504,7 +502,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "wifi_popup: [_" + left_text.text + "|]"
                         id: left_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -552,7 +551,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "wifi_popup: [|" + right_text.text + "_]"
                         id: right_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -616,7 +616,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "wifi_popup: [_" + full_button_text.text + "_]"
                         id: full_button_mouseArea
                         anchors.fill: parent
                         onPressed: {

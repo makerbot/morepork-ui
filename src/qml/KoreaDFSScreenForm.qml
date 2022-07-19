@@ -9,7 +9,6 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
-    property alias defaultItem: itemEnterPassword
     property alias wifiSwipeView: koreaDFScreenSwipeView
     property alias passwordField: passwordField
 
@@ -18,20 +17,10 @@ Item {
         ChangeDFSSettingPage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: koreaDFScreenSwipeView
-        smooth: false
+        logName: "koreaDFScreenSwipeView"
         currentIndex: 0 // Should never be non zero
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = koreaDFScreenSwipeView.currentIndex
-            koreaDFScreenSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(koreaDFScreenSwipeView.itemAt(itemToDisplayDefaultIndex))
-            koreaDFScreenSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            koreaDFScreenSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // settingsSwipeView.index = 0
         Item {

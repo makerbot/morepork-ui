@@ -11,7 +11,6 @@ Item {
     property alias settingsSwipeView: settingsSwipeView
     property alias advancedSettingsPage: advancedSettingsPage
     property alias cleanAirSettingsPage: cleanAirSettingsPage
-    property alias defaultItem: itemSettings
 
     property alias buttonPrinterInfo: buttonPrinterInfo
 
@@ -51,7 +50,7 @@ Item {
 
     smooth: false
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         PrinterInfoPage,            // 1
         ChangePrinterNamePage,      // 2
@@ -66,23 +65,10 @@ Item {
         CleanAirSettingsPage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: settingsSwipeView
+        logName: "settingsSwipeView"
         currentIndex: SettingsPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = settingsSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            settingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(settingsSwipeView.itemAt(itemToDisplayDefaultIndex))
-            settingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            settingsSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // SettingsPage.BasePage
         Item {
@@ -91,7 +77,6 @@ Item {
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
-            visible: false
 
             Flickable {
                 id: flickableSettings
@@ -513,28 +498,50 @@ Item {
         onTriggered: deauthorizeAccountsPopup.close()
     }
 
-    ModalPopup {
+    CustomPopup {
+        popupName: "Shutdown"
         id: shutdownPopup
+        popupWidth: 715
+        popupHeight: 275
         visible: false
-        popup_contents.contentItem: Item {
-            anchors.fill: parent
-            ColumnLayout {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+        showTwoButtons: true
+        left_button_text: qsTr("BACK")
+        right_button_text: qsTr("CONFIRM")
+        right_button.onClicked: {
+            bot.shutdown()
+        }
 
-                TitleText {
-                    text: qsTr("SHUT DOWN PRINTER")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-                BodyText{
-                    text: qsTr("Are you sure you want to shut down the printer?")
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
+        left_button.onClicked: {
+            shutdownPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_shutdown_popup
+            width: 650
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: 125
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Image {
+                width: 63
+                height: 63
+                source: "qrc:/img/extruder_material_error.png"
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextHeadline {
+                text: qsTr("SHUT DOWN?")
+                font.weight: Font.Bold
+                font.styleName: "Normal"
+                Layout.alignment: Qt.AlignHCenter
             }
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "DeauthorizeAccounts"
         id: deauthorizeAccountsPopup
         width: 800
         height: 480
@@ -631,7 +638,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "deauth_accounts: [_" + remove_accounts_text_deauth_accounts.text + "|]"
                         id: remove_accounts_mouseArea_deauth_accounts
                         anchors.fill: parent
                         onPressed: {
@@ -672,7 +680,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "deauth_accounts: [|" + cancel_text_deauth_accounts.text + "_]"
                         id: cancel_mouseArea_deauth_accounts
                         anchors.fill: parent
                         onPressed: {

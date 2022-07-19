@@ -25,13 +25,30 @@
 #else
 #include "model_impl/kaiten_bot_model.h"
 #include "model_impl/bot_logger.h"
-#define MOREPORK_UI_QML_MAIN "/usr/share/morepork_ui/MoreporkUI.qml"
+#define MOREPORK_UI_QML_MAIN QUrl("qrc:/qml/MoreporkUI.qml")
 #define MOREPORK_BOT_MODEL makeKaitenBotModel("/tmp/kaiten.socket")
 #define MOREPORK_LOGGER makeBotLogger()
 void msgHandler(QtMsgType type,
                 const QMessageLogContext & context,
                 const QString &msg) {
-    LOG(info) << msg.toStdString();
+    boost::log::trivial::severity_level level;
+    switch (type) {
+      case QtDebugMsg:
+        level = boost::log::trivial::debug;
+        break;
+      case QtInfoMsg:
+        level = boost::log::trivial::info;
+        break;
+      case QtWarningMsg:
+        level = boost::log::trivial::warning;
+        break;
+      default:
+        level = boost::log::trivial::error;
+        break;
+    }
+    BOOST_LOG_SEV(Logging::general::get(), level) << "[ui] ["
+        << (context.file?:"") << ":" << context.line << ":"
+        << (context.function?:"") << "]\n" << msg.toStdString();
 }
 #endif
 #include "fre_tracker.h"
@@ -100,7 +117,13 @@ int main(int argc, char ** argv) {
 
     engine.load(MOREPORK_UI_QML_MAIN);
 
-    QObject *rootObject = engine.rootObjects().first();
+    QList<QObject *> rootObjects = engine.rootObjects();
+    if (rootObjects.empty()) {
+        qCritical() << "Failed to find any root objects (QML parse error?)";
+        return -1;
+    }
+
+    QObject *rootObject = rootObjects.first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
     if(argc > 1 && std::string(argv[1]) == "--rotate_display_180")
         if (qmlObject)

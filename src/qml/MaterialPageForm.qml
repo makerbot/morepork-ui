@@ -9,12 +9,13 @@ import MachineTypeEnum 1.0
 
 Item {
     id: materialPage
+    width: 800
+    height: 408
     smooth: false
     property alias bay1: bay1
     property alias bay2: bay2
-    property alias defaultItem: itemFilamentBay
     property alias materialSwipeView: materialSwipeView
-    property alias expExtruderSettingsPage: expExtruderSettingsPage
+    property alias loadMaterialSettingsPage: loadMaterialSettingsPage
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
 
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
@@ -23,16 +24,12 @@ Item {
     property alias continue_mouseArea: continue_mouseArea
     property alias continue_rectangle: continue_rectangle
 
-    property alias noExtruderPopup: noExtruderPopup
-    property int extruderIDnoExtruderPopup
-    property alias attach_extruder_mouseArea_no_extruder_popup: attach_extruder_mouseArea_no_extruder_popup
-    property alias cancel_mouseArea_no_extruder_popup: cancel_mouseArea_no_extruder_popup
-
     property alias materialWarningPopup: materialWarningPopup
     property alias ok_unk_mat_loading_mouseArea: ok_mat_warning_mouseArea
 
     property alias materialPageDrawer: materialPageDrawer
     property bool isLoadFilament: false
+    property int toolIdx: 0
     property bool startLoadUnloadFromUI: false
     property bool isLoadUnloadProcess: bot.process.type == ProcessType.Load ||
                                        bot.process.type == ProcessType.Unload ||
@@ -44,6 +41,8 @@ Item {
     property bool isMaterialMismatch: false
 
     property alias moistureWarningPopup: moistureWarningPopup
+    property alias uncapped1CExtruderAlert: uncapped1CExtruderAlert
+    property bool restartPendingAfterExtruderReprogram: false
 
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess &&
@@ -91,7 +90,7 @@ Item {
     // change, call a function that changes the c++ property --> c++ property
     // is changed by function --> qml property does not change.
     Timer {
-        id: respondExpExtruderTopLoading
+        id: respondTopLoadingWarning
         interval: 100
         onTriggered: {
             bot.acknowledgeMaterial(true)
@@ -100,9 +99,9 @@ Item {
 
     onIsTopLoadingChanged: {
         if(isTopLoading) {
-            if(loadUnloadFilamentProcess.bayID == 1 &&
-               bay1.usingExperimentalExtruder) {
-                respondExpExtruderTopLoading.start()
+            if(isUsingExpExtruder(loadUnloadFilamentProcess.bayID) ||
+                    !bot.hasFilamentBay) {
+                respondTopLoadingWarning.start()
             } else {
                 if(cancelLoadUnloadPopup.opened) {
                     cancelLoadUnloadPopup.close()
@@ -208,26 +207,17 @@ Item {
         id: materialPageDrawer
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,
-        ExpExtruderSettingsPage,
+        LoadMaterialSettingsPage,
         LoadUnloadPage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: materialSwipeView
+        logName: "materialSwipeView"
         currentIndex: MaterialPage.BasePage
-        smooth: false
         anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = materialSwipeView.currentIndex
-            materialSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(materialSwipeView.itemAt(itemToDisplayDefaultIndex))
-            materialSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            materialSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // MaterialPage.BasePage
         Item {
@@ -236,34 +226,32 @@ Item {
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: MoreporkUI.BasePage
             smooth: false
-            visible: true
 
-            FilamentBay {
-                id: bay1
-                visible: true
-                anchors.top: parent.top
-                anchors.topMargin: 25
-                filamentBayID: 1
-            }
-
-            FilamentBay {
-                id: bay2
-                visible: true
-                anchors.top: parent.top
-                anchors.topMargin: 225
-                filamentBayID: 2
+            RowLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 43
+                    FilamentBay {
+                        id: bay1
+                        visible: true
+                        filamentBayID: 1
+                    }
+                    FilamentBay {
+                        id: bay2
+                        visible: true
+                        filamentBayID: 2
+                    }
             }
         }
 
-        // MaterialPage.ExpExtruderSettingsPage
+        // MaterialPage.LoadMaterialSettingsPage
         Item {
-            id: itemExpExtruderSettings
+            id: itemSelectMaterial
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
             visible: false
 
-            ExpExtruderSettings {
-                id: expExtruderSettingsPage
+            LoadMaterialSettings {
+                id: loadMaterialSettingsPage
             }
         }
 
@@ -335,195 +323,20 @@ Item {
                     if(printPage.isPrintProcess) {
                         activeDrawer = printPage.printingDrawer
                         setDrawerState(true)
-                        // Go to print page directly after loading or
-                        // unloading during a print.
-                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                        // Go to print page directly after loading
+                        // but if unloading stay on material page
+                        if(isLoadFilament) {
+                            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+
+                        }
                     }
                 }
             }
         }
     }
 
-    Popup {
-        id: noExtruderPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.CloseOnPressOutside
-        background: Rectangle {
-            id: popupBackgroundDim_no_extruder_popup
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
-        }
-        enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-        }
-        exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-        }
-
-        Rectangle {
-            id: basePopupItem_no_extruder_popup
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: 220
-            radius: 10
-            border.width: 2
-            border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            Rectangle {
-                id: horizontal_divider_no_extruder_popup
-                width: 720
-                height: 2
-                color: "#ffffff"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
-            }
-
-            Rectangle {
-                id: vertical_divider_no_extruder_popup
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Item {
-                id: buttonBar_no_extruder_popup
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-
-                Rectangle {
-                    id: cancel_rectangle_no_extruder_popup
-                    x: 0
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: cancel_text_no_extruder_popup
-                        color: "#ffffff"
-                        text: qsTr("CANCEL")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    MouseArea {
-                        id: cancel_mouseArea_no_extruder_popup
-                        anchors.fill: parent
-                        onPressed: {
-                            cancel_text_no_extruder_popup.color = "#000000"
-                            cancel_rectangle_no_extruder_popup.color = "#ffffff"
-                        }
-                        onReleased: {
-                            cancel_text_no_extruder_popup.color = "#ffffff"
-                            cancel_rectangle_no_extruder_popup.color = "#00000000"
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: attach_extruder_rectangle_no_extruder_popup
-                    x: 360
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: attach_extruder_text_no_extruder_popup
-                        color: "#ffffff"
-                        text: qsTr("ATTACH EXTRUDER")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    MouseArea {
-                        id: attach_extruder_mouseArea_no_extruder_popup
-                        anchors.fill: parent
-                        onPressed: {
-                            attach_extruder_text_no_extruder_popup.color = "#000000"
-                            attach_extruder_rectangle_no_extruder_popup.color = "#ffffff"
-                        }
-                        onReleased: {
-                            attach_extruder_text_no_extruder_popup.color = "#ffffff"
-                            attach_extruder_rectangle_no_extruder_popup.color = "#00000000"
-                        }
-                    }
-                }
-            }
-
-            ColumnLayout {
-                id: columnLayout_no_extruder_popup
-                width: 590
-                height: 100
-                anchors.top: parent.top
-                anchors.topMargin: 25
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: title_text_no_extruder_popup
-                    color: "#cbcbcb"
-                    text: qsTr("NO EXTRUDER DETECTED")
-                    font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                }
-
-                Text {
-                    id: description_text_no_extruder_popup
-                    color: "#cbcbcb"
-                    text: {
-                        qsTr("Please attach a %1 Performance extruder into slot %2").arg(
-                            extruderIDnoExtruderPopup == 1 ? qsTr("Model 1") : qsTr("Support 2")).arg(
-                            extruderIDnoExtruderPopup == 1 ? qsTr("one") : qsTr("two"))
-                    }
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    font.family: defaultFont.name
-                    font.pixelSize: 18
-                    lineHeight: 1.3
-                }
-            }
-        }
-    }
-
-    Popup {
+    LoggingPopup {
+        popupName: "MaterialWarning"
         id: materialWarningPopup
         width: 800
         height: 480
@@ -618,7 +431,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "material_warning_popup: [OK]"
                         id: ok_mat_warning_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -648,8 +462,8 @@ Item {
                         if(isMaterialMismatch) {
                             if (loadUnloadFilamentProcess.currentActiveTool == 1) {
                                 if (bot.machineType != MachineType.Fire &&
-                                        (materialPage.bay1.filamentMaterialName == "ABS" ||
-                                         materialPage.bay1.filamentMaterialName == "ASA")) {
+                                        (materialPage.bay1.filamentMaterial == "abs" ||
+                                         materialPage.bay1.filamentMaterial == "asa")) {
                                     qsTr("UNSUPPORTED MATERIAL DETECTED")
                                 } else {
                                     qsTr("MODEL MATERIAL REQUIRED")
@@ -681,8 +495,8 @@ Item {
                                     // specific material. This warning can be made generic for
                                     // all such materials.
                                     if (bot.machineType != MachineType.Fire &&
-                                        (materialPage.bay1.filamentMaterialName == "ABS" ||
-                                         materialPage.bay1.filamentMaterialName == "ASA")) {
+                                        (materialPage.bay1.filamentMaterial == "abs" ||
+                                         materialPage.bay1.filamentMaterial == "asa")) {
                                         qsTr("Only PLA, Tough and PETG model material are compatible with a Model 1A Extruder. Insert a Model 1XA Extruder to print ABS or ASA.")
                                     } else {
                                         qsTr("Only PLA, Tough and PETG model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
@@ -692,7 +506,7 @@ Item {
                                     qsTr("Only ABS and ASA model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
                                     break;
                                 case ExtruderType.MK14_COMP:
-                                    qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.goodMaterialsList.join(", "))
+                                    qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.goodMaterialsList.map(bot.getMaterialName).join(", "))
                                     break;
                                 }
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
@@ -729,7 +543,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelLoadUnload"
         id: cancelLoadUnloadPopup
         width: 800
         height: 480
@@ -817,7 +632,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[_" + cancel_loading_text.text + "|]"
                         id: cancel_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -853,7 +669,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[|" + continue_loading_text.text + "_]"
                         id: continue_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -914,7 +731,8 @@ Item {
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "WaitUntilUnloaded"
         id: waitUntilUnloadedPopup
         width: 800
         height: 480
@@ -969,6 +787,7 @@ Item {
     }
 
     CustomPopup {
+        popupName: "MoistureSensitiveMaterialAlert"
         id: moistureWarningPopup
         popupWidth: 720
         popupHeight: 320
@@ -1018,6 +837,144 @@ Item {
                 font.letterSpacing: 1
                 lineHeight: 1.3
             }
+        }
+    }
+
+    CustomPopup {
+        popupName: "Uncapped1CExtruderAlert"
+        id: uncapped1CExtruderAlert
+        popupWidth: 750
+        popupHeight: {
+            if(popupState == "reprogrammed" || popupState == "restart_pending") {
+                300
+            } else {
+                400
+            }
+        }
+        property string popupState: "base state"
+        showTwoButtons: true
+        left_button_text: {
+            if(popupState == "base state" || popupState == "reprogrammed") {
+                qsTr("BACK")
+            }
+        }
+        left_button.onClicked: {
+            uncapped1CExtruderAlert.close()
+            if(popupState == "reprogrammed") {
+                restartPendingAfterExtruderReprogram = true
+            }
+        }
+
+        right_button_text: {
+            if(popupState == "base state") {
+                qsTr("CONFIRM")
+            } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
+                qsTr("RESTART NOW")
+            }
+        }
+
+        right_button.onClicked: {
+            if(popupState == "base state") {
+                // 0x00050002 = 327682 (mk14c, subtype 2)
+                bot.writeExtruderEeprom(0, 1, 327682)
+                popupState = "reprogrammed"
+            } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
+                bot.reboot()
+            }
+        }
+
+        onClosed: {
+            popupState = "base state"
+        }
+
+        ColumnLayout {
+            id: columnLayout_uncapped_1c_extruder_popup
+            width: 650
+            height: 320
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 0
+
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                source: "qrc:/img/extruder_material_error.png"
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextHeadline {
+                id: title
+                text: qsTr("NOZZLE CAP INSTALLED?")
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
+                id: description
+                text: qsTr("<b>1C Extruder</b> requires a nozzle cap for " +
+                           "<b>ABS-R</b>. Have you installed the nozzle cap?" +
+                           "<br><br>\"CONFIRM\" will reprogram the extruder. " +
+                           "You will need to restart the printer afterwards." +
+                           "<br><br>Please call our Customer Support team to " +
+                           "have a cap shipped for you to upgrade.")
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            states: [
+                State {
+                    name: "reprogrammed"
+                    when: uncapped1CExtruderAlert.popupState == "reprogrammed"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_complete_small.png"
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("REPROGRAMMED SUCCESSFULLY")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("You will need to restart the printer before using this extruder.")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_uncapped_1c_extruder_popup
+                        height: 200
+                        anchors.topMargin: 80
+                    }
+                },
+                State {
+                    name: "restart_pending"
+                    when: uncapped1CExtruderAlert.popupState == "restart_pending"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/extruder_material_error.png"
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("RESTART REQUIRED")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("You will need to restart the printer before using this extruder.")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_uncapped_1c_extruder_popup
+                        height: 200
+                        anchors.topMargin: 80
+                    }
+                }
+            ]
         }
     }
 }

@@ -53,7 +53,8 @@ Rectangle {
         lineHeight: 1.5
     }
 
-    MouseArea {
+    LoggingMouseArea {
+        logText: "RB [(" + label + ")]"
         id: button_mouseArea
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter

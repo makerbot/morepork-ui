@@ -196,7 +196,7 @@ ApplicationWindow {
     }
 
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
-    
+
     onIsfirmwareUpdateAvailableChanged: {
         if(isfirmwareUpdateAvailable && isFreComplete) {
             if(settingsPage.settingsSwipeView.currentIndex != 3) {
@@ -204,7 +204,7 @@ ApplicationWindow {
             }
         }
     }
-    
+
     property bool skipFirmwareUpdate: false
     property bool viewReleaseNotes: false
 
@@ -239,6 +239,10 @@ ApplicationWindow {
                 topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
         }
+    }
+
+    function setDateTimeTextVisible(state) {
+        topBar.dateTimeText.visible = state
     }
 
     function setCurrentItem(currentItem_) {
@@ -313,7 +317,7 @@ ApplicationWindow {
         hepaErrorAcknowledged = false
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,       // 0
         PrintPage,      // 1
         ExtruderPage,   // 2
@@ -474,18 +478,29 @@ ApplicationWindow {
             z: 2
         }
 
-        Drawer {
-            id: backSwipe
-            width: rootAppWindow.width
-            height: rootAppWindow.height
-            edge: rootItem.rotation == 180 ? Qt.RightEdge : Qt.LeftEdge
-            dim: false
-            opacity: 0
-            interactive: false
-            onOpened: {
-                position = 0
-                goBack()
-                close()
+        Flickable {
+            id: backSwipeHandler
+            z: 1
+            height: 420
+            width: 20
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            flickableDirection: Flickable.HorizontalFlick
+            interactive:  mainSwipeView.currentIndex
+            onFlickStarted: {
+                if (horizontalVelocity < 0) {
+                    returnToBounds()
+                    goBack()
+                }
+            }
+
+            boundsMovement: Flickable.StopAtBounds
+            pressDelay: 0
+
+            rebound: Transition {
+                NumberAnimation {
+                    duration: 0
+                }
             }
         }
 
@@ -509,36 +524,23 @@ ApplicationWindow {
                      !isFreComplete && !inFreStep
         }
 
-        SwipeView {
+        LoggingSwipeView {
             id: mainSwipeView
-            anchors.fill: parent
+            itemWithEnum: rootAppWindow
+            logName: "mainSwipeView"
             anchors.topMargin: topBar.barHeight
-            interactive: false
-            transform: Translate {
-                x: backSwipe.position * mainSwipeView.width * 1.5
-            }
+
             property alias materialPage: materialPage
-            smooth: false
             visible: connectionState == ConnectionState.Connected &&
                      !freScreen.visible
 
-            function swipeToItem(itemToDisplayDefaultIndex) {
-                var prevIndex = mainSwipeView.currentIndex
-                mainSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-                if(itemToDisplayDefaultIndex === MoreporkUI.BasePage) {
-                    mainSwipeView.setCurrentIndex(MoreporkUI.BasePage)
+            function customEntryCheck(swipeToIndex) {
+                if(swipeToIndex === MoreporkUI.BasePage) {
                     topBar.backButton.visible = false
-                    if(!printPage.isPrintProcess) {
-                        disableDrawer()
-                    }
-                }
-                else {
-                    mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem.visible = true
-                    setCurrentItem(mainSwipeView.itemAt(itemToDisplayDefaultIndex).defaultItem)
-                    mainSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
+                    if(!printPage.isPrintProcess) disableDrawer()
+                } else {
                     topBar.backButton.visible = true
                 }
-                mainSwipeView.itemAt(prevIndex).visible = false
             }
 
             // MoreporkUI.BasePage
@@ -576,9 +578,30 @@ ApplicationWindow {
 
             // MoreporkUI.PrintPage
             Item {
-                property alias defaultItem: printPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
+                property bool hasAltBack: true
                 smooth: false
                 visible: false
+
+                function altBack() {
+                    if(!inFreStep) {
+                        if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
+                            printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
+                            return
+                        }
+                        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                    }
+                    else {
+                        skipFreStepPopup.open()
+                    }
+                }
+
+                function skipFreStepAction() {
+                    printPage.printStatusView.testPrintComplete = false
+                    bot.cancel()
+                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                }
                 PrintPage {
                     id: printPage
                     smooth: false
@@ -588,8 +611,8 @@ ApplicationWindow {
 
             // MoreporkUI.ExtruderPage
             Item {
-                property int defaultIndex: 2
-                property alias defaultItem: extruderPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 ExtruderPage {
@@ -600,8 +623,8 @@ ApplicationWindow {
 
             // MoreporkUI.SettingsPage
             Item {
-                property int defaultIndex: 3
-                property alias defaultItem: settingsPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 SettingsPage {
@@ -614,8 +637,8 @@ ApplicationWindow {
 
             // MoreporkUI.InfoPage
             Item {
-                property int defaultIndex: 4
-                property alias defaultItem: infoPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 InfoPage {
@@ -627,38 +650,32 @@ ApplicationWindow {
 
             // MoreporkUI.MaterialPage
             Item {
-                property int defaultIndex: 5
-                property alias defaultItem: materialPage.defaultItem
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
                 MaterialPage {
                     id: materialPage
                     smooth: false
-                    anchors.fill: parent
                 }
             }
 
             // MoreporkUI.AdvancedPage
             Item {
-                property int defaultIndex: 6
-                property alias defaultItem: advancedPage.defaultItem
-                property bool hasAltBack: true
+                property var backSwiper: mainSwipeView
+                property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
                 visible: false
-
-                function altBack() {
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                }
 
                 AdvancedSettingsPage {
                     id: advancedPage
                     anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
-
                 }
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "SkipFreStep"
             id: skipFreStepPopup
             width: 800
             height: 480
@@ -789,7 +806,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buttonBarFre: [" + skip_text.text + "]"
                             id: skip_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -859,7 +877,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buttonBarFre: [" + continue_text.text + "]"
                             id: continue_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1000,8 +1019,9 @@ ApplicationWindow {
                 }
             }
         }
-        
-        Popup {
+
+        LoggingPopup {
+            popupName: "AuthenticatePrinter"
             id: authenticatePrinterPopup
             width: 800
             height: 480
@@ -1186,7 +1206,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "authenticatePrinterPopup: [_" + dismiss_text.text + "|]"
                             id: dismiss_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1232,7 +1253,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "authenticatePrinterPopup: [|" + authenticate_text.text + "_]"
                             id: authenticate_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1259,7 +1281,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "InstallUnsignedFirmware"
             id: installUnsignedFwPopup
             width: 800
             height: 480
@@ -1396,7 +1419,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "installUnsignedFwBasePopupItem: [_" + install_text.text + "|]"
                             id: install_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1438,7 +1462,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "installUnsignedFwBasePopupItem: [|" + cancel_text.text + "_]"
                             id: cancel_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1459,7 +1484,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "FirmwareUpdateNotification"
             id: firmwareUpdatePopup
             width: 800
             height: 480
@@ -1555,7 +1581,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "firmwareUpdatePopup [_" + dismiss_text1.text + "|]"
                             id: notnow_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1602,7 +1629,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "firmwareUpdatePopup [|" + update_text.text + "_]"
                             id: update_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1716,7 +1744,8 @@ ApplicationWindow {
                         font.pixelSize: 18
                         visible: viewReleaseNotes ? false : true
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "firmwareUpdatePopup [" + firmware_description_text2.text + "]"
                             anchors.fill: parent
                             visible: skipFirmwareUpdate ? false : true
                             onClicked: {
@@ -1728,7 +1757,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "ClearBuildPlate"
             id: buildPlateClearPopup
             width: 800
             height: 480
@@ -1820,7 +1850,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buildPlateClearPopup [_" + start_print_text.text + "|]"
                             id: start_print_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1866,7 +1897,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "buildPlateClearPopup [|" + cancel_print_text.text + "_]"
                             id: cancel_print_mouseArea
                             anchors.fill: parent
                             onPressed: {
@@ -1922,6 +1954,7 @@ ApplicationWindow {
         }
 
         ModalPopup {
+            popupName: "ExtruderMismatch"
             // tool_type_correct flag is sent in system notification by
             // kaiten which determines the "correctness" by looking through
             // printer settings.json under 'supported_tool_types' key.
@@ -1995,6 +2028,7 @@ ApplicationWindow {
 
         // Modal Popup for Toolhead Disconnected/FFC Cable Disconnected
         ModalPopup {
+            popupName: "CarriageCommunicationError"
             /* When the toolhead disconnects, the Kaiten's Bot Model's
                extruderXErrorCode the toolhead error disconnect error
                code followed by a space.
@@ -2031,7 +2065,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
             width: 800
             height: 480
@@ -2113,7 +2148,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "extNotCalibratedPopup [_" + calib_text.text + "|]"
                             id: calib_mouseArea
                             anchors.fill: parent
                             onClicked: {
@@ -2154,7 +2190,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "extNotCalibratedPopup [|" + cancel_calib_text.text + "_]"
                             id: cancel_calib_mouseArea
                             anchors.fill: parent
                             onClicked: {
@@ -2202,7 +2239,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "UpdatingExtruderFirmware"
             id: updatingExtruderFirmwarePopup
             width: 800
             height: 480
@@ -2237,7 +2275,7 @@ ApplicationWindow {
                 radius: 10
                 border.width: 2
                 border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter                
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 ColumnLayout {
                     id: columnLayout3
@@ -2319,7 +2357,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "CancelPrint"
             id: cancelPrintPopup
             width: 800
             height: 480
@@ -2407,7 +2446,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "cancelPrintPopup [_" + cancel_text_cancel_print_popup.text + "|]"
                             id: cancel_mouseArea_cancel_print_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2448,7 +2488,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "cancelPrintPopup [|" + continue_text_cancel_print_popup.text + "_]"
                             id: continue_mouseArea_cancel_print_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2502,7 +2543,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "SafeToRemoveUsb"
             id: safeToRemoveUsbPopup
             width: 800
             height: 480
@@ -2577,7 +2619,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "safeToRemoveUsbPopup [" + ok_text_remove_usb_popup.text + "]"
                             id: ok_mouseArea_remove_usb_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2618,7 +2661,8 @@ ApplicationWindow {
             }
         }
 
-        Popup {
+        LoggingPopup {
+            popupName: "StartPrintError"
             id: startPrintErrorsPopup
             width: 800
             height: 480
@@ -2691,7 +2735,8 @@ ApplicationWindow {
                              !printPage.startPrintBuildDoorOpen &&
                              !printPage.startPrintTopLidOpen
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "startPrintErrorsPopup [X]"
                         id: closePopup_start_print_errors_popup
                         anchors.fill: parent
                         onClicked: startPrintErrorsPopup.close()
@@ -2759,7 +2804,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "startPrintErrorsPopup [_" + full_text_start_print_errors_popup.text + "_]"
                             id: full_mouseArea_start_print_errors_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2822,7 +2868,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "startPrintErrorsPopup [_" + left_text_start_print_errors_popup.text + "|]"
                             id: left_mouseArea_start_print_errors_popup
                             anchors.fill: parent
                             onPressed: {
@@ -2903,7 +2950,8 @@ ApplicationWindow {
                             anchors.horizontalCenter: parent.horizontalCenter
                         }
 
-                        MouseArea {
+                        LoggingMouseArea {
+                            logText: "startPrintErrorsPopup [|" + right_text_start_print_errors_popup.text + "_]"
                             id: right_mouseArea_start_print_errors_popup
                             anchors.fill: parent
                             onPressed: {
@@ -3016,13 +3064,13 @@ ApplicationWindow {
                             else if(printPage.startPrintMaterialMismatch) {
                                 (materialPage.bay1.usingExperimentalExtruder ?
                                         qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_support_material.toUpperCase()) :
+                                                    printPage.print_support_material_name) :
                                         qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
-                                                    printPage.print_model_material.toUpperCase()) +
+                                                    printPage.print_model_material_name) +
                                                 (!printPage.support_extruder_used ?
                                                     "." :
                                                     (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_support_material.toUpperCase()))) +
+                                                    printPage.print_support_material_name))) +
                                 qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
                             }
                             else if(printPage.startPrintGenuineSliceUnknownMaterial) {
@@ -3038,10 +3086,10 @@ ApplicationWindow {
                             }
                             else if(printPage.startPrintWithUnknownMaterials) {
                                 qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
-                                     printPage.print_model_material.toUpperCase()) +
+                                     printPage.print_model_material_name) +
                                  (printPage.support_extruder_used ?
                                             qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
-                                                 printPage.print_support_material.toUpperCase()) :
+                                                 printPage.print_support_material_name) :
                                             qsTr(".")) +
                                   qsTr("\nThis printer is optimized for genuine MakerBot materials.")
                             }
@@ -3049,8 +3097,8 @@ ApplicationWindow {
                                     printPage.startPrintWithInsufficientSupportMaterial) {
                                 var insufficientModel = printPage.startPrintWithInsufficientModelMaterial
                                 var insufficientSupport = printPage.startPrintWithInsufficientSupportMaterial
-                                var modelMatStr = printPage.print_model_material.toUpperCase()
-                                var supportMatStr = printPage.print_support_material.toUpperCase()
+                                var modelMatStr = printPage.print_model_material_name
+                                var supportMatStr = printPage.print_support_material_name
                                 qsTr("There may not be enough <b>%1").arg(
                                      (insufficientModel && insufficientSupport) ?
                                          qsTr("%1</b> and <b>%2</b>").arg(modelMatStr).arg(supportMatStr) :
@@ -3079,6 +3127,7 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            popupName: "LabsExtruderDetected"
             id: experimentalExtruderPopup
             popupWidth: 720
             popupHeight: 350
@@ -3115,7 +3164,7 @@ ApplicationWindow {
                     id: description_text_exp_ext_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" + 
+                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
                              "partners and recommended print settings. Material should\n" +
                              "be loaded through the AUX port under the removable cover\n" +
                              "on the top left of the printer. Make sure that the extruders\n" +
@@ -3138,6 +3187,7 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            popupName: "HepaFilterError"
             id: hepaFilterErrorPopup
             popupWidth: 720
             popupHeight: 280
@@ -3199,6 +3249,7 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            popupName: "HepaFilterReset"
             id: hepaFilterResetPopup
             popupWidth: 720
             popupHeight: 280

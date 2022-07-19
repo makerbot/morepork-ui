@@ -143,4 +143,13 @@ Button {
         anchors.verticalCenter: parent.verticalCenter
         source: "qrc:/img/arrow_19pix.png"
     }
+
+    Component.onCompleted: {
+        this.onClicked.connect(logClick)
+    }
+
+    function logClick() {
+        console.info("fileButton: [" + filenameText.text + "] clicked")
+    }
+
 }

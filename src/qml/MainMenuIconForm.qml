@@ -54,7 +54,8 @@ Item {
             font.pixelSize: 22
         }
 
-        MouseArea {
+        LoggingMouseArea {
+            logText: "MMI [[" + textIconDesc.text + "]]"
             id: mouseArea
             anchors.fill: parent
             smooth: false

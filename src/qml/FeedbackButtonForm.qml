@@ -35,10 +35,11 @@ Rectangle {
     Layout.preferredHeight: height
     Layout.preferredWidth: width
 
-    property bool resetState: printStatusPage.failureFeedbackSelected
+    property bool resetState: acknowledgePrintFinished.failureFeedbackSelected
     onResetStateChanged: {
         if(resetState) {
             selected = false
+            acknowledgePrintFinished.updateFeedbackDict(key, selected)
         }
     }
 
@@ -61,7 +62,8 @@ Rectangle {
         lineHeight: 1.5
     }
 
-    MouseArea {
+    LoggingMouseArea {
+        logText: "FeedbackBtn: [(" + label + ")]"
         id: button_mouseArea
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -74,7 +76,7 @@ Rectangle {
         onClicked: {
             if(selected) { selected = false }
             else { selected = true }
-            updateFeedbackDict(key, selected)
+            acknowledgePrintFinished.updateFeedbackDict(key, selected)
         }
     }
 }

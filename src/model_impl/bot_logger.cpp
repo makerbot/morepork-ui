@@ -11,8 +11,8 @@ class BotLogger : public Logger {
 };
 
 Logger * makeBotLogger() {
+    Logging::Initialize("printer", 10, "ui", 10, "ui_telem");
     Logging::ChangeGeneralLevel("info");
-    Logging::Initialize("printer", "ui", "ui_telem");
 
     return dynamic_cast<Logger*>(new BotLogger());
 }

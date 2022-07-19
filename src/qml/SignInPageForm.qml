@@ -8,7 +8,6 @@ Item {
     height: 440
     smooth: false
     antialiasing: false
-    property alias defaultItem: authorizeAccountView
     property alias signInSwipeView: signInSwipeView
 
     property alias addAccountButton: addAccountButton
@@ -22,32 +21,23 @@ Item {
     property alias passwordField: passwordField
     property alias forgotPasswordButton: forgotPasswordButton
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,
         UsernamePage,
         PasswordPage
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: signInSwipeView
-        smooth: false
+        logName: "signInSwipeView"
         currentIndex: SignInPage.BasePage
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = signInSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            // Skip showing the first page when we swipe through to
-            // the second page while in the fre.
-            if(itemToDisplayDefaultIndex == SignInPage.UsernamePage && inFreStep) {
+        function customEntryCheck(swipeToIndex) {
+            // Skip showing the base page when we swipe through directly to
+            // the username page while in the FRE.
+            if(swipeToIndex == SignInPage.UsernamePage && inFreStep) {
                 authorizeAccountView.visible = false
             }
-            signInSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(signInSwipeView.itemAt(itemToDisplayDefaultIndex))
-            signInSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
         }
 
         // SignInPage.BasePage
@@ -368,6 +358,15 @@ Item {
             smooth: false
             anchors.fill: parent
             active: true
+        }
+
+        onVisibleChanged: {
+            if (visible) {
+                bot.pause_touchlog()
+            }
+            if (!visible) {
+                bot.resume_touchlog()
+            }
         }
     }
 }

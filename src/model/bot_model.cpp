@@ -22,6 +22,28 @@ void BotModel::firmwareReleaseNotesListReset() {
     m_firmwareReleaseNotes.clear();
 }
 
+QString BotModel::getMaterialName(QString apiName) {
+    if(apiName == "im-pla") {
+        return "Tough";
+    } else if(apiName == "pet") {
+        return "PETG";
+    } else if(apiName == "sr30") {
+        return "SR-30";
+    } else if(apiName == "im-pla-esd") {
+        return "ESD";
+    } else if(apiName == "nylon12-cf") {
+        return "NYLON-12-CF";
+    } else if(apiName == "wss1") {
+        return "RapidRinse";
+    } else if(apiName == "abs-wss1") {
+        return "ABS-R";
+    } else if(apiName == "generic_model") {
+        return "UNKNOWN";
+    } else {
+        return apiName.toUpper();
+    }
+}
+
 void BotModel::cancel() {
     qDebug() << FL_STRM << "called";
 }
@@ -38,8 +60,8 @@ void BotModel::done(QString acknowledge_result) {
     qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
 }
 
-void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature) {
-    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " external: " << external << " whilePrinting: " << whilePrinting;
+void BotModel::loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature, QString material) {
+    qDebug() << FL_STRM << "called with tool_index: " << kToolIndex << " temperature: " << temperature[kToolIndex] << " material: " << material << " external: " << external << " whilePrinting: " << whilePrinting;
 }
 
 void BotModel::loadFilamentStop() {
@@ -143,6 +165,14 @@ void BotModel::addMakerbotAccount(QString username, QString makerbot_token) {
              << username << "; " <<  makerbot_token;
 }
 
+void BotModel::pause_touchlog() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::resume_touchlog() {
+    qDebug() << FL_STRM << "called";
+}
+
 void BotModel::zipLogs(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
@@ -192,6 +222,10 @@ void BotModel::resetSpoolProperties(const int bay_index) {
 }
 
 void BotModel::shutdown() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::reboot() {
     qDebug() << FL_STRM << "called";
 }
 
@@ -266,6 +300,16 @@ void BotModel::getFilterHours() {
 void BotModel::resetFilterHours() {
     qDebug() << FL_STRM << "called";
 }
+
+void BotModel::getExtrudersConfigs() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::writeExtruderEeprom(int index, int address, int data) {
+    qDebug() << FL_STRM << "called with parameters: " << "index " << index <<
+                " address" << address << " data" << data;
+}
+
 
 class DummyBotModel : public BotModel {
   public:

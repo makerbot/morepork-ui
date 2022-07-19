@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "AssistedLeveling"
     id: assistedLevelingPage
     width: 800
     height: 440
@@ -809,7 +810,8 @@ Item {
         }
     ]
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelAssistedLeveling"
         id: cancelAssistedLevelingPopup
         width: 800
         height: 480
@@ -897,7 +899,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelAssistedLevelingPopup: [" + cancel_leveling_text.text + "]"
                         id: cancel_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -933,7 +936,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelAssistedLevelingPopup: [" + continue_leveling_text.text + "]"
                         id: continue_mouseArea
                         anchors.fill: parent
                         onPressed: {

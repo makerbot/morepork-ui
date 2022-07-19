@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "CleanExtruders"
     id: cleanExtrudersPage
     width: 800
     height: 420
@@ -374,6 +375,7 @@ Item {
     ]
 
     CustomPopup {
+        popupName: "CancelCleanExtruders"
         id: cancelCleanExtrudersPopup
         popupWidth: 720
         popupHeight: 250

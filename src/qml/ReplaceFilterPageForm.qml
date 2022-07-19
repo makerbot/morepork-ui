@@ -12,7 +12,8 @@ Item {
     property alias itemReplaceFilter: itemReplaceFilter
     property alias replace_filter_next_button: replace_filter_next_button
 
-    Item {
+    LoggingItem {
+        itemName: "ReplaceFilterPage.itemReplaceFilter"
         id: itemReplaceFilter
         smooth: false
         visible: true
@@ -95,7 +96,7 @@ Item {
                         bot.resetFilterHours()
                         bot.hepaFilterPrintHours = 0
                         bot.hepaFilterChangeRequired = false
-                        cleanAirSettingsSwipeView.swipeToItem(0)
+                        cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
                         itemReplaceFilter.state = "done"
                     }
                     else {

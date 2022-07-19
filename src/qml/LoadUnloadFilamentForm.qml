@@ -7,7 +7,8 @@ import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "LoadUnloadFilament"
     id: loadUnloadForm
     width: 800
     height: 420
@@ -87,6 +88,7 @@ Item {
         var bay = ((bayID == 1) ? bay1 : bay2)
         if(bay.isMaterialValid) {
             isMaterialValid = true
+            checkForABSR(bayID)
             return true
         }
         else if(bay.isUnknownMaterial) {
@@ -151,17 +153,25 @@ Item {
                     state = "loaded_filament"
                 }
                 else {
-                    // Moving to default state is handled in cnacel
+                    // Moving to default state is handled in cancel
                     // button onClicked action, we just reset the
                     // cancelled flag here.
                     materialChangeCancelled = false
                 }
             }
             else if(bot.process.type == ProcessType.Unload) {
-                // We cant' cancel out of unloading so we don't
-                // need the UI state logic like in the 'Load'
-                // process above.
-                state = "unloaded_filament"
+                // Cancelling Load/Unload ends with 'done' step
+                // but the UI shouldn't go into load/unload
+                // successful state, but to the default state.
+                if(!materialChangeCancelled) {
+                    state = "unloaded_filament"
+                }
+                else {
+                    // Moving to default state is handled in cancel
+                    // button onClicked action, we just reset the
+                    // cancelled flag here.
+                    materialChangeCancelled = false
+                }
             }
             //The case when loading/unloading is stopped by user
             //in the middle of print process. Then the bot goes to
@@ -175,7 +185,7 @@ Item {
                 delayedEnableRetryButton()
                 if(materialChangeCancelled) {
                     state = "base state"
-                    materialSwipeView.swipeToItem(0)
+                    materialSwipeView.swipeToItem(MaterialPage.BasePage)
                     // If cancelled out of load/unload while in print process
                     // enable print drawer to set UI back to printing state.
                     setDrawerState(false)
@@ -183,7 +193,7 @@ Item {
                     setDrawerState(true)
                     if(inFreStep &&
                        bot.process.type == ProcessType.Print) {
-                        mainSwipeView.swipeToItem(1)
+                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                     }
                 }
                 else {
@@ -234,7 +244,7 @@ Item {
         id: snipMaterial
         z: 1
         anchors.verticalCenterOffset: -20
-        visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload
+        visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload && !bayFilamentSwitch
     }
 
     ExpExtruderInstructionsScreen {
@@ -442,7 +452,11 @@ Item {
             PropertyChanges {
                 target: main_instruction_text
                 text: {
-                    qsTr("%1 DETECTED").arg(materialName)
+                    if (bot.hasFilamentBay) {
+                        qsTr("%1 DETECTED").arg(materialName)
+                    } else {
+                        qsTr("LOADING FILAMENT")
+                    }
                 }
             }
 

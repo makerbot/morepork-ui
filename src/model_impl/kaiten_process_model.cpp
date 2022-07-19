@@ -52,6 +52,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         if (kStepStr == "initializing" ||
             kStepStr == "initial_heating" ||
             kStepStr == "heating_chamber" ||
+            kStepStr == "heating_build_platform" ||
             kStepStr == "final_heating" ||
             kStepStr == "cooling" ||
             kStepStr == "cooling_resuming" ||
@@ -73,6 +74,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Failed);
         else if (kStepStr == "completed")
             stateTypeSet(ProcessStateType::Completed);
+        else if (kStepStr == "cancelled")
+            stateTypeSet(ProcessStateType::Cancelled);
         // 'Load' and 'Unload' states (steps)
         // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
         else if (kStepStr == "preheating" ||

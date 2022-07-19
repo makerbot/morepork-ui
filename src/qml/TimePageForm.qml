@@ -7,7 +7,6 @@ Item {
     height: 440
     smooth: false
 
-    property alias defaultItem: itemSetTimeZone
     property alias timeZoneSelectorPage: timeZoneSelectorPage
     property alias timeSelectorPage: timeSelectorPage
     property alias timeSwipeView: timeSwipeView
@@ -18,27 +17,20 @@ Item {
         SetTime
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: timeSwipeView
+        logName: "timeSwipeView"
         currentIndex: TimePage.SetDate
-        smooth: false
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = timeSwipeView.currentIndex
-            timeSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == TimePage.SetDate) {
-                // When we swipe to the 0th index of this page set
-                // the current item as the settings page item that
-                // holds this page since we want the back button to
-                // use the settings item's altBack()
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == TimePage.SetDate) {
+                // When swiping to the 0th index of this swipeview set the
+                // settings page item that holds this page as the current
+                // item since we want the back button to use the settings
+                // items' altBack()
                 setCurrentItem(settingsSwipeView.itemAt(SettingsPage.TimePage))
-            } else {
-                setCurrentItem(timeSwipeView.itemAt(itemToDisplayDefaultIndex))
+                return true
             }
-            timeSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            timeSwipeView.itemAt(prevIndex).visible = false
         }
 
         // TimePage.SetDate

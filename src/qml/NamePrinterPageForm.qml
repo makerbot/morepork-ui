@@ -9,7 +9,6 @@ Item {
     height: 420
     smooth: false
     antialiasing: false
-    property alias defaultItem: itemNamePrinter
     property alias namePrinterSwipeView: namePrinterSwipeView
     property alias nameField: nameField
 
@@ -18,27 +17,20 @@ Item {
         ConfirmName
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: namePrinterSwipeView
-        smooth: false
+        logName: "namePrinterSwipeView"
         currentIndex: NamePrinterPage.EnterName
-        anchors.fill: parent
-        interactive: false
 
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = namePrinterSwipeView.currentIndex
-            namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            if(itemToDisplayDefaultIndex == NamePrinterPage.EnterName) {
-                // When we swipe to the 0th index of this page set
-                // the current item as the settings page item that
-                // holds this page since we want the back button to
-                // use the settings items altBack()
+        function customSetCurrentItem(swipeToIndex) {
+            if(swipeToIndex == NamePrinterPage.EnterName) {
+                // When swiping to the 0th index of this swipeview set the
+                // settings page item that holds this page as the current
+                // item since we want the back button to use the settings
+                // items' altBack()
                 setCurrentItem(settingsSwipeView.itemAt(SettingsPage.ChangePrinterNamePage))
-            } else {
-                setCurrentItem(namePrinterSwipeView.itemAt(itemToDisplayDefaultIndex))
+                return true
             }
-            namePrinterSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            namePrinterSwipeView.itemAt(prevIndex).visible = false
         }
 
         // NamePrinterPage.EnterName

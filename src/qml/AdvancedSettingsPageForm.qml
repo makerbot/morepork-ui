@@ -10,7 +10,6 @@ Item {
     smooth: false
     anchors.fill: parent
 
-    property alias defaultItem: itemAdvancedSettings
     property alias advancedSettingsSwipeView: advancedSettingsSwipeView
 
     property alias buttonTestScreen: buttonTestScreen
@@ -91,7 +90,7 @@ Item {
         }
     }
 
-    enum PageIndex {
+    enum SwipeIndex {
         BasePage,                   // 0
         AdvancedInfoPage,           // 1
         PreheatPage,                // 2
@@ -106,23 +105,10 @@ Item {
         TestScreenPage              // 11
     }
 
-    SwipeView {
+    LoggingSwipeView {
         id: advancedSettingsSwipeView
+        logName: "advancedSettingsSwipeView"
         currentIndex: AdvancedSettingsPage.BasePage
-        smooth: false
-        anchors.fill: parent
-        interactive: false
-
-        function swipeToItem(itemToDisplayDefaultIndex) {
-            var prevIndex = advancedSettingsSwipeView.currentIndex
-            if (prevIndex == itemToDisplayDefaultIndex) {
-                return;
-            }
-            advancedSettingsSwipeView.itemAt(itemToDisplayDefaultIndex).visible = true
-            setCurrentItem(advancedSettingsSwipeView.itemAt(itemToDisplayDefaultIndex))
-            advancedSettingsSwipeView.setCurrentIndex(itemToDisplayDefaultIndex)
-            advancedSettingsSwipeView.itemAt(prevIndex).visible = false
-        }
 
         // AdvancedSettingsPage.BasePage
         Item {
@@ -152,7 +138,6 @@ Item {
             }
 
             smooth: false
-            visible: true
 
             Flickable {
                 id: flickableAdvancedSettings
@@ -282,6 +267,31 @@ Item {
                         id: buttonAnalytics
                         buttonImage.source: "qrc:/img/icon_printer_info.png"
                         buttonText.text: qsTr("ANALYTICS")
+                    }
+
+                    MenuButton {
+                        id: buttonSupportMode
+                        buttonImage.source: "qrc:/img/icon_time_and_date.png"
+                        buttonText.text: "SHOW CURRENT TIME"
+
+                        SlidingSwitch {
+                            id: switchToggleSupportMode
+                            checked: settings.getDateTimeTextEnabled()
+                            enabled: parent.enabled
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 50
+                            onClicked: {
+                                if(switchToggleSupportMode.checked) {
+                                    settings.setDateTimeTextEnabled(true)
+                                    setDateTimeTextVisible(true)
+                                }
+                                else if(!switchToggleSupportMode.checked) {
+                                    settings.setDateTimeTextEnabled(false)
+                                    setDateTimeTextVisible(false)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -537,6 +547,7 @@ Item {
     }
 
     BusyPopup {
+        popupName: "CopyingLogs"
         property bool initialized: false
         property bool zipLogsInProgress: false
         property string logBundlePath: ""
@@ -547,7 +558,9 @@ Item {
     }
 
     ModalPopup {
+        popupName: "CopyingLogsCompleted"
         property bool succeeded: false
+        property int errorcode: 0
 
         id: copyLogsFinishedPopup
         visible: false
@@ -560,10 +573,32 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
+            BodyText{
+                visible: !(copyLogsFinishedPopup.succeeded)
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                color: copyLogsFinishedPopup.succeeded ? "#ffffff" : "#ff0000"
+                font.pixelSize: 18
+
+                text: (copyLogsFinishedPopup.errorcode == 1051) ?
+                      qsTr("\n\n\nINSUFFICIENT USB SPACE - REMOVE FILES AND TRY AGAIN") :
+                      qsTr("\n\n\nERROR CODE: " + copyLogsFinishedPopup.errorcode)
+
+                Image {
+                    id: copyLogsFinishedPopupAlertIcon
+                    height: sourceSize.height / 2
+                    width: sourceSize.width / 2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: -70
+                    source: "qrc:/img/error.png"
+                }
+            }
         }
     }
 
-    Popup {
+    LoggingPopup {
+        popupName: "ResetToFactory"
         id: resetFactoryConfirmPopup
         width: 800
         height: 480
@@ -659,7 +694,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "[" + yes_text.text + "]"
                         id: yes_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -699,7 +735,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "reset_to_factory: [" + no_text.text + "]"
                         id: no_mouseArea
                         anchors.fill: parent
                         onPressed: {

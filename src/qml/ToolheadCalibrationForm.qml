@@ -6,7 +6,8 @@ import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "ToolheadCalibration"
     id: calibrationPage
     width: 800
     height: 440
@@ -493,7 +494,8 @@ Item {
         }
     ]
 
-    Popup {
+    LoggingPopup {
+        popupName: "CancelCalibration"
         id: cancelCalibrationPopup
         width: 800
         height: 480
@@ -585,7 +587,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelCalibrationPopup: [_" + stop_calib_text.text + "|]"
                         id: stop_mouseArea
                         anchors.fill: parent
                         onPressed: {
@@ -623,7 +626,8 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                     }
 
-                    MouseArea {
+                    LoggingMouseArea {
+                        logText: "cancelCalibrationPopup: [|" + continue_calib_text.text + "_]"
                         id: continue_mouseArea
                         anchors.fill: parent
                         onPressed: {

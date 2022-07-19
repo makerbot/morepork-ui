@@ -6,7 +6,8 @@ import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "ErrorScreen"
     width: 800
     height: 440
     smooth: false
@@ -449,7 +450,7 @@ Item {
                     arg((materialPage.shouldUserAssistPurging(bot.process.errorSource+1) ?
                              (qsTr("\n%1 may require manual\nassistance for purging.").arg((((bot.process.errorSource+1) == 1) ?
                                                                                                 materialPage.bay1 :
-                                                                                                materialPage.bay2).printMaterialName.toUpperCase())) :
+                                                                                                materialPage.bay2).printMaterialName)) :
                          ("")))
                 }
             }
@@ -505,14 +506,14 @@ Item {
                 text: {
                     qsTr("The printer has run out of %1").arg(
                         bot.process.filamentBayAOOF ?
-                             printPage.print_model_material.toUpperCase() :
-                             printPage.print_support_material.toUpperCase()) +
+                             printPage.print_model_material_name :
+                             printPage.print_support_material_name) +
                     qsTr(". Open\nmaterial bay %1 and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds.\n").arg(
                         bot.process.filamentBayAOOF ? qsTr("1") : qsTr("2")) +
                     qsTr("Then place a MakerBot %1 spool\nin the bay to load material.").arg(
                         bot.process.filamentBayAOOF ?
-                             printPage.print_model_material.toUpperCase() :
-                             printPage.print_support_material.toUpperCase())
+                             printPage.print_model_material_name :
+                             printPage.print_support_material_name)
                 }
             }
 
@@ -613,8 +614,8 @@ Item {
                             bot.process.extruderAOOF ? qsTr("1") : qsTr("2")) +
                     qsTr(" Then place a\nMakerBot %1 spool in the bay\nto load material.").arg(
                         bot.process.extruderAOOF ?
-                             printPage.print_model_material.toUpperCase() :
-                             printPage.print_support_material.toUpperCase())
+                             printPage.print_model_material_name :
+                             printPage.print_support_material_name)
                 }
             }
 

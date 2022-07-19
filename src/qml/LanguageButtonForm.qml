@@ -7,20 +7,26 @@ Button {
     width: parent.width
     height: 80
     smooth: false
+    enabled: !(currentLocale == localeCode)
 
     onClicked: {
-        translate.selectLanguage(localeCode)
-        settings.setLanguageCode(localeCode)
+        console.info("[=" + languageName + "=] clicked")
+        itemSelectLanguage.loadingIcon.visible = true
+        delay(500, function() {
+            translate.selectLanguage(localeCode);
+            settings.setLanguageCode(localeCode);
 
-        // currentLocale is referenced from the parent page
-        // 'LanguageSelectorForm.qml' which is a bad thing
-        // to do in qml as the refernece will be silently
-        // lost when this child is reused elesewhere and
-        // only fail at runtime.
+            // currentLocale is referenced from the parent page
+            // 'LanguageSelectorForm.qml' which is a bad thing
+            // to do in qml as the refernece will be silently
+            // lost when this child is reused elesewhere and
+            // only fail at runtime.
 
-        // The locale name can only be accessed from
-        // the constructed object
-        currentLocale = Qt.locale().name
+            // The locale name can only be accessed from
+            // the constructed object
+            currentLocale = Qt.locale().name;
+            itemSelectLanguage.loadingIcon.visible = false;
+        })
     }
 
     property alias isSelected: isSelectedImage.visible
@@ -28,6 +34,17 @@ Button {
     property string localeCode: "en_GB"
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
+
+    Timer {
+        id: timer
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = 1000
+        timer.repeat = false
+        timer.triggered.connect(cb)
+        timer.start()
+    }
 
     background:
         Rectangle {
