@@ -35,15 +35,17 @@
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define TEST_PRINT_PATH QString("/usr/test_prints/")
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
-#define USB_STORAGE_DEV_BY_PATH \
+#define USB_STORAGE_DEV_BY_PATH_FRNT_PNL \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
+// MOBO_PORT_2 and MOBO_PORT_3 introduced with motherboard rev-6 (Sunflower)
+#define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2 \
+QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0\:1.2\:1.0-scsi-0\:0\:0\:0")
+#define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_3 \
+QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0\:1.3\:1.0-scsi-0\:0\:0\:0")
 #define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_1 \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1.1:1.0-scsi-0:0:0:0")
 #define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_2 \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1.2:1.0-scsi-0:0:0:0")
-// TODO(chris): Remove this when we no longer need to support rev B boards
-#define LEGACY_USB_DEV_BY_PATH \
-QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.4:1.0-scsi-0:0:0:0")
 #define MACHINE_PID_PATH std::string("/usr/settings/PID")
 #endif
 
