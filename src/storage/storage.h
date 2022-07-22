@@ -21,10 +21,11 @@
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
-#define USB_STORAGE_DEV_BY_PATH QString()
+#define USB_STORAGE_DEV_BY_PATH_FRNT_PNL QString()
+#define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2 QString()
+#define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_3 QString()
 #define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_1 QString()
 #define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_2 QString()
-#define LEGACY_USB_DEV_BY_PATH QString()
 #ifdef SETTINGS_FILE_DIR
 #define MACHINE_PID_PATH SETTINGS_FILE_DIR + std::string("/mock_PID")
 #endif
