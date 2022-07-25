@@ -227,8 +227,8 @@ Item {
 
                     MenuButton {
                         id: buttonResetToFactory
-                        buttonImage.anchors.leftMargin: 30
-                        buttonImage.source: "qrc:/img/alert.png"
+                        buttonImage.anchors.leftMargin: 23
+                        buttonImage.source: "qrc:/img/forward_icon.png"
                         buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
                         enabled: !isProcessRunning()
                     }
@@ -599,182 +599,156 @@ Item {
             NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
         }
 
-        onClosed: {
-            isResetting = false
-            hasReset = false
-        }
-
         Rectangle {
             id: basePopupItem
+            width: 715
+            height: 282
             color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: 265
             radius: 10
-            border.width: 2
             border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
+            border.width: 2
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
 
-            Rectangle {
-                id: horizontal_divider
-                width: 720
-                height: 2
-                color: "#ffffff"
+            Row {
+                id: fctr_rst_button_row
+                width: parent.width
+                height: 52
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
-                visible: !isResetting
-            }
-
-            Rectangle {
-                id: vertical_divider
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: !isResetting
-            }
-
-            Item {
-                id: buttonBar
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                visible: !isResetting
 
                 Rectangle {
-                    id: yes_rectangle
-                    x: 0
-                    y: 0
-                    width: 360
-                    height: 72
+                    id: back_rectangle
+                    width: parent.width / 2
+                    height: parent.height
                     color: "#00000000"
                     radius: 10
+                    border.color: "#ffffff"
+                    border.width: 2
 
                     Text {
-                        id: yes_text
+                        id: back_text
                         color: "#ffffff"
-                        text: qsTr("RESET TO FACTORY")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
+                        text: qsTr("BACK")
                         font.letterSpacing: 3
                         font.weight: Font.Bold
                         font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
+                        font.pixelSize: 17
                         anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
                     }
 
                     LoggingMouseArea {
-                        logText: "[" + yes_text.text + "]"
-                        id: yes_mouseArea
+                        logText: "[" + back_text.text + "]"
+                        id: back_mouseArea
                         anchors.fill: parent
                         onPressed: {
-                            yes_text.color = "#000000"
-                            yes_rectangle.color = "#ffffff"
+                            back_text.color = "#000000"
+                            back_rectangle.color = "#ffffff"
                         }
                         onReleased: {
-                            yes_text.color = "#ffffff"
-                            yes_rectangle.color = "#00000000"
-                        }
-                        onClicked: {
-                            bot.resetToFactory(true)
-                            isResetting = true
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: no_rectangle
-                    x: 360
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: no_text
-                        color: "#ffffff"
-                        text: qsTr("CANCEL")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "reset_to_factory: [" + no_text.text + "]"
-                        id: no_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            no_text.color = "#000000"
-                            no_rectangle.color = "#ffffff"
-                        }
-                        onReleased: {
-                            no_text.color = "#ffffff"
-                            no_rectangle.color = "#00000000"
+                            back_text.color = "#ffffff"
+                            back_rectangle.color = "#00000000"
                         }
                         onClicked: {
                             resetFactoryConfirmPopup.close()
                         }
                     }
                 }
+
+                Rectangle {
+                    id: confirm_rectangle
+                    width: parent.width / 2
+                    height: parent.height
+                    color: "#ffffff"
+                    radius: 10
+                    border.color: "#ffffff"
+                    border.width: 2
+
+                    Text {
+                        id: confirm_text
+                        text: qsTr("CONFIRM")
+                        font.letterSpacing: 3
+                        font.weight: Font.Bold
+                        font.family: defaultFont.name
+                        font.pixelSize: 17
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+
+                    LoggingMouseArea {
+                        logText: "reset_to_factory: [" + confirm_text.text + "]"
+                        id: confirm_mouseArea
+                        anchors.fill: parent
+                        onPressed: {
+                            confirm_text.color = "#ffffff"
+                            confirm_rectangle.color = "#000000"
+                        }
+                        onReleased: {
+                            confirm_text.color = "#000000"
+                            confirm_rectangle.color = "#ffffff"
+                        }
+                        onClicked: {
+                            bot.resetToFactory(true)
+                        }
+                    }
+                }
             }
 
-            ColumnLayout {
-                id: columnLayout
-                width: 590
-                height: isResetting ? 180 : 130
-                spacing: 0
+            Column {
+                id: column
+                width: parent.width
+                height: parent.height - fctr_rst_button_row.height
+                topPadding: 35
+                spacing: 15
                 anchors.top: parent.top
-                anchors.topMargin: isResetting ? 50 : 35
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+                Image {
+                    id: extruder_material_error
+                    source: "qrc:/img/extruder_material_error.png"
+                    sourceSize.width: 63
+                    fillMode: Image.PreserveAspectFit
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
 
                 Text {
                     id: alert_text
-                    color: "#cbcbcb"
-                    text: hasReset ? qsTr("RESET SUCCESSFUL") : isResetting ? qsTr("RESETTING TO FACTORY...") : qsTr("RESET TO FACTORY")
+                    color: "#ffffff"
+                    text: qsTr("RESTORE FACTORY SETTINGS?")
+                    font.pixelSize: 20
                     font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: defaultFont.name
                     font.weight: Font.Bold
-                    font.pixelSize: 20
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 Text {
-                    id: description_text
-                    color: "#cbcbcb"
-                    text: hasReset ? "" : isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
-                    verticalAlignment: Text.AlignVCenter
+                    id: descritpion_text
+                    width: parent.width
+                    color: "#ffffff"
+                    text: qsTr("This will erase all history, preferences, account information and calibration settings.")
+                    font.pixelSize: 16
                     horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    lineHeight: 1.3
+                    font.letterSpacing: 3
+                    font.family: defaultFont.name
                     font.weight: Font.Light
                     wrapMode: Text.WordWrap
-                    font.family: defaultFont.name
-                    font.pixelSize: 18
-                    lineHeight: 1.3
-                    visible: !hasReset
-                }
-
-                BusySpinner {
-                    id: resettingSpinner
-                    spinnerActive: isResetting
-                    spinnerSize: 64
-                    Layout.alignment: Qt.AlignHCenter
+                    rightPadding: 5
+                    leftPadding: 5
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;autoSize:true;formeditorZoom:1.1;height:480;width:640}D{i:1}D{i:6}D{i:7}D{i:8}
+D{i:9}D{i:10}D{i:11}D{i:13}D{i:12}D{i:14}D{i:15}D{i:16}D{i:17}D{i:18}D{i:19}D{i:21}
+D{i:20}D{i:5}D{i:4}D{i:3}D{i:23}D{i:22}D{i:25}D{i:24}D{i:27}D{i:26}D{i:29}D{i:28}
+D{i:31}D{i:30}D{i:33}D{i:32}D{i:35}D{i:34}D{i:37}D{i:36}D{i:39}D{i:38}D{i:41}D{i:40}
+D{i:2}D{i:42}D{i:43}D{i:48}
+}
+##^##*/
