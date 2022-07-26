@@ -180,8 +180,4 @@
         <file alias="extruder_material_error.png">images/extruder_material_error.png</file>
         <file alias="process_complete_small.png">images/process_complete_small.png</file>
     </qresource>
-    <qresource prefix="/">
-        <file>TouchTestScreen.qml</file>
-        <file>TouchTestScreenForm.qml</file>
-    </qresource>
 </RCC>
