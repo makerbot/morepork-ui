@@ -40,7 +40,7 @@ Item {
            color: "white"
            visible: pointIndex < 8 && !finished
            x: points[pointIndex].x- width / 2
-           y: points[pointIndex].y - height/2
+           y: points[pointIndex].y - height / 2
            width: 60
            height: width
            radius: width / 2
@@ -133,11 +133,7 @@ Item {
            forceButtonWidth: true
            button_mouseArea.onClicked: {
                advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-               finished = false
-               avgOffsetX = 0
-               avgOffsetY = 0
-               offsetsX = []
-               offsetsY = []
+               resetTouchTest()
            }
            anchors.horizontalCenter: parent.horizontalCenter
            anchors.verticalCenter: parent.verticalCenter
