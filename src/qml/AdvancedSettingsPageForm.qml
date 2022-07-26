@@ -31,12 +31,12 @@ Item {
     property alias copyLogsFinishedPopup: copyLogsFinishedPopup
 
     property alias buttonResetToFactory: buttonResetToFactory
-    property alias resetFactoryConfirmPopup: resetFactoryConfirmPopup
-    property bool isResetting: false
-    property bool hasReset: false
-    property bool isFactoryResetProcess: bot.process.type == ProcessType.FactoryResetProcess
-    property bool doneFactoryReset: bot.process.type == ProcessType.FactoryResetProcess &&
-                                    bot.process.stateType == ProcessStateType.Done
+    property alias resetToFactoryPopup: resetToFactoryPopup
+//    property bool isResetting: false
+//    property bool hasReset: false
+    property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
+    property bool doneFactoryReset: bot.process.type === ProcessType.FactoryResetProcess &&
+                                    bot.process.stateType === ProcessStateType.Done
 
     property alias buttonSpoolInfo: buttonSpoolInfo
 
@@ -52,21 +52,21 @@ Item {
     property string otherBlue: "#45a2d3"
 
     Timer {
-        id: closeResetPopupTimer
+        id: closeResetToFactoryPopup
         interval: 2500
         onTriggered: {
-            resetFactoryConfirmPopup.close()
+            resetFactoryPopup.close()
             // Reset all screen positions
-            if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+            if(settingsPage.settingsSwipeView.currentIndex !== SettingsPage.BasePage) {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
-            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex !== AdvancedSettingsPage.BasePage) {
                 settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
             }
-            if(advancedPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+            if(advancedPage.advancedSettingsSwipeView.currentIndex !== AdvancedSettingsPage.BasePage) {
                 advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
             }
-            if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
+            if(mainSwipeView.currentIndex !== MoreporkUI.BasePage) {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
             fre.setFreStep(FreStep.Welcome)
@@ -76,15 +76,15 @@ Item {
 
     onIsFactoryResetProcessChanged: {
         if(isFactoryResetProcess){
-            resetFactoryConfirmPopup.open()
-            isResetting = true
+            resetToFactoryPopup.open()
+//            isResetting = true
         }
     }
 
     onDoneFactoryResetChanged: {
         if(doneFactoryReset) {
-            hasReset = true
-            closeResetPopupTimer.start()
+//            hasReset = true
+            closeResetToFactoryPopup.start()
         }
     }
 
@@ -112,10 +112,10 @@ Item {
             id: itemAdvancedSettings
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
+                if(mainSwipeView.currentIndex === MoreporkUI.AdvancedPage) {
                     mainSwipeView
                 }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
+                else if(mainSwipeView.currentIndex === MoreporkUI.SettingsPage) {
                     settingsPage.settingsSwipeView
                 }
                 else {
@@ -123,10 +123,10 @@ Item {
                 }
             }
             property int backSwipeIndex: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
+                if(mainSwipeView.currentIndex === MoreporkUI.AdvancedPage) {
                     MoreporkUI.BasePage
                 }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
+                else if(mainSwipeView.currentIndex === MoreporkUI.SettingsPage) {
                     SettingsPage.BasePage
                 }
                 else {
@@ -575,170 +575,58 @@ Item {
         }
     }
 
-    LoggingPopup {
+    CustomPopup {
         popupName: "ResetToFactory"
-        id: resetFactoryConfirmPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.NoAutoClose
-        background: Rectangle {
-            id: popupBackgroundDim
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
+        id: resetToFactoryPopup
+        popupWidth: 720
+        popupHeight: 280
+        visible: false
+        showTwoButtons: true
+        invert_right_button_color: true
+        left_button_text: "BACK"
+        right_button_text: "CONFIRM"
+        right_button.onClicked: {
+            bot.resetToFactory(true)
         }
-        enter: Transition {
-            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+        left_button.onClicked: {
+            resetToFactoryPopup.close()
         }
-        exit: Transition {
-            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-        }
+        user_column.topPadding: 35
 
-        Rectangle {
-            id: basePopupItem
-            width: 715
-            height: 282
-            color: "#000000"
-            radius: 10
-            border.color: "#ffffff"
-            border.width: 2
+        Image {
+            id: extruder_material_error
+            source: "qrc:/img/extruder_material_error.png"
+            sourceSize.width: 63
+            fillMode: Image.PreserveAspectFit
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+        }
 
-            Row {
-                id: fctr_rst_button_row
-                width: parent.width
-                height: 52
-                anchors.bottom: parent.bottom
+        Text {
+            id: alert_text
+            color: "#ffffff"
+            text: qsTr("RESTORE FACTORY SETTINGS?")
+            font.pixelSize: 20
+            font.letterSpacing: 3
+            font.family: defaultFont.name
+            font.weight: Font.Bold
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
 
-                Rectangle {
-                    id: back_rectangle
-                    width: parent.width / 2
-                    height: parent.height
-                    color: "#00000000"
-                    radius: 10
-                    border.color: "#ffffff"
-                    border.width: 2
-
-                    Text {
-                        id: back_text
-                        color: "#ffffff"
-                        text: qsTr("BACK")
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 17
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "[" + back_text.text + "]"
-                        id: back_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            back_text.color = "#000000"
-                            back_rectangle.color = "#ffffff"
-                        }
-                        onReleased: {
-                            back_text.color = "#ffffff"
-                            back_rectangle.color = "#00000000"
-                        }
-                        onClicked: {
-                            resetFactoryConfirmPopup.close()
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: confirm_rectangle
-                    width: parent.width / 2
-                    height: parent.height
-                    color: "#ffffff"
-                    radius: 10
-                    border.color: "#ffffff"
-                    border.width: 2
-
-                    Text {
-                        id: confirm_text
-                        text: qsTr("CONFIRM")
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 17
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "reset_to_factory: [" + confirm_text.text + "]"
-                        id: confirm_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            confirm_text.color = "#ffffff"
-                            confirm_rectangle.color = "#000000"
-                        }
-                        onReleased: {
-                            confirm_text.color = "#000000"
-                            confirm_rectangle.color = "#ffffff"
-                        }
-                        onClicked: {
-                            bot.resetToFactory(true)
-                        }
-                    }
-                }
-            }
-
-            Column {
-                id: column
-                width: parent.width
-                height: parent.height - fctr_rst_button_row.height
-                topPadding: 35
-                spacing: 15
-                anchors.top: parent.top
-                anchors.verticalCenter: parent.verticalCenter
-
-                Image {
-                    id: extruder_material_error
-                    source: "qrc:/img/extruder_material_error.png"
-                    sourceSize.width: 63
-                    fillMode: Image.PreserveAspectFit
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Text {
-                    id: alert_text
-                    color: "#ffffff"
-                    text: qsTr("RESTORE FACTORY SETTINGS?")
-                    font.pixelSize: 20
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Text {
-                    id: descritpion_text
-                    width: parent.width
-                    color: "#ffffff"
-                    text: qsTr("This will erase all history, preferences, account information and calibration settings.")
-                    font.pixelSize: 16
-                    horizontalAlignment: Text.AlignHCenter
-                    lineHeight: 1.3
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    rightPadding: 5
-                    leftPadding: 5
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-            }
+        Text {
+            id: descritpion_text
+            width: parent.width
+            color: "#ffffff"
+            text: qsTr("This will erase all history, preferences, account information and calibration settings.")
+            font.pixelSize: 16
+            horizontalAlignment: Text.AlignHCenter
+            lineHeight: 1.3
+            font.letterSpacing: 3
+            font.family: defaultFont.name
+            font.weight: Font.Light
+            wrapMode: Text.WordWrap
+            rightPadding: 5
+            leftPadding: 5
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }
