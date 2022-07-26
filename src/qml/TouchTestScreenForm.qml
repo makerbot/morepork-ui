@@ -94,7 +94,6 @@ Item {
            }
 
            RowLayout {
-               id: rowX
                spacing: 20
                Layout.alignment: Qt.AlignHCenter
 
