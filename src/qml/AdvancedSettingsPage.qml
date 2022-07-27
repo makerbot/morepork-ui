@@ -3,6 +3,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 AdvancedSettingsPageForm {
+
     buttonAdvancedInfo.onClicked: {
         bot.query_status()
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AdvancedInfoPage)
@@ -84,5 +85,9 @@ AdvancedSettingsPageForm {
 
     buttonAnnealPrint.onClicked: {
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AnnealPrintPage)
+    }
+
+    buttonTouchTest.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.TouchTestPage)
     }
 }

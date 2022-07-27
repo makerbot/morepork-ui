@@ -24,6 +24,8 @@ Item {
 
     property alias buttonAnnealPrint: buttonAnnealPrint
 
+    property alias buttonTouchTest: buttonTouchTest
+
     property alias buttonCopyLogs: buttonCopyLogs
 
     property alias copyingLogsPopup: copyingLogsPopup
@@ -99,7 +101,8 @@ Item {
         ShareAnalyticsPage,         // 7
         DryMaterialPage,            // 8
         CleanExtrudersPage,         // 9
-        AnnealPrintPage             // 10
+        AnnealPrintPage,            // 10
+        TouchTestPage               // 11
     }
 
     LoggingSwipeView {
@@ -283,6 +286,12 @@ Item {
                                 }
                             }
                         }
+                    }
+
+                    MenuButton {
+                        id: buttonTouchTest
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: qsTr("DISPLAY TOUCH TEST")
                     }
                 }
             }
@@ -520,6 +529,27 @@ Item {
                         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
+            }
+        }
+
+        // AdvancedSettingsPage.TouchTestPage
+        Item {
+            id: touchTestItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+             function altBack() {
+                 touchTest.resetTouchTest()
+                 if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
+                     advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                 }
+             }
+
+            TouchTestScreen {
+                id: touchTest
             }
         }
     }
