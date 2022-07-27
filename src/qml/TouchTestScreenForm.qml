@@ -3,6 +3,9 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
 Item {
+    width: rootAppWindow.width
+    height: rootAppWindow.height
+
     // Defined set of points for test
     property var points: [
         {'x': 100,'y': 100},
@@ -32,8 +35,8 @@ Item {
 
     Item {
        id: touchTest
-       width: 800
-       height: 400
+       width: parent.width
+       height: parent.height
 
        Rectangle {
            id: touchCircle
@@ -41,7 +44,7 @@ Item {
            visible: pointIndex < 8 && !finished
            x: points[pointIndex].x- width / 2
            y: points[pointIndex].y - height / 2
-           width: 60
+           width: 50
            height: width
            radius: width / 2
        }
@@ -51,7 +54,6 @@ Item {
            acceptedDevices: PointerDevice.TouchScreen | PointerDevice.Mouse
            onTapped: {
                if(!finished) {
-
                    // Get difference between tap and defined point
                    // and add to array
                    var diff = point.position.x - points[pointIndex].x
