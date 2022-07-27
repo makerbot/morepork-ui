@@ -23,10 +23,12 @@ Item {
     property bool finished: false
     property real avgOffsetX: 0
     property real avgOffsetY: 0
+    property real distance: 0
 
     function resetTouchTest() {
         pointIndex = 0
         finished = false
+        distance = 0
         avgOffsetX = 0
         avgOffsetY = 0
         offsetsX = []
@@ -74,8 +76,14 @@ Item {
                            avgOffsetY += offsetsY[i]
                        }
                        // Divide and finish test
-                       avgOffsetX = Math.round(avgOffsetX/8)
-                       avgOffsetY = Math.round(avgOffsetY/8)
+                       avgOffsetX /= 8
+                       avgOffsetY /= 8
+
+                       // Get distance (hypotenuse)
+                       var distSq = avgOffsetX*avgOffsetX + avgOffsetY*avgOffsetY
+                       distance = Math.sqrt(distSq)
+
+                       // Set flag to finished
                        finished = true
                    }
                }
@@ -87,7 +95,7 @@ Item {
            spacing: 10
            anchors.horizontalCenter: parent.horizontalCenter
            anchors.verticalCenter: parent.verticalCenter
-           anchors.verticalCenterOffset: -50
+           anchors.verticalCenterOffset: -80
            visible: finished
 
            TitleText {
@@ -96,11 +104,15 @@ Item {
            }
 
            RowLayout {
-               spacing: 20
+               spacing: 15
                Layout.alignment: Qt.AlignHCenter
 
                ColumnLayout {
                    spacing: 10
+                   TextHeadline {
+                       id: textHeaderDist
+                       text: qsTr("D:")
+                   }
 
                    TextHeadline {
                        id: textHeaderX
@@ -112,17 +124,23 @@ Item {
                    }
                }
                ColumnLayout {
-                   spacing: 10
+                   spacing: 15
+
+                   TextSubheader {
+                       id: textDistance
+                       text: qsTr("%1").arg(Math.round(distance))
+                   }
 
                    TextSubheader {
                        id: textAvgOffX
-                       text: qsTr("%1").arg(avgOffsetX)
+                       text: qsTr("%1").arg(Math.round(avgOffsetX))
                    }
 
                    TextSubheader {
                        id: textAvgOffY
-                       text: qsTr("%1").arg(avgOffsetY)
+                       text: qsTr("%1").arg(Math.round(avgOffsetY))
                    }
+
                }
            }
        }
