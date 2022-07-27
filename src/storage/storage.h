@@ -40,9 +40,9 @@
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
 // MOBO_PORT_2 and MOBO_PORT_3 introduced with motherboard rev-6 (Sunflower)
 #define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2 \
-QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0\:1.2\:1.0-scsi-0\:0\:0\:0")
+QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.2:1.0-scsi-0:0:0:0")
 #define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_3 \
-QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0\:1.3\:1.0-scsi-0\:0\:0\:0")
+QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.3:1.0-scsi-0:0:0:0")
 #define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_1 \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1.1:1.0-scsi-0:0:0:0")
 #define USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_2 \
