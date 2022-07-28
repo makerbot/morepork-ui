@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.3
 
 LoggingPopup {
     id: popup
-    width: 800
-    height: 480
+    width: rootAppWindow.width
+    height: rootAppWindow.height
     modal: true
     dim: false
     focus: true
@@ -25,9 +25,6 @@ LoggingPopup {
     property bool showTwoButtons: false
     property bool invert_left_button_color: false
     property bool invert_right_button_color: false
-    property alias user_column: user_column
-    // Any items added to a CustomPopup will be under user_column
-    default property alias user_column_content: user_column.data
 
     background: Rectangle {
         id: popupBackgroundDim
@@ -47,22 +44,13 @@ LoggingPopup {
         id: popupContainer
         color: "#000000"
         rotation: rootItem.rotation == 180 ? 180 : 0
-        width: 715
-        height: 282
+        width: 720
+        height: 265
         radius: 10
         border.width: 2
         border.color: "#ffffff"
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-
-        Column {
-            id: user_column
-            width: parent.width
-            height: parent.height - full_button.height
-            spacing: 15
-            anchors.top: parent.top
-            anchors.verticalCenter: parent.verticalCenter
-        }
 
         Item {
             id: buttonBar
@@ -169,7 +157,7 @@ LoggingPopup {
                         anchors.fill: parent
                         onPressed: {
                             left_text.color = invert_left_button_color ? "#ffffff" : "#000000"
-                            left_rectangle.color = invert_left_button_color ? "#000000" : "#ffffff"
+                            left_rectangle.color = invert_left_button_color ? "#00000000" : "#ffffff"
                         }
                         onReleased: {
                             left_text.color = invert_left_button_color ? "#000000" : "#ffffff"
@@ -207,7 +195,7 @@ LoggingPopup {
                         anchors.fill: parent
                         onPressed: {
                             right_text.color = invert_right_button_color ? "#ffffff" : "#000000"
-                            right_rectangle.color = invert_right_button_color ? "#000000" : "#ffffff"
+                            right_rectangle.color = invert_right_button_color ? "#00000000" : "#ffffff"
                         }
                         onReleased: {
                             right_text.color = invert_right_button_color ? "#000000" : "#ffffff"

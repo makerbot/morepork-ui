@@ -606,14 +606,13 @@ Item {
     CustomPopup {
         popupName: "ResetToFactory"
         id: resetToFactoryPopup
-        popupWidth: 720
-        popupHeight: 280
+        popupWidth: 715
+        popupHeight: 282
         visible: false
         showTwoButtons: true
         invert_right_button_color: true
         left_button_text: "BACK"
         right_button_text: "CONFIRM"
-        user_column.topPadding: 35
         right_button.onClicked: {
             right_button.enabled = false
             left_button.enabled = false
@@ -627,40 +626,50 @@ Item {
             isResetting = false
         }
 
-        Image {
-            id: extruder_material_error
-            source: "qrc:/img/extruder_material_error.png"
-            sourceSize.width: 63
-            fillMode: Image.PreserveAspectFit
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+        Column {
+            id: user_column
+            width: resetToFactoryPopup.popupContainer.width
+            height: resetToFactoryPopup.popupContainer.height - resetToFactoryPopup.full_button.height
+            anchors.top: resetToFactoryPopup.popupContainer.top
+            anchors.horizontalCenter: resetToFactoryPopup.popupContainer.horizontalCenter
+            spacing: 15
+            topPadding: 35
 
-        Text {
-            id: alert_text
-            color: "#ffffff"
-            text: isResetting ? qsTr("RESTORING FACTORY SETTINGS...") : qsTr("RESTORE FACTORY SETTINGS?")
-            font.pixelSize: 20
-            font.letterSpacing: 3
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+            Image {
+                id: extruder_material_error
+                source: "qrc:/img/extruder_material_error.png"
+                sourceSize.width: 63
+                fillMode: Image.PreserveAspectFit
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
 
-        Text {
-            id: descritpion_text
-            width: parent.width
-            color: "#ffffff"
-            text: isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
-            font.pixelSize: 16
-            horizontalAlignment: Text.AlignHCenter
-            lineHeight: 1.3
-            font.letterSpacing: 3
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            wrapMode: Text.WordWrap
-            rightPadding: 5
-            leftPadding: 5
-            anchors.horizontalCenter: parent.horizontalCenter
+            Text {
+                id: alert_text
+                color: "#ffffff"
+                text: isResetting ? qsTr("RESTORING FACTORY SETTINGS...") : qsTr("RESTORE FACTORY SETTINGS?")
+                font.pixelSize: 20
+                font.letterSpacing: 3
+                font.family: defaultFont.name
+                font.weight: Font.Bold
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Text {
+                id: descritpion_text
+                width: parent.width
+                color: "#ffffff"
+                text: isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
+                font.pixelSize: 16
+                horizontalAlignment: Text.AlignHCenter
+                lineHeight: 1.3
+                font.letterSpacing: 3
+                font.family: defaultFont.name
+                font.weight: Font.Light
+                wrapMode: Text.WordWrap
+                rightPadding: 5
+                leftPadding: 5
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
     }
 }
