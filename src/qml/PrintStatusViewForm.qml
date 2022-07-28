@@ -394,7 +394,7 @@ Item {
                     width: 100
                     height: 100
                     smooth: false
-                    spacing: 65
+                    spacing: 50
 
                     ColumnLayout {
                         id: columnLayout1
@@ -848,6 +848,7 @@ Item {
                     antialiasing: false
                     smooth: false
                     font.pixelSize: 145
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.family: defaultFont.name
                     font.weight: Font.Light
                     font.letterSpacing: 3
