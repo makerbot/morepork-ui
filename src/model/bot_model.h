@@ -110,6 +110,10 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void resetFilterHours();
     Q_INVOKABLE virtual void getExtrudersConfigs();
     Q_INVOKABLE virtual void writeExtruderEeprom(int index, int address, int data);
+    Q_INVOKABLE virtual void submitNPSSurvey(int score);
+    Q_INVOKABLE virtual void logNPSSubmissionTime(QString time);
+    Q_INVOKABLE virtual QString getLastNPSSubmissionTime();
+
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();

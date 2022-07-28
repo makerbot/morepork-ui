@@ -114,6 +114,10 @@ class KaitenBotModel : public BotModel {
     void resetFilterHours();
     void getExtrudersConfigs();
     void writeExtruderEeprom(int index, int address, int data);
+    void submitNPSSurvey(int score);
+    void logNPSSubmissionTime(QString time);
+    QString getLastNPSSubmissionTime();
+    QString m_npsFilePath;
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1446,6 +1450,43 @@ void KaitenBotModel::writeExtruderEeprom(int index, int address, int data) {
     }
 }
 
+void KaitenBotModel::submitNPSSurvey(int score) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        json_params["score"] = Json::Value(score);
+
+        conn->jsonrpc.invoke("submit_nps_survey", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::logNPSSubmissionTime(QString time) {
+    FILE *f;
+    f = fopen(m_npsFilePath.toStdString().c_str(), "w");
+    if (f) {
+        fputs (time.toStdString().c_str(), f);
+        fclose (f);
+    }
+    forceSyncFile(QString(m_npsFilePath));
+}
+
+QString KaitenBotModel::getLastNPSSubmissionTime() {
+    FILE *f;
+    char time[100];
+    f = fopen(m_npsFilePath.toStdString().c_str(), "r");
+    if (f) {
+        fgets (time, 100, f);
+        fclose (f);
+    } else {
+        return QString("null");
+    }
+    return QString(time);
+}
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
@@ -1481,7 +1522,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_cameraState(new CameraStateNotification(this)),
         m_printQueueNot(new PrintQueueNotificatiion(this)),
         m_filterHoursCb(new FilterHoursCallback(this)),
-        m_extrudersConfigsCb(new ExtrudersConfigsCallback(this)) {
+        m_extrudersConfigsCb(new ExtrudersConfigsCallback(this)),
+        m_npsFilePath("/var/last_nps_submission_time") {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 
