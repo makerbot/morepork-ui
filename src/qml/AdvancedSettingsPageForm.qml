@@ -32,6 +32,7 @@ Item {
 
     property alias copyLogsFinishedPopup: copyLogsFinishedPopup
 
+    property bool isResetting: false
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetToFactoryPopup: resetToFactoryPopup
     property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
@@ -55,18 +56,18 @@ Item {
         id: closeResetPopupTimer
         interval: 2500
         onTriggered: {
-            resetFactoryPopup.close()
+            resetToFactoryPopup.close()
             // Reset all screen positions
-            if(settingsPage.settingsSwipeView.currentIndex !== SettingsPage.BasePage) {
+            if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
-            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex !== AdvancedSettingsPage.BasePage) {
+            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
                 settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
             }
-            if(advancedPage.advancedSettingsSwipeView.currentIndex !== AdvancedSettingsPage.BasePage) {
+            if(advancedPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
                 advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
             }
-            if(mainSwipeView.currentIndex !== MoreporkUI.BasePage) {
+            if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
             fre.setFreStep(FreStep.Welcome)
@@ -76,6 +77,7 @@ Item {
 
     onIsFactoryResetProcessChanged: {
         if(isFactoryResetProcess){
+            isResetting = true
             resetToFactoryPopup.open()
         }
     }
@@ -611,13 +613,19 @@ Item {
         invert_right_button_color: true
         left_button_text: "BACK"
         right_button_text: "CONFIRM"
+        user_column.topPadding: 35
         right_button.onClicked: {
+            right_button.enabled = false
+            left_button.enabled = false
+            isResetting = true
             bot.resetToFactory(true)
         }
         left_button.onClicked: {
             resetToFactoryPopup.close()
         }
-        user_column.topPadding: 35
+        onClosed: {
+            isResetting = false
+        }
 
         Image {
             id: extruder_material_error
@@ -630,7 +638,7 @@ Item {
         Text {
             id: alert_text
             color: "#ffffff"
-            text: qsTr("RESTORE FACTORY SETTINGS?")
+            text: isResetting ? qsTr("RESTORING FACTORY SETTINGS...") : qsTr("RESTORE FACTORY SETTINGS?")
             font.pixelSize: 20
             font.letterSpacing: 3
             font.family: defaultFont.name
@@ -642,7 +650,7 @@ Item {
             id: descritpion_text
             width: parent.width
             color: "#ffffff"
-            text: qsTr("This will erase all history, preferences, account information and calibration settings.")
+            text: isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
             font.pixelSize: 16
             horizontalAlignment: Text.AlignHCenter
             lineHeight: 1.3
