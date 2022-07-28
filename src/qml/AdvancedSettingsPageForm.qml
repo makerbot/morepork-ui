@@ -624,6 +624,8 @@ Item {
         }
         onClosed: {
             isResetting = false
+            right_button.enabled = true
+            left_button.enabled = true
         }
 
         Column {
