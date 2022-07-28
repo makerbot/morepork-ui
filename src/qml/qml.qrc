@@ -253,5 +253,7 @@
         <file>ExtruderStatusForm.qml</file>
         <file>MaterialStatus.qml</file>
         <file>MaterialStatusForm.qml</file>
+        <file>TouchTestScreen.qml</file>
+        <file>TouchTestScreenForm.qml</file>
     </qresource>
 </RCC>

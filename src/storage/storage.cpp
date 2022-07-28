@@ -413,11 +413,13 @@ void MoreporkStorage::newSortType(){
 
 
 void MoreporkStorage::updateUsbStorageConnected(){
-  const bool kUsbStorConnected = QFileInfo(USB_STORAGE_DEV_BY_PATH).exists() ||
-            QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_1).exists() ||
-            QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_2).exists();
-  const bool kUsbLegacyConnected = QFileInfo(LEGACY_USB_DEV_BY_PATH).exists();
-  usbStorageConnectedSet(kUsbStorConnected || kUsbLegacyConnected);
+  const bool kUsbStorConnected =
+      QFileInfo(USB_STORAGE_DEV_BY_PATH_FRNT_PNL).exists() ||
+      QFileInfo(USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2).exists() ||
+      QFileInfo(USB_STORAGE_DEV_BY_PATH_MOBO_PORT_3).exists() ||
+      QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_1).exists() ||
+      QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_2).exists();
+  usbStorageConnectedSet(kUsbStorConnected);
   if (!kUsbStorConnected) {
       prog_copy_->cancel(); // cancel copy if one is ongoing
       printFileListReset();
