@@ -2849,9 +2849,7 @@ ApplicationWindow {
 
                             function resetDetailsAndGoToMaterialsPage() {
                                 printPage.resetPrintFileDetails()
-                                if(printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
-                                    printPage.printSwipeView.setCurrentIndex(PrintPage.BasePage)
-                                }
+                                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                             }
 

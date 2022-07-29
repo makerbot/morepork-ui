@@ -24,8 +24,8 @@ ErrorScreenForm {
     }
 
     function resetSwipeViews() {
-        if(printPage.printStatusView.printStatusSwipeView.currentIndex != 0) {
-            printPage.printStatusView.printStatusSwipeView.setCurrentIndex(0)
+        if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
+            printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
         }
         if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
