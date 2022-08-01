@@ -53,7 +53,7 @@ AdvancedSettingsPageForm {
     }
 
     buttonResetToFactory.onClicked: {
-        resetFactoryConfirmPopup.open()
+        resetToFactoryPopup.open()
     }
 
     buttonSpoolInfo.onClicked: {
