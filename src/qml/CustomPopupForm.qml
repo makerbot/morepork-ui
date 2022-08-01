@@ -12,6 +12,12 @@ LoggingPopup {
     parent: overlay
     closePolicy: Popup.NoAutoClose
 
+    enum DefaultButton {
+        None,
+        Left,
+        Right
+    }
+
     property alias popupContainer: popupContainer
     property alias popupWidth: popupContainer.width
     property alias popupHeight: popupContainer.height
@@ -23,8 +29,7 @@ LoggingPopup {
     property alias right_button_text: right_text.text
     property bool showOneButton: false
     property bool showTwoButtons: false
-    property bool invert_left_button_color: false
-    property bool invert_right_button_color: false
+    property int defaultButton: CustomPopup.None
 
     background: Rectangle {
         id: popupBackgroundDim
@@ -132,13 +137,13 @@ LoggingPopup {
                     height: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
-                    color: invert_left_button_color ? "#ffffff" : "#00000000"
+                    color: (defaultButton === CustomPopup.Left ? "#ffffff" : "#00000000")
                     radius: 10
                     visible: true
 
                     Text {
                         id: left_text
-                        color: invert_left_button_color ? "#000000" : "#ffffff"
+                        color: (defaultButton === CustomPopup.Left ? "#000000" : "#ffffff")
                         text: qsTr("LEFT TEXT")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -156,12 +161,12 @@ LoggingPopup {
                         id: left_button
                         anchors.fill: parent
                         onPressed: {
-                            left_text.color = invert_left_button_color ? "#ffffff" : "#000000"
-                            left_rectangle.color = invert_left_button_color ? "#00000000" : "#ffffff"
+                            left_text.color = (defaultButton === CustomPopup.Left ? "#ffffff" : "#000000")
+                            left_rectangle.color = (defaultButton === CustomPopup.Left ? "#00000000" : "#ffffff")
                         }
                         onReleased: {
-                            left_text.color = invert_left_button_color ? "#000000" : "#ffffff"
-                            left_rectangle.color = invert_left_button_color ? "#ffffff" : "#00000000"
+                            left_text.color = (defaultButton === CustomPopup.Left ? "#000000" : "#ffffff")
+                            left_rectangle.color = (defaultButton === CustomPopup.Left ? "#ffffff" : "#00000000")
                         }
                     }
                 }
@@ -172,13 +177,13 @@ LoggingPopup {
                     height: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
-                    color: invert_right_button_color ? "#ffffff" : "#00000000"
+                    color: (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
                     radius: 10
                     visible: true
 
                     Text {
                         id: right_text
-                        color: invert_right_button_color ? "#000000" : "#ffffff"
+                        color: (defaultButton === CustomPopup.Right ? "#000000" : "#ffffff")
                         text: qsTr("RIGHT TEXT")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
@@ -194,12 +199,12 @@ LoggingPopup {
                         id: right_button
                         anchors.fill: parent
                         onPressed: {
-                            right_text.color = invert_right_button_color ? "#ffffff" : "#000000"
-                            right_rectangle.color = invert_right_button_color ? "#00000000" : "#ffffff"
+                            right_text.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#000000")
+                            right_rectangle.color = (defaultButton === CustomPopup.Right ? "#00000000" : "#ffffff")
                         }
                         onReleased: {
-                            right_text.color = invert_right_button_color ? "#000000" : "#ffffff"
-                            right_rectangle.color = invert_right_button_color ? "#ffffff" : "#00000000"
+                            right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#ffffff")
+                            right_rectangle.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
                         }
                     }
                 }

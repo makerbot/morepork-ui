@@ -610,7 +610,7 @@ Item {
         popupHeight: 282
         visible: false
         showTwoButtons: true
-        invert_right_button_color: true
+        defaultButton: LoggingPopup.Right
         left_button_text: "BACK"
         right_button_text: "CONFIRM"
         right_button.onClicked: {
