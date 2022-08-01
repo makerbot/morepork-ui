@@ -229,7 +229,7 @@ Item {
                     MenuButton {
                         id: buttonResetToFactory
                         buttonImage.anchors.leftMargin: 23
-                        buttonImage.source: "qrc:/img/forward_icon.png"
+                        buttonImage.source: "qrc:/img/icon_factory_reset.png"
                         buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
                         enabled: !isProcessRunning()
                     }
