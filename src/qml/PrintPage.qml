@@ -188,10 +188,9 @@ PrintPageForm {
         }
 
         // Survey has never been submitted, so ask for it.
-        if (bot.getLastNPSSubmissionTime() == "null") { return true }
+        if (bot.getNPSSurveyDueDate() == "null") { return true }
 
-        // 3 months elapsed since last survey submission?
-        return ((new Date() - new Date(bot.getLastNPSSubmissionTime())) > 7889400000)
+        return (new Date() > new Date(bot.getNPSSurveyDueDate()))
     }
 
     printingDrawer.buttonCancelPrint.onClicked: {

@@ -314,11 +314,11 @@ void BotModel::submitNPSSurvey(int score) {
     qDebug() << FL_STRM << "called with parameters: " << score;
 }
 
-void BotModel::logNPSSubmissionTime(QString time) {
+void BotModel::setNPSSurveyDueDate(QString time) {
     qDebug() << FL_STRM << "called with parameters: " << time;
 }
 
-QString BotModel::getLastNPSSubmissionTime() {
+QString BotModel::getNPSSurveyDueDate() {
     qDebug() << FL_STRM << "called";
     return QString("null");
 }

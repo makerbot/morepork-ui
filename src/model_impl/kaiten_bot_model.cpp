@@ -115,8 +115,8 @@ class KaitenBotModel : public BotModel {
     void getExtrudersConfigs();
     void writeExtruderEeprom(int index, int address, int data);
     void submitNPSSurvey(int score);
-    void logNPSSubmissionTime(QString time);
-    QString getLastNPSSubmissionTime();
+    void setNPSSurveyDueDate(QString time);
+    QString getNPSSurveyDueDate();
     QString m_npsFilePath;
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
@@ -1465,7 +1465,7 @@ void KaitenBotModel::submitNPSSurvey(int score) {
     }
 }
 
-void KaitenBotModel::logNPSSubmissionTime(QString time) {
+void KaitenBotModel::setNPSSurveyDueDate(QString time) {
     FILE *f;
     f = fopen(m_npsFilePath.toStdString().c_str(), "w");
     if (f) {
@@ -1475,7 +1475,7 @@ void KaitenBotModel::logNPSSubmissionTime(QString time) {
     forceSyncFile(QString(m_npsFilePath));
 }
 
-QString KaitenBotModel::getLastNPSSubmissionTime() {
+QString KaitenBotModel::getNPSSurveyDueDate() {
     FILE *f;
     char time[100];
     f = fopen(m_npsFilePath.toStdString().c_str(), "r");
@@ -1523,7 +1523,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_printQueueNot(new PrintQueueNotificatiion(this)),
         m_filterHoursCb(new FilterHoursCallback(this)),
         m_extrudersConfigsCb(new ExtrudersConfigsCallback(this)),
-        m_npsFilePath("/var/last_nps_submission_time") {
+        m_npsFilePath("/var/nps_survey_due_date") {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
 

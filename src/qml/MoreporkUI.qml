@@ -276,6 +276,13 @@ ApplicationWindow {
         return bot.hepaFilterConnected
     }
 
+    // Update the NPS survey due date to 3 months from now
+    function updateNPSSurveyDueDate() {
+        var due = new Date()
+        due.setMonth(due.getMonth() + 3)
+        bot.setNPSSurveyDueDate(due)
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"
@@ -3202,7 +3209,7 @@ ApplicationWindow {
             right_button.onClicked: {
                 if (ratings_buttons.score >= 0) {
                     bot.submitNPSSurvey(ratings_buttons.score)
-                    bot.logNPSSubmissionTime(new Date().toString())
+                    updateNPSSurveyDueDate()
                     npsSurveyPopup.close()
                 }
             }
