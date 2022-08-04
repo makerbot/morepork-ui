@@ -226,6 +226,9 @@ MaterialPageForm {
                 toolIdx = 0
                 load(toolIdx, false)
             }
+
+            enabled: (printPage.isPrintProcess && (bot.process.stateType == ProcessStateType.Paused) ||
+                      (canLoadUnloadStart(bay1.filamentBayID) && bay1.extruderFilamentPresent))
         }
 
         unloadButton {
@@ -256,6 +259,9 @@ MaterialPageForm {
                 toolIdx = 1
                 load(toolIdx, false)
             }
+
+            enabled: (printPage.isPrintProcess && (bot.process.stateType == ProcessStateType.Paused) ||
+                      (canLoadUnloadStart(bay2.filamentBayID) && bay2.extruderFilamentPresent))
         }
 
         unloadButton {
