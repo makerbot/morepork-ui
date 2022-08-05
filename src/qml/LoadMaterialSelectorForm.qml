@@ -76,7 +76,7 @@ ListSelector {
         smooth: false
         antialiasing: false
         onClicked: {
-            startLoadForMaterial(toolIdx, false, model.modelData)
+            startLoadUnloadForMaterial(toolIdx, model.modelData)
         }
     }
     footer:

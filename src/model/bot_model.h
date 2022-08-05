@@ -54,7 +54,7 @@ class BotModel : public BaseModel {
             bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void loadFilamentStop();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external,
-            bool whilePrinting, QList<int> temperature = {0,0});
+            bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void assistedLevel();
     Q_INVOKABLE virtual void acknowledge_level();
     Q_INVOKABLE virtual void continue_leveling();
