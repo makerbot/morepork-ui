@@ -12,8 +12,12 @@ Item {
     property alias tempSelectorPage: tempSelectorPage
     property alias selectMaterialSwipeView: selectMaterialSwipeView
 
-    function startLoadForMaterial(tool_idx, external, material) {
-        load(tool_idx, external, [0,0], material)
+    function startLoadUnloadForMaterial(tool_idx, material) {
+        if(isLoadFilament) {
+            load(tool_idx, false, [0,0], material)
+        } else {
+            unload(tool_idx, true, [0,0], material)
+        }
     }
 
     function startLoadUnloadCustomTemperature(tool_idx, temperature) {

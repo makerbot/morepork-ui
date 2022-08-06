@@ -130,7 +130,7 @@ MaterialPageForm {
     }
 
     function shouldSelectMaterial(tool_idx) {
-        return ((isUsingExpExtruder(tool_idx+1) || !bot.hasFilamentBay) && bot.loadedMaterials[tool_idx] == "unknown")
+        return (isUsingExpExtruder(tool_idx+1) || (!bot.hasFilamentBay && bot.loadedMaterials[tool_idx] == "unknown"))
     }
 
     function checkForABSR(bayID) {
@@ -184,7 +184,7 @@ MaterialPageForm {
         materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
-    function unload(tool_idx, external, temperature=0) {
+    function unload(tool_idx, external, temperature=0, material="None") {
         startLoadUnloadFromUI = true
         isLoadFilament = false
         enableMaterialDrawer()
@@ -197,6 +197,8 @@ MaterialPageForm {
             temp_list[tool_idx] = temperature
             bot.unloadFilament(tool_idx, external, while_printing, temp_list)
             loadMaterialSettingsPage.selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
+        } else if(material != "None") {
+            bot.unloadFilament(tool_idx, external, while_printing, [0,0], material)
         } else {
             bot.unloadFilament(tool_idx, external, while_printing)
         }
@@ -224,13 +226,24 @@ MaterialPageForm {
         purgeButton {
             onClicked: {
                 toolIdx = 0
+                if(isUsingExpExtruder(toolIdx+1)) {
+                    isLoadFilament = true
+                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return
+                }
                 load(toolIdx, false)
             }
+            enabled: canLoadUnloadStart(bay1.filamentBayID)
         }
 
         unloadButton {
             onClicked: {
                 toolIdx = 0
+                if(isUsingExpExtruder(toolIdx+1)) {
+                    isLoadFilament = false
+                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return
+                }
                 unload(toolIdx, true)
             }
             enabled: canLoadUnloadStart(bay1.filamentBayID) && bay1.extruderFilamentPresent
@@ -256,6 +269,7 @@ MaterialPageForm {
                 toolIdx = 1
                 load(toolIdx, false)
             }
+            enabled: canLoadUnloadStart(bay2.filamentBayID)
         }
 
         unloadButton {
