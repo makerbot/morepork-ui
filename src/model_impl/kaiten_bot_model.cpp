@@ -53,7 +53,7 @@ class KaitenBotModel : public BotModel {
     void done(QString acknowledge_result);
     void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void loadFilamentStop();
-    void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0});
+    void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void assistedLevel();
     void continue_leveling();
     void acknowledge_level();
@@ -652,24 +652,19 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
         }
 
         if(material != "None") {
-          json_params["material"] = Json::Value(material.toStdString());
+            json_params["material"] = Json::Value(material.toStdString());
         }
 
+        json_params["tool_index"] = Json::Value(kToolIndex);
+        json_params["external"] = Json::Value(external);
+
         if(!whilePrinting) {
-            json_params["tool_index"] = Json::Value(kToolIndex);
-            json_params["external"] = Json::Value(external);
             conn->jsonrpc.invoke("load_filament", json_params, std::weak_ptr<JsonRpcCallback>());
         }
         else {
             Json::Value json_params1(Json::objectValue);
             json_params1["method"] = Json::Value("load_filament");
-            Json::Value json_args(Json::objectValue);
-            json_args["tool_index"] = Json::Value(kToolIndex);
-            if(json_params.isMember("temperature_settings")) {
-                json_args["temperature_settings"] = json_params["temperature_settings"];
-            }
-            json_args["external"] = Json::Value(external);
-            json_params1["params"] = Json::Value(json_args);
+            json_params1["params"] = json_params;
             conn->jsonrpc.invoke("process_method", json_params1, std::weak_ptr<JsonRpcCallback>());
         }
     }
@@ -692,7 +687,7 @@ void KaitenBotModel::loadFilamentStop(){
     }
 }
 
-void KaitenBotModel::unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature){
+void KaitenBotModel::unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature, QString material){
     try{
         qDebug() << FL_STRM << "tool_index: " << kToolIndex;
         auto conn = m_conn.data();
@@ -706,20 +701,20 @@ void KaitenBotModel::unloadFilament(const int kToolIndex, bool external, bool wh
             json_params["temperature_settings"] = Json::Value(temperature_list);
         }
 
+        if(material != "None") {
+            json_params["material"] = Json::Value(material.toStdString());
+        }
+
+        json_params["tool_index"] = Json::Value(kToolIndex);
+
         if(!whilePrinting) {
-            json_params["tool_index"] = Json::Value(kToolIndex);
             json_params["external"] = Json::Value(external);
             conn->jsonrpc.invoke("unload_filament", json_params, std::weak_ptr<JsonRpcCallback>());
         }
         else {
             Json::Value json_params1(Json::objectValue);
             json_params1["method"] = Json::Value("unload_filament");
-            Json::Value json_args(Json::objectValue);
-            json_args["tool_index"] = Json::Value(kToolIndex);
-            if(json_params.isMember("temperature_settings")) {
-                json_args["temperature_settings"] = json_params["temperature_settings"];
-            }
-            json_params1["params"] = Json::Value(json_args);
+            json_params1["params"] = json_params;
             conn->jsonrpc.invoke("process_method", json_params1, std::weak_ptr<JsonRpcCallback>());
         }
     }
