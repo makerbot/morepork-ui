@@ -30,6 +30,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             color: "#cbcbcb"
             font.capitalization: Font.AllUppercase
+            width: 300
         }
 
         Text {
@@ -46,6 +47,8 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             color: "#ffffff"
             font.capitalization: Font.AllUppercase
+            width: 385
+            elide: Text.ElideRight
         }
     }
 }
