@@ -223,7 +223,7 @@ Item {
         extruder_temp = !support_extruder_used ?
                             meta['extruder_temperatures'][0] + "C" :
                             meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
-        buildplane_temp = Math.floor(meta['buildplane_target_temperature']) + "C"
+        buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
         if(!startPrintMaterialCheck()) {
