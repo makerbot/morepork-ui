@@ -310,6 +310,18 @@ void BotModel::writeExtruderEeprom(int index, int address, int data) {
                 " address" << address << " data" << data;
 }
 
+void BotModel::submitNPSSurvey(int score) {
+    qDebug() << FL_STRM << "called with parameters: " << score;
+}
+
+void BotModel::setNPSSurveyDueDate(QString time) {
+    qDebug() << FL_STRM << "called with parameters: " << time;
+}
+
+QString BotModel::getNPSSurveyDueDate() {
+    qDebug() << FL_STRM << "called";
+    return QString("null");
+}
 
 class DummyBotModel : public BotModel {
   public:

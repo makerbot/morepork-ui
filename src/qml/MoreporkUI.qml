@@ -276,6 +276,13 @@ ApplicationWindow {
         return bot.hepaFilterConnected
     }
 
+    // Update the NPS survey due date to 3 months from now
+    function updateNPSSurveyDueDate() {
+        var due = new Date()
+        due.setMonth(due.getMonth() + 3)
+        bot.setNPSSurveyDueDate(due)
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"
@@ -3080,8 +3087,8 @@ ApplicationWindow {
                 hepaErrorAcknowledged = true
                 hepaFilterErrorPopup.close()
             }
-            left_button_text: "CONTINUE PRINTING"
-            right_button_text: "PAUSE PRINTING"
+            left_button_text: qsTr("CONTINUE PRINTING")
+            right_button_text: qsTr("PAUSE PRINTING")
             left_button.onClicked: {
                 hepaErrorAcknowledged = true
                 hepaFilterErrorPopup.close()
@@ -3137,8 +3144,8 @@ ApplicationWindow {
             popupHeight: 280
             visible: false
             showTwoButtons: true
-            left_button_text: "CANCEL PROCEDURE"
-            right_button_text: "CONTINUE PROCEDURE"
+            left_button_text: qsTr("CANCEL PROCEDURE")
+            right_button_text: qsTr("CONTINUE PROCEDURE")
             right_button.onClicked: {
                 bot.resetFilterHours()
                 bot.hepaFilterPrintHours = 0
@@ -3184,6 +3191,118 @@ ApplicationWindow {
                     font.pixelSize: 18
                     font.letterSpacing: 1
                     lineHeight: 1.3
+                }
+            }
+        }
+
+        CustomPopup {
+            popupName: "NPSSurvey"
+            id: npsSurveyPopup
+            popupWidth: 720
+            popupHeight: 325
+            visible: false
+            showTwoButtons: true
+            left_button_text: qsTr("LATER")
+            right_button_text: qsTr("SEND FEEDBACK")
+            right_button.onClicked: {
+                if (ratings_buttons.score >= 0) {
+                    bot.submitNPSSurvey(ratings_buttons.score)
+                    updateNPSSurveyDueDate()
+                    npsSurveyPopup.close()
+                }
+            }
+            left_button.onClicked: {
+                npsSurveyPopup.close()
+            }
+            onOpened: {
+                ratings_buttons.checkState = Qt.Unchecked
+            }
+
+            ColumnLayout {
+                id: columnLayout_nps_survey_popup
+                width: 650
+                height: children.height + 75
+                spacing: 30
+                anchors.top: parent.top
+                anchors.topMargin: 110
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                TextHeadline {
+                    id: titleText_nps_survey_popup
+                    text: qsTr("HOW LIKELY ARE YOU TO RECOMMEND THE MAKERBOT METHOD TO A FRIEND OR COLLEAGUE?")
+                    color: "#ffffff"
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                }
+
+                ColumnLayout {
+                    id: ratingBar_nps_survey_popup
+                    Layout.preferredWidth: parent.width
+                    spacing: 20
+
+                    RowLayout {
+                        id: legend_text_nps_survey_popup
+                        Layout.preferredWidth: parent.width
+                        spacing: 350
+
+                        TextSubheader {
+                            text: qsTr("Not at all likely")
+                            style: TextSubheader.Bold
+                            color: "#ffffff"
+                        }
+
+                        TextSubheader {
+                            text: qsTr("Extremely likely")
+                            style: TextSubheader.Bold
+                            color: "#ffffff"
+                        }
+                    }
+
+                    ButtonGroup {
+                        id: ratings_buttons
+                        buttons: button_row.children
+                        property int score: -1
+                        onClicked: {
+                            score = button.rating
+                        }
+                    }
+
+                    RowLayout {
+                        id: button_row
+                        Layout.preferredWidth: parent.width
+                        spacing: -4
+                        Layout.alignment: Layout.Center
+
+                        Repeater {
+                            model: 10
+                            delegate:
+                            RadioButton {
+                                id: control
+                                property int rating: index + 1
+
+                                indicator: Rectangle {
+                                    width: 52
+                                    height: 52
+                                    radius: 5
+                                    color: control.checked ? "#ffffff" : "#000000"
+                                    border.width: 2
+                                    border.color: "#ffffff"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    anchors.horizontalCenter: parent.horizontalCenter
+
+                                    TextBody {
+                                        style: TextBody.Large
+                                        font.weight: Font.Bold
+                                        text: control.rating
+                                        color: control.checked ? "#000000" : "#ffffff"
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        anchors.horizontalCenter: parent.horizontalCenter
+                                        anchors.verticalCenterOffset: -2
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

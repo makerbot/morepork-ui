@@ -44,6 +44,13 @@ FrePageForm {
         }
 
         button_mouseArea.onClicked: {
+            // The primary interaction for moving thorugh the FRE is
+            // through this button which has to be clicked atleast once.
+            // The NPS survey shouldn't be asked for 3 months after setting
+            // up a printer or after resetting a printer both cases where
+            // the user will have to go through the FRE.
+            updateNPSSurveyDueDate()
+
             if(state == "wifi_setup") {
                 if(isNetworkConnectionAvailable) {
                     if(isfirmwareUpdateAvailable) {

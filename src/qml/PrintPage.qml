@@ -178,6 +178,19 @@ PrintPageForm {
             printStatusView.testPrintComplete = true
         }
         resetPrintFileDetails()
+        if (isNPSSurveyDue()) { npsSurveyPopup.open() }
+    }
+
+    function isNPSSurveyDue() {
+        // Printer isnt keeping correct time, so skip survey.
+        if (new Date() < new Date("Wed Jul 20 16:11:15 2022 GMT-0400")) {
+            return false
+        }
+
+        // Survey has never been submitted, so ask for it.
+        if (bot.getNPSSurveyDueDate() == "null") { return true }
+
+        return (new Date() > new Date(bot.getNPSSurveyDueDate()))
     }
 
     printingDrawer.buttonCancelPrint.onClicked: {
