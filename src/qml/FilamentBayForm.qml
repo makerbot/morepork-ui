@@ -247,7 +247,8 @@ Item {
                 id: loadButton
                 text: qsTr("LOAD")
                 logKey: text
-                visible: !extruderFilamentPresent
+                visible: !extruderFilamentPresent ||
+                         (!bot.hasFilamentBay && filamentMaterial == "unknown")
             }
 
             ButtonRectangleSecondary {
@@ -260,7 +261,8 @@ Item {
                 id: purgeButton
                 text: qsTr("PURGE")
                 logKey: text
-                visible: extruderFilamentPresent
+                visible: (bot.hasFilamentBay) ? extruderFilamentPresent :
+                         (extruderFilamentPresent && filamentMaterial != "unknown")
             }
         }
     }
