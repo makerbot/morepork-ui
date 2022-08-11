@@ -41,6 +41,7 @@ Item {
     property bool isMaterialMismatch: false
 
     property alias moistureWarningPopup: moistureWarningPopup
+
     property alias uncapped1CExtruderAlert: uncapped1CExtruderAlert
     property bool restartPendingAfterExtruderReprogram: false
 
@@ -841,6 +842,8 @@ Item {
     }
 
     CustomPopup {
+        property bool extruderAPresent: bot.extruderAPresent
+
         popupName: "Uncapped1CExtruderAlert"
         id: uncapped1CExtruderAlert
         popupWidth: 750
@@ -880,6 +883,14 @@ Item {
                 popupState = "reprogrammed"
             } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
                 bot.reboot()
+            }
+        }
+
+        onExtruderAPresentChanged: {
+            // Upon removal of the 1C extruder...
+            if(!extruderAPresent) {
+                // equivalent to activating the above "BACK" button
+                uncapped1CExtruderAlert.close()
             }
         }
 
