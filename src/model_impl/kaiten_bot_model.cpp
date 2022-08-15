@@ -1993,6 +1993,12 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(infoChamberError, kChamber["error"]);
         }
 
+        const Json::Value &kDragon = info["dragon_status"];
+        if(kDragon.isObject()){
+            UPDATE_STRING_PROP(infoHeatSysStateStr, kDragon["mcu_state_str"]);
+            UPDATE_STRING_PROP(infoHeatSysErrorStr, kDragon["mcu_error_str"]);
+        }
+
         const Json::Value &kFilamentBay = info["filamentbay_status"];
         if(kFilamentBay.isArray() && kFilamentBay.size() > 0){
             const Json::Value &kBayA = kFilamentBay[0],
