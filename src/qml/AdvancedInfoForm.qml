@@ -50,6 +50,12 @@ Item {
                 }
             }
 
+            AdvancedInfoDragonItem {
+                anchors.left: parent.left
+                anchors.leftMargin: 40
+                visible: !bot.hasFilamentBay
+            }
+
             AdvancedInfoFilamentBaysItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 40

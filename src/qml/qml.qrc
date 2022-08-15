@@ -255,5 +255,7 @@
         <file>MaterialStatusForm.qml</file>
         <file>TouchTestScreen.qml</file>
         <file>TouchTestScreenForm.qml</file>
+        <file>AdvancedInfoDragonItem.qml</file>
+        <file>AdvancedInfoDragonItemForm.qml</file>
     </qresource>
 </RCC>
