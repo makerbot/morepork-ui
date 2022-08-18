@@ -99,29 +99,15 @@ Item {
 
     property bool isMaterialValid: {
         skipMaterialChecks ||
-        supportedMaterialsList.indexOf(filamentMaterial) >= 0
+        supportedMaterials.indexOf(filamentMaterial) >= 0
     }
 
     function checkSliceValid(material) {
         return usingExperimentalExtruder ||
-            supportedMaterialsList.indexOf(material) >= 0;
+            supportedMaterials.indexOf(material) >= 0;
     }
 
-    property var supportedMaterialsList: {
-        // Get the supported materials list from kaiten
-        // based on the extruder
-        switch(filamentBayID) {
-        case 1:
-            bot.extruderASupportedMaterials
-            break;
-        case 2:
-            bot.extruderBSupportedMaterials
-            break;
-        default:
-            []
-            break;
-        }
-    }
+    property var supportedMaterials: bot["extruder%1SupportedMaterials".arg(idxAsAxis)]
 
     property string printMaterial : {
         switch(filamentBayID) {
