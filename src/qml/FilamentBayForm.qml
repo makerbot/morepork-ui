@@ -99,66 +99,15 @@ Item {
 
     property bool isMaterialValid: {
         skipMaterialChecks ||
-        goodMaterialsList.indexOf(filamentMaterial) >= 0
+        supportedMaterials.indexOf(filamentMaterial) >= 0
     }
 
     function checkSliceValid(material) {
         return usingExperimentalExtruder ||
-            goodMaterialsList.indexOf(material) >= 0;
+            supportedMaterials.indexOf(material) >= 0;
     }
 
-    property var goodMaterialsList: {
-        // The materials valid for a bay/extruder depends
-        // on the extruder attached. The materials are
-        // extruder specific and not machine specific, but
-        // the extruders are themselves machine specific,
-        // so in theory the materials are also machine
-        // specific. e.g. hot extruders can never be attached
-        // to V1 printers so ABS/SR-30 can't be used on V1
-        // without some warranty voiding creativity. This logic
-        // shouldn't get too broken since an extruder should
-        // always be attached to a printer anytime the user
-        // wants to print or load which are the only times the
-        // material checks can block something.
-        switch(filamentBayID) {
-        case 1:
-            switch (bot.extruderAType) {
-            case ExtruderType.MK14:
-                ["pla", "im-pla", "pet", "nylon", "tpu"]
-                break;
-            case ExtruderType.MK14_HOT:
-                ["abs", "asa", "pc-abs", "pc-abs-fr", "abs-wss1"]
-                break;
-            case ExtruderType.MK14_COMP:
-                if(bot.machineType == MachineType.Fire) {
-                    ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf"]
-                } else {
-                    ["pla", "im-pla", "pet", "im-pla-esd", "nylon", "tpu", "nylon-cf", "nylon12-cf", "abs", "asa", "pc-abs", "pc-abs-fr", "abs-wss1"]
-                }
-                break;
-            default:
-                []
-                break;
-            }
-            break;
-        case 2:
-            switch (bot.extruderBType) {
-            case ExtruderType.MK14:
-                ["pva"]
-                break;
-            case ExtruderType.MK14_HOT:
-                ["sr30", "hips", "wss1"]
-                break;
-            default:
-                []
-                break;
-            }
-            break;
-        default:
-            []
-            break;
-        }
-    }
+    property var supportedMaterials: bot["extruder%1SupportedMaterials".arg(idxAsAxis)]
 
     property string printMaterial : {
         switch(filamentBayID) {
