@@ -18,7 +18,6 @@ AdvancedSettingsPageForm {
     }
 
     buttonCopyLogs.onClicked: {
-        copyingLogsPopup.popupState = "no_usb_detected";
         if(storage.usbStorageConnected) {
             var now = new Date();
             copyingLogsPopup.logBundlePath =
@@ -27,6 +26,9 @@ AdvancedSettingsPageForm {
                     ".zip";
             bot.zipLogs(copyingLogsPopup.logBundlePath);
             copyingLogsPopup.popupState = "copy_logs_state";
+        }
+        else {
+            copyingLogsPopup.popupState = "no_usb_detected";
         }
 
         if (!copyingLogsPopup.initialized) {
@@ -39,19 +41,25 @@ AdvancedSettingsPageForm {
 
                     var succeeded = !(bot.process.errorCode);
                     copyingLogsPopup.errorcode = bot.process.errorCode;
-                    if (bot.process.stateType === ProcessStateType.Done &&
-                            succeeded) {
-                        bot.forceSyncFile(copyingLogsPopup.logBundlePath)
-                        copyingLogsPopup.popupState = "successfully_copied_logs";
+                    if(bot.process.stateType === ProcessStateType.Done &&
+                            !copyingLogsPopup.cancelled) {
+                        if (succeeded) {
+                            bot.forceSyncFile(copyingLogsPopup.logBundlePath)
+                            copyingLogsPopup.popupState = "successfully_copied_logs";
+                        }
+                        else {
+                            copyingLogsPopup.popupState = "failed_copied_logs";
+                        }
                     }
                     else if(bot.process.stateType === ProcessStateType.Done) {
-                        copyingLogsPopup.popupState = "failed_copied_logs";
+                        copyingLogsPopup.close();
                     }
+
                 }
             });
 
             copyingLogsPopup.initialized = true;
-            copyingLogsPopup.copyPopupVisible = true;
+            copyingLogsPopup.open();
         }
     }
 

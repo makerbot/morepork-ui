@@ -551,18 +551,22 @@ Item {
     }
 
     CustomPopup {
-        popupName: "CopyingLogsPopup"
+        popupName: "CopyingLogs"
         property bool initialized: false
-        property bool copyPopupVisible: false
         property string logBundlePath: ""
         property int errorcode: 0
+        property bool showButton: true
+        property bool cancelled: false
 
         id: copyingLogsPopup
-        visible: copyPopupVisible
+        visible: false
         popupWidth: 750
         popupHeight: {
             if(popupState == "failed_copied_logs") {
                 350
+            }
+            else if(popupState == "cancelling_copy_logs") {
+                250
             }
             else {
                 300
@@ -570,7 +574,7 @@ Item {
         }
 
         property string popupState: "no_usb_detected"
-        showOneButton: true
+        showOneButton: showButton
         full_button_text: {
             if (popupState =="copy_logs_state") {
                 qsTr("CANCEL")
@@ -582,16 +586,23 @@ Item {
         full_button.onClicked: {
             if(popupState == "copy_logs_state") {
                 bot.cancel()
+                showButton = false
+                cancelled = true
+                popupState = "cancelling_copy_logs"
             }
-            copyPopupVisible = false
-            initialized = false
-            copyingLogsPopup.close()
+            else {
+                initialized = false
+                cancelled = false
+                copyingLogsPopup.close()
+                showButton = true
+            }
         }
 
         onClosed: {
             popupState = "no_usb_detected"
-            copyPopupVisible = false
             initialized = false
+            cancelled = false
+            showButton = true
         }
 
         ColumnLayout {
@@ -681,7 +692,7 @@ Item {
 
                     PropertyChanges {
                         target: description
-                        text: qsTr("You need to insert a USB to use this feature")
+                        text: qsTr("You need to insert a USB to use this feature.")
                         visible: true
                     }
 
@@ -689,6 +700,37 @@ Item {
                         target: columnLayout_copy_logs
                         height: 100
                         anchors.topMargin: 120
+                    }
+                },
+                State {
+                    name: "cancelling_copy_logs"
+                    when: copyingLogsPopup.popupState == "cancelling_copy_logs"
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("CANCELLING...")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("Do not remove USB.")
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_copy_logs
+                        height: 100
+                        anchors.topMargin: 140
+                        spacing: 25
                     }
                 },
                 State {
