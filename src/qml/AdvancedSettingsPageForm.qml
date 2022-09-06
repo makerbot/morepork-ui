@@ -553,10 +553,10 @@ Item {
     CustomPopup {
         popupName: "CopyingLogs"
         property bool initialized: false
+        property bool cancelled: false
         property string logBundlePath: ""
         property int errorcode: 0
         property bool showButton: true
-        property bool cancelled: false
 
         id: copyingLogsPopup
         visible: false
@@ -588,11 +588,13 @@ Item {
                 bot.cancel()
                 showButton = false
                 cancelled = true
+                errorcode = 0
                 popupState = "cancelling_copy_logs"
             }
             else {
                 initialized = false
                 cancelled = false
+                errorcode = 0
                 copyingLogsPopup.close()
                 showButton = true
             }
@@ -602,6 +604,7 @@ Item {
             popupState = "no_usb_detected"
             initialized = false
             cancelled = false
+            errorcode = 0
             showButton = true
         }
 
