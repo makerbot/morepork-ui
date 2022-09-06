@@ -54,7 +54,6 @@ AdvancedSettingsPageForm {
                     else if(bot.process.stateType === ProcessStateType.Done) {
                         copyingLogsPopup.close();
                     }
-
                 }
             });
 
