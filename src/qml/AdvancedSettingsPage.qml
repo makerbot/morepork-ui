@@ -1,4 +1,4 @@
-import QtQuick 2.10
+﻿import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
@@ -18,37 +18,47 @@ AdvancedSettingsPageForm {
     }
 
     buttonCopyLogs.onClicked: {
-        if (buttonCopyLogs.enabled) {
+        if(storage.usbStorageConnected) {
             var now = new Date();
             copyingLogsPopup.logBundlePath =
                     storage.usbStoragePath + "/Logs_" +
                     now.toString().replace(/[\s,:]/g, "_") +
                     ".zip";
             bot.zipLogs(copyingLogsPopup.logBundlePath);
+            copyingLogsPopup.popupState = "copy_logs_state";
+        }
+        else {
+            copyingLogsPopup.popupState = "no_usb_detected";
         }
 
         if (!copyingLogsPopup.initialized) {
             bot.process.onStateTypeChanged.connect(function() {
+
                 if (bot.process.type === ProcessType.ZipLogsProcess) {
-                    copyingLogsPopup.zipLogsInProgress =
+
+                    var zipLogsInProgress =
                              bot.process.stateType !== ProcessStateType.Done;
 
                     var succeeded = !(bot.process.errorCode);
-                    if (bot.process.stateType === ProcessStateType.Done &&
-                            succeeded) {
-                        bot.forceSyncFile(copyingLogsPopup.logBundlePath)
+                    copyingLogsPopup.errorcode = bot.process.errorCode;
+                    if(bot.process.stateType === ProcessStateType.Done &&
+                            !copyingLogsPopup.cancelled) {
+                        if (succeeded) {
+                            bot.forceSyncFile(copyingLogsPopup.logBundlePath)
+                            copyingLogsPopup.popupState = "successfully_copied_logs";
+                        }
+                        else {
+                            copyingLogsPopup.popupState = "failed_copied_logs";
+                        }
                     }
-                    copyLogsFinishedPopup.succeeded = succeeded;
-                    copyLogsFinishedPopup.errorcode = bot.process.errorCode;
-                } else {
-                    copyingLogsPopup.zipLogsInProgress = false;
+                    else if(bot.process.stateType === ProcessStateType.Done) {
+                        copyingLogsPopup.close();
+                    }
                 }
             });
 
-            copyingLogsPopup.onAboutToHide.connect(function() {
-                copyLogsFinishedPopup.open();
-            });
             copyingLogsPopup.initialized = true;
+            copyingLogsPopup.open();
         }
     }
 

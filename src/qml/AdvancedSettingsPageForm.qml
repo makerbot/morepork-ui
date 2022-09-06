@@ -30,8 +30,6 @@ Item {
 
     property alias copyingLogsPopup: copyingLogsPopup
 
-    property alias copyLogsFinishedPopup: copyLogsFinishedPopup
-
     property bool isResetting: false
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetToFactoryPopup: resetToFactoryPopup
@@ -223,7 +221,7 @@ Item {
                         id: buttonCopyLogs
                         buttonImage.source: "qrc:/img/icon_copy_logs.png"
                         buttonText.text: qsTr("COPY LOGS TO USB")
-                        enabled: (!isProcessRunning() && storage.usbStorageConnected)
+                        enabled: !isProcessRunning()
                     }
 
                     MenuButton {
@@ -552,54 +550,257 @@ Item {
         }
     }
 
-    BusyPopup {
+    CustomPopup {
         popupName: "CopyingLogs"
         property bool initialized: false
-        property bool zipLogsInProgress: false
+        property bool cancelled: false
         property string logBundlePath: ""
+        property int errorcode: 0
+        property bool showButton: true
 
         id: copyingLogsPopup
-        visible: zipLogsInProgress
-        busyPopupText: qsTr("COPYING LOGS TO USB...")
-    }
-
-    ModalPopup {
-        popupName: "CopyingLogsCompleted"
-        property bool succeeded: false
-        property int errorcode: 0
-
-        id: copyLogsFinishedPopup
         visible: false
-        popup_contents.contentItem: Item {
-            anchors.fill: parent
-            TitleText {
-                text: copyLogsFinishedPopup.succeeded ?
-                            qsTr("FINISHED COPYING LOGS TO USB") :
-                            qsTr("FAILED TO COPY LOGS TO USB")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+        popupWidth: 750
+        popupHeight: {
+            if(popupState == "failed_copied_logs") {
+                350
             }
-            BodyText{
-                visible: !(copyLogsFinishedPopup.succeeded)
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                color: copyLogsFinishedPopup.succeeded ? "#ffffff" : "#ff0000"
-                font.pixelSize: 18
+            else if(popupState == "cancelling_copy_logs") {
+                250
+            }
+            else {
+                300
+            }
+        }
 
-                text: (copyLogsFinishedPopup.errorcode == 1051) ?
-                      qsTr("\n\n\nINSUFFICIENT USB SPACE - REMOVE FILES AND TRY AGAIN") :
-                      qsTr("\n\n\nERROR CODE: " + copyLogsFinishedPopup.errorcode)
+        property string popupState: "no_usb_detected"
+        showOneButton: showButton
+        full_button_text: {
+            if (popupState =="copy_logs_state") {
+                qsTr("CANCEL")
+            }
+            else {
+                qsTr("CLOSE")
+            }
+        }
+        full_button.onClicked: {
+            if(popupState == "copy_logs_state") {
+                bot.cancel()
+                showButton = false
+                cancelled = true
+                errorcode = 0
+                popupState = "cancelling_copy_logs"
+            }
+            else {
+                initialized = false
+                cancelled = false
+                errorcode = 0
+                copyingLogsPopup.close()
+                showButton = true
+            }
+        }
 
-                Image {
-                    id: copyLogsFinishedPopupAlertIcon
-                    height: sourceSize.height / 2
-                    width: sourceSize.width / 2
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -70
-                    source: "qrc:/img/error.png"
+        onClosed: {
+            popupState = "no_usb_detected"
+            initialized = false
+            cancelled = false
+            errorcode = 0
+            showButton = true
+        }
+
+        ColumnLayout {
+            id: columnLayout_copy_logs
+            width: 650
+            height: parent.height
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            BusySpinner {
+                id: busy_spinner_img
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                spinnerSize: 64
+            }
+
+            TextHeadline {
+                id: title
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
+                id: description
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            states: [
+                State {
+                    name: "copy_logs_state"
+                    when: copyingLogsPopup.popupState == "copy_logs_state"
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("COPYING LOGS TO USB")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_copy_logs
+                        height: 100
+                        anchors.topMargin: 120
+                        spacing: 25
+                    }
+                },
+                State {
+                    name: "no_usb_detected"
+                    when: copyingLogsPopup.popupState == "no_usb_detected"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/extruder_material_error.png"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("NO USB DETECTED")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("You need to insert a USB to use this feature.")
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_copy_logs
+                        height: 100
+                        anchors.topMargin: 120
+                    }
+                },
+                State {
+                    name: "cancelling_copy_logs"
+                    when: copyingLogsPopup.popupState == "cancelling_copy_logs"
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("CANCELLING...")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        text: qsTr("Do not remove USB.")
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_copy_logs
+                        height: 100
+                        anchors.topMargin: 140
+                        spacing: 25
+                    }
+                },
+                State {
+                    name: "successfully_copied_logs"
+                    when: copyingLogsPopup.popupState == "successfully_copied_logs"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_complete_small.png"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("COPY LOGS TO USB - COMPLETE")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_copy_logs
+                        height: 100
+                        anchors.topMargin: 140
+                        spacing: 35
+                    }
+                },
+                State {
+                    name: "failed_copied_logs"
+                    when: copyingLogsPopup.popupState == "failed_copied_logs"
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/extruder_material_error.png"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: title
+                        text: qsTr("COPY LOGS TO USB - FAILED")
+                    }
+
+                    PropertyChanges {
+                        target: description
+                        visible: true
+                        text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
+                                    "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
+                                    "CODE: %1").arg(copyingLogsPopup.errorcode)
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout_copy_logs
+                        height: 200
+                        anchors.topMargin: 80
+                    }
                 }
-            }
+            ]
         }
     }
 
