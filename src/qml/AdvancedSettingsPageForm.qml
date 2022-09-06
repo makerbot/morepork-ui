@@ -588,13 +588,11 @@ Item {
                 bot.cancel()
                 showButton = false
                 cancelled = true
-                errorcode = 0
                 popupState = "cancelling_copy_logs"
             }
             else {
                 initialized = false
                 cancelled = false
-                errorcode = 0
                 copyingLogsPopup.close()
                 showButton = true
             }
@@ -604,7 +602,6 @@ Item {
             popupState = "no_usb_detected"
             initialized = false
             cancelled = false
-            errorcode = 0
             showButton = true
         }
 
