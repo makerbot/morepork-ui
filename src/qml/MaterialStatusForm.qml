@@ -33,9 +33,15 @@ Item {
                     text: {
                         if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
                             filamentMaterialName.toUpperCase()
-                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) &&
-                                bot.loadedMaterials[filamentBayID - 1] != "unknown") {
-                            bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
+                        } else if(!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) {
+                            if(bot.loadedMaterials[filamentBayID - 1] != "unknown") {
+                                bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
+                            }
+                            // Case when OOF and print is paused. Loaded materials is "unknown"
+                            // as the extruder switch is not triggered.
+                            else if(printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused) {
+                                qsTr("LOAD %1").arg(printMaterialName)
+                            }
                         } else {
                             qsTr("NOT DETECTED")
                         }

@@ -162,7 +162,7 @@ ErrorScreenForm {
                 }
                 else if(state == "extruder_oof_error_state1") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
-                        if(bot.extruderAType == ExtruderType.MK14_EXP) {
+                        if(bot.extruderAType == ExtruderType.MK14_EXP || !bot.hasFilamentBay) {
                             acknowledgeError()
                             resetSwipeViews()
                             mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
