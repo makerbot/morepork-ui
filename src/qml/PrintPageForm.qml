@@ -105,6 +105,13 @@ Item {
             printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false // Reset when print starts
             showPrintTip()
             startPrintSource = PrintPage.None
+
+            // Reset material page states when (an external) print process starts
+            // so that the user isn't stuck on the material loading screen if
+            // they had it open. Since this is the same cleanup signal at the
+            // end of (mid-print) loading it takes us directly to the printing
+            // screen too as a good side effect.
+            materialPage.loadUnloadFilamentProcess.processDone()
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
