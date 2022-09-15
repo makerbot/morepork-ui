@@ -31,10 +31,20 @@ Item {
                     style: TextBody.ExtraLarge
                     font.weight: Font.Bold
                     text: {
-                        if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
+                        // Print paused and extruder switch not triggered. This condition is the LCD
+                        // for all types of printers where we want to prompt the user to load a specific
+                        // material to continue printing when paused either due to OOF or somehow simply
+                        // paused without any filament in the extruder.
+                        if(printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused && !extruderFilamentPresent) {
+                            qsTr("LOAD %1").arg(printMaterialName)
+                        }
+                        // Printers with Filament Bay (Method/X)
+                        else if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
                             filamentMaterialName.toUpperCase()
-                        } else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) &&
-                                bot.loadedMaterials[filamentBayID - 1] != "unknown") {
+                        }
+                        // Printers without Filament Bay (Method XL) or ones using a labs extruder
+                        else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) &&
+                                  (bot.loadedMaterials[filamentBayID - 1] != "unknown")) {
                             bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
                         } else {
                             qsTr("NOT DETECTED")
@@ -65,13 +75,7 @@ Item {
                     Layout.preferredWidth: parent.width
                     wrapMode: Text.WordWrap
                     text: {
-                        if(printPage.isPrintProcess &&
-                           bot.process.stateType == ProcessStateType.Paused &&
-                           !extruderFilamentPresent &&
-                           !spoolPresent &&
-                           filamentMaterial != printMaterial) {
-                            qsTr("INSERT %1 TO CONTINUE").arg(printMaterialName)
-                        } else if(spoolPresent) {
+                        if(spoolPresent) {
                             filamentColorName.toUpperCase()
                         } else if(extruderFilamentPresent) {
                             usingExperimentalExtruder ?
