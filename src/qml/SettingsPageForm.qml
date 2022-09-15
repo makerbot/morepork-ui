@@ -27,6 +27,7 @@ Item {
     property alias deauthorizeAccountsPopup: deauthorizeAccountsPopup
 
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
+    property alias firmwareUpdatePage: firmwareUpdatePage
 
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
     property alias calibrateErrorScreen: calibrateErrorScreen
@@ -61,7 +62,7 @@ Item {
         TimePage,                   // 7
         AdvancedSettingsPage,       // 8
         ChangeLanguagePage,         // 9
-        KoreaDFSSecretPage,          // 10
+        KoreaDFSSecretPage,         // 10
         CleanAirSettingsPage
     }
 
@@ -144,7 +145,7 @@ Item {
                     MenuButton {
                         id: buttonFirmwareUpdate
                         buttonImage.source: "qrc:/img/icon_software_update.png"
-                        buttonText.text: qsTr("SOFTWARE UPDATE")
+                        buttonText.text: qsTr("FIRMWARE UPDATE")
                         buttonNeedsAction: isfirmwareUpdateAvailable
                     }
 
@@ -298,6 +299,7 @@ Item {
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
+            property alias firmwareUpdatePage: firmwareUpdatePage
             smooth: false
             visible: false
 

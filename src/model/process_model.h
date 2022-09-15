@@ -44,7 +44,8 @@ class ProcessModel : public BaseModel {
         Done,
         Cancelling,
         CleaningUp,
-        TransferringFirmware, // Firmware update states
+        DownloadingFirmware, // Firmware update states
+        TransferringFirmware,
         VerifyingFirmware,
         InstallingFirmware,
         BuildPlateInstructions, // Assisted leveling states

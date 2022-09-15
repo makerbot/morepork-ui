@@ -3,7 +3,6 @@ import StorageSortTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 FirmwareFileListUsbForm {
-    property bool updateFirmware: false
 
     function startFirmwareUpdate() {
         updateFirmware = true

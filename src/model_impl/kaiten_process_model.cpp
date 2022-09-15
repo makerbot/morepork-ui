@@ -59,8 +59,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             kStepStr == "homing" ||
             kStepStr == "position_found" ||
             kStepStr == "preheating_resuming" ||
-            kStepStr == "waiting_for_file" ||
-            kStepStr == "transfer")
+            kStepStr == "waiting_for_file")
             stateTypeSet(ProcessStateType::Loading);
         else if (kStepStr == "suspending")
             stateTypeSet(ProcessStateType::Pausing);
@@ -103,7 +102,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // Firmware Updating States
         // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
         else if (kStepStr == "downloading")
-        //Another possible step for firmwareUpdate is 'transfer' which is mapped to 'Loading'
+            stateTypeSet(ProcessStateType::DownloadingFirmware);
+        else if (kStepStr == "transfer")
             stateTypeSet(ProcessStateType::TransferringFirmware);
         else if (kStepStr == "verify_firmware")
             stateTypeSet(ProcessStateType::VerifyingFirmware);

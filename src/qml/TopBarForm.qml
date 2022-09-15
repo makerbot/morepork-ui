@@ -300,7 +300,15 @@ Item {
                                 qsTr("AUTHORIZE MAKERBOT ACCOUNT")
                                 break;
                             case SettingsPage.FirmwareUpdatePage:
-                                qsTr("SOFTWARE UPDATE")
+
+                                if(settingsPage.settingsSwipeView.currentItem.firmwareUpdatePage.state == "install_from_usb"
+                                    || settingsPage.settingsSwipeView.currentItem.firmwareUpdatePage.state == "select_firmware_file") {
+                                       qsTr("FIRMWARE UPDATE - USB")
+                                }
+                                else {
+                                    qsTr("FIRMWARE UPDATE")
+                                }
+
                                 break;
                             case SettingsPage.CalibrateExtrudersPage:
                                 qsTr("CALIBRATE EXTRUDERS")

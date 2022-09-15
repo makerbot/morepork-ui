@@ -11,7 +11,7 @@ Button {
     property alias buttonText: buttonText
     property alias buttonImage: buttonImage
     property bool buttonNeedsAction: false
-    property string alertImage: "qrc:/img/alert.png"
+    property string alertImage: "qrc:/img/extruder_material_error.png"
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
     enabled: true
@@ -64,8 +64,8 @@ Button {
 
         Image {
             id: buttonAlertImage
-            width: sourceSize.width
-            height: sourceSize.height
+            width: sourceSize.width -50
+            height: sourceSize.height -50
             anchors.right: parent.right
             anchors.rightMargin: 30
             anchors.verticalCenter: parent.verticalCenter
