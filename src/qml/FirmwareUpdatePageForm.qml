@@ -29,7 +29,6 @@ LoggingItem {
 
     property bool isUsbStorageConnected: storage.usbStorageConnected
     property bool isFirmwareFileCopying: storage.fileIsCopying
-    property string firmwareVersion: bot.version
 
     onIsFirmwareFileCopyingChanged: {
         if(isFirmwareFileCopying &&
@@ -292,7 +291,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: ver_status_text
-                text: qsTr("VERSION %1").arg(firmwareVersion)
+                text: qsTr("VERSION %1").arg(bot.version)
                 visible: true
             }
 
@@ -446,7 +445,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: ver_status_text
-                text: qsTr("CURRENT FIRMWARE: %1").arg(firmwareVersion)
+                text: qsTr("CURRENT FIRMWARE: %1").arg(bot.version)
                 anchors.topMargin: 70
                 visible: true
             }
