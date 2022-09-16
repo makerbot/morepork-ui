@@ -60,7 +60,7 @@ LoggingPopup {
         Item {
             id: buttonBar
             width: parent.width
-            height: 52
+            height: 72
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 0
             visible: showOneButton || showTwoButtons
@@ -106,11 +106,11 @@ LoggingPopup {
                         anchors.fill: parent
                         onPressed: {
                             full_button_rectangle.color = "#ffffff"
-                            full_button_text.color = "#000000"
+                            full_text.color = "#000000"
                         }
                         onReleased: {
                             full_button_rectangle.color = "#00000000"
-                            full_button_text.color = "#ffffff"
+                            full_text.color = "#ffffff"
                         }
                     }
                 }
