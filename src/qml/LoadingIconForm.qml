@@ -12,9 +12,15 @@ Rectangle {
     smooth: true
     visible: true
 
+    enum Icon {
+        Loading,
+        Success,
+        Failure
+    }
+
+    property int icon_image: LoadingIcon.Loading
     property alias loading: loading_icon.visible
     property int loadingProgress: 0
-    property string icon_image: "loading"
 
     Image {
         id: inner_image
@@ -33,7 +39,8 @@ Rectangle {
             to: 0
             duration: 10000
             loops: Animation.Infinite
-            running: icon_image == "loading"
+            running: icon_image === LoadingIcon.Loading
+
         }
     }
 
@@ -134,7 +141,8 @@ Rectangle {
     states: [
         State {
             name: "loading"
-            when: icon_image == "loading"
+            when: icon_image === LoadingIcon.Loading
+
 
             PropertyChanges {
                 target: inner_image
@@ -156,7 +164,8 @@ Rectangle {
         },
         State {
             name: "success"
-            when: icon_image == "success"
+            when: icon_image === LoadingIcon.Success
+
 
             PropertyChanges {
                 target: inner_image
@@ -180,7 +189,8 @@ Rectangle {
         },
         State {
             name: "failure"
-            when: icon_image == "failure"
+            when: icon_image === LoadingIcon.Failure
+
 
             PropertyChanges {
                 target: inner_image

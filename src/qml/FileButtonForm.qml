@@ -62,6 +62,7 @@ Button {
             id: filenameText
             width: 525
             text: qsTr("Filename Text")
+            font.capitalization: Font.AllUppercase
             font.family: defaultFont.name
             font.letterSpacing: 3
             font.weight: Font.Bold

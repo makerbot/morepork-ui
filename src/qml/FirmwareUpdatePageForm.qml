@@ -42,7 +42,7 @@ LoggingItem {
     onIsUsbStorageConnectedChanged: {
         if(state == "select_firmware_file" &&
            !isUsbStorageConnected &&
-           bot.process.type == ProcessType.None) {
+           bot.process.type === ProcessType.None) {
             state = "install_from_usb"
         }
     }
@@ -50,7 +50,8 @@ LoggingItem {
     property int errorCode
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
-        if(bot.process.errorCode > 0) {
+        if(bot.process.type === ProcessType.FirmwareUpdate
+                && bot.process.errorCode > 0) {
             errorCode = bot.process.errorCode
             firmwareUpdateFailedPopup.open()
         }
@@ -86,7 +87,7 @@ LoggingItem {
         anchors.leftMargin: 80
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
-        icon_image: "loading"
+        icon_image: LoadingIcon.Loading
         visible: true
         loading: true
     }
@@ -108,56 +109,26 @@ LoggingItem {
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
 
-        Text {
+        TextHeadline {
             id: main_status_text
             text: qsTr("CHECKING FOR UPDATES")
+            color: "#ffffff"
             width: parent.width
             anchors.top: parent.top
             anchors.topMargin: 60
-            wrapMode: Text.WordWrap
-            font.letterSpacing: 3
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            font.capitalization: Font.AllUppercase
-            font.pixelSize: 18
-            lineHeight: 1.35
             visible: true
         }
 
-        Text {
-            id: ver_status_text
-            width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 70
-            font.wordSpacing: 1
-            font.letterSpacing: 2
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.pixelSize: 14
-            lineHeight: 1.35
-            wrapMode: Text.WordWrap
-            visible: false
-        }
-
-        Text {
-            id: release_notes_text
-            text: qsTr("%1 RELEASE NOTES").arg(bot.firmwareUpdateVersion)
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Light
+        TextSubheader {
+            id: subheader_text
             font.underline: true
-            font.capitalization: Font.AllUppercase
-            font.pixelSize: 14
-            visible: false
+            color: "#ffffff"
             anchors.top: parent.top
-            anchors.topMargin: 70
-            font.wordSpacing: 1
-            font.letterSpacing: 2
+            anchors.topMargin: 80
+            visible: false
 
             LoggingMouseArea {
-                logText: "[" + release_notes_text.text + "]"
+                logText: "[" + subheader_text.text + "]"
                 id: viewReleaseNotesMouseArea
                 anchors.fill: parent
                 onClicked: {
@@ -168,20 +139,14 @@ LoggingItem {
             }
         }
 
-        Text {
+        TextBody {
             id: sub_status_text
             text: qsTr("PLEASE WAIT A MOMENT")
+            font.weight: Font.Light
+            color: "#ffffff"
             width: parent.width
             anchors.top: parent.top
-            anchors.topMargin: 100
-            font.wordSpacing: 1
-            font.letterSpacing: 2
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.pixelSize: 14
-            lineHeight: 1.35
-            wrapMode: Text.WordWrap
+            anchors.topMargin: 70
             visible: true
         }
 
@@ -209,7 +174,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: loading_icon
-                icon_image: "failure"
+                icon_image: LoadingIcon.Failure
                 visible: true
             }
 
@@ -226,25 +191,28 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: ver_status_text
-                visible: false
+                target: subheader_text
+                text: qsTr("%1 RELEASE NOTES").arg(bot.firmwareUpdateVersion)
+                font.underline: true
+                visible: true
             }
 
             PropertyChanges {
-                target: release_notes_text
-                visible: true
+                target: viewReleaseNotesMouseArea
+                enabled: true
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: qsTr("Recommended to improve machine reliability and print quality.")
-                anchors.topMargin: 110
+                font.weight: Font.Normal
+                anchors.topMargin: 120
                 visible: true
             }
 
             PropertyChanges {
                 target: button1
-                anchors.topMargin: 180
+                anchors.topMargin: 200
                 text: qsTr("INSTALL VIA NETWORK")
                 visible: true
                 enabled: !isProcessRunning()
@@ -252,7 +220,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button2
-                anchors.topMargin: 260
+                anchors.topMargin: 275
                 text: qsTr("INSTALL VIA USB")
                 visible: true
             }
@@ -260,6 +228,7 @@ LoggingItem {
             PropertyChanges {
                 target: columnLayout
                 height: 335
+                visible: true
             }
 
             PropertyChanges {
@@ -273,7 +242,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: loading_icon
-                icon_image: "success"
+                icon_image: LoadingIcon.Success
                 visible: true
             }
 
@@ -290,20 +259,22 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: ver_status_text
+                target: subheader_text
                 text: qsTr("VERSION %1").arg(bot.version)
+                font.underline: false
                 visible: true
             }
 
             PropertyChanges {
-                target: release_notes_text
-                visible: false
+                target: viewReleaseNotesMouseArea
+                enabled: false
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: qsTr("No update is required at this time.")
-                anchors.topMargin: 110
+                font.weight: Font.Normal
+                anchors.topMargin: 120
                 visible: true
             }
 
@@ -311,12 +282,12 @@ LoggingItem {
                 target: button1
                 text: qsTr("CONFIRM")
                 visible: true
-                anchors.topMargin: 155
+                anchors.topMargin: 180
             }
 
             PropertyChanges {
                 target: button2
-                anchors.topMargin: 230
+                anchors.topMargin: 255
                 text: qsTr("INSTALL VIA USB")
                 visible: true
             }
@@ -325,6 +296,7 @@ LoggingItem {
                 target: columnLayout
                 height: 250
                 anchors.verticalCenterOffset: -55
+                visible: true
             }
 
             PropertyChanges {
@@ -338,7 +310,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: loading_icon
-                icon_image: "loading"
+                icon_image: LoadingIcon.Loading
                 visible: true
             }
 
@@ -371,12 +343,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: ver_status_text
-                visible: false
-            }
-
-            PropertyChanges {
-                target: release_notes_text
+                target: subheader_text
                 visible: false
             }
 
@@ -399,6 +366,7 @@ LoggingItem {
                         break;
                     }
                 }
+                font.weight: Font.Light
                 anchors.topMargin: 100
                 visible: true
             }
@@ -416,6 +384,7 @@ LoggingItem {
             PropertyChanges {
                 target: columnLayout
                 height: 150
+                visible: true
             }
 
             PropertyChanges {
@@ -425,6 +394,7 @@ LoggingItem {
         },
         State {
             name: "install_from_usb"
+
             PropertyChanges {
                 target: loading_icon
                 visible: false
@@ -442,27 +412,20 @@ LoggingItem {
                 target: main_status_text
                 visible: false
             }
-
             PropertyChanges {
-                target: ver_status_text
-                text: qsTr("CURRENT FIRMWARE: %1").arg(bot.version)
-                anchors.topMargin: 70
-                visible: true
-            }
-
-            PropertyChanges {
-                target: release_notes_text
+                target: subheader_text
                 visible: false
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: {
-                    qsTr("Visit <font color=\"#E85A4F\"><b>makerbot.com/%1</b></font> to download "
+                    qsTr("CURRENT FIRMWARE: %1<br><br>Visit <font color=\"#E85A4F\"><b>makerbot.com/%2</b></font> to download "
                          + "the latest firmware. Drag the file onto a usb stick and insert it into "
-                         + "the front of the printer.").arg(getUrlByMachineType(bot.machineType))
+                         + "the front of the printer.").arg(bot.version).arg(getUrlByMachineType(bot.machineType))
                 }
-                anchors.topMargin: 110
+                font.weight: Font.Normal
+                anchors.topMargin: 60
                 visible: true
             }
 
@@ -482,6 +445,7 @@ LoggingItem {
             PropertyChanges {
                 target: columnLayout
                 height: 320
+                visible: true
             }
 
             PropertyChanges {
@@ -491,6 +455,7 @@ LoggingItem {
         },
         State {
             name: "select_firmware_file"
+
             PropertyChanges {
                 target: loading_icon
                 visible: false
@@ -556,14 +521,11 @@ LoggingItem {
                 spinnerSize: 48
             }
 
-            Text {
+            TextHeadline {
                 id: alert_text_firmware_popup
-                color: "#cbcbcb"
-                font.letterSpacing: 3
+                text: ""
+                color: "#ffffff"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
             Item {
@@ -574,18 +536,14 @@ LoggingItem {
                 visible: true
             }
 
-            Text {
+            TextBody {
                 id: description_text_firmware_popup
-                color: "#cbcbcb"
+                color: "#ffffff"
+                font.weight: Font.Light
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 16
-                lineHeight: 1.3
                 visible: true
             }
             states: [
@@ -654,8 +612,8 @@ LoggingItem {
 
             Image {
                 id: error_image
-                width: sourceSize.width - 20
-                height: sourceSize.height - 20
+                width: sourceSize.width - 10
+                height: sourceSize.height - 10
                 Layout.alignment: Qt.AlignHCenter
                 source: "qrc:/img/extruder_material_error.png"
             }
@@ -663,6 +621,7 @@ LoggingItem {
             TextHeadline {
                 id: title
                 Layout.alignment: Qt.AlignHCenter
+                color: "#ffffff"
                 text: qsTr("FIRMWARE UPDATE - FAILED")
             }
 
@@ -671,6 +630,7 @@ LoggingItem {
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
+                color: "#ffffff"
                 text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
                             "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
                             "CODE: %1").arg(bot.process.errorCode)

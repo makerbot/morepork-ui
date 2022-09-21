@@ -23,8 +23,9 @@ Item {
         fileBaseName = ""
     }
 
-    Text {
+    TextBody {
         id: noFilesText
+        style: TextBody.ExtraLarge
         color: "#ffffff"
         font.weight: Font.Bold
         text: qsTr("NO FIRMWARE FILES")
@@ -32,50 +33,39 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.verticalCenterOffset: -75
         anchors.horizontalCenter: parent.horizontalCenter
-        font.pixelSize: 19
-        font.letterSpacing: 2
         visible: storage.storageIsEmpty
 
-        Text {
+        TextBody {
             color: "#ffffff"
-            font.family: "Antennae"
             font.weight: Font.Light
             text: {
                 qsTr("Choose another folder or visit <b>makerbot.com/%1</b> to<br> download the " +
                      "latest firmware. Drag the file onto a usb<br> stick and insert it into " +
                      "the front of the printer.").arg(getUrlByMachineType(bot.machineType))
             }
+            style: TextBody.Large
             anchors.top: parent.bottom
             anchors.topMargin: 15
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            font.pixelSize: 17
-            font.letterSpacing: 1
-            lineHeight: 1.4
         }
     }
 
-    Text {
+    TextSubheader {
         id: itemUsbCurrentFwText
         color: "#ffffff"
-        font.family: "Antennae"
-        font.weight: Font.Light
         text: qsTr("CURRENT FIRMWARE: %1").arg(bot.version)
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
         visible: !storage.storageIsEmpty && !storage.fileIsCopying
-        font.pixelSize: 18
-        font.letterSpacing: 1
-        lineHeight: 1.4
     }
 
     Item {
         id: itemUsbFwUpdateStorage
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
         smooth: false
         visible: true
         anchors.top: itemUsbCurrentFwText.bottom
+        anchors.topMargin: 10
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom

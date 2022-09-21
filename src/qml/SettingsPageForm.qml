@@ -306,7 +306,12 @@ Item {
             function altBack() {
                 if(!inFreStep) {
                     if(firmwareUpdatePage.state == "install_from_usb") {
-                        firmwareUpdatePage.state = "no_firmware_update_available"
+                        if(isfirmwareUpdateAvailable) {
+                            firmwareUpdatePage.state = "firmware_update_available"
+                        }
+                        else {
+                            firmwareUpdatePage.state = "no_firmware_update_available"
+                        }
                     }
                     else if (firmwareUpdatePage.state == "select_firmware_file") {
                         var backDir = storage.backStackPop()
