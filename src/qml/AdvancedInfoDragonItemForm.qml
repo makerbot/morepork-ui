@@ -14,7 +14,7 @@ Item {
 
         Text {
             id: heading
-            text: qsTr("Heating System")
+            text: qsTr("HEATING SYSTEM")
             font.letterSpacing: 2
             font.weight: Font.Bold
             font.pixelSize: 20

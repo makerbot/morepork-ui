@@ -267,8 +267,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoChamberHeaterBTemp, -999)
     MODEL_PROP(int, infoChamberError, -0)
     // Heating System (Dragon)
-    MODEL_PROP(QString, infoHeatSysStateStr, "Unknown")
-    MODEL_PROP(QString, infoHeatSysErrorStr, "Unknown")
+    MODEL_PROP(QString, infoHeatSysStateStr, "NONE")
+    MODEL_PROP(QString, infoHeatSysErrorStr, "NONE")
     // Filament Bay
     // Bay 1
     MODEL_PROP(int, infoBay1Temp, -999)

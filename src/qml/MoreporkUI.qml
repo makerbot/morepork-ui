@@ -1956,6 +1956,43 @@ ApplicationWindow {
             }
         }
 
+        // Modal Popup for Heating system error
+        ModalPopup {
+            popupName: "HeatingSystemError"
+            /* Report to the user that the heating system has detected a fault.
+            */
+            property bool heatingSystemError: bot.infoHeatSysErrorStr !== "NONE"
+            id: heatingSystemErrorPopup
+            visible: heatingSystemError && !bot.hasFilamentBay
+            disableUserClose: false
+
+            popup_contents.contentItem: Item {
+                anchors.fill: parent
+                ColumnLayout {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: 150
+
+                    TitleText {
+                        text: "HEATING SYSTEM ERROR"
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+                    BodyText{
+                        text: {
+                           qsTr("The printer’s Chamber and Build Plate Heating System is reporting "
+                                    + "an error %1. Try restarting the printer. If this happens again, "
+                                    + "please contact MakerBot support.").arg(bot.infoHeatSysErrorStr)
+                        }
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        Layout.preferredWidth: 600
+                        wrapMode: "WordWrap"
+                    }
+                }
+            }
+        }
+
         LoggingPopup {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup

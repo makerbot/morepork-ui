@@ -1995,8 +1995,16 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
 
         const Json::Value &kDragon = info["dragon_status"];
         if(kDragon.isObject()){
-            UPDATE_STRING_PROP(infoHeatSysStateStr, kDragon["mcu_state_str"]);
-            UPDATE_STRING_PROP(infoHeatSysErrorStr, kDragon["mcu_error_str"]);
+            Json::Value infoStr = kDragon["mcu_state_str"];
+            if(infoStr.asString().empty()) {
+                infoStr = "NONE";
+            }
+            UPDATE_STRING_PROP(infoHeatSysStateStr, infoStr);
+            infoStr = kDragon["mcu_error_str"];
+            if(infoStr.asString().empty()) {
+                infoStr = "NONE";
+            }
+            UPDATE_STRING_PROP(infoHeatSysErrorStr, infoStr);
         }
 
         const Json::Value &kFilamentBay = info["filamentbay_status"];
