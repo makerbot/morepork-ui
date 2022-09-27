@@ -127,7 +127,7 @@ Item {
     // This popup is common for both methods of signing into
     // the printer.
     CustomPopup {
-        popupName: "AuthorizeAccount"
+        popupName: "AccountsAuthorization"
         id: authorizeAccountPopup
         popupWidth: 720
         popupHeight: 305
