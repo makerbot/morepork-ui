@@ -632,13 +632,11 @@ Item {
 
             TextHeadline {
                 id: title
-                color: "#ffffff"
                 Layout.alignment: Qt.AlignHCenter
             }
 
             TextBody {
                 id: description
-                color: "#ffffff"
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter

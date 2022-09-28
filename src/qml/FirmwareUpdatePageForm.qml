@@ -58,15 +58,8 @@ LoggingItem {
     }
     property bool updateFirmware: false
 
-    function getUrlByMachineType(type) {
-        switch(type) {
-        case MachineType.Fire:
-            return "methodFW"
-        case MachineType.Lava:
-            return "methodXFW"
-        case MachineType.Magma:
-            return "methodXLFW"
-        }
+    function getUrlForMethod() {
+           return "support.makerbot.com/s/article/Method-Firmware"
     }
 
     Rectangle {
@@ -95,76 +88,75 @@ LoggingItem {
     Image {
         id: image
         anchors.left: parent.left
-        anchors.leftMargin: 80
+        anchors.leftMargin: 120
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
         visible: false
     }
 
-    Item {
+    ColumnLayout {
         id: columnLayout
         x: 400
-        width: 350
+        width: 360
         height: 150
-        anchors.verticalCenterOffset: -20
+        anchors.verticalCenterOffset: 0
         anchors.verticalCenter: parent.verticalCenter
+        spacing: 32
 
-        TextHeadline {
-            id: main_status_text
-            text: qsTr("CHECKING FOR UPDATES")
-            color: "#ffffff"
+        ColumnLayout {
+            spacing: 24
             width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 60
-            visible: true
-        }
+            height: parent.height
 
-        TextSubheader {
-            id: subheader_text
-            font.underline: true
-            color: "#ffffff"
-            anchors.top: parent.top
-            anchors.topMargin: 80
-            visible: false
+            TextHeadline {
+                id: main_status_text
+                text: qsTr("CHECKING FOR UPDATES")
+                width: parent.width
+                visible: true
+            }
 
-            LoggingMouseArea {
-                logText: "[" + subheader_text.text + "]"
-                id: viewReleaseNotesMouseArea
-                anchors.fill: parent
-                onClicked: {
-                    firmwareUpdatePopup.open()
-                    skipFirmwareUpdate = false
-                    viewReleaseNotes = true
+            TextSubheader {
+                id: subheader_text
+                font.underline: true
+                visible: false
+
+                LoggingMouseArea {
+                    logText: "[" + subheader_text.text + "]"
+                    id: viewReleaseNotesMouseArea
+                    anchors.fill: parent
+                    onClicked: {
+                        firmwareUpdatePopup.open()
+                        skipFirmwareUpdate = false
+                        viewReleaseNotes = true
+                    }
                 }
             }
-        }
 
-        TextBody {
-            id: sub_status_text
-            text: qsTr("PLEASE WAIT A MOMENT")
-            font.weight: Font.Light
-            color: "#ffffff"
+            TextBody {
+                id: sub_status_text
+                text: qsTr("PLEASE WAIT A MOMENT")
+                font.weight: Font.Light
+                width: parent.width
+                Layout.fillWidth: true
+                visible: true
+            }
+        }
+        ColumnLayout {
+            spacing: 24
             width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 70
-            visible: true
-        }
+            height: parent.height
 
-        ButtonRectanglePrimary {
-            id: button1
-            text: qsTr("TEXT")
-            logKey: text
-            visible: false
-            anchors.top: parent.top
-            anchors.topMargin: 0
-        }
+            ButtonRectanglePrimary {
+                id: button1
+                logKey: text
+                visible: false
+            }
 
-        ButtonRectangleSecondary {
-            id: button2
-            logKey: text
-            visible: false
-            anchors.top: parent.top
-            anchors.topMargin: 0
+            ButtonRectangleSecondary {
+                id: button2
+                logKey: text
+                visible: false
+            }
         }
     }
     states: [
@@ -186,7 +178,6 @@ LoggingItem {
             PropertyChanges {
                 target: main_status_text
                 text: qsTr("NEW FIRMWARE AVAILABLE")
-                anchors.topMargin: 30
                 visible: true
             }
 
@@ -206,7 +197,6 @@ LoggingItem {
                 target: sub_status_text
                 text: qsTr("Recommended to improve machine reliability and print quality.")
                 font.weight: Font.Normal
-                anchors.topMargin: 120
                 visible: true
             }
 
@@ -227,7 +217,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: columnLayout
-                height: 335
+                height: 250
+                anchors.verticalCenterOffset: -30
                 visible: true
             }
 
@@ -254,7 +245,6 @@ LoggingItem {
             PropertyChanges {
                 target: main_status_text
                 text: qsTr("FIRMWARE IS UP TO DATE")
-                anchors.topMargin: 30
                 visible: true
             }
 
@@ -274,7 +264,6 @@ LoggingItem {
                 target: sub_status_text
                 text: qsTr("No update is required at this time.")
                 font.weight: Font.Normal
-                anchors.topMargin: 120
                 visible: true
             }
 
@@ -282,20 +271,18 @@ LoggingItem {
                 target: button1
                 text: qsTr("CONFIRM")
                 visible: true
-                anchors.topMargin: 180
             }
 
             PropertyChanges {
                 target: button2
-                anchors.topMargin: 255
                 text: qsTr("INSTALL VIA USB")
                 visible: true
             }
 
             PropertyChanges {
                 target: columnLayout
-                height: 250
-                anchors.verticalCenterOffset: -55
+                height: 100
+                anchors.verticalCenterOffset: -100
                 visible: true
             }
 
@@ -338,7 +325,6 @@ LoggingItem {
                         break;
                     }
                 }
-                anchors.topMargin: 60
                 visible: true
             }
 
@@ -367,7 +353,6 @@ LoggingItem {
                     }
                 }
                 font.weight: Font.Light
-                anchors.topMargin: 100
                 visible: true
             }
 
@@ -383,7 +368,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: columnLayout
-                height: 150
+                height: 80
+                anchors.verticalCenterOffset: 0
                 visible: true
             }
 
@@ -404,7 +390,8 @@ LoggingItem {
                 target: image
                 width: sourceSize.width
                 height: sourceSize.height
-                source: "qrc:/img/firmware_update_available.png"
+                source: "qrc:/img/usb_1.png"
+
                 visible: true
             }
 
@@ -420,12 +407,11 @@ LoggingItem {
             PropertyChanges {
                 target: sub_status_text
                 text: {
-                    qsTr("CURRENT FIRMWARE: %1<br><br>Visit <font color=\"#E85A4F\"><b>makerbot.com/%2</b></font> to download "
-                         + "the latest firmware. Drag the file onto a usb stick and insert it into "
-                         + "the front of the printer.").arg(bot.version).arg(getUrlByMachineType(bot.machineType))
+                    qsTr("CURRENT FIRMWARE: %1<br><br>Visit <b>%2</b> to download the latest "
+                         + "firmware. Drag the file onto a usb stick and insert it into the "
+                         + "front of the printer.").arg(bot.version).arg(getUrlForMethod())
                 }
                 font.weight: Font.Normal
-                anchors.topMargin: 60
                 visible: true
             }
 
@@ -433,7 +419,6 @@ LoggingItem {
                 target: button1
                 text: qsTr("CHOOSE FILE")
                 visible: true
-                anchors.topMargin: 220
                 enabled: storage.usbStorageConnected
             }
 
@@ -444,7 +429,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: columnLayout
-                height: 320
+                height: 250
+                anchors.verticalCenterOffset: -20
                 visible: true
             }
 

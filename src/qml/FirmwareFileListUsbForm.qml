@@ -26,7 +26,6 @@ Item {
     TextBody {
         id: noFilesText
         style: TextBody.ExtraLarge
-        color: "#ffffff"
         font.weight: Font.Bold
         text: qsTr("NO FIRMWARE FILES")
         horizontalAlignment: Text.AlignHCenter
@@ -36,24 +35,24 @@ Item {
         visible: storage.storageIsEmpty
 
         TextBody {
-            color: "#ffffff"
             font.weight: Font.Light
             text: {
-                qsTr("Choose another folder or visit <b>makerbot.com/%1</b> to<br> download the " +
-                     "latest firmware. Drag the file onto a usb<br> stick and insert it into " +
-                     "the front of the printer.").arg(getUrlByMachineType(bot.machineType))
+                qsTr("Choose another folder or visit <b>%1</b> to download the " +
+                     "latest firmware. Drag the file onto a usb stick and insert it into " +
+                     "the front of the printer.").arg(getUrlForMethod())
             }
             style: TextBody.Large
             anchors.top: parent.bottom
             anchors.topMargin: 15
             horizontalAlignment: Text.AlignHCenter
             anchors.horizontalCenter: parent.horizontalCenter
+            width: 650
+            wrapMode: Text.WordWrap
         }
     }
 
     TextSubheader {
         id: itemUsbCurrentFwText
-        color: "#ffffff"
         text: qsTr("CURRENT FIRMWARE: %1").arg(bot.version)
         horizontalAlignment: Text.AlignHCenter
         anchors.horizontalCenter: parent.horizontalCenter
