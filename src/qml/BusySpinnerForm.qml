@@ -42,7 +42,7 @@ BusyIndicator {
 
                 Repeater {
                     id: repeater
-                    model: 6
+                    model: 7
 
                     Rectangle {
                         x: baseItem.width / 2 - width / 2

@@ -7,7 +7,7 @@ import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "FirmwareUpdatePage"
-    id: item1
+    id: firmwareUpdatePage
     width: 800
     height: 440
     smooth: false
@@ -28,11 +28,21 @@ LoggingItem {
     }
 
     property bool isUsbStorageConnected: storage.usbStorageConnected
+    property bool isFirmwareFileCopying: storage.fileIsCopying
 
+    onIsFirmwareFileCopyingChanged: {
+        if(isFirmwareFileCopying &&
+           firmwareUpdatePage.state == "select_firmware_file") {
+            retrievingFirmwarePopup.open()
+        }
+        else {
+            retrievingFirmwarePopup.close()
+        }
+    }
     onIsUsbStorageConnectedChanged: {
         if(state == "select_firmware_file" &&
            !isUsbStorageConnected &&
-           bot.process.type == ProcessType.None) {
+           bot.process.type === ProcessType.None) {
             state = "install_from_usb"
         }
     }
@@ -40,10 +50,16 @@ LoggingItem {
     property int errorCode
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
-        if(bot.process.errorCode > 0) {
+        if(bot.process.type === ProcessType.FirmwareUpdate
+                && bot.process.errorCode > 0) {
             errorCode = bot.process.errorCode
-            state = "firmware_update_failed"
+            firmwareUpdateFailedPopup.open()
         }
+    }
+    property bool updateFirmware: false
+
+    function getUrlForMethod() {
+           return "support.makerbot.com/s/article/Method-Firmware"
     }
 
     Rectangle {
@@ -64,101 +80,83 @@ LoggingItem {
         anchors.leftMargin: 80
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
+        icon_image: LoadingIcon.Loading
+        visible: true
         loading: true
     }
 
     Image {
         id: image
         anchors.left: parent.left
-        anchors.leftMargin: 80
+        anchors.leftMargin: 120
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
         visible: false
     }
 
-    Item {
+    ColumnLayout {
         id: columnLayout
         x: 400
-        width: 350
+        width: 360
         height: 150
-        anchors.verticalCenterOffset: -20
+        anchors.verticalCenterOffset: 0
         anchors.verticalCenter: parent.verticalCenter
+        spacing: 32
 
-        Text {
-            id: main_status_text
-            text: qsTr("CHECKING FOR UPDATES")
+        ColumnLayout {
+            spacing: 24
             width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            wrapMode: Text.WordWrap
-            font.letterSpacing: 3
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            font.capitalization: Font.AllUppercase
-            font.pixelSize: 20
-            lineHeight: 1.35
-            visible: true
-        }
+            height: parent.height
 
-        Text {
-            id: sub_status_text
-            text: qsTr("PLEASE WAIT A MOMENT")
-            width: parent.width
-            anchors.top: parent.top
-            anchors.topMargin: 70
-            font.wordSpacing: 1
-            font.letterSpacing: 2
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.pixelSize: 18
-            lineHeight: 1.35
-            wrapMode: Text.WordWrap
-            visible: true
-        }
+            TextHeadline {
+                id: main_status_text
+                text: qsTr("CHECKING FOR UPDATES")
+                width: parent.width
+                visible: true
+            }
 
-        Text {
-            id: release_notes_text
-            text: qsTr("RELEASE NOTES")
-            color: "#cbcbcb"
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.underline: true
-            font.capitalization: Font.AllUppercase
-            font.pixelSize: 18
-            visible: false
-            anchors.top: parent.top
-            anchors.topMargin: 0
+            TextSubheader {
+                id: subheader_text
+                font.underline: true
+                visible: false
 
-            LoggingMouseArea {
-                logText: "[" + release_notes_text.text + "]"
-                id: viewReleaseNotesMouseArea
-                anchors.fill: parent
-                onClicked: {
-                    firmwareUpdatePopup.open()
-                    skipFirmwareUpdate = false
-                    viewReleaseNotes = true
+                LoggingMouseArea {
+                    logText: "[" + subheader_text.text + "]"
+                    id: viewReleaseNotesMouseArea
+                    anchors.fill: parent
+                    onClicked: {
+                        firmwareUpdatePopup.open()
+                        skipFirmwareUpdate = false
+                        viewReleaseNotes = true
+                    }
                 }
             }
-        }
 
-        RoundedButton {
-            id: button1
-            buttonWidth: 265
-            buttonHeight: 50
-            label: qsTr("TEXT")
-            visible: false
-            anchors.top: parent.top
-            anchors.topMargin: 0
+            TextBody {
+                id: sub_status_text
+                text: qsTr("PLEASE WAIT A MOMENT")
+                font.weight: Font.Light
+                width: parent.width
+                Layout.fillWidth: true
+                visible: true
+            }
         }
+        ColumnLayout {
+            spacing: 24
+            width: parent.width
+            height: parent.height
 
-        RoundedButton {
-            id: button2
-            buttonHeight: 50
-            visible: false
-            anchors.top: parent.top
-            anchors.topMargin: 0
+            ButtonRectanglePrimary {
+                id: button1
+                logKey: text
+                visible: false
+            }
+
+            ButtonRectangleSecondary {
+                id: button2
+                logKey: text
+                visible: false
+            }
         }
     }
     states: [
@@ -168,52 +166,60 @@ LoggingItem {
 
             PropertyChanges {
                 target: loading_icon
-                loading: false
-            }
-
-            PropertyChanges {
-                target: image
-                source: "qrc:/img/firmware_update_available.png"
-                height: sourceSize.height
-                width: sourceSize.width
+                icon_image: LoadingIcon.Failure
                 visible: true
             }
 
             PropertyChanges {
+                target: image
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_status_text
-                text: qsTr("NEW SOFTWARE AVAILABLE")
-                anchors.topMargin: 30
+                text: qsTr("NEW FIRMWARE AVAILABLE")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: subheader_text
+                text: qsTr("%1 RELEASE NOTES").arg(bot.firmwareUpdateVersion)
+                font.underline: true
+                visible: true
+            }
+
+            PropertyChanges {
+                target: viewReleaseNotesMouseArea
+                enabled: true
             }
 
             PropertyChanges {
                 target: sub_status_text
-                text: qsTr("A new version of software is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
-                anchors.topMargin: 110
-            }
-
-            PropertyChanges {
-                target: release_notes_text
-                anchors.topMargin: 225
+                text: qsTr("Recommended to improve machine reliability and print quality.")
+                font.weight: Font.Normal
                 visible: true
             }
 
             PropertyChanges {
                 target: button1
-                anchors.topMargin: 275
-                buttonWidth: 265
-                label: qsTr("INSTALL UPDATE")
+                anchors.topMargin: 200
+                text: qsTr("INSTALL VIA NETWORK")
                 visible: true
-                disable_button: isProcessRunning()
+                enabled: !isProcessRunning()
             }
 
             PropertyChanges {
                 target: button2
-                visible: false
+                anchors.topMargin: 275
+                text: qsTr("INSTALL VIA USB")
+                visible: true
             }
 
             PropertyChanges {
                 target: columnLayout
-                height: 335
+                height: 250
+                anchors.verticalCenterOffset: -30
+                visible: true
             }
 
             PropertyChanges {
@@ -227,107 +233,57 @@ LoggingItem {
 
             PropertyChanges {
                 target: loading_icon
-                loading: false
-            }
-
-            PropertyChanges {
-                target: image
-                source: "qrc:/img/process_successful.png"
-                height: sourceSize.height
-                width: sourceSize.width
+                icon_image: LoadingIcon.Success
                 visible: true
             }
 
             PropertyChanges {
+                target: image
+                visible: false
+            }
+
+            PropertyChanges {
                 target: main_status_text
-                text: qsTr("SOFTWARE IS UP TO DATE")
-                anchors.topMargin: 35
+                text: qsTr("FIRMWARE IS UP TO DATE")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: subheader_text
+                text: qsTr("VERSION %1").arg(bot.version)
+                font.underline: false
+                visible: true
+            }
+
+            PropertyChanges {
+                target: viewReleaseNotesMouseArea
+                enabled: false
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: qsTr("No update is required at this time.")
-                anchors.topMargin: 85
-            }
-
-            PropertyChanges {
-                target: release_notes_text
-                visible: false
+                font.weight: Font.Normal
+                visible: true
             }
 
             PropertyChanges {
                 target: button1
-                buttonWidth: 100
-                label: qsTr("OK")
+                text: qsTr("CONFIRM")
                 visible: true
-                anchors.topMargin: 160
             }
 
             PropertyChanges {
                 target: button2
-                anchors.topMargin: 230
-                label: qsTr("UPDATE VIA USB STICK")
-                buttonWidth: 360
-                label_width: 325
+                text: qsTr("INSTALL VIA USB")
                 visible: true
             }
 
             PropertyChanges {
                 target: columnLayout
-                height: 250
-                anchors.verticalCenterOffset: -55
-            }
-
-            PropertyChanges {
-                target: firmwareFileListUsb
-                visible: false
-            }
-        },
-        State {
-            name: "firmware_update_failed"
-
-            PropertyChanges {
-                target: loading_icon
-                loading: false
-            }
-
-            PropertyChanges {
-                target: image
-                source: "qrc:/img/error.png"
-                height: sourceSize.height
-                width: sourceSize.width
+                height: 100
+                anchors.verticalCenterOffset: -100
                 visible: true
-            }
-
-            PropertyChanges {
-                target: main_status_text
-                text: qsTr("SOFTWARE UPDATE FAILED")
-                anchors.topMargin: 20
-            }
-
-            PropertyChanges {
-                target: sub_status_text
-                text: qsTr("Make sure your printer is connected to the internet and please try again.")
-                anchors.topMargin: 100
-            }
-
-            PropertyChanges {
-                target: release_notes_text
-                visible: false
-            }
-
-            PropertyChanges {
-                target: button1
-                label: qsTr("OK")
-                buttonWidth: 175
-                visible: true
-                anchors.topMargin: 200
-            }
-
-
-            PropertyChanges {
-                target: columnLayout
-                height: 290
             }
 
             PropertyChanges {
@@ -341,7 +297,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: loading_icon
-                loading: true
+                icon_image: LoadingIcon.Loading
                 visible: true
             }
 
@@ -355,24 +311,26 @@ LoggingItem {
                 text: {
                     switch(bot.process.stateType)
                     {
-                    // Since 'transfer' step also maps to
-                    // 'loading' state in print process
-                    case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
-                        qsTr("UPDATING SOFTWARE [1/3]")
+                        qsTr("UPDATING FIRMWARE [1/3]")
                         break;
                     case ProcessStateType.VerifyingFirmware:
-                        qsTr("UPDATING SOFTWARE [2/3]")
+                        qsTr("UPDATING FIRMWARE [2/3]")
                         break;
                     case ProcessStateType.InstallingFirmware:
-                        qsTr("UPDATING SOFTWARE [3/3]")
+                        qsTr("UPDATING FIRMWARE [3/3]")
                         break;
                     default:
                         qsTr("CHECKING FOR UPDATES")
                         break;
                     }
                 }
-                anchors.topMargin: 0
+                visible: true
+            }
+
+            PropertyChanges {
+                target: subheader_text
+                visible: false
             }
 
             PropertyChanges {
@@ -380,29 +338,22 @@ LoggingItem {
                 text: {
                     switch(bot.process.stateType)
                     {
-                        // Since 'transfer' step also maps to
-                        // 'loading' state in print process
-                    case ProcessStateType.Loading:
                     case ProcessStateType.TransferringFirmware:
-                        qsTr("TRANSFERRING... %1\%").arg(bot.process.printPercentage)
+                        qsTr("TRANSFERRING FILE... (%1\%)").arg(bot.process.printPercentage)
                         break;
                     case ProcessStateType.VerifyingFirmware:
-                        qsTr("VERIFYING FILE... %1\%").arg(bot.process.printPercentage)
+                        qsTr("VERIFYING FILE... (%1\%)").arg(bot.process.printPercentage)
                         break;
                     case ProcessStateType.InstallingFirmware:
-                        qsTr("INSTALLING... %1\%").arg(bot.process.printPercentage)
+                        qsTr("INSTALLING FILE... (%1\%)").arg(bot.process.printPercentage)
                         break;
                     default:
                         qsTr("PLEASE WAIT A MOMENT")
                         break;
                     }
                 }
-                anchors.topMargin: 75
-            }
-
-            PropertyChanges {
-                target: release_notes_text
-                visible: false
+                font.weight: Font.Light
+                visible: true
             }
 
             PropertyChanges {
@@ -417,7 +368,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: columnLayout
-                height: 150
+                height: 80
+                anchors.verticalCenterOffset: 0
+                visible: true
             }
 
             PropertyChanges {
@@ -427,53 +380,46 @@ LoggingItem {
         },
         State {
             name: "install_from_usb"
+
             PropertyChanges {
                 target: loading_icon
-                loading: false
+                visible: false
             }
 
             PropertyChanges {
                 target: image
                 width: sourceSize.width
                 height: sourceSize.height
-                source: "qrc:/img/firmware_update_available.png"
+                source: "qrc:/img/usb_1.png"
+
                 visible: true
             }
 
             PropertyChanges {
                 target: main_status_text
-                text: qsTr("DOWNLOAD TO\nUSB STICK")
-                anchors.topMargin: 20
+                visible: false
+            }
+            PropertyChanges {
+                target: subheader_text
+                visible: false
             }
 
             PropertyChanges {
                 target: sub_status_text
                 text: {
-                    if (bot.machineType == MachineType.Fire) {
-                        qsTr("Visit MakerBot.com/MethodFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
-
-                    } else if (bot.machineType == MachineType.Lava) {
-                        qsTr("Visit MakerBot.com/MethodXFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
-                    } else if (bot.machineType == MachineType.Magma) {
-                        qsTr("Visit MakerBot.com/MethodXLFW to download the latest firmware. Drag the file onto a usb stick and insert it into the front of the printer.")
-                    }
-
+                    qsTr("CURRENT FIRMWARE: %1<br><br>Visit <b>%2</b> to download the latest "
+                         + "firmware. Drag the file onto a usb stick and insert it into the "
+                         + "front of the printer.").arg(bot.version).arg(getUrlForMethod())
                 }
-                anchors.topMargin: 100
-            }
-
-            PropertyChanges {
-                target: release_notes_text
-                visible: false
+                font.weight: Font.Normal
+                visible: true
             }
 
             PropertyChanges {
                 target: button1
-                buttonWidth: 220
-                label: qsTr("CHOOSE FILE")
+                text: qsTr("CHOOSE FILE")
                 visible: true
-                anchors.topMargin: 260
-                disable_button: !storage.usbStorageConnected
+                enabled: storage.usbStorageConnected
             }
 
             PropertyChanges {
@@ -483,7 +429,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: columnLayout
-                height: 320
+                height: 250
+                anchors.verticalCenterOffset: -20
+                visible: true
             }
 
             PropertyChanges {
@@ -493,10 +441,10 @@ LoggingItem {
         },
         State {
             name: "select_firmware_file"
+
             PropertyChanges {
                 target: loading_icon
                 visible: false
-                loading: false
             }
 
             PropertyChanges {
@@ -516,4 +464,163 @@ LoggingItem {
             }
         }
     ]
+
+
+    CustomPopup {
+        popupName: "RetrievingFirmware"
+        id: retrievingFirmwarePopup
+        popupWidth: 720
+        popupHeight: 280
+        showOneButton: true
+
+        visible: bot.process.type === ProcessType.FirmwareUpdate
+                 && bot.process.stateType === ProcessStateType.DownloadingFirmware
+
+        full_button_text: qsTr("CANCEL")
+        full_button.onClicked: {
+            if(columnLayout_firmware_popup.state == "copying") {
+                updateFirmware = false
+                storage.cancelCopy()
+            }
+            else {
+                bot.cancel()
+            }
+        }
+
+        onClosed: {
+
+        }
+
+        ColumnLayout {
+            id: columnLayout_firmware_popup
+            width: 590
+            height: 180
+            anchors.top: parent.top
+            anchors.topMargin: 110
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 0
+
+            BusySpinner {
+                id: busyIndicator_firmware_popup
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                spinnerActive: true
+                spinnerSize: 48
+            }
+
+            TextHeadline {
+                id: alert_text_firmware_popup
+                text: ""
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            Item {
+                id: emptyItem_firmware_popup
+                width: 10
+                height: 5
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                visible: true
+            }
+
+            TextBody {
+                id: description_text_firmware_popup
+                color: "#ffffff"
+                font.weight: Font.Light
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                visible: true
+            }
+            states: [
+                State {
+                    name: "downloading"
+                    when: bot.process.type === ProcessType.FirmwareUpdate
+                          && bot.process.stateType === ProcessStateType.DownloadingFirmware
+
+                    PropertyChanges {
+                        target: alert_text_firmware_popup
+                        text: qsTr("DOWNLOADING FIRMWARE")
+                    }
+                    PropertyChanges {
+                        target: description_text_firmware_popup
+                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                    }
+                },
+                State {
+                    name: "copying"
+                    when: isFirmwareFileCopying
+
+                    PropertyChanges {
+                        target: alert_text_firmware_popup
+                        text: qsTr("COPYING FIRMWARE")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_firmware_popup
+                        text: (storage.fileCopyProgress * 100.0).toFixed(1) + "%"
+                    }
+                }
+            ]
+        }
+    }
+
+    CustomPopup {
+        popupName: "FirmwareUpdateFailure"
+        id: firmwareUpdateFailedPopup
+        visible: false
+        popupWidth: 750
+        popupHeight: 350
+
+        showOneButton: true
+        full_button_text: qsTr("CLOSE")
+        full_button.onClicked: {
+            if(isfirmwareUpdateAvailable) {
+                firmwareUpdatePage.state = "firmware_update_available"
+            }
+            else {
+                firmwareUpdatePage.state = "no_firmware_update_available"
+            }
+           firmwareUpdateFailedPopup.close()
+        }
+
+        onClosed: {
+
+        }
+        ColumnLayout {
+            id: columnLayout_firmware_failure
+            width: 650
+            height: 200
+            anchors.top: parent.top
+            anchors.topMargin: 80
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height - 10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/extruder_material_error.png"
+            }
+
+            TextHeadline {
+                id: title
+                Layout.alignment: Qt.AlignHCenter
+                color: "#ffffff"
+                text: qsTr("FIRMWARE UPDATE - FAILED")
+            }
+
+            TextBody {
+                id: description
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: "#ffffff"
+                text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
+                            "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
+                            "CODE: %1").arg(bot.process.errorCode)
+            }
+        }
+    }
 }

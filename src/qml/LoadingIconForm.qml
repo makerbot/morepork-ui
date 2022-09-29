@@ -12,6 +12,13 @@ Rectangle {
     smooth: true
     visible: true
 
+    enum Icon {
+        Loading,
+        Success,
+        Failure
+    }
+
+    property int icon_image: LoadingIcon.Loading
     property alias loading: loading_icon.visible
     property int loadingProgress: 0
 
@@ -26,12 +33,14 @@ Rectangle {
         visible: parent.visible && loadingProgress == 0
 
         RotationAnimator {
+            id: rotate_inner_image
             target: inner_image
             from: 360
             to: 0
             duration: 10000
             loops: Animation.Infinite
-            running: parent.visible
+            running: icon_image === LoadingIcon.Loading
+
         }
     }
 
@@ -53,6 +62,21 @@ Rectangle {
             loops: Animation.Infinite
             running: parent.visible
         }
+    }
+
+    Rectangle {
+        id: progress_circle
+        width: 240
+        height: 240
+        color: "#00000000"
+        radius: 120
+        antialiasing: true
+        smooth: true
+        border.width: 3
+        border.color: "#FFFFFF"
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        visible: parent.visible
     }
 
     Text {
@@ -114,4 +138,78 @@ Rectangle {
             context.stroke()
         }
     }
+    states: [
+        State {
+            name: "loading"
+            when: icon_image === LoadingIcon.Loading
+
+
+            PropertyChanges {
+                target: inner_image
+                source: "qrc:/img/loading_gears.png"
+                width: 68
+                height: 68
+            }
+
+            PropertyChanges {
+                target: outer_image
+                visible: parent.visible
+            }
+
+            PropertyChanges {
+                target: progress_circle
+                visible: false
+            }
+
+        },
+        State {
+            name: "success"
+            when: icon_image === LoadingIcon.Success
+
+
+            PropertyChanges {
+                target: inner_image
+                source: "qrc:/img/check_mark.png"
+                rotation: 0
+                width: 79
+                height: 59
+            }
+
+            PropertyChanges {
+                target: outer_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: progress_circle
+                border.color: "#3183AF"
+                visible: parent.visible
+            }
+
+        },
+        State {
+            name: "failure"
+            when: icon_image === LoadingIcon.Failure
+
+
+            PropertyChanges {
+                target: inner_image
+                source: "qrc:/img/exc_mark.png"
+                rotation: 0
+                width: 16
+                height: 89
+            }
+
+            PropertyChanges {
+                target: outer_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: progress_circle
+                border.color: "#F79125"
+                visible: parent.visible
+            }
+        }
+    ]
 }

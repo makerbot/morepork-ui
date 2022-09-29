@@ -655,7 +655,7 @@ ApplicationWindow {
                                     qsTr("SKIP WIFI")
                                     break;
                                 case FreStep.SoftwareUpdate:
-                                    qsTr("SKIP SOFTWARE UPDATE")
+                                    qsTr("SKIP FIRMWARE UPDATE")
                                     break;
                                 case FreStep.NamePrinter:
                                     qsTr("SKIP NAMING PRINTER")
@@ -807,7 +807,7 @@ ApplicationWindow {
                                 qsTr("SKIP WI-FI SETUP?")
                                 break;
                             case FreStep.SoftwareUpdate:
-                                qsTr("SKIP SOFTWARE UPDATE?")
+                                qsTr("SKIP FIRMWARE UPDATE?")
                                 break;
                             case FreStep.NamePrinter:
                                 qsTr("SKIP NAMING PRINTER?")
@@ -1557,7 +1557,7 @@ ApplicationWindow {
                     Text {
                         id: firmware_header_text
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? qsTr("SOFTWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP SOFTWARE UPDATE?") : qsTr("SOFTWARE UPDATE AVAILABLE")
+                        text: viewReleaseNotes ? qsTr("FIRMWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP FIRMWARE UPDATE?") : qsTr("FIRMWARE UPDATE AVAILABLE")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
                         font.family: defaultFont.name
@@ -1577,7 +1577,7 @@ ApplicationWindow {
                         id: firmware_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date software for your printer.") : qsTr("A new version of software is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
+                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date firmware for your printer.") : qsTr("A new version of firmware is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true

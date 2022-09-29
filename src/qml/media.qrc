@@ -180,5 +180,6 @@
         <file alias="extruder_material_error.png">images/extruder_material_error.png</file>
         <file alias="process_complete_small.png">images/process_complete_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
+        <file alias="usb_1.png">images/usb_1.png</file>
     </qresource>
 </RCC>
