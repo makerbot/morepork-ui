@@ -1750,6 +1750,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           if(kHeatedBuildPlateA.isObject()){
             UPDATE_FLOAT_PROP(hbpCurrentTemp, kHeatedBuildPlateA["current_temperature"])
             UPDATE_INT_PROP(hbpTargetTemp, kHeatedBuildPlateA["target_temperature"])
+            UPDATE_INT_PROP(hbpErrorCode, kHeatedBuildPlateA["error"])
           }
         }
       }

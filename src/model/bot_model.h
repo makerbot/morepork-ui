@@ -187,6 +187,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
+    MODEL_PROP(int, hbpErrorCode, 0)
     MODEL_PROP(bool, hasFilamentBay, false)
     MODEL_PROP(QStringList, loadedMaterials, {"unknown", "unknown"})
     MODEL_PROP(QStringList, loadedMaterialNames, {"UNKNOWN", "UNKNOWN"})
@@ -267,8 +268,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, infoChamberHeaterBTemp, -999)
     MODEL_PROP(int, infoChamberError, -0)
     // Heating System (Dragon)
-    MODEL_PROP(QString, infoHeatSysStateStr, "NONE")
-    MODEL_PROP(QString, infoHeatSysErrorStr, "NONE")
+    MODEL_PROP(QString, infoHeatSysStateStr, "Unknown")
+    MODEL_PROP(QString, infoHeatSysErrorStr, "Unknown")
     // Filament Bay
     // Bay 1
     MODEL_PROP(int, infoBay1Temp, -999)

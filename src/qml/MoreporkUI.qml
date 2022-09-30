@@ -1961,7 +1961,11 @@ ApplicationWindow {
             popupName: "HeatingSystemError"
             /* Report to the user that the heating system has detected a fault.
             */
-            property bool heatingSystemError: bot.infoHeatSysErrorStr !== "NONE"
+            property bool chamberErrorValid: (bot.chamberErrorCode !== 0 && bot.chamberErrorCode !== 45
+                                              && bot.chamberErrorCode !== 48)
+            property bool heatingSystemError: (bot.hbpErrorCode !== 0 || chamberErrorValid)
+            property int heatingSystemErrorCode: (chamberErrorValid ? bot.chamberErrorCode : bot.hbpErrorCode)
+
             id: heatingSystemErrorPopup
             visible: heatingSystemError && !bot.hasFilamentBay
             disableUserClose: false
@@ -1977,11 +1981,12 @@ ApplicationWindow {
                         text: "HEATING SYSTEM ERROR"
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
+
                     BodyText{
                         text: {
-                           qsTr("The printer’s Chamber and Build Plate Heating System is reporting "
-                                    + "an error %1. Try restarting the printer. If this happens again, "
-                                    + "please contact MakerBot support.").arg(bot.infoHeatSysErrorStr)
+                           qsTr("The printer’s Heating System is reporting an error %1. Details can be found on the "
+                                    + "Sensor Info page. Try restarting the printer. If this happens again, please "
+                                    + "contact MakerBot support.").arg(heatingSystemErrorPopup.heatingSystemErrorCode)
                         }
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
