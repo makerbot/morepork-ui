@@ -1957,7 +1957,7 @@ ApplicationWindow {
         }
 
         // Modal Popup for Heating system error
-        ModalPopup {
+        CustomPopup {
             popupName: "HeatingSystemError"
             /* Report to the user that the heating system has detected a fault.
             */
@@ -1968,32 +1968,31 @@ ApplicationWindow {
 
             id: heatingSystemErrorPopup
             visible: heatingSystemError && !bot.hasFilamentBay
-            disableUserClose: false
+            closePolicy: Popup.CloseOnPressOutside
 
-            popup_contents.contentItem: Item {
-                anchors.fill: parent
-                ColumnLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: 150
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 150
 
-                    TitleText {
-                        text: "HEATING SYSTEM ERROR"
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                TextHeadline {
+                    text: "HEATING SYSTEM ERROR"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextBody {
+                    text: {
+                       qsTr("The printer’s Heating System is reporting an error %1. Details can be found on the "
+                                + "Sensor Info page. Try restarting the printer. If this happens again, please "
+                                + "contact MakerBot support.").arg(heatingSystemErrorPopup.heatingSystemErrorCode)
                     }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: 620
+                    wrapMode: "WordWrap"
 
-                    BodyText{
-                        text: {
-                           qsTr("The printer’s Heating System is reporting an error %1. Details can be found on the "
-                                    + "Sensor Info page. Try restarting the printer. If this happens again, please "
-                                    + "contact MakerBot support.").arg(heatingSystemErrorPopup.heatingSystemErrorCode)
-                        }
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.preferredWidth: 600
-                        wrapMode: "WordWrap"
-                    }
                 }
             }
         }
