@@ -33,14 +33,14 @@ Item {
             id: stateStrProperty
             label: qsTr("STATE")
             value_anchors.leftMargin: -100
-            value: (bot.infoHeatSysStateStr !== "") ? bot.infoHeatSysStateStr : "NONE"
-        }
+            value: bot.infoHeatSysStateStr
+       }
 
         AdvancedInfoElement {
             id: errorStrProperty
             label: qsTr("ERROR")
             value_anchors.leftMargin: -100
-            value: (bot.infoHeatSysErrorStr !== "") ? bot.infoHeatSysErrorStr : "NONE"
+            value: bot.infoHeatSysErrorStr
         }
     }
 }
