@@ -1956,6 +1956,47 @@ ApplicationWindow {
             }
         }
 
+        // Modal Popup for Heating system error
+        CustomPopup {
+            popupName: "HeatingSystemError"
+            /* Report to the user that the heating system has detected a fault.
+            */
+            property bool chamberErrorValid: (bot.chamberErrorCode !== 0 && bot.chamberErrorCode !== 45
+                                              && bot.chamberErrorCode !== 48)
+            property bool heatingSystemError: (bot.hbpErrorCode !== 0 || chamberErrorValid)
+            property int heatingSystemErrorCode: (chamberErrorValid ? bot.chamberErrorCode : bot.hbpErrorCode)
+
+            id: heatingSystemErrorPopup
+            visible: heatingSystemError && !bot.hasFilamentBay
+            closePolicy: Popup.CloseOnPressOutside
+
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 150
+
+                TextHeadline {
+                    text: "HEATING SYSTEM ERROR"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextBody {
+                    text: {
+                       qsTr("The printer’s Heating System is reporting an error %1. Details can be found on the "
+                                + "Sensor Info page. Try restarting the printer. If this happens again, please "
+                                + "contact MakerBot support.").arg(heatingSystemErrorPopup.heatingSystemErrorCode)
+                    }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: 620
+                    wrapMode: "WordWrap"
+
+                }
+            }
+        }
+
         LoggingPopup {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
