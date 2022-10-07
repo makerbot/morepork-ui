@@ -118,14 +118,14 @@ MaterialPageForm {
     function shouldUserAssistDrawerLoading(bayID) {
         var current_mat = (bayID == 1 ? bay1.filamentMaterial :
                                 bay2.filamentMaterial)
-        var materials = ["tpu", "nylon-cf", "nylon12-cf"]
+        var materials = ["tpu", "nylon-cf", "nylon12-cf", "abs-cf10"]
         return (materials.indexOf(current_mat) >= 0) && bot.hasFilamentBay
     }
 
     function shouldUserAssistPurging(bayID) {
         var current_mat = (bayID == 1 ? bay1.filamentMaterial :
                                 bay2.filamentMaterial)
-        var materials = ["nylon-cf", "nylon12-cf"]
+        var materials = ["nylon-cf", "nylon12-cf", "abs-cf10"]
         return (materials.indexOf(current_mat) >= 0)
     }
 

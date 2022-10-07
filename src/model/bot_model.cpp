@@ -37,6 +37,8 @@ QString BotModel::getMaterialName(QString apiName) {
         return "RapidRinse";
     } else if(apiName == "abs-wss1") {
         return "ABS-R";
+    } else if (apiName == "abs-cf10") {
+        return "ABS-CF";
     } else if(apiName == "generic_model") {
         return "UNKNOWN";
     } else {
