@@ -103,7 +103,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         // Firmware Updating States
         // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
         else if (kStepStr == "downloading")
-        //Another possible step for firmwareUpdate is 'transfer' which is mapped to 'Loading'
+            stateTypeSet(ProcessStateType::DownloadingFirmware);
+        else if (kStepStr == "transfer_firmware")
             stateTypeSet(ProcessStateType::TransferringFirmware);
         else if (kStepStr == "verify_firmware")
             stateTypeSet(ProcessStateType::VerifyingFirmware);

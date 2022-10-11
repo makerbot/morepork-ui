@@ -6,10 +6,9 @@ import ProcessStateTypeEnum 1.0
 
 LoggingItem {
     itemName: "AcknowledgePrintFinished"
-    id: element
-    width: 300
+    id: acknowledgePrintElement
+    width: 400
     height: 165
-
     property bool failureFeedbackSelected: false
 
     // Defects template dict. that will sent for all feedback. Even success.
@@ -82,81 +81,83 @@ LoggingItem {
         anchors.top: titleText.bottom
         anchors.topMargin: 20
         spacing: 35
-        RowLayout {
-            id: feedbackButtons
-            spacing: 35
-            RoundedButton {
-                id: failedButton
-                buttonWidth: 87
-                buttonHeight: 87
-                radius: Math.min(buttonHeight, buttonWidth)/2
-                forceButtonWidth: true
-                button_mouseArea.onClicked: {
-                    failureFeedbackSelected = true
-                    // Make a deep copy of the print defects dict. template which will
-                    // be updated in the print feedback component with the selected
-                    // defects.
-                    // This is absolutely uneccessary, if only the analytics guys
-                    // don't insist on sending the full defects dict. even for print
-                    // success feedback.
-                    defects = JSON.parse(JSON.stringify(print_defects_template))
-                }
 
-                Image {
-                    id: thumbs_down
-                    source: "qrc:/img/print_feedback_thumbs_down.png"
-                    sourceSize: Qt.size(source.width, source.height)
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 3
-                }
-
-                ColorOverlay {
-                    anchors.fill: thumbs_down
-                    source: thumbs_down
-                    color: failedButton.button_mouseArea.pressed ? "#000000" : "#00000000"
-                }
+        RoundedButton {
+            id: failedButton
+            buttonWidth: 87
+            buttonHeight: 87
+            radius: Math.min(buttonHeight, buttonWidth)/2
+            forceButtonWidth: true
+            button_mouseArea.onClicked: {
+                failureFeedbackSelected = true
+                // Make a deep copy of the print defects dict. template which will
+                // be updated in the print feedback component with the selected
+                // defects.
+                // This is absolutely uneccessary, if only the analytics guys
+                // don't insist on sending the full defects dict. even for print
+                // success feedback.
+                defects = JSON.parse(JSON.stringify(print_defects_template))
             }
 
-            RoundedButton {
-                id: successButton
-                buttonWidth: 87
-                buttonHeight: 87
-                radius: Math.min(buttonHeight, buttonWidth)/2
-                forceButtonWidth: true
+            Image {
+                id: thumbs_down
+                source: "qrc:/img/print_feedback_thumbs_down.png"
+                sourceSize: Qt.size(source.width, source.height)
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 3
+            }
 
-                button_mouseArea.onClicked: {
-                    submitFeedbackAndAcknowledge(true)
-                }
-
-                Image {
-                    id: thumbs_up
-                    source: "qrc:/img/print_feedback_thumbs_up.png"
-                    sourceSize: Qt.size(source.width, source.height)
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -3
-                }
-
-                ColorOverlay {
-                    anchors.fill: thumbs_up
-                    source: thumbs_up
-                    color: successButton.button_mouseArea.pressed ? "#000000" : "#00000000"
-                }
+            ColorOverlay {
+                anchors.fill: thumbs_down
+                source: thumbs_down
+                color: failedButton.button_mouseArea.pressed ? "#000000" : "#00000000"
             }
         }
 
         RoundedButton {
-            id: done_button
-            buttonHeight: 50
-            label: qsTr("SKIP")
-            visible: true
-            border.width: 0
+            id: successButton
+            buttonWidth: 87
+            buttonHeight: 87
+            radius: Math.min(buttonHeight, buttonWidth)/2
+            forceButtonWidth: true
+
             button_mouseArea.onClicked: {
-                acknowledgePrint()
+                submitFeedbackAndAcknowledge(true)
+            }
+
+            Image {
+                id: thumbs_up
+                source: "qrc:/img/print_feedback_thumbs_up.png"
+                sourceSize: Qt.size(source.width, source.height)
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -3
+            }
+
+            ColorOverlay {
+                anchors.fill: thumbs_up
+                source: thumbs_up
+                color: successButton.button_mouseArea.pressed ? "#000000" : "#00000000"
             }
         }
     }
+
+    RoundedButton {
+        id: done_button
+        buttonHeight: 50
+        label: qsTr("SKIP")
+        visible: true
+        border.width: 0
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 40
+        anchors.rightMargin: 65
+        button_mouseArea.onClicked: {
+            acknowledgePrint()
+        }
+    }
+
     states: [
         State {
             name: "print_successful"
@@ -172,10 +173,6 @@ LoggingItem {
                 target: buttonContainerPrintCompleted
                 anchors.top: titleText.bottom
                 anchors.topMargin: 20
-            }
-
-            PropertyChanges {
-                target: feedbackButtons
                 visible: true
             }
 
@@ -187,6 +184,11 @@ LoggingItem {
             PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("SKIP")
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 40
+                anchors.rightMargin: 65
+                visible: true
             }
         },
         State {
@@ -206,12 +208,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: buttonContainerPrintCompleted
-                anchors.top: element.top
-                anchors.topMargin: 0
-            }
-
-            PropertyChanges {
-                target: feedbackButtons
                 visible: false
             }
 
@@ -224,11 +220,9 @@ LoggingItem {
                 target: done_button
                 button_text.text: qsTr("DONE")
                 border.width: 2
-            }
-
-            PropertyChanges {
-                target: element
-                height: 50
+                anchors.rightMargin: 295
+                anchors.bottomMargin: 115
+                visible: true
             }
         },
         State {
@@ -247,12 +241,15 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: feedbackButtons
-                visible: false
+                target: buttonContainerPrintCancelled
+                visible: true
             }
 
             PropertyChanges {
-                target: buttonContainerPrintCancelled
+                target: done_button
+                button_text.text: qsTr("SKIP")
+                anchors.rightMargin: 175
+                anchors.bottomMargin: -80
                 visible: true
             }
         }

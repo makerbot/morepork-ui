@@ -655,7 +655,7 @@ ApplicationWindow {
                                     qsTr("SKIP WIFI")
                                     break;
                                 case FreStep.SoftwareUpdate:
-                                    qsTr("SKIP SOFTWARE UPDATE")
+                                    qsTr("SKIP FIRMWARE UPDATE")
                                     break;
                                 case FreStep.NamePrinter:
                                     qsTr("SKIP NAMING PRINTER")
@@ -807,7 +807,7 @@ ApplicationWindow {
                                 qsTr("SKIP WI-FI SETUP?")
                                 break;
                             case FreStep.SoftwareUpdate:
-                                qsTr("SKIP SOFTWARE UPDATE?")
+                                qsTr("SKIP FIRMWARE UPDATE?")
                                 break;
                             case FreStep.NamePrinter:
                                 qsTr("SKIP NAMING PRINTER?")
@@ -1557,7 +1557,7 @@ ApplicationWindow {
                     Text {
                         id: firmware_header_text
                         color: "#cbcbcb"
-                        text: viewReleaseNotes ? qsTr("SOFTWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP SOFTWARE UPDATE?") : qsTr("SOFTWARE UPDATE AVAILABLE")
+                        text: viewReleaseNotes ? qsTr("FIRMWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP FIRMWARE UPDATE?") : qsTr("FIRMWARE UPDATE AVAILABLE")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 5
                         font.family: defaultFont.name
@@ -1577,7 +1577,7 @@ ApplicationWindow {
                         id: firmware_description_text1
                         width: 500
                         color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date software for your printer.") : qsTr("A new version of software is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
+                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date firmware for your printer.") : qsTr("A new version of firmware is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.fillWidth: true
@@ -1952,6 +1952,47 @@ ApplicationWindow {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
+                }
+            }
+        }
+
+        // Modal Popup for Heating system error
+        CustomPopup {
+            popupName: "HeatingSystemError"
+            /* Report to the user that the heating system has detected a fault.
+            */
+            property bool chamberErrorValid: (bot.chamberErrorCode !== 0 && bot.chamberErrorCode !== 45
+                                              && bot.chamberErrorCode !== 48)
+            property bool heatingSystemError: (bot.hbpErrorCode !== 0 || chamberErrorValid)
+            property int heatingSystemErrorCode: (chamberErrorValid ? bot.chamberErrorCode : bot.hbpErrorCode)
+
+            id: heatingSystemErrorPopup
+            visible: heatingSystemError && !bot.hasFilamentBay
+            closePolicy: Popup.CloseOnPressOutside
+
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 150
+
+                TextHeadline {
+                    text: "HEATING SYSTEM ERROR"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextBody {
+                    text: {
+                       qsTr("The printer’s Heating System is reporting an error %1. Details can be found on the "
+                                + "Sensor Info page. Try restarting the printer. If this happens again, please "
+                                + "contact MakerBot support.").arg(heatingSystemErrorPopup.heatingSystemErrorCode)
+                    }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: 620
+                    wrapMode: "WordWrap"
+
                 }
             }
         }

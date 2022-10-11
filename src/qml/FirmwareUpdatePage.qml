@@ -3,7 +3,7 @@ import ProcessTypeEnum 1.0
 import StorageFileTypeEnum 1.0
 
 FirmwareUpdatePageForm {
-    button1.button_mouseArea.onClicked: {
+    button1.onClicked: {
         switch(state) {
         case "firmware_update_available": {
             bot.installFirmware()
@@ -33,12 +33,13 @@ FirmwareUpdatePageForm {
         }
     }
 
-    button2.button_mouseArea.onClicked: {
+    button2.onClicked: {
         switch(state) {
         case "firmware_update_failed":
             goBack()
             break;
         case "no_firmware_update_available":
+        case "firmware_update_available":
             state = "install_from_usb"
             break;
         default:
