@@ -5,7 +5,6 @@ import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
 
 SettingsPageForm {
-
     buttonPrinterInfo.onClicked: {
         settingsSwipeView.swipeToItem(SettingsPage.PrinterInfoPage)
     }
@@ -52,10 +51,6 @@ SettingsPageForm {
 
     buttonAuthorizeAccounts.onClicked: {
         settingsSwipeView.swipeToItem(SettingsPage.AuthorizeAccountsPage)
-    }
-
-    buttonDeauthorizeAccounts.onClicked: {
-        deauthorizeAccountsPopup.open()
     }
 
     buttonFirmwareUpdate.onClicked: {

@@ -1,4 +1,5 @@
 import QtQuick 2.10
+import QtQuick.Layouts 1.12
 
 Item {
     id: element
@@ -39,47 +40,46 @@ Item {
         }
     }
 
-    Text {
-        id: otp_text
-        color: "#ffffff"
-        text: otp
-        anchors.top: parent.top
-        anchors.topMargin: 75
+    ColumnLayout {
+        width: parent.width - 60
+        height: children.height + 20
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: -10
         anchors.horizontalCenter: parent.horizontalCenter
-        font.letterSpacing: 5
-        font.family: defaultFont.name
-        font.weight: Font.Light
-        font.pixelSize: 140
-        opacity: otp_expired ? 0.2 : 1
+        spacing: 50
+
+        ColumnLayout {
+            spacing: 10
+            TextBody {
+                style: TextBody.Large
+                text: qsTr("Log into CloudPrint and enter the code below")
+                font.weight: Font.Medium
+            }
+
+            TextBody {
+                style: TextBody.Large
+                text: qsTr("<b>cloudprint.makerbot.com</b>  |  <b>Add Printer > Method Series</b>")
+                font.weight: Font.Bold
+            }
+        }
+
+        TextHuge {
+            id: otp_text
+            text: otp
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            opacity: otp_expired ? 0.2 : 1
+        }
+
+        TextSubheader {
+            text: {
+                otp_expired ? qsTr("This code has expired.") :
+                              qsTr("This code is valid for %1").arg(time_left)
+            }
+        }
     }
 
-    Text {
-        id: otp_instructions_text
-        width: 700
-        color: "#cbcbcb"
-        text: qsTr("To add this printer to your account visit MakerBot.com/authorize " +
-                   "and enter the code above. ") +
-              (otp_expired ? qsTr("This code has expired.") :
-                             qsTr("This code is valid for %1.").arg(time_left))
-        horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
-        anchors.top: otp_text.bottom
-        anchors.topMargin: 50
-        anchors.horizontalCenter: parent.horizontalCenter
-        font.family: defaultFont.name
-        font.weight: Font.Light
-        font.pixelSize: 18
-        font.letterSpacing: 1
-        lineHeight: 1.2
-    }
-
-    RoundedButton {
+    RefreshButton {
         id: getOTPButton
-        label: qsTr("GET NEW CODE")
-        buttonHeight: 50
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: otp_instructions_text.bottom
-        anchors.topMargin: 30
-        visible: otp_expired
+        enabled: otp_expired
     }
 }
