@@ -255,14 +255,14 @@ Item {
 
                     MenuButton {
                         id: buttonAnalytics
-                        buttonImage.source: "qrc:/img/icon_printer_info.png"
+                        buttonImage.source: "qrc:/img/icon_analytics.png"
                         buttonText.text: qsTr("ANALYTICS")
                     }
 
                     MenuButton {
                         id: buttonSupportMode
                         buttonImage.source: "qrc:/img/icon_time_and_date.png"
-                        buttonText.text: "SHOW CURRENT TIME"
+                        buttonText.text: qsTr("SHOW CURRENT TIME")
 
                         SlidingSwitch {
                             id: switchToggleSupportMode
