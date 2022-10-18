@@ -23,6 +23,7 @@ Text {
             20
         }
     }
+    verticalAlignment: Text.AlignVCenter
     font.letterSpacing: {
         switch(style) {
         case TextHeadline.Base:
