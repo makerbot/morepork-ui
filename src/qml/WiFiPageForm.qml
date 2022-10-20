@@ -131,7 +131,7 @@ Item {
                             bot.net.wifiError != WifiError.NoError) {
                         qsTr("Search for wireless networks failed.")
                     } else {
-                        ""
+                        emptyString
                     }
                 }
                 anchors.verticalCenter: parent.verticalCenter
@@ -641,6 +641,7 @@ Item {
                             else if(bot.net.wifiError == WifiError.InvalidPassword) {
                                 wifiPopup.close()
                             }
+
                             if(wifiPopup.opened) {
                                 wifiPopup.close()
                             }
@@ -685,6 +686,8 @@ Item {
                             }
                             else if (bot.net.wifiError != WifiError.NoError) {
                                 qsTr("FAILED TO CONNECT TO %1").arg(selectedWifiName)
+                            } else {
+                                defaultString
                             }
                         }
                     }

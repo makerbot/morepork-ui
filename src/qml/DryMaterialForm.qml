@@ -411,6 +411,8 @@ LoggingItem {
 
                     } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
                         qsTr("DRYING MATERIAL")
+                    } else {
+                        defaultString
                     }
                 }
                 anchors.topMargin: 60
@@ -424,11 +426,10 @@ LoggingItem {
             PropertyChanges {
                 target: time_remaining_text
                 visible: {
-                    if(bot.process.stateType == ProcessStateType.Loading) {
-                        false
-
-                    } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
+                    if(bot.process.stateType == ProcessStateType.DryingSpool) {
                         true
+                    } else { // All other cases including ProcessStateType.Loading
+                        false
                     }
                 }
                 text: {

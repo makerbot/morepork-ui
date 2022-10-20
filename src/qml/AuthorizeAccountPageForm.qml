@@ -133,7 +133,7 @@ Item {
         popupHeight: 305
 
         // popups dont have native states support yet
-        property var state
+        property var state: emptyString
 
         showOneButton: state == "no_account" ||
                        state == "reset_password" ||
@@ -144,23 +144,21 @@ Item {
                         state == "no_network_connection"
 
         full_button_text: {
-            if(state == "no_account") {
-                qsTr("DONE")
-            } else if(state == "reset_password") {
+            if(state == "no_account" ||
+                    state == "reset_password" ||
+                    state == "failed_to_get_otp") {
                 qsTr("DONE")
             } else if(state == "authorization_failed") {
                 qsTr("TRY AGAIN")
-            } else if(state == "failed_to_get_otp") {
-                qsTr("DONE")
+            } else {
+                defaultString
             }
         }
 
         full_button.onClicked: {
-            if(state == "no_account") {
-                authorizeAccountPopup.close()
-            } else if(state == "reset_password") {
-                authorizeAccountPopup.close()
-            } else if(state == "authorization_failed") {
+            if(state == "no_account" ||
+                    state == "reset_password" ||
+                    state == "authorization_failed") {
                 authorizeAccountPopup.close()
             } else if(state == "failed_to_get_otp") {
                 backToSelectAuthMethod()
@@ -172,6 +170,8 @@ Item {
                 qsTr("BACK")
             } else if(state == "no_network_connection") {
                 qsTr("CLOSE")
+            } else {
+                defaultString
             }
         }
 
@@ -188,6 +188,8 @@ Item {
                 qsTr("CONFIRM")
             } else if(state == "no_network_connection") {
                 qsTr("GO TO SETTINGS")
+            } else {
+                defaultString
             }
         }
 

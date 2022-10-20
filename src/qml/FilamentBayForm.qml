@@ -118,7 +118,7 @@ Item {
             printPage.print_support_material
             break;
         default:
-            ""
+            emptyString
             break;
         }
     }
@@ -132,7 +132,7 @@ Item {
             printPage.print_support_material_name
             break;
         default:
-            ""
+            emptyString
             break;
         }
     }
@@ -180,6 +180,10 @@ Item {
             state: {
                 if(!extruderPresent) {
                     "no_extruder_detected"
+                }
+                else {
+                    bot.hasFilamentBay ? "extruder_present_material_details_known" :
+                                         "extruder_present_material_details_unknown"
                 }
             }
         }

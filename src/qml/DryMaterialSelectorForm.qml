@@ -20,6 +20,8 @@ ListView {
             dryingMaterialsListMethodX
         } else if(bot.machineType == MachineType.Magma) {
             dryingMaterialsListMethodX
+        } else {
+            []
         }
     }
 

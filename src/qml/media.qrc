@@ -181,5 +181,6 @@
         <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
         <file alias="usb_1.png">images/usb_1.png</file>
+        <file alias="broken.png">images/broken.png</file>
     </qresource>
 </RCC>

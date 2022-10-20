@@ -12,6 +12,8 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 480
+    readonly property string defaultString: "default"
+    readonly property string emptyString: ""
     property alias mainSwipeView: mainSwipeView
     property alias topBar: topBar
     property var currentItem: mainMenu
@@ -23,8 +25,6 @@ ApplicationWindow {
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
     property bool extruderAToolTypeCorrect: bot.extruderAToolTypeCorrect
     property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
-    readonly property int th_disconnect_err: 13
-    readonly property string th_disconnect_err_str: "13 "
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
     property bool extrudersPresent: extruderAPresent && extruderBPresent
@@ -99,6 +99,7 @@ ApplicationWindow {
         case FreStep.FreComplete:
             break;
         default:
+            freScreen.state = "base state"
             break;
         }
     }
@@ -2962,7 +2963,7 @@ ApplicationWindow {
                                 qsTr("LOW MATERIAL")
                             }
                             else {
-                                ""
+                                emptyString
                             }
                         }
                         font.letterSpacing: 3
@@ -3040,7 +3041,7 @@ ApplicationWindow {
                                 qsTr(" to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now.")
                             }
                              else {
-                                ""
+                                emptyString
                             }
                         }
                         horizontalAlignment: Text.AlignHCenter
