@@ -94,7 +94,7 @@
         <file alias="icon_time_and_date.png">images/icon_time_and_date.png</file>
         <file alias="icon_deauthorize_accounts.png">images/icon_deauthorize_accounts.png</file>
         <file alias="icon_preheat.png">images/icon_preheat.png</file>
-        <file alias="icon_name_printer.png">images/icon_name_printer.png</file>
+        <file alias="icon_change_printer_name.png">images/icon_change_printer_name.png</file>
         <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
         <file alias="icon_clean_extruders.png">images/icon_clean_extruders.png</file>
         <file alias="icon_dry_material.png">images/icon_dry_material.png</file>
@@ -181,5 +181,6 @@
         <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
         <file alias="usb_1.png">images/usb_1.png</file>
+        <file alias="confirm_printer_name.png">images/confirm_printer_name.png</file>
     </qresource>
 </RCC>

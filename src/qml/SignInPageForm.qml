@@ -1,7 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QtQuick.VirtualKeyboard 2.3
 
 Item {
     width: 800
@@ -336,36 +335,6 @@ Item {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    Item {
-        id: inputPanelContainer
-        smooth: false
-        antialiasing: false
-        visible: settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
-                 (signInSwipeView.currentIndex == SignInPage.UsernamePage ||
-                  signInSwipeView.currentIndex == SignInPage.PasswordPage)
-        x: -30
-        y: inputPanel && parent ? parent.height - inputPanel.height : 0
-        z: 1
-        width: 860
-        height: inputPanel.height
-        InputPanel {
-            id: inputPanel
-            antialiasing: false
-            smooth: false
-            anchors.fill: parent
-            active: true
-        }
-
-        onVisibleChanged: {
-            if (visible) {
-                bot.pause_touchlog()
-            }
-            if (!visible) {
-                bot.resume_touchlog()
             }
         }
     }
