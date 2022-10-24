@@ -177,15 +177,7 @@ Item {
         }
 
         MaterialStatus {
-            state: {
-                if(!extruderPresent) {
-                    "no_extruder_detected"
-                }
-                else {
-                    bot.hasFilamentBay ? "extruder_present_material_details_known" :
-                                         "extruder_present_material_details_unknown"
-                }
-            }
+
         }
 
         // Buttons
