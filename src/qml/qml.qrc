@@ -142,8 +142,6 @@
         <file>SnipMaterialScreenForm.qml</file>
         <file>LanguageSelector.qml</file>
         <file>LanguageSelectorForm.qml</file>
-        <file>LanguageButton.qml</file>
-        <file>LanguageButtonForm.qml</file>
         <file>StorageTypeButton.qml</file>
         <file>StorageTypeButtonForm.qml</file>
         <file>PopupMenu.qml</file>
