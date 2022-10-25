@@ -101,6 +101,7 @@
         <file alias="icon_dry_material.png">images/icon_dry_material.png</file>
         <file alias="icon_anneal_print.png">images/icon_anneal_print.png</file>
         <file alias="icon_power.png">images/icon_power.png</file>
+        <file alias="icon_analytics.png">images/icon_analytics.png</file>
         <file alias="calib_extruders.png">images/calib_extruders.png</file>
         <file alias="calib_extruders_XA.png">images/calib_extruders_XA.png</file>
         <file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
@@ -181,6 +182,7 @@
         <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
         <file alias="usb_1.png">images/usb_1.png</file>
+        <file alias="analytics_makerbot_logo.png">images/analytics_makerbot_logo.png</file>
         <file alias="open_menu_item_arrow.png">images/open_menu_item_arrow.png</file>
         <file alias="menu_button_alert.png">images/menu_button_alert.png</file>
         <file alias="wifi_menu_icon.png">images/wifi_menu_icon.png</file>
