@@ -100,7 +100,7 @@ Item {
 
                     MenuButton {
                         id: buttonChangePrinterName
-                        buttonImage.source: "qrc:/img/icon_name_printer.png"
+                        buttonImage.source: "qrc:/img/icon_change_printer_name.png"
                         buttonText.text: qsTr("CHANGE PRINTER NAME")
                     }
 
@@ -208,6 +208,7 @@ Item {
             visible: false
 
             function altBack() {
+                namePrinter.nameField.clear()
                 if(!inFreStep) {
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
