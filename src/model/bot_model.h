@@ -79,6 +79,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pause_touchlog();
     Q_INVOKABLE virtual void resume_touchlog();
     Q_INVOKABLE virtual void zipLogs(QString path);
+    Q_INVOKABLE virtual void zipTimelapseImages(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
     Q_INVOKABLE virtual void acknowledgeMaterial(bool response);

@@ -19,6 +19,7 @@ class ProcessModel : public BaseModel {
         CalibrationProcess,
         FactoryResetProcess,
         ZipLogsProcess,
+        ZipTimelapseImagesProcess,
         DryingCycleProcess,
         NozzleCleaningProcess,
         AnnealPrintProcess,
