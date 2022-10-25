@@ -1,17 +1,20 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.9
 
 Button {
     id: menuButton
-    height: 90
-    smooth: false
-    spacing: 0
+    height: 96
     anchors.right: parent.right
     anchors.left: parent.left
+    smooth: false
+    spacing: 0
     property alias buttonText: buttonText
     property alias buttonImage: buttonImage
-    property bool buttonNeedsAction: false
-    property string alertImage: "qrc:/img/extruder_material_error.png"
+    property alias buttonAlertImage: buttonAlertImage
+    property alias wifiIcons: wifiIcons
+    property alias slidingSwitch: slidingSwitch
+    property alias openMenuItemArrow: openMenuItemArrow
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
     enabled: true
@@ -36,43 +39,85 @@ Button {
         anchors.fill: parent
         opacity: enabled ? 1.0 : 0.3
 
-        Image {
-            id: buttonImage
-            width: sourceSize.width
-            height: sourceSize.height
+        RowLayout {
+            id: leftSideItems
+            height: parent.height
+            width: children.width
+            spacing: 24
             anchors.left: parent.left
-            anchors.leftMargin: 20
+            anchors.leftMargin: 32
             anchors.verticalCenter: parent.verticalCenter
-            smooth: false
-            antialiasing: false
+
+            Image {
+                id: buttonImage
+                width: sourceSize.width
+                height: sourceSize.height
+                smooth: false
+                antialiasing: false
+            }
+
+            TextHeadline {
+                id: buttonText
+            }
         }
 
-        Text {
-            id: buttonText
-            text: "Default Text"
-            font.family: defaultFont.name
-            font.letterSpacing: 3
-            font.weight: Font.Bold
-            font.pointSize: 14
-            color: "#ffffff"
-            anchors.left: buttonImage.right
-            anchors.leftMargin: 28
-            anchors.verticalCenter: parent.verticalCenter
-            smooth: false
-            antialiasing: false
-        }
-
-        Image {
-            id: buttonAlertImage
-            width: sourceSize.width -50
-            height: sourceSize.height -50
+        RowLayout {
+            id: rightSideItems
+            height: parent.height
+            width: children.width
+            spacing: 16
             anchors.right: parent.right
-            anchors.rightMargin: 30
+            anchors.rightMargin: 32
             anchors.verticalCenter: parent.verticalCenter
-            smooth: false
-            antialiasing: false
-            source: alertImage
-            visible: buttonNeedsAction
+
+            Image {
+                id: buttonAlertImage
+                width: sourceSize.width
+                height: sourceSize.height
+                smooth: false
+                antialiasing: false
+                source: "qrc:/img/menu_button_alert.png"
+                visible: false
+            }
+
+            RowLayout {
+                id: wifiIcons
+                height: parent.height
+                width: children.width
+                spacing: 16
+                visible: false
+
+                Image {
+                    id: wifiSecuredImage
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    smooth: false
+                    antialiasing: false
+                    source: "qrc:/img/wifi_secured_menu_icon.png"
+                }
+
+                Image {
+                    id: wifiImage
+                    width: sourceSize.width
+                    height: sourceSize.height
+                    smooth: false
+                    antialiasing: false
+                    source: "qrc:/img/wifi_menu_icon.png"
+                }
+            }
+
+            SlidingSwitch {
+                id: slidingSwitch
+                visible: false
+            }
+
+            Image {
+                id: openMenuItemArrow
+                width: sourceSize.width
+                height: sourceSize.height
+                source: "qrc:/img/open_menu_item_arrow.png"
+                visible: false
+            }
         }
     }
 
@@ -83,5 +128,4 @@ Button {
     function uiLogBtn() {
         console.info("MB [=" + buttonText.text + "=] clicked")
     }
-
 }
