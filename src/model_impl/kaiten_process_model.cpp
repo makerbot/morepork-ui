@@ -30,6 +30,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::FactoryResetProcess);
         else if (kNameStr == "ZipLogsProcess")
             typeSet(ProcessType::ZipLogsProcess);
+        else if (kNameStr == "ZipTimelapseImagesProcess")
+            typeSet(ProcessType::ZipTimelapseImagesProcess);
         else if (kNameStr == "DryingCycleProcess")
             typeSet(ProcessType::DryingCycleProcess);
         else if (kNameStr == "NozzleCleaningProcess")
