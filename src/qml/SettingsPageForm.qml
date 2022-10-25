@@ -137,7 +137,7 @@ Item {
                         id: buttonFirmwareUpdate
                         buttonImage.source: "qrc:/img/icon_software_update.png"
                         buttonText.text: qsTr("FIRMWARE UPDATE")
-                        buttonNeedsAction: isfirmwareUpdateAvailable
+                        buttonAlertImage.visible: isfirmwareUpdateAvailable
                     }
 
                     MenuButton {
@@ -149,8 +149,8 @@ Item {
 
                     MenuButton {
                         id: buttonChangeLanguage
-                        buttonImage.source: "qrc:/img/icon_change_language.png"
-                        buttonText.text: qsTr("CHANGE LANGUAGE")
+                        buttonImage.source: "qrc:/img/icon_choose_language.png"
+                        buttonText.text: qsTr("CHOOSE LANGUAGE")
                     }
 
                     MenuButton {
@@ -171,8 +171,7 @@ Item {
                         buttonImage.anchors.leftMargin: 30
                         buttonText.text: qsTr("CLEAN AIR SETTINGS")
                         buttonText.anchors.leftMargin: 38
-                        alertImage: "qrc:/img/filter_change_required.png"
-                        buttonNeedsAction: bot.hepaFilterChangeRequired
+                        buttonAlertImage.visible: bot.hepaFilterChangeRequired
                     }
 
 
