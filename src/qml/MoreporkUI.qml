@@ -1,11 +1,12 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.9
 import ProcessTypeEnum 1.0
 import ConnectionStateEnum 1.0
 import FreStepEnum 1.0
 import MachineTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import QtQuick.VirtualKeyboard 2.3
 
 ApplicationWindow {
     id: rootAppWindow
@@ -349,6 +350,40 @@ ApplicationWindow {
             smooth: false
             z: -1
             anchors.fill: parent
+        }
+
+        Item {
+            id: inputPanelContainer
+            z: 10
+            smooth: false
+            antialiasing: false
+            visible: {
+                settingsPage.settingsSwipeView.currentIndex == SettingsPage.ChangePrinterNamePage ||
+                settingsPage.settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
+                 (settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
+                  settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
+                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
+                 settingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
+            }
+            x: -30
+            y: parent.height - inputPanel.height + 22
+            width: 860
+            height: inputPanel.height
+            InputPanel {
+                id: inputPanel
+                antialiasing: false
+                smooth: false
+                anchors.fill: parent
+                active: true
+            }
+            onVisibleChanged: {
+                if (visible) {
+                    bot.pause_touchlog()
+                } else {
+                    bot.resume_touchlog()
+                }
+            }
         }
 
         StartupSplashScreen {

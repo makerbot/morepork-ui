@@ -10,6 +10,10 @@ Item {
     property alias buttonPrimary: buttonPrimary
     property alias buttonSecondary1: buttonSecondary1
     property alias buttonSecondary2: buttonSecondary2
+    property alias slidingSwitch: slidingSwitch
+
+    anchors.right: parent.right
+    anchors.bottom: parent.bottom
 
     ColumnLayout {
         width: 360
@@ -27,7 +31,6 @@ Item {
 
             NumberedSteps {
                 id: numberedSteps
-                visible: false
                 steps: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"]
@@ -58,6 +61,12 @@ Item {
             ButtonRectangleSecondary {
                 id: buttonSecondary2
                 text: "label"
+            }
+
+            SlidingSwitch {
+                id: slidingSwitch
+                showText: true
+                switchText: "label"
             }
         }
     }

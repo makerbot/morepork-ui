@@ -85,7 +85,7 @@ Item {
                     anchors.leftMargin: 20
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: -3
-                    source: "qrc:/img/filter_change_required.png"
+                    source: "qrc:/img/menu_button_alert.png"
                     visible: bot.hepaFilterChangeRequired
                     cache: false
                     smooth: false
