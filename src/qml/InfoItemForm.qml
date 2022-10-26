@@ -16,38 +16,34 @@ Item {
     Item {
         id: baseItem
         anchors.fill: parent
-        Text {
+        TextBody {
+            style: TextBody.Regular
+
             id: labelText
+            font.weight: Font.Medium
             text: "label"
-            antialiasing: false
-            smooth: false
             anchors.left: parent.left
             anchors.leftMargin: 0
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.letterSpacing: 3
-            font.pixelSize: 18
             anchors.verticalCenter: parent.verticalCenter
-            color: "#cbcbcb"
-            font.capitalization: Font.AllUppercase
-            width: 300
-        }
-
-        Text {
-            id: dataText
-            text: "data"
-            anchors.left: parent.left
-            anchors.leftMargin: 350
             antialiasing: false
             smooth: false
-            font.family: defaultFont.name
-            font.letterSpacing: 5
-            font.weight: Font.Bold
-            font.pixelSize: 18
-            anchors.verticalCenter: parent.verticalCenter
-            color: "#ffffff"
             font.capitalization: Font.AllUppercase
-            width: 385
+            width: 270
+        }
+
+        TextBody {
+            style: TextBody.Regular
+
+            id: dataText
+            font.weight: Font.Bold
+            text: "data"
+            anchors.left: parent.left
+            anchors.leftMargin: 320
+            anchors.verticalCenter: parent.verticalCenter
+            antialiasing: false
+            smooth: false
+            font.capitalization: Font.AllUppercase
+            width: 415
             elide: Text.ElideRight
         }
     }
