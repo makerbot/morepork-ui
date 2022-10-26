@@ -570,7 +570,7 @@ LoggingItem {
                         qsTr("Adjust front right height")
                         break;
                     default:
-                        ""
+                        emptyString
                         break;
                     }
                 }

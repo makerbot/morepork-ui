@@ -356,6 +356,8 @@ LoggingItem {
                         qsTr("NETWORK ERROR")
                     } else if(authState == FreAuthorizeWithCode.Authorized) {
                         qsTr("CONNECTED TO CLOUDPRINT")
+                    } else {
+                        defaultString
                     }
                 }
                 font.letterSpacing: 2

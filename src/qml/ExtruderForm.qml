@@ -41,6 +41,9 @@ Item {
         case 2:
             materialPage.bay2.spoolPresent
             break;
+        default:
+            false
+            break;
         }
     }
 
@@ -90,6 +93,9 @@ Item {
                         case ExtruderType.MK14_HOT_E:
                             "qrc:/img/extruder_labs_1_ht_attached.png"
                             break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                     }
                     break;
                 case 2:
@@ -100,13 +106,15 @@ Item {
                         case ExtruderType.MK14_HOT:
                             "qrc:/img/extruder_2XA_attached.png"
                             break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                     }
                     break;
                 default:
                     "qrc:/img/extruder_not_attached.png"
                     break;
                 }
-
             } else {
                 "qrc:/img/extruder_not_attached.png"
             }
@@ -141,6 +149,9 @@ Item {
                             case ExtruderType.MK14_HOT_E:
                                 "LABS 1 HT"
                                 break;
+                            default:
+                                defaultString
+                                break;
                             }
                             break;
                         case 2:
@@ -151,7 +162,13 @@ Item {
                             case ExtruderType.MK14_HOT:
                                 "2XA"
                                 break;
+                            default:
+                                defaultString
+                                break;
                             }
+                            break;
+                        default:
+                            defaultString
                             break;
                         }
                     }

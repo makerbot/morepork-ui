@@ -562,6 +562,8 @@ Item {
                             bot.getMaterialName(model.modelData.materialB)
                         } else if (model.modelData.extruderUsedA && !model.modelData.extruderUsedB) {
                             bot.getMaterialName(model.modelData.materialA)
+                        } else {
+                            defaultString
                         }
                     }
                     materialError.visible: {
@@ -574,6 +576,8 @@ Item {
                             materialPage.bay1.usingExperimentalExtruder ?
                                     false :
                                     model.modelData.materialA != materialPage.bay1.filamentMaterial
+                        } else {
+                            false
                         }
 
                     }
@@ -705,6 +709,8 @@ Item {
                             materialPage.bay1.usingExperimentalExtruder ?
                                     false :
                                     metaData['materials'][0] != materialPage.bay1.filamentMaterial
+                        } else {
+                            false
                         }
                     }
                     onClicked: {
@@ -985,6 +991,8 @@ Item {
                         qsTr("COPYING")
                     } else if(isFileCopySuccessful) {
                         qsTr("FILE ADDED")
+                    } else {
+                        defaultString
                     }
                 }
                 font.letterSpacing: 3
@@ -1002,6 +1010,8 @@ Item {
                         qsTr("Remove unwanted files from the printer's internal storage to free up space")
                     } else if(isFileCopySuccessful) {
                         qsTr("<b>%1</b> has been added to internal storage.").arg(file_name)
+                    } else {
+                        defaultString
                     }
                 }
                 horizontalAlignment: Text.AlignHCenter
@@ -1091,6 +1101,8 @@ Item {
                 true
             } else if(printFromQueueState == PrintPage.WaitingToStartPrint) {
                 false
+            } else {
+                false
             }
         }
         full_button_text: {
@@ -1099,6 +1111,8 @@ Item {
             } else if(printFromQueueState == PrintPage.FailedToStartPrint ||
                       printFromQueueState == PrintPage.FailedToGetPrintDetails) {
                 "OK"
+            } else {
+                defaultString
             }
         }
         full_button.onClicked: {

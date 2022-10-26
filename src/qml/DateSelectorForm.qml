@@ -48,23 +48,24 @@ Item {
     }
 
     function formatText(count, modelData) {
+        var data = 0
         if (count == 12) {
             // Month
-            var data = modelData + 1
             if (data.toString().length < 2) {
+                data = modelData + 1
                 data = "0" + data
             }
             return data
         } else if(count == 31 || count == 30 || count == 28 || count == 29) {
             // Date
-            var data = modelData + 1
             if (data.toString().length < 2) {
+                data = modelData + 1
                 data = "0" + data
             }
             return data
         } else if(count == 100) {
             // Year
-            var data = modelData + 2000
+            data = modelData + 2000
             return data
         }
     }

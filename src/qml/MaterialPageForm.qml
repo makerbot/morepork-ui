@@ -509,6 +509,9 @@ Item {
                                 case ExtruderType.MK14_COMP:
                                     qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.supportedMaterials.map(bot.getMaterialName).join(", "))
                                     break;
+                                default:
+                                    defaultString
+                                    break;
                                 }
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
                                 switch (bot.extruderBType) {
@@ -517,6 +520,9 @@ Item {
                                     break;
                                 case ExtruderType.MK14_HOT:
                                     qsTr("Only SR-30 support material is compatible in material bay 2. Insert MakerBot SR-30 support material in material bay 2 to continue.")
+                                    break;
+                                default:
+                                    defaultString
                                     break;
                                 }
                             }
@@ -528,6 +534,9 @@ Item {
                             } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
                                 qsTr("The Performance Support extruder is only compatible with\n" +
                                 "MakerBot Method support materials.")
+                            }
+                            else {
+                                defaultString
                             }
                         }
                     }

@@ -82,7 +82,7 @@ Item {
                                  qsTr("LABS MATERIAL LOADED") :
                                  qsTr("UNKNOWN MATERIAL")
                         } else {
-                            ""
+                            emptyString
                         }
                     }
                 }
@@ -93,7 +93,7 @@ Item {
                     font.weight: Font.Thin
                     text: spoolPresent ?
                             qsTr("%1KG REMAINING").arg(filamentQuantity) :
-                              ""
+                              emptyString
                 }
             }
         }

@@ -182,6 +182,7 @@
         <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
         <file alias="usb_1.png">images/usb_1.png</file>
+        <file alias="broken.png">images/broken.png</file>
         <file alias="confirm_printer_name.png">images/confirm_printer_name.png</file>
         <file alias="analytics_makerbot_logo.png">images/analytics_makerbot_logo.png</file>
         <file alias="open_menu_item_arrow.png">images/open_menu_item_arrow.png</file>
