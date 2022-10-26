@@ -12,18 +12,15 @@ Item {
         id: baseItem
         anchors.fill: parent
 
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 65
+        TextBody {
+            style: TextBody.ExtraLarge
+
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
-            anchors.topMargin: 5
             text: qsTr("%1 info").arg(bot.name)
-            font.pixelSize: 22
-            font.capitalization: Font.AllUppercase
-            color: "#cbcbcb"
-            font.family: defaultFont.name
+            font.pixelSize: 17
             font.weight: Font.Bold
-            font.letterSpacing: 5
+            font.capitalization: Font.AllUppercase
         }
 
         ColumnLayout {
@@ -52,11 +49,6 @@ Item {
                 dataText: bot.net.ipAddr
             }
             InfoItem {
-                id: info_subnet
-                labelText: qsTr("Netmask")
-                dataText: bot.net.netmask
-            }
-            InfoItem {
                 id: info_gateway
                 labelText: qsTr("Gateway")
                 dataText: bot.net.gateway
@@ -71,10 +63,10 @@ Item {
                 dataElement.visible: false
                 ListView {
                     id: listView
-                    x: 350
+                    x: 320
                     anchors.top: parent.top
                     anchors.topMargin: 0
-                    width: 100
+                    width: 150
                     height: 50
                     boundsBehavior: Flickable.DragOverBounds
                     orientation: ListView.Vertical
@@ -83,20 +75,18 @@ Item {
                     smooth: false
                     model: bot.net.dns
                     delegate:
-                        Text {
-                        text: model.modelData
-                        font.family: defaultFont.name
-                        font.letterSpacing: 2
-                        font.weight: Font.Bold
-                        font.pixelSize: 18
-                        color: "#ffffff"
-                    }
+                        TextBody {
+                            style: TextBody.Base
+
+                            text: model.modelData
+                            font.weight: Font.Bold
+                        }
                 }
             }
 
             InfoItem {
                 id: info_wifiNetwork
-                labelText: qsTr("WiFi Name")
+                labelText: qsTr("Wi-Fi Name")
                 dataText: bot.net.interface === "wifi" ? bot.net.name : qsTr("n/a")
             }
             InfoItem {
@@ -106,7 +96,7 @@ Item {
             }
             InfoItem {
                 id: info_wlanMacAddress
-                labelText: qsTr("WiFi MAC Address")
+                labelText: qsTr("Wi-Fi MAC Address")
                 dataText: bot.net.wlanMacAddr
             }
         }
