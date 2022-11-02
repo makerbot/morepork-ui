@@ -4,29 +4,17 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: 300
+    height: 429
 
     ColumnLayout {
         id: columnLayout
-        anchors.bottomMargin: 30
-        spacing: 0
-        anchors.fill: parent
+        width: parent.width
+        spacing: 43
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Large
             id: heading
             text: qsTr("CHAMBER")
-            font.letterSpacing: 2
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            font.family: defaultFont.name
-            color: "#ffffff"
-        }
-
-        Item {
-            id: spacing_item
-            width: 200
-            height: 15
-            visible: true
         }
 
         AdvancedInfoElement {
@@ -51,8 +39,6 @@ Item {
             id: buildplaneTargetProperty
             label: qsTr("BUILD PLANE TGT. TEMP.")
             value: bot.buildplaneTargetTemp
-            label_element.font.pixelSize: 14
-            label_element.font.letterSpacing: 1
         }
 
         AdvancedInfoElement {

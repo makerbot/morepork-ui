@@ -3,21 +3,17 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 800
-    height: 320
+    width: parent.width
+    height: 455
 
     ColumnLayout {
-        anchors.bottomMargin: 30
-        anchors.fill: parent
+        width: parent.width
+        spacing: 43
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Large
             id: heading
             text: qsTr("FILAMENT BAY")
-            font.letterSpacing: 2
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            font.family: defaultFont.name
-            color: "#ffffff"
         }
 
         RowLayout {
