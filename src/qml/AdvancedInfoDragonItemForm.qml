@@ -3,30 +3,18 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 800
-    height: 120
+    width: 400
+    height: 128
 
     ColumnLayout {
         id: columnLayout
-        anchors.bottomMargin: 30
-        spacing: 0
-        anchors.fill: parent
+        width: parent.width
+        spacing: 43
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Large
             id: heading
             text: qsTr("HEATING SYSTEM")
-            font.letterSpacing: 2
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            font.family: defaultFont.name
-            color: "#ffffff"
-        }
-
-        Item {
-            id: spacing_item
-            width: 200
-            height: 15
-            visible: true
         }
 
         AdvancedInfoElement {

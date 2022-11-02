@@ -5,23 +5,18 @@ import MachineTypeEnum 1.0
 
 Item {
     width: 400
-    height: 240
-
-    Text {
-        id: heading
-        text: qsTr("MISCELLANEOUS")
-        font.letterSpacing: 2
-        font.weight: Font.Bold
-        font.pixelSize: 20
-        font.family: defaultFont.name
-        color: "#ffffff"
-    }
+    height: bot.machineType == MachineType.Magma ? (257 + 86) : 257
 
     ColumnLayout {
         id: columnLayout
-        anchors.top: heading.bottom
-        anchors.topMargin: 15
-        spacing: 0
+        width: parent.width
+        spacing: 43
+
+        TextHeadline {
+            style: TextHeadline.Large
+            id: heading
+            text: qsTr("MISCELLANEOUS")
+        }
 
         AdvancedInfoElement {
             id: doorActivatedProperty
