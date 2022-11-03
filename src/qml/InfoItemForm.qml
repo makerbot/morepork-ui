@@ -4,47 +4,42 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: infoItem
-    height: 20
-    width: 600
+    width: 680
     smooth: false
+    antialiasing: false
+
     property alias labelText: labelText.text
     property alias dataText: dataText.text
     property alias dataElement: dataText
     property alias labelElement: labelText
     property alias baseElement: baseItem
 
-    Item {
+    RowLayout {
         id: baseItem
-        anchors.fill: parent
-        TextBody {
-            style: TextBody.Regular
+        width: parent.width
+        spacing: 50
 
+        TextBody {
+            style: TextBody.Base
+            font.weight: Font.Light
             id: labelText
-            font.weight: Font.Medium
             text: "label"
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.verticalCenter: parent.verticalCenter
-            antialiasing: false
-            smooth: false
             font.capitalization: Font.AllUppercase
-            width: 270
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.minimumWidth: 270
         }
 
         TextBody {
-            style: TextBody.Regular
-
-            id: dataText
+            style: TextBody.Base
             font.weight: Font.Bold
+            id: dataText
             text: "data"
-            anchors.left: parent.left
-            anchors.leftMargin: 320
-            anchors.verticalCenter: parent.verticalCenter
-            antialiasing: false
-            smooth: false
             font.capitalization: Font.AllUppercase
-            width: 415
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             elide: Text.ElideRight
+            Layout.minimumWidth: 365
         }
     }
 }
