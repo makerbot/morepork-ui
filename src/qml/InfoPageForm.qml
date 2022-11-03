@@ -10,52 +10,55 @@ Item {
 
     Item {
         id: baseItem
-        anchors.fill: parent
-
-        TextBody {
-            style: TextBody.ExtraLarge
-
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.top
-            text: qsTr("%1 info").arg(bot.name)
-            font.pixelSize: 17
-            font.weight: Font.Bold
-            font.capitalization: Font.AllUppercase
-        }
+        width: parent.width
 
         ColumnLayout {
             id: columnLayout
-            width: 600
+            width: 800
             height: 350
-            anchors.left: parent.left
-            anchors.leftMargin: 65
-            anchors.top: parent.top
-            anchors.topMargin: 50
             smooth: false
+            spacing: 34
 
+
+            Item {
+                id: spacing_item
+                width: 200
+                height: 18
+                visible: true
+            }
             InfoItemForm {
                 id: info_firmwareVersion
                 labelText: qsTr("Firmware Version")
                 dataText: bot.version
+                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_connectionType
                 labelText: qsTr("Connection Type")
                 dataText: bot.net.interface
+                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_ipAddress
                 labelText: qsTr("IP Address")
                 dataText: bot.net.ipAddr
+                Layout.leftMargin: 60
+            }
+            InfoItem {
+                id: info_subnet
+                labelText: qsTr("Netmask")
+                dataText: bot.net.netmask
+                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_gateway
                 labelText: qsTr("Gateway")
                 dataText: bot.net.gateway
+                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_dns
-                height: listView.height
+                Layout.minimumHeight: listView.height
                 labelText: qsTr("DNS")
                 dataText: bot.net.gateway
                 labelElement.anchors.top: baseElement.top
@@ -82,22 +85,25 @@ Item {
                             font.weight: Font.Bold
                         }
                 }
+                Layout.leftMargin: 60
             }
-
             InfoItem {
                 id: info_wifiNetwork
                 labelText: qsTr("Wi-Fi Name")
                 dataText: bot.net.interface === "wifi" ? bot.net.name : qsTr("n/a")
+                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_ethMacAddress
                 labelText: qsTr("Ethernet MAC Address")
                 dataText: bot.net.ethMacAddr
+                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_wlanMacAddress
                 labelText: qsTr("Wi-Fi MAC Address")
                 dataText: bot.net.wlanMacAddr
+                Layout.leftMargin: 60
             }
         }
     }
