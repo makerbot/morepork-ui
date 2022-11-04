@@ -31,6 +31,16 @@ LoggingPopup {
     property bool showTwoButtons: false
     property int defaultButton: CustomPopup.None
 
+    // Using "popupHeight" alias property will overwrite this
+    // should use one or the other to determine sizing
+    // Added to dynamically change height based on contents
+    property int popupContentsHeight: 165
+    property int popupContentsHeightOffset: 100
+
+    // Images to be used in Custom popups
+    readonly property string popupCompleteImage: "qrc:/img/popup_complete.png"
+    readonly property string popupErrorImage: "qrc:/img/popup_error.png"
+
     background: Rectangle {
         id: popupBackgroundDim
         color: "#000000"
@@ -104,7 +114,7 @@ LoggingPopup {
         color: "#000000"
         rotation: rootItem.rotation == 180 ? 180 : 0
         width: 720
-        height: 265
+        height: popupContentsHeight + popupContentsHeightOffset
         radius: 10
         border.width: 2
         border.color: "#ffffff"

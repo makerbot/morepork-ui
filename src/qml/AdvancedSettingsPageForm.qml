@@ -552,28 +552,20 @@ Item {
 
     CustomPopup {
         popupName: "CopyingLogs"
+
+
+        id: copyingLogsPopup
+        visible: false
+        popupWidth: 750
+        popupContentsHeight: columnLayout_copy_logs.height
+
         property bool initialized: false
         property bool cancelled: false
         property string logBundlePath: ""
         property int errorcode: 0
         property bool showButton: true
-
-        id: copyingLogsPopup
-        visible: false
-        popupWidth: 750
-        popupHeight: {
-            if(popupState == "failed_copied_logs") {
-                350
-            }
-            else if(popupState == "cancelling_copy_logs") {
-                250
-            }
-            else {
-                300
-            }
-        }
-
         property string popupState: "no_usb_detected"
+
         showOneButton: showButton
         full_button_text: {
             if (popupState =="copy_logs_state") {
@@ -594,8 +586,8 @@ Item {
             else {
                 initialized = false
                 cancelled = false
-                errorcode = 0
                 copyingLogsPopup.close()
+                errorcode = 0
                 showButton = true
             }
         }
@@ -611,7 +603,6 @@ Item {
         ColumnLayout {
             id: columnLayout_copy_logs
             width: 650
-            height: parent.height
             anchors.top: parent.top
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter
@@ -669,8 +660,8 @@ Item {
 
                     PropertyChanges {
                         target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 120
+                        height: 180
+                        anchors.topMargin: 100
                         spacing: 25
                     }
                 },
@@ -680,7 +671,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: copyingLogsPopup.popupErrorImage
                         visible: true
                     }
                     PropertyChanges {
@@ -701,8 +692,9 @@ Item {
 
                     PropertyChanges {
                         target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 120
+                        height: 180
+                        anchors.topMargin: 100
+                        spacing: 20
                     }
                 },
                 State {
@@ -731,7 +723,7 @@ Item {
 
                     PropertyChanges {
                         target: columnLayout_copy_logs
-                        height: 100
+                        height: 120
                         anchors.topMargin: 140
                         spacing: 25
                     }
@@ -742,7 +734,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/process_complete_small.png"
+                        source: copyingLogsPopup.popupCompleteImage
                         visible: true
                     }
                     PropertyChanges {
@@ -762,9 +754,9 @@ Item {
 
                     PropertyChanges {
                         target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 140
-                        spacing: 35
+                        height: 150
+                        anchors.topMargin: 110
+                        spacing: 20
                     }
                 },
                 State {
@@ -773,7 +765,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: copyingLogsPopup.popupErrorImage
                         visible: true
                     }
                     PropertyChanges {
@@ -791,13 +783,14 @@ Item {
                         visible: true
                         text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
                                     "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                                    "CODE: %1").arg(copyingLogsPopup.errorcode)
+                                    "CODE: %1").arg(bot.process.errorCode)
                     }
 
                     PropertyChanges {
                         target: columnLayout_copy_logs
-                        height: 200
+                        height: 220
                         anchors.topMargin: 80
+                        spacing: 20
                     }
                 }
             ]

@@ -28,21 +28,7 @@ Text {
             16
         }
     }
-    font.letterSpacing: {
-        switch(style) {
-        case TextBody.Base:
-            font.weight == Font.Bold ? 1.8 : 1
-            break;
-        case TextBody.Large:
-            font.weight == Font.Bold ? 1.8 : 1.1
-            break;
-        case TextBody.ExtraLarge:
-            font.weight == Font.Bold ? 2.2 : 1.3
-            break;
-        default:
-            1
-        }
-    }
+
     lineHeightMode: Text.FixedHeight
     wrapMode: Text.WordWrap
     lineHeight: {
@@ -61,4 +47,29 @@ Text {
         }
     }
     color: Qt.rgba(255, 255, 255, 0.8)
+
+    // Due to binding error we set the spacing onCompleted
+    Component.onCompleted: {
+        font.letterSpacing = setLetterSpacing()
+    }
+
+    function setLetterSpacing() {
+        var spacing = 1;
+        switch(style) {
+        case TextBody.Base:
+            spacing = (font.weight == Font.Bold ? 1.8 : 1);
+            break;
+        case TextBody.Large:
+            spacing = (font.weight == Font.Bold ? 1.8 : 1.1);
+            break;
+        case TextBody.ExtraLarge:
+            spacing = (font.weight == Font.Bold ? 2.2 : 1.3);
+            break;
+        default:
+            spacing = 1
+            break;
+        }
+        return spacing;
+    }
+
 }
