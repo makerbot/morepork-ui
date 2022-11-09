@@ -2003,10 +2003,12 @@ ApplicationWindow {
             property int heatingSystemErrorCode: (chamberErrorValid ? bot.chamberErrorCode : bot.hbpErrorCode)
 
             id: heatingSystemErrorPopup
+            popupContentsHeight: heatingSystemColumnLayout.height
             visible: heatingSystemError && !bot.hasFilamentBay
             closePolicy: Popup.CloseOnPressOutside
 
             ColumnLayout {
+                id: heatingSystemColumnLayout
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 height: 150

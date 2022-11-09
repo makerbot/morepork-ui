@@ -391,7 +391,6 @@ LoggingItem {
                 width: sourceSize.width
                 height: sourceSize.height
                 source: "qrc:/img/usb_1.png"
-
                 visible: true
             }
 
@@ -399,6 +398,7 @@ LoggingItem {
                 target: main_status_text
                 visible: false
             }
+
             PropertyChanges {
                 target: subheader_text
                 visible: false
@@ -470,7 +470,7 @@ LoggingItem {
         popupName: "RetrievingFirmware"
         id: retrievingFirmwarePopup
         popupWidth: 720
-        popupHeight: 280
+        popupContentsHeight: columnLayout_firmware_popup.height
         showOneButton: true
 
         visible: bot.process.type === ProcessType.FirmwareUpdate
@@ -494,11 +494,11 @@ LoggingItem {
         ColumnLayout {
             id: columnLayout_firmware_popup
             width: 590
-            height: 180
+            height: 160
             anchors.top: parent.top
             anchors.topMargin: 110
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 0
+            spacing: 15
 
             BusySpinner {
                 id: busyIndicator_firmware_popup
@@ -510,22 +510,11 @@ LoggingItem {
             TextHeadline {
                 id: alert_text_firmware_popup
                 text: ""
-                color: "#ffffff"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            }
-
-            Item {
-                id: emptyItem_firmware_popup
-                width: 10
-                height: 5
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                visible: true
             }
 
             TextBody {
                 id: description_text_firmware_popup
-                color: "#ffffff"
-                font.weight: Font.Light
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
@@ -542,6 +531,7 @@ LoggingItem {
                         target: alert_text_firmware_popup
                         text: qsTr("DOWNLOADING FIRMWARE")
                     }
+
                     PropertyChanges {
                         target: description_text_firmware_popup
                         text: qsTr("%1").arg(bot.process.printPercentage) + "%"
@@ -570,7 +560,7 @@ LoggingItem {
         id: firmwareUpdateFailedPopup
         visible: false
         popupWidth: 750
-        popupHeight: 350
+        popupContentsHeight: columnLayout_firmware_failure.height
 
         showOneButton: true
         full_button_text: qsTr("CLOSE")
@@ -587,27 +577,27 @@ LoggingItem {
         onClosed: {
 
         }
+
         ColumnLayout {
             id: columnLayout_firmware_failure
             width: 650
-            height: 200
+            height: 230
             anchors.top: parent.top
             anchors.topMargin: 80
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 20
+            spacing: 15
 
             Image {
                 id: error_image
                 width: sourceSize.width - 10
                 height: sourceSize.height - 10
                 Layout.alignment: Qt.AlignHCenter
-                source: "qrc:/img/extruder_material_error.png"
+                source: firmwareUpdateFailedPopup.popupErrorImage
             }
 
             TextHeadline {
                 id: title
                 Layout.alignment: Qt.AlignHCenter
-                color: "#ffffff"
                 text: qsTr("FIRMWARE UPDATE - FAILED")
             }
 
@@ -616,9 +606,8 @@ LoggingItem {
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
-                color: "#ffffff"
                 text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
-                            "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
+                            "support through <b>makerbot.com</b> to identify your issue.<br><br>" +
                             "CODE: %1").arg(bot.process.errorCode)
             }
         }
