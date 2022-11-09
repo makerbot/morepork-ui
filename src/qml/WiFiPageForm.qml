@@ -231,6 +231,7 @@ Item {
                     signalStrength: model.modelData.sig_strength
                     wifiIcons.visible: true
                     isConnected: currentWifiName === buttonText.text
+                    buttonImage.source: "qrc:/img/process_complete_small.png"
 
                     onClicked: {
                         if(isConnected) {

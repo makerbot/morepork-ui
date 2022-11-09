@@ -22,7 +22,7 @@ Button {
     // For Wifi button - To use Wifi Icons the property
     // visibiliy must be set to true
     property bool isSaved: false
-    property bool isConnected: false
+    property alias isConnected: buttonImage.visible
     property alias isSecured: wifiSecuredImage.visible
     property int signalStrength: 0
 
@@ -57,18 +57,10 @@ Button {
 
             Image {
                 id: buttonImage
-                Layout.preferredWidth: sourceSize.width
-                Layout.preferredHeight: sourceSize.height
+                Layout.preferredWidth: (wifiIcons.visible) ? 34 : sourceSize.width
+                Layout.preferredHeight: (wifiIcons.visible) ? 34 : sourceSize.height
                 smooth: false
                 antialiasing: false
-            }
-
-            Image {
-                id: isConnectedImage
-                Layout.preferredWidth: 34
-                Layout.preferredHeight: 34
-                source: "qrc:/img/process_complete_small.png"
-                visible: isConnected
             }
 
             TextHeadline {
