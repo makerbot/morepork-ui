@@ -395,7 +395,7 @@ Item {
         popupName: "Wifi"
         id: wifiPopup
         closePolicy: Popup.CloseOnPressOutside
-        popupContentsHeight: columnLayout.height
+        popupHeight: columnLayout.height + 100
 
         // Full Button Bar
         showOneButton: !(isForgetEnabled ||
@@ -545,7 +545,7 @@ Item {
                     PropertyChanges {
                         target: error_image
                         visible: true
-                        source:  wifiPopup.popupCompleteImage
+                        source:  "qrc:/img/popup_complete.png"
                     }
 
                     PropertyChanges {
@@ -624,7 +624,7 @@ Item {
                     PropertyChanges {
                         target: error_image
                         visible: true
-                        source: wifiPopup.popupErrorImage
+                        source: "qrc:/img/popup_error.png"
                     }
 
                     PropertyChanges {
@@ -653,7 +653,7 @@ Item {
                     PropertyChanges {
                         target: error_image
                         visible: true
-                        source: wifiPopup.popupErrorImage
+                        source: "qrc:/img/popup_error.png"
                     }
 
                     PropertyChanges {
