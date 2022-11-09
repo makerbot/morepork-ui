@@ -552,11 +552,6 @@ Item {
 
     CustomPopup {
         popupName: "CopyingLogs"
-        property bool initialized: false
-        property bool cancelled: false
-        property string logBundlePath: ""
-        property int errorcode: 0
-        property bool showButton: true
 
         id: copyingLogsPopup
         visible: false
