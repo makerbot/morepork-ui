@@ -118,7 +118,7 @@ AdvancedSettingsPageForm {
         if (!copyingTimelapseImagesPopup.initialized) {
             bot.process.onStateTypeChanged.connect(function() {
 
-                if (bot.process.type === ProcessType.ZipTimelapseImagesProcess) {
+                if (bot.process.type === ProcessType.ZipLogsProcess) {
 
                     var zipTimelapseImagesInProgress =
                              bot.process.stateType !== ProcessStateType.Done;
