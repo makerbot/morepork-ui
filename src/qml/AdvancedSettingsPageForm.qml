@@ -12,23 +12,41 @@ Item {
 
     property alias advancedSettingsSwipeView: advancedSettingsSwipeView
 
+    property alias buttonPrinterInfo: buttonPrinterInfo
+
     property alias buttonAdvancedInfo: buttonAdvancedInfo
 
-    property alias buttonPreheat: buttonPreheat
+    property alias wifiPage: wifiPage
+    property alias buttonWiFi: buttonWiFi
+    property alias koreaDFSScreen: koreaDFSScreen
 
-    property alias buttonAssistedLeveling: buttonAssistedLeveling
+    property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
+    property alias authorizeAccountPage: authorizeAccountPage
 
-    property alias buttonCleanExtruders: buttonCleanExtruders
-
-    property alias buttonDryMaterial: buttonDryMaterial
-
-    property alias buttonAnnealPrint: buttonAnnealPrint
-
-    property alias buttonTouchTest: buttonTouchTest
+    property alias buttonFirmwareUpdate: buttonFirmwareUpdate
+    property alias firmwareUpdatePage: firmwareUpdatePage
 
     property alias buttonCopyLogs: buttonCopyLogs
 
     property alias copyingLogsPopup: copyingLogsPopup
+
+    property alias buttonAnalytics: buttonAnalytics
+
+    property alias buttonChangePrinterName: buttonChangePrinterName
+    property alias namePrinter: namePrinter
+
+    property alias buttonTime: buttonTime
+    property alias timePage: timePage
+
+    property alias buttonChangeLanguage: buttonChangeLanguage
+    property alias languageSelector: languageSelectorPage
+
+    property alias spoolInfoPage: spoolInfoPage
+    property alias buttonSpoolInfo: buttonSpoolInfo
+
+    property alias buttonColorSwatch: buttonColorSwatch
+
+    property alias buttonTouchTest: buttonTouchTest
 
     property bool isResetting: false
     property alias buttonResetToFactory: buttonResetToFactory
@@ -36,16 +54,6 @@ Item {
     property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
     property bool doneFactoryReset: bot.process.type === ProcessType.FactoryResetProcess &&
                                     bot.process.stateType === ProcessStateType.Done
-
-    property alias buttonSpoolInfo: buttonSpoolInfo
-
-    property alias buttonColorSwatch: buttonColorSwatch
-
-    property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
-
-    property alias buttonAnalytics: buttonAnalytics
-
-    property alias spoolInfoPage: spoolInfoPage
 
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
@@ -87,18 +95,24 @@ Item {
     }
 
     enum SwipeIndex {
-        BasePage,                   // 0
-        AdvancedInfoPage,           // 1
-        PreheatPage,                // 2
-        AssistedLevelingPage,       // 3
+        BasePage,
+        PrinterInfoPage,
+        AdvancedInfoPage,
+        WifiPage,
+        AuthorizeAccountsPage,
+        FirmwareUpdatePage,
+        // Setup?
+
+        ShareAnalyticsPage,
+        ChangePrinterNamePage,
+        TimePage,
+        ChangeLanguagePage,
         SpoolInfoPage,              // 4
-        ColorSwatchPage,            // 5
-        RaiseLowerBuildPlatePage,   // 6
-        ShareAnalyticsPage,         // 7
-        DryMaterialPage,            // 8
-        CleanExtrudersPage,         // 9
-        AnnealPrintPage,            // 10
-        TouchTestPage               // 11
+        ColorSwatchPage,
+        TouchTestPage,
+        // move
+
+        KoreaDFSSecretPage
     }
 
     LoggingSwipeView {
@@ -111,10 +125,11 @@ Item {
             id: itemAdvancedSettings
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
+                /*if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
                     mainSwipeView
                 }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
+                else*/
+                if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
                     settingsPage.settingsSwipeView
                 }
                 else {
@@ -122,10 +137,11 @@ Item {
                 }
             }
             property int backSwipeIndex: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
+                /*if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
                     MoreporkUI.BasePage
                 }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
+                else*/
+                if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
                     SettingsPage.BasePage
                 }
                 else {
@@ -152,69 +168,51 @@ Item {
                     spacing: 0
 
                     MenuButton {
+                        id: buttonPrinterInfo
+                        buttonImage.source: "qrc:/img/icon_printer_info.png"
+                        buttonText.text: qsTr("PRINTER INFO")
+                    }
+
+                    MenuButton {
                         id: buttonAdvancedInfo
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonImage.source: "qrc:/img/icon_printer_info.png"
                         buttonText.text: qsTr("SENSOR INFO")
                     }
 
                     MenuButton {
-                        id: buttonPreheat
-                        buttonImage.source: "qrc:/img/icon_preheat.png"
-                        buttonText.text: qsTr("PREHEAT")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonAssistedLeveling
-                        buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
-                        buttonText.text: qsTr("ASSISTED LEVELING")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonCleanExtruders
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: qsTr("CLEAN EXTRUDERS")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonDryMaterial
-                        buttonImage.source: "qrc:/img/icon_dry_material.png"
-                        buttonText.text: qsTr("DRY MATERIAL")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonAnnealPrint
-                        buttonImage.source: "qrc:/img/icon_anneal_print.png"
-                        buttonText.text: qsTr("ANNEAL PRINT")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonJamDetectionExpExtruder
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: "LABS " + qsTr("EXTRUDER JAM DETECTION")
-                        enabled: bot.extruderAPresent &&
-                                 materialPage.bay1.usingExperimentalExtruder
+                        id: buttonWiFi
+                        buttonImage.source: "qrc:/img/icon_wifi.png"
+                        buttonText.text: qsTr("WIFI AND NETWORK")
 
                         SlidingSwitch {
-                            id: switchToggleJamDetection
-                            checked: !bot.extruderAJamDetectionDisabled
-                            enabled: parent.enabled
+                            id: switchWifi
+                            checked: bot.net.wifiEnabled
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
                             anchors.rightMargin: 50
+
                             onClicked: {
-                                if(switchToggleJamDetection.checked) {
-                                    bot.ignoreError(0,[81],false)
+                                if(switchWifi.checked) {
+                                    bot.toggleWifi(true)
                                 }
-                                else if(!switchToggleJamDetection.checked) {
-                                    bot.ignoreError(0,[81],true)
+                                else if(!switchWifi.checked) {
+                                    bot.toggleWifi(false)
                                 }
                             }
                         }
+                    }
+                    MenuButton {
+                        id: buttonAuthorizeAccounts
+                        buttonImage.source: "qrc:/img/icon_authorize_account.png"
+                        buttonText.text: qsTr("ACCOUNT AUTHORIZATION")
+                        openMenuItemArrow.visible: true
+                    }
+
+                    MenuButton {
+                        id: buttonFirmwareUpdate
+                        buttonImage.source: "qrc:/img/icon_software_update.png"
+                        buttonText.text: qsTr("FIRMWARE UPDATE")
+                        buttonAlertImage.visible: isfirmwareUpdateAvailable
                     }
 
                     MenuButton {
@@ -225,43 +223,26 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonResetToFactory
-                        buttonImage.anchors.leftMargin: 23
-                        buttonImage.source: "qrc:/img/icon_factory_reset.png"
-                        buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonSpoolInfo
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: qsTr("SPOOL INFO")
-                        visible: false
-                    }
-
-                    MenuButton {
-                        id: buttonColorSwatch
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: qsTr("COLOR SWATCH")
-                        visible: false
-                    }
-
-                    MenuButton {
-                        id: buttonRaiseLowerBuildPlate
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
                         id: buttonAnalytics
                         buttonImage.source: "qrc:/img/icon_analytics.png"
                         buttonText.text: qsTr("ANALYTICS")
                     }
 
                     MenuButton {
+                        id: buttonChangePrinterName
+                        buttonImage.source: "qrc:/img/icon_change_printer_name.png"
+                        buttonText.text: qsTr("CHANGE PRINTER NAME")
+                    }
+
+                    MenuButton {
+                        id: buttonTime
+                        buttonImage.source: "qrc:/img/icon_time.png"
+                        buttonText.text: qsTr("TIME AND DATE")
+                    }
+
+                    MenuButton {
                         id: buttonSupportMode
-                        buttonImage.source: "qrc:/img/icon_time_and_date.png"
+                        buttonImage.source: "qrc:/img/icon_time.png"
                         buttonText.text: qsTr("SHOW CURRENT TIME")
 
                         SlidingSwitch {
@@ -285,11 +266,53 @@ Item {
                     }
 
                     MenuButton {
+                        id: buttonChangeLanguage
+                        buttonImage.source: "qrc:/img/icon_choose_language.png"
+                        buttonText.text: qsTr("CHOOSE LANGUAGE")
+                    }
+
+                    MenuButton {
+                        id: buttonSpoolInfo
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: qsTr("SPOOL INFO")
+                        visible: false
+                    }
+
+                    MenuButton {
+                        id: buttonColorSwatch
+                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonText.text: qsTr("COLOR SWATCH")
+                        visible: false
+                    }
+
+                    MenuButton {
                         id: buttonTouchTest
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: qsTr("DISPLAY TOUCH TEST")
                     }
+
+                    MenuButton {
+                        id: buttonResetToFactory
+                        buttonImage.anchors.leftMargin: 23
+                        buttonImage.source: "qrc:/img/icon_factory_reset.png"
+                        buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
+                        enabled: !isProcessRunning()
+                    }
                 }
+            }
+        }
+
+        // AdvancedSettingsPage.PrinterInfoPage
+        Item {
+            id: printerInfoItem
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            InfoPage {
+
             }
         }
 
@@ -306,23 +329,38 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.PreheatPage
+        // AdvancedSettingsPage.WifiPage
         Item {
-            id: preheatItem
+            id: wifiItem
             property var backSwiper: advancedSettingsSwipeView
             property int backSwipeIndex: AdvancedSettingsPage.BasePage
             smooth: false
             visible: false
+            property bool hasAltBack: true
 
-            PreheatPage {
+            function altBack() {
+                if(!inFreStep) {
+                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            WiFiPage {
+                id: wifiPage
 
             }
         }
 
-        // AdvancedSettingsPage.AssistedLevelingPage
+        // AdvancedSettingsPage.AuthorizeAccountsPage
         Item {
-            id: itemAssistedLeveling
-            // backSwiper and backSwipeIndex are used by backClicked
+            id: accountsItem
             property var backSwiper: advancedSettingsSwipeView
             property int backSwipeIndex: AdvancedSettingsPage.BasePage
             property bool hasAltBack: true
@@ -331,14 +369,59 @@ Item {
 
             function altBack() {
                 if(!inFreStep) {
-                    if(bot.process.type == ProcessType.AssistedLeveling) {
-                        assistedLevel.cancelAssistedLevelingPopup.open()
+                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                authorizeAccountPage.backToSettings()
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            AuthorizeAccountPage {
+                id: authorizeAccountPage
+            }
+        }
+
+
+        // AdvancedSettingsPage.FirmwareUpdatePage
+        Item {
+            id: firmwareUpdateItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property bool hasAltBack: true
+            property alias firmwareUpdatePage: firmwareUpdatePage
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    if(firmwareUpdatePage.state == "install_from_usb") {
+                        if(isfirmwareUpdateAvailable) {
+                            firmwareUpdatePage.state = "firmware_update_available"
+                        }
+                        else {
+                            firmwareUpdatePage.state = "no_firmware_update_available"
+                        }
+                    }
+                    else if (firmwareUpdatePage.state == "select_firmware_file") {
+                        var backDir = storage.backStackPop()
+                        if(backDir !== "") {
+                            storage.updateFirmwareFileList(backDir)
+                        }
+                        else {
+                            firmwareUpdatePage.state = "install_from_usb"
+                        }
+                    }
+                    else if (firmwareUpdatePage.state == "firmware_update_failed") {
+                        firmwareUpdatePage.state = "no_firmware_update_available"
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                     else {
-                        assistedLevel.state = "base state"
-                        if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                            advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                        }
+                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                     }
                 }
                 else {
@@ -348,23 +431,95 @@ Item {
 
             function skipFreStepAction() {
                 bot.cancel()
-                assistedLevel.state = "cancelling"
                 advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
-            AssistedLeveling {
-                id: assistedLevel
-                currentHES: bot.process.currentHes
-                targetHESLower: bot.process.targetHesLower
-                targetHESUpper: bot.process.targetHesUpper
+            FirmwareUpdatePage {
+                id: firmwareUpdatePage
+            }
+        }
 
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
+        // AdvancedSettingsPage.ShareAnalyticsPage
+        Item {
+            id: analyticsItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            AnalyticsScreen {
+                id: analyticsScreen
+            }
+        }
+
+        // AdvancedSettingsPage.ChangePrinterNamePage
+        Item {
+            id: namePrinterItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                namePrinter.nameField.clear()
+                if(!inFreStep) {
+                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
                 }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            NamePrinterPage {
+                id: namePrinter
+            }
+        }
+
+        // AdvancedSettingsPage.TimePage
+        Item {
+            id: timeItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            TimePage {
+                id: timePage
+            }
+        }
+
+        // AdvancedSettingsPage.ChangeLanguagePage
+        Item {
+            id: changeLanguageItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            LanguageSelector {
+                id: languageSelectorPage
             }
         }
 
@@ -394,140 +549,6 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.RaiseLowerBuildPlatePage
-        Item {
-            id: raiseLowerBuildPlateItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            RaiseLowerBuildPlateItem {
-                id: raiseLowerBuildPlate
-            }
-        }
-
-        // AdvancedSettingsPage.ShareAnalyticsPage
-        Item {
-            id: analyticsItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            AnalyticsScreen {
-                id: analyticsScreen
-            }
-        }
-
-        // AdvancedSettingsPage.DryMaterialPage
-        Item {
-            id: dryMaterialItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            property bool hasAltBack: true
-            property bool backIsCancel: bot.process.type == ProcessType.DryingCycleProcess &&
-                                        dryMaterial.state != "choose_material" &&
-                                        dryMaterial.state != "waiting_for_spool" &&
-                                        dryMaterial.state != "dry_kit_instructions_2"
-            smooth: false
-            visible: false
-
-            function altBack() {
-                if(bot.process.type == ProcessType.DryingCycleProcess) {
-                    if(dryMaterial.state == "choose_material") {
-                        dryMaterial.state = "waiting_for_spool"
-                        dryMaterial.doChooseMaterial = false
-                    }
-                    else if(dryMaterial.state == "waiting_for_spool")
-                        dryMaterial.state = "dry_kit_instructions_2"
-                    else if(dryMaterial.state == "dry_kit_instructions_2")
-                        dryMaterial.state = "dry_kit_instructions_1"
-                    else
-                        dryMaterial.cancelDryingCyclePopup.open()
-                } else {
-                    dryMaterial.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-
-            DryMaterial {
-                id: dryMaterial
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-        }
-
-        // AdvancedSettingsPage.CleanExtrudersPage
-        Item {
-            id: cleanExtrudersItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            property bool hasAltBack: true
-            smooth: false
-            visible: false
-
-            function altBack() {
-                if(bot.process.type == ProcessType.NozzleCleaningProcess) {
-                    cleanExtruders.cancelCleanExtrudersPopup.open()
-                } else {
-                    cleanExtruders.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-
-            CleanExtruders {
-                id: cleanExtruders
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-        }
-
-        // AdvancedSettingsPage.AnnealPrintPage
-        Item {
-            id: annealPrintItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            property bool hasAltBack: true
-            property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
-            smooth: false
-            visible: false
-
-            function altBack() {
-                if(bot.process.type == ProcessType.AnnealPrintProcess) {
-                    bot.cancel()
-                    annealPrint.state = "cancelling"
-                } else {
-                    annealPrint.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-
-            AnnealPrint {
-                id: annealPrint
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-        }
-
         // AdvancedSettingsPage.TouchTestPage
         Item {
             id: touchTestItem
@@ -548,7 +569,32 @@ Item {
                 id: touchTest
             }
         }
+
+        // AdvancedSettingsPage.KoreaDFSSecretPage
+        Item {
+            id: koreaDFSScreenItem
+            property var backSwiper: advancedSettingsSwipeView
+            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            KoreaDFSScreenForm {
+                id: koreaDFSScreen
+            }
+        }
+
+        ////
+
+
+
+
     }
+
+    /*Timer {
+        id: closeDeauthorizeAccountsPopupTimer
+        interval: 1500
+        onTriggered: deauthorizeAccountsPopup.close()
+    }*/
 
     CustomPopup {
         popupName: "CopyingLogs"

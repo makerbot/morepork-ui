@@ -37,7 +37,7 @@ Item {
                 // settings page item that holds this page as the current
                 // item since we want the back button to use the settings
                 // items' altBack()
-                setCurrentItem(settingsSwipeView.itemAt(SettingsPage.AuthorizeAccountsPage))
+                setCurrentItem(advancedSettingsSwipeView.itemAt(AdvancedSettingsPage.AuthorizeAccountsPage))
                 return true
             }
         }
@@ -46,7 +46,7 @@ Item {
         Item {
             id: itemSelectAuthorizeMethod
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsSwipeView
+            property var backSwiper: advancedSettingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: true

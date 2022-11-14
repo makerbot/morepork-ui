@@ -332,8 +332,8 @@ ApplicationWindow {
         ExtruderPage,   // 2
         SettingsPage,   // 3
         InfoPage,       // 4
-        MaterialPage,   // 5
-        AdvancedPage    // 6
+        MaterialPage   // 5
+        //AdvancedPage    // 6
     }
 
     Item {
@@ -357,14 +357,14 @@ ApplicationWindow {
             z: 10
             smooth: false
             antialiasing: false
-            visible: {
-                settingsPage.settingsSwipeView.currentIndex == SettingsPage.ChangePrinterNamePage ||
-                settingsPage.settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage ||
-                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
-                 (settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
-                  settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
-                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
-                 settingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
+            visible: {// todo here
+                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex == AdvancedSettingsPage.ChangePrinterNamePage ||
+                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex == AdvancedSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex == AdvancedSettingsPage.AuthorizeAccountsPage &&
+                 (settingsPage.advancedSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
+                  settingsPage.advancedSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
+                (settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex == AdvancedSettingsPage.WifiPage &&
+                 settingsPage.advancedSettingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
             }
             x: -30
             y: parent.height - inputPanel.height + 22
@@ -498,7 +498,7 @@ ApplicationWindow {
                     }
 
                     mainMenuIcon_advanced.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.AdvancedPage)
+                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     }
                 }
             }
@@ -588,7 +588,7 @@ ApplicationWindow {
             }
 
             // MoreporkUI.AdvancedPage
-            Item {
+           /* Item {
                 property var backSwiper: mainSwipeView
                 property int backSwipeIndex: MoreporkUI.BasePage
                 smooth: false
@@ -598,7 +598,7 @@ ApplicationWindow {
                     id: advancedPage
                     anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
                 }
-            }
+            }*/
         }
 
         LoggingPopup {
@@ -1572,8 +1572,8 @@ ApplicationWindow {
                                 if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
                                     mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                                 }
-                                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.FirmwareUpdatePage) {
-                                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
+                                if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.FirmwareUpdatePage) {
+                                    settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.FirmwareUpdatePage)
                                 }
                                 firmwareUpdatePopup.close()
                             }

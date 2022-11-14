@@ -287,29 +287,18 @@ Item {
                             break;
                         case MoreporkUI.SettingsPage:
                             switch(settingsPage.settingsSwipeView.currentIndex) {
-                            case SettingsPage.PrinterInfoPage:
-                                qsTr("%1 INFO").arg(bot.name)
+                            case SettingsPage.PreheatPage:
+                                qsTr("PREHEAT")
                                 break;
-                            case SettingsPage.ChangePrinterNamePage:
-                                qsTr("CHANGE PRINTER NAME")
+                            case SettingsPage.DryMaterialPage:
+                                qsTr("DRYING CYCLE")
                                 break;
-                            case SettingsPage.WifiPage:
-                                qsTr("CHOOSE WIFI NETWORK")
+                            case SettingsPage.AnnealPrintPage:
+                                qsTr("ANNEAL PRINT")
                                 break;
-                            case SettingsPage.AuthorizeAccountsPage:
-                                qsTr("AUTHORIZE MAKERBOT ACCOUNT")
-                                break;
-                            case SettingsPage.FirmwareUpdatePage:
 
-                                if(settingsPage.settingsSwipeView.currentItem.firmwareUpdatePage.state == "install_from_usb"
-                                    || settingsPage.settingsSwipeView.currentItem.firmwareUpdatePage.state == "select_firmware_file") {
-                                       qsTr("FIRMWARE UPDATE - USB")
-                                }
-                                else {
-                                    qsTr("FIRMWARE UPDATE")
-                                }
 
-                                break;
+
                             case SettingsPage.CalibrateExtrudersPage:
                                 qsTr("CALIBRATE EXTRUDERS")
                                 break;
@@ -328,11 +317,31 @@ Item {
                                 break;
                             case SettingsPage.AdvancedSettingsPage:
                                 switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
+                                case AdvancedSettingsPage.PrinterInfoPage:
+                                    qsTr("%1 INFO").arg(bot.name)
+                                    break;
                                 case AdvancedSettingsPage.AdvancedInfoPage:
                                     qsTr("%1 SENSOR INFO").arg(bot.name)
                                     break;
-                                case AdvancedSettingsPage.PreheatPage:
-                                    qsTr("PREHEAT")
+                                case AdvancedSettingsPage.WifiPage:
+                                    qsTr("CHOOSE WIFI NETWORK")
+                                    break;
+                                case AdvancedSettingsPage.AuthorizeAccountsPage:
+                                    qsTr("AUTHORIZE MAKERBOT ACCOUNT")
+                                    break;
+                                case AdvancedSettingsPage.FirmwareUpdatePage:
+
+                                    if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentItem.firmwareUpdatePage.state == "install_from_usb"
+                                        || settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentItem.firmwareUpdatePage.state == "select_firmware_file") {
+                                           qsTr("FIRMWARE UPDATE - USB")
+                                    }
+                                    else {
+                                        qsTr("FIRMWARE UPDATE")
+                                    }
+
+                                    break;
+                                case AdvancedSettingsPage.ChangePrinterNamePage:
+                                    qsTr("CHANGE PRINTER NAME")
                                     break;
                                 case AdvancedSettingsPage.AssistedLevelingPage:
                                     qsTr("ASSISTED LEVELING")
@@ -343,19 +352,16 @@ Item {
                                 case AdvancedSettingsPage.ShareAnalyticsPage:
                                     qsTr("ANALYTICS")
                                     break;
-                                case AdvancedSettingsPage.DryMaterialPage:
-                                    qsTr("DRYING CYCLE")
-                                    break;
+
                                 case AdvancedSettingsPage.CleanExtrudersPage:
                                     qsTr("CLEAN EXTRUDERS")
                                     break;
-                                case 10:
-                                    qsTr("ANNEAL PRINT")
-                                    break;
+
                                 default:
-                                    qsTr("ADVANCED")
+                                    qsTr("SYSTEM SETTINGS")
                                     break;
                                 }
+
                                 break;
                             case SettingsPage.ChangeLanguagePage:
                                 qsTr("CHOOSE LANGUAGE")
@@ -391,7 +397,7 @@ Item {
                                 break;
                             }
                             break;
-                        case MoreporkUI.AdvancedPage:
+                        /*case MoreporkUI.AdvancedPage:
                             // This bit is repeated from above, but making it a function
                             // returning a string doesn't seem to be updating the title
                             // dynamically when the advanced page is reached through the
@@ -425,7 +431,7 @@ Item {
                                 qsTr("ADVANCED")
                                 break;
                             }
-                            break;
+                            break;*/
                         default:
                             bot.name
                             break;

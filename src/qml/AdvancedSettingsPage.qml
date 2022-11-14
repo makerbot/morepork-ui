@@ -1,21 +1,64 @@
 ﻿import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import WifiStateEnum 1.0
 
 AdvancedSettingsPageForm {
+
+    buttonPrinterInfo.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.PrinterInfoPage)
+    }
 
     buttonAdvancedInfo.onClicked: {
         bot.query_status()
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AdvancedInfoPage)
     }
 
-    buttonPreheat.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.PreheatPage)
+    buttonWiFi.onClicked: {
+        if((bot.net.wifiState == WifiState.Connected) ||
+            wifiPage.isWifiConnected) {
+            bot.scanWifi(false)
+        }
+        else if(bot.net.wifiState == WifiState.NotConnected ||
+                bot.net.wifiState == WifiState.NoWifiFound) {
+            bot.net.setWifiState(WifiState.Searching)
+            bot.scanWifi(true)
+        }
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.WifiPage)
     }
 
-    buttonAssistedLeveling.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AssistedLevelingPage)
+    buttonWiFi.onPressedChanged: {
+        if(buttonWiFi.pressed) {
+            koreaDFSModeTimer.start()
+        } else {
+            if(koreaDFSModeTimer.running) {
+                koreaDFSModeTimer.stop()
+            }
+        }
     }
+
+    Timer {
+        id: koreaDFSModeTimer
+        interval: 10000
+        onTriggered: {
+            if(buttonWiFi.pressed) {
+                dfs.loadDFSSetting()
+                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.KoreaDFSSecretPage)
+                koreaDFSScreen.passwordField.forceActiveFocus()
+            }
+        }
+    }
+
+    buttonAuthorizeAccounts.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AuthorizeAccountsPage)
+    }
+
+    buttonFirmwareUpdate.onClicked: {
+        bot.firmwareUpdateCheck(false)
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.FirmwareUpdatePage)
+    }
+
+
 
     buttonCopyLogs.onClicked: {
         if(storage.usbStorageConnected) {
@@ -62,8 +105,24 @@ AdvancedSettingsPageForm {
         }
     }
 
-    buttonResetToFactory.onClicked: {
-        resetToFactoryPopup.open()
+    buttonAnalytics.onClicked: {
+        bot.getCloudServicesInfo()
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ShareAnalyticsPage)
+    }
+
+    buttonChangePrinterName.onClicked: {
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ChangePrinterNamePage)
+        namePrinter.nameField.forceActiveFocus()
+    }
+
+    buttonTime.onClicked: {
+        bot.getSystemTime()
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.TimePage)
+    }
+
+    buttonChangeLanguage.onClicked: {
+        languageSelector.currentLocale = Qt.locale().name
+        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ChangeLanguagePage)
     }
 
     buttonSpoolInfo.onClicked: {
@@ -76,28 +135,11 @@ AdvancedSettingsPageForm {
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ColorSwatchPage)
     }
 
-    buttonRaiseLowerBuildPlate.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.RaiseLowerBuildPlatePage)
-    }
-
-    buttonAnalytics.onClicked: {
-        bot.getCloudServicesInfo()
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ShareAnalyticsPage)
-    }
-
-    buttonDryMaterial.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.DryMaterialPage)
-    }
-
-    buttonCleanExtruders.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.CleanExtrudersPage)
-    }
-
-    buttonAnnealPrint.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AnnealPrintPage)
-    }
-
     buttonTouchTest.onClicked: {
         advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.TouchTestPage)
+    }
+
+    buttonResetToFactory.onClicked: {
+        resetToFactoryPopup.open()
     }
 }

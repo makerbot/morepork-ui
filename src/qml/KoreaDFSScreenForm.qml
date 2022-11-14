@@ -21,11 +21,11 @@ Item {
         logName: "koreaDFScreenSwipeView"
         currentIndex: 0 // Should never be non zero
 
-        // settingsSwipeView.index = 0
+        // advancedSettingsSwipeView.index = 0
         Item {
             id: itemEnterPassword
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsSwipeView
+            property var backSwiper: advancedSettingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
@@ -34,7 +34,7 @@ Item {
             function altBack() {
                 passwordField.clear()
                 showPassword.checked = false
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                advancedSettingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
 
             Item {
@@ -152,7 +152,7 @@ Item {
             }
         }
 
-        // settingsSwipeView.index = 1
+        // advancedSettingsSwipeView.index = 1
         Item {
             id: itemKoreaDFSSettings
             // backSwiper and backSwipeIndex are used by backClicked
@@ -214,7 +214,7 @@ Item {
                         passwordField.clear()
                         showPassword.checked = false
                         koreaDFScreenSwipeView.swipeToItem(KoreaDFSScreen.BasePage)
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                        advancedSettingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
             }

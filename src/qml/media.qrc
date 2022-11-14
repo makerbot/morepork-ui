@@ -96,7 +96,6 @@
         <file alias="icon_deauthorize_accounts.png">images/icon_deauthorize_accounts.png</file>
         <file alias="icon_preheat.png">images/icon_preheat.png</file>
         <file alias="icon_change_printer_name.png">images/icon_change_printer_name.png</file>
-        <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
         <file alias="icon_clean_extruders.png">images/icon_clean_extruders.png</file>
         <file alias="icon_dry_material.png">images/icon_dry_material.png</file>
         <file alias="icon_anneal_print.png">images/icon_anneal_print.png</file>
@@ -190,5 +189,14 @@
         <file alias="wifi_menu_icon.png">images/wifi_menu_icon.png</file>
         <file alias="wifi_secured_menu_icon.png">images/wifi_secured_menu_icon.png</file>
         <file alias="selected_checkmark.png">images/selected_checkmark.png</file>
+        <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
+        <file alias="icon_build_plate_settings.png">images/icon_build_plate_settings.png</file>
+        <file alias="icon_extruder_settings.png">images/icon_extruder_settings.png</file>
+        <file alias="icon_system_settings.png">images/icon_system_settings.png</file>
+        <file alias="icon_time.png">images/icon_time.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>BuildPlateSettingsPageForm.qml</file>
+        <file>BuildPlateSettingsPage.qml</file>
     </qresource>
 </RCC>

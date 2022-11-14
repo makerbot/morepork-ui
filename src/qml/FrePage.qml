@@ -66,16 +66,16 @@ FrePageForm {
                     bot.net.setWifiState(WifiState.Searching)
                     bot.scanWifi(true)
                     mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.WifiPage)
+                    settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.WifiPage)
                 }
             } else if(state == "software_update") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
+                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.FirmwareUpdatePage)
             } else if(state == "name_printer") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ChangePrinterNamePage)
+                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ChangePrinterNamePage)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "set_time_date") {
                 inFreStep = true

@@ -255,5 +255,9 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
+        <file>ExtruderSettingsPageForm.qml</file>
+        <file>ExtruderSettingsPage.qml</file>
+        <file>BuildPlateSettingsPage.qml</file>
+        <file>BuildPlateSettingsPageForm.qml</file>
     </qresource>
 </RCC>
