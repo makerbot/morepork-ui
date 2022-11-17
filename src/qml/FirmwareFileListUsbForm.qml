@@ -86,8 +86,8 @@ Item {
                 smooth: false
                 antialiasing: false
                 fileThumbnail.source: model.modelData.isDir ?
-                                          "qrc:/img/directory_icon.png" :
-                                          "qrc:/img/sombrero_icon.png"
+                                          "qrc:/img/icon_directory.png" :
+                                          "qrc:/img/icon_sombrero.png"
                 fileThumbnail.width: model.modelData.isDir ? 140 : 70
                 fileThumbnail.height: model.modelData.isDir ? 106 : 53
                 fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 25 : 60

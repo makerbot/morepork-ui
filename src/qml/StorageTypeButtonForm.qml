@@ -12,6 +12,7 @@ Button {
     anchors.left: parent.left
     property alias storageName: storageNameText.text
     property alias storageThumbnail: storageThumbnail
+    property alias storageThumbnailSourceSize: storageThumbnail.sourceSize
     property alias storageDescription: storageDescriptionText.text
     property real storageUsed: 0.0
     property color buttonColor: "#00000000"
@@ -116,7 +117,7 @@ Button {
 
         Text {
             id: percentUsedText
-            text: qsTr("%1\% USED").arg(storageUsed)
+            text: qsTr("%1\% AVAILABLE").arg(100-storageUsed)
             font.family: "Antenna"
             font.letterSpacing: 3
             font.weight: Font.Light
@@ -132,13 +133,12 @@ Button {
 
         Image {
             id: image
-            width: sourceSize.width
-            height: sourceSize.height
+            height: 20
+            width: 10
             anchors.right: parent.right
-            anchors.rightMargin: 20
-            rotation: 180
+            anchors.rightMargin: 21
             anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/img/arrow_19pix.png"
+            source: "qrc:/img/forward_arrow_42_80px.png"
         }
     }
 

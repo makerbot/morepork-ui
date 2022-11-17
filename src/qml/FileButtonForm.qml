@@ -56,7 +56,7 @@ Button {
         height: 50
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
-        anchors.leftMargin: 190
+        anchors.leftMargin: 188
 
         Text {
             id: filenameText
@@ -117,31 +117,30 @@ Button {
                 verticalAlignment: Text.Left
                 smooth: false
                 antialiasing: false
-
-                Image {
-                    id: materialErrorAlertIcon
-                    height: 20
-                    anchors.left: parent.right
-                    anchors.leftMargin: 7
-                    anchors.verticalCenter: parent.verticalCenter
-                    width: 20
-                    antialiasing: false
-                    smooth: false
-                    source: "qrc:/img/alert.png"
-                }
             }
         }
     }
 
     Image {
-        id: image
-        width: sourceSize.width
-        height: sourceSize.height
+        id: materialErrorAlertIcon
+        height: 28
+        width: 28
         anchors.right: parent.right
-        anchors.rightMargin: 20
-        rotation: 180
+        anchors.rightMargin: 54
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/arrow_19pix.png"
+        antialiasing: false
+        smooth: false
+        source: "qrc:/img/circle_alert_112px.png"
+    }
+
+    Image {
+        id: image
+        height: 20
+        width: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 21
+        anchors.verticalCenter: parent.verticalCenter
+        source: "qrc:/img/forward_arrow_42_80px.png"
     }
 
     Component.onCompleted: {
