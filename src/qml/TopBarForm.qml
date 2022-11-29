@@ -287,6 +287,88 @@ Item {
                             break;
                         case MoreporkUI.SettingsPage:
                             switch(settingsPage.settingsSwipeView.currentIndex) {
+
+                            case SettingsPage.SystemSettingsPage:
+                                switch(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex) {
+                                case SystemSettingsPage.PrinterInfoPage:
+                                    qsTr("%1 INFO").arg(bot.name)
+                                    break;
+                                case SystemSettingsPage.AdvancedInfoPage:
+                                    qsTr("%1 SENSOR INFO").arg(bot.name)
+                                    break;
+                                case SystemSettingsPage.WifiPage:
+                                    qsTr("CHOOSE WIFI NETWORK")
+                                    break;
+                                case SystemSettingsPage.AuthorizeAccountsPage:
+                                    qsTr("AUTHORIZE MAKERBOT ACCOUNT")
+                                    break;
+                                case SystemSettingsPage.FirmwareUpdatePage:
+
+                                    if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentItem.firmwareUpdatePage.state == "install_from_usb"
+                                        || settingsPage.systemSettingsPage.systemSettingsSwipeView.currentItem.firmwareUpdatePage.state == "select_firmware_file") {
+                                           qsTr("FIRMWARE UPDATE - USB")
+                                    }
+                                    else {
+                                        qsTr("FIRMWARE UPDATE")
+                                    }
+                                    break;
+                                case SystemSettingsPage.ShareAnalyticsPage:
+                                    qsTr("ANALYTICS")
+                                    break;
+                                case SystemSettingsPage.ChangePrinterNamePage:
+                                    qsTr("CHANGE PRINTER NAME")
+                                    break;
+                                case SystemSettingsPage.TimePage:
+                                    switch(settingsPage.systemSettingsPage.timePage.timeSwipeView.currentIndex) {
+                                    case TimePage.SetDate:
+                                        qsTr("ENTER TODAY'S DATE")
+                                        break;
+                                    case TimePage.SetTimeZone:
+                                        qsTr("SET TIME ZONE")
+                                        break;
+                                    case TimePage.SetTime:
+                                        qsTr("SET CURRENT TIME")
+                                        break;
+                                    default:
+                                        qsTr("TIME AND DATE")
+                                        break;
+                                    }
+                                    break;
+                                default:
+                                    qsTr("SYSTEM SETTINGS")
+                                    break;
+                                }
+                                break;
+                            case SettingsPage.ExtruderSettingsPage:
+                                switch(settingsPage.extruderSettingsPage.extruderSettingsSwipeView.currentIndex) {
+                                case ExtruderSettingsPage.CalibrateExtrudersPage:
+                                    qsTr("CALIBRATE EXTRUDERS")
+                                    break;
+                                case ExtruderSettingsPage.CleanExtrudersPage:
+                                    qsTr("CLEAN EXTRUDERS")
+                                    break;
+                                default:
+                                    qsTr("EXTRUDER SETTINGS")
+                                    break;
+                                }
+                                break;
+                            case SettingsPage.BuildPlateSettingsPage:
+                                switch(settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.currentIndex) {
+                                    case BuildPlateSettingsPage.AssistedLevelingPage:
+                                        qsTr("ASSISTED LEVELING")
+                                        break;
+                                    case BuildPlateSettingsPage.RaiseLowerBuildPlatePage:
+                                        qsTr("RAISE/LOWER BUILD PLATE")
+                                        break;
+                                    default:
+                                        qsTr("BUILD PLATE SETTINGS")
+                                        break;
+                                }
+                                break;
+
+                            case SettingsPage.CleanAirSettingsPage:
+                                qsTr("CLEAN AIR SETTINGS")
+                                break;
                             case SettingsPage.PreheatPage:
                                 qsTr("PREHEAT")
                                 break;
@@ -295,79 +377,6 @@ Item {
                                 break;
                             case SettingsPage.AnnealPrintPage:
                                 qsTr("ANNEAL PRINT")
-                                break;
-
-
-
-                            case SettingsPage.CalibrateExtrudersPage:
-                                qsTr("CALIBRATE EXTRUDERS")
-                                break;
-                            case SettingsPage.TimePage:
-                                switch(settingsPage.timePage.timeSwipeView.currentIndex) {
-                                case TimePage.SetDate:
-                                    qsTr("ENTER TODAY'S DATE")
-                                    break;
-                                case TimePage.SetTimeZone:
-                                    qsTr("SET TIME ZONE")
-                                    break;
-                                case TimePage.SetTime:
-                                    qsTr("SET CURRENT TIME")
-                                    break;
-                                }
-                                break;
-                            case SettingsPage.AdvancedSettingsPage:
-                                switch(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex) {
-                                case AdvancedSettingsPage.PrinterInfoPage:
-                                    qsTr("%1 INFO").arg(bot.name)
-                                    break;
-                                case AdvancedSettingsPage.AdvancedInfoPage:
-                                    qsTr("%1 SENSOR INFO").arg(bot.name)
-                                    break;
-                                case AdvancedSettingsPage.WifiPage:
-                                    qsTr("CHOOSE WIFI NETWORK")
-                                    break;
-                                case AdvancedSettingsPage.AuthorizeAccountsPage:
-                                    qsTr("AUTHORIZE MAKERBOT ACCOUNT")
-                                    break;
-                                case AdvancedSettingsPage.FirmwareUpdatePage:
-
-                                    if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentItem.firmwareUpdatePage.state == "install_from_usb"
-                                        || settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentItem.firmwareUpdatePage.state == "select_firmware_file") {
-                                           qsTr("FIRMWARE UPDATE - USB")
-                                    }
-                                    else {
-                                        qsTr("FIRMWARE UPDATE")
-                                    }
-
-                                    break;
-                                case AdvancedSettingsPage.ChangePrinterNamePage:
-                                    qsTr("CHANGE PRINTER NAME")
-                                    break;
-                                case AdvancedSettingsPage.AssistedLevelingPage:
-                                    qsTr("ASSISTED LEVELING")
-                                    break;
-                                case AdvancedSettingsPage.RaiseLowerBuildPlatePage:
-                                    qsTr("RAISE/LOWER BUILD PLATE")
-                                    break;
-                                case AdvancedSettingsPage.ShareAnalyticsPage:
-                                    qsTr("ANALYTICS")
-                                    break;
-
-                                case AdvancedSettingsPage.CleanExtrudersPage:
-                                    qsTr("CLEAN EXTRUDERS")
-                                    break;
-
-                                default:
-                                    qsTr("SYSTEM SETTINGS")
-                                    break;
-                                }
-
-                                break;
-                            case SettingsPage.ChangeLanguagePage:
-                                qsTr("CHOOSE LANGUAGE")
-                                break;
-                            case SettingsPage.CleanAirSettingsPage:
-                                qsTr("CLEAN AIR SETTINGS")
                                 break;
                             default:
                                 qsTr("SETTINGS")
@@ -397,41 +406,6 @@ Item {
                                 break;
                             }
                             break;
-                        /*case MoreporkUI.AdvancedPage:
-                            // This bit is repeated from above, but making it a function
-                            // returning a string doesn't seem to be updating the title
-                            // dynamically when the advanced page is reached through the
-                            // settings page.
-                            switch(advancedPage.advancedSettingsSwipeView.currentIndex) {
-                            case AdvancedSettingsPage.AdvancedInfoPage:
-                                qsTr("%1 SENSOR INFO").arg(bot.name)
-                                break;
-                            case AdvancedSettingsPage.PreheatPage:
-                                qsTr("PREHEAT")
-                                break;
-                            case AdvancedSettingsPage.AssistedLevelingPage:
-                                qsTr("ASSISTED LEVELING")
-                                break;
-                            case AdvancedSettingsPage.RaiseLowerBuildPlatePage:
-                                qsTr("RAISE/LOWER BUILD PLATE")
-                                break;
-                            case AdvancedSettingsPage.ShareAnalyticsPage:
-                                qsTr("ANALYTICS")
-                                break;
-                            case AdvancedSettingsPage.DryMaterialPage:
-                                qsTr("DRYING CYCLE")
-                                break;
-                            case AdvancedSettingsPage.CleanExtrudersPage:
-                                qsTr("CLEAN EXTRUDERS")
-                                break;
-                            case 10:
-                                qsTr("ANNEAL PRINT")
-                                break;
-                            default:
-                                qsTr("ADVANCED")
-                                break;
-                            }
-                            break;*/
                         default:
                             bot.name
                             break;

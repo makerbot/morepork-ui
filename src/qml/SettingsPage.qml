@@ -5,8 +5,8 @@ import ProcessStateTypeEnum 1.0
 
 SettingsPageForm {
 
-    buttonAdvancedSettings.onClicked: {
-        settingsSwipeView.swipeToItem(SettingsPage.AdvancedSettingsPage)
+    buttonSystemSettings.onClicked: {
+        settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
     }
 
     buttonExtruderSettings.onClicked: {

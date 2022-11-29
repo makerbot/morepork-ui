@@ -97,8 +97,8 @@
         <file>NamePrinterPageForm.qml</file>
         <file>FirmwareUpdateSuccessfulScreen.qml</file>
         <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
-        <file>AdvancedSettingsPage.qml</file>
-        <file>AdvancedSettingsPageForm.qml</file>
+        <file>SystemSettingsPage.qml</file>
+        <file>SystemSettingsPageForm.qml</file>
         <file>TimeSelector.qml</file>
         <file>TimeSelectorForm.qml</file>
         <file>SlidingSwitch.qml</file>

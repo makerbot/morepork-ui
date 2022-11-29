@@ -21,8 +21,8 @@ LoggingItem {
             if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
             }
-            if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.FirmwareUpdatePage) {
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.FirmwareUpdatePage)
+            if(systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
             }
         }
     }

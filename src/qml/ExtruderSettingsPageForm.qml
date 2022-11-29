@@ -14,19 +14,15 @@ Item {
 
     property alias extruderSettingsSwipeView: extruderSettingsSwipeView
 
-
-
-    // Extruder Settings
-    property alias buttonCleanExtruders: buttonCleanExtruders
-
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
     property alias calibrateErrorScreen: calibrateErrorScreen
 
+    property alias buttonCleanExtruders: buttonCleanExtruders
 
     enum SwipeIndex {
-        BasePage,
-        CleanExtrudersPage,
-        CalibrateExtrudersPage
+        BasePage,               //0
+        CalibrateExtrudersPage, //1
+        CleanExtrudersPage      //2
     }
 
     LoggingSwipeView {
@@ -38,28 +34,8 @@ Item {
         Item {
             id: itemExtruderSettings
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: {
-
-                if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    settingsPage.settingsSwipeView
-                }
-                else {
-                    mainSwipeView
-                }
-            }
-            property int backSwipeIndex: {
-                /*if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    MoreporkUI.BasePage
-                }
-                else*/
-                if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    SettingsPage.BasePage
-                }
-                else {
-                    MoreporkUI.BasePage
-                }
-            }
-
+            property var backSwiper: settingsPage.settingsSwipeView
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
 
             Flickable {
@@ -78,17 +54,18 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    MenuButton {
-                        id: buttonCleanExtruders
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: qsTr("CLEAN EXTRUDERS")
-                        enabled: !isProcessRunning()
-                    }
 
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
                         buttonText.text: qsTr("CALIBRATE EXTRUDERS")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonCleanExtruders
+                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
+                        buttonText.text: qsTr("CLEAN EXTRUDERS")
                         enabled: !isProcessRunning()
                     }
 
@@ -120,6 +97,80 @@ Item {
             }
         }
 
+        // ExtruderSettingsPage.CalibrateExtrudersPage
+        Item {
+            id: calibrateToolheadsItem
+            property var backSwiper: extruderSettingsSwipeView
+            property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(toolheadCalibration.chooseMaterial) {
+                    toolheadCalibration.chooseMaterial = false
+                    return
+                }
+                if(!inFreStep) {
+                    if(bot.process.type === ProcessType.CalibrationProcess &&
+                       bot.process.isProcessCancellable) {
+                        toolheadCalibration.cancelCalibrationPopup.open()
+                    } else if(bot.process.type == ProcessType.None) {
+                         toolheadCalibration.resetStates(false)
+                    }
+                }
+                else {
+                    if(calibrateErrorScreen.lastReportedErrorType ==
+                                                        ErrorType.NoError) {
+                        skipFreStepPopup.open()
+                    }
+                }
+            }
+
+            function skipFreStepAction() {
+                if(toolheadCalibration.chooseMaterial) {
+                    toolheadCalibration.chooseMaterial = false
+                    return
+                }
+                bot.cancel()
+                toolheadCalibration.state = "base state"
+                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            ToolheadCalibration {
+                id: toolheadCalibration
+                visible: !calibrateErrorScreen.visible
+                onProcessDone: {
+                    resetStates(true)
+                }
+
+                function resetStates(processDone) {
+                    state = "base state"
+                    // Dont go back if an error happened
+                    if(calibrateErrorScreen.lastReportedErrorType ==
+                                                        ErrorType.NoError) {
+                        if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
+                            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+                        }
+                        if(processDone) {
+                            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                        }
+                    }
+                }
+            }
+
+            ErrorScreen {
+                id: calibrateErrorScreen
+                isActive: bot.process.type == ProcessType.CalibrationProcess
+                visible: {
+                    lastReportedProcessType == ProcessType.CalibrationProcess &&
+                    lastReportedErrorType != ErrorType.NoError
+                }
+            }
+        }
+
         // ExtruderSettingsPage.CleanExtrudersPage
         Item {
             id: cleanExtrudersItem
@@ -147,77 +198,7 @@ Item {
                     if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
                         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                     }
-                }
-            }
-        }
-
-
-        // SettingsPage.CalibrateExtrudersPage
-        Item {
-            id: calibrateToolheadsItem
-            property var backSwiper: extruderSettingsSwipeView
-            property int backSwipeIndex: ExtruderSettingsPage.BasePage
-            property bool hasAltBack: true
-            smooth: false
-            visible: false
-
-            function altBack() {
-                if(toolheadCalibration.chooseMaterial) {
-                    toolheadCalibration.chooseMaterial = false
-                    return
-                }
-                if(!inFreStep) {
-                    if(bot.process.type === ProcessType.CalibrationProcess &&
-                       bot.process.isProcessCancellable) {
-                        toolheadCalibration.cancelCalibrationPopup.open()
-                    } else if(bot.process.type == ProcessType.None) {
-                        toolheadCalibration.resetStates()
-                    }
-                }
-                else {
-                    if(calibrateErrorScreen.lastReportedErrorType ==
-                                                        ErrorType.NoError) {
-                        skipFreStepPopup.open()
-                    }
-                }
-            }
-
-            function skipFreStepAction() {
-                if(toolheadCalibration.chooseMaterial) {
-                    toolheadCalibration.chooseMaterial = false
-                    return
-                }
-                bot.cancel()
-                toolheadCalibration.state = "base state"
-                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            }
-
-            ToolheadCalibration {
-                id: toolheadCalibration
-                visible: !calibrateErrorScreen.visible
-                onProcessDone: {
-                    resetStates()
-                }
-
-                function resetStates() {
-                    state = "base state"
-                    // Dont go back if an error happened
-                    if(calibrateErrorScreen.lastReportedErrorType ==
-                                                        ErrorType.NoError) {
-                        if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                        }
-                    }
-                }
-            }
-
-            ErrorScreen {
-                id: calibrateErrorScreen
-                isActive: bot.process.type == ProcessType.CalibrationProcess
-                visible: {
-                    lastReportedProcessType == ProcessType.CalibrationProcess &&
-                    lastReportedErrorType != ErrorType.NoError
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

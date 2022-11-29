@@ -6,11 +6,11 @@ import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
-    id: advancedSettingsPage
+    id: systemSettingsPage
     smooth: false
     anchors.fill: parent
 
-    property alias advancedSettingsSwipeView: advancedSettingsSwipeView
+    property alias systemSettingsSwipeView: systemSettingsSwipeView
 
     property alias buttonPrinterInfo: buttonPrinterInfo
 
@@ -67,11 +67,8 @@ Item {
             if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
-            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-            }
-            if(advancedPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+            if(systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
+                systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             }
             if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
@@ -95,72 +92,45 @@ Item {
     }
 
     enum SwipeIndex {
-        BasePage,
-        PrinterInfoPage,
-        AdvancedInfoPage,
-        WifiPage,
-        AuthorizeAccountsPage,
-        FirmwareUpdatePage,
-        // Setup?
-
-        ShareAnalyticsPage,
-        ChangePrinterNamePage,
-        TimePage,
-        ChangeLanguagePage,
-        SpoolInfoPage,              // 4
-        ColorSwatchPage,
-        TouchTestPage,
-        // move
-
-        KoreaDFSSecretPage
+        BasePage,               // 0
+        PrinterInfoPage,        // 1
+        AdvancedInfoPage,       // 2
+        WifiPage,               // 3
+        AuthorizeAccountsPage,  // 4
+        FirmwareUpdatePage,     // 5
+        ShareAnalyticsPage,     // 6
+        ChangePrinterNamePage,  // 7
+        TimePage,               // 8
+        ChangeLanguagePage,     // 9
+        SpoolInfoPage,          // 10
+        ColorSwatchPage,        // 11
+        TouchTestPage,          // 12
+        KoreaDFSSecretPage      // 13
     }
 
     LoggingSwipeView {
-        id: advancedSettingsSwipeView
-        logName: "advancedSettingsSwipeView"
-        currentIndex: AdvancedSettingsPage.BasePage
+        id: systemSettingsSwipeView
+        logName: "systemSettingsSwipeView"
+        currentIndex: SystemSettingsPage.BasePage
 
-        // AdvancedSettingsPage.BasePage
+        // SystemSettingsPage.BasePage
         Item {
-            id: itemAdvancedSettings
+            id: itemSystemSettings
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: {
-                /*if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    mainSwipeView
-                }
-                else*/
-                if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    settingsPage.settingsSwipeView
-                }
-                else {
-                    mainSwipeView
-                }
-            }
-            property int backSwipeIndex: {
-                /*if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    MoreporkUI.BasePage
-                }
-                else*/
-                if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    SettingsPage.BasePage
-                }
-                else {
-                    MoreporkUI.BasePage
-                }
-            }
-
+            property var backSwiper: settingsPage.settingsSwipeView
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
 
             Flickable {
-                id: flickableAdvancedSettings
+                id: flickableSystemSettings
                 smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
-                contentHeight: columnAdvancedSettings.height
+                contentHeight: columnSystemSettings.height
 
                 Column {
-                    id: columnAdvancedSettings
+                    id: columnSystemSettings
                     smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
@@ -302,12 +272,12 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.PrinterInfoPage
+        // SystemSettingsPage.PrinterInfoPage
         Item {
             id: printerInfoItem
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -316,11 +286,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.AdvancedInfoPage
+        // SystemSettingsPage.AdvancedInfoPage
         Item {
             id: advancedInfoItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -329,18 +299,18 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.WifiPage
+        // SystemSettingsPage.WifiPage
         Item {
             id: wifiItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
             property bool hasAltBack: true
 
             function altBack() {
                 if(!inFreStep) {
-                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -348,7 +318,7 @@ Item {
             }
 
             function skipFreStepAction() {
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -358,18 +328,18 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.AuthorizeAccountsPage
+        // SystemSettingsPage.AuthorizeAccountsPage
         Item {
             id: accountsItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -387,11 +357,11 @@ Item {
         }
 
 
-        // AdvancedSettingsPage.FirmwareUpdatePage
+        // SystemSettingsPage.FirmwareUpdatePage
         Item {
             id: firmwareUpdateItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             property alias firmwareUpdatePage: firmwareUpdatePage
             smooth: false
@@ -418,10 +388,10 @@ Item {
                     }
                     else if (firmwareUpdatePage.state == "firmware_update_failed") {
                         firmwareUpdatePage.state = "no_firmware_update_available"
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                     }
                     else {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                     }
                 }
                 else {
@@ -431,7 +401,7 @@ Item {
 
             function skipFreStepAction() {
                 bot.cancel()
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -440,11 +410,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.ShareAnalyticsPage
+        // SystemSettingsPage.ShareAnalyticsPage
         Item {
             id: analyticsItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -453,11 +423,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.ChangePrinterNamePage
+        // SystemSettingsPage.ChangePrinterNamePage
         Item {
             id: namePrinterItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -465,7 +435,7 @@ Item {
             function altBack() {
                 namePrinter.nameField.clear()
                 if(!inFreStep) {
-                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -473,7 +443,7 @@ Item {
             }
 
             function skipFreStepAction() {
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -482,18 +452,18 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.TimePage
+        // SystemSettingsPage.TimePage
         Item {
             id: timeItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -501,7 +471,7 @@ Item {
             }
 
             function skipFreStepAction() {
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -510,11 +480,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.ChangeLanguagePage
+        // SystemSettingsPage.ChangeLanguagePage
         Item {
             id: changeLanguageItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -523,11 +493,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.SpoolInfoPage
+        // SystemSettingsPage.SpoolInfoPage
         Item {
             id: spoolInfoItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -536,11 +506,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.ColorSwatchPage
+        // SystemSettingsPage.ColorSwatchPage
         Item {
             id: colorSwatchItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -549,19 +519,19 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.TouchTestPage
+        // SystemSettingsPage.TouchTestPage
         Item {
             id: touchTestItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
              function altBack() {
                  touchTest.resetTouchTest()
-                 if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                     advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                 if(systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
+                     systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                  }
              }
 
@@ -570,11 +540,11 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.KoreaDFSSecretPage
+        // SystemSettingsPage.KoreaDFSSecretPage
         Item {
             id: koreaDFSScreenItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -582,19 +552,13 @@ Item {
                 id: koreaDFSScreen
             }
         }
-
-        ////
-
-
-
-
     }
 
-    /*Timer {
+    Timer {
         id: closeDeauthorizeAccountsPopupTimer
         interval: 1500
         onTriggered: deauthorizeAccountsPopup.close()
-    }*/
+    }
 
     CustomPopup {
         popupName: "CopyingLogs"
@@ -726,7 +690,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
                     PropertyChanges {
@@ -748,7 +712,7 @@ Item {
                     PropertyChanges {
                         target: columnLayout_copy_logs
                         height: 100
-                        anchors.topMargin: 120
+                        anchors.topMargin: 110
                     }
                 },
                 State {
@@ -819,7 +783,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
                     PropertyChanges {

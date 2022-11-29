@@ -37,7 +37,7 @@ Item {
                 buttonText.text: model.modelData["name"]
 
                 onClicked: {
-                    languageChnageInProgressPopup.open()
+                    languageChangeInProgressPopup.open()
                     delayedSetLanguage.start()
                 }
 
@@ -51,7 +51,7 @@ Item {
                         // The locale name can only be accessed from
                         // the constructed object
                         currentLocale = Qt.locale().name
-                        languageChnageInProgressPopup.close()
+                        languageChangeInProgressPopup.close()
                     }
                 }
             }
@@ -59,7 +59,7 @@ Item {
 
     CustomPopup {
         popupName: "LanguageChangeInProgress"
-        id: languageChnageInProgressPopup
+        id: languageChangeInProgressPopup
         showOneButton: false
         showTwoButtons: false
 

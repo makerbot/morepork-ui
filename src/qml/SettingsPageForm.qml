@@ -10,8 +10,8 @@ Item {
     id: settingsPage
     property alias settingsSwipeView: settingsSwipeView
 
-    property alias advancedSettingsPage: advancedSettingsPage
-    property alias buttonAdvancedSettings: buttonAdvancedSettings
+    property alias systemSettingsPage: systemSettingsPage
+    property alias buttonSystemSettings: buttonSystemSettings
 
     property alias extruderSettingsPage: extruderSettingsPage
     property alias buttonExtruderSettings: buttonExtruderSettings
@@ -31,26 +31,20 @@ Item {
     property alias buttonShutdown: buttonShutdown
     property alias shutdownPopup: shutdownPopup
 
-
-
-
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
 
     smooth: false
 
     enum SwipeIndex {
-        BasePage,                   // 0
-        //SystemSettingsPage,
-        AdvancedSettingsPage,
-        ExtruderSettingsPage,
-        BuildPlateSettingsPage,
-        CleanAirSettingsPage,
-        PreheatPage,
-        DryMaterialPage,
-        AnnealPrintPage
-
-        //KoreaDFSSecretPage         // 10
+        BasePage,               // 0
+        SystemSettingsPage,     // 1
+        ExtruderSettingsPage,   // 2
+        BuildPlateSettingsPage, // 3
+        CleanAirSettingsPage,   // 4
+        PreheatPage,            // 5
+        DryMaterialPage,        // 6
+        AnnealPrintPage         // 7
     }
 
     LoggingSwipeView {
@@ -83,7 +77,7 @@ Item {
                     spacing: 0
 
                     MenuButton {
-                        id: buttonAdvancedSettings
+                        id: buttonSystemSettings
                         buttonImage.source: "qrc:/img/icon_system_settings.png"
                         buttonText.text: qsTr("SYSTEM SETTINGS")
                         openMenuItemArrow.visible: true
@@ -121,7 +115,7 @@ Item {
 
                     MenuButton {
                         id: buttonDryMaterial
-                        buttonImage.source: "qrc:/img/icon_dry_material.png"
+                        buttonImage.source: "qrc:/img/icon_material.png"
                         buttonText.text: qsTr("DRY MATERIAL")
                         enabled: !isProcessRunning()
                     }
@@ -142,16 +136,16 @@ Item {
             }
         }
 
-        // SettingsPage.AdvancedSettingsPage
+        // SettingsPage.SystemSettingsPage
         Item {
-            id: advancedSettingsItem
+            id: systemSettingsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 
-            AdvancedSettingsPage {
-                id: advancedSettingsPage
+            SystemSettingsPage {
+                id: systemSettingsPage
             }
         }
 
@@ -198,7 +192,7 @@ Item {
         Item {
             id: preheatItem
             property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: Settings.BasePage
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -244,7 +238,7 @@ Item {
                 id: dryMaterial
                 onProcessDone: {
                     state = "base state"
-                    if(advancedettingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
                         settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
@@ -283,13 +277,6 @@ Item {
                 }
             }
         }
-
-
-        // Move Extruders
-
-
-
-
     }
 
 

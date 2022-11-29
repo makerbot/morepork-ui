@@ -3,15 +3,15 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import WifiStateEnum 1.0
 
-AdvancedSettingsPageForm {
+SystemSettingsPageForm {
 
     buttonPrinterInfo.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.PrinterInfoPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.PrinterInfoPage)
     }
 
     buttonAdvancedInfo.onClicked: {
         bot.query_status()
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AdvancedInfoPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AdvancedInfoPage)
     }
 
     buttonWiFi.onClicked: {
@@ -24,7 +24,7 @@ AdvancedSettingsPageForm {
             bot.net.setWifiState(WifiState.Searching)
             bot.scanWifi(true)
         }
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.WifiPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.WifiPage)
     }
 
     buttonWiFi.onPressedChanged: {
@@ -43,19 +43,19 @@ AdvancedSettingsPageForm {
         onTriggered: {
             if(buttonWiFi.pressed) {
                 dfs.loadDFSSetting()
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.KoreaDFSSecretPage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.KoreaDFSSecretPage)
                 koreaDFSScreen.passwordField.forceActiveFocus()
             }
         }
     }
 
     buttonAuthorizeAccounts.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AuthorizeAccountsPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AuthorizeAccountsPage)
     }
 
     buttonFirmwareUpdate.onClicked: {
         bot.firmwareUpdateCheck(false)
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.FirmwareUpdatePage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
     }
 
 
@@ -107,36 +107,36 @@ AdvancedSettingsPageForm {
 
     buttonAnalytics.onClicked: {
         bot.getCloudServicesInfo()
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ShareAnalyticsPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ShareAnalyticsPage)
     }
 
     buttonChangePrinterName.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ChangePrinterNamePage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
         namePrinter.nameField.forceActiveFocus()
     }
 
     buttonTime.onClicked: {
         bot.getSystemTime()
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.TimePage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.TimePage)
     }
 
     buttonChangeLanguage.onClicked: {
         languageSelector.currentLocale = Qt.locale().name
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ChangeLanguagePage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangeLanguagePage)
     }
 
     buttonSpoolInfo.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.SpoolInfoPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SpoolInfoPage)
         // TODO(shirley): is there a better place to call this?
         spoolInfoPage.init();
     }
 
     buttonColorSwatch.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ColorSwatchPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ColorSwatchPage)
     }
 
     buttonTouchTest.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.TouchTestPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.TouchTestPage)
     }
 
     buttonResetToFactory.onClicked: {

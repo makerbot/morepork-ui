@@ -194,9 +194,7 @@
         <file alias="icon_extruder_settings.png">images/icon_extruder_settings.png</file>
         <file alias="icon_system_settings.png">images/icon_system_settings.png</file>
         <file alias="icon_time.png">images/icon_time.png</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>BuildPlateSettingsPageForm.qml</file>
-        <file>BuildPlateSettingsPage.qml</file>
+        <file alias="icon_material.png">images/icon_material.png</file>
+        <file alias="icon_raise_lower_bp.png">images/icon_raise_lower_bp.png</file>
     </qresource>
 </RCC>

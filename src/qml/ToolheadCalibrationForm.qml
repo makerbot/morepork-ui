@@ -40,7 +40,7 @@ LoggingItem {
                 if(inFreStep) {
                     state = "base state"
                 }
-                calibrateToolheadsItem.altBack()
+                processDone()
             }
         }
     }

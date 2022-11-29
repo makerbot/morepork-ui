@@ -82,7 +82,7 @@ Item {
             } else {
                 bot.changeMachineName(nameField.text)
             }
-            advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+            systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             if(inFreStep) {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 fre.gotoNextStep(currentFreStep)

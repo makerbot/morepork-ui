@@ -17,11 +17,10 @@ Item {
 
     property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
 
-
     enum SwipeIndex {
-        BasePage,
-        RaiseLowerBuildPlatePage,
-        AssistedLevelingPage
+        BasePage,                   //0
+        AssistedLevelingPage,       //1
+        RaiseLowerBuildPlatePage    //2
     }
 
     LoggingSwipeView {
@@ -55,32 +54,19 @@ Item {
                     spacing: 0
 
                     MenuButton {
-                        id: buttonRaiseLowerBuildPlate
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
                         id: buttonAssistedLeveling
                         buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
                         buttonText.text: qsTr("ASSISTED LEVELING")
                         enabled: !isProcessRunning()
                     }
+
+                    MenuButton {
+                        id: buttonRaiseLowerBuildPlate
+                        buttonImage.source: "qrc:/img/icon_raise_lower_bp.png"
+                        buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
+                        enabled: !isProcessRunning()
+                    }
                 }
-            }
-        }
-
-        // BuildPlateSettingsPage.RaiseLowerBuildPlatePage
-        Item {
-            id: raiseLowerBuildPlateItem
-            property var backSwiper: buildPlateSettingsSwipeView
-            property int backSwipeIndex: BuildPlateSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            RaiseLowerBuildPlateItem {
-                id: raiseLowerBuildPlate
             }
         }
 
@@ -104,6 +90,7 @@ Item {
                         if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
                             buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                         }
+                        //settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
                 else {
@@ -129,7 +116,21 @@ Item {
                     if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
                         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                     }
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
+            }
+        }
+
+        // BuildPlateSettingsPage.RaiseLowerBuildPlatePage
+        Item {
+            id: raiseLowerBuildPlateItem
+            property var backSwiper: buildPlateSettingsSwipeView
+            property int backSwipeIndex: BuildPlateSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            RaiseLowerBuildPlateItem {
+                id: raiseLowerBuildPlate
             }
         }
     }
