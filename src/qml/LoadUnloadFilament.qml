@@ -55,39 +55,26 @@ LoadUnloadFilamentForm {
 
     retryButton {
         button_mouseArea.onClicked: {
-            // loadFilament(tool_index, external, whilePrinitng)
-            // unloadFilament(tool_index, external, whilePrinitng)
-            var temperature_list = [0,0]
-            if(isExternalLoadUnload) {
-                temperature_list[bayID - 1] = lastHeatingTemperature
-            }
-            if(state == "loaded_filament") {
-                if(bot.process.type == ProcessType.None) {
-                    bot.loadFilament(bayID - 1, false, false, temperature_list)
-                }
-                else if(bot.process.type == ProcessType.Print) {
-                    bot.loadFilament(bayID - 1, false, true, temperature_list)
-                }
-            } else if(state == "unloaded_filament") {
-                if(bot.process.type == ProcessType.None) {
-                    bot.unloadFilament(bayID - 1, true, false, temperature_list)
-                }
-                else if(bot.process.type == ProcessType.Print) {
-                    bot.unloadFilament(bayID - 1, true, true, temperature_list)
-                }
-            } else if(state == "error") {
-                if(bot.process.type == ProcessType.None) {
-                    isLoadFilament ?
-                        bot.loadFilament(bayID - 1, false, false, temperature_list) :
-                        bot.unloadFilament(bayID - 1, true, false, temperature_list)
-                }
-                else if(bot.process.type == ProcessType.Print) {
-                    isLoadFilament ?
-                        bot.loadFilament(bayID - 1, false, true, temperature_list) :
-                        bot.unloadFilament(bayID - 1, true, true, temperature_list)
-                }
-            }
             state = "base_state"
+            var temperature_list = [0,0]
+            if(retryTemperature > 0) {
+                temperature_list[bayID - 1] = retryTemperature
+            }
+            var while_printing;
+            if(bot.process.type == ProcessType.None) {
+                while_printing = false;
+            } else if(bot.process.type == ProcessType.Print) {
+                while_printing = false;
+            } else {
+                return;
+            }
+            if(isLoadFilament) {
+                bot.loadFilament(bayID - 1, false, while_printing,
+                    temperature_list, retryMaterial);
+            } else {
+                bot.unloadFilament(bayID - 1, false, while_printing,
+                    temperature_list, retryMaterial);
+            }
         }
     }
 }

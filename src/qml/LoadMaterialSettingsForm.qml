@@ -14,9 +14,9 @@ Item {
 
     function startLoadUnloadForMaterial(tool_idx, material) {
         if(isLoadFilament) {
-            load(tool_idx, false, [0,0], material)
+            load(tool_idx, false, 0, material)
         } else {
-            unload(tool_idx, true, [0,0], material)
+            unload(tool_idx, true, 0, material)
         }
     }
 
