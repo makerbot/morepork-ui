@@ -153,21 +153,15 @@ Item {
                         id: buttonWiFi
                         buttonImage.source: "qrc:/img/icon_wifi.png"
                         buttonText.text: qsTr("WIFI AND NETWORK")
+                        slidingSwitch.checked: bot.net.wifiEnabled
+                        slidingSwitch.visible: true
 
-                        SlidingSwitch {
-                            id: switchWifi
-                            checked: bot.net.wifiEnabled
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 50
-
-                            onClicked: {
-                                if(switchWifi.checked) {
-                                    bot.toggleWifi(true)
-                                }
-                                else if(!switchWifi.checked) {
-                                    bot.toggleWifi(false)
-                                }
+                        slidingSwitch.onClicked: {
+                            if(slidingSwitch.checked) {
+                                bot.toggleWifi(true)
+                            }
+                            else if(!slidingSwitch.checked) {
+                                bot.toggleWifi(false)
                             }
                         }
                     }
@@ -214,23 +208,18 @@ Item {
                         id: buttonSupportMode
                         buttonImage.source: "qrc:/img/icon_time.png"
                         buttonText.text: qsTr("SHOW CURRENT TIME")
+                        slidingSwitch.checked: settings.getDateTimeTextEnabled()
+                        slidingSwitch.enabled: parent.enabled
+                        slidingSwitch.visible: true
 
-                        SlidingSwitch {
-                            id: switchToggleSupportMode
-                            checked: settings.getDateTimeTextEnabled()
-                            enabled: parent.enabled
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 50
-                            onClicked: {
-                                if(switchToggleSupportMode.checked) {
-                                    settings.setDateTimeTextEnabled(true)
-                                    setDateTimeTextVisible(true)
-                                }
-                                else if(!switchToggleSupportMode.checked) {
-                                    settings.setDateTimeTextEnabled(false)
-                                    setDateTimeTextVisible(false)
-                                }
+                        slidingSwitch.onClicked: {
+                            if(slidingSwitch.checked) {
+                                settings.setDateTimeTextEnabled(true)
+                                setDateTimeTextVisible(true)
+                            }
+                            else if(!slidingSwitch.checked) {
+                                settings.setDateTimeTextEnabled(false)
+                                setDateTimeTextVisible(false)
                             }
                         }
                     }

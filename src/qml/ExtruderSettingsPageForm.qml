@@ -76,20 +76,16 @@ Item {
                         enabled: bot.extruderAPresent &&
                                  materialPage.bay1.usingExperimentalExtruder
 
-                        SlidingSwitch {
-                            id: switchToggleJamDetection
-                            checked: !bot.extruderAJamDetectionDisabled
-                            enabled: parent.enabled
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 50
-                            onClicked: {
-                                if(switchToggleJamDetection.checked) {
-                                    bot.ignoreError(0,[81],false)
-                                }
-                                else if(!switchToggleJamDetection.checked) {
-                                    bot.ignoreError(0,[81],true)
-                                }
+                        slidingSwitch.checked:!bot.extruderAJamDetectionDisabled
+                        slidingSwitch.enabled: parent.enabled
+                        slidingSwitch.visible: true
+
+                        slidingSwitch.onClicked: {
+                            if(slidingSwitch.checked) {
+                                bot.ignoreError(0,[81],false)
+                            }
+                            else if(!slidingSwitch.checked) {
+                                bot.ignoreError(0,[81],true)
                             }
                         }
                     }
