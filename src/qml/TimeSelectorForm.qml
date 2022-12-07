@@ -261,13 +261,13 @@ Item {
                 setTime()
                 if(inFreStep) {
                     timeSwipeView.swipeToItem(TimePage.SetDate)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                     mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                     fre.gotoNextStep(currentFreStep)
                 }
                 else {
                     timeSwipeView.swipeToItem(TimePage.SetDate)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 }
             }
             enabled: {

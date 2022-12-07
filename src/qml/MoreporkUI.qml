@@ -332,8 +332,7 @@ ApplicationWindow {
         ExtruderPage,   // 2
         SettingsPage,   // 3
         InfoPage,       // 4
-        MaterialPage,   // 5
-        AdvancedPage    // 6
+        MaterialPage    // 5
     }
 
     Item {
@@ -358,13 +357,13 @@ ApplicationWindow {
             smooth: false
             antialiasing: false
             visible: {
-                settingsPage.settingsSwipeView.currentIndex == SettingsPage.ChangePrinterNamePage ||
-                settingsPage.settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage ||
-                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
-                 (settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
-                  settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
-                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
-                 settingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.ChangePrinterNamePage ||
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.AuthorizeAccountsPage &&
+                 (settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
+                  settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.WifiPage &&
+                 settingsPage.systemSettingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
             }
             x: -30
             y: parent.height - inputPanel.height + 22
@@ -498,7 +497,7 @@ ApplicationWindow {
                     }
 
                     mainMenuIcon_advanced.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.AdvancedPage)
+                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     }
                 }
             }
@@ -584,19 +583,6 @@ ApplicationWindow {
                 MaterialPage {
                     id: materialPage
                     smooth: false
-                }
-            }
-
-            // MoreporkUI.AdvancedPage
-            Item {
-                property var backSwiper: mainSwipeView
-                property int backSwipeIndex: MoreporkUI.BasePage
-                smooth: false
-                visible: false
-
-                AdvancedSettingsPage {
-                    id: advancedPage
-                    anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
                 }
             }
         }
@@ -1569,12 +1555,9 @@ ApplicationWindow {
                                 update_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
-                                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                }
-                                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.FirmwareUpdatePage) {
-                                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
-                                }
+                                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
                                 firmwareUpdatePopup.close()
                             }
                         }
@@ -2123,7 +2106,8 @@ ApplicationWindow {
                             onClicked: {
                                 extNotCalibratedPopup.close()
                                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
+                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
                             }
                             onPressed: {
                                 calib_text.color = "#000000"
