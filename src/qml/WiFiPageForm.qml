@@ -223,15 +223,13 @@ Item {
                 model: bot.net.WiFiList
 
                 delegate:
-                    MenuButton {
+                    WiFiButton {
                     antialiasing: false
-                    buttonText.text: model.modelData.name
+                    wifiName: model.modelData.name
                     isSecured: model.modelData.secured
                     isSaved: model.modelData.saved
                     signalStrength: model.modelData.sig_strength
-                    wifiIcons.visible: true
-                    isConnected: currentWifiName === buttonText.text
-                    buttonImage.source: "qrc:/img/process_complete_small.png"
+                    isConnected: currentWifiName == wifiName
 
                     onClicked: {
                         if(isConnected) {

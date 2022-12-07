@@ -253,5 +253,7 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
+        <file>WiFiButton.qml</file>
+        <file>WiFiButtonForm.qml</file>
     </qresource>
 </RCC>

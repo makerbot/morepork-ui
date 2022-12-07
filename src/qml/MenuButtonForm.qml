@@ -19,13 +19,6 @@ Button {
     property color buttonPressColor: "#0f0f0f"
     enabled: true
 
-    // For Wifi button - To use Wifi Icons the property
-    // visibiliy must be set to true
-    property bool isSaved: false
-    property alias isConnected: buttonImage.visible
-    property alias isSecured: wifiSecuredImage.visible
-    property int signalStrength: 0
-
     background: Rectangle {
         opacity: menuButton.down ? 1 : 0
         color: menuButton.down ? buttonPressColor : buttonColor
@@ -57,8 +50,8 @@ Button {
 
             Image {
                 id: buttonImage
-                Layout.preferredWidth: (wifiIcons.visible) ? 34 : sourceSize.width
-                Layout.preferredHeight: (wifiIcons.visible) ? 34 : sourceSize.height
+                width: sourceSize.width
+                height: sourceSize.height
                 smooth: false
                 antialiasing: false
             }
@@ -96,33 +89,20 @@ Button {
 
                 Image {
                     id: wifiSecuredImage
-                    Layout.preferredWidth: sourceSize.width
-                    Layout.preferredHeight: sourceSize.height
+                    width: sourceSize.width
+                    height: sourceSize.height
                     smooth: false
                     antialiasing: false
                     source: "qrc:/img/wifi_secured_menu_icon.png"
                 }
 
                 Image {
-                    id: wifiImageSignalStrength
-                    Layout.preferredWidth: sourceSize.width
-                    Layout.preferredHeight: sourceSize.height
+                    id: wifiImage
+                    width: sourceSize.width
+                    height: sourceSize.height
                     smooth: false
                     antialiasing: false
-                    source: {
-                        if(signalStrength >= 70) {
-                            "qrc:/img/wifi_strong.png"
-                        }
-                        else if(signalStrength >= 45) {
-                            "qrc:/img/wifi_medium.png"
-                        }
-                        else if(signalStrength > 33) {
-                            "qrc:/img/wifi_low.png"
-                        }
-                        else {
-                            "qrc:/img/wifi_poor.png"
-                        }
-                    }
+                    source: "qrc:/img/wifi_menu_icon.png"
                 }
             }
 
