@@ -8,6 +8,7 @@ import ErrorTypeEnum 1.0
 
 Item {
     id: settingsPage
+    anchors.fill: parent
     property alias settingsSwipeView: settingsSwipeView
     property alias advancedSettingsPage: advancedSettingsPage
     property alias cleanAirSettingsPage: cleanAirSettingsPage

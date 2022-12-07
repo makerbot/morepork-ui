@@ -12,6 +12,8 @@ Item {
     property alias minutesTumbler: minutesTumbler
 
     property string systemTime: bot.systemTime
+    property string displayTime
+    property string displayDate
     onSystemTimeChanged: {
         formatTime()
     }
@@ -24,7 +26,9 @@ Item {
         // 2018-09-10 18:04:16
         var time_elements = systemTime.split(" ")
         var date_element = time_elements[0] // 2018-09-10
+        displayDate = date_element
         var time_element = time_elements[1] // 18:04:16
+        displayTime = time_element
         var time_split = time_element.split(":")
         var current_hour = time_split[0] // 18
         var current_minute = time_split[1] // 04
@@ -43,7 +47,7 @@ Item {
 
     function formatText(count, modelData) {
         var data = count === 12 ? modelData + 1 : modelData
-        return ((count > 12 && data.toString().length < 2) ? "0" + data : data)
+        return ((data.toString().length < 2) ? "0" + data : data)
     }
 
     function setTime() {
@@ -79,200 +83,143 @@ Item {
             opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: Tumbler.tumbler.count > 2 ? 175 : 60
+            font.pixelSize: Tumbler.tumbler.count > 2 ? 100 : 60
             font.weight: Font.Light
             font.family: defaultFont.name
             color: "#ffffff"
         }
     }
 
-    Row {
-        id: row
-        spacing: 0
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+    Item {
+        anchors.left: parent.left
+        anchors.leftMargin: 40
+        anchors.right: setTimeButton.left
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
 
         Tumbler {
             id: hoursTumbler
-            width: 250
-            height: 500
+            width: 128
+            height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
             model: 12
             delegate: delegateComponent
+
+            Rectangle {
+                id: toplineHours
+                width: parent.width
+                height: 1
+                color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -65
+            }
+
+            Rectangle {
+                id: bottomLineHours
+                width: parent.width
+                height: 1
+                color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 50
+            }
         }
 
         Text {
-            id: time_separator_text
-            width: 50
+            id: timeSeparator
             color: "#ffffff"
             text: ":"
-            leftPadding: -15
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
+            anchors.left: hoursTumbler.right
+            anchors.leftMargin: 40
             anchors.verticalCenter: parent.verticalCenter
             font.family: defaultFont.name
-            font.pixelSize: 135
+            font.pixelSize: 100
         }
 
         Tumbler {
             id: minutesTumbler
-            width: 250
-            height: 500
+            width: 128
+            height: parent.height
+            anchors.left: timeSeparator.right
+            anchors.leftMargin: 40
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
             model: 60
             delegate: delegateComponent
-        }
 
-        Text {
-            id: spacingItem
-            width: 50
-            anchors.verticalCenter: parent.verticalCenter
+            Rectangle {
+                id: toplineMinutes
+                width: parent.width
+                height: 1
+                color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -65
+            }
+
+            Rectangle {
+                id: bottomLineMinutes
+                width: parent.width
+                height: 1
+                color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 50
+            }
         }
 
         Tumbler {
             id: meridianTumbler
-            width: 100
-            height: 640
+            width: 120
+            height: parent.height*1.6
+            anchors.left: minutesTumbler.right
+            anchors.leftMargin: 40
             anchors.verticalCenter: parent.verticalCenter
             model: ["AM", "PM"]
             delegate: delegateComponent
+
+            Rectangle {
+                id: topLineMeridian
+                width: parent.width
+                height: 1
+                color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -65
+            }
+
+            Rectangle {
+                id: bottomLineMeridian
+                width: parent.width
+                height: 1
+                color: "#ffffff"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 50
+            }
         }
     }
 
-    Item {
-        id: overlayItem
-        width: 500
-        height: 175
-        anchors.left: parent.left
-        anchors.leftMargin: 75
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -10
-
-        Rectangle {
-            id: topLeftLine
-            width: 200
-            height: 1
-            color: "#ffffff"
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-        }
-
-        Rectangle {
-            id: topRightLine
-            width: 200
-            height: 1
-            color: "#ffffff"
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-        }
-
-        Rectangle {
-            id: bottomLeftLine
-            width: 200
-            height: 1
-            color: "#ffffff"
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-        }
-
-        Rectangle {
-            id: bottomRightLine
-            width: 200
-            height: 1
-            color: "#ffffff"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-        }
-
-        Rectangle {
-            id: topFadeItem
-            width: 800
-            height: 150
-            anchors.horizontalCenterOffset: 20
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: "#000000"
-                }
-
-                GradientStop {
-                    position: 1
-                    color: "#00000000"
-                }
-            }
-            anchors.bottom: parent.top
-            anchors.bottomMargin: 0
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        Rectangle {
-            id: bottomFadeItem
-            width: 800
-            height: 150
-            anchors.horizontalCenterOffset: 20
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: "#00000000"
-                }
-
-                GradientStop {
-                    position: 1
-                    color: "#000000"
-                }
-            }
-            anchors.top: parent.bottom
-            anchors.topMargin: 0
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-    }
-
-    RoundedButton {
+    ButtonRectanglePrimary {
         id: setTimeButton
-        buttonHeight: 50
-        buttonWidth: 120
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 50
-        anchors.horizontalCenter: parent.horizontalCenter
-        label: qsTr("DONE")
-        opacity: {
-            button_mouseArea.enabled ? 1.0 : 0.1
-        }
+        width: 120
+        anchors.right: parent.right
+        anchors.rightMargin: 40
+        anchors.verticalCenter: parent.verticalCenter
+        text: qsTr("SAVE")
 
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: 100
+        onClicked: {
+            setTime()
+            if(inFreStep) {
+                timeSwipeView.swipeToItem(TimePage.SetDate)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                fre.gotoNextStep(currentFreStep)
+            }
+            else {
+                timeSwipeView.swipeToItem(TimePage.BasePage)
             }
         }
-
-        button_mouseArea {
-            onClicked: {
-                setTime()
-                if(inFreStep) {
-                    timeSwipeView.swipeToItem(TimePage.SetDate)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                    fre.gotoNextStep(currentFreStep)
-                }
-                else {
-                    timeSwipeView.swipeToItem(TimePage.SetDate)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                }
-            }
-            enabled: {
-                !hoursTumbler.moving && !minutesTumbler.moving && !meridianTumbler.moving
-            }
+        enabled: {
+            !hoursTumbler.moving && !minutesTumbler.moving && !meridianTumbler.moving
         }
     }
 }

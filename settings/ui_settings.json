@@ -1,6 +1,17 @@
 {
+    "dimensions" : {
+        "app" : { "width": 800, "height": 480 },
+        "top_bar" : { "width": 800, "height": 72 },
+        "content" : { "width": 800, "height": 408 },
+        "menu_button" : { "width": 800, "height": 96 },
+        "button" : { "width": 360, "height": 52 },
+        "time_settings_button" : { "width": 800, "height": 104 },
+        "margin" : 40,
+        "spacing": 24
+    },
+    "colors" : { },
     "allow_internal_storage": false,
-    "date_time_text_enabled: false,
+    "show_time_in_top_bar": false,
     "language_code": "en_GB",
     "skip_filament_nags": false,
     "show_nylon_cf_anneal_print_tip": true,

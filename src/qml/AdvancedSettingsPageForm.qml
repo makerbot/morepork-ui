@@ -260,31 +260,6 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonSupportMode
-                        buttonImage.source: "qrc:/img/icon_time_and_date.png"
-                        buttonText.text: qsTr("SHOW CURRENT TIME")
-
-                        SlidingSwitch {
-                            id: switchToggleSupportMode
-                            checked: settings.getDateTimeTextEnabled()
-                            enabled: parent.enabled
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 50
-                            onClicked: {
-                                if(switchToggleSupportMode.checked) {
-                                    settings.setDateTimeTextEnabled(true)
-                                    setDateTimeTextVisible(true)
-                                }
-                                else if(!switchToggleSupportMode.checked) {
-                                    settings.setDateTimeTextEnabled(false)
-                                    setDateTimeTextVisible(false)
-                                }
-                            }
-                        }
-                    }
-
-                    MenuButton {
                         id: buttonTouchTest
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: qsTr("DISPLAY TOUCH TEST")

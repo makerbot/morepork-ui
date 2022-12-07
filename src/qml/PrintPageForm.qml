@@ -8,6 +8,7 @@ import ErrorTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
+    anchors.fill: parent
     smooth: false
     property string fileName: "unknown.makerbot"
     property string file_name

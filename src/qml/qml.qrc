@@ -132,12 +132,8 @@
         <file>ReviewTestPrintPageForm.qml</file>
         <file>TimePage.qml</file>
         <file>TimePageForm.qml</file>
-        <file>TimeZoneButton.qml</file>
-        <file>TimeZoneButtonForm.qml</file>
         <file>TimeZoneSelector.qml</file>
         <file>TimeZoneSelectorForm.qml</file>
-        <file>TimeZoneLocationSeparator.qml</file>
-        <file>TimeZoneLocationSeparatorForm.qml</file>
         <file>SnipMaterialScreen.qml</file>
         <file>SnipMaterialScreenForm.qml</file>
         <file>LanguageSelector.qml</file>
@@ -255,5 +251,7 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
+        <file>TimeSettingsButton.qml</file>
+        <file>TimeSettings.qml</file>
     </qresource>
 </RCC>
