@@ -11,6 +11,7 @@ Item {
             }
             slidingSwitch {
                 visible: true
+                checked: settings.getShowTimeInTopBar()
                 onClicked: {
                     settings.setShowTimeInTopBar(slidingSwitch.checked)
                     showTime(slidingSwitch.checked)
