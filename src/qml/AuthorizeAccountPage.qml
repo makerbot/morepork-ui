@@ -41,7 +41,7 @@ AuthorizeAccountPageForm {
         authorizeAccountWithCodePage.checkAuthTimer.stop()
         authorizeAccountWithCodePage.expireOTPTimer.stop()
         authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
-        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
     }
 
     function closePopup() {
