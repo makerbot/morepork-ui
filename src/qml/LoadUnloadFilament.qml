@@ -55,7 +55,7 @@ LoadUnloadFilamentForm {
 
     retryButton {
         button_mouseArea.onClicked: {
-            state = "base_state"
+            state = "base state"
             var temperature_list = [0,0]
             if(retryTemperature > 0) {
                 temperature_list[bayID - 1] = retryTemperature
