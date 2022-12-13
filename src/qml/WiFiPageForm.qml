@@ -65,7 +65,7 @@ Item {
         id: wifiFreStepComplete
         interval: 2000
         onTriggered: {
-            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+            settingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             if(isfirmwareUpdateAvailable) {
                 fre.gotoNextStep(currentFreStep)
@@ -90,15 +90,15 @@ Item {
         Item {
             id: itemChooseWifi
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: true
 
             function altBack() {
                 if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 }
                 else {
                     skipFreStepPopup.open()
@@ -106,7 +106,7 @@ Item {
             }
 
             function skipFreStepAction() {
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 

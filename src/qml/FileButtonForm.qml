@@ -42,7 +42,6 @@ Button {
     ThumbnailImage {
         id: fileThumbnail
         width: 140
-        height: 106
         antialiasing: false
         fillMode: Image.PreserveAspectFit
         anchors.verticalCenter: parent.verticalCenter

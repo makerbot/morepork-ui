@@ -41,17 +41,21 @@ Button {
         anchors.fill: parent
         opacity: enabled ? 1.0 : 0.4
 
-        Image {
-            id: storageThumbnail
-            sourceSize.width: 140
-            sourceSize.height: 106
-            asynchronous: true
-            smooth: false
-            antialiasing: false
-            fillMode: Image.PreserveAspectFit
-            anchors.verticalCenter: parent.verticalCenter
+        Item {
+            id: storageThumbnailItem
+            height: parent.height
+            width: 188
             anchors.left: parent.left
-            anchors.leftMargin: 25
+
+            Image {
+                id: storageThumbnail
+                asynchronous: true
+                smooth: false
+                antialiasing: false
+                // fillMode: Image.PreserveAspectFit
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
         }
 
         Item {
@@ -59,8 +63,7 @@ Button {
             width: 100
             height: 50
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 190
+            anchors.left: storageThumbnailItem.right
 
             Text {
                 id: storageNameText
