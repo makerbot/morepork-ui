@@ -1842,6 +1842,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                   materialsDisplay.append("UNKNOWN");
               } else if (mat.isString()) {
                   QString matAPI(mat.asString().c_str());
+                  if (matAPI == "generic") matAPI = "unknown";
                   materialsAPI.append(matAPI);
                   materialsDisplay.append(getMaterialName(matAPI));
               }
