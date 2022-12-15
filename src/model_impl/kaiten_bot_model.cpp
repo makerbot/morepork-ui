@@ -1074,7 +1074,7 @@ void KaitenBotModel::zipTimelapseImages(QString path) {
       Json::Value json_params(Json::objectValue);
       json_params["zip_path"] = Json::Value(path.toStdString());
       conn->jsonrpc.invoke(
-              "zip_timelapse_images",
+              "zip_timelapseimages",
               json_params,
               std::weak_ptr<JsonRpcCallback>());
   }

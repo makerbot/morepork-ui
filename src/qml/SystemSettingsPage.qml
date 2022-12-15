@@ -58,8 +58,6 @@ SystemSettingsPageForm {
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
     }
 
-
-
     buttonCopyLogs.onClicked: {
         if(storage.usbStorageConnected) {
             var now = new Date();
@@ -102,6 +100,50 @@ SystemSettingsPageForm {
 
             copyingLogsPopup.initialized = true;
             copyingLogsPopup.open();
+        }
+    }
+
+    buttonCopyTimelapseImages.onClicked: {
+        if(storage.usbStorageConnected) {
+            var now = new Date();
+            copyingTimelapseImagesPopup.timelapseBundlePath =
+                    storage.usbStoragePath + "/TimelapseImages_" +
+                    now.toString().replace(/[\s,:]/g, "_") +
+                    ".zip";
+            bot.zipTimelapseImages(copyingTimelapseImagesPopup.timelapseBundlePath);
+            copyingTimelapseImagesPopup.popupState = "copy_timelapse_images_state";
+        }
+        else {
+            copyingTimelapseImagesPopup.popupState = "no_usb_detected";
+        }
+
+        if (!copyingTimelapseImagesPopup.initialized) {
+            bot.process.onStateTypeChanged.connect(function() {
+                if (bot.process.type === ProcessType.ZipLogsProcess) {
+
+                    var zipTimelapseImagesInProgress =
+                        bot.process.stateType !== ProcessStateType.Done;
+
+                    var succeeded = !(bot.process.errorCode);
+                    copyingTimelapseImagesPopup.errorcode = bot.process.errorCode;
+                    if(bot.process.stateType === ProcessStateType.Done &&
+                            !copyingTimelapseImagesPopup.cancelled) {
+                        if (succeeded) {
+                            bot.forceSyncFile(copyingTimelapseImagesPopup.timelapseBundlePath)
+                            copyingTimelapseImagesPopup.popupState = "successfully_copied_timelapse_images";
+                        }
+                        else {
+                            copyingTimelapseImagesPopup.popupState = "failed_copied_timelapse_images";
+                        }
+                    }
+                    else if(bot.process.stateType === ProcessStateType.Done) {
+                        copyingTimelapseImagesPopup.close();
+                    }
+                }
+            });
+
+            copyingTimelapseImagesPopup.initialized = true;
+            copyingTimelapseImagesPopup.open();
         }
     }
 
