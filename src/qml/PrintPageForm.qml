@@ -700,7 +700,9 @@ Item {
                     }
 
                     materialError.visible: {
-                        if (metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1]) {
+                        if (!hasMeta) {
+                            false
+                        } else if (metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1]) {
                             materialPage.bay1.usingExperimentalExtruder ?
                                 (metaData['materials'][1] != materialPage.bay2.filamentMaterial) :
                                 (metaData['materials'][0] != materialPage.bay1.filamentMaterial ||
