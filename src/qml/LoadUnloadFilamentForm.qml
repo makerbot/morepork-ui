@@ -657,6 +657,9 @@ LoggingItem {
                         case ExtruderType.MK14_HOT_E:
                             "qrc:/img/extruder_labs_1_ht_heating.png"
                             break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                         }
                     } else if(bayID == 2) {
                         switch(bot.extruderBType) {
@@ -666,7 +669,12 @@ LoggingItem {
                         case ExtruderType.MK14_HOT:
                             "qrc:/img/extruder_2XA_heating.png"
                             break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                         }
+                    } else {
+                        "qrc:/img/broken.png"
                     }
                 }
             }
@@ -1113,6 +1121,9 @@ LoggingItem {
                           break;
                       case ProcessType.Unload:
                           qsTr("FILAMENT UNLOADING FAILED")
+                          break;
+                      default:
+                          defaultString
                           break;
                     }
                 }

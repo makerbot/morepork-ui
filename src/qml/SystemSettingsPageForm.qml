@@ -6,33 +6,49 @@ import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
-    id: advancedSettingsPage
+    id: systemSettingsPage
     smooth: false
     anchors.fill: parent
 
-    property alias advancedSettingsSwipeView: advancedSettingsSwipeView
+    property alias systemSettingsSwipeView: systemSettingsSwipeView
+
+    property alias buttonPrinterInfo: buttonPrinterInfo
 
     property alias buttonAdvancedInfo: buttonAdvancedInfo
 
-    property alias buttonPreheat: buttonPreheat
+    property alias wifiPage: wifiPage
+    property alias buttonWiFi: buttonWiFi
+    property alias koreaDFSScreen: koreaDFSScreen
 
-    property alias buttonAssistedLeveling: buttonAssistedLeveling
+    property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
+    property alias authorizeAccountPage: authorizeAccountPage
 
-    property alias buttonCleanExtruders: buttonCleanExtruders
-
-    property alias buttonDryMaterial: buttonDryMaterial
-
-    property alias buttonAnnealPrint: buttonAnnealPrint
-
-    property alias buttonTouchTest: buttonTouchTest
+    property alias buttonFirmwareUpdate: buttonFirmwareUpdate
+    property alias firmwareUpdatePage: firmwareUpdatePage
 
     property alias buttonCopyLogs: buttonCopyLogs
-
     property alias copyingLogsPopup: copyingLogsPopup
 
     property alias buttonCopyTimelapseImages: buttonCopyTimelapseImages
-
     property alias copyingTimelapseImagesPopup: copyingTimelapseImagesPopup
+
+    property alias buttonAnalytics: buttonAnalytics
+
+    property alias buttonChangePrinterName: buttonChangePrinterName
+    property alias namePrinter: namePrinter
+
+    property alias buttonTime: buttonTime
+    property alias timePage: timePage
+
+    property alias buttonChangeLanguage: buttonChangeLanguage
+    property alias languageSelector: languageSelectorPage
+
+    property alias spoolInfoPage: spoolInfoPage
+    property alias buttonSpoolInfo: buttonSpoolInfo
+
+    property alias buttonColorSwatch: buttonColorSwatch
+
+    property alias buttonTouchTest: buttonTouchTest
 
     property bool isResetting: false
     property alias buttonResetToFactory: buttonResetToFactory
@@ -40,16 +56,6 @@ Item {
     property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
     property bool doneFactoryReset: bot.process.type === ProcessType.FactoryResetProcess &&
                                     bot.process.stateType === ProcessStateType.Done
-
-    property alias buttonSpoolInfo: buttonSpoolInfo
-
-    property alias buttonColorSwatch: buttonColorSwatch
-
-    property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
-
-    property alias buttonAnalytics: buttonAnalytics
-
-    property alias spoolInfoPage: spoolInfoPage
 
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
@@ -63,11 +69,8 @@ Item {
             if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             }
-            if(settingsPage.advancedSettingsPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                settingsPage.advancedSettingsPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-            }
-            if(advancedPage.advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+            if(systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
+                systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             }
             if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
@@ -91,64 +94,45 @@ Item {
     }
 
     enum SwipeIndex {
-        BasePage,                   // 0
-        AdvancedInfoPage,           // 1
-        PreheatPage,                // 2
-        AssistedLevelingPage,       // 3
-        SpoolInfoPage,              // 4
-        ColorSwatchPage,            // 5
-        RaiseLowerBuildPlatePage,   // 6
-        ShareAnalyticsPage,         // 7
-        DryMaterialPage,            // 8
-        CleanExtrudersPage,         // 9
-        AnnealPrintPage,            // 10
-        TouchTestPage               // 11
+        BasePage,               // 0
+        PrinterInfoPage,        // 1
+        AdvancedInfoPage,       // 2
+        WifiPage,               // 3
+        AuthorizeAccountsPage,  // 4
+        FirmwareUpdatePage,     // 5
+        ShareAnalyticsPage,     // 6
+        ChangePrinterNamePage,  // 7
+        TimePage,               // 8
+        ChangeLanguagePage,     // 9
+        SpoolInfoPage,          // 10
+        ColorSwatchPage,        // 11
+        TouchTestPage,          // 12
+        KoreaDFSSecretPage      // 13
     }
 
     LoggingSwipeView {
-        id: advancedSettingsSwipeView
-        logName: "advancedSettingsSwipeView"
-        currentIndex: AdvancedSettingsPage.BasePage
+        id: systemSettingsSwipeView
+        logName: "systemSettingsSwipeView"
+        currentIndex: SystemSettingsPage.BasePage
 
-        // AdvancedSettingsPage.BasePage
+        // SystemSettingsPage.BasePage
         Item {
-            id: itemAdvancedSettings
+            id: itemSystemSettings
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    mainSwipeView
-                }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    settingsPage.settingsSwipeView
-                }
-                else {
-                    mainSwipeView
-                }
-            }
-            property int backSwipeIndex: {
-                if(mainSwipeView.currentIndex == MoreporkUI.AdvancedPage) {
-                    MoreporkUI.BasePage
-                }
-                else if(mainSwipeView.currentIndex == MoreporkUI.SettingsPage) {
-                    SettingsPage.BasePage
-                }
-                else {
-                    MoreporkUI.BasePage
-                }
-            }
-
+            property var backSwiper: settingsPage.settingsSwipeView
+            property int backSwipeIndex: SettingsPage.BasePage
             smooth: false
 
             Flickable {
-                id: flickableAdvancedSettings
+                id: flickableSystemSettings
                 smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
-                contentHeight: columnAdvancedSettings.height
+                contentHeight: columnSystemSettings.height
 
                 Column {
-                    id: columnAdvancedSettings
+                    id: columnSystemSettings
                     smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
@@ -156,69 +140,45 @@ Item {
                     spacing: 0
 
                     MenuButton {
+                        id: buttonPrinterInfo
+                        buttonImage.source: "qrc:/img/icon_printer_info.png"
+                        buttonText.text: qsTr("PRINTER INFO")
+                    }
+
+                    MenuButton {
                         id: buttonAdvancedInfo
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonImage.source: "qrc:/img/icon_printer_info.png"
                         buttonText.text: qsTr("SENSOR INFO")
                     }
 
                     MenuButton {
-                        id: buttonPreheat
-                        buttonImage.source: "qrc:/img/icon_preheat.png"
-                        buttonText.text: qsTr("PREHEAT")
-                        enabled: !isProcessRunning()
-                    }
+                        id: buttonWiFi
+                        buttonImage.source: "qrc:/img/icon_wifi.png"
+                        buttonText.text: qsTr("WIFI AND NETWORK")
+                        slidingSwitch.checked: bot.net.wifiEnabled
+                        slidingSwitch.visible: true
 
-                    MenuButton {
-                        id: buttonAssistedLeveling
-                        buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
-                        buttonText.text: qsTr("ASSISTED LEVELING")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonCleanExtruders
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: qsTr("CLEAN EXTRUDERS")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonDryMaterial
-                        buttonImage.source: "qrc:/img/icon_dry_material.png"
-                        buttonText.text: qsTr("DRY MATERIAL")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonAnnealPrint
-                        buttonImage.source: "qrc:/img/icon_anneal_print.png"
-                        buttonText.text: qsTr("ANNEAL PRINT")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonJamDetectionExpExtruder
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: "LABS " + qsTr("EXTRUDER JAM DETECTION")
-                        enabled: bot.extruderAPresent &&
-                                 materialPage.bay1.usingExperimentalExtruder
-
-                        SlidingSwitch {
-                            id: switchToggleJamDetection
-                            checked: !bot.extruderAJamDetectionDisabled
-                            enabled: parent.enabled
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 50
-                            onClicked: {
-                                if(switchToggleJamDetection.checked) {
-                                    bot.ignoreError(0,[81],false)
-                                }
-                                else if(!switchToggleJamDetection.checked) {
-                                    bot.ignoreError(0,[81],true)
-                                }
+                        slidingSwitch.onClicked: {
+                            if(slidingSwitch.checked) {
+                                bot.toggleWifi(true)
+                            }
+                            else if(!slidingSwitch.checked) {
+                                bot.toggleWifi(false)
                             }
                         }
+                    }
+                    MenuButton {
+                        id: buttonAuthorizeAccounts
+                        buttonImage.source: "qrc:/img/icon_authorize_account.png"
+                        buttonText.text: qsTr("ACCOUNT AUTHORIZATION")
+                        openMenuItemArrow.visible: true
+                    }
+
+                    MenuButton {
+                        id: buttonFirmwareUpdate
+                        buttonImage.source: "qrc:/img/icon_software_update.png"
+                        buttonText.text: qsTr("FIRMWARE UPDATE")
+                        buttonAlertImage.visible: isfirmwareUpdateAvailable
                     }
 
                     MenuButton {
@@ -229,11 +189,55 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonResetToFactory
-                        buttonImage.anchors.leftMargin: 23
-                        buttonImage.source: "qrc:/img/icon_factory_reset.png"
-                        buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
+                        id: buttonCopyTimelapseImages
+                        buttonImage.source: "qrc:/img/icon_copy_logs.png"
+                        buttonText.text: qsTr("COPY TIMELAPSE IMAGES TO USB")
                         enabled: !isProcessRunning()
+                        visible: settings.getCaptureTimelapseImages()
+                    }
+
+                    MenuButton {
+                        id: buttonAnalytics
+                        buttonImage.source: "qrc:/img/icon_analytics.png"
+                        buttonText.text: qsTr("ANALYTICS")
+                    }
+
+                    MenuButton {
+                        id: buttonChangePrinterName
+                        buttonImage.source: "qrc:/img/icon_change_printer_name.png"
+                        buttonText.text: qsTr("CHANGE PRINTER NAME")
+                    }
+
+                    MenuButton {
+                        id: buttonTime
+                        buttonImage.source: "qrc:/img/icon_time.png"
+                        buttonText.text: qsTr("TIME AND DATE")
+                    }
+
+                    MenuButton {
+                        id: buttonSupportMode
+                        buttonImage.source: "qrc:/img/icon_time.png"
+                        buttonText.text: qsTr("SHOW CURRENT TIME")
+                        slidingSwitch.checked: settings.getDateTimeTextEnabled()
+                        slidingSwitch.enabled: parent.enabled
+                        slidingSwitch.visible: true
+
+                        slidingSwitch.onClicked: {
+                            if(slidingSwitch.checked) {
+                                settings.setDateTimeTextEnabled(true)
+                                setDateTimeTextVisible(true)
+                            }
+                            else if(!slidingSwitch.checked) {
+                                settings.setDateTimeTextEnabled(false)
+                                setDateTimeTextVisible(false)
+                            }
+                        }
+                    }
+
+                    MenuButton {
+                        id: buttonChangeLanguage
+                        buttonImage.source: "qrc:/img/icon_choose_language.png"
+                        buttonText.text: qsTr("CHOOSE LANGUAGE")
                     }
 
                     MenuButton {
@@ -251,65 +255,41 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonRaiseLowerBuildPlate
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
-                        buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonAnalytics
-                        buttonImage.source: "qrc:/img/icon_printer_info.png"
-                        buttonText.text: qsTr("ANALYTICS")
-                    }
-
-                    MenuButton {
-                        id: buttonSupportMode
-                        buttonImage.source: "qrc:/img/icon_time_and_date.png"
-                        buttonText.text: "SHOW CURRENT TIME"
-
-                        SlidingSwitch {
-                            id: switchToggleSupportMode
-                            checked: settings.getDateTimeTextEnabled()
-                            enabled: parent.enabled
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 50
-                            onClicked: {
-                                if(switchToggleSupportMode.checked) {
-                                    settings.setDateTimeTextEnabled(true)
-                                    setDateTimeTextVisible(true)
-                                }
-                                else if(!switchToggleSupportMode.checked) {
-                                    settings.setDateTimeTextEnabled(false)
-                                    setDateTimeTextVisible(false)
-                                }
-                            }
-                        }
-                    }
-
-                    MenuButton {
                         id: buttonTouchTest
                         buttonImage.source: "qrc:/img/icon_advanced_info.png"
                         buttonText.text: qsTr("DISPLAY TOUCH TEST")
                     }
 
                     MenuButton {
-                        id: buttonCopyTimelapseImages
-                        buttonImage.source: "qrc:/img/icon_copy_logs.png"
-                        buttonText.text: qsTr("COPY TIMELAPSE IMAGES TO USB")
+                        id: buttonResetToFactory
+                        buttonImage.anchors.leftMargin: 23
+                        buttonImage.source: "qrc:/img/icon_factory_reset.png"
+                        buttonText.text: qsTr("RESTORE FACTORY SETTINGS")
                         enabled: !isProcessRunning()
-                        visible: settings.getCaptureTimelapseImages()
                     }
                 }
             }
         }
 
-        // AdvancedSettingsPage.AdvancedInfoPage
+        // SystemSettingsPage.PrinterInfoPage
+        Item {
+            id: printerInfoItem
+            // backSwiper and backSwipeIndex are used by backClicked
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            InfoPage {
+
+            }
+        }
+
+        // SystemSettingsPage.AdvancedInfoPage
         Item {
             id: advancedInfoItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -318,39 +298,99 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.PreheatPage
+        // SystemSettingsPage.WifiPage
         Item {
-            id: preheatItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            id: wifiItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
+            property bool hasAltBack: true
 
-            PreheatPage {
+            function altBack() {
+                if(!inFreStep) {
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            WiFiPage {
+                id: wifiPage
 
             }
         }
 
-        // AdvancedSettingsPage.AssistedLevelingPage
+        // SystemSettingsPage.AuthorizeAccountsPage
         Item {
-            id: itemAssistedLeveling
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            id: accountsItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
                 if(!inFreStep) {
-                    if(bot.process.type == ProcessType.AssistedLeveling) {
-                        assistedLevel.cancelAssistedLevelingPopup.open()
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                authorizeAccountPage.backToSettings()
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            AuthorizeAccountPage {
+                id: authorizeAccountPage
+            }
+        }
+
+
+        // SystemSettingsPage.FirmwareUpdatePage
+        Item {
+            id: firmwareUpdateItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            property bool hasAltBack: true
+            property alias firmwareUpdatePage: firmwareUpdatePage
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    if(firmwareUpdatePage.state == "install_from_usb") {
+                        if(isfirmwareUpdateAvailable) {
+                            firmwareUpdatePage.state = "firmware_update_available"
+                        }
+                        else {
+                            firmwareUpdatePage.state = "no_firmware_update_available"
+                        }
+                    }
+                    else if (firmwareUpdatePage.state == "select_firmware_file") {
+                        var backDir = storage.backStackPop()
+                        if(backDir !== "") {
+                            storage.updateFirmwareFileList(backDir)
+                        }
+                        else {
+                            firmwareUpdatePage.state = "install_from_usb"
+                        }
+                    }
+                    else if (firmwareUpdatePage.state == "firmware_update_failed") {
+                        firmwareUpdatePage.state = "no_firmware_update_available"
+                        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                     }
                     else {
-                        assistedLevel.state = "base state"
-                        if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                            advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                        }
+                        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                     }
                 }
                 else {
@@ -360,70 +400,20 @@ Item {
 
             function skipFreStepAction() {
                 bot.cancel()
-                assistedLevel.state = "cancelling"
-                advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
-            AssistedLeveling {
-                id: assistedLevel
-                currentHES: bot.process.currentHes
-                targetHESLower: bot.process.targetHesLower
-                targetHESUpper: bot.process.targetHesUpper
-
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
+            FirmwareUpdatePage {
+                id: firmwareUpdatePage
             }
         }
 
-        // AdvancedSettingsPage.SpoolInfoPage
-        Item {
-            id: spoolInfoItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            SpoolInfoPage {
-                id: spoolInfoPage
-            }
-        }
-
-        // AdvancedSettingsPage.ColorSwatchPage
-        Item {
-            id: colorSwatchItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            ColorSwatchPage {
-                id: colorSwatch
-            }
-        }
-
-        // AdvancedSettingsPage.RaiseLowerBuildPlatePage
-        Item {
-            id: raiseLowerBuildPlateItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            RaiseLowerBuildPlateItem {
-                id: raiseLowerBuildPlate
-            }
-        }
-
-        // AdvancedSettingsPage.ShareAnalyticsPage
+        // SystemSettingsPage.ShareAnalyticsPage
         Item {
             id: analyticsItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: false
 
@@ -432,127 +422,115 @@ Item {
             }
         }
 
-        // AdvancedSettingsPage.DryMaterialPage
+        // SystemSettingsPage.ChangePrinterNamePage
         Item {
-            id: dryMaterialItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
-            property bool hasAltBack: true
-            property bool backIsCancel: bot.process.type == ProcessType.DryingCycleProcess &&
-                                        dryMaterial.state != "choose_material" &&
-                                        dryMaterial.state != "waiting_for_spool" &&
-                                        dryMaterial.state != "dry_kit_instructions_2"
-            smooth: false
-            visible: false
-
-            function altBack() {
-                if(bot.process.type == ProcessType.DryingCycleProcess) {
-                    if(dryMaterial.state == "choose_material") {
-                        dryMaterial.state = "waiting_for_spool"
-                        dryMaterial.doChooseMaterial = false
-                    }
-                    else if(dryMaterial.state == "waiting_for_spool")
-                        dryMaterial.state = "dry_kit_instructions_2"
-                    else if(dryMaterial.state == "dry_kit_instructions_2")
-                        dryMaterial.state = "dry_kit_instructions_1"
-                    else
-                        dryMaterial.cancelDryingCyclePopup.open()
-                } else {
-                    dryMaterial.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-
-            DryMaterial {
-                id: dryMaterial
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
-            }
-        }
-
-        // AdvancedSettingsPage.CleanExtrudersPage
-        Item {
-            id: cleanExtrudersItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            id: namePrinterItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
-                if(bot.process.type == ProcessType.NozzleCleaningProcess) {
-                    cleanExtruders.cancelCleanExtrudersPopup.open()
-                } else {
-                    cleanExtruders.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
+                namePrinter.nameField.clear()
+                if(!inFreStep) {
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
                 }
             }
 
-            CleanExtruders {
-                id: cleanExtruders
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
+            function skipFreStepAction() {
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            NamePrinterPage {
+                id: namePrinter
             }
         }
 
-        // AdvancedSettingsPage.AnnealPrintPage
+        // SystemSettingsPage.TimePage
         Item {
-            id: annealPrintItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            id: timeItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
-            property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
             smooth: false
             visible: false
 
             function altBack() {
-                if(bot.process.type == ProcessType.AnnealPrintProcess) {
-                    bot.cancel()
-                    annealPrint.state = "cancelling"
-                } else {
-                    annealPrint.state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
+                if(!inFreStep) {
+                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
                 }
             }
 
-            AnnealPrint {
-                id: annealPrint
-                onProcessDone: {
-                    state = "base state"
-                    if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
-                    }
-                }
+            function skipFreStepAction() {
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            TimePage {
+                id: timePage
             }
         }
 
-        // AdvancedSettingsPage.TouchTestPage
+        // SystemSettingsPage.ChangeLanguagePage
+        Item {
+            id: changeLanguageItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            LanguageSelector {
+                id: languageSelectorPage
+            }
+        }
+
+        // SystemSettingsPage.SpoolInfoPage
+        Item {
+            id: spoolInfoItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            SpoolInfoPage {
+                id: spoolInfoPage
+            }
+        }
+
+        // SystemSettingsPage.ColorSwatchPage
+        Item {
+            id: colorSwatchItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            ColorSwatchPage {
+                id: colorSwatch
+            }
+        }
+
+        // SystemSettingsPage.TouchTestPage
         Item {
             id: touchTestItem
-            property var backSwiper: advancedSettingsSwipeView
-            property int backSwipeIndex: AdvancedSettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: false
 
              function altBack() {
                  touchTest.resetTouchTest()
-                 if(advancedSettingsSwipeView.currentIndex != AdvancedSettingsPage.BasePage) {
-                     advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+                 if(systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
+                     systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                  }
              }
 
@@ -560,6 +538,25 @@ Item {
                 id: touchTest
             }
         }
+
+        // SystemSettingsPage.KoreaDFSSecretPage
+        Item {
+            id: koreaDFSScreenItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            smooth: false
+            visible: false
+
+            KoreaDFSScreenForm {
+                id: koreaDFSScreen
+            }
+        }
+    }
+
+    Timer {
+        id: closeDeauthorizeAccountsPopupTimer
+        interval: 1500
+        onTriggered: deauthorizeAccountsPopup.close()
     }
 
     CustomPopup {
@@ -588,7 +585,7 @@ Item {
         property string popupState: "no_usb_detected"
         showOneButton: showButton
         full_button_text: {
-            if(popupState == "copy_logs_state") {
+            if (popupState == "copy_logs_state") {
                 qsTr("CANCEL")
             }
             else {
@@ -692,7 +689,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
                     PropertyChanges {
@@ -714,7 +711,7 @@ Item {
                     PropertyChanges {
                         target: columnLayout_copy_logs
                         height: 100
-                        anchors.topMargin: 120
+                        anchors.topMargin: 110
                     }
                 },
                 State {
@@ -785,7 +782,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
                     PropertyChanges {
@@ -842,7 +839,7 @@ Item {
         property string popupState: "no_usb_detected"
         showOneButton: showButton
         full_button_text: {
-            if(popupState == "copy_timelapse_images_state") {
+            if (popupState == "copy_timelapse_images_state") {
                 qsTr("CANCEL")
             }
             else {
@@ -921,18 +918,15 @@ Item {
                         target: timelapse_busy_spinner_img
                         visible: true
                     }
-
                     PropertyChanges {
                         target: timelapse_title
                         text: qsTr("COPYING TIMELAPSE IMAGES TO USB")
                     }
-
                     PropertyChanges {
                         target: timelapse_description
                         text: qsTr("%1").arg(bot.process.printPercentage) + "%"
                         visible: true
                     }
-
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images
                         height: 100
@@ -946,29 +940,26 @@ Item {
 
                     PropertyChanges {
                         target: timelapse_error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
                     PropertyChanges {
                         target: timelapse_busy_spinner_img
                         visible: false
                     }
-
                     PropertyChanges {
                         target: timelapse_title
                         text: qsTr("NO USB DETECTED")
                     }
-
                     PropertyChanges {
                         target: timelapse_description
                         text: qsTr("You need to insert a USB to use this feature.")
                         visible: true
                     }
-
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images
                         height: 100
-                        anchors.topMargin: 120
+                        anchors.topMargin: 110
                     }
                 },
                 State {
@@ -983,18 +974,15 @@ Item {
                         target: timelapse_busy_spinner_img
                         visible: true
                     }
-
                     PropertyChanges {
                         target: timelapse_title
                         text: qsTr("CANCELLING...")
                     }
-
                     PropertyChanges {
                         target: timelapse_description
                         text: qsTr("Do not remove USB.")
                         visible: true
                     }
-
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images
                         height: 100
@@ -1015,17 +1003,14 @@ Item {
                         target: timelapse_busy_spinner_img
                         visible: false
                     }
-
                     PropertyChanges {
                         target: timelapse_title
                         text: qsTr("COPY TIMELAPSE IMAGES TO USB - COMPLETE")
                     }
-
                     PropertyChanges {
                         target: timelapse_description
                         visible: false
                     }
-
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images
                         height: 100
@@ -1039,19 +1024,17 @@ Item {
 
                     PropertyChanges {
                         target: timelapse_error_image
-                        source: "qrc:/img/extruder_material_error.png"
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
                     PropertyChanges {
                         target: timelapse_busy_spinner_img
                         visible: false
                     }
-
                     PropertyChanges {
                         target: timelapse_title
-                        text: qsTr("COPY TIMELAPSE IMAGES TO USB - FAILED")
+                        text: qsTr("COPY LOGS TO USB - FAILED")
                     }
-
                     PropertyChanges {
                         target: timelapse_description
                         visible: true
@@ -1059,7 +1042,6 @@ Item {
                                     "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
                                     "CODE: %1").arg(copyingTimelapseImagesPopup.errorcode)
                     }
-
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images
                         height: 200

@@ -1,20 +1,61 @@
 ﻿import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import WifiStateEnum 1.0
 
-AdvancedSettingsPageForm {
+SystemSettingsPageForm {
+
+    buttonPrinterInfo.onClicked: {
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.PrinterInfoPage)
+    }
 
     buttonAdvancedInfo.onClicked: {
         bot.query_status()
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AdvancedInfoPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AdvancedInfoPage)
     }
 
-    buttonPreheat.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.PreheatPage)
+    buttonWiFi.onClicked: {
+        if((bot.net.wifiState == WifiState.Connected) ||
+            wifiPage.isWifiConnected) {
+            bot.scanWifi(false)
+        }
+        else if(bot.net.wifiState == WifiState.NotConnected ||
+                bot.net.wifiState == WifiState.NoWifiFound) {
+            bot.net.setWifiState(WifiState.Searching)
+            bot.scanWifi(true)
+        }
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.WifiPage)
     }
 
-    buttonAssistedLeveling.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AssistedLevelingPage)
+    buttonWiFi.onPressedChanged: {
+        if(buttonWiFi.pressed) {
+            koreaDFSModeTimer.start()
+        } else {
+            if(koreaDFSModeTimer.running) {
+                koreaDFSModeTimer.stop()
+            }
+        }
+    }
+
+    Timer {
+        id: koreaDFSModeTimer
+        interval: 10000
+        onTriggered: {
+            if(buttonWiFi.pressed) {
+                dfs.loadDFSSetting()
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.KoreaDFSSecretPage)
+                koreaDFSScreen.passwordField.forceActiveFocus()
+            }
+        }
+    }
+
+    buttonAuthorizeAccounts.onClicked: {
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AuthorizeAccountsPage)
+    }
+
+    buttonFirmwareUpdate.onClicked: {
+        bot.firmwareUpdateCheck(false)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
     }
 
     buttonCopyLogs.onClicked: {
@@ -62,45 +103,6 @@ AdvancedSettingsPageForm {
         }
     }
 
-    buttonResetToFactory.onClicked: {
-        resetToFactoryPopup.open()
-    }
-
-    buttonSpoolInfo.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.SpoolInfoPage)
-        // TODO(shirley): is there a better place to call this?
-        spoolInfoPage.init();
-    }
-
-    buttonColorSwatch.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ColorSwatchPage)
-    }
-
-    buttonRaiseLowerBuildPlate.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.RaiseLowerBuildPlatePage)
-    }
-
-    buttonAnalytics.onClicked: {
-        bot.getCloudServicesInfo()
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.ShareAnalyticsPage)
-    }
-
-    buttonDryMaterial.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.DryMaterialPage)
-    }
-
-    buttonCleanExtruders.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.CleanExtrudersPage)
-    }
-
-    buttonAnnealPrint.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AnnealPrintPage)
-    }
-
-    buttonTouchTest.onClicked: {
-        advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.TouchTestPage)
-    }
-
     buttonCopyTimelapseImages.onClicked: {
         if(storage.usbStorageConnected) {
             var now = new Date();
@@ -117,11 +119,10 @@ AdvancedSettingsPageForm {
 
         if (!copyingTimelapseImagesPopup.initialized) {
             bot.process.onStateTypeChanged.connect(function() {
-
                 if (bot.process.type === ProcessType.ZipLogsProcess) {
 
                     var zipTimelapseImagesInProgress =
-                             bot.process.stateType !== ProcessStateType.Done;
+                        bot.process.stateType !== ProcessStateType.Done;
 
                     var succeeded = !(bot.process.errorCode);
                     copyingTimelapseImagesPopup.errorcode = bot.process.errorCode;
@@ -144,5 +145,43 @@ AdvancedSettingsPageForm {
             copyingTimelapseImagesPopup.initialized = true;
             copyingTimelapseImagesPopup.open();
         }
+    }
+
+    buttonAnalytics.onClicked: {
+        bot.getCloudServicesInfo()
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ShareAnalyticsPage)
+    }
+
+    buttonChangePrinterName.onClicked: {
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
+        namePrinter.nameField.forceActiveFocus()
+    }
+
+    buttonTime.onClicked: {
+        bot.getSystemTime()
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.TimePage)
+    }
+
+    buttonChangeLanguage.onClicked: {
+        languageSelector.currentLocale = Qt.locale().name
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangeLanguagePage)
+    }
+
+    buttonSpoolInfo.onClicked: {
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SpoolInfoPage)
+        // TODO(shirley): is there a better place to call this?
+        spoolInfoPage.init();
+    }
+
+    buttonColorSwatch.onClicked: {
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ColorSwatchPage)
+    }
+
+    buttonTouchTest.onClicked: {
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.TouchTestPage)
+    }
+
+    buttonResetToFactory.onClicked: {
+        resetToFactoryPopup.open()
     }
 }

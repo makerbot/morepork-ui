@@ -118,7 +118,7 @@ Item {
             printPage.print_support_material
             break;
         default:
-            ""
+            emptyString
             break;
         }
     }
@@ -132,7 +132,7 @@ Item {
             printPage.print_support_material_name
             break;
         default:
-            ""
+            emptyString
             break;
         }
     }
@@ -177,11 +177,7 @@ Item {
         }
 
         MaterialStatus {
-            state: {
-                if(!extruderPresent) {
-                    "no_extruder_detected"
-                }
-            }
+
         }
 
         // Buttons

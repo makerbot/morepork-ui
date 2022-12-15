@@ -186,6 +186,8 @@ LoggingItem {
                 annealPartTemperatureListMethodX
             } else if(bot.machineType == MachineType.Magma) {
                 annealPartTemperatureListMethodX
+            } else {
+                []
             }
         }
 
@@ -248,6 +250,8 @@ LoggingItem {
 
                     } else if(bot.process.stateType == ProcessStateType.AnnealingPrint) {
                         qsTr("ANNEALING PRINT")
+                    } else {
+                        defaultString
                     }
                 }
                 anchors.topMargin: 60
@@ -261,11 +265,10 @@ LoggingItem {
             PropertyChanges {
                 target: time_remaining_text
                 visible: {
-                    if(bot.process.stateType == ProcessStateType.Loading) {
-                        false
-
-                    } else if(bot.process.stateType == ProcessStateType.AnnealingPrint) {
+                    if(bot.process.stateType == ProcessStateType.AnnealingPrint) {
                         true
+                    } else { // All other cases including ProcessStateType.Loading
+                        false
                     }
                 }
                 text: {
