@@ -142,7 +142,7 @@ class BotModel : public BaseModel {
                WRITE firmwareReleaseNotesListSet
                RESET firmwareReleaseNotesListReset
                NOTIFY firmwareReleaseNotesListChanged)
-    MODEL_PROP(ConnectionState, state, Connected)
+    MODEL_PROP(ConnectionState, state, Connecting)
     MODEL_PROP(QString, username, "Unknown")
     MODEL_PROP(QString, systemTime, "Unknown")
     MODEL_PROP(QString, timeZone, "Unknown")
