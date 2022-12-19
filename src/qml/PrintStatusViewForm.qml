@@ -294,7 +294,7 @@ Item {
                             qsTr("PRINT COMPLETE")
                             break;
                         default:
-                            ""
+                            emptyString
                             break;
                         }
                     }

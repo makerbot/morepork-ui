@@ -7,7 +7,7 @@ LoggingItem {
     itemName: "HeatShieldInstructions"
     property bool heatShieldWarningAcknowledged: false
     property bool extruderAttached: bot.extruderAPresent
-    property int lastAttachedExtruder: ExtruderType.None
+    property int lastAttachedExtruder: ExtruderType.NONE
     property bool lastExtruderValid: false
     property string timeRemaining
     property var endTime: new Date()

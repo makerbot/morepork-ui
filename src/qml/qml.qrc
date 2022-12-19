@@ -97,8 +97,8 @@
         <file>NamePrinterPageForm.qml</file>
         <file>FirmwareUpdateSuccessfulScreen.qml</file>
         <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
-        <file>AdvancedSettingsPage.qml</file>
-        <file>AdvancedSettingsPageForm.qml</file>
+        <file>SystemSettingsPage.qml</file>
+        <file>SystemSettingsPageForm.qml</file>
         <file>TimeSelector.qml</file>
         <file>TimeSelectorForm.qml</file>
         <file>SlidingSwitch.qml</file>
@@ -142,8 +142,6 @@
         <file>SnipMaterialScreenForm.qml</file>
         <file>LanguageSelector.qml</file>
         <file>LanguageSelectorForm.qml</file>
-        <file>LanguageButton.qml</file>
-        <file>LanguageButtonForm.qml</file>
         <file>StorageTypeButton.qml</file>
         <file>StorageTypeButtonForm.qml</file>
         <file>PopupMenu.qml</file>
@@ -257,5 +255,9 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
+        <file>ExtruderSettingsPageForm.qml</file>
+        <file>ExtruderSettingsPage.qml</file>
+        <file>BuildPlateSettingsPage.qml</file>
+        <file>BuildPlateSettingsPageForm.qml</file>
     </qresource>
 </RCC>

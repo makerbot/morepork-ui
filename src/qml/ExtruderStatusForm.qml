@@ -39,6 +39,9 @@ Item {
                             case ExtruderType.MK14_HOT_E:
                                 "qrc:/img/extruder_labs_ht.png"
                                 break;
+                            default:
+                                "qrc:/img/broken.png"
+                                break;
                         }
                         break;
                         case 2:
@@ -49,8 +52,13 @@ Item {
                             case ExtruderType.MK14_HOT:
                                 "qrc:/img/extruder_2xa.png"
                                 break;
+                            default:
+                                "qrc:/img/broken.png"
+                                break;
                         }
                         break;
+                        default:
+                            break;
                     }
                 } else {
                     "qrc:/img/extruder_material_error.png"

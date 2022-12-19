@@ -50,6 +50,9 @@ ListSelector {
                             case ExtruderType.MK14_HOT_E:
                                 "qrc:/img/extruder_labs_ht.png"
                                 break;
+                            default:
+                                "qrc:/img/broken.png"
+                                break;
                         }
                         break;
                         case 1:
@@ -60,8 +63,14 @@ ListSelector {
                             case ExtruderType.MK14_HOT:
                                 "qrc:/img/extruder_2xa.png"
                                 break;
+                            default:
+                                "qrc:/img/broken.png"
+                                break;
                         }
                         break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                     }
                 }
             }

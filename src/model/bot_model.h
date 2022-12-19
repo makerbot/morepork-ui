@@ -79,6 +79,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pause_touchlog();
     Q_INVOKABLE virtual void resume_touchlog();
     Q_INVOKABLE virtual void zipLogs(QString path);
+    Q_INVOKABLE virtual void zipTimelapseImages(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
     Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
@@ -187,6 +188,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
+    MODEL_PROP(int, hbpErrorCode, 0)
     MODEL_PROP(bool, hasFilamentBay, false)
     MODEL_PROP(QStringList, loadedMaterials, {"unknown", "unknown"})
     MODEL_PROP(QStringList, loadedMaterialNames, {"UNKNOWN", "UNKNOWN"})

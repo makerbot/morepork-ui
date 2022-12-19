@@ -28,7 +28,7 @@ Item {
                 // settings page item that holds this page as the current
                 // item since we want the back button to use the settings
                 // items' altBack()
-                setCurrentItem(settingsSwipeView.itemAt(SettingsPage.TimePage))
+                setCurrentItem(systemSettingsSwipeView.itemAt(SystemSettingsPage.TimePage))
                 return true
             }
         }
@@ -36,8 +36,8 @@ Item {
         // TimePage.SetDate
         Item {
             id: itemSetDate
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: true
 

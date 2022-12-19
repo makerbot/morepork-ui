@@ -107,7 +107,7 @@ Item {
             else if(!bot.extruderAPresent && bot.extruderBPresent) {
                 "qrc:/img/extruder_right.png"
             }
-            else if(!bot.extruderAPresent && !bot.extruderBPresent) {
+            else {
                 "qrc:/img/extruder_none.png"
             }
         }

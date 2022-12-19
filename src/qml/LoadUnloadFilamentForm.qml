@@ -21,9 +21,10 @@ LoggingItem {
     property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
-    property bool isExternalLoadUnload: false
-    property int lastHeatingTemperature: 0
+    property int retryTemperature: 0
+    property string retryMaterial: "None"
     property int bayID: 0
+    property bool isExpExtruder: bayID == 1 ? bay1.usingExperimentalExtruder : false
     property int currentActiveTool: bot.process.currentToolIndex + 1
     // Hold onto the current bay ID even after the process completes
     onCurrentActiveToolChanged: {
@@ -244,7 +245,7 @@ LoggingItem {
         id: snipMaterial
         z: 1
         anchors.verticalCenterOffset: -20
-        visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload && !bayFilamentSwitch
+        visible: !snipMaterialAlertAcknowledged && !isExpExtruder && !bayFilamentSwitch
     }
 
     ExpExtruderInstructionsScreen {
@@ -429,14 +430,14 @@ LoggingItem {
     states: [
         State {
             name: "feed_filament"
-            when: isMaterialValid && !isExternalLoadUnload && !bayFilamentSwitch &&
+            when: isMaterialValid && !isExpExtruder && !bayFilamentSwitch &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged
+                visible: !snipMaterialAlertAcknowledged && !isExpExtruder
             }
 
             PropertyChanges {
@@ -500,7 +501,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged && !isExternalLoadUnload
+                visible: !snipMaterialAlertAcknowledged && !isExpExtruder
             }
 
             PropertyChanges {
@@ -561,7 +562,7 @@ LoggingItem {
         },
         State {
             name: "preheating"
-            when: (extruderFilamentSwitch || isExternalLoadUnload) &&
+            when: (extruderFilamentSwitch || isExpExtruder) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
@@ -591,7 +592,7 @@ LoggingItem {
                     !extruderFilamentSwitch &&
                     (bot.process.type == ProcessType.Print ||
                      bot.process.type == ProcessType.Load) &&
-                    isExternalLoadUnload &&
+                    isExpExtruder &&
                     targetTemperature > 0 &&
                     ((currentTemperature + 30) >= targetTemperature)
                 }
@@ -657,6 +658,9 @@ LoggingItem {
                         case ExtruderType.MK14_HOT_E:
                             "qrc:/img/extruder_labs_1_ht_heating.png"
                             break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                         }
                     } else if(bayID == 2) {
                         switch(bot.extruderBType) {
@@ -666,7 +670,12 @@ LoggingItem {
                         case ExtruderType.MK14_HOT:
                             "qrc:/img/extruder_2XA_heating.png"
                             break;
+                        default:
+                            "qrc:/img/broken.png"
+                            break;
                         }
+                    } else {
+                        "qrc:/img/broken.png"
                     }
                 }
             }
@@ -1113,6 +1122,9 @@ LoggingItem {
                           break;
                       case ProcessType.Unload:
                           qsTr("FILAMENT UNLOADING FAILED")
+                          break;
+                      default:
+                          defaultString
                           break;
                     }
                 }

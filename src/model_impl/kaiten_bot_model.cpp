@@ -82,6 +82,7 @@ class KaitenBotModel : public BotModel {
     void resume_touchlog();
     void zipLogs(QString path);
     void forceSyncFile(QString path);
+    void zipTimelapseImages(QString path);
     void changeMachineName(QString new_name);
     void acknowledgeMaterial(bool response);
     void acknowledgeSafeToRemoveUsb();
@@ -1066,6 +1067,22 @@ void KaitenBotModel::zipLogs(QString path) {
   }
 }
 
+void KaitenBotModel::zipTimelapseImages(QString path) {
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["zip_path"] = Json::Value(path.toStdString());
+      conn->jsonrpc.invoke(
+              "zip_timelapseimages",
+              json_params,
+              std::weak_ptr<JsonRpcCallback>());
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
+
 void KaitenBotModel::changeMachineName(QString new_name) {
     try{
         qDebug() << FL_STRM << "called";
@@ -1750,6 +1767,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           if(kHeatedBuildPlateA.isObject()){
             UPDATE_FLOAT_PROP(hbpCurrentTemp, kHeatedBuildPlateA["current_temperature"])
             UPDATE_INT_PROP(hbpTargetTemp, kHeatedBuildPlateA["target_temperature"])
+            UPDATE_INT_PROP(hbpErrorCode, kHeatedBuildPlateA["error"])
           }
         }
       }
@@ -1841,6 +1859,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                   materialsDisplay.append("UNKNOWN");
               } else if (mat.isString()) {
                   QString matAPI(mat.asString().c_str());
+                  if (matAPI == "generic") matAPI = "unknown";
                   materialsAPI.append(matAPI);
                   materialsDisplay.append(getMaterialName(matAPI));
               }
@@ -1995,8 +2014,16 @@ void KaitenBotModel::queryStatusUpdate(const Json::Value &info) {
 
         const Json::Value &kDragon = info["dragon_status"];
         if(kDragon.isObject()){
-            UPDATE_STRING_PROP(infoHeatSysStateStr, kDragon["mcu_state_str"]);
-            UPDATE_STRING_PROP(infoHeatSysErrorStr, kDragon["mcu_error_str"]);
+            Json::Value infoStr = kDragon["mcu_state_str"];
+            if(infoStr.asString().empty()) {
+                infoStr = "NONE";
+            }
+            UPDATE_STRING_PROP(infoHeatSysStateStr, infoStr);
+            infoStr = kDragon["mcu_error_str"];
+            if(infoStr.asString().empty()) {
+                infoStr = "NONE";
+            }
+            UPDATE_STRING_PROP(infoHeatSysErrorStr, infoStr);
         }
 
         const Json::Value &kFilamentBay = info["filamentbay_status"];

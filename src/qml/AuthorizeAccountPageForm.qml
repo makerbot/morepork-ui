@@ -8,6 +8,7 @@ Item {
 
     property alias buttonAuthorizeWithCode: buttonAuthorizeWithCode
     property alias buttonLoginToMakerbotAccount: buttonLoginToMakerbotAccount
+    property alias buttonDeauthorizeAccounts: buttonDeauthorizeAccounts
 
     property alias authorizeAccountWithCodePage: authorizeAccountWithCodePage
 
@@ -36,7 +37,7 @@ Item {
                 // settings page item that holds this page as the current
                 // item since we want the back button to use the settings
                 // items' altBack()
-                setCurrentItem(settingsSwipeView.itemAt(SettingsPage.AuthorizeAccountsPage))
+                setCurrentItem(systemSettingsSwipeView.itemAt(SystemSettingsPage.AuthorizeAccountsPage))
                 return true
             }
         }
@@ -45,8 +46,8 @@ Item {
         Item {
             id: itemSelectAuthorizeMethod
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: true
 
@@ -76,6 +77,12 @@ Item {
                         id: buttonLoginToMakerbotAccount
                         buttonImage.source: "qrc:/img/icon_authorize_account.png"
                         buttonText.text: qsTr("LOG IN TO MAKERBOT ACCOUNT")
+                    }
+
+                    MenuButton {
+                        id: buttonDeauthorizeAccounts
+                        buttonImage.source: "qrc:/img/icon_deauthorize_accounts.png"
+                        buttonText.text: qsTr("DEAUTHORIZE ALL ACCOUNTS")
                     }
                 }
             }
@@ -120,97 +127,117 @@ Item {
     // This popup is common for both methods of signing into
     // the printer.
     CustomPopup {
-        popupName: "AuthorizeAccount"
+        popupName: "AccountsAuthorization"
         id: authorizeAccountPopup
         popupWidth: 720
         popupHeight: 305
 
         // popups dont have native states support yet
-        property var state
+        property var state: emptyString
 
         showOneButton: state == "no_account" ||
                        state == "reset_password" ||
                        state == "authorization_failed" ||
                        state == "failed_to_get_otp"
+
+        showTwoButtons: state == "deauthorize_accounts" ||
+                        state == "no_network_connection"
+
         full_button_text: {
-            if(state == "no_account") {
-                qsTr("DONE")
-            } else if(state == "reset_password") {
+            if(state == "no_account" ||
+                    state == "reset_password" ||
+                    state == "failed_to_get_otp") {
                 qsTr("DONE")
             } else if(state == "authorization_failed") {
                 qsTr("TRY AGAIN")
-            } else if(state == "failed_to_get_otp") {
-                qsTr("DONE")
+            } else {
+                defaultString
             }
         }
 
         full_button.onClicked: {
-            if(state == "no_account") {
-                authorizeAccountPopup.close()
-            } else if(state == "reset_password") {
-                authorizeAccountPopup.close()
-            } else if(state == "authorization_failed") {
+            if(state == "no_account" ||
+                    state == "reset_password" ||
+                    state == "authorization_failed") {
                 authorizeAccountPopup.close()
             } else if(state == "failed_to_get_otp") {
                 backToSelectAuthMethod()
             }
         }
 
-        RowLayout {
-            id: contents
-            width: 600
-            height: 300
+        left_button_text: {
+            if(state == "deauthorize_accounts") {
+                qsTr("BACK")
+            } else if(state == "no_network_connection") {
+                qsTr("CLOSE")
+            } else {
+                defaultString
+            }
+        }
+
+        left_button.onClicked: {
+            if(state == "deauthorize_accounts") {
+                authorizeAccountPopup.close()
+            } else if(state == "no_network_connection") {
+                authorizeAccountPopup.close()
+            }
+        }
+
+        right_button_text: {
+            if(state == "deauthorize_accounts") {
+                qsTr("CONFIRM")
+            } else if(state == "no_network_connection") {
+                qsTr("GO TO SETTINGS")
+            } else {
+                defaultString
+            }
+        }
+
+        right_button.onClicked: {
+            if(state == "deauthorize_accounts") {
+                bot.deauthorizeAllAccounts()
+            } else if(state == "no_network_connection") {
+                authorizeAccountPopup.close()
+                backToSettings()
+            }
+        }
+
+        ColumnLayout {
+            height: children.height
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             anchors.verticalCenter: authorizeAccountPopup.popupContainer.verticalCenter
             anchors.verticalCenterOffset: -30
             anchors.horizontalCenter: authorizeAccountPopup.popupContainer.horizontalCenter
             state: authorizeAccountPopup.state
-            spacing: 20
+            spacing: 15
 
             Image {
-                id: authCompleteImage
-                Layout.alignment: Qt.AlignVCenter
+                id: statusImage
+                Layout.alignment: Qt.AlignHCenter
                 width: sourceSize.width
                 height: sourceSize.height
-                source: "qrc:/img/account_auth_complete.png"
+                source: "qrc:/img/process_complete_small.png"
             }
 
-            ColumnLayout {
-                id: textContainer
-                height: children.height
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                spacing: 15
-                Text {
-                    id: titleText
-                    color: "#cbcbcb"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 22
-                    lineHeight: 1.3
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
+            BusySpinner {
+                id: waitingSpinner
+                Layout.alignment: Qt.AlignHCenter
+                spinnerSize: 64
+            }
 
-                BusySpinner {
-                    id: waitingSpinner
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
-                    spinnerSize: 64
-                }
+            TextHeadline {
+                id: titleText
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
 
-                Text {
-                    id: subtitleText
-                    color: "#cbcbcb"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.weight: Font.Light
-                    font.family: defaultFont.name
-                    font.pixelSize: 18
-                    font.letterSpacing: 1
-                    lineHeight: 1.3
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-                }
+            TextBody {
+                id: subtitleText
+                style: TextBody.Large
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
 
             states: [
@@ -219,6 +246,7 @@ Item {
                     PropertyChanges {
                         target: titleText
                         text: qsTr("PLEASE VISIT MAKERBOT.COM TO<br>CREATE AN ACCOUNT")
+                        visible: true
                     }
 
                     PropertyChanges {
@@ -232,7 +260,7 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
+                        target: statusImage
                         visible: false
                     }
                 },
@@ -241,6 +269,7 @@ Item {
                     PropertyChanges {
                         target: titleText
                         text: qsTr("PLEASE VISIT MAKERBOT.COM TO<br>RESET YOUR PASSWORD")
+                        visible: true
                     }
 
                     PropertyChanges {
@@ -254,7 +283,7 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
+                        target: statusImage
                         visible: false
                     }
                 },
@@ -263,6 +292,7 @@ Item {
                     PropertyChanges {
                         target: titleText
                         text: qsTr("AUTHORIZING ACCOUNT")
+                        visible: true
                     }
 
                     PropertyChanges {
@@ -276,13 +306,8 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
+                        target: statusImage
                         visible: false
-                    }
-
-                    PropertyChanges {
-                        target: contents
-                        anchors.verticalCenterOffset: 0
                     }
                 },
                 State {
@@ -290,6 +315,7 @@ Item {
                     PropertyChanges {
                         target: titleText
                         text: qsTr("AUTHENTICATION ERROR")
+                        visible: true
                     }
 
                     PropertyChanges {
@@ -304,25 +330,23 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
-                        visible: false
+                        target: statusImage
+                        visible: true
+                        source: "qrc:/img/process_error_small.png"
                     }
                 },
                 State {
                     name: "authorization_successful"
                     PropertyChanges {
                         target: titleText
-                        text: qsTr("AUTHENTICATION\nCOMPLETE")
-                        horizontalAlignment: Text.AlignLeft
-                        Layout.alignment: Qt.AlignLeft
+                        text: qsTr("AUTHORIZATION COMPLETE")
+                        visible: true
                     }
 
                     PropertyChanges {
                         target: subtitleText
-                        text: qsTr("<b>%1</b><br>is now authenticated to this printer.").arg(username)
+                        text: qsTr("<b>%1</b> is now authorized to this printer.").arg(username)
                         visible: true
-                        horizontalAlignment: Text.AlignLeft
-                        Layout.alignment: Qt.AlignLeft
                     }
 
                     PropertyChanges {
@@ -331,13 +355,9 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
+                        target: statusImage
                         visible: true
-                    }
-
-                    PropertyChanges {
-                        target: contents
-                        anchors.verticalCenterOffset: 0
+                        source: "qrc:/img/process_complete_small.png"
                     }
                 },
                 State {
@@ -345,6 +365,7 @@ Item {
                     PropertyChanges {
                         target: titleText
                         text: qsTr("CONNECTING")
+                        visible: true
                     }
 
                     PropertyChanges {
@@ -358,13 +379,8 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
+                        target: statusImage
                         visible: false
-                    }
-
-                    PropertyChanges {
-                        target: contents
-                        anchors.verticalCenterOffset: 0
                     }
                 },
                 State {
@@ -372,6 +388,7 @@ Item {
                     PropertyChanges {
                         target: titleText
                         text: qsTr("FAILED TO GET CODE")
+                        visible: true
                     }
 
                     PropertyChanges {
@@ -386,8 +403,61 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: authCompleteImage
-                        visible: false
+                        target: statusImage
+                        visible: true
+                        source: "qrc:/img/process_error_small.png"
+                    }
+                },
+                State {
+                    name: "deauthorize_accounts"
+                    PropertyChanges {
+                        target: titleText
+                        text: qsTr("DEAUTHORIZE ALL ACCOUNTS?")
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: subtitleText
+                        text: qsTr("You will have to reauthorize any account you wish to connect to<br>" +
+                                   "this printer in the future.")
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: false
+                    }
+
+                    PropertyChanges {
+                        target: statusImage
+                        visible: true
+                        source: "qrc:/img/process_error_small.png"
+                    }
+                },
+                State {
+                    name: "no_network_connection"
+                    PropertyChanges {
+                        target: titleText
+                        visible: true
+                        text: qsTr("CONNECT TO NETWORK")
+                    }
+
+                    PropertyChanges {
+                        target: subtitleText
+                        visible: true
+                        text: qsTr("You need to connect to a network to use this feature<br>" +
+                                   "<b>Settings > System Settings > Wifi and Network</b>")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: false
+                    }
+
+                    PropertyChanges {
+                        target: statusImage
+                        visible: true
+                        source: "qrc:/img/process_error_small.png"
                     }
                 }
             ]

@@ -86,7 +86,7 @@ Button {
             else if(signalStrength > 33) {
                 "qrc:/img/wifi_low.png"
             }
-            else if(signalStrength <= 33) {
+            else {
                 "qrc:/img/wifi_poor.png"
             }
         }

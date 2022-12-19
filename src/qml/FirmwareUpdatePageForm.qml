@@ -21,8 +21,8 @@ LoggingItem {
             if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
             }
-            if(settingsSwipeView.currentIndex != SettingsPage.FirmwareUpdatePage) {
-                settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
+            if(systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
             }
         }
     }
@@ -390,7 +390,7 @@ LoggingItem {
                 target: image
                 width: sourceSize.width
                 height: sourceSize.height
-                source: "qrc:/img/usb_1.png"
+                source: "qrc:/img/icon_usb.png"
 
                 visible: true
             }

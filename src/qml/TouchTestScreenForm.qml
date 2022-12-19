@@ -151,7 +151,7 @@ Item {
            buttonHeight: 70
            forceButtonWidth: true
            button_mouseArea.onClicked: {
-               advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.BasePage)
+               systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                resetTouchTest()
            }
            anchors.horizontalCenter: parent.horizontalCenter

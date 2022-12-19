@@ -45,6 +45,60 @@ LoggingPopup {
         NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
     }
 
+    // Added for when we need to use Popup.CloseOnPressOutside
+    // Top Outside
+    MouseArea {
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: popupContainer.top
+
+        onClicked: {
+            if(closePolicy == Popup.CloseOnPressOutside) {
+                popup.close()
+            }
+        }
+    }
+    // Right Outside
+    MouseArea {
+        anchors.top: parent.top
+        anchors.left: popupContainer.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
+        onClicked: {
+            if(closePolicy == Popup.CloseOnPressOutside) {
+                popup.close()
+            }
+        }
+    }
+    // Left Outside
+    MouseArea {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: popupContainer.left
+        anchors.bottom: parent.bottom
+
+        onClicked: {
+            if(closePolicy == Popup.CloseOnPressOutside) {
+                popup.close()
+            }
+        }
+    }
+    // Bottom Outside
+    MouseArea {
+        anchors.top: popupContainer.bottom
+        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+
+        onClicked: {
+            if(closePolicy == Popup.CloseOnPressOutside) {
+                popup.close()
+            }
+        }
+    }
+
     Rectangle {
         id: popupContainer
         color: "#000000"

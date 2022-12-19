@@ -14,7 +14,7 @@ Image {
         } else if(startPrintSource == PrintPage.FromLocal) {
             "image://thumbnail/" + fileName
         } else {
-            ""
+            emptyString
         }
     }
 

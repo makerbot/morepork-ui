@@ -43,9 +43,11 @@ Item {
                             filamentMaterialName.toUpperCase()
                         }
                         // Printers without Filament Bay (Method XL) or ones using a labs extruder
-                        else if((!bot.hasFilamentBay || isUsingExpExtruder(filamentBayID)) &&
+                        else if((!bot.hasFilamentBay || usingExperimentalExtruder) &&
                                   (bot.loadedMaterials[filamentBayID - 1] != "unknown")) {
                             bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
+                        } else if(usingExperimentalExtruder && extruderFilamentPresent) {
+                            qsTr("LABS MATERIAL\nLOADED")
                         } else {
                             qsTr("NOT DETECTED")
                         }
@@ -74,26 +76,16 @@ Item {
                     font.weight: Font.Thin
                     Layout.preferredWidth: parent.width
                     wrapMode: Text.WordWrap
-                    text: {
-                        if(spoolPresent) {
-                            filamentColorName.toUpperCase()
-                        } else if(extruderFilamentPresent) {
-                            usingExperimentalExtruder ?
-                                 qsTr("LABS MATERIAL LOADED") :
-                                 qsTr("UNKNOWN MATERIAL")
-                        } else {
-                            ""
-                        }
-                    }
+                    visible: spoolPresent
+                    text: filamentColorName.toUpperCase()
                 }
 
                 TextBody {
                     id: materialAmount
                     style: TextBody.Base
                     font.weight: Font.Thin
-                    text: spoolPresent ?
-                            qsTr("%1KG REMAINING").arg(filamentQuantity) :
-                              ""
+                    visible: spoolPresent
+                    text: qsTr("%1KG REMAINING").arg(filamentQuantity)
                 }
             }
         }

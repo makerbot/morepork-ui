@@ -2,12 +2,28 @@ import QtQuick 2.10
 
 AuthorizeAccountPageForm {
     buttonAuthorizeWithCode.onClicked: {
+        if(!isNetworkConnectionAvailable) {
+            showNoNetworkConnectionPopup()
+            return
+        }
         authorizeAccountWithCodePage.beginAuthWithCode()
         authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCode)
     }
 
     buttonLoginToMakerbotAccount.onClicked: {
+        if(!isNetworkConnectionAvailable) {
+            showNoNetworkConnectionPopup()
+            return
+        }
         authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCredentials)
+    }
+
+    buttonDeauthorizeAccounts.onClicked: {
+        if(!isNetworkConnectionAvailable) {
+            showNoNetworkConnectionPopup()
+            return
+        }
+        showDeauthorizePopup()
     }
 
     function backToSelectAuthMethod() {
@@ -25,7 +41,7 @@ AuthorizeAccountPageForm {
         authorizeAccountWithCodePage.checkAuthTimer.stop()
         authorizeAccountWithCodePage.expireOTPTimer.stop()
         authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
-        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
     }
 
     function closePopup() {
@@ -66,6 +82,16 @@ AuthorizeAccountPageForm {
         authorizeAccountPopup.state = "authorization_successful"
         authorizeAccountPopup.open()
         closeAuthCompletePopupTimer.start()
+    }
+
+    function showDeauthorizePopup() {
+        authorizeAccountPopup.state = "deauthorize_accounts"
+        authorizeAccountPopup.open()
+    }
+
+    function showNoNetworkConnectionPopup() {
+        authorizeAccountPopup.state = "no_network_connection"
+        authorizeAccountPopup.open()
     }
 
     Timer {
