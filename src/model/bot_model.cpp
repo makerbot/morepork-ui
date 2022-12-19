@@ -179,6 +179,10 @@ void BotModel::zipLogs(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
 
+void BotModel::zipTimelapseImages(QString path) {
+    qDebug() << FL_STRM << "called with parameter: " << path;
+}
+
 void BotModel::forceSyncFile(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }

@@ -1,5 +1,6 @@
 {
     "allow_internal_storage": false,
+    "capture_timelapse_images": false,
     "date_time_text_enabled: false,
     "language_code": "en_GB",
     "skip_filament_nags": false,
