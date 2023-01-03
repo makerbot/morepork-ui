@@ -43,25 +43,17 @@ Item {
 
     function formatText(count, modelData) {
         var data = 0
-        if (count == 12) {
-            // Month
+        // Month & Date tumbler
+        if (count == 12 || count == 31 || count == 30 || count == 29 || count == 28) {
             data = modelData + 1
             if (data.toString().length < 2) {
                 data = "0" + data
             }
-            return data
-        } else if(count == 31 || count == 30 || count == 28 || count == 29) {
-            // Date
-            data = modelData + 1
-            if (data.toString().length < 2) {
-                data = "0" + data
-            }
-            return data
-        } else if(count == 100) {
+        } else if(count == 50) {
             // Year
             data = modelData + 2000
-            return data
         }
+        return data
     }
 
     function setTime() {
@@ -76,16 +68,28 @@ Item {
 
     Component {
         id: delegateComponent
-
         Text {
             text: formatText(Tumbler.tumbler.count, modelData)
-            opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 100
+            // The following check currently spams the log with type errors when the
+            // month tumbler is changed which affects the model of the date tumbler
+            // where it seems to intermediately not hold a valid data type and I
+            // couldn't find a way to prevent it.
+            font.pixelSize: Tumbler.tumbler.currentItem.text == text ? 100 : 64
             font.weight: Font.Light
             font.family: defaultFont.name
-            color: "#ffffff"
+            // The following check currently spams the log with type errors when the
+            // month tumbler is changed which affects the model of the date tumbler
+            // where it seems to intermediately not hold a valid data type and I
+            // couldn't find a way to prevent it.
+            color: Tumbler.tumbler.currentItem.text == text ? "#ffffff" : "#B2B2B2"
+
+            Behavior on font.pixelSize {
+                NumberAnimation {
+                    duration: 50
+                }
+            }
         }
     }
 
@@ -96,133 +100,63 @@ Item {
         anchors.bottom: parent.bottom
         anchors.top: parent.top
 
-        Tumbler {
+        VerticalTumbler {
             id: monthTumbler
             anchors.verticalCenter: parent.verticalCenter
-            width: 120
+            width: 130
             height: parent.height
             visibleItemCount: 3
             model: 12
             delegate: delegateComponent
-
-            Rectangle {
-                id: topLineMonth
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-            }
-
-
-            Rectangle {
-                id: bottomLineMonth
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 50
-
-                TextSubheader {
-                    text: qsTr("MONTH")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 10
-                }
-            }
+            tumblerName: qsTr("MONTH")
         }
 
-        Tumbler {
+        VerticalTumbler {
             id: dateTumbler
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: monthTumbler.right
             anchors.leftMargin: 24
-            width: 120
+            width: 130
             height: parent.height
             visibleItemCount: 3
+
             model: {
-                if (monthTumbler.currentItem.text == 2) {
-                    if (parseInt(yearTumbler.currentItem.text, 10) % 4 == 0) {
-                        29
+                if(!monthTumbler.moving) {
+                    if(monthTumbler.currentItem.text == 2) {
+                        if (parseInt(yearTumbler.currentItem.text, 10) % 4 == 0) {
+                            29
+                        } else {
+                            28
+                        }
+                    } else if(monthTumbler.currentItem.text == 1 ||
+                              monthTumbler.currentItem.text == 3 ||
+                              monthTumbler.currentItem.text == 5 ||
+                              monthTumbler.currentItem.text == 7 ||
+                              monthTumbler.currentItem.text == 8 ||
+                              monthTumbler.currentItem.text == 10 ||
+                              monthTumbler.currentItem.text == 12 ) {
+                        31
                     } else {
-                        28
+                        30
                     }
-                } else if(monthTumbler.currentItem.text == 1 ||
-                          monthTumbler.currentItem.text == 3 ||
-                          monthTumbler.currentItem.text == 5 ||
-                          monthTumbler.currentItem.text == 7 ||
-                          monthTumbler.currentItem.text == 8 ||
-                          monthTumbler.currentItem.text == 10 ||
-                          monthTumbler.currentItem.text == 12 ) {
-                    31
                 } else {
-                    30
+                    model
                 }
             }
-
             delegate: delegateComponent
-
-
-            Rectangle {
-                id: topLineDate
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-            }
-
-            Rectangle {
-                id: bottomLineDate
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 50
-
-                TextSubheader {
-                    text: qsTr("DAY")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 10
-                }
-            }
+            tumblerName: qsTr("DAY")
         }
 
-        Tumbler {
+        VerticalTumbler {
             id: yearTumbler
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: dateTumbler.right
             anchors.leftMargin: 24
-            width: 300
+            width: 265
             height: parent.height*1.65
-            model: 100
+            model: 50
             delegate: delegateComponent
-
-            Rectangle {
-                id: topLineYear
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-            }
-
-            Rectangle {
-                id: bottomLineYear
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 50
-
-                TextSubheader {
-                    text: qsTr("YEAR")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 10
-                }
-            }
+            tumblerName: qsTr("YEAR")
         }
     }
 
@@ -237,8 +171,6 @@ Item {
         onClicked: {
             setTime()
             timeSwipeView.swipeToItem(TimePage.BasePage)
-            console.log(parent.width)
-            console.log(parent.height)
         }
         enabled: {
             !monthTumbler.moving && !dateTumbler.moving && !yearTumbler.moving

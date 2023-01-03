@@ -253,5 +253,6 @@
         <file>AdvancedInfoDragonItemForm.qml</file>
         <file>TimeSettingsButton.qml</file>
         <file>TimeSettings.qml</file>
+        <file>VerticalTumbler.qml</file>
     </qresource>
 </RCC>

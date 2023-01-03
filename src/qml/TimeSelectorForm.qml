@@ -77,16 +77,27 @@ Item {
 
     Component {
         id: delegateComponent
-
         Text {
             text: formatText(Tumbler.tumbler.count, modelData)
-            opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: Tumbler.tumbler.count > 2 ? 100 : 60
+            font.pixelSize: {
+                if(Tumbler.tumbler.currentItem.text === text &&
+                   Tumbler.tumbler.count > 2) {
+                    100
+                } else {
+                    64
+                }
+            }
             font.weight: Font.Light
             font.family: defaultFont.name
-            color: "#ffffff"
+            color: Tumbler.tumbler.currentItem.text === text ? "#ffffff" : "#B2B2B2"
+
+            Behavior on font.pixelSize {
+                NumberAnimation {
+                    duration: 50
+                }
+            }
         }
     }
 
@@ -97,32 +108,14 @@ Item {
         anchors.bottom: parent.bottom
         anchors.top: parent.top
 
-        Tumbler {
+        VerticalTumbler {
             id: hoursTumbler
-            width: 128
+            width: 140
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
             model: 12
             delegate: delegateComponent
-
-            Rectangle {
-                id: toplineHours
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-            }
-
-            Rectangle {
-                id: bottomLineHours
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 50
-            }
         }
 
         Text {
@@ -138,9 +131,9 @@ Item {
             font.pixelSize: 100
         }
 
-        Tumbler {
+        VerticalTumbler {
             id: minutesTumbler
-            width: 128
+            width: 140
             height: parent.height
             anchors.left: timeSeparator.right
             anchors.leftMargin: 40
@@ -148,27 +141,9 @@ Item {
             visibleItemCount: 3
             model: 60
             delegate: delegateComponent
-
-            Rectangle {
-                id: toplineMinutes
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-            }
-
-            Rectangle {
-                id: bottomLineMinutes
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 50
-            }
         }
 
-        Tumbler {
+        VerticalTumbler {
             id: meridianTumbler
             width: 120
             height: parent.height*1.6
@@ -177,24 +152,6 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             model: ["AM", "PM"]
             delegate: delegateComponent
-
-            Rectangle {
-                id: topLineMeridian
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -65
-            }
-
-            Rectangle {
-                id: bottomLineMeridian
-                width: parent.width
-                height: 1
-                color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 50
-            }
         }
     }
 
