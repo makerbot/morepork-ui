@@ -287,7 +287,6 @@ Item {
                             break;
                         case MoreporkUI.SettingsPage:
                             switch(settingsPage.settingsSwipeView.currentIndex) {
-
                             case SettingsPage.SystemSettingsPage:
                                 switch(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex) {
                                 case SystemSettingsPage.PrinterInfoPage:
@@ -297,7 +296,18 @@ Item {
                                     qsTr("%1 SENSOR INFO").arg(bot.name)
                                     break;
                                 case SystemSettingsPage.WifiPage:
-                                    qsTr("CHOOSE WIFI NETWORK")
+                                    switch(settingsPage.wifiPage.wifiSwipeView.currentIndex) {
+                                    case WiFiPage.EnterPassword:
+                                       var wifiNameRefactor = (qsTr("%1").arg(settingsPage.wifiPage.selectedWifiName))
+                                       if(wifiNameRefactor.length > 8) {
+                                            wifiNameRefactor= wifiNameRefactor.substr(0,8) + "..."
+                                        }
+                                        qsTr("%1 - ENTER PASSWORD").arg(wifiNameRefactor)
+                                        break;
+                                    default:
+                                        qsTr("WIFI AND NETWORK")
+                                        break;
+                                    }
                                     break;
                                 case SystemSettingsPage.AuthorizeAccountsPage:
                                     qsTr("AUTHORIZE MAKERBOT ACCOUNT")

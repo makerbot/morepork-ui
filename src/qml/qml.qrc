@@ -61,8 +61,6 @@
         <file>MenuButton.qml</file>
         <file>MenuButtonForm.qml</file>
         <file>WiFiPageForm.qml</file>
-        <file>WiFiButton.qml</file>
-        <file>WiFiButtonForm.qml</file>
         <file>WiFiPage.qml</file>
         <file>SignInPage.qml</file>
         <file>SignInPageForm.qml</file>
@@ -255,6 +253,8 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
+        <file>WiFiButton.qml</file>
+        <file>WiFiButtonForm.qml</file>
         <file>ExtruderSettingsPageForm.qml</file>
         <file>ExtruderSettingsPage.qml</file>
         <file>BuildPlateSettingsPage.qml</file>

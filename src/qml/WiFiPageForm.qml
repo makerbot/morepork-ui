@@ -1,4 +1,4 @@
-import QtQuick 2.10
+﻿import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import WifiStateEnum 1.0
@@ -6,12 +6,12 @@ import WifiErrorEnum 1.0
 import FreStepEnum 1.0
 
 Item {
+    id: wifiPage
     width: 800
     height: 440
     smooth: false
     antialiasing: false
     property alias wifiSwipeView: wifiSwipeView
-
     property int wifiError: bot.net.wifiError
     property bool isWifiConnected: bot.net.interface == "wifi"
     property string currentWifiName: bot.net.name
@@ -20,29 +20,16 @@ Item {
     property bool selectedWifiSaved: false
     property bool isForgetEnabled: false
 
-    RefreshButton {
-        visible: (wifiSwipeView.currentIndex === WiFiPage.ChooseWifi)
-        enabled: (bot.net.wifiState !== WifiState.Searching);
-
-        button_mouseArea.onClicked: {
-            bot.scanWifi(true)
-            bot.net.setWifiState(WifiState.Searching)
-        }
-
-        busy: bot.net.wifiState === WifiState.Searching
-    }
-
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
             bot.net.setWifiState(WifiState.Connected)
-            if(wifiPopup.opened){
-                wifiPopup.close()
-            }
+
             if(wifiSwipeView.currentIndex != WiFiPage.ChooseWifi) {
                 wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
             }
             bot.scanWifi(true)
             passwordField.clear()
+
             if(inFreStep && currentFreStep == FreStep.SetupWifi) {
                 wifiFreStepComplete.start()
                 bot.firmwareUpdateCheck(false)
@@ -110,38 +97,84 @@ Item {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
-            // When the bot is not connected to wifi and the user
-            // performs a wifi scan. In this case a deep scan happens
-            // and it takes sometime to return the results. Once the
-            // results are returned the bot goes into one of
-            // 'Not Connected' or 'NoWifiFound' states.
-            Text {
-                color: "#ffffff"
-                font.family: defaultFont.name
-                font.weight: Font.Light
-                text: {
-                    if(!bot.net.wifiEnabled) {
-                        qsTr("Turn on WiFi and try again.")
-                    } else if ((wifiList.count == 0) && (bot.net.wifiState == WifiState.Searching)) {
-                        qsTr("Searching...")
-                    } else if (bot.net.wifiState == WifiState.NoWifiFound) {
-                        qsTr("No wireless networks found.")
-                    } else if (bot.net.wifiState == WifiState.NotConnected &&
-                            bot.net.wifiError != WifiError.NoError) {
-                        qsTr("Search for wireless networks failed.")
-                    } else {
-                        emptyString
+            ColumnLayout {
+                id: ethernetInfoId
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                spacing: 15
+
+                Image {
+                    id: ethernet_image
+                    Layout.preferredWidth: 30
+                    Layout.preferredHeight: 30
+                    Layout.alignment: Qt.AlignHCenter
+                    source: {
+                        if(bot.net.interface == "ethernet") {
+                            "qrc:/img/process_complete_small.png"
+                        } else {
+                            "qrc:/img/ethernet_connected.png"
+                        }
                     }
                 }
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -20
-                anchors.horizontalCenter: parent.horizontalCenter
-                font.pointSize: 20
-                visible: (wifiList.count == 0 && bot.net.wifiState == WifiState.Searching) ||
-                         bot.net.wifiState == WifiState.NoWifiFound ||
-                         (bot.net.wifiState == WifiState.NotConnected &&
-                                (bot.net.wifiError == WifiError.ScanFailed ||
-                                 bot.net.wifiError == WifiError.UnknownError))
+                TextBody {
+                    font.pixelSize: 13
+                    font.weight: Font.Bold
+                    Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.WordWrap
+
+                    Layout.preferredWidth: 400
+                    text: {
+                        if(bot.net.interface == "ethernet") {
+                            "You’re connected to the internet through the ethernet port."
+                        } else {
+                            "Plug an ethernet cable into the rear of the machine to use a wired connection."
+                        }
+                    }
+                }
+                ButtonRectangleSecondary {
+                    width: 750
+                    Layout.preferredWidth: 750
+                    text: "SCAN WI-FI NETWORKS"
+                    Layout.alignment: Qt.AlignHCenter
+                    enabled: (bot.net.wifiState !== WifiState.Searching)
+
+                    onClicked: {
+                        bot.scanWifi(true)
+                        bot.net.setWifiState(WifiState.Searching)
+                    }
+                }
+
+                // When the bot is not connected to wifi and the user
+                // performs a wifi scan. In this case a deep scan happens
+                // and it takes sometime to return the results. Once the
+                // results are returned the bot goes into one of
+                // 'Not Connected' or 'NoWifiFound' states.
+                TextBody {
+                    style: TextBody.Large
+                    text: {
+                        if(!bot.net.wifiEnabled) {
+                            qsTr("Turn on WiFi and try again.")
+                        } else if ((wifiList.count == 0) && (bot.net.wifiState == WifiState.Searching)) {
+                            qsTr("Searching...")
+                        } else if (bot.net.wifiState == WifiState.NoWifiFound) {
+                            qsTr("No wireless networks found.")
+                        } else if (bot.net.wifiState == WifiState.NotConnected &&
+                                bot.net.wifiError != WifiError.NoError) {
+                            qsTr("Search for wireless networks failed.")
+                        } else {
+                            emptyString
+                        }
+                    }
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.topMargin: 60
+                    visible: (wifiList.count == 0 && bot.net.wifiState == WifiState.Searching) ||
+                             bot.net.wifiState == WifiState.NoWifiFound ||
+                             (bot.net.wifiState == WifiState.NotConnected &&
+                              (bot.net.wifiError == WifiError.ScanFailed ||
+                               bot.net.wifiError == WifiError.UnknownError))
+                }
             }
 
             // When the bot is already connected to the wifi and
@@ -160,7 +193,7 @@ Item {
                          bot.net.wifiState == WifiState.Connected)
                 spinnerSize: 64
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -20
+                anchors.verticalCenterOffset: 30
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -171,22 +204,26 @@ Item {
                 id: wifiList
                 smooth: false
                 antialiasing: false
-                anchors.fill: parent
+                anchors.top: ethernetInfoId.bottom
+                anchors.topMargin: 20
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
                 boundsBehavior: Flickable.DragOverBounds
                 spacing: 1
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
-                visible: bot.net.wifiState == WifiState.Connected ||
+                clip: true
+                visible: (bot.net.wifiState == WifiState.Connected ||
                          isWifiConnected ||
                          (bot.net.wifiState == WifiState.NotConnected &&
                                 bot.net.wifiError != WifiError.ScanFailed &&
                                 bot.net.wifiError != WifiError.UnknownError) ||
-                         (bot.net.wifiState === WifiState.Searching && count != 0)
+                         (bot.net.wifiState === WifiState.Searching && count != 0))
                 model: bot.net.WiFiList
 
                 delegate:
                     WiFiButton {
-                    smooth: false
                     antialiasing: false
                     wifiName: model.modelData.name
                     isSecured: model.modelData.secured
@@ -205,6 +242,7 @@ Item {
                             selectedWifiName = model.modelData.name
                             selectedWifiPath = model.modelData.path
                             selectedWifiSaved = model.modelData.saved
+
                             if(selectedWifiSaved || !isSecured) {
                                 bot.net.setWifiState(WifiState.Connecting)
                                 wifiPopup.open()
@@ -248,82 +286,75 @@ Item {
 
             Item {
                 id: appContainer
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.bottom: inputPanelContainer.top
+                anchors.fill: parent.fill
                 smooth: false
                 antialiasing: false
 
-                Text {
+                TextSubheader {
                     text: qsTr("ENTER PASSWORD FOR %1").arg(selectedWifiName)
-                    font.capitalization: Font.AllUppercase
-                    font.letterSpacing: 1.5
-                    font.wordSpacing: 1
-                    font.pointSize: 12
-                    color: "#ffffff"
-                    anchors.left: passwordField.left
-                    anchors.bottom: passwordField.top
+                    anchors.left: passwordInput.left
+                    anchors.bottom: passwordInput.top
                     anchors.bottomMargin: 10
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
                 }
-
-                TextField {
-                    id: passwordField
-                    width: 440
-                    height: 44
-                    smooth: false
-                    antialiasing: false
-                    anchors.top: parent.top
-                    anchors.topMargin: 50
+                RowLayout {
+                    id: passwordInput
+                    width: 700
+                    height: 50
                     anchors.left: parent.left
                     anchors.leftMargin: 50
-                    background:
-                        Rectangle {
-                            radius: 2
-                            anchors.fill: parent
-                            color: "#f7f7f7"
-                        }
-                    color: "#000000"
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pointSize: (showPassword.checked ||
-                                    text == "") ? 14 : 24
-                    placeholderText: "Enter WiFi password"
-                    passwordCharacter: "•"
-                    echoMode: {
-                        showPassword.checked ?
-                                    TextField.Normal:
-                                    TextField.Password
-                    }
-                }
-
-                RoundedButton {
-                    id: connectButton
-                    anchors.left: passwordField.right
-                    anchors.leftMargin: 20
                     anchors.top: parent.top
                     anchors.topMargin: 48
-                    label_width: 150
-                    label: qsTr("CONNECT")
-                    buttonWidth: 160
-                    buttonHeight: 50
-                    button_mouseArea.onClicked: {
-                        bot.net.setWifiState(WifiState.Connecting)
-                        wifiPopup.open()
-                        bot.connectWifi(selectedWifiPath,
-                                        passwordField.text,
-                                        selectedWifiName)
+                    spacing: 30
+
+                    TextField {
+                        id: passwordField
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 50
+                        Layout.alignment: Qt.AlignVCenter
+                        smooth: false
+                        antialiasing: false
+                        background:
+                            Rectangle {
+                                radius: 2
+                                anchors.fill: parent
+                                color: "#f7f7f7"
+                            }
+                        color: "#000000"
+                        font.family: defaultFont.name
+                        font.weight: Font.Light
+                        font.pointSize: (showPassword.checked ||
+                                        text == "") ? 14 : 24
+                        placeholderText: "Enter WiFi password"
+                        passwordCharacter: "•"
+                        echoMode: {
+                            showPassword.checked ?
+                                        TextField.Normal:
+                                        TextField.Password
+                        }
+                    }
+
+                    ButtonRectangleSecondaryForm {
+                        id: connectButton
+                        Layout.preferredWidth: 160
+                        Layout.preferredHeight: 50
+                        Layout.alignment: Qt.AlignVCenter
+                        text: qsTr("CONNECT")
+                        onClicked: {
+                            bot.net.setWifiState(WifiState.Connecting)
+                            wifiPopup.open()
+                            bot.connectWifi(selectedWifiPath,
+                                            passwordField.text,
+                                            selectedWifiName)
+                        }
                     }
                 }
 
                 RowLayout {
                     id: rowLayout
                     anchors.leftMargin: -3
-                    anchors.top: passwordField.bottom
+                    anchors.top: passwordInput.bottom
                     anchors.topMargin: 10
-                    anchors.left: passwordField.left
+                    anchors.left: passwordInput.left
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     CheckBox {
@@ -350,42 +381,87 @@ Item {
                             }
                     }
 
-                    Text {
+                    TextBody {
                         id: show_password_text
-                        color: "#ffffff"
                         text: qsTr("Show Password")
-                        font.letterSpacing: 2
-                        font.family: defaultFont.name
-                        font.weight: Font.Light
-                        font.pixelSize: 18
                     }
                 }
             }
         }
     }
 
-    LoggingPopup {
+    CustomPopup {
         popupName: "Wifi"
         id: wifiPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
         closePolicy: Popup.CloseOnPressOutside
-        background: Rectangle {
-            id: popupBackgroundDim
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
+        popupHeight: columnLayout.height + 100
+
+        // Full Button Bar
+        showOneButton: !(isForgetEnabled ||
+                       bot.net.wifiState == WifiState.Disconnecting) &&
+                       (bot.net.wifiState == WifiState.Connecting ||
+                       bot.net.wifiState == WifiState.NotConnected ||
+                       bot.net.wifiError == WifiError.ConnectFailed ||
+                       bot.net.wifiError == WifiError.InvalidPassword)
+
+        full_button_text: {
+            if(bot.net.wifiState == WifiState.Connecting) {
+                qsTr("CANCEL")
+            }
+            else if(bot.net.wifiState == WifiState.NotConnected) {
+                if(bot.net.wifiError == WifiError.ConnectFailed) {
+                    qsTr("RETRY")
+                }
+                else if(bot.net.wifiError == WifiError.InvalidPassword) {
+                    qsTr("CLOSE")
+                }
+                else {
+                    qsTr("CLOSE")
+                }
+            } else {
+                emptyString
+            }
         }
-        enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
+
+        full_button.onClicked: {
+            if(bot.net.wifiState == WifiState.Connecting) {
+                wifiPopup.close()
+            }
+            else if(bot.net.wifiError == WifiError.ConnectFailed) {
+                bot.net.setWifiState(WifiState.Connecting)
+                bot.net.connectWifi(selectedWifiPath,
+                                    passwordField.text,
+                                    selectedWifiName)
+            }
+            else if(bot.net.wifiError == WifiError.InvalidPassword) {
+                wifiPopup.close()
+            }
+            if(wifiPopup.opened) {
+                wifiPopup.close()
+            }
         }
-        exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+
+        // Two Buttons Bar
+        showTwoButtons: bot.net.wifiState == WifiState.Disconnecting ||
+                        isForgetEnabled
+
+        left_button_text: qsTr("YES")
+        left_button.onClicked: {
+            if(bot.net.wifiState == WifiState.Disconnecting) {
+                bot.disconnectWifi(selectedWifiPath)
+            }
+            else if(isForgetEnabled) {
+                bot.forgetWifi(selectedWifiPath)
+            }
+            bot.scanWifi(true)
+            wifiPopup.close()
+        }
+
+        right_button_text: qsTr("CANCEL")
+        right_button.onClicked: {
+            if(isForgetEnabled || bot.net.wifiState == WifiState.Disconnecting) {
+                wifiPopup.close()
+            }
         }
 
         onClosed: {
@@ -399,302 +475,204 @@ Item {
             else if(bot.net.wifiState == WifiState.Disconnecting) {
                 bot.net.setWifiState(WifiState.Connected)
             }
-
         }
 
-        Rectangle {
-            id: basePopupItem
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: ((bot.net.wifiState == WifiState.Connecting ||
-                     bot.net.wifiState == WifiState.Connected ||
-                     bot.net.wifiError != WifiError.NoError) &&
-                        !isForgetEnabled) ? 320 : 220
-            radius: 10
-            border.width: 2
-            border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
+        ColumnLayout {
+            id: columnLayout
+            width: 590
+            height: 150
+            anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 110
+            spacing: 15
 
-            Rectangle {
-                id: horizontal_divider
-                width: 720
-                height: 2
-                color: "#ffffff"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
-            }
-
-            Rectangle {
-                id: vertical_divider
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
+            BusySpinner {
+                id: wifiConnectingBusy
+                visible: true
+                spinnerSize: 64
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: bot.net.wifiState == WifiState.Disconnecting ||
-                         isForgetEnabled
             }
 
-            Item {
-                id: buttonBar
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
+            Image {
+                id: error_image
+                width: 80
+                height: 80
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                visible: false
 
-                Rectangle {
-                    id: left_rectangle
-                    x: 0
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-                    visible: bot.net.wifiState == WifiState.Disconnecting ||
-                             isForgetEnabled
-
-                    Text {
-                        id: left_text
-                        color: "#ffffff"
-                        text: qsTr("YES")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "wifi_popup: [_" + left_text.text + "|]"
-                        id: left_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            left_rectangle.color = "#ffffff"
-                            left_text.color = "#000000"
-                        }
-                        onReleased: {
-                            left_rectangle.color = "#00000000"
-                            left_text.color = "#ffffff"
-                        }
-                        onClicked: {
-                            if(bot.net.wifiState == WifiState.Disconnecting) {
-                                bot.disconnectWifi(selectedWifiPath)
-                            }
-                            else if(isForgetEnabled) {
-                                bot.forgetWifi(selectedWifiPath)
-                            }
-                            bot.scanWifi(true)
-                            wifiPopup.close()
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: right_rectangle
-                    x: 360
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-                    visible: bot.net.wifiState == WifiState.Disconnecting ||
-                             isForgetEnabled
-
-                    Text {
-                        id: right_text
-                        color: "#ffffff"
-                        text: qsTr("CANCEL")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "wifi_popup: [|" + right_text.text + "_]"
-                        id: right_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            right_rectangle.color = "#ffffff"
-                            right_text.color = "#000000"
-                        }
-                        onReleased: {
-                            right_rectangle.color = "#00000000"
-                            right_text.color = "#ffffff"
-                        }
-                        onClicked: {
-                            if(isForgetEnabled || bot.net.wifiState == WifiState.Disconnecting) {
-                                wifiPopup.close()
-                            }
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: full_button_rectangle
-                    x: 0
-                    y: 0
-                    width: 720
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-                    visible: !isForgetEnabled &&
-                             (bot.net.wifiState == WifiState.Connecting ||
-                             bot.net.wifiState == WifiState.NotConnected ||
-                             bot.net.wifiError == wifiError.ConnectFailed ||
-                             bot.net.wifiError == wifiError.InvalidPassword)
-
-                    Text {
-                        id: full_button_text
-                        color: "#ffffff"
-                        text: {
-                            if(bot.net.wifiState == WifiState.Connecting) {
-                                qsTr("CANCEL")
-                            }
-                            else {
-                                if(bot.net.wifiError == WifiError.ConnectFailed) {
-                                    qsTr("RETRY")
-                                }
-                                else if(bot.net.wifiError == WifiError.InvalidPassword) {
-                                    qsTr("CLOSE")
-                                }
-                                else {
-                                    qsTr("CLOSE")
-                                }
-                            }
-                        }
-
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "wifi_popup: [_" + full_button_text.text + "_]"
-                        id: full_button_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            full_button_rectangle.color = "#ffffff"
-                            full_button_text.color = "#000000"
-                        }
-                        onReleased: {
-                            full_button_rectangle.color = "#00000000"
-                            full_button_text.color = "#ffffff"
-                        }
-                        onClicked: {
-                            if(bot.net.wifiState == WifiState.Connecting) {
-                                wifiPopup.close()
-                            }
-                            else if(bot.net.wifiError == WifiError.ConnectFailed) {
-                                bot.net.setWifiState(WifiState.Connecting)
-                                bot.net.connectWifi(selectedWifiPath,
-                                                    passwordField.text,
-                                                    selectedWifiName)
-                            }
-                            else if(bot.net.wifiError == WifiError.InvalidPassword) {
-                                wifiPopup.close()
-                            }
-
-                            if(wifiPopup.opened) {
-                                wifiPopup.close()
-                            }
-                        }
-                    }
-                }
             }
 
-            ColumnLayout {
-                id: columnLayout
-                width: 590
-                height: ((bot.net.wifiState == WifiState.Connecting ||
-                         bot.net.wifiState == WifiState.Connected ||
-                         bot.net.wifiError != WifiError.NoError) &&
-                            !isForgetEnabled) ? 150 : 100
-                anchors.top: parent.top
-                anchors.topMargin: ((bot.net.wifiState == WifiState.Connecting ||
-                                    bot.net.wifiState == WifiState.Connected ||
-                                    bot.net.wifiError != WifiError.NoError) &&
-                                        !isForgetEnabled)? 60 : 25
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: header_text
-                    color: "#cbcbcb"
-                    text: {
-                        if(isForgetEnabled) {
-                            qsTr("FORGET %1?").arg(selectedWifiName)
-                        }
-                        else if(bot.net.wifiState == WifiState.Connecting) {
-                            qsTr("CONNECTING TO %1").arg(selectedWifiName)
-                        }
-                        else if(bot.net.wifiState == WifiState.Connected) {
-                            qsTr("CONNECTED")
-                        }
-                        else if(bot.net.wifiState == WifiState.Disconnecting) {
-                            qsTr("DISCONNECT FROM %1?").arg(selectedWifiName)
-                        }
-                        else {
-                            if(bot.net.wifiError == WifiError.InvalidPassword) {
-                                qsTr("INVALID PASSWORD")
-                            }
-                            else if (bot.net.wifiError != WifiError.NoError) {
-                                qsTr("FAILED TO CONNECT TO %1").arg(selectedWifiName)
-                            } else {
-                                defaultString
-                            }
-                        }
-                    }
-                    font.capitalization: Font.AllUppercase
-                    font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                }
-
-                BusySpinner {
-                    id: wifiConnectingBusy
-                    spinnerActive: (bot.net.wifiState == WifiState.Connecting ||
-                                    bot.net.wifiState == WifiState.Connected) &&
-                                    !isForgetEnabled
-                    spinnerSize: 64
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Item {
-                    id: errorImageContainer
-                    width: 80
-                    height: 80
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    visible: bot.net.wifiError != WifiError.NoError &&
-                             bot.net.wifiState == WifiState.NotConnected
-
-                    Image {
-                        id: error_image
-                        anchors.fill: parent
-                        source: "qrc:/img/error.png"
-                    }
-                }
+            TextHeadline {
+                id: header_text
+                text: qsTr("CONNECTING")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
+
+            states: [
+                State {
+                    name: "connecting"
+                    when: !isForgetEnabled && bot.net.wifiState == WifiState.Connecting
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: wifiConnectingBusy
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: header_text
+                        text: qsTr("CONNECTING")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout
+                        height: 150
+                        anchors.topMargin: 110
+                        spacing: 15
+                    }
+                },
+                State {
+                    name: "connected"
+                    when: !isForgetEnabled
+                          && bot.net.wifiState == WifiState.Connected
+                            && bot.net.wifiError == WifiError.NoError
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: true
+                        source:  "qrc:/img/popup_complete.png"
+                    }
+
+                    PropertyChanges {
+                        target: wifiConnectingBusy
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: header_text
+                        text: qsTr("CONNECTED SUCCESSFULLY")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout
+                        height: 100
+                        anchors.topMargin: 160
+                        spacing: 25
+                    }
+                },
+                State {
+                    name: "forget"
+                    when: isForgetEnabled
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: wifiConnectingBusy
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: header_text
+                        text: qsTr("FORGET %1?").arg(selectedWifiName)
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout
+                        height: 100
+                        anchors.topMargin: 150
+                    }
+                },
+                State {
+                    name: "disconnected"
+                    when: !isForgetEnabled && bot.net.wifiState == WifiState.Disconnecting
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: wifiConnectingBusy
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: header_text
+                        text: qsTr("DISCONNECT FROM %1?").arg(selectedWifiName)
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout
+                        height: 100
+                        anchors.topMargin: 150
+                    }
+                },
+                State {
+                    name: "failure"
+                    when: bot.net.wifiState == WifiState.NotConnected &&
+                          bot.net.wifiError !== WifiError.NoError &&
+                          bot.net.wifiError !== WifiError.InvalidPassword
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: true
+                        source: "qrc:/img/popup_error.png"
+                    }
+
+                    PropertyChanges {
+                        target: wifiConnectingBusy
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: header_text
+                        text: qsTr("FAILED TO CONNECT")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout
+                        height: 140
+                        anchors.topMargin: 115
+                        spacing: 10
+                    }
+                },
+                State {
+                    name: "invalid_password"
+                    when: bot.net.wifiState == WifiState.NotConnected &&
+                          bot.net.wifiError !== WifiError.NoError &&
+                          bot.net.wifiError == WifiError.InvalidPassword
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: true
+                        source: "qrc:/img/popup_error.png"
+                    }
+
+                    PropertyChanges {
+                        target: wifiConnectingBusy
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: header_text
+                        text: qsTr("INVALID PASSWORD")
+                    }
+
+                    PropertyChanges {
+                        target: columnLayout
+                        height: 140
+                        anchors.topMargin: 115
+                        spacing: 10
+                    }
+                }
+            ]
         }
     }
 }

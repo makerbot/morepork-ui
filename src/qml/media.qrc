@@ -188,6 +188,8 @@
         <file alias="wifi_menu_icon.png">images/wifi_menu_icon.png</file>
         <file alias="wifi_secured_menu_icon.png">images/wifi_secured_menu_icon.png</file>
         <file alias="selected_checkmark.png">images/selected_checkmark.png</file>
+        <file alias="popup_complete.png">images/popup_complete.png</file>
+        <file alias="popup_error.png">images/popup_error.png</file>
         <file alias="circle_alert_112px.png">images/circle_alert_112px.png</file>
         <file alias="forward_arrow_42_80px.png">images/forward_arrow_42_80px.png</file>
         <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
