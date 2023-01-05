@@ -95,9 +95,8 @@ Item {
     }
     states: [
         State {
-            name: "no_material"
-            when: (bot.hasFilamentBay && !spoolPresent) ||
-                  (!bot.hasFilamentBay && bot.loadedMaterials[filamentBayID - 1] == "unknown")
+            name: "not_loaded_no_rfid"
+            when: !spoolPresent && !extruderFilamentPresent
 
             PropertyChanges {
                 target: error_image
@@ -115,7 +114,7 @@ Item {
             }
         },
         State {
-            name: "rfid_present_material_known"
+            name: "rfid_present"
             when: spoolPresent
 
             PropertyChanges {
@@ -134,8 +133,8 @@ Item {
             }
         },
         State {
-            name: "rfid_not_present_material_known"
-            when: !bot.hasFilamentBay && bot.loadedMaterials[filamentBayID - 1] != "unknown"
+            name: "loaded_no_rfid"
+            when: !spoolPresent && extruderFilamentPresent
 
             PropertyChanges {
                 target: error_image

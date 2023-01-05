@@ -198,7 +198,6 @@ Item {
         // and go back.
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
-            loadUnloadFilamentProcess.isExternalLoadUnload = false
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
             setDrawerState(false)
         }
@@ -315,7 +314,6 @@ Item {
                                     bot.extruderBFilamentPresent
                 onProcessDone: {
                     state = "base state"
-                    isExternalLoadUnload = false
                     materialSwipeView.swipeToItem(MaterialPage.BasePage)
                     setDrawerState(false)
                     // If load/unload process completes successfully while,

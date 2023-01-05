@@ -82,6 +82,7 @@ class KaitenBotModel : public BotModel {
     void resume_touchlog();
     void zipLogs(QString path);
     void forceSyncFile(QString path);
+    void zipTimelapseImages(QString path);
     void changeMachineName(QString new_name);
     void acknowledgeMaterial(bool response);
     void acknowledgeSafeToRemoveUsb();
@@ -1066,6 +1067,22 @@ void KaitenBotModel::zipLogs(QString path) {
   }
 }
 
+void KaitenBotModel::zipTimelapseImages(QString path) {
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["zip_path"] = Json::Value(path.toStdString());
+      conn->jsonrpc.invoke(
+              "zip_timelapseimages",
+              json_params,
+              std::weak_ptr<JsonRpcCallback>());
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
+
 void KaitenBotModel::changeMachineName(QString new_name) {
     try{
         qDebug() << FL_STRM << "called";
@@ -1842,6 +1859,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                   materialsDisplay.append("UNKNOWN");
               } else if (mat.isString()) {
                   QString matAPI(mat.asString().c_str());
+                  if (matAPI == "generic") matAPI = "unknown";
                   materialsAPI.append(matAPI);
                   materialsDisplay.append(getMaterialName(matAPI));
               }

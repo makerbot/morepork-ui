@@ -390,7 +390,7 @@ LoggingItem {
                 target: image
                 width: sourceSize.width
                 height: sourceSize.height
-                source: "qrc:/img/usb_1.png"
+                source: "qrc:/img/icon_usb.png"
 
                 visible: true
             }

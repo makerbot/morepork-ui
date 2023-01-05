@@ -16,7 +16,7 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
   const QFileInfo kFileInfo(kAbsoluteFilePath);
   if(kFileInfo.exists()) {
       if(kFileInfo.isDir()) {
-          return QPixmap::fromImage(QImage(":/img/directory_icon.png"));
+          return QPixmap::fromImage(QImage(":/img/icon_directory.png"));
       } else {
           MakerbotFileMetaReader file_meta_reader(kFileInfo);
           QImage thumbnail;

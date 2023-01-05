@@ -27,8 +27,10 @@ Item {
     property alias firmwareUpdatePage: firmwareUpdatePage
 
     property alias buttonCopyLogs: buttonCopyLogs
-
     property alias copyingLogsPopup: copyingLogsPopup
+
+    property alias buttonCopyTimelapseImages: buttonCopyTimelapseImages
+    property alias copyingTimelapseImagesPopup: copyingTimelapseImagesPopup
 
     property alias buttonAnalytics: buttonAnalytics
 
@@ -184,6 +186,14 @@ Item {
                         buttonImage.source: "qrc:/img/icon_copy_logs.png"
                         buttonText.text: qsTr("COPY LOGS TO USB")
                         enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonCopyTimelapseImages
+                        buttonImage.source: "qrc:/img/icon_copy_logs.png"
+                        buttonText.text: qsTr("COPY TIMELAPSE IMAGES TO USB")
+                        enabled: !isProcessRunning()
+                        visible: settings.getCaptureTimelapseImages()
                     }
 
                     MenuButton {
@@ -575,7 +585,7 @@ Item {
         property string popupState: "no_usb_detected"
         showOneButton: showButton
         full_button_text: {
-            if (popupState =="copy_logs_state") {
+            if (popupState == "copy_logs_state") {
                 qsTr("CANCEL")
             }
             else {
@@ -795,6 +805,245 @@ Item {
 
                     PropertyChanges {
                         target: columnLayout_copy_logs
+                        height: 200
+                        anchors.topMargin: 80
+                    }
+                }
+            ]
+        }
+    }
+
+    CustomPopup {
+        popupName: "CopyingTimelapseImages"
+        property bool initialized: false
+        property bool cancelled: false
+        property string timelapseBundlePath: ""
+        property int errorcode: 0
+        property bool showButton: true
+
+        id: copyingTimelapseImagesPopup
+        visible: false
+        popupWidth: 750
+        popupHeight: {
+            if(popupState == "failed_copied_timelapse_images") {
+                350
+            }
+            else if(popupState == "cancelling_copy_timelapse_images") {
+                250
+            }
+            else {
+                300
+            }
+        }
+
+        property string popupState: "no_usb_detected"
+        showOneButton: showButton
+        full_button_text: {
+            if (popupState == "copy_timelapse_images_state") {
+                qsTr("CANCEL")
+            }
+            else {
+                qsTr("CLOSE")
+            }
+        }
+        full_button.onClicked: {
+            if(popupState == "copy_timelapse_images_state") {
+                bot.cancel()
+                showButton = false
+                cancelled = true
+                errorcode = 0
+                popupState = "cancelling_copy_timelapse_images"
+            }
+            else {
+                initialized = false
+                cancelled = false
+                errorcode = 0
+                copyingTimelapseImagesPopup.close()
+                showButton = true
+            }
+        }
+
+        onClosed: {
+            popupState = "no_usb_detected"
+            initialized = false
+            cancelled = false
+            errorcode = 0
+            showButton = true
+        }
+
+        ColumnLayout {
+            id: columnLayout_copy_timelapse_images
+            width: 650
+            height: parent.height
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: timelapse_error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            BusySpinner {
+                id: timelapse_busy_spinner_img
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                spinnerSize: 64
+            }
+
+            TextHeadline {
+                id: timelapse_title
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
+                id: timelapse_description
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            states: [
+                State {
+                    name: "copy_timelapse_images_state"
+                    when: copyingTimelapseImagesPopup.popupState == "copy_timelapse_images_state"
+
+                    PropertyChanges {
+                        target: timelapse_error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: timelapse_busy_spinner_img
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: timelapse_title
+                        text: qsTr("COPYING TIMELAPSE IMAGES TO USB")
+                    }
+                    PropertyChanges {
+                        target: timelapse_description
+                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: columnLayout_copy_timelapse_images
+                        height: 100
+                        anchors.topMargin: 120
+                        spacing: 25
+                    }
+                },
+                State {
+                    name: "no_usb_detected"
+                    when: copyingTimelapseImagesPopup.popupState == "no_usb_detected"
+
+                    PropertyChanges {
+                        target: timelapse_error_image
+                        source: "qrc:/img/process_error_small.png"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: timelapse_busy_spinner_img
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: timelapse_title
+                        text: qsTr("NO USB DETECTED")
+                    }
+                    PropertyChanges {
+                        target: timelapse_description
+                        text: qsTr("You need to insert a USB to use this feature.")
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: columnLayout_copy_timelapse_images
+                        height: 100
+                        anchors.topMargin: 110
+                    }
+                },
+                State {
+                    name: "cancelling_copy_timelapse_images"
+                    when: copyingTimelapseImagesPopup.popupState == "cancelling_copy_timelapse_images"
+
+                    PropertyChanges {
+                        target: timelapse_error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: timelapse_busy_spinner_img
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: timelapse_title
+                        text: qsTr("CANCELLING...")
+                    }
+                    PropertyChanges {
+                        target: timelapse_description
+                        text: qsTr("Do not remove USB.")
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: columnLayout_copy_timelapse_images
+                        height: 100
+                        anchors.topMargin: 140
+                        spacing: 25
+                    }
+                },
+                State {
+                    name: "successfully_copied_timelapse_images"
+                    when: copyingTimelapseImagesPopup.popupState == "successfully_copied_timelapse_images"
+
+                    PropertyChanges {
+                        target: timelapse_error_image
+                        source: "qrc:/img/process_complete_small.png"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: timelapse_busy_spinner_img
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: timelapse_title
+                        text: qsTr("COPY TIMELAPSE IMAGES TO USB - COMPLETE")
+                    }
+                    PropertyChanges {
+                        target: timelapse_description
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: columnLayout_copy_timelapse_images
+                        height: 100
+                        anchors.topMargin: 140
+                        spacing: 35
+                    }
+                },
+                State {
+                    name: "failed_copied_timelapse_images"
+                    when: copyingTimelapseImagesPopup.popupState == "failed_copied_timelapse_images"
+
+                    PropertyChanges {
+                        target: timelapse_error_image
+                        source: "qrc:/img/process_error_small.png"
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: timelapse_busy_spinner_img
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: timelapse_title
+                        text: qsTr("COPY LOGS TO USB - FAILED")
+                    }
+                    PropertyChanges {
+                        target: timelapse_description
+                        visible: true
+                        text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
+                                    "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
+                                    "CODE: %1").arg(copyingTimelapseImagesPopup.errorcode)
+                    }
+                    PropertyChanges {
+                        target: columnLayout_copy_timelapse_images
                         height: 200
                         anchors.topMargin: 80
                     }
