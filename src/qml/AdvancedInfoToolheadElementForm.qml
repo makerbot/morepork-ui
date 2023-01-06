@@ -24,7 +24,7 @@ Item {
     ColumnLayout {
         id: columnLayout
         width: parent.width
-        spacing: 43
+        spacing: 40
 
         TextHeadline {
             style: TextHeadline.Base

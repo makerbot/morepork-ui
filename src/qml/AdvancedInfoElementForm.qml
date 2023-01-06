@@ -17,6 +17,7 @@ Item {
         width: 250
         text: qsTr("LABEL")
         anchors.verticalCenter: parent.verticalCenter
+        font.letterSpacing: 2
     }
 
     TextBody {
@@ -25,6 +26,7 @@ Item {
         id: value
         text: qsTr("VALUE")
         font.capitalization: Font.AllUppercase
+        horizontalAlignment: Text.AlignRight
         anchors.right: parent.right
         anchors.rightMargin: 63
         anchors.verticalCenter: parent.verticalCenter

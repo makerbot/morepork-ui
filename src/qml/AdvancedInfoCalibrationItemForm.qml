@@ -8,12 +8,13 @@ Item {
 
     ColumnLayout {
         width: parent.width
-        spacing: 43
+        spacing: 40
 
         TextHeadline {
             style: TextHeadline.Large
             id: heading
             text: qsTr("CALIBRATION OFFSETS")
+            font.letterSpacing: 10
         }
 
         RowLayout {

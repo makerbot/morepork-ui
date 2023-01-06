@@ -10,12 +10,13 @@ Item {
     ColumnLayout {
         id: columnLayout
         width: parent.width
-        spacing: 43
+        spacing: 40
 
         TextHeadline {
             style: TextHeadline.Large
             id: heading
             text: qsTr("MISCELLANEOUS")
+            font.letterSpacing: 10
         }
 
         AdvancedInfoElement {
