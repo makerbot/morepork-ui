@@ -325,6 +325,11 @@ QString BotModel::getNPSSurveyDueDate() {
     return QString("null");
 }
 
+void BotModel::moveBuildPlate(const int distance, const int speed) {
+    qDebug() << FL_STRM << "called with parameters: " << "distance " << distance <<
+                           " speed" << speed;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

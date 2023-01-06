@@ -113,6 +113,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void submitNPSSurvey(int score);
     Q_INVOKABLE virtual void setNPSSurveyDueDate(QString time);
     Q_INVOKABLE virtual QString getNPSSurveyDueDate();
+    Q_INVOKABLE virtual void moveBuildPlate(const int distance, const int speed);
 
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);

@@ -9,6 +9,11 @@ BuildPlateSettingsPageForm {
     }
 
     buttonRaiseLowerBuildPlate.onClicked: {
+        if(raiseLowerBuildPlate.chamberDoorOpen) {
+            doorOpenRaiseLowerBuildPlatePopup.open()
+            return
+        }
+
         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.RaiseLowerBuildPlatePage)
     }
 }

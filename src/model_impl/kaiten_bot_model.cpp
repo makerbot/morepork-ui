@@ -118,6 +118,7 @@ class KaitenBotModel : public BotModel {
     void setNPSSurveyDueDate(QString time);
     QString getNPSSurveyDueDate();
     QString m_npsFilePath;
+    void moveBuildPlate(const int distance, const int speed);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1481,6 +1482,22 @@ QString KaitenBotModel::getNPSSurveyDueDate() {
         return QString("null");
     }
     return QString(time);
+}
+
+void KaitenBotModel::moveBuildPlate(const int distance, const int speed) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        json_params["distance"] = Json::Value(distance);
+        json_params["speed"] = Json::Value(speed);
+
+        conn->jsonrpc.invoke("move_build_plate", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
 }
 
 KaitenBotModel::KaitenBotModel(const char * socketpath) :

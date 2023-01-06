@@ -103,8 +103,8 @@
         <file>TimeSelectorForm.qml</file>
         <file>SlidingSwitch.qml</file>
         <file>SlidingSwitchForm.qml</file>
-        <file>RaiseLowerBuildPlateItem.qml</file>
-        <file>RaiseLowerBuildPlateItemForm.qml</file>
+        <file>RaiseLowerBuildPlate.qml</file>
+        <file>RaiseLowerBuildPlateForm.qml</file>
         <file>AdvancedInfoElement.qml</file>
         <file>AdvancedInfoElementForm.qml</file>
         <file>AdvancedInfoToolheadElement.qml</file>
