@@ -257,5 +257,7 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
+        <file>DayOneUpdateScreen.qml</file>
+        <file>DayOneUpdateScreenForm.qml</file>
     </qresource>
 </RCC>

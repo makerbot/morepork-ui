@@ -48,6 +48,7 @@ ApplicationWindow {
     onConnectionStateChanged: {
         if(connectionState == ConnectionState.Connected) {
             fre.initialize()
+            fre.setFreStep(FreStep.Welcome)
             if(isNetworkConnectionAvailable) {
                 bot.firmwareUpdateCheck(false)
             }
@@ -198,7 +199,7 @@ ApplicationWindow {
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
 
     onIsfirmwareUpdateAvailableChanged: {
-        if(isfirmwareUpdateAvailable && isFreComplete) {
+        if(isfirmwareUpdateAvailable && isFreComplete && !dayOneUpdateScreen.visible) {
             if(settingsPage.settingsSwipeView.currentIndex != 3) {
                 firmwareUpdatePopup.open()
             }
@@ -353,8 +354,15 @@ ApplicationWindow {
         StartupSplashScreen {
             id: startupSplashScreen
             anchors.fill: parent
-            z: 2
+            z: 3
             visible: connectionState != ConnectionState.Connected
+        }
+
+        DayOneUpdateScreen {
+            id: dayOneUpdateScreen
+            anchors.fill: parent
+            z: 2
+            visible: true
         }
 
         FirmwareUpdateSuccessfulScreen {
