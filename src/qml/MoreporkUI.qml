@@ -1,17 +1,20 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.9
 import ProcessTypeEnum 1.0
 import ConnectionStateEnum 1.0
 import FreStepEnum 1.0
 import MachineTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import QtQuick.VirtualKeyboard 2.3
 
 ApplicationWindow {
     id: rootAppWindow
     visible: true
     width: 800
     height: 480
+    readonly property string defaultString: "default"
+    readonly property string emptyString: ""
     property alias mainSwipeView: mainSwipeView
     property alias topBar: topBar
     property var currentItem: mainMenu
@@ -23,8 +26,6 @@ ApplicationWindow {
     property int extruderFirmwareUpdateProgressB: bot.extruderFirmwareUpdateProgressB
     property bool extruderAToolTypeCorrect: bot.extruderAToolTypeCorrect
     property bool extruderBToolTypeCorrect: bot.extruderBToolTypeCorrect
-    readonly property int th_disconnect_err: 13
-    readonly property string th_disconnect_err_str: "13 "
     property bool extruderAPresent: bot.extruderAPresent
     property bool extruderBPresent: bot.extruderBPresent
     property bool extrudersPresent: extruderAPresent && extruderBPresent
@@ -100,6 +101,7 @@ ApplicationWindow {
         case FreStep.FreComplete:
             break;
         default:
+            freScreen.state = "base state"
             break;
         }
     }
@@ -349,6 +351,40 @@ ApplicationWindow {
             smooth: false
             z: -1
             anchors.fill: parent
+        }
+
+        Item {
+            id: inputPanelContainer
+            z: 10
+            smooth: false
+            antialiasing: false
+            visible: {
+                settingsPage.settingsSwipeView.currentIndex == SettingsPage.ChangePrinterNamePage ||
+                settingsPage.settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
+                 (settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
+                  settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
+                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
+                 settingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
+            }
+            x: -30
+            y: parent.height - inputPanel.height + 22
+            width: 860
+            height: inputPanel.height
+            InputPanel {
+                id: inputPanel
+                antialiasing: false
+                smooth: false
+                anchors.fill: parent
+                active: true
+            }
+            onVisibleChanged: {
+                if (visible) {
+                    bot.pause_touchlog()
+                } else {
+                    bot.resume_touchlog()
+                }
+            }
         }
 
         StartupSplashScreen {
@@ -1964,6 +2000,47 @@ ApplicationWindow {
             }
         }
 
+        // Modal Popup for Heating system error
+        CustomPopup {
+            popupName: "HeatingSystemError"
+            /* Report to the user that the heating system has detected a fault.
+            */
+            property bool chamberErrorValid: (bot.chamberErrorCode !== 0 && bot.chamberErrorCode !== 45
+                                              && bot.chamberErrorCode !== 48)
+            property bool heatingSystemError: (bot.hbpErrorCode !== 0 || chamberErrorValid)
+            property int heatingSystemErrorCode: (chamberErrorValid ? bot.chamberErrorCode : bot.hbpErrorCode)
+
+            id: heatingSystemErrorPopup
+            visible: heatingSystemError && !bot.hasFilamentBay
+            closePolicy: Popup.CloseOnPressOutside
+
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 150
+
+                TextHeadline {
+                    text: "HEATING SYSTEM ERROR"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextBody {
+                    text: {
+                       qsTr("The printer’s Heating System is reporting an error %1. Details can be found on the "
+                                + "Sensor Info page. Try restarting the printer. If this happens again, please "
+                                + "contact MakerBot support.").arg(heatingSystemErrorPopup.heatingSystemErrorCode)
+                    }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: 620
+                    wrapMode: "WordWrap"
+
+                }
+            }
+        }
+
         LoggingPopup {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
@@ -2929,7 +3006,7 @@ ApplicationWindow {
                                 qsTr("LOW MATERIAL")
                             }
                             else {
-                                ""
+                                emptyString
                             }
                         }
                         font.letterSpacing: 3
@@ -3007,7 +3084,7 @@ ApplicationWindow {
                                 qsTr(" to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now.")
                             }
                              else {
-                                ""
+                                emptyString
                             }
                         }
                         horizontalAlignment: Text.AlignHCenter

@@ -14,7 +14,7 @@ Item {
 
         Text {
             id: heading
-            text: qsTr("Heating System")
+            text: qsTr("HEATING SYSTEM")
             font.letterSpacing: 2
             font.weight: Font.Bold
             font.pixelSize: 20
@@ -34,7 +34,7 @@ Item {
             label: qsTr("STATE")
             value_anchors.leftMargin: -100
             value: bot.infoHeatSysStateStr
-        }
+       }
 
         AdvancedInfoElement {
             id: errorStrProperty

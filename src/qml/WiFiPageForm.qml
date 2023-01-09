@@ -1,7 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QtQuick.VirtualKeyboard 2.3
 import WifiStateEnum 1.0
 import WifiErrorEnum 1.0
 import FreStepEnum 1.0
@@ -131,7 +130,7 @@ Item {
                             bot.net.wifiError != WifiError.NoError) {
                         qsTr("Search for wireless networks failed.")
                     } else {
-                        ""
+                        emptyString
                     }
                 }
                 anchors.verticalCenter: parent.verticalCenter
@@ -359,33 +358,6 @@ Item {
                         font.family: defaultFont.name
                         font.weight: Font.Light
                         font.pixelSize: 18
-                    }
-                }
-            }
-
-            Item {
-                id: inputPanelContainer
-                smooth: false
-                antialiasing: false
-                visible: settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
-                         wifiSwipeView.currentIndex == WiFiPage.EnterPassword
-                x: -30
-                y: parent.height - inputPanel.height
-                width: 860
-                height: inputPanel.height
-                InputPanel {
-                    id: inputPanel
-                    //y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
-                    antialiasing: false
-                    smooth: false
-                    anchors.fill: parent
-                }
-                onVisibleChanged: {
-                    if (visible) {
-                        bot.pause_touchlog()
-                    }
-                    if (!visible) {
-                        bot.resume_touchlog()
                     }
                 }
             }
@@ -641,6 +613,7 @@ Item {
                             else if(bot.net.wifiError == WifiError.InvalidPassword) {
                                 wifiPopup.close()
                             }
+
                             if(wifiPopup.opened) {
                                 wifiPopup.close()
                             }
@@ -685,6 +658,8 @@ Item {
                             }
                             else if (bot.net.wifiError != WifiError.NoError) {
                                 qsTr("FAILED TO CONNECT TO %1").arg(selectedWifiName)
+                            } else {
+                                defaultString
                             }
                         }
                     }

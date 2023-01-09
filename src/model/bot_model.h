@@ -187,6 +187,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, chamberErrorCode, 0)
     MODEL_PROP(float, hbpCurrentTemp, -999.0f)
     MODEL_PROP(int, hbpTargetTemp, -999)
+    MODEL_PROP(int, hbpErrorCode, 0)
     MODEL_PROP(bool, hasFilamentBay, false)
     MODEL_PROP(QStringList, loadedMaterials, {"unknown", "unknown"})
     MODEL_PROP(QStringList, loadedMaterialNames, {"UNKNOWN", "UNKNOWN"})

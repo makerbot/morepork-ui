@@ -1,7 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import QtQuick.VirtualKeyboard 2.3
 import DFSEnum 1.0
 
 Item {
@@ -149,24 +148,6 @@ Item {
                         font.weight: Font.Light
                         font.pixelSize: 18
                     }
-                }
-            }
-
-            Item {
-                id: inputPanelContainer
-                smooth: false
-                antialiasing: false
-                visible: settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage
-                x: -30
-                y: parent.height - inputPanel.height
-                width: 860
-                height: inputPanel.height
-                InputPanel {
-                    id: inputPanel
-                    //y: Qt.inputMethod.visible ? parent.height - inputPanel.height : parent.height
-                    antialiasing: false
-                    smooth: false
-                    anchors.fill: parent
                 }
             }
         }

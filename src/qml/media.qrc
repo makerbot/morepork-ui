@@ -90,16 +90,18 @@
         <file alias="icon_assisted_leveling.png">images/icon_assisted_leveling.png</file>
         <file alias="icon_calibrate_toolhead.png">images/icon_calibrate_toolhead.png</file>
         <file alias="icon_change_language.png">images/icon_change_language.png</file>
+        <file alias="icon_choose_language.png">images/icon_choose_language.png</file>
         <file alias="icon_software_update.png">images/icon_software_update.png</file>
         <file alias="icon_time_and_date.png">images/icon_time_and_date.png</file>
         <file alias="icon_deauthorize_accounts.png">images/icon_deauthorize_accounts.png</file>
         <file alias="icon_preheat.png">images/icon_preheat.png</file>
-        <file alias="icon_name_printer.png">images/icon_name_printer.png</file>
+        <file alias="icon_change_printer_name.png">images/icon_change_printer_name.png</file>
         <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
         <file alias="icon_clean_extruders.png">images/icon_clean_extruders.png</file>
         <file alias="icon_dry_material.png">images/icon_dry_material.png</file>
         <file alias="icon_anneal_print.png">images/icon_anneal_print.png</file>
         <file alias="icon_power.png">images/icon_power.png</file>
+        <file alias="icon_analytics.png">images/icon_analytics.png</file>
         <file alias="calib_extruders.png">images/calib_extruders.png</file>
         <file alias="calib_extruders_XA.png">images/calib_extruders_XA.png</file>
         <file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
@@ -114,7 +116,6 @@
         <file alias="wifi_strong.png">images/wifi_strong.png</file>
         <file alias="icon_authorize_account.png">images/icon_authorize_account.png</file>
         <file alias="loading.png">images/loading.png</file>
-        <file alias="account_auth_complete.png">images/account_auth_complete.png</file>
         <file alias="add_account_image.png">images/add_account_image.png</file>
         <file alias="pattern.png">images/pattern.png</file>
         <file alias="attach_extruder_1_step1.gif">images/attach_extruder_1_step1.gif</file>
@@ -161,7 +162,6 @@
         <file alias="step_3_remove_electronics.png">images/step_3_remove_electronics.png</file>
         <file alias="step_4_remove_filter.png">images/step_4_remove_filter.png</file>
         <file alias="filter.png">images/filter.png</file>
-        <file alias="filter_change_required.png">images/filter_change_required.png</file>
         <file alias="yellow_hepa_blink.gif">images/yellow_hepa_blink.gif</file>
         <file alias="white_hepa_no_blink.gif">images/white_hepa_no_blink.gif</file>
         <file alias="print_feedback_thumbs_up.png">images/print_feedback_thumbs_up.png</file>
@@ -179,7 +179,16 @@
         <file alias="extruder_labs_ht.png">images/extruder_id/extruder_labs_ht.png</file>
         <file alias="extruder_material_error.png">images/extruder_material_error.png</file>
         <file alias="process_complete_small.png">images/process_complete_small.png</file>
+        <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
         <file alias="usb_1.png">images/usb_1.png</file>
+        <file alias="broken.png">images/broken.png</file>
+        <file alias="confirm_printer_name.png">images/confirm_printer_name.png</file>
+        <file alias="analytics_makerbot_logo.png">images/analytics_makerbot_logo.png</file>
+        <file alias="open_menu_item_arrow.png">images/open_menu_item_arrow.png</file>
+        <file alias="menu_button_alert.png">images/menu_button_alert.png</file>
+        <file alias="wifi_menu_icon.png">images/wifi_menu_icon.png</file>
+        <file alias="wifi_secured_menu_icon.png">images/wifi_secured_menu_icon.png</file>
+        <file alias="selected_checkmark.png">images/selected_checkmark.png</file>
     </qresource>
 </RCC>

@@ -142,7 +142,7 @@ Item {
                         } else if(itemAttachExtruder.state == "close_top_lid") {
                             "qrc:/img/error_close_lid.png"
                         } else {
-                            ""
+                            emptyString
                         }
                     }
                     visible: true
@@ -161,6 +161,8 @@ Item {
                                 qsTr("PLACE TOP LID")
                             } else if(bot.chamberErrorCode == 0) {
                                 qsTr("PLACE TOP LID")
+                            } else {
+                                emptyString
                             }
                         }
                         else if(itemAttachExtruder.state == "base state") {
@@ -170,9 +172,11 @@ Item {
                                 qsTr("REMOVE TOP LID")
                             } else if(bot.chamberErrorCode == 0) {
                                 qsTr("REMOVE TOP LID")
+                            } else {
+                                emptyString
                             }
                         } else {
-                            ""
+                           emptyString
                         }
                     }
                     anchors.top: parent.top
@@ -223,6 +227,8 @@ Item {
                                 qsTr("RUN CALIBRATION")
                             } else if (bot.process.type == ProcessType.Print) {
                                 qsTr("RESUME PRINT")
+                            } else {
+                                defaultString
                             }
                         }
                         else {
@@ -436,7 +442,11 @@ Item {
                                     } else {
                                         qsTr("Insert a Support 2A or 2X Extruder into\nSlot 2")
                                     }
+                                } else {
+                                    defaultString
                                 }
+                            } else {
+                                defaultString
                             }
                         }
                     }

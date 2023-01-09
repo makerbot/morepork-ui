@@ -23,9 +23,6 @@ Item {
     property alias buttonAuthorizeAccounts: buttonAuthorizeAccounts
     property alias authorizeAccountPage: authorizeAccountPage
 
-    property alias buttonDeauthorizeAccounts: buttonDeauthorizeAccounts
-    property alias deauthorizeAccountsPopup: deauthorizeAccountsPopup
-
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias firmwareUpdatePage: firmwareUpdatePage
 
@@ -103,7 +100,7 @@ Item {
 
                     MenuButton {
                         id: buttonChangePrinterName
-                        buttonImage.source: "qrc:/img/icon_name_printer.png"
+                        buttonImage.source: "qrc:/img/icon_change_printer_name.png"
                         buttonText.text: qsTr("CHANGE PRINTER NAME")
                     }
 
@@ -133,20 +130,14 @@ Item {
                     MenuButton {
                         id: buttonAuthorizeAccounts
                         buttonImage.source: "qrc:/img/icon_authorize_account.png"
-                        buttonText.text: qsTr("AUTHORIZE MAKERBOT ACCOUNT")
-                    }
-
-                    MenuButton {
-                        id: buttonDeauthorizeAccounts
-                        buttonImage.source: "qrc:/img/icon_deauthorize_accounts.png"
-                        buttonText.text: qsTr("DEAUTHORIZE MAKERBOT ACCOUNTS")
+                        buttonText.text: qsTr("ACCOUNT AUTHORIZATION")
                     }
 
                     MenuButton {
                         id: buttonFirmwareUpdate
                         buttonImage.source: "qrc:/img/icon_software_update.png"
                         buttonText.text: qsTr("FIRMWARE UPDATE")
-                        buttonNeedsAction: isfirmwareUpdateAvailable
+                        buttonAlertImage.visible: isfirmwareUpdateAvailable
                     }
 
                     MenuButton {
@@ -158,8 +149,8 @@ Item {
 
                     MenuButton {
                         id: buttonChangeLanguage
-                        buttonImage.source: "qrc:/img/icon_change_language.png"
-                        buttonText.text: qsTr("CHANGE LANGUAGE")
+                        buttonImage.source: "qrc:/img/icon_choose_language.png"
+                        buttonText.text: qsTr("CHOOSE LANGUAGE")
                     }
 
                     MenuButton {
@@ -180,8 +171,7 @@ Item {
                         buttonImage.anchors.leftMargin: 30
                         buttonText.text: qsTr("CLEAN AIR SETTINGS")
                         buttonText.anchors.leftMargin: 38
-                        alertImage: "qrc:/img/filter_change_required.png"
-                        buttonNeedsAction: bot.hepaFilterChangeRequired
+                        buttonAlertImage.visible: bot.hepaFilterChangeRequired
                     }
 
 
@@ -218,6 +208,7 @@ Item {
             visible: false
 
             function altBack() {
+                namePrinter.nameField.clear()
                 if(!inFreStep) {
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
@@ -543,212 +534,6 @@ Item {
                 font.weight: Font.Bold
                 font.styleName: "Normal"
                 Layout.alignment: Qt.AlignHCenter
-            }
-        }
-    }
-
-    LoggingPopup {
-        popupName: "DeauthorizeAccounts"
-        id: deauthorizeAccountsPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.NoAutoClose
-        background: Rectangle {
-            id: popupBackgroundDim_deauth_accounts
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
-        }
-        enter: Transition {
-            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-        }
-        exit: Transition {
-            NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-        }
-
-        onClosed: {
-            clearingAccounts = false
-        }
-
-        property bool clearingAccounts: false
-
-        Rectangle {
-            id: basePopupItem_deauth_accounts
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: 265
-            radius: 10
-            border.width: 2
-            border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            Rectangle {
-                id: horizontal_divider_deauth_accounts
-                width: 720
-                height: 2
-                color: "#ffffff"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
-                visible: !deauthorizeAccountsPopup.clearingAccounts
-            }
-
-            Rectangle {
-                id: vertical_divider_deauth_accounts
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: !deauthorizeAccountsPopup.clearingAccounts
-            }
-
-            Item {
-                id: buttonBar_deauth_accounts
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                visible: !deauthorizeAccountsPopup.clearingAccounts
-
-                Rectangle {
-                    id: remove_accounts_rectangle_deauth_accounts
-                    x: 0
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: remove_accounts_text_deauth_accounts
-                        color: "#ffffff"
-                        text: qsTr("REMOVE ACCOUNTS")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "deauth_accounts: [_" + remove_accounts_text_deauth_accounts.text + "|]"
-                        id: remove_accounts_mouseArea_deauth_accounts
-                        anchors.fill: parent
-                        onPressed: {
-                            remove_accounts_text_deauth_accounts.color = "#000000"
-                            remove_accounts_rectangle_deauth_accounts.color = "#ffffff"
-                        }
-                        onReleased: {
-                            remove_accounts_text_deauth_accounts.color = "#ffffff"
-                            remove_accounts_rectangle_deauth_accounts.color = "#00000000"
-                        }
-                        onClicked: {
-                            bot.deauthorizeAllAccounts()
-                            deauthorizeAccountsPopup.clearingAccounts = true
-                            closeDeauthorizeAccountsPopupTimer.start()
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: cancel_rectangle_deauth_accounts
-                    x: 360
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: cancel_text_deauth_accounts
-                        color: "#ffffff"
-                        text: qsTr("CANCEL")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "deauth_accounts: [|" + cancel_text_deauth_accounts.text + "_]"
-                        id: cancel_mouseArea_deauth_accounts
-                        anchors.fill: parent
-                        onPressed: {
-                            cancel_text_deauth_accounts.color = "#000000"
-                            cancel_rectangle_deauth_accounts.color = "#ffffff"
-                        }
-                        onReleased: {
-                            cancel_text_deauth_accounts.color = "#ffffff"
-                            cancel_rectangle_deauth_accounts.color = "#00000000"
-                        }
-                        onClicked: {
-                            deauthorizeAccountsPopup.close()
-                        }
-                    }
-                }
-            }
-
-            ColumnLayout {
-                id: columnLayout_deauth_accounts
-                width: 590
-                height: 160
-                spacing: 0
-                anchors.top: parent.top
-                anchors.topMargin: deauthorizeAccountsPopup.clearingAccounts ? 50 : 25
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: alert_text_deauth_accounts
-                    color: "#cbcbcb"
-                    text: deauthorizeAccountsPopup.clearingAccounts ? qsTr("ALL ACCOUNTS DEAUTHORIZED") : qsTr("DEAUTHORIZE ACCOUNTS")
-                    font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                }
-
-                Item {
-                    id: emptyItem_deauth_accounts
-                    width: 10
-                    height: 5
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    visible: !deauthorizeAccountsPopup.clearingAccounts
-                }
-
-                Text {
-                    id: description_text_deauth_accounts
-                    color: "#cbcbcb"
-                    text: qsTr("Deauthorize all accounts currently connected to this printer? You will have to reauthorize any account you wish to connect in the future.")
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    font.family: defaultFont.name
-                    font.pixelSize: 18
-                    lineHeight: 1.3
-                    visible: !deauthorizeAccountsPopup.clearingAccounts
-                }
             }
         }
     }
