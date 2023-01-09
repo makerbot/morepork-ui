@@ -17,6 +17,9 @@ Item {
 
     property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
 
+    property alias raiseLowerBuildPlate: raiseLowerBuildPlate
+    property alias doorOpenRaiseLowerBuildPlatePopup: doorOpenRaiseLowerBuildPlatePopup
+
     enum SwipeIndex {
         BasePage,                   //0
         AssistedLevelingPage,       //1
@@ -129,8 +132,35 @@ Item {
             smooth: false
             visible: false
 
-            RaiseLowerBuildPlateItem {
+            RaiseLowerBuildPlate {
                 id: raiseLowerBuildPlate
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "DoorOpenRaiseLowerBuildPlate"
+        id: doorOpenRaiseLowerBuildPlatePopup
+        showOneButton: true
+        full_button.onClicked: doorOpenRaiseLowerBuildPlatePopup.close()
+        full_button_text: qsTr("CONFIRM")
+
+        ColumnLayout {
+            spacing: 10
+            anchors.top: parent.top
+            anchors.topMargin: 125
+            anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                source: "qrc:/img/process_error_small.png"
+                Layout.alignment: Qt.AlignHCenter
+            }
+            TextHeadline {
+                text: qsTr("FRONT DOOR OPEN")
+                Layout.alignment: Qt.AlignHCenter
+            }
+            TextBody {
+                text: qsTr("Close the front door to proceed.")
+                Layout.alignment: Qt.AlignHCenter
             }
         }
     }
