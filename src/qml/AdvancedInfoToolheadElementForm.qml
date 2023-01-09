@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: 300
+    height: 560
 
     property alias toolheadLabelProperty: toolheadLabelProperty
     property alias attachedProperty: attachedProperty
@@ -23,24 +23,13 @@ Item {
 
     ColumnLayout {
         id: columnLayout
-        spacing: 1
-        anchors.fill: parent
+        width: parent.width
+        spacing: 40
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Base
             id: toolheadLabelProperty
             text: qsTr("TOOLHEAD LABEL")
-            font.letterSpacing: 2
-            font.pixelSize: 15
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            color: "#ffffff"
-        }
-
-        Item {
-            id: spacing_item
-            width: 200
-            height: 15
-            visible: true
         }
 
         AdvancedInfoElement {

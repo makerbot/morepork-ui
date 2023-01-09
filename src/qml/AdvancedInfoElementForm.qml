@@ -2,7 +2,6 @@ import QtQuick 2.10
 
 Item {
     width: 400
-    height: 25
 
     property alias label_element: label
     property alias label: label.text
@@ -11,28 +10,25 @@ Item {
     property alias value_element: value
     property alias value_anchors: value.anchors
 
-    Text {
+    TextBody {
+        style: TextBody.Base
+        font.weight: Font.Light
         id: label
-        width: 200
+        width: 250
         text: qsTr("LABEL")
-        font.letterSpacing: 2
         anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 15
-        font.family: defaultFont.name
-        color: "#c9c9c9"
+        font.letterSpacing: 2
     }
 
-    Text {
+    TextBody {
+        style: TextBody.Base
+        font.weight: Font.Bold
         id: value
         text: qsTr("VALUE")
         font.capitalization: Font.AllUppercase
-        font.letterSpacing: 2
-        font.bold: true
-        anchors.left: label.right
-        anchors.leftMargin: 25
+        horizontalAlignment: Text.AlignRight
+        anchors.right: parent.right
+        anchors.rightMargin: 63
         anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 15
-        font.family: defaultFont.name
-        color: "#ffffff"
     }
 }

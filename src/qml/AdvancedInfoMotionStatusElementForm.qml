@@ -1,64 +1,92 @@
 import QtQuick 2.10
+import QtQuick.Layouts 1.3
 
 Item {
-    width: 640
-    height: 25
+    width: 800
 
     property alias axis_label: axis_label.text
     property alias enabled_value: enabled_value.text
     property alias endstop_value: endstop_value.text
     property alias position_value: position_value.text
 
-    Text {
-        id: axis_label
-        width: 50
-        text: qsTr("AXIS")
-        font.letterSpacing: 2
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 15
-        font.family: defaultFont.name
-        color: "#c9c9c9"
-    }
+    RowLayout {
+        id: motion_status_rowLayout
+        width: parent.width
+        spacing: 0
 
-    Text {
-        id: enabled_value
-        width: 100
-        text: qsTr("ENABLED")
-        font.capitalization: Font.AllUppercase
-        font.letterSpacing: 2
-        anchors.left: axis_label.right
-        anchors.leftMargin: 70
-        anchors.verticalCenter: parent.verticalCenter
-        font.pixelSize: 15
-        font.family: defaultFont.name
-        color: "#ffffff"
-    }
+        TextBody {
+            style: {
+                if (text == qsTr("AXIS")) {
+                       TextBody.Large
+                }
+                else {
+                       TextBody.Base
+                }
+            }
+            id: axis_label
+            text: qsTr("AXIS")
+            font.weight: {
+                if (text == qsTr("AXIS")) {
+                    Font.Bold
+                }
+                else {
+                    Font.Light
+                }
+            }
+            font.capitalization: Font.AllUppercase
+            Layout.fillWidth: true
+            Layout.minimumWidth: 130
+        }
 
-    Text {
-        id: endstop_value
-        width: 100
-        color: "#ffffff"
-        text: qsTr("ENDSTOP")
-        font.letterSpacing: 2
-        font.pixelSize: 15
-        font.capitalization: Font.AllUppercase
-        anchors.leftMargin: 70
-        font.family: defaultFont.name
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: enabled_value.right
-    }
+        TextBody {
+            style: {
+                if (text == qsTr("ENABLED")) {
+                       TextBody.Large
+                }
+                else {
+                       TextBody.Base
+                }
+            }
+            id: enabled_value
+            text: qsTr("ENABLED")
+            font.weight: Font.Bold
+            font.capitalization: Font.AllUppercase
+            Layout.fillWidth: true
+            Layout.minimumWidth: 130
+        }
 
-    Text {
-        id: position_value
-        width: 100
-        color: "#ffffff"
-        text: qsTr("POSITION")
-        font.letterSpacing: 2
-        font.pixelSize: 15
-        font.capitalization: Font.AllUppercase
-        anchors.leftMargin: 70
-        font.family: defaultFont.name
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: endstop_value.right
+        TextBody {
+            style: {
+                if (text == qsTr("ENDSTOP")) {
+                       TextBody.Large
+                }
+                else {
+                       TextBody.Base
+                }
+            }
+            id: endstop_value
+            text: qsTr("ENDSTOP")
+            font.weight: Font.Bold
+            font.capitalization: Font.AllUppercase
+            Layout.fillWidth: true
+            Layout.minimumWidth: 130
+        }
+
+        TextBody {
+            style: {
+                if (text == qsTr("POSITION")) {
+                       TextBody.Large
+                }
+                else {
+                       TextBody.Base
+                }
+            }
+            id: position_value
+            text: qsTr("POSITION")
+            font.weight: Font.Bold
+            font.capitalization: Font.AllUppercase
+            Layout.fillWidth: true
+            Layout.minimumWidth: 130
+        }
     }
 }

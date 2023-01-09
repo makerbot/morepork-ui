@@ -3,41 +3,23 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 640
-    height: 280
+    width: parent.width
+    height: 396
 
     ColumnLayout {
         id: columnLayout
-        anchors.bottomMargin: 30
-        spacing: 0
-        anchors.fill: parent
+        width: parent.width
+        spacing: 40
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Large
             id: heading
             text: qsTr("MOTION STATUS")
-            font.letterSpacing: 2
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            font.family: defaultFont.name
-            color: "#ffffff"
-        }
-
-        Item {
-            id: spacing_item
-            width: 200
-            height: 15
-            visible: true
+            font.letterSpacing: 10
         }
 
         AdvancedInfoMotionStatusElement {
             id: headingLabelProperty
-        }
-
-        Item {
-            id: spacing_item1
-            width: 200
-            height: 15
-            visible: true
         }
 
         AdvancedInfoMotionStatusElement {
