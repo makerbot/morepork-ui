@@ -27,8 +27,8 @@ ApplicationWindow {
 
     property bool safeToRemoveUsb: bot.safeToRemoveUsb
     onSafeToRemoveUsbChanged: {
-        if(safeToRemoveUsb && isFreComplete) {
-            safeToRemoveUsbPopup.open()
+        if(safeToRemoveUsb) {
+            // safeToRemoveUsbPopup.open()
         }
     }
 
@@ -40,56 +40,6 @@ ApplicationWindow {
             if(isNetworkConnectionAvailable) {
                 bot.firmwareUpdateCheck(false)
             }
-        }
-    }
-
-    property bool inFreStep: false
-    property bool isFreComplete: fre.currentFreStep == FreStep.FreComplete
-    property int currentFreStep: fre.currentFreStep
-    onCurrentFreStepChanged: {
-        inFreStep = false
-        switch(currentFreStep) {
-        case FreStep.Welcome:
-            freScreen.state = "base state"
-            break;
-        case FreStep.SetupWifi:
-            freScreen.state = "wifi_setup"
-            break;
-        case FreStep.SoftwareUpdate:
-            freScreen.state = "software_update"
-            break;
-        case FreStep.NamePrinter:
-            freScreen.state = "name_printer"
-            break;
-        case FreStep.SetTimeDate:
-            freScreen.state = "set_time_date"
-            break;
-        case FreStep.AttachExtruders:
-            freScreen.state = "attach_extruders"
-            break;
-        case FreStep.LevelBuildPlate:
-            freScreen.state = "level_build_plate"
-            break;
-        case FreStep.CalibrateExtruders:
-            freScreen.state = "calibrate_extruders"
-            break;
-        case FreStep.LoadMaterial:
-            freScreen.state = "load_material"
-            break;
-        case FreStep.TestPrint:
-            freScreen.state = "test_print"
-            break;
-        case FreStep.LoginMbAccount:
-            freScreen.state = "log_in"
-            break;
-        case FreStep.SetupComplete:
-            freScreen.state = "setup_complete"
-            break;
-        case FreStep.FreComplete:
-            break;
-        default:
-            freScreen.state = "base state"
-            break;
         }
     }
 
@@ -249,19 +199,6 @@ ApplicationWindow {
             anchors.fill: parent
             z: 2
             visible: true
-        }
-
-        FirmwareUpdateSuccessfulScreen {
-            anchors.fill: parent
-            z: 2
-            visible: fre.isFirstBoot &&
-                     connectionState == ConnectionState.Connected
-        }
-
-        FrePage {
-            id: freScreen
-            visible: connectionState == ConnectionState.Connected &&
-                     !isFreComplete && !inFreStep
         }
 
         LoggingPopup {

@@ -25,6 +25,7 @@
         <file alias="firmware_update_available.png">images/firmware_update_available.png</file>
         <file alias="error.png">images/error.png</file>
         <file alias="process_successful.png">images/process_successful.png</file>
+        <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="refresh.png">images/refresh.png</file>
         <file alias="refresh_black.png">images/refresh_black.png</file>
         <file alias="icon_software_update.png">images/icon_software_update.png</file>
@@ -69,5 +70,6 @@
         <file alias="icon_time.png">images/icon_time.png</file>
         <file alias="icon_material.png">images/icon_material.png</file>
         <file alias="icon_raise_lower_bp.png">images/icon_raise_lower_bp.png</file>
+        <file alias="fake_fre.png">images/fake_fre.png</file>
     </qresource>
 </RCC>

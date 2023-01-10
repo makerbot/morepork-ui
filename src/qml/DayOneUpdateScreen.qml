@@ -6,107 +6,40 @@ import StorageFileTypeEnum 1.0
 import MachineTypeEnum 1.0
 
 DayOneUpdateScreenForm {
-    button1 {
-        button_mouseArea.onClicked: {
-            if(state == "update_now") {
-                if(bot.net.interface == "ethernet" && isfirmwareUpdateAvailable) {
-                    bot.installFirmware()
-                    state = "updating_firmware"
-                }
-                else {
-                    dayOneUpdatePagePopup.open()
-                }
-            }
-            else if(state == "download_to_usb_stick") {
-                storage.setStorageFileType(StorageFileType.Firmware)
-                storage.updateFirmwareFileList("?root_usb?")
-                firmwareUpdatePage.state = "select_firmware_file"
-                state = "usb_fw_file_list"
-            }
-            else if(state == "connect_to_wifi") {
-
-            }
-            else if(state == "updating_firmware") {
-
-            }
-            else if(state == "usb_fw_file_list") {
-
-            }
-            else {
-                // base state
-                state = "update_now"
-            }
-        }
-
-        disable_button: {
-            if(state == "download_to_usb_stick") {
-               if(storage.usbStorageConnected) {
-                   false
-               }
-               else {
-                   true
-               }
-            }
-            else if(state == "connect_to_wifi") {
-                true
-            }
-            else if(state == "updating_firmware") {
-                true
-            }
-            else if(state == "usb_fw_file_list") {
-                true
-            }
-            else if(state == "update_now") {
-                false
-            }
-            else {
-                // base state
-                false
-            }
-        }
-    }
-
-    button2 {
-        // Wi-Fi Button
-        button_mouseArea.onClicked: {
-            if(bot.net.interface == "ethernet") {
-                // If ethernet is connected prompt to unplug
-                // through the popup.
-                isEthernetConnected = true
-                dayOneUpdatePagePopup.open()
-            }
-            else {
+    button1.onClicked: {
+        if (state == "update_now") {
+            if (bot.net.interface == "ethernet" && isfirmwareUpdateAvailable) {
+                bot.installFirmware()
+                state = "updating_firmware"
+            } else if (bot.net.interface != "ethernet") {
                 state = "connect_to_wifi"
                 if(!bot.net.wifiEnabled) {
                     bot.toggleWifi(true)
                 }
                 bot.net.setWifiState(WifiState.Searching)
                 bot.scanWifi(true)
+            } else {
+                // Need a popup for poor network connectivity
             }
-        }
-
-        disable_button: {
-            if(state == "update_now") {
-                false
+        } else if (state == "download_to_usb_stick") {
+            if (storage.usbStorageConnected) {
+                storage.setStorageFileType(StorageFileType.Firmware)
+                storage.updateFirmwareFileList("?root_usb?")
+                firmwareUpdatePage.state = "select_firmware_file"
+                state = "usb_fw_file_list"
+            } else {
+                dayOneUpdatePagePopup.open()
             }
-            else {
-                true
-            }
+        } else {
+            state = "update_now"
         }
     }
 
-    button3 {
-        button_mouseArea.onClicked: {
+    button2.onClicked: {
+        if (state == "update_now") {
             state = "download_to_usb_stick"
-        }
-
-        disable_button: {
-            if(state == "update_now") {
-                false
-            }
-            else {
-                true
-            }
+        } else {
+            state = "update_now"
         }
     }
 
