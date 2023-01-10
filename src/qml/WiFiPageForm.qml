@@ -65,14 +65,7 @@ Item {
         id: wifiFreStepComplete
         interval: 2000
         onTriggered: {
-            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            if(isfirmwareUpdateAvailable) {
-                fre.gotoNextStep(currentFreStep)
-            }
-            else {
-                fre.setFreStep(FreStep.NamePrinter)
-            }
+            // TODO: Use this timer to move to the next step?
         }
     }
 
@@ -89,25 +82,12 @@ Item {
         // WiFiPage.ChooseWIFI
         Item {
             id: itemChooseWifi
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
             property bool hasAltBack: true
             smooth: false
             visible: true
 
             function altBack() {
-                if(!inFreStep) {
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                dayOneUpdateScreen.state = "update_now"
             }
 
             // When the bot is not connected to wifi and the user

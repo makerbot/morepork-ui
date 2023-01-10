@@ -3,61 +3,16 @@
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>MoreporkButton.qml</file>
-        <file>TopBar.qml</file>
-        <file>TopBarForm.qml</file>
-        <file>MainMenu.qml</file>
-        <file>MainMenuForm.qml</file>
-        <file>MainMenuIcon.qml</file>
-        <file>MainMenuIconForm.qml</file>
-        <file>PrintPage.qml</file>
-        <file>PrintPageForm.qml</file>
-        <file>PrintingDrawer.qml</file>
-        <file>ExtruderPage.qml</file>
-        <file>ExtruderPageForm.qml</file>
-        <file>SettingsPage.qml</file>
-        <file>SettingsPageForm.qml</file>
-        <file>InfoPage.qml</file>
-        <file>InfoPageForm.qml</file>
-        <file>InfoItem.qml</file>
-        <file>InfoItemForm.qml</file>
-        <file>MaterialPage.qml</file>
-        <file>MaterialPageForm.qml</file>
-        <file>PreheatPage.qml</file>
-        <file>PreheatPageForm.qml</file>
-        <file>PrintIcon.qml</file>
-        <file>PrintIconForm.qml</file>
         <file>NotificationIcons.qml</file>
         <file>NotificationIconsForm.qml</file>
-        <file>FilamentIcon.qml</file>
-        <file>FilamentIconForm.qml</file>
-        <file>PrintStatusView.qml</file>
-        <file>PrintStatusViewForm.qml</file>
-        <file>FilamentBay.qml</file>
-        <file>FilamentBayForm.qml</file>
-        <file>LoadUnloadFilament.qml</file>
-        <file>LoadUnloadFilamentForm.qml</file>
         <file>FileButton.qml</file>
         <file>FileButtonForm.qml</file>
-        <file>MaterialPageDrawer.qml</file>
-        <file>MaterialPageDrawerForm.qml</file>
         <file>RoundedButton.qml</file>
         <file>RoundedButtonForm.qml</file>
-        <file>SortDrawer.qml</file>
-        <file>SortDrawerForm.qml</file>
         <file>FirmwareUpdatePage.qml</file>
         <file>FirmwareUpdatePageForm.qml</file>
-        <file>MaterialIcon.qml</file>
-        <file>MaterialIconForm.qml</file>
-        <file>Extruder.qml</file>
-        <file>ExtruderForm.qml</file>
-        <file>AssistedLeveling.qml</file>
-        <file>AssistedLevelingForm.qml</file>
         <file>LoadingIcon.qml</file>
         <file>LoadingIconForm.qml</file>
-        <file>ToolheadCalibration.qml</file>
-        <file>ToolheadCalibrationForm.qml</file>
-        <file>AdvancedInfo.qml</file>
-        <file>AdvancedInfoForm.qml</file>
         <file>MenuButton.qml</file>
         <file>MenuButtonForm.qml</file>
         <file>WiFiPageForm.qml</file>
@@ -70,25 +25,11 @@
         <file>ModalPopupForm.qml</file>
         <file>TitleText.qml</file>
         <file>BodyText.qml</file>
-        <file>SpoolInfoPage.qml</file>
-        <file>SpoolInfoPageForm.qml</file>
-        <file>SpoolInfoColumn.qml</file>
-        <file>SpoolInfoColumnForm.qml</file>
         <file>BusyPopup.qml</file>
-        <file>ColorSwatchPage.qml</file>
-        <file>ColorSwatchPageForm.qml</file>
-        <file>ColorSelectorBox.qml</file>
-        <file>ColorSelectorBoxForm.qml</file>
         <file>BulletedListItem.qml</file>
         <file>BulletedListItemForm.qml</file>
         <file>BusySpinner.qml</file>
         <file>BusySpinnerForm.qml</file>
-        <file>StartPrintMaterialViewItem.qml</file>
-        <file>StartPrintMaterialViewItemForm.qml</file>
-        <file>StartPrintMaterialIcon.qml</file>
-        <file>StartPrintMaterialIconForm.qml</file>
-        <file>StartPrintPage.qml</file>
-        <file>StartPrintPageForm.qml</file>
         <file>StartupSplashScreen.qml</file>
         <file>StartupSplashScreenForm.qml</file>
         <file>FrePage.qml</file>
@@ -103,26 +44,6 @@
         <file>TimeSelectorForm.qml</file>
         <file>SlidingSwitch.qml</file>
         <file>SlidingSwitchForm.qml</file>
-        <file>RaiseLowerBuildPlateItem.qml</file>
-        <file>RaiseLowerBuildPlateItemForm.qml</file>
-        <file>AdvancedInfoElement.qml</file>
-        <file>AdvancedInfoElementForm.qml</file>
-        <file>AdvancedInfoToolheadElement.qml</file>
-        <file>AdvancedInfoToolheadElementForm.qml</file>
-        <file>AdvancedInfoToolheadsItem.qml</file>
-        <file>AdvancedInfoToolheadsItemForm.qml</file>
-        <file>AdvancedInfoFilamentBayElement.qml</file>
-        <file>AdvancedInfoFilamentBayElementForm.qml</file>
-        <file>AdvancedInfoFilamentBaysItem.qml</file>
-        <file>AdvancedInfoFilamentBaysItemForm.qml</file>
-        <file>AdvancedInfoChamberItem.qml</file>
-        <file>AdvancedInfoChamberItemForm.qml</file>
-        <file>AdvancedInfoMiscItem.qml</file>
-        <file>AdvancedInfoMiscItemForm.qml</file>
-        <file>AdvancedInfoMotionStatusElement.qml</file>
-        <file>AdvancedInfoMotionStatusElementForm.qml</file>
-        <file>AdvancedInfoMotionStatusItem.qml</file>
-        <file>AdvancedInfoMotionStatusItemForm.qml</file>
         <file>FirmwareFileListUsb.qml</file>
         <file>FirmwareFileListUsbForm.qml</file>
         <file>RefreshButton.qml</file>
@@ -130,18 +51,6 @@
         <file>ErrorScreenForm.qml</file>
         <file>ReviewTestPrintPage.qml</file>
         <file>ReviewTestPrintPageForm.qml</file>
-        <file>TimePage.qml</file>
-        <file>TimePageForm.qml</file>
-        <file>TimeZoneButton.qml</file>
-        <file>TimeZoneButtonForm.qml</file>
-        <file>TimeZoneSelector.qml</file>
-        <file>TimeZoneSelectorForm.qml</file>
-        <file>TimeZoneLocationSeparator.qml</file>
-        <file>TimeZoneLocationSeparatorForm.qml</file>
-        <file>SnipMaterialScreen.qml</file>
-        <file>SnipMaterialScreenForm.qml</file>
-        <file>LanguageSelector.qml</file>
-        <file>LanguageSelectorForm.qml</file>
         <file>StorageTypeButton.qml</file>
         <file>StorageTypeButtonForm.qml</file>
         <file>PopupMenu.qml</file>
@@ -152,70 +61,12 @@
         <file>CustomPopupForm.qml</file>
         <file>FileOptionsPopupMenu.qml</file>
         <file>FileOptionsPopupMenuForm.qml</file>
-        <file>AnalyticsScreen.qml</file>
-        <file>AnalyticsScreenForm.qml</file>
-        <file>WaitToCoolChamberScreen.qml</file>
-        <file>WaitToCoolChamberScreenForm.qml</file>
-        <file>KoreaDFSScreen.qml</file>
-        <file>KoreaDFSScreenForm.qml</file>
-        <file>LoadMaterialSettings.qml</file>
-        <file>LoadMaterialSettingsForm.qml</file>
-        <file>LoadMaterialSelector.qml</file>
-        <file>LoadMaterialSelectorForm.qml</file>
-        <file>CustomTempSelector.qml</file>
-        <file>CustomTempSelectorForm.qml</file>
-        <file>ExpExtruderInstructionsScreen.qml</file>
-        <file>ExpExtruderInstructionsScreenForm.qml</file>
-        <file>DryMaterial.qml</file>
-        <file>DryMaterialForm.qml</file>
-        <file>DryMaterialButton.qml</file>
-        <file>DryMaterialButtonForm.qml</file>
-        <file>DryMaterialSelector.qml</file>
-        <file>DryMaterialSelectorForm.qml</file>
-        <file>CleanExtrudersSequence.qml</file>
-        <file>CleanExtrudersSequenceForm.qml</file>
-        <file>CleanExtruders.qml</file>
-        <file>CleanExtrudersForm.qml</file>
-        <file>CleanExtruderMaterialSelector.qml</file>
-        <file>CleanExtruderMaterialSelectorForm.qml</file>
-        <file>AdvancedInfoCalibrationItem.qml</file>
-        <file>AdvancedInfoCalibrationItemForm.qml</file>
-        <file>AdvancedInfoCalibrationElementForm.qml</file>
-        <file>AdvancedInfoCalibrationElement.qml</file>
-        <file>AcknowledgePrintFinished.qml</file>
-        <file>AcknowledgePrintFinishedForm.qml</file>
-        <file>DateSelector.qml</file>
-        <file>DateSelectorForm.qml</file>
-        <file>CleanExtruderSettings.qml</file>
-        <file>CleanExtruderSettingsForm.qml</file>
-        <file>CleanExtruderTempSelector.qml</file>
-        <file>CleanExtruderTempSelectorForm.qml</file>
         <file>AuthorizeAccountPage.qml</file>
         <file>AuthorizeAccountPageForm.qml</file>
         <file>AuthorizeAccountWithCode.qml</file>
         <file>AuthorizeAccountWithCodeForm.qml</file>
-        <file>AnnealPrint.qml</file>
-        <file>AnnealPrintForm.qml</file>
-        <file>MaterialButton.qml</file>
-        <file>MaterialButtonForm.qml</file>
         <file>ListSelector.qml</file>
         <file>ListSelectorForm.qml</file>
-        <file>StartPrintSpecialInstructions.qml</file>
-        <file>StartPrintSpecialInstructionsForm.qml</file>
-        <file>UserAssistedLoadInstructions.qml</file>
-        <file>UserAssistedLoadInstructionsForm.qml</file>
-        <file>FailurePrintFeedback.qml</file>
-        <file>FailurePrintFeedbackForm.qml</file>
-        <file>FeedbackButton.qml</file>
-        <file>FeedbackButtonForm.qml</file>
-        <file>HeatShieldInstructions.qml</file>
-        <file>HeatShieldInstructionsForm.qml</file>
-        <file>CleanAirSettingsPage.qml</file>
-        <file>CleanAirSettingsPageForm.qml</file>
-        <file>FilterStatusPage.qml</file>
-        <file>FilterStatusPageForm.qml</file>
-        <file>ReplaceFilterPage.qml</file>
-        <file>ReplaceFilterPageForm.qml</file>
         <file>ImageWithFeedback.qml</file>
         <file>ImageWithFeedbackForm.qml</file>
         <file>ThumbnailImage.qml</file>
@@ -247,14 +98,6 @@
         <file>ButtonRectangleBaseForm.qml</file>
         <file>NumberedSteps.qml</file>
         <file>NumberedStepsForm.qml</file>
-        <file>ExtruderStatus.qml</file>
-        <file>ExtruderStatusForm.qml</file>
-        <file>MaterialStatus.qml</file>
-        <file>MaterialStatusForm.qml</file>
-        <file>TouchTestScreen.qml</file>
-        <file>TouchTestScreenForm.qml</file>
-        <file>AdvancedInfoDragonItem.qml</file>
-        <file>AdvancedInfoDragonItemForm.qml</file>
         <file>DayOneUpdateScreen.qml</file>
         <file>DayOneUpdateScreenForm.qml</file>
     </qresource>
