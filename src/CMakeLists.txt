@@ -208,18 +208,4 @@ if(NOT ${QT_CREATOR_BUILD})
     install(FILES ${QM_FILES}
         DESTINATION "${ROOT_INSTALL_DIR}/usr/share/morepork_ui/translations")
 
-    install(
-        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/fire/"
-	    DESTINATION
-            "${CMAKE_INSTALL_PREFIX}/per_machine/fire/rootfs/usr/test_prints")
-    install(
-        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/lava/"
-	    DESTINATION
-            "${CMAKE_INSTALL_PREFIX}/per_machine/lava/rootfs/usr/test_prints")
-    # TODO(chris) Actually make test prints for magma.  These won't actually
-    #             print so we will hopefully catch this before shipping...
-    install(
-        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/lava/"
-	    DESTINATION
-            "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/test_prints")
 endif()
