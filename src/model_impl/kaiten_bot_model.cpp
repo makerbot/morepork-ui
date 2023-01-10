@@ -82,6 +82,7 @@ class KaitenBotModel : public BotModel {
     void resume_touchlog();
     void zipLogs(QString path);
     void forceSyncFile(QString path);
+    void zipTimelapseImages(QString path);
     void changeMachineName(QString new_name);
     void acknowledgeMaterial(bool response);
     void acknowledgeSafeToRemoveUsb();
@@ -118,6 +119,7 @@ class KaitenBotModel : public BotModel {
     void setNPSSurveyDueDate(QString time);
     QString getNPSSurveyDueDate();
     QString m_npsFilePath;
+    void moveBuildPlate(const int distance, const int speed);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1066,6 +1068,22 @@ void KaitenBotModel::zipLogs(QString path) {
   }
 }
 
+void KaitenBotModel::zipTimelapseImages(QString path) {
+  try{
+      qDebug() << FL_STRM << "called";
+      auto conn = m_conn.data();
+      Json::Value json_params(Json::objectValue);
+      json_params["zip_path"] = Json::Value(path.toStdString());
+      conn->jsonrpc.invoke(
+              "zip_timelapseimages",
+              json_params,
+              std::weak_ptr<JsonRpcCallback>());
+  }
+  catch(JsonRpcInvalidOutputStream &e){
+      qWarning() << FFL_STRM << e.what();
+  }
+}
+
 void KaitenBotModel::changeMachineName(QString new_name) {
     try{
         qDebug() << FL_STRM << "called";
@@ -1483,6 +1501,22 @@ QString KaitenBotModel::getNPSSurveyDueDate() {
     return QString(time);
 }
 
+void KaitenBotModel::moveBuildPlate(const int distance, const int speed) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        json_params["distance"] = Json::Value(distance);
+        json_params["speed"] = Json::Value(speed);
+
+        conn->jsonrpc.invoke("move_build_plate", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -1842,6 +1876,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                   materialsDisplay.append("UNKNOWN");
               } else if (mat.isString()) {
                   QString matAPI(mat.asString().c_str());
+                  if (matAPI == "generic") matAPI = "unknown";
                   materialsAPI.append(matAPI);
                   materialsDisplay.append(getMaterialName(matAPI));
               }

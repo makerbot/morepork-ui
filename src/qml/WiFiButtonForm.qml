@@ -1,23 +1,25 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.9
 
 Button {
     id: wifiButton
-    width: parent.width
-    height: 80
+    height: 96
+    anchors.right: parent.right
+    anchors.left: parent.left
     smooth: false
+    spacing: 0
     property bool isSaved: false
-    property bool isConnected: false
+    property alias isConnected: isConnectedImage.visible//false
     property alias wifiName: wifiName.text
     property alias isSecured: image_secured.visible
     property int signalStrength
     property color buttonColor: "#00000000"
     property color buttonPressColor: "#0f0f0f"
+    enabled: true
 
     background:
         Rectangle {
-        anchors.fill: parent
         opacity: wifiButton.down ? 1 : 0
         color: wifiButton.down ? buttonPressColor : buttonColor
         smooth: false
@@ -28,68 +30,88 @@ Button {
         width: parent.width
         height: 1
         anchors.top: parent.top
-        anchors.topMargin: 0
+        anchors.topMargin: -1
         smooth: false
     }
 
-    Image {
-        id: isConnectedImage
-        width: 34
-        height: 34
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 18
-        source: "qrc:/img/check_circle_small.png"
-        visible: isConnected
-    }
+    Item {
+        id: contentItem
+        anchors.fill: parent
+        opacity: enabled ? 1.0 : 0.3
 
-    Text {
-        id: wifiName
-        text: qsTr("WiFi Name")
-        anchors.left: parent.left
-        anchors.leftMargin: 75
-        anchors.verticalCenter: parent.verticalCenter
-        font.family: defaultFont.name
-        font.letterSpacing: 3
-        font.weight: Font.Bold
-        font.pointSize: 14
-        font.capitalization: Font.AllUppercase
-        color: "#ffffff"
-        smooth: false
-        antialiasing: false
-    }
+        RowLayout {
+            id: leftSideItems
+            height: parent.height
+            width: children.width
+            spacing: 24
+            anchors.left: parent.left
+            anchors.leftMargin: 32
+            anchors.verticalCenter: parent.verticalCenter
 
-    Image {
-        id: image_secured
-        width: sourceSize.width * 1.2
-        height: sourceSize.height * 1.2
-        anchors.right: parent.right
-        anchors.rightMargin: 120
-        anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/lock_icon.png"
-    }
+            Item {
+                Layout.preferredWidth: 34
+                Layout.preferredHeight: 34
 
-    Image {
-        id: image_signal_strength
-        width: sourceSize.width * 1.2
-        height: sourceSize.height * 1.2
-        anchors.right: parent.right
-        anchors.rightMargin: 40
-        anchors.verticalCenter: parent.verticalCenter
-        source: {
-            if(signalStrength >= 70) {
-                "qrc:/img/wifi_strong.png"
+                Image {
+                    id: isConnectedImage
+                    width: 34
+                    height: 34
+                    source: "qrc:/img/process_complete_small.png"
+                    smooth: false
+                    antialiasing: false
+                }
             }
-            else if(signalStrength >= 45) {
-                "qrc:/img/wifi_medium.png"
+
+            TextHeadline {
+                id: wifiName
+                text: qsTr("WiFi Name")
             }
-            else if(signalStrength > 33) {
-                "qrc:/img/wifi_low.png"
+        }
+
+        RowLayout {
+            id: rightSideItems
+            height: parent.height
+            width: children.width
+            spacing: 16
+            anchors.right: parent.right
+            anchors.rightMargin: 32
+            anchors.verticalCenter: parent.verticalCenter
+
+            Image {
+                id: image_secured
+                Layout.preferredWidth: sourceSize.width
+                Layout.preferredHeight: sourceSize.height
+                source: "qrc:/img/wifi_secured_menu_icon.png"
             }
-            else {
-                "qrc:/img/wifi_poor.png"
+
+            Image {
+                id: image_signal_strength
+                Layout.preferredWidth: sourceSize.width
+                Layout.preferredHeight: sourceSize.height
+                source: {
+                    if(signalStrength >= 70) {
+                        "qrc:/img/wifi_strong.png"
+                    }
+                    else if(signalStrength >= 45) {
+                        "qrc:/img/wifi_medium.png"
+                    }
+                    else if(signalStrength > 33) {
+                        "qrc:/img/wifi_low.png"
+                    }
+                    else {
+                       "qrc:/img/wifi_poor.png"
+                   }
+                }
             }
         }
     }
 
+    Component.onCompleted: {
+        this.onClicked.connect(uiLogBtn)
+    }
+
+    function uiLogBtn() {
+        console.info("MB [=" + wifiName.text + "=] clicked")
+    }
 }
+

@@ -56,14 +56,17 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
 
         for (Json::Value ap : wifiList) {
             if (ap.isObject()) {
+                // Remove hidden networks from the list by name
                 QString name = ap["name"].asString().c_str();
-                QString password = ap["password"].asString().c_str();
-                bool password_req = (password == "none" ? false : true);
-                bool password_saved = (password == "stored" ? true : false);
-                QString path = ap["path"].asString().c_str();
-                int sig_strength = ap["strength"].asInt();
-                wifi_list.append(new WiFiAP(name, password_req, password_saved,
-                                            path, sig_strength));
+                if(!name.isEmpty()) {
+                    QString password = ap["password"].asString().c_str();
+                    bool password_req = (password == "none" ? false : true);
+                    bool password_saved = (password == "stored" ? true : false);
+                    QString path = ap["path"].asString().c_str();
+                    int sig_strength = ap["strength"].asInt();
+                    wifi_list.append(new WiFiAP(name, password_req, password_saved,
+                                                path, sig_strength));
+                }
             }
         }
 

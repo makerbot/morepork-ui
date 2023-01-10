@@ -66,22 +66,26 @@ FrePageForm {
                     bot.net.setWifiState(WifiState.Searching)
                     bot.scanWifi(true)
                     mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.WifiPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                    settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.WifiPage)
                 }
             } else if(state == "software_update") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
             } else if(state == "name_printer") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ChangePrinterNamePage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "set_time_date") {
                 inFreStep = true
                 bot.getSystemTime()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.TimePage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.TimePage)
             } else if(state == "attach_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
@@ -90,12 +94,14 @@ FrePageForm {
                 extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
             } else if(state == "level_build_plate") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(MoreporkUI.AdvancedPage)
-                advancedPage.advancedSettingsSwipeView.swipeToItem(AdvancedSettingsPage.AssistedLevelingPage)
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BuildPlateSettingsPage)
+                settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.AssistedLevelingPage)
             } else if(state == "calibrate_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad()

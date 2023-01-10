@@ -179,6 +179,10 @@ void BotModel::zipLogs(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
 
+void BotModel::zipTimelapseImages(QString path) {
+    qDebug() << FL_STRM << "called with parameter: " << path;
+}
+
 void BotModel::forceSyncFile(QString path) {
     qDebug() << FL_STRM << "called with parameter: " << path;
 }
@@ -323,6 +327,11 @@ void BotModel::setNPSSurveyDueDate(QString time) {
 QString BotModel::getNPSSurveyDueDate() {
     qDebug() << FL_STRM << "called";
     return QString("null");
+}
+
+void BotModel::moveBuildPlate(const int distance, const int speed) {
+    qDebug() << FL_STRM << "called with parameters: " << "distance " << distance <<
+                           " speed" << speed;
 }
 
 class DummyBotModel : public BotModel {

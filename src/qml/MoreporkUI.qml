@@ -189,8 +189,7 @@ ApplicationWindow {
         ExtruderPage,   // 2
         SettingsPage,   // 3
         InfoPage,       // 4
-        MaterialPage,   // 5
-        AdvancedPage    // 6
+        MaterialPage    // 5
     }
 
     Item {

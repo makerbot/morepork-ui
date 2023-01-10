@@ -97,7 +97,6 @@ MaterialPageForm {
 
     function resetStatesAfterLoadWhilePaused() {
         loadUnloadFilamentProcess.state = "base state"
-        loadUnloadFilamentProcess.isExternalLoadUnload = false
         materialSwipeView.swipeToItem(MaterialPage.BasePage)
         // If cancelled out of load/unload while in print process
         // enable print drawer to set UI back to printing state.
@@ -168,18 +167,14 @@ MaterialPageForm {
             external = true
         }
 
+        var temp_list = [0,0]
         if(temperature > 0) {
-            loadUnloadFilamentProcess.isExternalLoadUnload = true
-            loadUnloadFilamentProcess.lastHeatingTemperature = temperature
-            var temp_list = [0,0]
             temp_list[tool_idx] = temperature
-            bot.loadFilament(tool_idx, external, while_printing, temp_list)
             loadMaterialSettingsPage.selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
-        } else if(material != "None") {
-            bot.loadFilament(tool_idx, external, while_printing, [0,0], material)
-        } else {
-            bot.loadFilament(tool_idx, external, while_printing)
         }
+        loadUnloadFilamentProcess.retryTemperature = temperature
+        loadUnloadFilamentProcess.retryMaterial = material
+        bot.loadFilament(tool_idx, external, while_printing, temp_list, material)
         loadUnloadFilamentProcess.state = "preheating"
         materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
@@ -190,18 +185,14 @@ MaterialPageForm {
         enableMaterialDrawer()
         var while_printing = (printPage.isPrintProcess &&
                 bot.process.stateType == ProcessStateType.Paused)
+        var temp_list = [0,0]
         if(temperature > 0) {
-            loadUnloadFilamentProcess.isExternalLoadUnload = true
-            loadUnloadFilamentProcess.lastHeatingTemperature = temperature
-            var temp_list = [0,0]
             temp_list[tool_idx] = temperature
-            bot.unloadFilament(tool_idx, external, while_printing, temp_list)
             loadMaterialSettingsPage.selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
-        } else if(material != "None") {
-            bot.unloadFilament(tool_idx, external, while_printing, [0,0], material)
-        } else {
-            bot.unloadFilament(tool_idx, external, while_printing)
         }
+        loadUnloadFilamentProcess.retryTemperature = temperature
+        loadUnloadFilamentProcess.retryMaterial = material
+        bot.unloadFilament(tool_idx, external, while_printing, temp_list, material)
         loadUnloadFilamentProcess.state = "preheating"
         materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }

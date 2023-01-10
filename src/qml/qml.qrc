@@ -16,8 +16,6 @@
         <file>MenuButton.qml</file>
         <file>MenuButtonForm.qml</file>
         <file>WiFiPageForm.qml</file>
-        <file>WiFiButton.qml</file>
-        <file>WiFiButtonForm.qml</file>
         <file>WiFiPage.qml</file>
         <file>SignInPage.qml</file>
         <file>SignInPageForm.qml</file>
@@ -38,8 +36,8 @@
         <file>NamePrinterPageForm.qml</file>
         <file>FirmwareUpdateSuccessfulScreen.qml</file>
         <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
-        <file>AdvancedSettingsPage.qml</file>
-        <file>AdvancedSettingsPageForm.qml</file>
+        <file>SystemSettingsPage.qml</file>
+        <file>SystemSettingsPageForm.qml</file>
         <file>TimeSelector.qml</file>
         <file>TimeSelectorForm.qml</file>
         <file>SlidingSwitch.qml</file>
@@ -98,6 +96,8 @@
         <file>ButtonRectangleBaseForm.qml</file>
         <file>NumberedSteps.qml</file>
         <file>NumberedStepsForm.qml</file>
+        <file>WiFiButton.qml</file>
+        <file>WiFiButtonForm.qml</file>
         <file>DayOneUpdateScreen.qml</file>
         <file>DayOneUpdateScreenForm.qml</file>
     </qresource>
