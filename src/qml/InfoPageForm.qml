@@ -29,6 +29,8 @@ Item {
             height: 350
             smooth: false
             spacing: 34
+            anchors.fill: parent
+            anchors.leftMargin: 60
 
             Item {
                 id: spacing_item
@@ -42,31 +44,26 @@ Item {
                 id: info_firmwareVersion
                 labelText: qsTr("Firmware Version")
                 dataText: bot.version
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_connectionType
                 labelText: qsTr("Connection Type")
                 dataText: bot.net.interface
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_ipAddress
                 labelText: qsTr("IP Address")
                 dataText: bot.net.ipAddr
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_subnet
                 labelText: qsTr("Netmask")
                 dataText: bot.net.netmask
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_gateway
                 labelText: qsTr("Gateway")
                 dataText: bot.net.gateway
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_dns
@@ -97,25 +94,21 @@ Item {
                             font.weight: Font.Bold
                         }
                 }
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_wifiNetwork
                 labelText: qsTr("Wi-Fi Name")
                 dataText: bot.net.interface === "wifi" ? bot.net.name : qsTr("n/a")
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_ethMacAddress
                 labelText: qsTr("Ethernet MAC Address")
                 dataText: bot.net.ethMacAddr
-                Layout.leftMargin: 60
             }
             InfoItem {
                 id: info_wlanMacAddress
                 labelText: qsTr("Wi-Fi MAC Address")
                 dataText: bot.net.wlanMacAddr
-                Layout.leftMargin: 60
             }
         }
     }
