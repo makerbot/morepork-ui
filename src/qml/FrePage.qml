@@ -63,7 +63,6 @@ FrePageForm {
                 else {
                     inFreStep = true
                     bot.toggleWifi(true)
-                    bot.net.setWifiState(WifiState.Searching)
                     bot.scanWifi(true)
                     mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
