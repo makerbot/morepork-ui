@@ -52,7 +52,8 @@ Item {
         id: wifiFreStepComplete
         interval: 2000
         onTriggered: {
-            settingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+            systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             if(isfirmwareUpdateAvailable) {
                 fre.gotoNextStep(currentFreStep)
@@ -94,6 +95,7 @@ Item {
 
             function skipFreStepAction() {
                 systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 

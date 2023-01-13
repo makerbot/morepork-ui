@@ -93,7 +93,6 @@ Item {
                         if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
                             buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                         }
-                        //settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
                 else {
@@ -105,6 +104,7 @@ Item {
                 bot.cancel()
                 assistedLevel.state = "cancelling"
                 buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -119,7 +119,9 @@ Item {
                     if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
                         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                     }
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    }
                 }
             }
         }

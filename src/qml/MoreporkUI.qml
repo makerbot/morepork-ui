@@ -285,6 +285,33 @@ ApplicationWindow {
         bot.setNPSSurveyDueDate(due)
     }
 
+    // Reset Swipe View Pages
+    function resetAllSwipeViewPages() {
+        resetSettingsSwipeViewPages()
+        //resetPrintSwipeviewPages()
+        //resetMaterialSwipeViewPages()
+    }
+
+    //settings
+    function resetSettingsSwipeViewPages() {
+        if(settingsPage.systemSettingsPage.timePage.timeSwipeView.currentIndex != TimePage.SetDate) {
+            settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetDate)
+        }
+
+        if(settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
+            settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+        }
+        if(settingsPage.extruderSettingsPage.extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
+            settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+        }
+        if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
+            settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+        }
+        if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+        }
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"

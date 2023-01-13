@@ -262,6 +262,7 @@ Item {
                 if(inFreStep) {
                     timeSwipeView.swipeToItem(TimePage.SetDate)
                     systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                     fre.gotoNextStep(currentFreStep)
                 }

@@ -44,8 +44,11 @@ ExtruderPageForm {
                     if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
                         mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     }
-                    if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.CalibrateExtrudersPage) {
-                        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
+                    if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
+                        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    }
+                    if(settingsPage.extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.CalibrateExtrudersPage) {
+                        settingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
                     }
                 } else if (bot.process.type == ProcessType.Print) {
                     // go to print screen

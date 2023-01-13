@@ -224,6 +224,7 @@ PrintPageForm {
                 if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
                     mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 }
+                // TODO WHAT'S THIS
                 if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
                     settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
                 }
