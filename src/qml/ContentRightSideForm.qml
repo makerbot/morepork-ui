@@ -4,6 +4,17 @@ import QtQuick.Layouts 1.12
 Item {
     width: 400
     height: 408
+
+    // Debug flag to help with development; set to true to
+    // view the layout in design view with all elements and
+    // pick the ones you want when designing a new page.
+    property bool showAllElements: false
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+        visible: showAllElements
+    }
+
     property alias textHeader: textHeader
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
@@ -27,6 +38,7 @@ Item {
                 id: textHeader
                 style: TextHeadline.Base
                 text: "standard header"
+                visible: false || showAllElements
             }
 
             NumberedSteps {
@@ -34,6 +46,7 @@ Item {
                 steps: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"]
+                visible: false || showAllElements
             }
 
             TextBody {
@@ -42,6 +55,16 @@ Item {
                 font.weight: Font.Normal
                 Layout.fillWidth: true
                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id purus feugiat sed nisi, quam. Orci, in eu interdum erat purus, proin."
+                visible: false || showAllElements
+            }
+
+            TextBody {
+                id: textBody1
+                style: TextBody.Base
+                font.weight: Font.Bold
+                Layout.fillWidth: true
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id purus feugiat sed nisi, quam. Orci, in eu interdum erat purus, proin."
+                visible: false || showAllElements
             }
         }
 
@@ -51,22 +74,26 @@ Item {
             ButtonRectanglePrimary {
                 id: buttonPrimary
                 text: "label"
+                visible: false || showAllElements
             }
 
             ButtonRectangleSecondary {
                 id: buttonSecondary1
                 text: "label"
+                visible: false || showAllElements
             }
 
             ButtonRectangleSecondary {
                 id: buttonSecondary2
                 text: "label"
+                visible: false || showAllElements
             }
 
             SlidingSwitch {
                 id: slidingSwitch
                 showText: true
                 switchText: "label"
+                visible: false || showAllElements
             }
         }
     }
