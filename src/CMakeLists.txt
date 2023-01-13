@@ -41,6 +41,7 @@ endif()
 # so this just magically works.
 find_package(Qt5 COMPONENTS Core Quick Multimedia Gui REQUIRED)
 find_package(Qt5LinguistTools)
+find_package(Qt5QuickCompiler)
 
 # Model impl sources aren't built for Qt creator so they just live here
 set(SOURCES
@@ -123,19 +124,19 @@ qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC
 file(GLOB TS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_SOURCES})
 
-qt5_add_resources(MOREPROK_UI_RESOURCES qml/media.qrc qml/qml.qrc)
+qtquick_compiler_add_resources(MOREPORK_UI_RESOURCES qml/media.qrc qml/qml.qrc)
 
 # Take care of host code
 if(${QT_CREATOR_BUILD})
     include_directories(host)
-    qt5_add_resources(MOREPROK_HOST_UI_RESOURCES host/host.qrc)
-    list(APPEND MOREPROK_UI_RESOURCES ${MOREPROK_HOST_UI_RESOURCES})
+    qt5_add_resources(MOREPORK_HOST_UI_RESOURCES host/host.qrc)
+    list(APPEND MOREPORK_UI_RESOURCES ${MOREPORK_HOST_UI_RESOURCES})
     list(APPEND SOURCES host/host_model.cpp)
 endif()
 
 add_executable(morepork_ui
     ${SOURCES}
-    ${MOREPROK_UI_RESOURCES}
+    ${MOREPORK_UI_RESOURCES}
     ${QM_FILES}
     ${MOREPORK_UI_HEADERS_MOC})
 target_link_libraries(morepork_ui
