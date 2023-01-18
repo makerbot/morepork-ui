@@ -1848,7 +1848,8 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
         noFilamentErrorDisabledSet(no_filament_error_disabled);
       }
       else {
-        doorLidErrorDisabledReset();
+        doorErrorDisabledReset();
+        lidErrorDisabledReset();
         noFilamentErrorDisabledReset();
       }
 
