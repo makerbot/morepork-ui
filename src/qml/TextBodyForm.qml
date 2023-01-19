@@ -12,7 +12,6 @@ Text {
     width: 360
     text: "text-base"
     font.family: "Roboto"
-    font.styleName: "Light"
     font.pixelSize: {
         switch(style) {
         case TextBody.Base:
@@ -46,7 +45,7 @@ Text {
             20
         }
     }
-    color: Qt.rgba(255, 255, 255, 0.8)
+    color: Qt.rgba(255, 255, 255, 0.9)
 
     // Due to binding error we set the spacing onCompleted
     Component.onCompleted: {

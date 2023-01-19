@@ -50,5 +50,5 @@ Text {
     horizontalAlignment: Text.AlignHCenter
     lineHeightMode: Text.FixedHeight
     lineHeight: 19.2
-    color: Qt.rgba(255, 255, 255, 0.8)
+    color: Qt.rgba(255, 255, 255, 0.9)
 }
