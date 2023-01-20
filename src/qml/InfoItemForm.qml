@@ -4,51 +4,42 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: infoItem
-    height: 20
-    width: 600
+    width: 680
     smooth: false
+    antialiasing: false
+
     property alias labelText: labelText.text
     property alias dataText: dataText.text
     property alias dataElement: dataText
     property alias labelElement: labelText
     property alias baseElement: baseItem
 
-    Item {
+    RowLayout {
         id: baseItem
-        anchors.fill: parent
-        Text {
+        width: parent.width
+        spacing: 50
+
+        TextBody {
+            style: TextBody.Base
+            font.weight: Font.Light
             id: labelText
             text: "label"
-            antialiasing: false
-            smooth: false
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.letterSpacing: 3
-            font.pixelSize: 18
-            anchors.verticalCenter: parent.verticalCenter
-            color: "#cbcbcb"
             font.capitalization: Font.AllUppercase
-            width: 300
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.minimumWidth: 270
         }
 
-        Text {
+        TextBody {
+            style: TextBody.Base
+            font.weight: Font.Bold
             id: dataText
             text: "data"
-            anchors.left: parent.left
-            anchors.leftMargin: 350
-            antialiasing: false
-            smooth: false
-            font.family: defaultFont.name
-            font.letterSpacing: 5
-            font.weight: Font.Bold
-            font.pixelSize: 18
-            anchors.verticalCenter: parent.verticalCenter
-            color: "#ffffff"
             font.capitalization: Font.AllUppercase
-            width: 385
+            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             elide: Text.ElideRight
+            Layout.minimumWidth: 365
         }
     }
 }
