@@ -120,7 +120,6 @@ Item {
 
             function skipFreStepAction() {
                 extruderSwipeView.swipeToItem(ExtruderPage.BasePage)
-                //settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 

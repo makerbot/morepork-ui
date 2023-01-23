@@ -228,9 +228,7 @@ Item {
                         dryMaterial.cancelDryingCyclePopup.open()
                 } else {
                     dryMaterial.state = "base state"
-                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    }
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
 
@@ -238,9 +236,7 @@ Item {
                 id: dryMaterial
                 onProcessDone: {
                     state = "base state"
-                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    }
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }
@@ -261,9 +257,7 @@ Item {
                     annealPrint.state = "cancelling"
                 } else {
                     annealPrint.state = "base state"
-                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    }
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
 
@@ -271,9 +265,7 @@ Item {
                 id: annealPrint
                 onProcessDone: {
                     state = "base state"
-                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    }
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

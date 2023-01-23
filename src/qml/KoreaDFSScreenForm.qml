@@ -163,7 +163,7 @@ Item {
             visible: true
 
             function altBack() {
-                // TODO WHATS THIS?
+
             }
 
             Text {

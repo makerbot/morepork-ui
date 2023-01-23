@@ -66,15 +66,8 @@ Item {
         onTriggered: {
             resetToFactoryPopup.close()
             // Reset all screen positions
-            if(systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
-                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-            }
-            if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-            }
-            if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            }
+            resetSettingsSwipeViewPages()
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
         }
@@ -317,8 +310,7 @@ Item {
             }
 
             function skipFreStepAction() {
-                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                resetSettingsSwipeViewPages()
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 

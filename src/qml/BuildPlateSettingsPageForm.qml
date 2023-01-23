@@ -90,9 +90,7 @@ Item {
                     }
                     else {
                         assistedLevel.state = "base state"
-                        if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
-                            buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
-                        }
+                        buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                     }
                 }
                 else {
@@ -116,12 +114,8 @@ Item {
 
                 onProcessDone: {
                     state = "base state"
-                    if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
-                        buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
-                    }
-                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    }
+                    buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

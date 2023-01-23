@@ -147,13 +147,10 @@ Item {
                     // Dont go back if an error happened
                     if(calibrateErrorScreen.lastReportedErrorType ==
                                                         ErrorType.NoError) {
-                        if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                        }
+                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+
                         if(processDone) {
-                            if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                            }
+                            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         }
                     }
                 }
@@ -183,9 +180,7 @@ Item {
                     cleanExtruders.cancelCleanExtrudersPopup.open()
                 } else {
                     cleanExtruders.state = "base state"
-                    if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    }
+                    extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                 }
             }
 
@@ -193,12 +188,8 @@ Item {
                 id: cleanExtruders
                 onProcessDone: {
                     state = "base state"
-                    if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    }
-                    if(settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    }
+                    extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

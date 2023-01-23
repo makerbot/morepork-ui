@@ -23,10 +23,7 @@ Item {
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
             bot.net.setWifiState(WifiState.Connected)
-
-            if(wifiSwipeView.currentIndex != WiFiPage.ChooseWifi) {
-                wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
-            }
+            wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
             bot.scanWifi(true)
             passwordField.clear()
 

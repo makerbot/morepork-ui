@@ -13,7 +13,6 @@ FirmwareUpdatePageForm {
             if(!inFreStep) {
                 goBack()
             } else {
-                //TODO CHECK LOGIC
                 settingsPage.systemSettingsPageView.swipeToItem(SystemSettingsPage.BasePage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
