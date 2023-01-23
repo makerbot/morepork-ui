@@ -21,7 +21,6 @@ SystemSettingsPageForm {
         }
         else if(bot.net.wifiState == WifiState.NotConnected ||
                 bot.net.wifiState == WifiState.NoWifiFound) {
-            bot.net.setWifiState(WifiState.Searching)
             bot.scanWifi(true)
         }
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.WifiPage)

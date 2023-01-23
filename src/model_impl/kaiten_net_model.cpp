@@ -71,11 +71,11 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
         }
 
         if (wifi_list.empty()) {
-            wifiStateSet(WifiState::NoWifiFound);
             WiFiListReset();
         } else {
             WiFiListSet(wifi_list);
         }
+        wifiSearchingSet(false);
     }
 
     // wifi_connect(...) part
@@ -95,6 +95,10 @@ void KaitenNetModel::wifiUpdate(const Json::Value &result) {
             }
         }
     }
+}
+
+void KaitenNetModel::setWifiSearching() {
+    wifiSearchingSet(true);
 }
 
 void KaitenNetModel::cloudServicesInfoUpdate(const Json::Value &result) {

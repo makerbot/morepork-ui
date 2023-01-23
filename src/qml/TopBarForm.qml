@@ -296,9 +296,9 @@ Item {
                                     qsTr("%1 SENSOR INFO").arg(bot.name)
                                     break;
                                 case SystemSettingsPage.WifiPage:
-                                    switch(settingsPage.wifiPage.wifiSwipeView.currentIndex) {
+                                    switch(settingsPage.systemSettingsPage.wifiPage.wifiSwipeView.currentIndex) {
                                     case WiFiPage.EnterPassword:
-                                       var wifiNameRefactor = (qsTr("%1").arg(settingsPage.wifiPage.selectedWifiName))
+                                       var wifiNameRefactor = (qsTr("%1").arg(settingsPage.systemSettingsPage.wifiPage.selectedWifiName))
                                        if(wifiNameRefactor.length > 8) {
                                             wifiNameRefactor= wifiNameRefactor.substr(0,8) + "..."
                                         }
