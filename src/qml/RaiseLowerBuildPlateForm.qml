@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     anchors.fill: parent
-    property bool chamberDoorOpen: bot.chamberErrorCode == 48 && !bot.doorLidErrorDisabled
+    property bool chamberDoorOpen: bot.chamberErrorCode == 48 && !bot.doorErrorDisabled
 
     onChamberDoorOpenChanged: {
         if(chamberDoorOpen &&
