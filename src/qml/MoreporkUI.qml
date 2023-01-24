@@ -285,6 +285,15 @@ ApplicationWindow {
         bot.setNPSSurveyDueDate(due)
     }
 
+    //Reset settings swipe view pages (nested pages)
+    function resetSettingsSwipeViewPages() {
+        settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetDate)
+        settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+        settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"
@@ -1775,12 +1784,8 @@ ApplicationWindow {
                             onClicked: {
                                 bot.buildPlateCleared()
                                 buildPlateClearPopup.close()
-                                if(mainSwipeView.currentIndex != MoreporkUI.PrintPage) {
-                                    mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                                }
-                                if(printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
-                                    printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
-                                }
+                                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                             }
                         }
                     }

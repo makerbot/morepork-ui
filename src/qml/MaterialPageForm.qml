@@ -52,6 +52,7 @@ Item {
            // the UI to move to material page for some
            // reason, quick hack to fix this.
            (bot.process.errorCode != 1041)) {
+
             if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage){
                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }

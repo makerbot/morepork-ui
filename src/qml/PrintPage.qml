@@ -222,28 +222,16 @@ PrintPageForm {
     printingDrawer.buttonChangeFilament.onClicked: {
         if(!printingDrawer.buttonChangeFilament.disableButton) {
             if(bot.process.stateType == ProcessStateType.Paused) {
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                }
-                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                }
-                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
-                }
+                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                resetSettingsSwipeViewPages()
                 printingDrawer.close()
             }
             else if(bot.process.stateType == ProcessStateType.Printing) {
                 bot.pauseResumePrint("suspend")
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                }
-                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                }
-                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
-                }
+                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                resetSettingsSwipeViewPages()
                 printingDrawer.close()
             }
         }

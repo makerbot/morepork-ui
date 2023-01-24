@@ -90,10 +90,7 @@ Item {
                     }
                     else {
                         assistedLevel.state = "base state"
-                        if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
-                            buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
-                        }
-                        //settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                        buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                     }
                 }
                 else {
@@ -105,6 +102,7 @@ Item {
                 bot.cancel()
                 assistedLevel.state = "cancelling"
                 buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -116,9 +114,7 @@ Item {
 
                 onProcessDone: {
                     state = "base state"
-                    if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
-                        buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
-                    }
+                    buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }

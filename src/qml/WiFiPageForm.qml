@@ -23,10 +23,7 @@ Item {
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
             bot.net.setWifiState(WifiState.Connected)
-
-            if(wifiSwipeView.currentIndex != WiFiPage.ChooseWifi) {
-                wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
-            }
+            wifiSwipeView.swipeToItem(WiFiPage.ChooseWifi)
             bot.scanWifi(true)
             passwordField.clear()
 
@@ -52,7 +49,8 @@ Item {
         id: wifiFreStepComplete
         interval: 2000
         onTriggered: {
-            settingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+            systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             if(isfirmwareUpdateAvailable) {
                 fre.gotoNextStep(currentFreStep)
@@ -94,6 +92,7 @@ Item {
 
             function skipFreStepAction() {
                 systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 

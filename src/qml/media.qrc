@@ -199,6 +199,8 @@
         <file alias="icon_time.png">images/icon_time.png</file>
         <file alias="icon_material.png">images/icon_material.png</file>
         <file alias="icon_raise_lower_bp.png">images/icon_raise_lower_bp.png</file>
+        <file alias="setup_procedures.png">images/setup_procedures.png</file>
+        <file alias="icon_fingerprint.png">images/icon_fingerprint.png</file>
         <file alias="error_image_overlay.png">images/error_image_overlay.png</file>
     </qresource>
 </RCC>
