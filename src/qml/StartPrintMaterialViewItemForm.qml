@@ -81,18 +81,22 @@ Item {
         }
     }
 
+    StartPrintMaterialIconForm {
+        id: startPrintMaterialIcon
+        filamentBayID: parent.filamentBayID
+        filamentRequired: materialRequired
+    }
+
     Image {
         id: materialErrorAlertIcon
         z: 1
-        width: 30
-        height: 30
-        anchors.left: parent.left
-        anchors.leftMargin: -12
-        anchors.top: parent.top
-        anchors.topMargin: -12
+        width: sourceSize.width
+        height: sourceSize.height
+        anchors.right: startPrintMaterialIcon.right
+        anchors.bottom: startPrintMaterialIcon.bottom
         antialiasing: false
         smooth: false
-        source: "qrc:/img/alert.png"
+        source: "qrc:/img/error_image_overlay.png"
         visible: {
             if(filamentBayID == 1 &&
                materialPage.bay1.filamentMaterial == print_model_material ||
@@ -113,12 +117,6 @@ Item {
                 true
             }
         }
-    }
-
-    StartPrintMaterialIconForm {
-        id: startPrintMaterialIcon
-        filamentBayID: parent.filamentBayID
-        filamentRequired: materialRequired
     }
 
     Item {
@@ -200,7 +198,7 @@ Item {
                 if(materialColorName != "Reading Spool...") {
                     qsTr("%1KG OF %2KG").arg(materialRequired).arg(materialAvailable)
                 } else {
-                    ""
+                    emptyString
                 }
             }
             anchors.top: materialColorText.bottom

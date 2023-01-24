@@ -1,9 +1,12 @@
 import QtQuick 2.10
+import QtQuick.Controls 2.2
+import QtQuick.Layouts 1.3
+import MachineTypeEnum 1.0
 
 Item {
     id: startPrintMaterialIcon
-    width: 82
-    height: 82
+    width: 65
+    height: 65
     smooth: false
 
     property int filamentBayID: 0
@@ -82,17 +85,46 @@ Item {
     }
 
     Rectangle {
-        id: base_circle
+        id: outer_ring
         anchors.fill: parent
         color: "#00000000"
-        radius: 82
+        radius: width/2
         antialiasing: false
         smooth: false
         anchors.top: parent.top
         anchors.topMargin: 0
         visible: true
         border.width: 2
-        border.color: "#c4c4c4"
+        //border.color: "#c4c4c4"
+        border.color: "#ffffff"
+    }
+    Rectangle {
+        id: inner_ring
+        width: outer_ring.width/(2.4)
+        height: outer_ring.height/(2.4)
+        radius: width/2
+        color: "#00000000"
+        border.color: "#ffffff"
+        border.width: 2
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+    }
+
+    Rectangle {
+        id: filament_extension
+        width: 2
+        height: outer_ring.radius
+        color: "#ffffff"
+        anchors.top: outer_ring.top
+        anchors.left: outer_ring.left
+    }
+
+    Rectangle {
+        id: material_amount_ring
+        anchors.fill: outer_ring
+        color: "#00000000"
+        antialiasing: false
+        smooth: false
         property int fillPercentAvailable: filamentPercentAvailable
         property int fillPercentRequired: filamentPercentRequired
         property string fillAvailableColor: filamentAvailableColor
@@ -131,26 +163,43 @@ Item {
                 context.reset();
                 var centreX = parent.width * 0.5;
                 var centreY = parent.height * 0.5;
-                context.beginPath();
-                //0.06283185 = PI*2/100
-                context.arc(centreX, centreY, parent.width*0.36,0,
-                            filamentPercentAvailable*0.06283185, false);
-                context.lineWidth = 10;
-                context.lineCap = "round";
-                context.strokeStyle = filamentAvailableColor;
-                context.stroke()
+                if(bot.machineType == MachineType.Magma) {
+                    // Do not know filament spool amount
+                    if(filamentPercentRequired > 0) {
 
-                if(filamentPercentRequired > 0) {
-                    var context1 = getContext("2d");
-                    context1.beginPath();
-                    context1.arc(centreX, centreY, parent.width*0.36,
-                                filamentPercentAvailable*0.06283185,
-                                (filamentPercentAvailable*0.06283185)-
-                                (filamentPercentRequired*0.06283185), true);
-                    context1.lineWidth = 10;
-                    context1.lineCap = "round";
-                    context1.strokeStyle = filamentRequiredColor;
-                    context1.stroke()
+                        context.beginPath();
+                        //0.06283185 = PI*2/100
+                        context.arc(centreX, centreY, parent.width*0.34,
+                                    0,filamentPercentRequired*0.06283185, false);
+                        context.lineWidth = 10;
+                        context.lineCap = "round";
+                        context.strokeStyle = filamentAvailableColor;
+                        context.stroke()
+                    }
+                }
+                else {
+
+                    context.beginPath();
+                    //0.06283185 = PI*2/100
+                    context.arc(centreX, centreY, parent.width*0.34,0,
+                                filamentPercentAvailable*0.06283185, false);
+                    context.lineWidth = 10;
+                    context.lineCap = "round";
+                    context.strokeStyle = filamentAvailableColor;
+                    context.stroke()
+
+                    if(filamentPercentRequired > 0) {
+                        var context1 = getContext("2d");
+                        context1.beginPath();
+                        context1.arc(centreX, centreY, parent.width*0.34,
+                                    filamentPercentAvailable*0.06283185,
+                                    (filamentPercentAvailable*0.06283185)-
+                                    (filamentPercentRequired*0.06283185), true);
+                        context1.lineWidth = 10;
+                        context1.lineCap = "round";
+                        context1.strokeStyle = filamentRequiredColor;
+                        context1.stroke()
+                    }
                 }
             }
         }
