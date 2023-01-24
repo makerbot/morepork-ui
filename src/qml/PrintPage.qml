@@ -92,15 +92,19 @@ PrintPageForm {
     }
 
     function startPrintDoorLidCheck() {
-        if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 45) {
-            startPrintTopLidOpen = true
-            return false
-        }
-        else if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 48) {
+        if(!bot.doorErrorDisabled && bot.chamberErrorCode == 48) {
             startPrintBuildDoorOpen = true
             return false
         }
-        else {
+        // This isn't a reliable check for the lid error as the door error
+        // preempts the lid error so this check can pass and the printer
+        // can still error out with a lid error if the user has disabled the
+        // door error but not the lid error and left them both open.
+        // This only affects internal users.
+        else if(!bot.lidErrorDisabled && bot.chamberErrorCode == 45) {
+            startPrintTopLidOpen = true
+            return false
+        } else {
             return true
         }
     }
