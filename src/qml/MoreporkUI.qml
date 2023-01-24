@@ -1937,7 +1937,7 @@ ApplicationWindow {
         }
 
         // Modal Popup for Toolhead Disconnected/FFC Cable Disconnected
-        ModalPopup {
+        CustomPopup {
             popupName: "CarriageCommunicationError"
             /* When the toolhead disconnects, the Kaiten's Bot Model's
                extruderXErrorCode the toolhead error disconnect error
@@ -1948,29 +1948,29 @@ ApplicationWindow {
 
             id: toolheadDisconnectedPopup
             visible: toolheadADisconnect || toolheadBDisconnect
-            disableUserClose: false
+            closePolicy: Popup.CloseOnPressOutside
 
-            popup_contents.contentItem: Item {
-                anchors.fill: parent
-                ColumnLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: 150
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 150
 
-                    TitleText {
-                        text: "CARRIAGE COMMUNICATION ERROR"
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                TextHeadline {
+                    text: "CARRIAGE COMMUNICATION ERROR"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                TextBody {
+                    text: {
+                        "The printer’s carriage is reporting communication drop-outs. " +
+                        "Try restarting the printer. If this happens again, please " +
+                        "contact MakerBot support."
                     }
-                    BodyText{
-                        text: {
-                            "The printer’s carriage is reporting communication drop-outs.\n"+
-                            "Try restarting the printer. If this happens again, please\n"+
-                            "contact MakerBot support."
-                        }
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: 620
+                    wrapMode: "WordWrap"
                 }
             }
         }
