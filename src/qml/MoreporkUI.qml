@@ -287,6 +287,7 @@ ApplicationWindow {
 
     //Reset settings swipe view pages (nested pages)
     function resetSettingsSwipeViewPages() {
+        console.info("Resetting Settings Pages to their Base Pages...")
         settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetDate)
         settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
         settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
