@@ -237,6 +237,7 @@
         <file>ButtonRectanglePrimaryForm.qml</file>
         <file>ButtonRoundPrintIcon.qml</file>
         <file>ButtonRoundPrintIconForm.qml</file>
+        <file>ContentLeftSide.qml</file>
         <file>ContentRightSide.qml</file>
         <file>ContentRightSideForm.qml</file>
         <file>ButtonRectangleSecondary.qml</file>
@@ -259,5 +260,8 @@
         <file>ExtruderSettingsPage.qml</file>
         <file>BuildPlateSettingsPage.qml</file>
         <file>BuildPlateSettingsPageForm.qml</file>
+        <file>TemperatureStatusElement.qml</file>
+        <file>TemperatureStatus.qml</file>
+        <file>ContentLeftSide.qml</file>
     </qresource>
 </RCC>

@@ -93,7 +93,6 @@ Item {
                         if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
                             buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                         }
-                        //settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                     }
                 }
                 else {
@@ -119,7 +118,6 @@ Item {
                     if(buildPlateSettingsSwipeView.currentIndex != BuildPlateSettingsPage.BasePage) {
                         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                     }
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

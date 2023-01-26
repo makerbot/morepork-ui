@@ -18,6 +18,8 @@ Item {
     property alias textHeader: textHeader
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
+    property alias textBody1: textBody1
+    property alias temperatureStatus: temperatureStatus
     property alias buttonPrimary: buttonPrimary
     property alias buttonSecondary1: buttonSecondary1
     property alias buttonSecondary2: buttonSecondary2
@@ -32,17 +34,20 @@ Item {
         spacing: 32
 
         ColumnLayout {
+            Layout.preferredWidth: parent.width
             spacing: 24
 
             TextHeadline {
                 id: textHeader
                 style: TextHeadline.Base
+                Layout.preferredWidth: parent.width
                 text: "standard header"
                 visible: false || showAllElements
             }
 
             NumberedSteps {
                 id: numberedSteps
+                Layout.preferredWidth: parent.width
                 steps: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"]
@@ -53,7 +58,7 @@ Item {
                 id: textBody
                 style: TextBody.Base
                 font.weight: Font.Normal
-                Layout.fillWidth: true
+                Layout.preferredWidth: parent.width
                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id purus feugiat sed nisi, quam. Orci, in eu interdum erat purus, proin."
                 visible: false || showAllElements
             }
@@ -62,8 +67,13 @@ Item {
                 id: textBody1
                 style: TextBody.Base
                 font.weight: Font.Bold
-                Layout.fillWidth: true
+                Layout.preferredWidth: parent.width
                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id purus feugiat sed nisi, quam. Orci, in eu interdum erat purus, proin."
+                visible: false || showAllElements
+            }
+
+            TemperatureStatus {
+                id: temperatureStatus
                 visible: false || showAllElements
             }
         }

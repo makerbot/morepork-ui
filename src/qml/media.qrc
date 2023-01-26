@@ -70,19 +70,33 @@
         <file alias="extruder_right.png">images/extruder_right.png</file>
         <file alias="extruder_none.png">images/extruder_none.png</file>
         <file alias="extruder_both.png">images/extruder_both.png</file>
-        <file alias="insert_build_plate.png">images/ast_lvl_insert_build_plate.png</file>
-        <file alias="remove_build_plate.png">images/ast_lvl_remove_build_plate.png</file>
-        <file alias="assisted_level_instructions.png">images/ast_lvl_instructions.png</file>
-        <file alias="build_plate_level.png">images/ast_lvl_build_plate_level.png</file>
-        <file alias="build_plate_not_level.png">images/ast_lvl_build_plate_not_level.png</file>
-        <file alias="build_plate_level_range.png">images/ast_lvl_build_plate_level_range.png</file>
-        <file alias="build_plate_level_begin.png">images/ast_lvl_build_plate_level_begin.png</file>
-        <file alias="sombrero_build_plate.png">images/ast_lvl_sombrero_build_plate.png</file>
-        <file alias="build_plate_left_adjust_tighten.png">images/ast_lvl_build_plate_left_adjust_tighten.png</file>
-        <file alias="build_plate_right_adjust_tighten.png">images/ast_lvl_build_plate_right_adjust_tighten.png</file>
-        <file alias="build_plate_left_adjust_loosen.png">images/ast_lvl_build_plate_left_adjust_loosen.png</file>
-        <file alias="build_plate_right_adjust_loosen.png">images/ast_lvl_build_plate_right_adjust_loosen.png</file>
-        <file alias="build_plate_leveled.png">images/ast_lvl_build_plate_leveled.png</file>
+
+        <!-- Assisted Level -->
+        <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
+        <file alias="method_insert_build_plate.png">images/assisted_level/method/insert_build_plate.png</file>
+        <file alias="method_remove_build_plate.png">images/assisted_level/method/remove_build_plate.png</file>
+        <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
+        <file alias="method_adjust_left_clockwise.png">images/assisted_level/method/adjust_left_clockwise.png</file>
+        <file alias="method_adjust_left_counter_clockwise.png">images/assisted_level/method/adjust_left_counter_clockwise.png</file>
+        <file alias="method_adjust_right_clockwise.png">images/assisted_level/method/adjust_right_clockwise.png</file>
+        <file alias="method_adjust_right_counter_clockwise.png">images/assisted_level/method/adjust_right_counter_clockwise.png</file>
+        <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
+
+        <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
+        <file alias="methodxl_insert_build_plate.png">images/assisted_level/methodxl/insert_build_plate.png</file>
+        <file alias="methodxl_remove_build_plate.png">images/assisted_level/methodxl/remove_build_plate.png</file>
+        <file alias="methodxl_locate_screws.png">images/assisted_level/methodxl/locate_screws.png</file>
+        <file alias="methodxl_adjust_left_clockwise.png">images/assisted_level/methodxl/adjust_left_clockwise.png</file>
+        <file alias="methodxl_adjust_left_counter_clockwise.png">images/assisted_level/methodxl/adjust_left_counter_clockwise.png</file>
+        <file alias="methodxl_adjust_right_clockwise.png">images/assisted_level/methodxl/adjust_right_clockwise.png</file>
+        <file alias="methodxl_adjust_right_counter_clockwise.png">images/assisted_level/methodxl/adjust_right_counter_clockwise.png</file>
+        <file alias="methodxl_adjust_done.png">images/assisted_level/methodxl/adjust_done.png</file>
+
+        <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
+        <file alias="leveler_indicator_orange.png">images/assisted_level/leveler_indicator_orange.png</file>
+        <file alias="leveler_scale.png">images/assisted_level/leveler_scale.png</file>
+        <!-- End Assisted Level -->
+
         <file alias="refresh.png">images/refresh.png</file>
         <file alias="refresh_black.png">images/refresh_black.png</file>
         <file alias="icon_printer_info.png">images/icon_printer_info.png</file>
