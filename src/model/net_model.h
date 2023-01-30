@@ -87,7 +87,6 @@ class NetModel : public BaseModel {
   public:
     //MOREPORK_QML_ENUM
     enum WifiState {
-         Searching,
          NoWifiFound,
          Connecting,
          Disconnecting,
@@ -140,6 +139,7 @@ class NetModel : public BaseModel {
     MODEL_PROP(QString, wlanMacAddr, "Unknown")
     MODEL_PROP(QStringList, dns, {"Unknown"})
     MODEL_PROP(bool, wifiEnabled, false)
+    MODEL_PROP(bool, wifiSearching, false)
     MODEL_PROP(WifiState, wifiState, NotConnected)
     MODEL_PROP(WifiError, wifiError, NoError)
     MODEL_PROP(bool, analyticsEnabled, false)

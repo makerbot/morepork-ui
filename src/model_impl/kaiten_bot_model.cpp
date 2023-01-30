@@ -938,6 +938,7 @@ void KaitenBotModel::scanWifi(bool forceRescan){
         Json::Value json_params(Json::objectValue);
         json_params["force_rescan"] = Json::Value(forceRescan);
         conn->jsonrpc.invoke("wifi_scan", json_params, m_wifiCb);
+        dynamic_cast<KaitenNetModel*>(m_net.data())->setWifiSearching();
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

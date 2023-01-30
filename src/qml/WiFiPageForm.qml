@@ -12,6 +12,7 @@ Item {
     smooth: false
     antialiasing: false
     property alias wifiSwipeView: wifiSwipeView
+    property alias wifiList: wifiList
     property int wifiError: bot.net.wifiError
     property bool isWifiConnected: bot.net.interface == "wifi"
     property string currentWifiName: bot.net.name
@@ -19,6 +20,11 @@ Item {
     property string selectedWifiName: ""
     property bool selectedWifiSaved: false
     property bool isForgetEnabled: false
+    property bool listVisible: bot.net.wifiEnabled && (isWifiConnected ||
+        bot.net.wifiState == WifiState.Connected ||
+        (bot.net.wifiState == WifiState.NotConnected &&
+         bot.net.wifiError != WifiError.ScanFailed &&
+         bot.net.wifiError != WifiError.UnknownError))
 
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
@@ -78,52 +84,27 @@ Item {
             }
 
             ColumnLayout {
-                id: ethernetInfoId
+                id: refreshButton
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
                 anchors.topMargin: 10
                 spacing: 15
 
-                Image {
-                    id: ethernet_image
-                    Layout.preferredWidth: 30
-                    Layout.preferredHeight: 30
-                    Layout.alignment: Qt.AlignHCenter
-                    source: {
-                        if(bot.net.interface == "ethernet") {
-                            "qrc:/img/process_complete_small.png"
-                        } else {
-                            "qrc:/img/ethernet_connected.png"
-                        }
-                    }
-                }
-                TextBody {
-                    font.pixelSize: 13
-                    font.weight: Font.Bold
-                    Layout.alignment: Qt.AlignHCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    wrapMode: Text.WordWrap
-
-                    Layout.preferredWidth: 400
-                    text: {
-                        if(bot.net.interface == "ethernet") {
-                            "You’re connected to the internet through the ethernet port."
-                        } else {
-                            "Plug an ethernet cable into the rear of the machine to use a wired connection."
-                        }
-                    }
-                }
                 ButtonRectangleSecondary {
                     width: 750
                     Layout.preferredWidth: 750
                     text: "SCAN WI-FI NETWORKS"
                     Layout.alignment: Qt.AlignHCenter
-                    enabled: (bot.net.wifiState !== WifiState.Searching)
+                    enabled: bot.net.interface !== "ethernet" &&
+                        bot.net.wifiEnabled && !bot.net.wifiSearching
 
                     onClicked: {
                         bot.scanWifi(true)
-                        bot.net.setWifiState(WifiState.Searching)
                     }
+                }
+
+                WiFiPageEthernet {
+                    visible: !listVisible
                 }
 
                 // When the bot is not connected to wifi and the user
@@ -136,7 +117,7 @@ Item {
                     text: {
                         if(!bot.net.wifiEnabled) {
                             qsTr("Turn on WiFi and try again.")
-                        } else if ((wifiList.count == 0) && (bot.net.wifiState == WifiState.Searching)) {
+                        } else if ((wifiList.count === 0) && (bot.net.wifiSearching)) {
                             qsTr("Searching...")
                         } else if (bot.net.wifiState == WifiState.NoWifiFound) {
                             qsTr("No wireless networks found.")
@@ -149,11 +130,7 @@ Item {
                     }
                     Layout.alignment: Qt.AlignCenter
                     Layout.topMargin: 60
-                    visible: (wifiList.count == 0 && bot.net.wifiState == WifiState.Searching) ||
-                             bot.net.wifiState == WifiState.NoWifiFound ||
-                             (bot.net.wifiState == WifiState.NotConnected &&
-                              (bot.net.wifiError == WifiError.ScanFailed ||
-                               bot.net.wifiError == WifiError.UnknownError))
+                    visible: !listVisible && bot.net.interface !== "ethernet"
                 }
             }
 
@@ -184,7 +161,7 @@ Item {
                 id: wifiList
                 smooth: false
                 antialiasing: false
-                anchors.top: ethernetInfoId.bottom
+                anchors.top: refreshButton.bottom
                 anchors.topMargin: 20
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -194,13 +171,13 @@ Item {
                 orientation: ListView.Vertical
                 flickableDirection: Flickable.VerticalFlick
                 clip: true
-                visible: (bot.net.wifiState == WifiState.Connected ||
-                         isWifiConnected ||
-                         (bot.net.wifiState == WifiState.NotConnected &&
-                                bot.net.wifiError != WifiError.ScanFailed &&
-                                bot.net.wifiError != WifiError.UnknownError) ||
-                         (bot.net.wifiState === WifiState.Searching && count != 0))
+                visible: listVisible
                 model: bot.net.WiFiList
+
+                header: WiFiPageEthernet {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottomMargin: 15
+                }
 
                 delegate:
                     WiFiButton {

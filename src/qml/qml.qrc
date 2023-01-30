@@ -98,6 +98,8 @@
         <file>NumberedStepsForm.qml</file>
         <file>WiFiButton.qml</file>
         <file>WiFiButtonForm.qml</file>
+        <file>WiFiPageEthernet.qml</file>
+        <file>WiFiPageEthernetForm.qml</file>
         <file>DayOneUpdateScreen.qml</file>
         <file>DayOneUpdateScreenForm.qml</file>
     </qresource>

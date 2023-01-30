@@ -3,21 +3,18 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 800
-    height: 450
+    width: parent.width
+    height: 667
 
     ColumnLayout {
-        anchors.bottomMargin: 65
-        anchors.fill: parent
+        width: parent.width
+        spacing: 40
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Large
             id: heading
             text: qsTr("TOOLHEADS")
-            font.letterSpacing: 2
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            font.family: defaultFont.name
-            color: "#ffffff"
+            font.letterSpacing: 10
         }
 
         RowLayout {

@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: 230
+    height: 364
 
     property alias filamentBayLabelProperty: filamentBayLabelProperty
     property alias temperatureProperty: temperatureProperty
@@ -18,24 +18,13 @@ Item {
 
     ColumnLayout {
         id: columnLayout
-        spacing: 0
-        anchors.fill: parent
+        width: parent.width
+        spacing: 40
 
-        Text {
+        TextHeadline {
+            style: TextHeadline.Base
             id: filamentBayLabelProperty
             text: qsTr("FILAMENT BAY LABEL")
-            font.letterSpacing: 2
-            font.pixelSize: 15
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            color: "#ffffff"
-        }
-
-        Item {
-            id: spacing_item
-            width: 200
-            height: 15
-            visible: true
         }
 
         AdvancedInfoElement {
