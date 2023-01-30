@@ -67,12 +67,6 @@ void SettingsInterface::mergeSettings(Json::Value &s1, Json::Value s2) {
     }
 }
 
-QVariant SettingsInterface::dimensions() {
-    Json::FastWriter writer;
-    return QJsonDocument::fromJson(writer.write(cached_settings_["dimensions"]).c_str()).toVariant();
-    // TODO: Add defaults in case this fails.
-}
-
 QString SettingsInterface::getLanguageCode() {
     return QString::fromStdString(cached_settings_["language_code"].asString());
 }

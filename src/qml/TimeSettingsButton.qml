@@ -8,9 +8,6 @@ Item {
     property string settingText: "default"
     property alias editSettingButton: editSettingButton
 
-//    width: dimensions["time_settings_button"]["width"]
-//    height: dimensions["time_settings_button"]["height"]
-
     Rectangle {
         anchors.fill: parent
         color: "#000000"

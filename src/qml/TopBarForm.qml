@@ -7,9 +7,7 @@ import ProcessStateTypeEnum 1.0
 
 Item {
     id: topBar
-//    width: dimensions["top_bar"]["width"]
-//    height: dimensions["top_bar"]["height"]
-    width: 800
+    width: parent.width
     height: 72
     smooth: false
     property alias textDateTime: textDateTime

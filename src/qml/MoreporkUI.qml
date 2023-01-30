@@ -9,15 +9,12 @@ import ExtruderTypeEnum 1.0
 import QtQuick.VirtualKeyboard 2.3
 
 ApplicationWindow {
-    property var dimensions: settings.dimensions()
     id: rootAppWindow
     visible: true
     minimumWidth: 800
     minimumHeight: 480
     width: 800
     height: 480
-//    width: dimensions["app"]["width"]
-//    height: dimensions["app"]["height"]
     readonly property string defaultString: "default"
     readonly property string emptyString: ""
     property alias mainSwipeView: mainSwipeView
@@ -458,8 +455,6 @@ ApplicationWindow {
 
         Item {
             id: contentContainer
-//            width: dimensions["content"]["width"]
-//            height: dimensions["content"]["height"]
             width: 800
             height: 408
             anchors.bottom: parent.bottom

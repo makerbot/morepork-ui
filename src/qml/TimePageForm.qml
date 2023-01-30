@@ -2,11 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-Item {
-//    width: dimensions["content"]["width"]
-//    height: dimensions["contetn"]["height"]
-    width: 800
-    height: 408
+LoggingItem {
     smooth: false
 
     property alias timeZoneSelectorPage: timeZoneSelectorPage
