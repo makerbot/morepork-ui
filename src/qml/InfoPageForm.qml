@@ -4,38 +4,42 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
+    anchors.top: parent.top
     smooth: false
     width: 800
     height: 440
 
     Item {
         id: baseItem
-        anchors.fill: parent
-
-        Text {
-            anchors.left: parent.left
-            anchors.leftMargin: 65
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            text: qsTr("%1 info").arg(bot.name)
-            font.pixelSize: 22
-            font.capitalization: Font.AllUppercase
-            color: "#cbcbcb"
-            font.family: defaultFont.name
+        TextBody {
+            style: TextBody.Large
+            text: qsTr("PRINTER INFO")
             font.weight: Font.Bold
-            font.letterSpacing: 5
+            font.letterSpacing: 3
+            horizontalAlignment: Text.AlignHCenter
+
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
         }
+        width: parent.width
 
         ColumnLayout {
             id: columnLayout
-            width: 600
+            width: 800
             height: 350
-            anchors.left: parent.left
-            anchors.leftMargin: 65
-            anchors.top: parent.top
-            anchors.topMargin: 50
             smooth: false
+            spacing: 34
+            anchors.fill: parent
+            anchors.leftMargin: 60
 
+            Item {
+                id: spacing_item
+                width: 200
+                height: 18
+                // return to 48 when topbar gets reduced
+                // height: 48
+                visible: true
+            }
             InfoItemForm {
                 id: info_firmwareVersion
                 labelText: qsTr("Firmware Version")
@@ -63,7 +67,7 @@ Item {
             }
             InfoItem {
                 id: info_dns
-                height: listView.height
+                Layout.minimumHeight: listView.height
                 labelText: qsTr("DNS")
                 dataText: bot.net.gateway
                 labelElement.anchors.top: baseElement.top
@@ -71,10 +75,10 @@ Item {
                 dataElement.visible: false
                 ListView {
                     id: listView
-                    x: 350
+                    x: 320
                     anchors.top: parent.top
                     anchors.topMargin: 0
-                    width: 100
+                    width: 150
                     height: 50
                     boundsBehavior: Flickable.DragOverBounds
                     orientation: ListView.Vertical
@@ -83,20 +87,17 @@ Item {
                     smooth: false
                     model: bot.net.dns
                     delegate:
-                        Text {
-                        text: model.modelData
-                        font.family: defaultFont.name
-                        font.letterSpacing: 2
-                        font.weight: Font.Bold
-                        font.pixelSize: 18
-                        color: "#ffffff"
-                    }
+                        TextBody {
+                            style: TextBody.Base
+
+                            text: model.modelData
+                            font.weight: Font.Bold
+                        }
                 }
             }
-
             InfoItem {
                 id: info_wifiNetwork
-                labelText: qsTr("WiFi Name")
+                labelText: qsTr("Wi-Fi Name")
                 dataText: bot.net.interface === "wifi" ? bot.net.name : qsTr("n/a")
             }
             InfoItem {
@@ -106,7 +107,7 @@ Item {
             }
             InfoItem {
                 id: info_wlanMacAddress
-                labelText: qsTr("WiFi MAC Address")
+                labelText: qsTr("Wi-Fi MAC Address")
                 dataText: bot.net.wlanMacAddr
             }
         }

@@ -92,15 +92,19 @@ PrintPageForm {
     }
 
     function startPrintDoorLidCheck() {
-        if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 45) {
-            startPrintTopLidOpen = true
-            return false
-        }
-        else if(!bot.doorLidErrorDisabled && bot.chamberErrorCode == 48) {
+        if(!bot.doorErrorDisabled && bot.chamberErrorCode == 48) {
             startPrintBuildDoorOpen = true
             return false
         }
-        else {
+        // This isn't a reliable check for the lid error as the door error
+        // preempts the lid error so this check can pass and the printer
+        // can still error out with a lid error if the user has disabled the
+        // door error but not the lid error and left them both open.
+        // This only affects internal users.
+        else if(!bot.lidErrorDisabled && bot.chamberErrorCode == 45) {
+            startPrintTopLidOpen = true
+            return false
+        } else {
             return true
         }
     }
@@ -218,28 +222,16 @@ PrintPageForm {
     printingDrawer.buttonChangeFilament.onClicked: {
         if(!printingDrawer.buttonChangeFilament.disableButton) {
             if(bot.process.stateType == ProcessStateType.Paused) {
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                }
-                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                }
-                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
-                }
+                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                resetSettingsSwipeViewPages()
                 printingDrawer.close()
             }
             else if(bot.process.stateType == ProcessStateType.Printing) {
                 bot.pauseResumePrint("suspend")
-                if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
-                    printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                }
-                if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                }
-                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                    settingsPage.settingsSwipeView.setCurrentIndex(SettingsPage.BasePage)
-                }
+                printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                resetSettingsSwipeViewPages()
                 printingDrawer.close()
             }
         }

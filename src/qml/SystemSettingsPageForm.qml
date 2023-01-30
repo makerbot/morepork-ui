@@ -66,15 +66,8 @@ Item {
         onTriggered: {
             resetToFactoryPopup.close()
             // Reset all screen positions
-            if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.BasePage) {
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-            }
-            if(systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.BasePage) {
-                systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-            }
-            if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            }
+            resetSettingsSwipeViewPages()
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
         }
@@ -256,7 +249,7 @@ Item {
 
                     MenuButton {
                         id: buttonTouchTest
-                        buttonImage.source: "qrc:/img/icon_advanced_info.png"
+                        buttonImage.source: "qrc:/img/icon_fingerprint.png"
                         buttonText.text: qsTr("DISPLAY TOUCH TEST")
                     }
 
@@ -317,7 +310,7 @@ Item {
             }
 
             function skipFreStepAction() {
-                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                resetSettingsSwipeViewPages()
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -347,6 +340,7 @@ Item {
 
             function skipFreStepAction() {
                 authorizeAccountPage.backToSettings()
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -401,6 +395,7 @@ Item {
             function skipFreStepAction() {
                 bot.cancel()
                 systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -443,6 +438,7 @@ Item {
 
             function skipFreStepAction() {
                 systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -471,6 +467,7 @@ Item {
 
             function skipFreStepAction() {
                 systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -571,14 +568,12 @@ Item {
         visible: false
         popupWidth: 750
         popupHeight: {
-            if(popupState == "failed_copied_logs") {
-                350
-            }
-            else if(popupState == "cancelling_copy_logs") {
-                250
+            if(showButton) {
+                columnLayout_copy_logs.height+145
             }
             else {
-                300
+
+                columnLayout_copy_logs.height+70
             }
         }
 
@@ -620,9 +615,9 @@ Item {
         ColumnLayout {
             id: columnLayout_copy_logs
             width: 650
-            height: parent.height
-            anchors.top: parent.top
-            anchors.topMargin: 30
+            height: children.height
+            anchors.top: copyingLogsPopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20
 
@@ -675,13 +670,6 @@ Item {
                         text: qsTr("%1").arg(bot.process.printPercentage) + "%"
                         visible: true
                     }
-
-                    PropertyChanges {
-                        target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 120
-                        spacing: 25
-                    }
                 },
                 State {
                     name: "no_usb_detected"
@@ -707,12 +695,6 @@ Item {
                         text: qsTr("You need to insert a USB to use this feature.")
                         visible: true
                     }
-
-                    PropertyChanges {
-                        target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 110
-                    }
                 },
                 State {
                     name: "cancelling_copy_logs"
@@ -737,13 +719,6 @@ Item {
                         text: qsTr("Do not remove USB.")
                         visible: true
                     }
-
-                    PropertyChanges {
-                        target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 140
-                        spacing: 25
-                    }
                 },
                 State {
                     name: "successfully_copied_logs"
@@ -767,13 +742,6 @@ Item {
                     PropertyChanges {
                         target: description
                         visible: false
-                    }
-
-                    PropertyChanges {
-                        target: columnLayout_copy_logs
-                        height: 100
-                        anchors.topMargin: 140
-                        spacing: 35
                     }
                 },
                 State {
@@ -801,12 +769,6 @@ Item {
                         text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
                                     "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
                                     "CODE: %1").arg(copyingLogsPopup.errorcode)
-                    }
-
-                    PropertyChanges {
-                        target: columnLayout_copy_logs
-                        height: 200
-                        anchors.topMargin: 80
                     }
                 }
             ]

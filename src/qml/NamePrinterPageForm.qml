@@ -84,6 +84,7 @@ Item {
             }
             systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             if(inFreStep) {
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 fre.gotoNextStep(currentFreStep)
             }
