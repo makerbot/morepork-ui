@@ -93,11 +93,18 @@ Item {
             }
         }
     }
+    Image {
+        id: material_image_error
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        width: sourceSize.width
+        height: sourceSize.height
+        source: "qrc:/img/error_image_overlay.png"
+    }
     states: [
         State {
-            name: "no_material"
-            when: (bot.hasFilamentBay && !spoolPresent) ||
-                  (!bot.hasFilamentBay && bot.loadedMaterials[filamentBayID - 1] == "unknown")
+            name: "not_loaded_no_rfid"
+            when: !spoolPresent && !extruderFilamentPresent
 
             PropertyChanges {
                 target: error_image
@@ -113,9 +120,14 @@ Item {
                 target: material_amount_ring
                 visible: false
             }
+
+            PropertyChanges {
+                target: material_image_error
+                visible: false
+            }
         },
         State {
-            name: "rfid_present_material_known"
+            name: "rfid_present"
             when: spoolPresent
 
             PropertyChanges {
@@ -132,10 +144,15 @@ Item {
                 target: material_amount_ring
                 visible: true
             }
+
+            PropertyChanges {
+                target: material_image_error
+                visible: false
+            }
         },
         State {
-            name: "rfid_not_present_material_known"
-            when: !bot.hasFilamentBay && bot.loadedMaterials[filamentBayID - 1] != "unknown"
+            name: "loaded_no_rfid"
+            when: !spoolPresent && extruderFilamentPresent
 
             PropertyChanges {
                 target: error_image
@@ -149,6 +166,11 @@ Item {
 
             PropertyChanges {
                 target: material_amount_ring
+                visible: false
+            }
+
+            PropertyChanges {
+                target: material_image_error
                 visible: false
             }
         }

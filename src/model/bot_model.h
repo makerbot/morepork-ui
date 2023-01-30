@@ -79,6 +79,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void pause_touchlog();
     Q_INVOKABLE virtual void resume_touchlog();
     Q_INVOKABLE virtual void zipLogs(QString path);
+    Q_INVOKABLE virtual void zipTimelapseImages(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
     Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
@@ -113,6 +114,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void submitNPSSurvey(int score);
     Q_INVOKABLE virtual void setNPSSurveyDueDate(QString time);
     Q_INVOKABLE virtual QString getNPSSurveyDueDate();
+    Q_INVOKABLE virtual void moveBuildPlate(const int distance, const int speed);
 
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
@@ -211,7 +213,8 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, spoolValidityCheckPending, false)
     MODEL_PROP(QString, unknownMaterialWarningType, "None")
     MODEL_PROP(bool, safeToRemoveUsb, false)
-    MODEL_PROP(bool, doorLidErrorDisabled, false)
+    MODEL_PROP(bool, doorErrorDisabled, false)
+    MODEL_PROP(bool, lidErrorDisabled, false)
 
     MODEL_PROP(int, spoolAOriginalAmount, 0)
     MODEL_PROP(int, spoolBOriginalAmount, 0)

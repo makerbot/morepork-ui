@@ -89,9 +89,7 @@ Item {
             //view when print process actually starts
             //assuming the user had navigated to other
             //pages before the print starts.
-            if(printSwipeView.currentIndex != PrintPage.BasePage) {
-                printSwipeView.swipeToItem(PrintPage.BasePage)
-            }
+            printSwipeView.swipeToItem(PrintPage.BasePage)
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
             setDrawerState(true)
@@ -389,27 +387,24 @@ Item {
                     spacing: 0
 
                     StorageTypeButton {
-                        id: buttonInternalStorage
-                        storageThumbnail.source: "qrc:/img/sombrero_icon.png"
-                        storageThumbnail.width: 70
-                        storageThumbnail.height: 53
-                        storageThumbnail.anchors.leftMargin: 60
-                        storageName: qsTr("INTERNAL STORAGE")
-                        storageDescription: qsTr("FILES SAVED ON PRINTER")
-                        storageUsed: Math.min(diskman.internalUsed.toFixed(1), 100)
+                        id: buttonQueuedPrints
+                        storageThumbnail.source: "qrc:/img/icon_directory.png"
+                        storageThumbnailSourceSize.width: 47
+                        storageThumbnailSourceSize.height: 43
+                        storageThumbnail.anchors.leftMargin: 71
+                        storageName: qsTr("QUEUE")
+                        storageDescription: qsTr("FROM CLOUDPRINT")
                         onClicked: {
-                            browsingUsbStorage = false
-                            storage.setStorageFileType(StorageFileType.Print)
-                            storage.updatePrintFileList("?root_internal?")
-                            activeDrawer = printPage.sortingDrawer
-                            setDrawerState(true)
-                            printSwipeView.swipeToItem(PrintPage.FileBrowser)
+                            printSwipeView.swipeToItem(PrintPage.PrintQueueBrowser)
                         }
                     }
 
                     StorageTypeButton {
                         id: buttonUsbStorage
-                        storageThumbnail.source: "qrc:/img/usb_icon.png"
+                        storageThumbnail.source: "qrc:/img/icon_usb.png"
+                        storageThumbnailSourceSize.width: 45
+                        storageThumbnailSourceSize.height: 53
+                        storageThumbnail.anchors.leftMargin: 72
                         storageName: qsTr("USB")
                         storageDescription: usbStorageConnected ? qsTr("EXTERNAL STORAGE") : qsTr("PLEASE INSERT A USB DRIVE")
                         enabled: usbStorageConnected
@@ -426,12 +421,21 @@ Item {
                     }
 
                     StorageTypeButton {
-                        id: buttonQueuedPrints
-                        storageThumbnail.source: "qrc:/img/directory_icon.png"
-                        storageName: qsTr("CLOUD QUEUE")
-                        storageDescription: qsTr("FILES FROM MAKERBOT CLOUD")
+                        id: buttonInternalStorage
+                        storageThumbnail.source: "qrc:/img/icon_sombrero.png"
+                        storageThumbnailSourceSize.width: 34
+                        storageThumbnailSourceSize.height: 45
+                        storageThumbnail.anchors.leftMargin: 77
+                        storageName: qsTr("INTERNAL STORAGE")
+                        storageDescription: qsTr("FILES SAVED ON PRINTER")
+                        storageUsed: Math.min(diskman.internalUsed.toFixed(1), 100)
                         onClicked: {
-                            printSwipeView.swipeToItem(PrintPage.PrintQueueBrowser)
+                            browsingUsbStorage = false
+                            storage.setStorageFileType(StorageFileType.Print)
+                            storage.updatePrintFileList("?root_internal?")
+                            activeDrawer = printPage.sortingDrawer
+                            setDrawerState(true)
+                            printSwipeView.swipeToItem(PrintPage.FileBrowser)
                         }
                     }
                 }
@@ -701,7 +705,9 @@ Item {
                     }
 
                     materialError.visible: {
-                        if (metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1]) {
+                        if (!hasMeta) {
+                            false
+                        } else if (metaData['extrusion_distances_mm'][0] && metaData['extrusion_distances_mm'][1]) {
                             materialPage.bay1.usingExperimentalExtruder ?
                                 (metaData['materials'][1] != materialPage.bay2.filamentMaterial) :
                                 (metaData['materials'][0] != materialPage.bay1.filamentMaterial ||
@@ -960,9 +966,7 @@ Item {
             storage.updatePrintFileList("?root_internal?")
             activeDrawer = printPage.sortingDrawer
             setDrawerState(true)
-            if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
-                printSwipeView.swipeToItem(PrintPage.FileBrowser)
-            }
+            printSwipeView.swipeToItem(PrintPage.FileBrowser)
             copyingFilePopup.close()
         }
 

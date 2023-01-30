@@ -45,7 +45,7 @@
         <file alias="extruder_1c_heating.png">images/extruder_1c_heating.png</file>
         <file alias="change_filament.png">images/change_filament.png</file>
         <file alias="close.png">images/close.png</file>
-        <file alias="directory_icon.png">images/directory_icon.png</file>
+        <file alias="icon_directory.png">images/icon_directory.png</file>
         <file alias="alert.png">images/alert.png</file>
         <file alias="check_mark_small.png">images/check_mark_small.png</file>
         <file alias="info_icon_small.png">images/info_icon_small.png</file>
@@ -56,8 +56,8 @@
         <file alias="firmware_update_available.png">images/firmware_update_available.png</file>
         <file alias="error.png">images/error.png</file>
         <file alias="process_successful.png">images/process_successful.png</file>
-        <file alias="sombrero_icon.png">images/sombrero_icon.png</file>
-        <file alias="usb_icon.png">images/usb_icon.png</file>
+        <file alias="icon_sombrero.png">images/icon_sombrero.png</file>
+        <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="extruder_1_attached.png">images/extruder_1_attached.png</file>
         <file alias="extruder_1XA_attached.png">images/extruder_1XA_attached.png</file>
         <file alias="extruder_2_attached.png">images/extruder_2_attached.png</file>
@@ -96,7 +96,6 @@
         <file alias="icon_deauthorize_accounts.png">images/icon_deauthorize_accounts.png</file>
         <file alias="icon_preheat.png">images/icon_preheat.png</file>
         <file alias="icon_change_printer_name.png">images/icon_change_printer_name.png</file>
-        <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
         <file alias="icon_clean_extruders.png">images/icon_clean_extruders.png</file>
         <file alias="icon_dry_material.png">images/icon_dry_material.png</file>
         <file alias="icon_anneal_print.png">images/icon_anneal_print.png</file>
@@ -181,7 +180,6 @@
         <file alias="process_complete_small.png">images/process_complete_small.png</file>
         <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
-        <file alias="usb_1.png">images/usb_1.png</file>
         <file alias="broken.png">images/broken.png</file>
         <file alias="confirm_printer_name.png">images/confirm_printer_name.png</file>
         <file alias="analytics_makerbot_logo.png">images/analytics_makerbot_logo.png</file>
@@ -190,5 +188,19 @@
         <file alias="wifi_menu_icon.png">images/wifi_menu_icon.png</file>
         <file alias="wifi_secured_menu_icon.png">images/wifi_secured_menu_icon.png</file>
         <file alias="selected_checkmark.png">images/selected_checkmark.png</file>
+        <file alias="popup_complete.png">images/popup_complete.png</file>
+        <file alias="popup_error.png">images/popup_error.png</file>
+        <file alias="circle_alert_112px.png">images/circle_alert_112px.png</file>
+        <file alias="forward_arrow_42_80px.png">images/forward_arrow_42_80px.png</file>
+        <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
+        <file alias="icon_build_plate_settings.png">images/icon_build_plate_settings.png</file>
+        <file alias="icon_extruder_settings.png">images/icon_extruder_settings.png</file>
+        <file alias="icon_system_settings.png">images/icon_system_settings.png</file>
+        <file alias="icon_time.png">images/icon_time.png</file>
+        <file alias="icon_material.png">images/icon_material.png</file>
+        <file alias="icon_raise_lower_bp.png">images/icon_raise_lower_bp.png</file>
+        <file alias="setup_procedures.png">images/setup_procedures.png</file>
+        <file alias="icon_fingerprint.png">images/icon_fingerprint.png</file>
+        <file alias="error_image_overlay.png">images/error_image_overlay.png</file>
     </qresource>
 </RCC>

@@ -287,6 +287,16 @@ ApplicationWindow {
         bot.setNPSSurveyDueDate(due)
     }
 
+    //Reset settings swipe view pages (nested pages)
+    function resetSettingsSwipeViewPages() {
+        console.info("Resetting Settings Pages to their Base Pages...")
+        settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetDate)
+        settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+        settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+    }
+
     FontLoader {
         id: defaultFont
         name: "Antenna"
@@ -334,8 +344,7 @@ ApplicationWindow {
         ExtruderPage,   // 2
         SettingsPage,   // 3
         InfoPage,       // 4
-        MaterialPage,   // 5
-        AdvancedPage    // 6
+        MaterialPage    // 5
     }
 
     Item {
@@ -360,13 +369,13 @@ ApplicationWindow {
             smooth: false
             antialiasing: false
             visible: {
-                settingsPage.settingsSwipeView.currentIndex == SettingsPage.ChangePrinterNamePage ||
-                settingsPage.settingsSwipeView.currentIndex == SettingsPage.KoreaDFSSecretPage ||
-                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.AuthorizeAccountsPage &&
-                 (settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
-                  settingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
-                (settingsPage.settingsSwipeView.currentIndex == SettingsPage.WifiPage &&
-                 settingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.ChangePrinterNamePage ||
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.AuthorizeAccountsPage &&
+                 (settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
+                  settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.WifiPage &&
+                 settingsPage.systemSettingsPage.wifiPage.wifiSwipeView.currentIndex == WiFiPage.EnterPassword)
             }
             x: -30
             y: parent.height - inputPanel.height + 22
@@ -506,7 +515,7 @@ ApplicationWindow {
                         }
 
                         mainMenuIcon_advanced.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.AdvancedPage)
+                            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                         }
                     }
                 }
@@ -583,18 +592,6 @@ ApplicationWindow {
                     visible: false
                     MaterialPage {
                         id: materialPage
-                    }
-                }
-
-                // MoreporkUI.AdvancedPage
-                Item {
-                    property var backSwiper: mainSwipeView
-                    property int backSwipeIndex: MoreporkUI.BasePage
-                    smooth: false
-                    visible: false
-
-                    AdvancedSettingsPage {
-                        id: advancedPage
                     }
                 }
             }
@@ -1568,12 +1565,9 @@ ApplicationWindow {
                                 update_rectangle.color = "#00000000"
                             }
                             onClicked: {
-                                if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
-                                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                }
-                                if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.FirmwareUpdatePage) {
-                                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.FirmwareUpdatePage)
-                                }
+                                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
                                 firmwareUpdatePopup.close()
                             }
                         }
@@ -1791,12 +1785,8 @@ ApplicationWindow {
                             onClicked: {
                                 bot.buildPlateCleared()
                                 buildPlateClearPopup.close()
-                                if(mainSwipeView.currentIndex != MoreporkUI.PrintPage) {
-                                    mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                                }
-                                if(printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
-                                    printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
-                                }
+                                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                             }
                         }
                     }
@@ -1953,7 +1943,7 @@ ApplicationWindow {
         }
 
         // Modal Popup for Toolhead Disconnected/FFC Cable Disconnected
-        ModalPopup {
+        CustomPopup {
             popupName: "CarriageCommunicationError"
             /* When the toolhead disconnects, the Kaiten's Bot Model's
                extruderXErrorCode the toolhead error disconnect error
@@ -1964,29 +1954,29 @@ ApplicationWindow {
 
             id: toolheadDisconnectedPopup
             visible: toolheadADisconnect || toolheadBDisconnect
-            disableUserClose: false
+            closePolicy: Popup.CloseOnPressOutside
 
-            popup_contents.contentItem: Item {
-                anchors.fill: parent
-                ColumnLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: 150
+            ColumnLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 150
 
-                    TitleText {
-                        text: "CARRIAGE COMMUNICATION ERROR"
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                TextHeadline {
+                    text: "CARRIAGE COMMUNICATION ERROR"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                TextBody {
+                    text: {
+                        "The printer’s carriage is reporting communication drop-outs. " +
+                        "Try restarting the printer. If this happens again, please " +
+                        "contact MakerBot support."
                     }
-                    BodyText{
-                        text: {
-                            "The printer’s carriage is reporting communication drop-outs.\n"+
-                            "Try restarting the printer. If this happens again, please\n"+
-                            "contact MakerBot support."
-                        }
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: 620
+                    wrapMode: "WordWrap"
                 }
             }
         }
@@ -2122,7 +2112,8 @@ ApplicationWindow {
                             onClicked: {
                                 extNotCalibratedPopup.close()
                                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
+                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
                             }
                             onPressed: {
                                 calib_text.color = "#000000"

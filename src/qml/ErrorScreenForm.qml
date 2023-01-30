@@ -300,7 +300,7 @@ LoggingItem {
                 target: errorMessageTitle
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateTyep == ProcessStateType.Paused) {
+                       bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
@@ -314,7 +314,7 @@ LoggingItem {
                 target: errorMessageDescription
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateTyep == ProcessStateType.Paused) {
+                       bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("Close the build chamber door to\ncontinue printing.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("Close the build chamber door and\nrestart print.")
@@ -330,7 +330,7 @@ LoggingItem {
                 buttonWidth: 260
                 label: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateTyep == ProcessStateType.Paused) {
+                       bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("RESUME PRINT")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("CONTINUE")
@@ -349,7 +349,7 @@ LoggingItem {
                 target: errorMessageTitle
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateTyep == ProcessStateType.Paused) {
+                       bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("PRINT PAUSED.\nCLOSE THE\nTOP LID.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("PRINT FAILED.\nCLOSE THE\nTOP LID.")
@@ -363,7 +363,7 @@ LoggingItem {
                 target: errorMessageDescription
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateTyep == ProcessStateType.Paused) {
+                       bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("Put the lid back on the printer\nto continue printing.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("Put the lid back on the printer and\nrestart print.")
@@ -379,7 +379,7 @@ LoggingItem {
                 buttonWidth: 260
                 label: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateTyep == ProcessStateType.Paused) {
+                       bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("RESUME PRINT")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("CONTINUE")

@@ -61,8 +61,6 @@
         <file>MenuButton.qml</file>
         <file>MenuButtonForm.qml</file>
         <file>WiFiPageForm.qml</file>
-        <file>WiFiButton.qml</file>
-        <file>WiFiButtonForm.qml</file>
         <file>WiFiPage.qml</file>
         <file>SignInPage.qml</file>
         <file>SignInPageForm.qml</file>
@@ -97,14 +95,16 @@
         <file>NamePrinterPageForm.qml</file>
         <file>FirmwareUpdateSuccessfulScreen.qml</file>
         <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
-        <file>AdvancedSettingsPage.qml</file>
-        <file>AdvancedSettingsPageForm.qml</file>
-        <file>TimeSelector.qml</file>
-        <file>TimeSelectorForm.qml</file>
+        <file>SystemSettingsPage.qml</file>
+        <file>SystemSettingsPageForm.qml</file>
+        <file>ExtruderSettingsPageForm.qml</file>
+        <file>ExtruderSettingsPage.qml</file>
+        <file>BuildPlateSettingsPage.qml</file>
+        <file>BuildPlateSettingsPageForm.qml</file>
         <file>SlidingSwitch.qml</file>
         <file>SlidingSwitchForm.qml</file>
-        <file>RaiseLowerBuildPlateItem.qml</file>
-        <file>RaiseLowerBuildPlateItemForm.qml</file>
+        <file>RaiseLowerBuildPlate.qml</file>
+        <file>RaiseLowerBuildPlateForm.qml</file>
         <file>AdvancedInfoElement.qml</file>
         <file>AdvancedInfoElementForm.qml</file>
         <file>AdvancedInfoToolheadElement.qml</file>
@@ -132,8 +132,15 @@
         <file>ReviewTestPrintPageForm.qml</file>
         <file>TimePage.qml</file>
         <file>TimePageForm.qml</file>
+        <file>TimeSettings.qml</file>
+        <file>TimeSettingsButton.qml</file>
         <file>TimeZoneSelector.qml</file>
         <file>TimeZoneSelectorForm.qml</file>
+        <file>DateSelector.qml</file>
+        <file>DateSelectorForm.qml</file>
+        <file>TimeSelector.qml</file>
+        <file>TimeSelectorForm.qml</file>
+        <file>VerticalTumbler.qml</file>
         <file>SnipMaterialScreen.qml</file>
         <file>SnipMaterialScreenForm.qml</file>
         <file>LanguageSelector.qml</file>
@@ -180,8 +187,6 @@
         <file>AdvancedInfoCalibrationElement.qml</file>
         <file>AcknowledgePrintFinished.qml</file>
         <file>AcknowledgePrintFinishedForm.qml</file>
-        <file>DateSelector.qml</file>
-        <file>DateSelectorForm.qml</file>
         <file>CleanExtruderSettings.qml</file>
         <file>CleanExtruderSettingsForm.qml</file>
         <file>CleanExtruderTempSelector.qml</file>
@@ -251,8 +256,7 @@
         <file>TouchTestScreenForm.qml</file>
         <file>AdvancedInfoDragonItem.qml</file>
         <file>AdvancedInfoDragonItemForm.qml</file>
-        <file>TimeSettingsButton.qml</file>
-        <file>TimeSettings.qml</file>
-        <file>VerticalTumbler.qml</file>
+        <file>WiFiButton.qml</file>
+        <file>WiFiButtonForm.qml</file>
     </qresource>
 </RCC>
