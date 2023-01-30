@@ -23,7 +23,6 @@ Item {
 
     RowLayout {
         anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
         anchors.left: parent.left
         anchors.leftMargin: 40
         anchors.right: parent.right
