@@ -27,9 +27,7 @@ ErrorScreenForm {
         if(printPage.printStatusView.printStatusSwipeView.currentIndex != PrintStatusView.Page0) {
             printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
         }
-        if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
-            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-        }
+        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
     }
 
     function isExtruderAError() {

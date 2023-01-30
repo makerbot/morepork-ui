@@ -34,28 +34,20 @@ ExtruderPageForm {
         if(itemAttachExtruder.state == "close_top_lid") {
             // done or run calibration
             itemAttachExtruder.state = "base state"
-            if(extruderSwipeView.currentIndex != ExtruderPage.BasePage) {
-                extruderSwipeView.swipeToItem(ExtruderPage.BasePage)
-            }
+            extruderSwipeView.swipeToItem(ExtruderPage.BasePage)
 
             if (!inFreStep) {
                 if (bot.process.type == ProcessType.None) {
                     // go to calibrate screen
-                    if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
-                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                    }
-                    if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.CalibrateExtrudersPage) {
-                        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CalibrateExtrudersPage)
-                    }
+                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                    settingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+
                 } else if (bot.process.type == ProcessType.Print) {
                     // go to print screen
                     bot.pauseResumePrint("resume");
-                    if (mainSwipeView.currentIndex != MoreporkUI.PrintPage) {
-                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                    }
-                    if (printPage.printSwipeView.currentIndex != PrintPage.BasePage) {
-                        printPage.printSwipeView.swipeToItem(PrintPage.BasePage);
-                    }
+                    mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                    printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                 }
             } else {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)

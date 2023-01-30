@@ -163,6 +163,7 @@ Item {
             visible: true
 
             function altBack() {
+
             }
 
             Text {

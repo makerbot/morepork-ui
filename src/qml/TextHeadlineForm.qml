@@ -10,7 +10,6 @@ Text {
     id: textHeadline
     text: "HEADLINE"
     font.family: "Antenna"
-    font.styleName: "Light"
     font.pixelSize: {
         switch(style) {
         case TextHeadline.Base:
@@ -36,7 +35,7 @@ Text {
             2
         }
     }
-    font.weight: Font.Bold
+    font.weight: Font.DemiBold
     font.capitalization: Font.AllUppercase
     wrapMode: Text.WordWrap
     lineHeightMode: Text.FixedHeight
@@ -52,5 +51,5 @@ Text {
             24
         }
     }
-    color: Qt.rgba(255, 255, 255, 0.8)
+    color: Qt.rgba(255, 255, 255, 0.9)
 }

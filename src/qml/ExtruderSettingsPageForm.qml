@@ -58,7 +58,7 @@ Item {
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
-                        buttonText.text: qsTr("CALIBRATE EXTRUDERS")
+                        buttonText.text: qsTr("AUTOMATIC CALIBRATION")
                         enabled: !isProcessRunning()
                     }
 
@@ -147,9 +147,8 @@ Item {
                     // Dont go back if an error happened
                     if(calibrateErrorScreen.lastReportedErrorType ==
                                                         ErrorType.NoError) {
-                        if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                        }
+                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+
                         if(processDone) {
                             settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         }
@@ -181,9 +180,7 @@ Item {
                     cleanExtruders.cancelCleanExtrudersPopup.open()
                 } else {
                     cleanExtruders.state = "base state"
-                    if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    }
+                    extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                 }
             }
 
@@ -191,9 +188,7 @@ Item {
                 id: cleanExtruders
                 onProcessDone: {
                     state = "base state"
-                    if(extruderSettingsSwipeView.currentIndex != ExtruderSettingsPage.BasePage) {
-                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    }
+                    extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }

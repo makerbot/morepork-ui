@@ -88,9 +88,7 @@ Item {
             //view when print process actually starts
             //assuming the user had navigated to other
             //pages before the print starts.
-            if(printSwipeView.currentIndex != PrintPage.BasePage) {
-                printSwipeView.swipeToItem(PrintPage.BasePage)
-            }
+            printSwipeView.swipeToItem(PrintPage.BasePage)
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
             setDrawerState(true)
@@ -967,9 +965,7 @@ Item {
             storage.updatePrintFileList("?root_internal?")
             activeDrawer = printPage.sortingDrawer
             setDrawerState(true)
-            if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
-                printSwipeView.swipeToItem(PrintPage.FileBrowser)
-            }
+            printSwipeView.swipeToItem(PrintPage.FileBrowser)
             copyingFilePopup.close()
         }
 

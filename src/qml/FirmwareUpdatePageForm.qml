@@ -18,12 +18,9 @@ LoggingItem {
     property bool isFwUpdProcess: bot.process.type == ProcessType.FirmwareUpdate
     onIsFwUpdProcessChanged: {
         if(isFwUpdProcess) {
-            if(mainSwipeView.currentIndex != MoreporkUI.SettingsPage) {
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-            }
-            if(systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
-                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
-            }
+            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+            settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+            systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
         }
     }
 

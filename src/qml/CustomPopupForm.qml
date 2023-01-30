@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import QtGraphicalEffects 1.12
 
 LoggingPopup {
     id: popup
@@ -29,7 +30,7 @@ LoggingPopup {
     property alias right_button_text: right_text.text
     property bool showOneButton: false
     property bool showTwoButtons: false
-    property int defaultButton: CustomPopup.None
+    property int defaultButton: CustomPopup.Right
 
     background: Rectangle {
         id: popupBackgroundDim
@@ -111,6 +112,21 @@ LoggingPopup {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
 
+        // Opacity Mask used so buttons can fill entire space
+        layer.enabled: true
+        layer.effect: OpacityMask {
+            maskSource: Item {
+                width: popupContainer.width
+                height: popupContainer.height
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: popupContainer.width
+                    height: popupContainer.height
+                    radius: 10
+                }
+             }
+        }
+
         Item {
             id: buttonBar
             width: parent.width
@@ -137,7 +153,6 @@ LoggingPopup {
                     id: full_button_rectangle
                     anchors.fill: parent
                     color: "#00000000"
-                    radius: 10
 
                     Text {
                         id: full_text
@@ -183,6 +198,7 @@ LoggingPopup {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
+
                 }
 
                 Rectangle {
@@ -192,7 +208,6 @@ LoggingPopup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     color: (defaultButton === CustomPopup.Left ? "#ffffff" : "#00000000")
-                    radius: 10
                     visible: true
 
                     Text {
@@ -232,7 +247,6 @@ LoggingPopup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     color: (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
-                    radius: 10
                     visible: true
 
                     Text {
