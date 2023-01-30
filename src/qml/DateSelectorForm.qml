@@ -170,7 +170,7 @@ Item {
 
         onClicked: {
             setTime()
-            timeSwipeView.swipeToItem(TimePage.BasePage)
+            goToNextStep.start()
         }
         enabled: {
             !monthTumbler.moving && !dateTumbler.moving && !yearTumbler.moving

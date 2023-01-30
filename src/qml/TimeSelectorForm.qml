@@ -165,15 +165,7 @@ Item {
 
         onClicked: {
             setTime()
-            if(inFreStep) {
-                timeSwipeView.swipeToItem(TimePage.SetDate)
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                fre.gotoNextStep(currentFreStep)
-            }
-            else {
-                timeSwipeView.swipeToItem(TimePage.BasePage)
-            }
+            goToNextStep.start()
         }
         enabled: {
             !hoursTumbler.moving && !minutesTumbler.moving && !meridianTumbler.moving
