@@ -9,6 +9,8 @@ import ExtruderTypeEnum 1.0
 LoggingItem {
     itemName: "ToolheadCalibration"
     id: calibrationPage
+    width: 800
+    height: 408
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
     property alias cancelCalibrationPopup: cancelCalibrationPopup
