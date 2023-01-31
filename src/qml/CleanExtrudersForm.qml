@@ -59,7 +59,7 @@ LoggingItem {
         anchors.left: parent.left
         anchors.leftMargin: 0
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/calib_check_nozzles_clean.png"
+        source: "qrc:/img/check_nozzles_clean.png"
         opacity: 1.0
     }
 

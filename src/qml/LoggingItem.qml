@@ -2,6 +2,8 @@ import QtQuick 2.12
 import MachineTypeEnum 1.0
 
 Item {
+    smooth: false
+    antialiasing: false
     property string itemName: "Default"
     onStateChanged: {
         console.info("Item", itemName, "changed state to", state)

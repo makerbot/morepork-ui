@@ -1,6 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.12
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
@@ -112,12 +112,12 @@ Item {
                        bot.process.isProcessCancellable) {
                         toolheadCalibration.cancelCalibrationPopup.open()
                     } else if(bot.process.type == ProcessType.None) {
-                         toolheadCalibration.resetStates(false)
+                        toolheadCalibration.state = "base state"
+                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                     }
                 }
                 else {
-                    if(calibrateErrorScreen.lastReportedErrorType ==
-                                                        ErrorType.NoError) {
+                    if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
                         skipFreStepPopup.open()
                     }
                 }
@@ -139,19 +139,9 @@ Item {
                 id: toolheadCalibration
                 visible: !calibrateErrorScreen.visible
                 onProcessDone: {
-                    resetStates(true)
-                }
-
-                function resetStates(processDone) {
-                    state = "base state"
-                    // Dont go back if an error happened
-                    if(calibrateErrorScreen.lastReportedErrorType ==
-                                                        ErrorType.NoError) {
+                    if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
+                        toolheadCalibration.state = "base state"
                         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-
-                        if(processDone) {
-                            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                        }
                     }
                 }
             }

@@ -15,11 +15,25 @@ Item {
         visible: showAllElements
     }
 
+    property alias animatedImage: animatedImage
     property alias image: image
     property alias loadingIcon: loadingIcon
 
     anchors.left: parent.left
     anchors.bottom: parent.bottom
+
+    AnimatedImage {
+        id: animatedImage
+        width: sourceSize.width
+        height: sourceSize.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        source: ""
+        cache: false
+        playing: visible
+        smooth: false
+        visible: false || showAllElements
+    }
 
     Image {
         id: image

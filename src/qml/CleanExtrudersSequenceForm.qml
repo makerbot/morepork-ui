@@ -210,7 +210,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: header_image
-                source: "qrc:/img/calib_check_nozzles_clean.png"
+                source: "qrc:/img/check_nozzles_clean.png"
                 opacity: 1
             }
 
@@ -328,7 +328,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: animated_image
-                source: "qrc:/img/calib_scrub_nozzles.gif"
+                source: "qrc:/img/scrub_nozzles.gif"
                 playing: true
                 opacity: 1
             }
