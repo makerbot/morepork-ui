@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property var steps: []
+    property int stepBegin: 1
     spacing: 24
 
     Repeater {
@@ -22,7 +23,7 @@ ColumnLayout {
                 TextSubheader {
                     id: stepNumber
                     style: TextSubheader.Bold
-                    text: index + 1
+                    text: index + stepBegin
                     color: "#000000"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.horizontalCenterOffset: 1

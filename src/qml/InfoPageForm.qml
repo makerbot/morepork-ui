@@ -40,7 +40,7 @@ Item {
                 // height: 48
                 visible: true
             }
-            InfoItemForm {
+            InfoItem {
                 id: info_firmwareVersion
                 labelText: qsTr("Firmware Version")
                 dataText: bot.version

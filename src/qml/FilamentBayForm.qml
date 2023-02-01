@@ -11,7 +11,7 @@ Item {
     width: 360
     smooth: false
     antialiasing: false
-    property alias loadButton: loadButton
+    property alias loadAttachButton: loadAttachButton
     property alias unloadButton: unloadButton
     property alias purgeButton: purgeButton
 
@@ -189,8 +189,14 @@ Item {
             antialiasing: false
 
             ButtonRectanglePrimary {
-                id: loadButton
-                text: qsTr("LOAD")
+                id: loadAttachButton
+                text: {
+                    if(!extruderPresent) {
+                        qsTr("ATTACH EXTRUDER")
+                    } else {
+                        qsTr("LOAD")
+                    }
+                }
                 logKey: text
                 visible: !extruderFilamentPresent ||
                          (!bot.hasFilamentBay && filamentMaterial == "unknown")
@@ -200,6 +206,8 @@ Item {
                 id: unloadButton
                 text: qsTr("UNLOAD")
                 logKey: text
+                visible: extruderPresent
+
             }
 
             ButtonRectangleSecondary {
@@ -208,6 +216,12 @@ Item {
                 logKey: text
                 visible: (bot.hasFilamentBay) ? extruderFilamentPresent :
                          (extruderFilamentPresent && filamentMaterial != "unknown")
+            }
+
+            Item {
+                height: purgeButton.height
+                width:purgeButton.width
+                visible: !extruderPresent
             }
         }
     }
