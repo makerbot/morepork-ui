@@ -2111,6 +2111,7 @@ ApplicationWindow {
                             anchors.fill: parent
                             onClicked: {
                                 extNotCalibratedPopup.close()
+                                resetSettingsSwipeViewPages()
                                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
