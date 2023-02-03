@@ -78,6 +78,8 @@ Item {
         }
     }
 
+    property bool doWifiFlow: !isFirmwareUpdateAvailable && bot.net.interface == "offline"
+
     Timer {
         id: checkForUpdatesTimer
         interval: 10000
@@ -279,7 +281,7 @@ Item {
 
             PropertyChanges {
                 target: button1
-                text: "CONNECT TO NETWORK"
+                text: doWifiFlow? "CONNECT TO WIFI" : "DOWNLOAD UPDATE"
             }
 
             PropertyChanges {
