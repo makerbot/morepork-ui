@@ -42,8 +42,8 @@ ColumnLayout {
 
             TextBody {
                 text: {
-                    customCurrentTemperature ? customCurrentTemperature :
-                    ("%1 C").arg(bot["extruder%1CurrentTemp"].arg(idxAsAxis))
+                    customCurrentTemperature > 0 ? customCurrentTemperature :
+                    ("%1 C").arg(bot["extruder%1CurrentTemp".arg(idxAsAxis)])
                 }
                 font.weight: Font.Bold
             }
@@ -58,8 +58,8 @@ ColumnLayout {
 
             TextBody {
                 text: {
-                    customTargetTemperature ? customTargetTemperature :
-                    ("%1 C").arg(bot["extruder%1TargetTemp"].arg(idxAsAxis))
+                    customTargetTemperature > 0 ? customTargetTemperature :
+                    ("%1 C").arg(bot["extruder%1TargetTemp".arg(idxAsAxis)])
                 }
                 font.weight: Font.Bold
             }
