@@ -13,6 +13,7 @@ Item {
     antialiasing: false
     property alias wifiSwipeView: wifiSwipeView
     property alias wifiList: wifiList
+    property alias wifiPopup: wifiPopup
     property int wifiError: bot.net.wifiError
     property bool isWifiConnected: bot.net.interface == "wifi"
     property string currentWifiName: bot.net.name

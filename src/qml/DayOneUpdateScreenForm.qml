@@ -27,6 +27,7 @@ Item {
         checkForUpdatesTimer.start()
         popupState = "update_check"
         dayOneUpdatePagePopup.open()
+        wifiPageDayOneUpdate.wifiPopup.close()
     }
 
     property bool isFirmwareUpdateProcess: bot.process.type == ProcessType.FirmwareUpdate
