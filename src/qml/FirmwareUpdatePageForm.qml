@@ -418,7 +418,7 @@ LoggingItem {
                 color: "#ffffff"
                 text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
                             "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                            "CODE: %1").arg(bot.process.errorCode)
+                            "CODE: %1").arg(errorCode)
             }
         }
     }
