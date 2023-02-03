@@ -88,6 +88,7 @@ Item {
             //view when print process actually starts
             //assuming the user had navigated to other
             //pages before the print starts.
+            resetSettingsSwipeViewPages()
             printSwipeView.swipeToItem(PrintPage.BasePage)
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
