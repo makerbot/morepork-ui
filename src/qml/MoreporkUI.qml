@@ -87,8 +87,6 @@ ApplicationWindow {
 
     }
 
-    property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
-
     property bool skipFirmwareUpdate: false
     property bool viewReleaseNotes: false
 

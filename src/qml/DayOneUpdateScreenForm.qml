@@ -16,15 +16,26 @@ Item {
     property alias wifiPageDayOneUpdate: wifiPageDayOneUpdate
     property alias dayOneUpdatePagePopup: dayOneUpdatePagePopup
     property alias firmwareUpdatePage: firmwareUpdatePage
+    property alias checkForUpdatesTimer: checkForUpdatesTimer
+    property alias popupState: popupLayout.state
+
+    property bool checkingServer: false
+
+    function checkServer() {
+        checkingServer = true
+        bot.firmwareUpdateCheck(false)
+        checkForUpdatesTimer.start()
+        popupState = "update_check"
+        dayOneUpdatePagePopup.open()
+    }
 
     property bool isFirmwareUpdateProcess: bot.process.type == ProcessType.FirmwareUpdate
 
     onIsFirmwareUpdateProcessChanged: {
-        if(isFirmwareUpdateProcess) {
+        if (isFirmwareUpdateProcess) {
             dayOneUpdatePagePopup.close()
             state = "updating_firmware"
-        }
-        else {
+        } else {
             state = "update_now"
         }
     }
@@ -32,70 +43,55 @@ Item {
     property bool isInterfaceTypeEthernet: bot.net.interface == "ethernet"
 
     onIsInterfaceTypeEthernetChanged: {
-        if(!isInterfaceTypeEthernet) {
-            if(dayOneUpdatePagePopup.opened) {
-                dayOneUpdatePagePopup.close()
-            }
+        if (isInterfaceTypeEthernet && state == "connect_to_wifi") {
+            checkServer()
+            state = "update_now"
         }
     }
 
     property bool isInterfaceTypeWifi: bot.net.interface == "wifi"
 
     onIsInterfaceTypeWifiChanged: {
-        if(isInterfaceTypeWifi) {
-            if(state == "connect_to_wifi") {
-                // dayOneUpdatePagePopup.open()
-            }
+        if (isInterfaceTypeWifi && state == "connect_to_wifi") {
+            checkServer()
         }
     }
 
     property bool isUsbStorageConnected: storage.usbStorageConnected
 
     onIsUsbStorageConnectedChanged: {
-        if(state == "usb_fw_file_list" &&
-           !isUsbStorageConnected &&
-           bot.process.type == ProcessType.None) {
+        if (state == "usb_fw_file_list" &&
+                !isUsbStorageConnected &&
+                bot.process.type == ProcessType.None) {
             state = "download_to_usb_stick"
         }
     }
 
-    property bool setDownloadFailed: false
-    property bool setFirmwareFileCorrupted: false
+    property bool isFirmwareUpdateAvailable: bot.firmwareUpdateAvailable
+
+    onIsFirmwareUpdateAvailableChanged: {
+        if (isFirmwareUpdateAvailable && checkingServer) {
+            checkingServer = false
+            bot.installFirmware()
+            dayOneUpdatePagePopup.close()
+            state = "updating_firmware"
+        }
+    }
 
     Timer {
         id: checkForUpdatesTimer
-        interval: 3000
+        interval: 10000
         onTriggered: {
-            if(isfirmwareUpdateAvailable) {
-                checkForUpdatesTimer.stop()
+            if (isFirmwareUpdateAvailable) {
                 dayOneUpdatePagePopup.close()
                 bot.installFirmware()
-            }
-            else {
-                bot.firmwareUpdateCheck(false)
-                checkForUpdatesTimer.restart()
-            }
-        }
-    }
-
-    property bool isFirmwareDownloadFailed: bot.process.errorCode == 1054
-
-    onIsFirmwareDownloadFailedChanged: {
-        if(isFirmwareDownloadFailed) {
-            setDownloadFailed = true
-            if(!dayOneUpdatePagePopup.opened) {
-                dayOneUpdatePagePopup.open()
-            }
-        }
-    }
-
-    property bool isFirmwareFileCorrupted: bot.process.errorCode == 1031
-
-    onIsFirmwareFileCorruptedChanged: {
-        if(isFirmwareFileCorrupted) {
-            setFirmwareFileCorrupted = true
-            if(!dayOneUpdatePagePopup.opened) {
-                dayOneUpdatePagePopup.open()
+            } else {
+                if (bot.net.interface == "wifi") {
+                    // If we are already connected to wifi but can't find
+                    // firmware, we might need to change the wifi network
+                    state = "connect_to_wifi"
+                }
+                popupState = "update_check_failed"
             }
         }
     }
@@ -429,11 +425,10 @@ Item {
             PropertyChanges {
                 target: imageBackArrow
                 visible: {
-                    if(bot.process.type == ProcessType.FirmwareUpdate &&
+                    if (bot.process.type == ProcessType.FirmwareUpdate &&
                        bot.process.stateType > ProcessStateType.TransferringFirmware) {
                         false
-                    }
-                    else {
+                    } else {
                         true
                     }
                 }
@@ -480,21 +475,21 @@ Item {
     CustomPopup {
         popupName: "DayOnePopup"
         id: dayOneUpdatePagePopup
-        showOneButton: true
-        popupWidth: 750
-        popupHeight: 300
+        popupWidth: 715
         full_button_text: qsTr("BACK")
         full_button.onClicked: {
+            checkingServer = false
             dayOneUpdatePagePopup.close()
         }
         ColumnLayout {
+            id: popupLayout
             width: 650
             anchors.top: parent.top
-            anchors.topMargin: 110
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20
 
             Image {
+                id: popupIcon
                 source: "qrc:/img/process_error_small.png"
                 Layout.alignment: Qt.AlignHCenter
             }
@@ -502,7 +497,13 @@ Item {
             TextHeadline {
                 id: popupTitle
                 Layout.alignment: Qt.AlignHCenter
-                text: qsTr("NO USB DETECTED")
+            }
+
+            BusySpinner {
+                id: waitingSpinner
+                spinnerActive: false
+                spinnerSize: 64
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             TextBody {
@@ -510,8 +511,114 @@ Item {
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: qsTr("Please insert USB stick with latest firmware to continue.")
             }
+
+            states: [
+                State {
+                    name: "no_usb"
+
+                    PropertyChanges {
+                        target: dayOneUpdatePagePopup
+                        popupHeight: 300
+                        showOneButton: true
+                    }
+
+                    PropertyChanges {
+                        target: popupLayout
+                        anchors.topMargin: 110
+                    }
+
+                    PropertyChanges {
+                        target: popupIcon
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: popupTitle
+                        text: qsTr("NO USB DETECTED")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: false
+                    }
+
+                    PropertyChanges {
+                        target: popupBody
+                        text: qsTr("Please insert USB stick with latest firmware to continue.")
+                        visible: true
+                    }
+                },
+                State {
+                    name: "update_check"
+
+                    PropertyChanges {
+                        target: dayOneUpdatePagePopup
+                        popupHeight: 240
+                        showOneButton: false
+                    }
+
+                    PropertyChanges {
+                        target: popupLayout
+                        anchors.topMargin: 170
+                    }
+
+                    PropertyChanges {
+                        target: popupIcon
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: popupTitle
+                        text: qsTr("CHECKING FOR UPDATE")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: true
+                    }
+
+                    PropertyChanges {
+                        target: popupBody
+                        visible: false
+                    }
+                },
+                State {
+                    name: "update_check_failed"
+
+                    PropertyChanges {
+                        target: dayOneUpdatePagePopup
+                        popupHeight: 300
+                        showOneButton: true
+                    }
+
+                    PropertyChanges {
+                        target: popupLayout
+                        anchors.topMargin: 110
+                    }
+
+                    PropertyChanges {
+                        target: popupIcon
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: popupTitle
+                        text: qsTr("UPDATE CHECK FAILED")
+                    }
+
+                    PropertyChanges {
+                        target: waitingSpinner
+                        spinnerActive: false
+                    }
+
+                    PropertyChanges {
+                        target: popupBody
+                        text: qsTr("Could not reach update server - please check your network connection.")
+                        visible: true
+                    }
+                }
+            ]
         }
     }
 }

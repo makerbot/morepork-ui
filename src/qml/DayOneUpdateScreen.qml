@@ -8,18 +8,20 @@ import MachineTypeEnum 1.0
 DayOneUpdateScreenForm {
     button1.onClicked: {
         if (state == "update_now") {
-            if (bot.net.interface == "ethernet" && isfirmwareUpdateAvailable) {
+            if (isFirmwareUpdateAvailable) {
                 bot.installFirmware()
                 state = "updating_firmware"
-            } else if (bot.net.interface != "ethernet") {
+            } else if (bot.net.interface == "offline") {
                 state = "connect_to_wifi"
                 if(!bot.net.wifiEnabled) {
                     bot.toggleWifi(true)
                 }
-                bot.net.setWifiState(WifiState.Searching)
                 bot.scanWifi(true)
             } else {
-                // Need a popup for poor network connectivity
+                bot.firmwareUpdateCheck(false)
+                checkForUpdatesTimer.start()
+                popupState = "update_check"
+                dayOneUpdatePagePopup.open()
             }
         } else if (state == "download_to_usb_stick") {
             if (storage.usbStorageConnected) {
@@ -28,6 +30,7 @@ DayOneUpdateScreenForm {
                 firmwareUpdatePage.state = "select_firmware_file"
                 state = "usb_fw_file_list"
             } else {
+                popupState = "no_usb"
                 dayOneUpdatePagePopup.open()
             }
         } else {
