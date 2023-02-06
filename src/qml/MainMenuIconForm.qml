@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: item_root
-    width: Math.max(textIconDesc.width + 20, 180)
-    height: 180
+    width: Math.max(textIconDesc.width + 20, 200)
+    height: 200
     smooth: false
     property alias mouseArea: mouseArea
     property alias image: image
@@ -26,32 +26,30 @@ Item {
 
         Image {
             id: image
+            source: "qrc:/qtquickplugin/images/template_image.png"
             x: 38
-            width: 75
-            height: 75
             smooth: false
             anchors.top: parent.top
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter
-            source: "qrc:/qtquickplugin/images/template_image.png"
             visible: imageVisible
+            width: sourceSize.width
+            height: sourceSize.height
         }
 
-        Text {
+        TextBody {
+            style: TextBody.ExtraLarge
+            font.weight: Font.Light
             id: textIconDesc
             x: 52
             color: "#a0a0a0"
             text: qsTr("Icon Name")
             anchors.top: parent.top
-            anchors.topMargin: 130
+            anchors.topMargin: 153
             antialiasing: false
             smooth: false
-            font.family: defaultFont.name
-            font.letterSpacing: 3
-            font.weight: Font.Light
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 22
         }
 
         LoggingMouseArea {
