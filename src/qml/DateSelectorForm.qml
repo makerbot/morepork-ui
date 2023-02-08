@@ -72,17 +72,9 @@ Item {
             text: formatText(Tumbler.tumbler.count, modelData)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            // The following check currently spams the log with type errors when the
-            // month tumbler is changed which affects the model of the date tumbler
-            // where it seems to intermediately not hold a valid data type and I
-            // couldn't find a way to prevent it.
             font.pixelSize: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? 100 : 64
             font.weight: Font.Light
             font.family: defaultFont.name
-            // The following check currently spams the log with type errors when the
-            // month tumbler is changed which affects the model of the date tumbler
-            // where it seems to intermediately not hold a valid data type and I
-            // couldn't find a way to prevent it.
             color: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? "#ffffff" : "#B2B2B2"
 
             Behavior on font.pixelSize {
