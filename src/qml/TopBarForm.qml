@@ -6,23 +6,24 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 Item {
-    id: itemTopBarForm
-    property alias itemTopBarForm: itemTopBarForm
-    // You will always want to reference pages off barHeight or
-    // topFadeIn.height depending on what you are doing.
-    property int barHeight: 40
-    height: topFadeIn.height
+    id: topBar
+    width: parent.width
+    height: 72
     smooth: false
-    property alias topFadeIn: topFadeIn
+    property alias textDateTime: textDateTime
     property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
     property alias text_printerName: textPrinterName
-    property alias dateTimeText: dateTimeText
     property string timeSeconds: "00"
     property string oldSeparatorString: " "
     signal backClicked()
     signal drawerDownClicked()
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+    }
 
     Timer {
         id: secondsUpdater
@@ -35,7 +36,7 @@ Item {
             var newSeparatorString = (((timeSeconds % 4) < 2) ? ":" : " ")
             if (newSeparatorString != oldSeparatorString) {
                 oldSeparatorString =  newSeparatorString
-                var formatString = "M/d H" + oldSeparatorString + "mm"
+                var formatString = "M/d  H" + oldSeparatorString + "mm"
                 textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
             }
         }
@@ -46,23 +47,19 @@ Item {
         z: 2
         anchors.right: parent.right
         anchors.rightMargin: 0
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     LinearGradient {
-        id: topFadeIn
-        height: 60
+        id: fade
+        height: 30
+        width: parent.width
         smooth: false
-        cached: true
         z: 1
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
+        anchors.top: parent.bottom
         gradient: Gradient {
             GradientStop {
-                position: 0.6
+                position: 0
                 color: "#FF000000"
             }
             GradientStop {
@@ -75,7 +72,7 @@ Item {
     Item {
         id: backButton
         width: 150
-        height: barHeight
+        height: parent.height
         smooth: false
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -86,7 +83,7 @@ Item {
         LoggingMouseArea {
             logText: "[<back_button<]"
             id: mouseArea_back
-            height: topFadeIn.height
+            height: parent.height
             smooth: false
             anchors.leftMargin: -parent.anchors.leftMargin
             anchors.top: parent.top
@@ -130,34 +127,20 @@ Item {
         }
     }
 
-    Item {
-        id: dateTimeText
-        z: 3
-        anchors.leftMargin: 48
-        anchors.topMargin: 11
-        anchors.left: backButton.left
-        anchors.top: parent.top
-        height: parent.height
-        width: 125
+    Text {
+        id: textDateTime
+        color: "#a0a0a0"
+        text: "--/-- --:--"
+        antialiasing: false
         smooth: false
-        visible: settings.getDateTimeTextEnabled()
-
-        Text {
-            id: textDateTime
-            color: "#a0a0a0"
-            text: "--/-- --:--"
-            antialiasing: false
-            smooth: false
-            font.capitalization: Font.AllUppercase
-            font.family: defaultFont.name
-            font.letterSpacing: 0
-            font.weight: Font.Light
-            font.pixelSize: 18
-            verticalAlignment: Text.AlignTop
-            horizontalAlignment: Text.AlignRight
-            anchors.top: parent.top
-            anchors.left: parent.left
-        }
+        font.capitalization: Font.AllUppercase
+        font.family: defaultFont.name
+        font.weight: Font.Light
+        font.pixelSize: 18
+        visible: settings.getShowTimeInTopBar()
+        anchors.left: backButton.left
+        anchors.leftMargin: 45
+        anchors.verticalCenter: parent.verticalCenter
     }
 
     Flickable {
@@ -167,6 +150,7 @@ Item {
         anchors.top: parent.top
         anchors.left: backButton.right
         anchors.right: notificationIcons.left
+        anchors.bottom: parent.bottom
         flickableDirection: Flickable.VerticalFlick
         onFlickStarted: {
             if (verticalVelocity < 0) drawerDownClicked()
@@ -179,12 +163,9 @@ Item {
         // (to open the drawers) is a child of the flickable.
         Item {
             id: itemPrinterName
-            height: barHeight
             smooth: false
             z: 1
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.left: parent.left
+            anchors.fill: parent
 
             Text {
                 id: textPrinterName
@@ -330,17 +311,17 @@ Item {
                                     break;
                                 case SystemSettingsPage.TimePage:
                                     switch(settingsPage.systemSettingsPage.timePage.timeSwipeView.currentIndex) {
-                                    case TimePage.SetDate:
-                                        qsTr("ENTER TODAY'S DATE")
+                                    case TimePage.BasePage:
+                                        qsTr("TIME AND DATE")
                                         break;
                                     case TimePage.SetTimeZone:
-                                        qsTr("SET TIME ZONE")
+                                        qsTr("EDIT TIME ZONE")
+                                        break;
+                                    case TimePage.SetDate:
+                                        qsTr("EDIT DATE")
                                         break;
                                     case TimePage.SetTime:
-                                        qsTr("SET CURRENT TIME")
-                                        break;
-                                    default:
-                                        qsTr("TIME AND DATE")
+                                        qsTr("EDIT TIME")
                                         break;
                                     }
                                     break;
@@ -438,7 +419,6 @@ Item {
 
             Image {
                 id: imageDrawerArrow
-                y: 227
                 height: 25
                 smooth: false
                 anchors.left: textPrinterName.right
@@ -453,10 +433,6 @@ Item {
             LoggingMouseArea {
                 logText: "[^TopDrawerDown^]"
                 id: mouseAreaTopDrawerDown
-                x: 301
-                y: 40
-                width: 40
-                height: 60
                 smooth: false
                 anchors.fill: parent
                 z: 2

@@ -9,8 +9,7 @@ import MachineTypeEnum 1.0
 
 Item {
     id: materialPage
-    width: 800
-    height: 408
+    anchors.fill: parent
     smooth: false
     property alias bay1: bay1
     property alias bay2: bay2
@@ -218,7 +217,6 @@ Item {
         id: materialSwipeView
         logName: "materialSwipeView"
         currentIndex: MaterialPage.BasePage
-        anchors.fill: parent
 
         // MaterialPage.BasePage
         Item {

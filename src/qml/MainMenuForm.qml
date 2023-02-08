@@ -5,6 +5,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 Item {
+    anchors.fill: parent
     property alias mainMenuIcon_info: mainMenuIcon_info
     property alias mainMenuIcon_advanced: mainMenuIcon_advanced
     property alias mainMenuIcon_material: mainMenuIcon_material
