@@ -140,12 +140,13 @@ LoggingItem {
             anchors.horizontalCenter: image.horizontalCenter
 
             property alias indicatorNeedle: indicatorNeedle
+            property alias levelingGoodCheckmark: levelingGoodCheckmark
 
             Image {
                 id: baseScale
                 height: sourceSize.height
                 width: sourceSize.width
-                source: "qrc:/img/leveler_scale.png"
+                source: ("qrc:/img/%1.png").arg(getImageForPrinter("leveler_scale"))
             }
 
             Image {
@@ -154,6 +155,15 @@ LoggingItem {
                 width: sourceSize.width
                 anchors.horizontalCenter: baseScale.horizontalCenter
                 source: "qrc:/img/leveler_indicator_orange.png"
+            }
+
+            Image {
+                id: levelingGoodCheckmark
+                height: sourceSize.height
+                width: sourceSize.width
+                anchors.horizontalCenter: baseScale.horizontalCenter
+                anchors.verticalCenter: baseScale.verticalCenter
+                source: "qrc:/img/leveling_good.png"
             }
         }
 
@@ -451,6 +461,11 @@ LoggingItem {
                     }
                 }
                 visible: true
+            }
+
+            PropertyChanges {
+                target: leveler.levelerScale.levelingGoodCheckmark
+                visible: currentHES <= targetHESUpper && currentHES >= targetHESLower
             }
 
             PropertyChanges {
