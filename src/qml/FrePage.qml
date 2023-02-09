@@ -86,6 +86,7 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.TimePage)
+                settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetTimeZone)
             } else if(state == "attach_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)

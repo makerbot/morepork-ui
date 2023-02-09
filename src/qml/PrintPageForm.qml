@@ -8,6 +8,7 @@ import ErrorTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
+    anchors.fill: parent
     smooth: false
     property string fileName: "unknown.makerbot"
     property string file_name
@@ -88,6 +89,7 @@ Item {
             //view when print process actually starts
             //assuming the user had navigated to other
             //pages before the print starts.
+            resetSettingsSwipeViewPages()
             printSwipeView.swipeToItem(PrintPage.BasePage)
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer

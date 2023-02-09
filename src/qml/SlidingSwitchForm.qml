@@ -31,6 +31,7 @@ Switch {
 
     TextBody {
         id: switchText
+        style: TextBody.Base
         font.weight: Font.Bold
         color: slidingSwitch.checked ? "#ffffff" : "#999999"
         anchors.verticalCenter: parent.verticalCenter
