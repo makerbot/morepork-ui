@@ -196,6 +196,60 @@ LoggingItem {
 
     states: [
         State {
+            name: "base state"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.temperatureStatus
+                visible: false
+            }
+
+            PropertyChanges {
+                target: leveler
+                visible: false
+            }
+        },
+
+        State {
             name: "remove_build_plate"
             when: bot.process.type == ProcessType.AssistedLeveling &&
                   bot.process.stateType == ProcessStateType.BuildPlateInstructions
