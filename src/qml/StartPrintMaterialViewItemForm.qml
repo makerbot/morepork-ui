@@ -126,7 +126,7 @@ Item {
         anchors.left: startPrintMaterialIcon.right
         anchors.leftMargin: 12
 
-        Text {
+        TextSubheader {
             id: materialNameOrBayIDText
             text: {
                 if(isLabsMaterial) {
@@ -138,30 +138,18 @@ Item {
                 }
             }
             anchors.top: parent.top
-                      anchors.topMargin: 8
+            anchors.topMargin: 8
             font.capitalization: Font.AllUppercase
-            smooth: false
-            antialiasing: false
-            font.letterSpacing: 3
-            font.family: defaultFont.name
             font.weight: Font.Bold
-            font.pixelSize: 17
-            color: "#cbcbcb"
         }
 
-        Text {
+        TextSubheader {
             id: materialColorText
             text: materialColorName
             anchors.top: materialNameOrBayIDText.bottom
             anchors.topMargin: 8
             font.capitalization: Font.AllUppercase
-            smooth: false
-            antialiasing: false
-            font.letterSpacing: 3
-            font.family: defaultFont.name
             font.weight: Font.Bold
-            font.pixelSize: 17
-            color: "#cbcbcb"
             visible: {
                 if(isLabsMaterial) {
                     false
@@ -171,7 +159,7 @@ Item {
             }
         }
 
-        Text {
+        TextSubheader {
             id: noMaterialText
             width: 210
             text: isLabsMaterial ?
@@ -181,18 +169,11 @@ Item {
             anchors.topMargin: 8
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             font.capitalization: Font.AllUppercase
-            smooth: false
-            antialiasing: false
-            font.letterSpacing: 3
-            font.family: defaultFont.name
             font.weight: Font.Normal
-            font.pixelSize: 18
-            color: "#cbcbcb"
-            lineHeight: 1.3
             visible: bot.hasFilamentBay && (!isSpoolPresent || isLabsMaterial)
         }
 
-        Text {
+        TextSubheader {
             id: materialRequiredText
             text: {
                 if(materialColorName != "Reading Spool...") {
@@ -203,13 +184,7 @@ Item {
             }
             anchors.top: materialColorText.bottom
             anchors.topMargin: 8
-            smooth: false
-            antialiasing: false
-            font.letterSpacing: 1
-            font.family: defaultFont.name
             font.weight: Font.Light
-            font.pixelSize: 18
-            color: "#ffffff"
             visible: {
                 if(isLabsMaterial) {
                     false

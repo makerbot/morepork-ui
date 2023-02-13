@@ -505,31 +505,24 @@ Item {
                 }
             }
 
-            Text {
+            TextSubheader {
                 id: noFilesText
-                color: "#ffffff"
                 font.weight: Font.Bold
                 text: qsTr("NO PRINTABLE FILES")
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -40
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: 19
-                font.letterSpacing: 2
                 visible: storage.storageIsEmpty
 
-                Text {
-                    color: "#ffffff"
-                    font.family: "Antennae"
+                TextBody {
+                    style: TextBody.Large
                     font.weight: Font.Light
-                    text: qsTr("Choose another folder or export a .MakerBot\nfile from the MakerBot Print app.")
+                    text: qsTr("Choose another folder or export a .MakerBot file from the MakerBot Print app.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 17
-                    font.letterSpacing: 1
-                    lineHeight: 1.4
                 }
             }
 
@@ -634,31 +627,24 @@ Item {
             smooth: false
             visible: false
 
-            Text {
+            TextSubheader {
                 id: noPrintsInQueueText
-                color: "#ffffff"
                 font.weight: Font.Bold
                 text: qsTr("NO PRINT JOBS IN QUEUE")
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -40
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: 19
-                font.letterSpacing: 2
                 visible: bot.net.printQueueEmpty
 
-                Text {
-                    color: "#ffffff"
-                    font.family: "Antennae"
+                TextBody {
+                    style: TextBody.Large
                     font.weight: Font.Light
                     text: qsTr("Use MakerBot CloudPrint to add to your printer's queue.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 17
-                    font.letterSpacing: 1
-                    lineHeight: 1.4
                 }
             }
 

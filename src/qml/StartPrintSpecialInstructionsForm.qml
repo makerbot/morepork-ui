@@ -5,8 +5,7 @@ import QtQuick.Layouts 1.3
 LoggingItem {
     itemName: "StartPrintSpecialInstructions"
     id: mainItem
-    width: 800
-    height: 440
+    anchors.fill: parent
 
     property alias nextButton: nextButton
     property alias dontShowButton: dontShowButton
@@ -37,57 +36,38 @@ LoggingItem {
     ColumnLayout {
         id: instructionsContainer
         height: 330
+        width: 360
         anchors.left: image.right
-        anchors.leftMargin: 0
+        anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
 
-        Text {
+        TextHeadline {
             id: title_text
-            Layout.maximumWidth: 350
-            color: "#cbcbcb"
             text: "TITLE"
-            font.letterSpacing: 2
-            font.wordSpacing: 3
-            wrapMode: Text.WordWrap
-            font.family: defaultFont.name
-            font.pixelSize: 22
             font.weight: Font.Bold
-            antialiasing: false
-            smooth: false
-            lineHeight: 1.2
         }
 
-        Text {
+        TextBody {
             id: description_text
-            Layout.maximumWidth: 350
-            color: "#cbcbcb"
             text: "Description"
-            wrapMode: Text.WordWrap
-            font.family: defaultFont.name
-            font.pixelSize: 20
             font.weight: Font.Light
-            lineHeight: 1.2
-            antialiasing: false
-            smooth: false
         }
 
-        RoundedButton {
-            id: nextButton
-            buttonHeight: 50
-            label: qsTr("CONTINUE")
-        }
+        ColumnLayout {
+            spacing: 20
 
-        Item {
-            id: emptySpacingItem
-            height: 5
-        }
+            ButtonRectanglePrimary {
+                id: nextButton
+                text: qsTr("CONTINUE")
+            }
 
-        RoundedButton {
-            id: dontShowButton
-            buttonHeight: 50
-            label: qsTr("DON'T SHOW ME AGAIN")
+            ButtonRectangleSecondary {
+                id: dontShowButton
+                text: qsTr("DON'T SHOW ME AGAIN")
+            }
         }
     }
+
     states: [
         State {
             name: "apply_glue_to_bp"
