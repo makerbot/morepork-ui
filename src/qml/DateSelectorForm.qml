@@ -4,12 +4,6 @@ import QtQuick.Layouts 1.3
 import FreStepEnum 1.0
 
 Item {
-
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     anchors.fill: parent
 
     property alias setDateButton: setDateButton
@@ -49,25 +43,17 @@ Item {
 
     function formatText(count, modelData) {
         var data = 0
-        if (count == 12) {
-            // Month
+        // Month & Date tumbler
+        if (count == 12 || count == 31 || count == 30 || count == 29 || count == 28) {
+            data = modelData + 1
             if (data.toString().length < 2) {
-                data = modelData + 1
                 data = "0" + data
             }
-            return data
-        } else if(count == 31 || count == 30 || count == 28 || count == 29) {
-            // Date
-            if (data.toString().length < 2) {
-                data = modelData + 1
-                data = "0" + data
-            }
-            return data
-        } else if(count == 100) {
+        } else if(count == 50) {
             // Year
             data = modelData + 2000
-            return data
         }
+        return data
     }
 
     function setTime() {
@@ -82,260 +68,104 @@ Item {
 
     Component {
         id: delegateComponent
-
         Text {
             text: formatText(Tumbler.tumbler.count, modelData)
-            opacity: 1.0 - Math.abs(Tumbler.displacement) / (Tumbler.tumbler.visibleItemCount / 2)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 110
+            font.pixelSize: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? 100 : 64
             font.weight: Font.Light
             font.family: defaultFont.name
-            color: "#ffffff"
+            color: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? "#ffffff" : "#B2B2B2"
+
+            Behavior on font.pixelSize {
+                NumberAnimation {
+                    duration: 50
+                }
+            }
         }
     }
 
     Item {
-        id: element
-        width: 800
-        height: 200
-        anchors.verticalCenterOffset: -20
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 40
+        anchors.right: setDateButton.left
+        anchors.bottom: parent.bottom
+        anchors.top: parent.top
 
-        Tumbler {
+        VerticalTumbler {
             id: monthTumbler
-            width: 180
-            height: 430
-            anchors.left: parent.left
-            anchors.leftMargin: 30
             anchors.verticalCenter: parent.verticalCenter
+            width: 130
+            height: parent.height
             visibleItemCount: 3
             model: 12
             delegate: delegateComponent
+            tumblerName: qsTr("MONTH")
         }
 
-        Tumbler {
+        VerticalTumbler {
             id: dateTumbler
-            width: 180
-            height: 430
-            anchors.left: parent.left
-            anchors.leftMargin: 240
             anchors.verticalCenter: parent.verticalCenter
+            anchors.left: monthTumbler.right
+            anchors.leftMargin: 24
+            width: 130
+            height: parent.height
             visibleItemCount: 3
+
             model: {
-                if (monthTumbler.currentItem.text == 2) {
-                    if (parseInt(yearTumbler.currentItem.text, 10) % 4 == 0) {
-                        29
+                if(!monthTumbler.moving) {
+                    if(monthTumbler.currentItem.text == 2) {
+                        if (parseInt(yearTumbler.currentItem.text, 10) % 4 == 0) {
+                            29
+                        } else {
+                            28
+                        }
+                    } else if(monthTumbler.currentItem.text == 1 ||
+                              monthTumbler.currentItem.text == 3 ||
+                              monthTumbler.currentItem.text == 5 ||
+                              monthTumbler.currentItem.text == 7 ||
+                              monthTumbler.currentItem.text == 8 ||
+                              monthTumbler.currentItem.text == 10 ||
+                              monthTumbler.currentItem.text == 12 ) {
+                        31
                     } else {
-                        28
+                        30
                     }
-                } else if(monthTumbler.currentItem.text == 1 ||
-                          monthTumbler.currentItem.text == 3 ||
-                          monthTumbler.currentItem.text == 5 ||
-                          monthTumbler.currentItem.text == 7 ||
-                          monthTumbler.currentItem.text == 8 ||
-                          monthTumbler.currentItem.text == 10 ||
-                          monthTumbler.currentItem.text == 12 ) {
-                    31
                 } else {
-                    30
+                    model
                 }
             }
-
             delegate: delegateComponent
+            tumblerName: qsTr("DAY")
         }
 
-        Tumbler {
+        VerticalTumbler {
             id: yearTumbler
-            width: 300
-            height: 700
-            anchors.right: parent.right
-            anchors.rightMargin: 30
             anchors.verticalCenter: parent.verticalCenter
-            model: 100
+            anchors.left: dateTumbler.right
+            anchors.leftMargin: 24
+            width: 265
+            height: parent.height*1.65
+            model: 50
             delegate: delegateComponent
+            tumblerName: qsTr("YEAR")
         }
     }
 
-    Item {
-        id: overlayItem
-        width: 800
-        height: 150
-        anchors.verticalCenterOffset: -28
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-
-        Rectangle {
-            id: topLeftLine
-            width: 150
-            height: 1
-            color: "#ffffff"
-            anchors.top: parent.top
-            anchors.topMargin: 18
-            anchors.left: parent.left
-            anchors.leftMargin: 45
-        }
-
-        Rectangle {
-            id: topCenterLine
-            width: 150
-            height: 1
-            color: "#ffffff"
-            anchors.top: parent.top
-            anchors.topMargin: 18
-            anchors.left: parent.left
-            anchors.leftMargin: 255
-        }
-
-        Rectangle {
-            id: topRightLine
-            width: 290
-            height: 1
-            color: "#ffffff"
-            anchors.top: parent.top
-            anchors.topMargin: 18
-            anchors.right: parent.right
-            anchors.rightMargin: 40
-        }
-
-        Rectangle {
-            id: bottomLeftLine
-            width: 150
-            height: 1
-            color: "#ffffff"
-            anchors.left: parent.left
-            anchors.leftMargin: 45
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 18
-
-            Text {
-                text: qsTr("MONTH")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.bottom
-                anchors.topMargin: 10
-                font.pixelSize: 15
-                font.weight: Font.Light
-                font.family: defaultFont.name
-                font.letterSpacing: 3
-                color: "#ffffff"
-            }
-        }
-
-        Rectangle {
-            id: bottomCenterLine
-            width: 150
-            height: 1
-            color: "#ffffff"
-            anchors.left: parent.left
-            anchors.leftMargin: 255
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 18
-
-            Text {
-                text: qsTr("DAY")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.bottom
-                anchors.topMargin: 10
-                font.pixelSize: 15
-                font.weight: Font.Light
-                font.family: defaultFont.name
-                font.letterSpacing: 3
-                color: "#ffffff"
-            }
-        }
-
-        Rectangle {
-            id: bottomRightLine
-            width: 290
-            height: 1
-            color: "#ffffff"
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 18
-            anchors.right: parent.right
-            anchors.rightMargin: 40
-
-            Text {
-                text: qsTr("YEAR")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top: parent.bottom
-                anchors.topMargin: 10
-                font.pixelSize: 15
-                font.weight: Font.Light
-                font.family: defaultFont.name
-                font.letterSpacing: 3
-                color: "#ffffff"
-            }
-        }
-
-        Rectangle {
-            id: topFadeItem
-            width: 800
-            height: 170
-            anchors.horizontalCenter: parent.horizontalCenter
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: "#000000"
-                }
-
-                GradientStop {
-                    position: 1
-                    color: "#00000000"
-                }
-            }
-            anchors.bottom: parent.top
-            anchors.bottomMargin: 0
-        }
-
-        Rectangle {
-            id: bottomFadeItem
-            width: 800
-            height: 170
-            anchors.horizontalCenter: parent.horizontalCenter
-            gradient: Gradient {
-                GradientStop {
-                    position: 0
-                    color: "#00000000"
-                }
-
-                GradientStop {
-                    position: 1
-                    color: "#000000"
-                }
-            }
-            anchors.top: parent.bottom
-            anchors.topMargin: 0
-        }
-    }
-
-    RoundedButton {
+    ButtonRectanglePrimary {
         id: setDateButton
-        buttonHeight: 50
-        buttonWidth: 120
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 50
-        anchors.horizontalCenter: parent.horizontalCenter
-        label: qsTr("NEXT")
-        opacity: {
-            button_mouseArea.enabled ? 1.0 : 0.1
-        }
-        is_button_transparent: false
+        width: 120
+        anchors.right: parent.right
+        anchors.rightMargin: 40
+        anchors.verticalCenter: parent.verticalCenter
+        text: qsTr("SAVE")
 
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: 100
-            }
+        onClicked: {
+            setTime()
+            goToNextStep.start()
         }
-
-        button_mouseArea {
-            onClicked: {
-                setTime()
-                timeSwipeView.swipeToItem(TimePage.SetTimeZone)
-            }
-            enabled: {
-                !monthTumbler.moving && !dateTumbler.moving && !yearTumbler.moving
-            }
+        enabled: {
+            !monthTumbler.moving && !dateTumbler.moving && !yearTumbler.moving
         }
     }
 }

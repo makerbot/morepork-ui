@@ -11,6 +11,8 @@ import QtQuick.VirtualKeyboard 2.3
 ApplicationWindow {
     id: rootAppWindow
     visible: true
+    minimumWidth: 800
+    minimumHeight: 480
     width: 800
     height: 480
     readonly property string defaultString: "default"
@@ -243,8 +245,8 @@ ApplicationWindow {
         }
     }
 
-    function setDateTimeTextVisible(state) {
-        topBar.dateTimeText.visible = state
+    function showTime(state) {
+        topBar.textDateTime.visible = state
     }
 
     function setCurrentItem(currentItem_) {
@@ -443,11 +445,11 @@ ApplicationWindow {
         TopBarForm {
             id: topBar
             z: 1
-            width: parent.width
-            smooth: false
             backButton.visible: false
             imageDrawerArrow.visible: false
             visible: mainSwipeView.visible
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
 
             onBackClicked: {
                 goBack()
@@ -460,139 +462,137 @@ ApplicationWindow {
                      !isFreComplete && !inFreStep
         }
 
-        LoggingSwipeView {
-            id: mainSwipeView
-            itemWithEnum: rootAppWindow
-            logName: "mainSwipeView"
-            anchors.topMargin: topBar.barHeight
+        Item {
+            id: contentContainer
+            width: 800
+            height: 408
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            property alias materialPage: materialPage
-            visible: connectionState == ConnectionState.Connected &&
-                     !freScreen.visible
+            LoggingSwipeView {
+                id: mainSwipeView
+                itemWithEnum: rootAppWindow
+                logName: "mainSwipeView"
 
-            function customEntryCheck(swipeToIndex) {
-                if(swipeToIndex === MoreporkUI.BasePage) {
-                    topBar.backButton.visible = false
-                    if(!printPage.isPrintProcess) disableDrawer()
-                } else {
-                    topBar.backButton.visible = true
-                }
-            }
+                property alias materialPage: materialPage
+                visible: connectionState == ConnectionState.Connected &&
+                         !freScreen.visible
 
-            // MoreporkUI.BasePage
-            Item {
-                smooth: false
-                MainMenu {
-                    id: mainMenu
-                    anchors.fill: parent
-
-                    mainMenuIcon_print.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                    }
-
-                    mainMenuIcon_extruder.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
-                    }
-
-                    mainMenuIcon_settings.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                    }
-
-                    mainMenuIcon_info.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.InfoPage)
-                    }
-
-                    mainMenuIcon_material.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                    }
-
-                    mainMenuIcon_advanced.mouseArea.onClicked: {
-                        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                function customEntryCheck(swipeToIndex) {
+                    if(swipeToIndex === MoreporkUI.BasePage) {
+                        topBar.backButton.visible = false
+                        if(!printPage.isPrintProcess) disableDrawer()
+                    } else {
+                        topBar.backButton.visible = true
                     }
                 }
-            }
 
-            // MoreporkUI.PrintPage
-            Item {
-                property var backSwiper: mainSwipeView
-                property int backSwipeIndex: MoreporkUI.BasePage
-                property bool hasAltBack: true
-                smooth: false
-                visible: false
+                // MoreporkUI.BasePage
+                Item {
+                    smooth: false
+                    MainMenu {
+                        id: mainMenu
+                        anchors.fill: parent
 
-                function altBack() {
-                    if(!inFreStep) {
-                        if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
-                            printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
-                            return
+                        mainMenuIcon_print.mouseArea.onClicked: {
+                            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                         }
+
+                        mainMenuIcon_extruder.mouseArea.onClicked: {
+                            mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
+                        }
+
+                        mainMenuIcon_settings.mouseArea.onClicked: {
+                            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                        }
+
+                        mainMenuIcon_info.mouseArea.onClicked: {
+                            mainSwipeView.swipeToItem(MoreporkUI.InfoPage)
+                        }
+
+                        mainMenuIcon_material.mouseArea.onClicked: {
+                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                        }
+
+                        mainMenuIcon_advanced.mouseArea.onClicked: {
+                            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                        }
+                    }
+                }
+
+                // MoreporkUI.PrintPage
+                Item {
+                    property var backSwiper: mainSwipeView
+                    property int backSwipeIndex: MoreporkUI.BasePage
+                    property bool hasAltBack: true
+                    smooth: false
+                    visible: false
+
+                    function altBack() {
+                        if(!inFreStep) {
+                            if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
+                                printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
+                                return
+                            }
+                            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                        }
+                        else {
+                            skipFreStepPopup.open()
+                        }
+                    }
+
+                    function skipFreStepAction() {
+                        printPage.printStatusView.testPrintComplete = false
+                        bot.cancel()
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                     }
-                    else {
-                        skipFreStepPopup.open()
+                    PrintPage {
+                        id: printPage
                     }
                 }
 
-                function skipFreStepAction() {
-                    printPage.printStatusView.testPrintComplete = false
-                    bot.cancel()
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                }
-                PrintPage {
-                    id: printPage
+                // MoreporkUI.ExtruderPage
+                Item {
+                    property var backSwiper: mainSwipeView
+                    property int backSwipeIndex: MoreporkUI.BasePage
                     smooth: false
-                    anchors.fill: parent
+                    visible: false
+                    ExtruderPage {
+                        id: extruderPage
+                    }
                 }
-            }
 
-            // MoreporkUI.ExtruderPage
-            Item {
-                property var backSwiper: mainSwipeView
-                property int backSwipeIndex: MoreporkUI.BasePage
-                smooth: false
-                visible: false
-                ExtruderPage {
-                    id: extruderPage
-                    anchors.fill: parent
-                }
-            }
-
-            // MoreporkUI.SettingsPage
-            Item {
-                property var backSwiper: mainSwipeView
-                property int backSwipeIndex: MoreporkUI.BasePage
-                smooth: false
-                visible: false
-                SettingsPage {
-                    id: settingsPage
+                // MoreporkUI.SettingsPage
+                Item {
+                    property var backSwiper: mainSwipeView
+                    property int backSwipeIndex: MoreporkUI.BasePage
                     smooth: false
-                    anchors.fill: parent
-                    anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
+                    visible: false
+                    SettingsPage {
+                        id: settingsPage
+                    }
                 }
-            }
 
-            // MoreporkUI.InfoPage
-            Item {
-                property var backSwiper: mainSwipeView
-                property int backSwipeIndex: MoreporkUI.BasePage
-                smooth: false
-                visible: false
-                InfoPage {
-                    id: infoPage
-                    anchors.fill: parent
-                    anchors.topMargin: topBar.topFadeIn.height - topBar.barHeight
-                }
-            }
-
-            // MoreporkUI.MaterialPage
-            Item {
-                property var backSwiper: mainSwipeView
-                property int backSwipeIndex: MoreporkUI.BasePage
-                smooth: false
-                visible: false
-                MaterialPage {
-                    id: materialPage
+                // MoreporkUI.InfoPage
+                Item {
+                    property var backSwiper: mainSwipeView
+                    property int backSwipeIndex: MoreporkUI.BasePage
                     smooth: false
+                    visible: false
+                    InfoPage {
+                        id: infoPage
+                    }
+                }
+
+                // MoreporkUI.MaterialPage
+                Item {
+                    property var backSwiper: mainSwipeView
+                    property int backSwipeIndex: MoreporkUI.BasePage
+                    smooth: false
+                    visible: false
+                    MaterialPage {
+                        id: materialPage
+                    }
                 }
             }
         }
@@ -2111,6 +2111,7 @@ ApplicationWindow {
                             anchors.fill: parent
                             onClicked: {
                                 extNotCalibratedPopup.close()
+                                resetSettingsSwipeViewPages()
                                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
