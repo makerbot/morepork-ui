@@ -59,7 +59,7 @@ LoggingItem {
     property bool updateFirmware: false
 
     function getUrlForMethod() {
-           return "support.makerbot.com/s/article/Method-Firmware"
+           return "makerbot.com/methodfw"
     }
 
     Rectangle {
