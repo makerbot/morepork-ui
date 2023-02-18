@@ -8,6 +8,7 @@ import ErrorTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
+    id: print_page
     anchors.fill: parent
     smooth: false
     property string fileName: "unknown.makerbot"
@@ -307,8 +308,7 @@ Item {
         BasePage,
         FileBrowser,
         PrintQueueBrowser,
-        StartPrintConfirm,
-        FileInfoPage
+        StartPrintConfirm
     }
 
     enum QueuedPrintState {
@@ -836,7 +836,7 @@ Item {
         }
 
         // PrintPage.FileInfoPage
-        Item {
+        /*Item {
             id: itemPrintInfoOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
@@ -927,26 +927,24 @@ Item {
                     visible: false
                 }
             }
-        }
+        }*/
     }
 
     CustomPopup {
         popupName: "CopyFileToInternalStorage"
         id: copyingFilePopup
-        popupWidth: 720
-        popupHeight: 265
-
+        popupHeight: columnLayout_copy_file_popup.height+145
         onClosed: {
             internalStorageFull = false
         }
 
-        showTwoButtons: isFileCopySuccessful || internalStorageFull
-        left_button_text: internalStorageFull ? qsTr("OK") : qsTr("DONE")
+        showTwoButtons: internalStorageFull
+        left_button_text: qsTr("OK")
         left_button.onClicked: {
             copyingFilePopup.close()
         }
 
-        right_button_text: internalStorageFull ? qsTr("VIEW FILES") : qsTr("VIEW FILE")
+        right_button_text: qsTr("VIEW FILES")
         right_button.onClicked: {
             browsingUsbStorage = false
             storage.setStorageFileType(StorageFileType.Print)
@@ -957,8 +955,8 @@ Item {
             copyingFilePopup.close()
         }
 
-        showOneButton: isFileCopying
-        full_button_text: qsTr("CANCEL")
+        showOneButton: isFileCopySuccessful || isFileCopying
+        full_button_text: isFileCopySuccessful ? qsTr("CLOSE") : qsTr("CANCEL")
         full_button.onClicked: {
             storage.cancelCopy()
             copyingFilePopup.close()
@@ -966,63 +964,171 @@ Item {
 
         ColumnLayout {
             id: columnLayout_copy_file_popup
-            width: 590
+            width: 650
             height: children.height
-            spacing: 35
-            anchors.top: parent.top
-            anchors.topMargin: 150
+            anchors.top: copyingFilePopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
 
-            Text {
-                id: alert_text_copy_file_popup
-                color: "#cbcbcb"
-                text: {
-                    if(internalStorageFull) {
-                        qsTr("PRINTER STORAGE IS FULL")
-                    } else if(isFileCopying) {
-                        qsTr("COPYING")
-                    } else if(isFileCopySuccessful) {
-                        qsTr("FILE ADDED")
-                    } else {
-                        defaultString
-                    }
-                }
-                font.letterSpacing: 3
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
                 Layout.alignment: Qt.AlignHCenter
-                font.family: "Antennae"
-                font.weight: Font.Bold
-                font.pixelSize: 20
+                source: "qrc:/img/process_complete_small.png"
+
             }
 
-            Text {
+            TextHeadline {
+                id: alert_text_copy_file_popup
+                Layout.alignment: Qt.AlignHCenter
+                font.weight: Font.Bold
+            }
+
+            TextBody {
                 id: description_text_copy_file_popup
-                color: "#cbcbcb"
-                text: {
-                    if (internalStorageFull) {
-                        qsTr("Remove unwanted files from the printer's internal storage to free up space")
-                    } else if(isFileCopySuccessful) {
-                        qsTr("<b>%1</b> has been added to internal storage.").arg(file_name)
-                    } else {
-                        defaultString
-                    }
-                }
                 horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
+                Layout.preferredWidth: 600
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
                 wrapMode: Text.WordWrap
-                font.family: "Antennae"
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
-                visible: isFileCopySuccessful || internalStorageFull
             }
 
             ProgressBar {
                 id: progressBar
                 Layout.alignment: Qt.AlignHCenter
                 value: (storage.fileCopyProgress).toFixed(2)
-                visible: isFileCopying
+                visible: false
+            }
+            states: [
+                State {
+                    name: "file_added"
+                    when: isFileCopySuccessful
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_complete_small.png"
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("FILE ADDED")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("The following file has been added to internal storage:"
+                                   +"<br><br><br><b>%1</b>").arg(file_name)
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: progressBar
+                        visible: false
+                    }
+                },
+                State {
+                    name: "copying"
+                    when: isFileCopying
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("COPYING")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: progressBar
+                        visible: true
+                    }
+                },
+                State {
+                    name: "storage_full"
+                    when: internalStorageFull
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_error_small.png"
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("PRINTER STORAGE IS FULL")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("Remove unwanted files from the printer's internal storage to free up space.")
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: progressBar
+                        visible: false
+                    }
+                }
+
+            ]
+        }
+    }
+
+    CustomPopup {
+        id: confirm_build_plate_popup
+        popupName: "ConfirmBuildPlate"
+        popupHeight: confirm_build_column_layout.height+145
+        showTwoButtons: true
+        right_button_text: qsTr("CONFIRM")
+        left_button_text: qsTr("BACK")
+        right_button.onClicked: {
+            // start print
+            confirm_build_plate_popup.close()
+            if(startPrintSource == PrintPage.FromPrintQueue) {
+                print_queue.startQueuedPrint(print_url_prefix,
+                                             print_job_id,
+                                             print_token)
+                printFromQueueState = PrintPage.WaitingToStartPrint
+            }
+            else {
+                startPrint()
+            }
+        }
+        left_button.onClicked: {
+            // don't start print
+            confirm_build_plate_popup.close()
+        }
+
+        ColumnLayout {
+            id: confirm_build_column_layout
+            width: 650
+            height: children.height
+            anchors.top: confirm_build_plate_popup.popupContainer.top
+            anchors.topMargin: 35
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: build_plate_error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_error_small.png"
+            }
+
+            TextHeadline {
+                id: title
+                text: "CONFIRM BUILD PLATE IS CLEAR"
+                Layout.alignment: Qt.AlignHCenter
             }
         }
     }

@@ -24,12 +24,13 @@ Item {
 
         // StartPrintPage.BasePage
         Item {
-                    id: startPrintPage1
-                    width: 800
-                    height: 420
-                    smooth: false
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 20
+            id: startPrintPage1
+            anchors.fill: parent.fill
+            anchors.bottomMargin: 20
+
+            //RowLayout {
+           //     spacing: 40
+            //    anchors.verticalCenter: parent.verticalCenter
 
                     ImageWithFeedback {
                         id: model_image1
@@ -44,32 +45,21 @@ Item {
 
                     Item {
                         id: detailsItem
-                        width: 400
-                        height: 375
-                        antialiasing: false
-                        smooth: false
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.verticalCenterOffset: 20
-                        anchors.left: parent.left
-                        anchors.leftMargin: 400
+                        anchors.left: model_image1.right
+                        anchors.top: parent.top
+                        anchors.topMargin: 10
+                        anchors.leftMargin: 40
 
-                        Text {
+                        TextBody {
                             id: printName
-                            width: 330
                             text: file_name
                             elide: Text.ElideRight
                             maximumLineCount: 2
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                            smooth: false
-                            antialiasing: false
-                            font.letterSpacing: 3
-                            font.family: defaultFont.name
                             font.weight: Font.Bold
-                            font.pixelSize: 21
-                            lineHeight: 1.1
-                            color: "#cbcbcb"
 
-                            Image {
+                            /*Image {
                                 id: infoIcon
                                 width: sourceSize.width
                                 height: sourceSize.height
@@ -88,27 +78,19 @@ Item {
                                     anchors.verticalCenter: parent.verticalCenter
                                     onClicked: printSwipeView.swipeToItem(PrintPage.FileInfoPage)
                                 }
-                            }
+                            }*/
                         }
 
                         RowLayout {
                             id: printTimeRowLayout
                             anchors.top: printName.bottom
                             anchors.topMargin: 12
-                            antialiasing: false
-                            smooth: false
                             spacing: 10
 
-                            Text {
+                            TextBody {
                                 id: printTimeLabel
                                 text: "PRINT TIME"
-                                smooth: false
-                                antialiasing: false
-                                font.letterSpacing: 3
-                                font.family: defaultFont.name
                                 font.weight: Font.Light
-                                font.pixelSize: 18
-                                color: "#ffffff"
                             }
 
                             Rectangle {
@@ -120,32 +102,11 @@ Item {
                                 smooth: false
                             }
 
-                            Text {
+                            TextBody {
                                 id: printTime
                                 text: print_time
-                                smooth: false
-                                antialiasing: false
-                                font.letterSpacing: 3
-                                font.family: defaultFont.name
                                 font.weight: Font.Light
-                                font.pixelSize: 18
-                                color: "#ffffff"
                             }
-                        }
-
-                        Text {
-                            id: readyByLabel
-                            text: "READY BY : " + readyByTime
-                            anchors.top: printTimeRowLayout.bottom
-                            anchors.topMargin: 10
-                            smooth: false
-                            antialiasing: false
-                            font.letterSpacing: 3
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.pixelSize: 18
-                            color: "#ffffff"
-                            visible: false
                         }
 
                         StartPrintMaterialViewItem {
@@ -165,26 +126,18 @@ Item {
                             visible: support_extruder_used
                         }
 
-                        RoundedButton {
+                        ButtonRectanglePrimary {
                             id: startPrintButton
                             anchors.top: materialBay2.bottom
                             anchors.topMargin: 28
-                            buttonWidth: inFreStep ? 300 : 210
-                            buttonHeight: 50
-                            label: inFreStep ? qsTr("START TEST PRINT") : qsTr("START")
-                            button_mouseArea.onClicked: {
-                                if(startPrintSource == PrintPage.FromLocal) {
-                                    if(startPrintCheck()){
-                                        startPrint()
-                                    }
-                                    else {
-                                        startPrintErrorsPopup.open()
-                                    }
-                                } else if(startPrintSource == PrintPage.FromPrintQueue) {
-                                    print_queue.startQueuedPrint(print_url_prefix,
-                                                                 print_job_id,
-                                                                 print_token)
-                                    printFromQueueState = PrintPage.WaitingToStartPrint
+                            width: 300
+                            text: inFreStep ? qsTr("START TEST PRINT") : qsTr("START PRINT")
+                            onClicked: {
+
+                                if(startPrintSource == PrintPage.FromLocal & !startPrintCheck()) {
+                                    startPrintErrorsPopup.open()
+                                } else {
+                                    confirm_build_plate_popup.open()
                                 }
                             }
                         }
@@ -213,7 +166,7 @@ Item {
                             }
                         }
                     }
-                }
+        }
 
 
         // StartPrintPage.PrintFileDetails
