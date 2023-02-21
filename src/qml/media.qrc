@@ -99,6 +99,17 @@
         <file alias="leveling_good.png">images/assisted_level/leveling_good.png</file>
         <!-- End Assisted Level -->
 
+        <!-- Calibration -->
+        <file alias="calibrate_extruders.png">images/calibration/calibrate_extruders.png</file>
+        <!-- Nozzle cleaning assets for the calibration process are reused from clean extruders nozzles -->
+        <!-- Insert and remove build plate images for the calibration process are reused from assisted level -->
+        <!-- End Calibration -->
+
+        <!-- Clean Extruders Nozzles -->
+        <file alias="check_nozzles_clean.png">images/clean_extruders/check_nozzles_clean.png</file>
+        <file alias="scrub_nozzles.gif">images/clean_extruders/scrub_nozzles.gif</file>
+        <!-- End Calibration -->
+
         <file alias="refresh.png">images/refresh.png</file>
         <file alias="refresh_black.png">images/refresh_black.png</file>
         <file alias="icon_printer_info.png">images/icon_printer_info.png</file>
@@ -117,12 +128,6 @@
         <file alias="icon_anneal_print.png">images/icon_anneal_print.png</file>
         <file alias="icon_power.png">images/icon_power.png</file>
         <file alias="icon_analytics.png">images/icon_analytics.png</file>
-        <file alias="calib_extruders.png">images/calib_extruders.png</file>
-        <file alias="calib_extruders_XA.png">images/calib_extruders_XA.png</file>
-        <file alias="calib_insert_build_plate.png">images/calib_insert_build_plate.png</file>
-        <file alias="calib_remove_build_plate.png">images/calib_remove_build_plate.png</file>
-        <file alias="calib_check_nozzles_clean.png">images/calib_check_nozzles_clean.png</file>
-        <file alias="calib_scrub_nozzles.gif">images/calib_scrub_nozzles.gif</file>
         <file alias="icon_wifi.png">images/icon_wifi.png</file>
         <file alias="lock_icon.png">images/lock_icon.png</file>
         <file alias="wifi_poor.png">images/wifi_poor.png</file>
