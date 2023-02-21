@@ -95,8 +95,10 @@
         <file>FirmwareUpdateSuccessfulScreenForm.qml</file>
         <file>SystemSettingsPage.qml</file>
         <file>SystemSettingsPageForm.qml</file>
-        <file>TimeSelector.qml</file>
-        <file>TimeSelectorForm.qml</file>
+        <file>ExtruderSettingsPageForm.qml</file>
+        <file>ExtruderSettingsPage.qml</file>
+        <file>BuildPlateSettingsPage.qml</file>
+        <file>BuildPlateSettingsPageForm.qml</file>
         <file>SlidingSwitch.qml</file>
         <file>SlidingSwitchForm.qml</file>
         <file>RaiseLowerBuildPlate.qml</file>
@@ -128,12 +130,15 @@
         <file>ReviewTestPrintPageForm.qml</file>
         <file>TimePage.qml</file>
         <file>TimePageForm.qml</file>
-        <file>TimeZoneButton.qml</file>
-        <file>TimeZoneButtonForm.qml</file>
+        <file>TimeSettings.qml</file>
+        <file>TimeSettingsButton.qml</file>
         <file>TimeZoneSelector.qml</file>
         <file>TimeZoneSelectorForm.qml</file>
-        <file>TimeZoneLocationSeparator.qml</file>
-        <file>TimeZoneLocationSeparatorForm.qml</file>
+        <file>DateSelector.qml</file>
+        <file>DateSelectorForm.qml</file>
+        <file>TimeSelector.qml</file>
+        <file>TimeSelectorForm.qml</file>
+        <file>VerticalTumbler.qml</file>
         <file>SnipMaterialScreen.qml</file>
         <file>SnipMaterialScreenForm.qml</file>
         <file>LanguageSelector.qml</file>
@@ -180,8 +185,6 @@
         <file>AdvancedInfoCalibrationElement.qml</file>
         <file>AcknowledgePrintFinished.qml</file>
         <file>AcknowledgePrintFinishedForm.qml</file>
-        <file>DateSelector.qml</file>
-        <file>DateSelectorForm.qml</file>
         <file>CleanExtruderSettings.qml</file>
         <file>CleanExtruderSettingsForm.qml</file>
         <file>CleanExtruderTempSelector.qml</file>
@@ -253,9 +256,5 @@
         <file>AdvancedInfoDragonItemForm.qml</file>
         <file>WiFiButton.qml</file>
         <file>WiFiButtonForm.qml</file>
-        <file>ExtruderSettingsPageForm.qml</file>
-        <file>ExtruderSettingsPage.qml</file>
-        <file>BuildPlateSettingsPage.qml</file>
-        <file>BuildPlateSettingsPageForm.qml</file>
     </qresource>
 </RCC>

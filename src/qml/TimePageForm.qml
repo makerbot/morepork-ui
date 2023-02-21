@@ -1,10 +1,8 @@
-import QtQuick 2.10
+import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
-Item {
-    width: 800
-    height: 440
+LoggingItem {
     smooth: false
 
     property alias timeZoneSelectorPage: timeZoneSelectorPage
@@ -12,18 +10,19 @@ Item {
     property alias timeSwipeView: timeSwipeView
 
     enum SwipeIndex {
-        SetDate,
+        BasePage,
         SetTimeZone,
+        SetDate,
         SetTime
     }
 
     LoggingSwipeView {
         id: timeSwipeView
         logName: "timeSwipeView"
-        currentIndex: TimePage.SetDate
+        currentIndex: TimePage.BasePage
 
         function customSetCurrentItem(swipeToIndex) {
-            if(swipeToIndex == TimePage.SetDate) {
+            if(swipeToIndex == TimePage.BasePage) {
                 // When swiping to the 0th index of this swipeview set the
                 // settings page item that holds this page as the current
                 // item since we want the back button to use the settings
@@ -33,17 +32,16 @@ Item {
             }
         }
 
-        // TimePage.SetDate
+        // TimePage.BasePage
         Item {
-            id: itemSetDate
+            id: itemBasePage
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
             smooth: false
             visible: true
 
-            DateSelector {
-                id: dateSelectorPage
-
+            TimeSettings {
+                id: timeSettingsPage
             }
         }
 
@@ -51,13 +49,25 @@ Item {
         Item {
             id: itemSetTimeZone
             property var backSwiper: timeSwipeView
-            property int backSwipeIndex: TimePage.SetDate
+            property int backSwipeIndex: TimePage.BasePage
             smooth: false
-            visible: true
+            visible: false
 
             TimeZoneSelector {
                 id: timeZoneSelectorPage
+            }
+        }
 
+        // TimePage.SetDate
+        Item {
+            id: itemSetDate
+            property var backSwiper: timeSwipeView
+            property int backSwipeIndex: TimePage.BasePage
+            smooth: false
+            visible: false
+
+            DateSelector {
+                id: dateSelectorPage
             }
         }
 
@@ -65,13 +75,12 @@ Item {
         Item {
             id: itemSetTime
             property var backSwiper: timeSwipeView
-            property int backSwipeIndex: TimePage.SetTimeZone
+            property int backSwipeIndex: TimePage.BasePage
             smooth: false
             visible: false
 
             TimeSelector {
                 id: timeSelectorPage
-
             }
         }
     }

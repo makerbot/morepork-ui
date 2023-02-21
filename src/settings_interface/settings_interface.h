@@ -39,8 +39,8 @@ class SettingsInterface : public QObject {
       Q_INVOKABLE void setShowNylonCFAnnealPrintTip(bool show);
       Q_INVOKABLE bool getShowApplyGlueOnBuildPlateTip(QString material);
       Q_INVOKABLE void setShowApplyGlueOnBuildPlateTip(QString material, bool show);
-      Q_INVOKABLE bool getDateTimeTextEnabled();
-      Q_INVOKABLE void setDateTimeTextEnabled(bool enabled);
+      Q_INVOKABLE bool getShowTimeInTopBar();
+      Q_INVOKABLE void setShowTimeInTopBar(bool enable);
       Q_INVOKABLE bool getCaptureTimelapseImages();
       Q_INVOKABLE void resetPreferences();
   private:
