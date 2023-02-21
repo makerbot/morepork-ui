@@ -7,6 +7,7 @@ import MachineTypeEnum 1.0
 
 Item {
     id: extruderPage
+    anchors.fill: parent
     property alias extruderSwipeView: extruderSwipeView
     property bool isTopLidOpen: bot.chamberErrorCode == 45
     property alias itemAttachExtruder: itemAttachExtruder

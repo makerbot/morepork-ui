@@ -208,26 +208,6 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonSupportMode
-                        buttonImage.source: "qrc:/img/icon_time.png"
-                        buttonText.text: qsTr("SHOW CURRENT TIME")
-                        slidingSwitch.checked: settings.getDateTimeTextEnabled()
-                        slidingSwitch.enabled: parent.enabled
-                        slidingSwitch.visible: true
-
-                        slidingSwitch.onClicked: {
-                            if(slidingSwitch.checked) {
-                                settings.setDateTimeTextEnabled(true)
-                                setDateTimeTextVisible(true)
-                            }
-                            else if(!slidingSwitch.checked) {
-                                settings.setDateTimeTextEnabled(false)
-                                setDateTimeTextVisible(false)
-                            }
-                        }
-                    }
-
-                    MenuButton {
                         id: buttonChangeLanguage
                         buttonImage.source: "qrc:/img/icon_choose_language.png"
                         buttonText.text: qsTr("CHOOSE LANGUAGE")

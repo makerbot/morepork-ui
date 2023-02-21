@@ -7,7 +7,7 @@
 #include <fstream>  // NOLINT(readability/streams)
 #include "settings_interface.h"
 
-SettingsInterface::SettingsInterface() 
+SettingsInterface::SettingsInterface()
     : default_file_(DEFAULT_UI_SETTINGS_PATH),
       override_file_(OVERRIDE_UI_SETTINGS_PATH) {
     initialize();
@@ -108,12 +108,12 @@ bool SettingsInterface::getShowApplyGlueOnBuildPlateTip(QString material) {
     return val.get(material.toStdString(), false).asBool();
 }
 
-bool SettingsInterface::getDateTimeTextEnabled() {
-    return cached_settings_["date_time_text_enabled"].asBool();
+bool SettingsInterface::getShowTimeInTopBar() {
+    return cached_settings_["show_time_in_top_bar"].asBool();
 }
 
-void SettingsInterface::setDateTimeTextEnabled(bool enabled) {
-    cached_settings_["date_time_text_enabled"] = enabled;
+void SettingsInterface::setShowTimeInTopBar(bool enable) {
+    cached_settings_["show_time_in_top_bar"] = enable;
     writeSettings();
 }
 
@@ -127,5 +127,6 @@ void SettingsInterface::resetPreferences() {
     for(const auto &key : val.getMemberNames()) {
         val[key] = true;
     }
+    cached_settings_["show_time_in_top_bar"] = false;
     writeSettings();
 }

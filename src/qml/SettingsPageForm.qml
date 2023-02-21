@@ -5,9 +5,11 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     id: settingsPage
+    anchors.fill: parent
     property alias settingsSwipeView: settingsSwipeView
 
     property alias systemSettingsPage: systemSettingsPage
@@ -104,6 +106,7 @@ Item {
                         buttonText.text: qsTr("CLEAN AIR SETTINGS")
                         buttonText.anchors.leftMargin: 38
                         buttonAlertImage.visible: bot.hepaFilterChangeRequired
+                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {
@@ -111,6 +114,7 @@ Item {
                         buttonImage.source: "qrc:/img/icon_preheat.png"
                         buttonText.text: qsTr("PREHEAT")
                         enabled: !isProcessRunning()
+                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {
@@ -118,6 +122,7 @@ Item {
                         buttonImage.source: "qrc:/img/icon_material.png"
                         buttonText.text: qsTr("DRY MATERIAL")
                         enabled: !isProcessRunning()
+                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {
@@ -125,6 +130,7 @@ Item {
                         buttonImage.source: "qrc:/img/icon_anneal_print.png"
                         buttonText.text: qsTr("ANNEAL PRINT")
                         enabled: !isProcessRunning()
+                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {

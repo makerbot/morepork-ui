@@ -30,6 +30,13 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
+        opacity: control.enabled ? 1 : 0.5
+
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: 100
+            }
+        }
     }
 
     background: Rectangle {
@@ -37,6 +44,13 @@ Button {
         implicitWidth: 136
         implicitHeight: 52
         radius: 5
+        opacity: control.enabled ? 1 : 0.5
+
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: 100
+            }
+        }
     }
 
     Component.onCompleted: {

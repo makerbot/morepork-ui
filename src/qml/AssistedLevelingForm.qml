@@ -140,12 +140,13 @@ LoggingItem {
             anchors.horizontalCenter: image.horizontalCenter
 
             property alias indicatorNeedle: indicatorNeedle
+            property alias levelingGoodCheckmark: levelingGoodCheckmark
 
             Image {
                 id: baseScale
                 height: sourceSize.height
                 width: sourceSize.width
-                source: "qrc:/img/leveler_scale.png"
+                source: ("qrc:/img/%1.png").arg(getImageForPrinter("leveler_scale"))
             }
 
             Image {
@@ -154,6 +155,15 @@ LoggingItem {
                 width: sourceSize.width
                 anchors.horizontalCenter: baseScale.horizontalCenter
                 source: "qrc:/img/leveler_indicator_orange.png"
+            }
+
+            Image {
+                id: levelingGoodCheckmark
+                height: sourceSize.height
+                width: sourceSize.width
+                anchors.horizontalCenter: baseScale.horizontalCenter
+                anchors.verticalCenter: baseScale.verticalCenter
+                source: "qrc:/img/leveling_good.png"
             }
         }
 
@@ -185,6 +195,60 @@ LoggingItem {
     }
 
     states: [
+        State {
+            name: "base state"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.temperatureStatus
+                visible: false
+            }
+
+            PropertyChanges {
+                target: leveler
+                visible: false
+            }
+        },
+
         State {
             name: "remove_build_plate"
             when: bot.process.type == ProcessType.AssistedLeveling &&
@@ -413,19 +477,19 @@ LoggingItem {
                     } else if(currentHES < targetHESLower) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_to_move_up_plate"))
                             break;
                         case ProcessStateType.LevelingRight:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_to_move_up_plate"))
                             break;
                         }
                     } else if(currentHES > targetHESUpper) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_counter_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_to_move_down_plate"))
                             break;
                         case ProcessStateType.LevelingRight:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_counter_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_to_move_down_plate"))
                             break;
                         }
                     }
@@ -454,6 +518,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: leveler.levelerScale.levelingGoodCheckmark
+                visible: currentHES <= targetHESUpper && currentHES >= targetHESLower
+            }
+
+            PropertyChanges {
                 target: leveler.instructionsBody
                 text: {
                     if(currentHES >= targetHESLower && currentHES <= targetHESUpper) {
@@ -468,19 +537,35 @@ LoggingItem {
                     } else if(currentHES < targetHESLower) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            qsTr("Turn left screw clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn left screw counter clockwise.")
+                            } else {
+                                qsTr("Turn left screw clockwise.")
+                            }
                             break;
                         case ProcessStateType.LevelingRight:
-                            qsTr("Turn right screw clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn right screw counter clockwise.")
+                            } else {
+                                qsTr("Turn right screw clockwise.")
+                            }
                             break;
                         }
                     } else if(currentHES > targetHESUpper) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            qsTr("Turn left screw counter clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn left screw clockwise.")
+                            } else {
+                                 qsTr("Turn left screw counter clockwise.")
+                            }
                             break;
                         case ProcessStateType.LevelingRight:
-                            qsTr("Turn right screw counter clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn right screw clockwise.")
+                            } else {
+                                 qsTr("Turn right screw counter clockwise.")
+                            }
                             break;
                         }
                     } else {
