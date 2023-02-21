@@ -477,19 +477,19 @@ LoggingItem {
                     } else if(currentHES < targetHESLower) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_to_move_up_plate"))
                             break;
                         case ProcessStateType.LevelingRight:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_to_move_up_plate"))
                             break;
                         }
                     } else if(currentHES > targetHESUpper) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_counter_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_left_to_move_down_plate"))
                             break;
                         case ProcessStateType.LevelingRight:
-                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_counter_clockwise"))
+                            ("qrc:/img/%1.png").arg(getImageForPrinter("adjust_right_to_move_down_plate"))
                             break;
                         }
                     }
@@ -537,19 +537,35 @@ LoggingItem {
                     } else if(currentHES < targetHESLower) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            qsTr("Turn left screw clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn left screw counter clockwise.")
+                            } else {
+                                qsTr("Turn left screw clockwise.")
+                            }
                             break;
                         case ProcessStateType.LevelingRight:
-                            qsTr("Turn right screw clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn right screw counter clockwise.")
+                            } else {
+                                qsTr("Turn right screw clockwise.")
+                            }
                             break;
                         }
                     } else if(currentHES > targetHESUpper) {
                         switch(bot.process.stateType) {
                         case ProcessStateType.LevelingLeft:
-                            qsTr("Turn left screw counter clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn left screw clockwise.")
+                            } else {
+                                 qsTr("Turn left screw counter clockwise.")
+                            }
                             break;
                         case ProcessStateType.LevelingRight:
-                            qsTr("Turn right screw counter clockwise.")
+                            if(bot.machineType == MachineType.Magma) {
+                                qsTr("Turn right screw clockwise.")
+                            } else {
+                                 qsTr("Turn right screw counter clockwise.")
+                            }
                             break;
                         }
                     } else {

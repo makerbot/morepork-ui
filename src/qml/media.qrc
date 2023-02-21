@@ -77,10 +77,10 @@
         <file alias="method_remove_build_plate.png">images/assisted_level/method/remove_build_plate.png</file>
         <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
         <file alias="method_leveler_scale.png">images/assisted_level/method/leveler_scale.png</file>
-        <file alias="method_adjust_left_clockwise.png">images/assisted_level/method/adjust_left_clockwise.png</file>
-        <file alias="method_adjust_left_counter_clockwise.png">images/assisted_level/method/adjust_left_counter_clockwise.png</file>
-        <file alias="method_adjust_right_clockwise.png">images/assisted_level/method/adjust_right_clockwise.png</file>
-        <file alias="method_adjust_right_counter_clockwise.png">images/assisted_level/method/adjust_right_counter_clockwise.png</file>
+        <file alias="method_adjust_left_to_move_up_plate.png">images/assisted_level/method/adjust_left_to_move_up_plate.png</file>
+        <file alias="method_adjust_left_to_move_down_plate.png">images/assisted_level/method/adjust_left_to_move_down_plate.png</file>
+        <file alias="method_adjust_right_to_move_up_plate.png">images/assisted_level/method/adjust_right_to_move_up_plate.png</file>
+        <file alias="method_adjust_right_to_move_down_plate.png">images/assisted_level/method/adjust_right_to_move_down_plate.png</file>
         <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
 
         <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
@@ -88,10 +88,10 @@
         <file alias="methodxl_remove_build_plate.png">images/assisted_level/methodxl/remove_build_plate.png</file>
         <file alias="methodxl_locate_screws.png">images/assisted_level/methodxl/locate_screws.png</file>
         <file alias="methodxl_leveler_scale.png">images/assisted_level/methodxl/leveler_scale.png</file>
-        <file alias="methodxl_adjust_left_clockwise.png">images/assisted_level/methodxl/adjust_left_clockwise.png</file>
-        <file alias="methodxl_adjust_left_counter_clockwise.png">images/assisted_level/methodxl/adjust_left_counter_clockwise.png</file>
-        <file alias="methodxl_adjust_right_clockwise.png">images/assisted_level/methodxl/adjust_right_clockwise.png</file>
-        <file alias="methodxl_adjust_right_counter_clockwise.png">images/assisted_level/methodxl/adjust_right_counter_clockwise.png</file>
+        <file alias="methodxl_adjust_left_to_move_up_plate.png">images/assisted_level/methodxl/adjust_left_to_move_up_plate.png</file>
+        <file alias="methodxl_adjust_left_to_move_down_plate.png">images/assisted_level/methodxl/adjust_left_to_move_down_plate.png</file>
+        <file alias="methodxl_adjust_right_to_move_up_plate.png">images/assisted_level/methodxl/adjust_right_to_move_up_plate.png</file>
+        <file alias="methodxl_adjust_right_to_move_down_plate.png">images/assisted_level/methodxl/adjust_right_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_done.png">images/assisted_level/methodxl/adjust_done.png</file>
 
         <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
