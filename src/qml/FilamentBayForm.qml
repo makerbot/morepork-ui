@@ -198,7 +198,7 @@ Item {
                     }
                 }
                 logKey: text
-                visible: !extruderFilamentPresent ||
+                visible: !extruderPresent || !extruderFilamentPresent ||
                          (!bot.hasFilamentBay && filamentMaterial == "unknown")
             }
 
@@ -214,8 +214,8 @@ Item {
                 id: purgeButton
                 text: qsTr("PURGE")
                 logKey: text
-                visible: (bot.hasFilamentBay) ? extruderFilamentPresent :
-                         (extruderFilamentPresent && filamentMaterial != "unknown")
+                visible: extruderPresent && ((bot.hasFilamentBay) ? extruderFilamentPresent :
+                         (extruderFilamentPresent && filamentMaterial != "unknown"))
             }
 
             Item {
