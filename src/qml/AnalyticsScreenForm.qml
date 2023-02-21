@@ -18,10 +18,14 @@ Item {
 
     ContentRightSide {
         id: contentRightSide
-        textHeader.text: qsTr("MAKERBOT ANALYTICS")
+        textHeader{
+            text: qsTr("MAKERBOT ANALYTICS")
+            visible: true
+        }
         textBody {
             style: TextBody.Large
             text: qsTr("Analytics enables sharing of information about your 3D printer with MakerBot to help us improve our products.")
+            visible: true
         }
         slidingSwitch {
             checked: bot.net.analyticsEnabled
@@ -33,10 +37,7 @@ Item {
                     bot.setAnalyticsEnabled(true)
                 }
             }
+            visible: true
         }
-        numberedSteps.visible: false
-        buttonPrimary.visible: false
-        buttonSecondary1.visible: false
-        buttonSecondary2.visible: false
     }
 }
