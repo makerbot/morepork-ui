@@ -38,6 +38,7 @@ Item {
             id: itemSetDate
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Set Date")
             smooth: false
             visible: true
 
@@ -52,6 +53,7 @@ Item {
             id: itemSetTimeZone
             property var backSwiper: timeSwipeView
             property int backSwipeIndex: TimePage.SetDate
+            property string topBarTitle: qsTr("Set Time Zone")
             smooth: false
             visible: true
 
@@ -66,6 +68,7 @@ Item {
             id: itemSetTime
             property var backSwiper: timeSwipeView
             property int backSwipeIndex: TimePage.SetTimeZone
+            property string topBarTitle: qsTr("Set Time")
             smooth: false
             visible: false
 

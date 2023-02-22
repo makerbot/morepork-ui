@@ -114,6 +114,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: qsTr("System Settings")
             smooth: false
 
             Flickable {
@@ -270,6 +271,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Printer Info")
             smooth: false
             visible: false
 
@@ -283,6 +285,7 @@ Item {
             id: advancedInfoItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Sensor Info")
             smooth: false
             visible: false
 
@@ -296,6 +299,7 @@ Item {
             id: wifiItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Wifi Settings")
             smooth: false
             visible: false
             property bool hasAltBack: true
@@ -325,6 +329,7 @@ Item {
             id: accountsItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Choose Authorization Method")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -355,6 +360,7 @@ Item {
             id: firmwareUpdateItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Update Firmware")
             property bool hasAltBack: true
             property alias firmwareUpdatePage: firmwareUpdatePage
             smooth: false
@@ -409,6 +415,7 @@ Item {
             id: analyticsItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Analytics Settings")
             smooth: false
             visible: false
 
@@ -422,6 +429,7 @@ Item {
             id: namePrinterItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Change Printer Name")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -452,6 +460,7 @@ Item {
             id: timeItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Set Date")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -481,6 +490,7 @@ Item {
             id: changeLanguageItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Set Language")
             smooth: false
             visible: false
 
@@ -520,6 +530,7 @@ Item {
             id: touchTestItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Touchscreen Test")
             property bool hasAltBack: true
             smooth: false
             visible: false

@@ -11,6 +11,8 @@ Item {
     property alias mainMenuIcon_print: mainMenuIcon_print
     property alias mainMenuIcon_extruder: mainMenuIcon_extruder
     property alias mainMenuIcon_settings: mainMenuIcon_settings
+    property string topBarTitle: "Home"
+
     smooth: false
     MainMenuIcon {
         id: mainMenuIcon_print

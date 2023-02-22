@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
+    property string topBarTitle: "Printer Info"
+
     anchors.top: parent.top
     smooth: false
     width: 800
@@ -11,18 +13,6 @@ Item {
 
     Item {
         id: baseItem
-        TextBody {
-            style: TextBody.Large
-            text: qsTr("PRINTER INFO")
-            font.weight: Font.Bold
-            font.letterSpacing: 3
-            horizontalAlignment: Text.AlignHCenter
-
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-        width: parent.width
-
         ColumnLayout {
             id: columnLayout
             width: 800
@@ -32,14 +22,6 @@ Item {
             anchors.fill: parent
             anchors.leftMargin: 60
 
-            Item {
-                id: spacing_item
-                width: 200
-                height: 18
-                // return to 48 when topbar gets reduced
-                // height: 48
-                visible: true
-            }
             InfoItemForm {
                 id: info_firmwareVersion
                 labelText: qsTr("Firmware Version")

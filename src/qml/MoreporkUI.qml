@@ -481,6 +481,7 @@ ApplicationWindow {
 
             // MoreporkUI.BasePage
             Item {
+                property string topBarTitle: "Home"
                 smooth: false
                 MainMenu {
                     id: mainMenu
@@ -516,6 +517,7 @@ ApplicationWindow {
             Item {
                 property var backSwiper: mainSwipeView
                 property int backSwipeIndex: MoreporkUI.BasePage
+                property string topBarTitle: qsTr("Choose a File")
                 property bool hasAltBack: true
                 smooth: false
                 visible: false
@@ -549,6 +551,7 @@ ApplicationWindow {
             Item {
                 property var backSwiper: mainSwipeView
                 property int backSwipeIndex: MoreporkUI.BasePage
+                property string topBarTitle: qsTr("Extruders")
                 smooth: false
                 visible: false
                 ExtruderPage {
@@ -561,6 +564,7 @@ ApplicationWindow {
             Item {
                 property var backSwiper: mainSwipeView
                 property int backSwipeIndex: MoreporkUI.BasePage
+                property string topBarTitle: qsTr("Settings")
                 smooth: false
                 visible: false
                 SettingsPage {
@@ -575,6 +579,7 @@ ApplicationWindow {
             Item {
                 property var backSwiper: mainSwipeView
                 property int backSwipeIndex: MoreporkUI.BasePage
+                property string topBarTitle: qsTr("Printer Info")
                 smooth: false
                 visible: false
                 InfoPage {
@@ -588,6 +593,7 @@ ApplicationWindow {
             Item {
                 property var backSwiper: mainSwipeView
                 property int backSwipeIndex: MoreporkUI.BasePage
+                property string topBarTitle: qsTr("Material")
                 smooth: false
                 visible: false
                 MaterialPage {
