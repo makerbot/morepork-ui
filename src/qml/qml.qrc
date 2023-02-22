@@ -238,6 +238,7 @@
         <file>ButtonRectanglePrimaryForm.qml</file>
         <file>ButtonRoundPrintIcon.qml</file>
         <file>ButtonRoundPrintIconForm.qml</file>
+        <file>ContentLeftSide.qml</file>
         <file>ContentRightSide.qml</file>
         <file>ContentRightSideForm.qml</file>
         <file>ButtonRectangleSecondary.qml</file>
@@ -256,5 +257,7 @@
         <file>AdvancedInfoDragonItemForm.qml</file>
         <file>WiFiButton.qml</file>
         <file>WiFiButtonForm.qml</file>
+        <file>TemperatureStatusElement.qml</file>
+        <file>TemperatureStatus.qml</file>
     </qresource>
 </RCC>

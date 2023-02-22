@@ -115,7 +115,6 @@ Item {
                 onProcessDone: {
                     state = "base state"
                     buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

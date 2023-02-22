@@ -19,6 +19,7 @@ Item {
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
+    property alias temperatureStatus: temperatureStatus
     property alias buttonPrimary: buttonPrimary
     property alias buttonSecondary1: buttonSecondary1
     property alias buttonSecondary2: buttonSecondary2
@@ -68,6 +69,11 @@ Item {
                 font.weight: Font.Bold
                 Layout.preferredWidth: parent.width
                 text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id purus feugiat sed nisi, quam. Orci, in eu interdum erat purus, proin."
+                visible: false || showAllElements
+            }
+
+            TemperatureStatus {
+                id: temperatureStatus
                 visible: false || showAllElements
             }
         }
