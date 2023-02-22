@@ -6,24 +6,24 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 Item {
-    id: topBar
+    id: itemTopBarForm
+    property alias itemTopBarForm: itemTopBarForm
+    // You will always want to reference pages off barHeight or
+    // topFadeIn.height depending on what you are doing.
+    property int barHeight: 72
+    height: topFadeIn.height
     width: parent.width
-    height: 72
     smooth: false
     property alias textDateTime: textDateTime
     property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
-    property alias text_printerName: textPrinterName
+    property alias dateTimeText: dateTimeText
+    property alias textNameStatus: textNameStatus
     property string timeSeconds: "00"
     property string oldSeparatorString: " "
     signal backClicked()
     signal drawerDownClicked()
-
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
 
     Timer {
         id: secondsUpdater
@@ -36,7 +36,7 @@ Item {
             var newSeparatorString = (((timeSeconds % 4) < 2) ? ":" : " ")
             if (newSeparatorString != oldSeparatorString) {
                 oldSeparatorString =  newSeparatorString
-                var formatString = "M/d  H" + oldSeparatorString + "mm"
+                var formatString = "M/d\nH" + oldSeparatorString + "mm"
                 textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
             }
         }
@@ -47,19 +47,22 @@ Item {
         z: 2
         anchors.right: parent.right
         anchors.rightMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        height: barHeight
     }
 
     LinearGradient {
-        id: fade
-        height: 30
+        id: topFadeIn
+        // height: 30
+        height: 102
         width: parent.width
         smooth: false
+        cached: true
         z: 1
-        anchors.top: parent.bottom
+        anchors.fill: parent
         gradient: Gradient {
             GradientStop {
-                position: 0
+                position: 0.6
                 color: "#FF000000"
             }
             GradientStop {
@@ -72,7 +75,7 @@ Item {
     Item {
         id: backButton
         width: 150
-        height: parent.height
+        height: barHeight
         smooth: false
         anchors.left: parent.left
         anchors.leftMargin: 10
@@ -97,11 +100,9 @@ Item {
             height: sourceSize.height
             width: sourceSize.width
             smooth: false
-            anchors.verticalCenterOffset: -1
-            anchors.verticalCenter: text_back.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenterOffset: -49
             fillMode: Image.PreserveAspectFit
             source: currentItem.backIsCancel ||
                     (inFreStep && (typeof currentItem.skipFreStepAction === "function")) ?
@@ -109,7 +110,8 @@ Item {
                         "qrc:/img/back_button.png"
         }
 
-        Text {
+        TextBody {
+            style: TextBody.Light
             id: text_back
             width: 200
             color: "#a0a0a0"
@@ -117,30 +119,40 @@ Item {
             antialiasing: false
             smooth: false
             verticalAlignment: Text.AlignVCenter
-            font.family: defaultFont.name
-            font.letterSpacing: 3
-            font.weight: Font.Light
-            font.pixelSize: 22
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: imageBackArrow.right
             anchors.leftMargin: 5
         }
     }
 
-    Text {
-        id: textDateTime
-        color: "#a0a0a0"
-        text: "--/-- --:--"
-        antialiasing: false
-        smooth: false
-        font.capitalization: Font.AllUppercase
-        font.family: defaultFont.name
-        font.weight: Font.Light
-        font.pixelSize: 18
-        visible: settings.getShowTimeInTopBar()
+    Item {
+        id: dateTimeText
+        z: 3
+        anchors.leftMargin: 48
         anchors.left: backButton.left
-        anchors.leftMargin: 45
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        height: barHeight
+        width: 100
+        smooth: false
+        visible: settings.getDateTimeTextEnabled()
+
+        TextHeadline {
+            style: TextHeadline.Base
+            font.weight: Font.Thin
+            font.pixelSize: 17
+            id: textDateTime
+            color: "#a0a0a0"
+            text: "--/--\n--:--"
+            antialiasing: false
+            smooth: false
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignLeft
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.horizontalCenterOffset: 17
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 5
+            lineHeight: 29
+        }
     }
 
     Flickable {
@@ -167,263 +179,120 @@ Item {
             z: 1
             anchors.fill: parent
 
-            Text {
-                id: textPrinterName
-                color: "#a0a0a0"
+            TextHeadline {
+                style: TextHeadline.Base
+                font.weight: Font.Thin
+                font.pixelSize: 17
+                id: textNameStatus
+                antialiasing: false
+                smooth: false
+                verticalAlignment: Text.AlignTop
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: -22
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -26
                 text: {
+                    var status_text = "IDLE"
                     switch(bot.process.type) {
                     case ProcessType.Print:
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            qsTr("LOADING")
+                            status_text = qsTr("LOADING")
                             break;
                         case ProcessStateType.Printing:
-                            qsTr("PRINTING")
+                            status_text = qsTr("PRINTING")
                             break;
                         case ProcessStateType.Pausing:
-                            qsTr("PAUSING")
+                            status_text = qsTr("PAUSING")
                             break;
                         case ProcessStateType.Resuming:
-                            qsTr("RESUMING")
+                            status_text = qsTr("RESUMING")
                             break;
                         case ProcessStateType.Paused:
-                            qsTr("PAUSED")
+                            status_text = qsTr("PAUSED")
                             break;
                         case ProcessStateType.Failed:
-                            qsTr("FAILED")
+                            status_text = qsTr("FAILED")
                             break;
                         case ProcessStateType.Completed:
-                            qsTr("PRINT COMPLETE")
+                            status_text = qsTr("PRINT COMPLETE")
                             break;
                         case ProcessStateType.Cancelled:
-                            qsTr("PRINT CANCELLED")
+                            status_text = qsTr("PRINT CANCELLED")
                             break;
                         }
-                        break;
+                    break;
                     case ProcessType.Load:
                         switch(bot.process.stateType) {
                         case ProcessStateType.Preheating:
-                            qsTr("PREHEATING")
+                            status_text = qsTr("PREHEATING")
                             break;
                         case ProcessStateType.Extrusion:
-                            qsTr("EXTRUDING")
+                            status_text = qsTr("EXTRUDING")
                             break;
                         case ProcessStateType.Stopping:
                         case ProcessStateType.Done:
-                            qsTr("MATERIAL LOADED")
+                            status_text = qsTr("MATERIAL LOADED")
                             break;
                         default:
-                            qsTr("LOAD MATERIAL")
+                            status_text = qsTr("LOAD MATERIAL")
                             break;
                         }
                         break;
                     case ProcessType.Unload:
                         switch(bot.process.stateType) {
                         case ProcessStateType.Preheating:
-                            qsTr("PREHEATING")
+                            status_text = qsTr("PREHEATING")
                             break;
                         case ProcessStateType.UnloadingFilament:
-                            qsTr("UNLOADING MATERIAL")
+                            status_text = qsTr("UNLOADING MATERIAL")
                             break;
                         case ProcessStateType.Done:
-                            qsTr("MATERIAL UNLOADED")
+                            status_text = qsTr("MATERIAL UNLOADED")
                             break;
                         default:
-                            qsTr("UNLOAD MATERIAL")
+                            status_text = qsTr("UNLOAD MATERIAL")
                             break;
                         }
                         break;
                     default:
-                        switch(mainSwipeView.currentIndex) {
-                        case MoreporkUI.BasePage:
-                            bot.name
-                            break;
-                        case MoreporkUI.PrintPage:
-                            switch(printPage.printSwipeView.currentIndex) {
-                            case PrintPage.BasePage:
-                            case PrintPage.FileBrowser:
-                            case PrintPage.PrintQueueBrowser:
-                                qsTr("CHOOSE A FILE")
-                                break;
-                            case PrintPage.StartPrintConfirm:
-                                qsTr("PRINT")
-                                break;
-                            case PrintPage.FileInfoPage:
-                                qsTr("FILE INFORMATION")
-                                break;
-                            }
-                            break;
-                        case MoreporkUI.ExtruderPage:
-                            switch(extruderPage.extruderSwipeView.currentIndex) {
-                            case ExtruderPage.BasePage:
-                                qsTr("EXTRUDERS")
-                                break;
-                            case ExtruderPage.AttachExtruderPage:
-                                qsTr("ATTACHING EXTRUDERS")
-                                break;
-                            default:
-                                qsTr("EXTRUDERS")
-                                break;
-                            }
-                            break;
-                        case MoreporkUI.SettingsPage:
-                            switch(settingsPage.settingsSwipeView.currentIndex) {
-                            case SettingsPage.SystemSettingsPage:
-                                switch(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex) {
-                                case SystemSettingsPage.PrinterInfoPage:
-                                    qsTr("%1 INFO").arg(bot.name)
-                                    break;
-                                case SystemSettingsPage.AdvancedInfoPage:
-                                    qsTr("%1 SENSOR INFO").arg(bot.name)
-                                    break;
-                                case SystemSettingsPage.WifiPage:
-                                    switch(settingsPage.wifiPage.wifiSwipeView.currentIndex) {
-                                    case WiFiPage.EnterPassword:
-                                       var wifiNameRefactor = (qsTr("%1").arg(settingsPage.wifiPage.selectedWifiName))
-                                       if(wifiNameRefactor.length > 8) {
-                                            wifiNameRefactor= wifiNameRefactor.substr(0,8) + "..."
-                                        }
-                                        qsTr("%1 - ENTER PASSWORD").arg(wifiNameRefactor)
-                                        break;
-                                    default:
-                                        qsTr("WIFI AND NETWORK")
-                                        break;
-                                    }
-                                    break;
-                                case SystemSettingsPage.AuthorizeAccountsPage:
-                                    qsTr("AUTHORIZE MAKERBOT ACCOUNT")
-                                    break;
-                                case SystemSettingsPage.FirmwareUpdatePage:
-
-                                    if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentItem.firmwareUpdatePage.state == "install_from_usb"
-                                        || settingsPage.systemSettingsPage.systemSettingsSwipeView.currentItem.firmwareUpdatePage.state == "select_firmware_file") {
-                                           qsTr("FIRMWARE UPDATE - USB")
-                                    }
-                                    else {
-                                        qsTr("FIRMWARE UPDATE")
-                                    }
-                                    break;
-                                case SystemSettingsPage.ShareAnalyticsPage:
-                                    qsTr("ANALYTICS")
-                                    break;
-                                case SystemSettingsPage.ChangePrinterNamePage:
-                                    qsTr("CHANGE PRINTER NAME")
-                                    break;
-                                case SystemSettingsPage.TimePage:
-                                    switch(settingsPage.systemSettingsPage.timePage.timeSwipeView.currentIndex) {
-                                    case TimePage.BasePage:
-                                        qsTr("TIME AND DATE")
-                                        break;
-                                    case TimePage.SetTimeZone:
-                                        qsTr("EDIT TIME ZONE")
-                                        break;
-                                    case TimePage.SetDate:
-                                        qsTr("EDIT DATE")
-                                        break;
-                                    case TimePage.SetTime:
-                                        qsTr("EDIT TIME")
-                                        break;
-                                    }
-                                    break;
-                                default:
-                                    qsTr("SYSTEM SETTINGS")
-                                    break;
-                                }
-                                break;
-                            case SettingsPage.ExtruderSettingsPage:
-                                switch(settingsPage.extruderSettingsPage.extruderSettingsSwipeView.currentIndex) {
-                                case ExtruderSettingsPage.CalibrateExtrudersPage:
-                                    qsTr("CALIBRATE EXTRUDERS")
-                                    break;
-                                case ExtruderSettingsPage.CleanExtrudersPage:
-                                    qsTr("CLEAN EXTRUDERS")
-                                    break;
-                                default:
-                                    qsTr("EXTRUDER SETTINGS")
-                                    break;
-                                }
-                                break;
-                            case SettingsPage.BuildPlateSettingsPage:
-                                switch(settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.currentIndex) {
-                                    case BuildPlateSettingsPage.AssistedLevelingPage:
-                                        qsTr("ASSISTED LEVELING")
-                                        break;
-                                    case BuildPlateSettingsPage.RaiseLowerBuildPlatePage:
-                                        qsTr("RAISE/LOWER BUILD PLATE")
-                                        break;
-                                    default:
-                                        qsTr("BUILD PLATE SETTINGS")
-                                        break;
-                                }
-                                break;
-
-                            case SettingsPage.CleanAirSettingsPage:
-                                qsTr("CLEAN AIR SETTINGS")
-                                break;
-                            case SettingsPage.PreheatPage:
-                                qsTr("PREHEAT")
-                                break;
-                            case SettingsPage.DryMaterialPage:
-                                qsTr("DRYING CYCLE")
-                                break;
-                            case SettingsPage.AnnealPrintPage:
-                                qsTr("ANNEAL PRINT")
-                                break;
-                            default:
-                                qsTr("SETTINGS")
-                                break;
-                            }
-                            break;
-                        case MoreporkUI.InfoPage:
-                            qsTr("INFO")
-                            break;
-                        case MoreporkUI.MaterialPage:
-                            switch(materialPage.materialSwipeView.currentIndex) {
-                            case MaterialPage.BasePage:
-                                qsTr("MATERIAL")
-                                break;
-                            case MaterialPage.LoadMaterialSettingsPage:
-                                switch(materialPage.loadMaterialSettingsPage.selectMaterialSwipeView.currentIndex) {
-                                    case LoadMaterialSettings.SelectMaterialPage:
-                                    qsTr("CHOOSE BASE MATERIAL")
-                                    break;
-                                    case LoadMaterialSettings.SelectTemperaturePage:
-                                    qsTr("CHOOSE TEMPERATURE")
-                                    break;
-                                }
-                                break;
-                            default:
-                                qsTr("MATERIAL")
-                                break;
-                            }
-                            break;
-                        default:
-                            bot.name
-                            break;
-                        }
+                        status_text = qsTr("IDLE")
                         break;
                     }
+                    qsTr("%1 - %2").arg(bot.name).arg(status_text)
                 }
-                font.capitalization: Font.AllUppercase
+            }
+
+            TextHeadline {
+                style: TextHeadline.Base
+                font.pixelSize: 17
+                id: textTitle
                 antialiasing: false
                 smooth: false
-                verticalAlignment: Text.AlignVCenter
-                font.family: defaultFont.name
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 22
+                verticalAlignment: Text.AlignBottom
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.horizontalCenterOffset: -20
+                anchors.horizontalCenterOffset: -22
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -4
+                text: {
+                    if (
+                        (currentItem.topBarTitle == qsTr("Choose a File")) &
+                        (bot.process.type == ProcessType.Print)) {
+                        qsTr("Print")
+                    }
+                    else {
+                      currentItem.topBarTitle
+                    }
+                }
             }
 
             Image {
                 id: imageDrawerArrow
                 height: 25
                 smooth: false
-                anchors.left: textPrinterName.right
+                anchors.left: textNameStatus.right
                 anchors.leftMargin: 10
-                anchors.verticalCenter: textPrinterName.verticalCenter
+                anchors.verticalCenter: textNameStatus.verticalCenter
                 rotation: -90
                 z: 1
                 source: "qrc:/img/arrow_19pix.png"
