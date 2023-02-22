@@ -179,6 +179,16 @@ LoggingItem {
                   chooseMaterial
 
             PropertyChanges {
+                target: contentLeftSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: false
+            }
+
+            PropertyChanges {
                 target: cleanExtrudersSequence
                 visible: false
             }
