@@ -3280,6 +3280,7 @@ ApplicationWindow {
                 }
             }
             left_button.onClicked: {
+                updateNPSSurveyDueDate()
                 npsSurveyPopup.close()
             }
             onOpened: {
