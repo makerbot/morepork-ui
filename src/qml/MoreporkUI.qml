@@ -3358,7 +3358,7 @@ ApplicationWindow {
                                     border.color: "#ffffff"
                                 }
                                 contentItem: TextBody {
-                                        style: TextBody.ExtraLarge
+                                        style: TextBody.Large
                                         font.weight: Font.Bold
                                         text: control.rating
                                         color: control.checked ? "#000000" : "#ffffff"
