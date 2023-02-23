@@ -3356,18 +3356,15 @@ ApplicationWindow {
                                     color: control.checked ? "#ffffff" : "#000000"
                                     border.width: 2
                                     border.color: "#ffffff"
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.horizontalCenter: parent.horizontalCenter
-
-                                    TextBody {
-                                        style: TextBody.Large
+                                }
+                                contentItem: TextBody {
+                                        style: TextBody.ExtraLarge
                                         font.weight: Font.Bold
                                         text: control.rating
                                         color: control.checked ? "#000000" : "#ffffff"
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        anchors.verticalCenterOffset: -2
-                                    }
+                                        verticalAlignment: Text.AlignVCenter
+                                        horizontalAlignment: Text.AlignHCenter
+                                        anchors.fill : indicator
                                 }
                             }
                         }

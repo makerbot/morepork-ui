@@ -8,7 +8,9 @@ Text {
         ExtraLarge
     }
     property int style: TextBody.Base
+    property int text_width: 360
     id: textBody
+    width: text_width
     text: "text-base"
     font.family: "Roboto"
     font.pixelSize: {
