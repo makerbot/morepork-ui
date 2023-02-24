@@ -25,6 +25,7 @@ Item {
     property real modelMaterialRequired
     property real supportMaterialRequired
     property int num_shells
+    property real infill_density
     property real layer_height_mm
     property string extruder_temp
     property string buildplane_temp
@@ -198,6 +199,7 @@ Item {
         supportMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
         layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
+        infill_density = file.infillDensity
         extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
                                               file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
         buildplane_temp = file.buildplaneTempCelcius + "C"
@@ -267,6 +269,7 @@ Item {
         modelMaterialRequired = 0.0
         supportMaterialRequired = 0.0
         num_shells = ""
+        infill_density = ""
         extruder_temp = ""
         buildplane_temp = ""
         slicer_name = ""
@@ -587,7 +590,7 @@ Item {
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
-                            if(!startPrintMaterialCheck()) {
+                            if(false) {//!startPrintMaterialCheck()) {
                                 startPrintErrorsPopup.open()
                             }
                             else {
@@ -834,100 +837,6 @@ Item {
                 id: startPrintItem
             }
         }
-
-        // PrintPage.FileInfoPage
-        /*Item {
-            id: itemPrintInfoOpt
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: isPrintProcess ? PrintPage.BasePage : PrintPage.StartPrintConfirm
-            smooth: false
-            visible: false
-
-            ColumnLayout {
-                id: layout
-                width: 600
-                spacing: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 65
-                anchors.top: parent.top
-                anchors.topMargin: 50
-                smooth: false
-
-                InfoItem {
-                    id: printInfo_fileName
-                    labelText: qsTr("Filename")
-                    dataText: file_name
-                }
-
-                InfoItem {
-                    id: printInfo_timeEstimate
-                    labelText: qsTr("Print Time Estimate")
-                    dataText: print_time
-                }
-
-                InfoItem {
-                    id: printInfo_material
-                    labelText: qsTr("Print Material")
-                    dataText: print_material
-                }
-
-                InfoItem {
-                    id: printInfo_usesSupport
-                    labelText: qsTr("Supports")
-                    dataText: uses_support
-                    visible: false
-                }
-
-                InfoItem {
-                    id: printInfo_usesRaft
-                    labelText: qsTr("Rafts")
-                    dataText: uses_raft
-                    visible: false
-                }
-
-                InfoItem {
-                    id: printInfo_modelMass
-                    labelText: qsTr("Model")
-                    dataText: model_mass
-                }
-
-                InfoItem {
-                    id: printInfo_supportMass
-                    labelText: qsTr("Support")
-                    dataText: support_mass
-                    visible: support_extruder_used
-                }
-
-                InfoItem {
-                    id: printInfo_Shells
-                    labelText: qsTr("Shells")
-                    dataText: num_shells
-                    visible: false
-                }
-
-                InfoItem {
-                    id: printInfo_extruderTemperature
-                    labelText: qsTr("Extruder Temperature")
-                    dataText: extruder_temp
-                }
-
-                InfoItem {
-                    id: printInfo_buildplaneTemperature
-                    labelText: qsTr("Chamber Temp. (Build Plane)")
-                    dataText: buildplane_temp
-                    labelElement.font.pixelSize: 16
-                    labelElement.font.letterSpacing: 2
-                }
-
-                InfoItem {
-                    id: printInfo_slicerName
-                    labelText: qsTr("Slicer Name")
-                    dataText: slicer_name
-                    visible: false
-                }
-            }
-        }*/
     }
 
     CustomPopup {
@@ -1239,14 +1148,10 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
-            Text {
+            TextHeadline {
                 id: alert_text_print_queue_popup
-                color: "#cbcbcb"
-                font.letterSpacing: 3
                 Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
             states: [
@@ -1261,7 +1166,7 @@ Item {
 
                     PropertyChanges {
                         target: alert_text_print_queue_popup
-                        text: qsTr("LOADING PRINT DETAILS...")
+                        text: qsTr("LOADING PRINT DETAILS")
                     }
 
                     PropertyChanges {

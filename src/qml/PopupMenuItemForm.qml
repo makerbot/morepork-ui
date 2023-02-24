@@ -16,13 +16,11 @@ MenuItem {
         color: pressed ? "#ffffff" : "transparent"
     }
 
-    Text {
+    TextSubheader {
         id: menuItemLabel
         text: qsTr("Menu Item")
         horizontalAlignment: Text.AlignHCenter
-        font.family: "Antenna"
         font.weight: Font.Light
-        font.pixelSize: 18
         color: parent.enabled ? pressed ? "#000000" : "#ffffff" : "#4d4d4d"
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter

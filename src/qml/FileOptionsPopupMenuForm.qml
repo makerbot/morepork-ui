@@ -9,16 +9,18 @@ import StorageFileTypeEnum 1.0
 PopupMenu {
     id: optionsMenu
     menuHeight: children.height
+    menuWidth: parent.width
 
     onOpened: {
         itemAt(count - 1).isLastItem = true
     }
 
+
     PopupMenuItem {
         id: addRemoveFileButton
         label: browsingUsbStorage ?
-                   qsTr("Add to printer storage") :
-                   qsTr("Remove from printer\nstorage")
+                   qsTr("ADD TO PRINTER STORAGE") :
+                   qsTr("REMOVE FROM PRINTER\nSTORAGE")
         onClicked: {
             if(browsingUsbStorage) {
                 if(buttonInternalStorage.storageUsed < 95) {
@@ -40,7 +42,7 @@ PopupMenu {
 
     PopupMenuItem {
         id: deleteFileButton
-        label: qsTr("Delete file")
+        label: qsTr("DELETE FILE")
         onClicked: {
             storage.deletePrintFile(fileName)
             if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
@@ -51,11 +53,11 @@ PopupMenu {
         enabled: browsingUsbStorage
     }
 
-    PopupMenuItem {
+    /*PopupMenuItem {
         id: closeMenuButton
         label: qsTr("Close")
         onClicked: {
             optionsMenu.close()
         }
-    }
+    }*/
 }
