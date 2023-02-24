@@ -16,6 +16,7 @@ Item {
     Rectangle {
         id: baseRectangle
         anchors.fill: parent
+        anchors.horizontalCenter: parent.horizontalCenter
         color: "#00000000"
         radius: 10
         border.width: 2
@@ -24,32 +25,32 @@ Item {
         antialiasing: false
         opacity: isDisabled ? 0.3 : 1
 
-        Image {
-            id: image
-            source: "qrc:/qtquickplugin/images/template_image.png"
-            x: 38
-            smooth: false
-            anchors.top: parent.top
-            anchors.topMargin: 30
+        ColumnLayout {
+            id:iconColumnLayout
+            spacing: 19
             anchors.horizontalCenter: parent.horizontalCenter
-            visible: imageVisible
-            width: sourceSize.width
-            height: sourceSize.height
-        }
+            anchors.verticalCenter: parent.verticalCenter
 
-        TextBody {
-            style: TextBody.ExtraLarge
-            font.weight: Font.Light
-            id: textIconDesc
-            x: 52
-            color: "#a0a0a0"
-            text: qsTr("Icon Name")
-            anchors.top: parent.top
-            anchors.topMargin: 153
-            antialiasing: false
-            smooth: false
-            anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
+            Image {
+                id: image
+                source: "qrc:/qtquickplugin/images/template_image.png"
+                smooth: false
+                Layout.alignment: Qt.AlignHCenter
+                visible: imageVisible
+                width: sourceSize.width
+                height: sourceSize.height
+            }
+
+            TextBody {
+                style: TextBody.ExtraLarge
+                font.weight: Font.Light
+                id: textIconDesc
+                text: qsTr("Icon Name")
+                antialiasing: false
+                smooth: false
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
         }
 
         LoggingMouseArea {

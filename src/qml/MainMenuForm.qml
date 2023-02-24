@@ -15,8 +15,9 @@ Item {
         id: mainMenuLayout
         spacing: 5
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -7
+        anchors.verticalCenterOffset: -2
         anchors.horizontalCenter: parent.horizontalCenter
+
         MainMenuIcon {
             Layout.margins: 14
             Layout.alignment: Qt.AlignHCenter
