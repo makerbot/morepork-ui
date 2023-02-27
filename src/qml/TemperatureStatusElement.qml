@@ -12,6 +12,7 @@ ColumnLayout {
     property int extruderIdx: 0
     property int customCurrentTemperature: -999
     property int customTargetTemperature: -999
+    property alias type: headline.text
 
     property string idxAsAxis: {
         switch (extruderIdx) {
@@ -27,6 +28,7 @@ ColumnLayout {
     }
 
     TextHeadline {
+        id: headline
         text: qsTr("Extruder %1").arg(extruderIdx + 1)
     }
 
