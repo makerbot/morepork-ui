@@ -5,9 +5,8 @@ LoggingItem {
     itemName: "PrintIcon"
     id: item1
     width: 250
-    height: 265
+    height: 250
     smooth: false
-    property alias action_mouseArea: action_mouseArea
     property bool actionButton: true
 
     Rectangle {
@@ -101,8 +100,8 @@ LoggingItem {
 
         Image {
             id: loading_or_paused_image
-            width: 214
-            height: 214
+            width: 235
+            height: 235
             smooth: false
             source: "qrc:/img/loading_rings.png"
             anchors.horizontalCenter: parent.horizontalCenter
@@ -162,40 +161,6 @@ LoggingItem {
             }
         }
 
-        Rectangle {
-            id: action_circle
-            width: 61
-            height: 61
-            color: "#000000"
-            radius: 31
-            antialiasing: false
-            smooth: false
-            anchors.top: parent.top
-            anchors.topMargin: 201
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: false
-            border.width: 3
-            border.color: "#484848"
-            opacity: (bot.process.stateType == ProcessStateType.Paused ||
-                      bot.process.stateType == ProcessStateType.Printing) ?
-                         1 : 0.3
-
-            Image {
-                id: action_image
-                width: 45
-                height: 45
-                smooth: false
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            LoggingMouseArea {
-                logText: "printing - action_circle: [?action image?]"
-                id: action_mouseArea
-                smooth: false
-                anchors.fill: parent
-            }
-        }
     }
 
     states: [
@@ -214,11 +179,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: action_circle
-                visible: actionButton
-            }
-
-            PropertyChanges {
                 target: percentage_printing_text
                 visible: true
             }
@@ -233,10 +193,6 @@ LoggingItem {
                 visible: true
             }
 
-            PropertyChanges {
-                target: action_image
-                source: "qrc:/img/pause.png"
-            }
         },
         State {
             name: "paused_state"
@@ -249,11 +205,6 @@ LoggingItem {
             PropertyChanges {
                 target: status_image
                 visible: false
-            }
-
-            PropertyChanges {
-                target: action_circle
-                visible: actionButton
             }
 
             PropertyChanges {
@@ -272,11 +223,6 @@ LoggingItem {
                 height: 224
                 source: "qrc:/img/paused_rings.png"
                 visible: true
-            }
-
-            PropertyChanges {
-                target: action_image
-                source: "qrc:/img/play.png"
             }
 
             PropertyChanges {
