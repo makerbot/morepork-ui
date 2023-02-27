@@ -7,7 +7,7 @@ import MachineTypeEnum 1.0
 Item {
     id: printStatusPage
     width: 800
-    height: 440
+    height: 408
     smooth: false
     property string fileName_
     property string filePathName
@@ -107,16 +107,89 @@ Item {
         Item {
             id: page0
             width: 800
-            height: 420
+            height: 408
             smooth: false
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
             PrintIcon {
+                id: printIcon
                 anchors.verticalCenterOffset: 7
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: 65
+                anchors.top: parent.top
+                anchors.topMargin: 50 
+            }
+
+            ButtonRoundPrintIcon {
+                id: pause
+                radius: 25
+                anchors.left: parent.left
+                anchors.leftMargin: 100.64
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                image_source: (bot.process.stateType == ProcessStateType.Paused ||
+                               bot.process.stateType == ProcessStateType.Pausing ||
+                               bot.process.stateType == ProcessStateType.Resuming ||
+                               bot.process.stateType == ProcessStateType.Preheating ||
+                               bot.process.stateType == ProcessStateType.UnloadingFilament) ?
+                                  "qrc:/img/play.png" : "qrc:/img/pause.png"
+
+
+                opacity: (bot.process.stateType == ProcessStateType.Paused ||
+                          bot.process.stateType == ProcessStateType.Printing) ?
+                          1 : 0.3
+
+                mouseArea.onClicked: {
+                    switch(bot.process.stateType) {
+                        case ProcessStateType.Printing:
+                            //In Printing State
+                            bot.pauseResumePrint("suspend")
+                            break;
+                        case ProcessStateType.Paused:
+                            //In Paused State
+                            bot.pauseResumePrint("resume")
+                        break;
+                    default:
+                        break;
+                    }
+                }
+            }
+
+            TextSubheader {
+                style: Style.Base
+                text: qsTr("PAUSE")
+                anchors.verticalCenter: pause.verticalCenter
+                anchors.top : pause.bottom
+                anchors.horizontalCenter: pause.horizontalCenter
+                anchors.topMargin: 15.7
+            }
+
+            ButtonRoundPrintIcon {
+                id: cancel
+                radius: 27
+                anchors.left: pause.right
+                anchors.leftMargin: 66
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                image_source: "qrc:/img/cancel.png"
+
+                mouseArea.onClicked: {
+                    if(inFreStep) {
+                        skipFreStepPopup.open()
+                        return;
+                     }
+                     cancelPrintPopup.open()                }
+            }
+
+            TextSubheader {
+                style: Style.Base
+                text: qsTr("CANCEL")
+                anchors.verticalCenter: cancel.verticalCenter
+                anchors.horizontalCenter: cancel.horizontalCenter
+                anchors.top : cancel.bottom
+                anchors.topMargin: 15.7
             }
 
             ColumnLayout {
@@ -143,13 +216,17 @@ Item {
                     }
                 }
 
-                Text {
+                TextHeadline {
                     id: status_text0
-                    color: "#cbcbcb"
+                    style: Style.Large
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            qsTr("GETTING READY")
+                            if(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer") {
+                                qsTr("GETTING READY")
+                            }else {
+                                qsTr("HEATING")
+                            }
                             break;
                         case ProcessStateType.Printing:
                             qsTr("PRINTING")
@@ -190,19 +267,14 @@ Item {
                             break;
                         }
                     }
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 5
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 18
-                    elide: Text.ElideMiddle
                     Layout.preferredWidth: parent.width - 40
+                    Layout.bottomMargin: 40
                 }
 
                 Text {
                     id: subtext0
                     color: "#cbcbcb"
+                    visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
@@ -211,13 +283,13 @@ Item {
                             } else if(bot.process.stepStr == "transfer") {
                                 qsTr("TRANSFERRING PRINT FILE")
                             } else if(bot.process.stepStr == "heating_chamber") {
-                                qsTr("HEATING UP CHAMBER")
+                                qsTr("CHAMBER")
                             } else if(bot.process.stepStr == "heating_build_platform") {
-                                qsTr("HEATING UP BUILD PLATFORM")
+                                qsTr("BUILD PLATE")
                             } else if(bot.extruderATargetTemp > 0) {
-                                qsTr("HEATING UP EXTRUDER")
+                                qsTr("EXTRUDER")
                             } else {
-                                qsTr("HEATING UP CHAMBER")
+                                qsTr("CHAMBER")
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -247,17 +319,18 @@ Item {
                     }
                     antialiasing: false
                     smooth: false
-                    font.letterSpacing: 3
+                    font.letterSpacing: 2
                     font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pixelSize: 18
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
                     elide: Text.ElideMiddle
                     Layout.preferredWidth: parent.width - 40
                 }
 
-                Text {
+                TextBody {
                     id: subtext1
-                    color: "#cbcbcb"
+                    style: Style.Large
+                    visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
@@ -265,19 +338,7 @@ Item {
                                 ""
                             } else if(bot.process.stepStr == "transfer") {
                                 bot.process.printPercentage + "%"
-                            } else if(bot.process.stepStr == "heating_chamber") {
-                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
-                            } else if(bot.process.stepStr == "heating_build_platform") {
-                                (qsTr("%1 C").arg(Math.floor(bot.hbpCurrentTemp)) + " | " + qsTr("%1 C").arg(bot.hbpTargetTemp))
-                            } else if(bot.extruderATargetTemp > 0) {
-                                (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderATargetTemp) +
-                                 (support_extruder_used_ ?
-                                     (qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp)) :
-                                     "\n"))
-                            } else {
-                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
                             }
-                            break;
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
@@ -298,13 +359,55 @@ Item {
                             break;
                         }
                     }
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pixelSize: 18
-                    lineHeight: 1.4
+                }
+
+                TemperatureStatusElement {
+                    visible: (bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
+                    customCurrentTemperature: {
+                        if(bot.process.stepStr == "heating_chamber"){
+                            bot.buildplaneCurrentTemp
+                        } else if(bot.process.stepStr == "heating_build_platform"){
+                            bot.hbpCurrentTemp
+                        } else if(bot.extruderATargetTemp > 0) {
+                            bot.extruderACurrentTemp
+                        } else {
+                            bot.buildplaneCurrentTemp
+                        }
+                    }
+                    customTargetTemperature: {
+                        if(bot.process.stepStr == "heating_chamber"){
+                            bot.buildplaneTargetTemp
+                        } else if(bot.process.stepStr == "heating_build_platform"){
+                            bot.hbpTargetTemp
+                        } else if(bot.extruderATargetTemp > 0) {
+                            bot.extruderATargetTemp
+                        } else {
+                            bot.buildplaneTargetTemp
+                        }
+                    }
+
+                    type: {
+                        if (bot.process.stateType == ProcessStateType.Loading) {
+                            if(bot.process.stepStr == "heating_chamber") {
+                                qsTr("CHAMBER")
+                            } else if(bot.process.stepStr == "heating_build_platform") {
+                                qsTr("BUILD PLATE")
+                            } else if(bot.extruderATargetTemp > 0) {
+                                qsTr("EXTRUDER 1")
+                            } else {
+                                qsTr("CHAMBER")
+                            }
+                        }
+                    }
+                }
+
+                TemperatureStatusElement {
+                    visible: (bot.extruderBTargetTemp > 0 && bot.process.stateType == ProcessStateType.Loading &&
+                              !(bot.process.stepStr == "heating_chamber" || bot.process.stepStr == "heating_build_platform"))
+                    customCurrentTemperature: bot.extruderBCurrentTemp
+                    customTargetTemperature: bot.extruderBTargetTemp
+
+                    type: qsTr("EXTRUDER 2")
                 }
 
                 RoundedButton {
