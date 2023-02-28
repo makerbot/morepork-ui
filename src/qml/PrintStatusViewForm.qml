@@ -1001,7 +1001,7 @@ Item {
             }
 
             TextHeadline{
-                text: {PAUSING
+                text: {
                     if(bot.process.stateType == ProcessStateType.Pausing){
                         qsTr("PAUSING")
                     } else if( bot.process.stateType == ProcessStateType.Resuming){
