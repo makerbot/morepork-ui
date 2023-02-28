@@ -4,7 +4,7 @@ MouseArea {
     property string logText: "logText"
 
     Component.onCompleted: {
-        this.onClicked.connect(logClick)
+        this.onReleased.connect(logClick)
     }
 
     function logClick() {
