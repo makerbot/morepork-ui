@@ -201,32 +201,22 @@ Item {
                 anchors.leftMargin: 400
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: {
-                    if(acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
-                       acknowledgePrintFinished.state == "print_failed") {
-                        50
-                    } else {
-                        0
-                    }
+                    acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
+                       acknowledgePrintFinished.state == "print_failed" ?
+                        50 : 0
                 }
                 spacing: {
-                    if(bot.process.stateType == ProcessStateType.Cancelled) {
-                        -10
-                    } else {
-                        20
-                    }
+                    bot.process.stateType == ProcessStateType.Cancelled ?
+                        -10 : 20
                 }
-
                 TextHeadline {
                     id: status_text0
                     style: Style.Large
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            if(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer") {
-                                qsTr("GETTING READY")
-                            }else {
-                                qsTr("HEATING")
-                            }
+                            (bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer") ?
+                                qsTr("GETTING READY") : qsTr("HEATING")
                             break;
                         case ProcessStateType.Printing:
                             qsTr("PRINTING")
@@ -243,7 +233,7 @@ Item {
                             qsTr("PAUSED")
                             break;
                         case ProcessStateType.Completed:
-                            fileName_
+                            qsTr("COMPLETED")
                             break;
                         case ProcessStateType.Failed:
                             qsTr("PRINT FAILED")
@@ -255,12 +245,7 @@ Item {
                             qsTr("CANCELLING")
                             break;
                         case ProcessStateType.CleaningUp:
-                            if(bot.process.complete) {
-                                qsTr("FINISHING UP")
-                            }
-                            else {
-                                qsTr("CANCELLING")
-                            }
+                            (bot.process.complete) ? qsTr("FINISHING UP") : qsTr("CANCELLING")
                             break;
                         default:
                             ""
@@ -268,12 +253,11 @@ Item {
                         }
                     }
                     Layout.preferredWidth: parent.width - 40
-                    Layout.bottomMargin: 40
                 }
 
-                Text {
+                TextSubheader {
                     id: subtext0
-                    color: "#cbcbcb"
+                    style: Style.Base
                     visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
@@ -282,14 +266,6 @@ Item {
                                 qsTr("WAITING FOR PRINT FILE")
                             } else if(bot.process.stepStr == "transfer") {
                                 qsTr("TRANSFERRING PRINT FILE")
-                            } else if(bot.process.stepStr == "heating_chamber") {
-                                qsTr("CHAMBER")
-                            } else if(bot.process.stepStr == "heating_build_platform") {
-                                qsTr("BUILD PLATE")
-                            } else if(bot.extruderATargetTemp > 0) {
-                                qsTr("EXTRUDER")
-                            } else {
-                                qsTr("CHAMBER")
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -298,12 +274,10 @@ Item {
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
                         case ProcessStateType.Paused:
-                            (bot.process.errorCode?
-                                qsTr("Error %1").arg(bot.process.errorCode) :
-                                fileName_)
+                            fileName_
                             break;
                         case ProcessStateType.Completed:
-                            qsTr("%1 PRINT TIME").arg(print_time_)
+                            fileName_
                             break;
                         case ProcessStateType.Failed:
                             qsTr("Error %1").arg(bot.process.errorCode)
@@ -317,14 +291,16 @@ Item {
                             break;
                         }
                     }
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 2
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                    elide: Text.ElideMiddle
                     Layout.preferredWidth: parent.width - 40
+                    horizontalAlignment: Text.AlignTop
+                }
+
+                TextHeadline{
+                    id: minutes_remaining_printing_paused
+                    visible: (bot.process.stateType == ProcessStateType.Paused || bot.process.stateType == ProcessStateType.Printing)
+                    style: Style.Large
+
+                    text: qsTr("%1").arg(timeLeftString)
                 }
 
                 TextBody {
@@ -339,20 +315,20 @@ Item {
                             } else if(bot.process.stepStr == "transfer") {
                                 bot.process.printPercentage + "%"
                             }
+                            break;
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
-                        case ProcessStateType.Paused: {
+                        case ProcessStateType.Paused:
                             timeLeftString == "0M" ?
                                         qsTr("FINISHING UP") :
-                                        qsTr("%1 REMAINING").arg(timeLeftString)
-                        }
+                                        qsTr("REMAINING")
                             break;
                         case ProcessStateType.Failed:
                             qsTr("%1 PRINT TIME").arg(print_time_)
                             break;
                         case ProcessStateType.Completed:
-                            qsTr("PRINT COMPLETE")
+                            qsTr("%1 PRINT TIME").arg(print_time_)
                             break;
                         default:
                             emptyString
@@ -913,84 +889,6 @@ Item {
         }
 
         Item {
-            id: page3
-            width: 800
-            height: 420
-            smooth: false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
-
-            ColumnLayout {
-                id: columnLayout_page3
-                smooth: false
-                spacing: 10
-                width: page3.width - 80
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: done_by_label0
-                    color: "#cbcbcb"
-                    text: doneByDayString
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.pixelSize: 15
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-
-                Text {
-                    id: end_time_text
-                    color: "#ffffff"
-                    text: doneByTimeString
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    font.pixelSize: 145
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-
-                Text {
-                    id: printer_name_is_printing_text
-                    color: "#cbcbcb"
-                    text: qsTr("%1 IS PRINTING").arg(printerName)
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.pixelSize: 15
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-
-                Text {
-                    id: fileName_text3
-                    color: "#ffffff"
-                    text: fileName_
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.pixelSize: 15
-                    font.weight: Font.Bold
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-            }
-        }
-
-        Item {
             id: page4
             width: 800
             height: 420
@@ -998,84 +896,58 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            Item {
-                id: baseItem
-                width: 750
-                height: 160
-                smooth: false
+            TextHuge{
+                id: name_printer
+                text: printerName
+                anchors.top : parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.leftMargin: 50
+                anchors.topMargin: 50
+                anchors.rightMargin: 50
+                elide: Text.ElideRight
+            }
 
-                Text {
-                    id: printerName_text4
-                    color: "#ffffff"
-                    text: printerName
-                    antialiasing: false
-                    smooth: false
-                    font.pixelSize: 85
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.letterSpacing: 0
+            TextSubheader{
+                id: done_by
+                text: qsTr("DONE BY")
+                anchors.left: parent.left
+                anchors.top: name_printer.bottom
+                anchors.leftMargin: 50
+            }
 
-                    Text {
-                        id: is_printing_label
-                        color: "#cbcbcb"
-                        text: qsTr("IS PRINTING")
-                        antialiasing: false
-                        smooth: false
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: -30
-                        font.pixelSize: 16
-                        font.family: defaultFont.name
-                        font.weight: Font.Light
-                        font.letterSpacing: 3
+            TextHeadline{
+                id: day
+                text: doneByDayString
+                style: Style.ExtraLarge
+                anchors.left: parent.left
+                anchors.top: done_by.bottom
+                anchors.leftMargin: 50
+            }
 
-                        Text {
-                            id: filename_text4
-                            color: "#ffffff"
-                            text: fileName_
-                            antialiasing: false
-                            smooth: false
-                            anchors.left: parent.right
-                            anchors.leftMargin: 10
-                            font.pixelSize: 16
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            width: page4.width - 200
-                            elide: Text.ElideMiddle
-                        }
+            TextHeadline{
+                id: time
+                text: doneByTimeString
+                style: Style.ExtraLarge
+                anchors.left: parent.left
+                anchors.top: day.bottom
+                anchors.leftMargin: 50
+            }
 
-                        Text {
-                            id: done_by_label1
-                            color: "#cbcbcb"
-                            text: doneByDayString
-                            antialiasing: false
-                            smooth: false
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: -30
-                            font.pixelSize: 16
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
+            TextSubheader{
+                id: filename_header
+                text: qsTr("FILENAME")
+                anchors.left: parent.left
+                anchors.top: time.bottom
+                anchors.leftMargin: 50
+            }
 
-                            Text {
-                                id: end_time_text4
-                                color: "#ffffff"
-                                text: doneByTimeString
-                                antialiasing: false
-                                smooth: false
-                                anchors.left: parent.right
-                                anchors.leftMargin: 10
-                                font.pixelSize: 16
-                                font.family: defaultFont.name
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-                        }
-                    }
-                }
+            TextBody{
+                id: printjob_name
+                text: fileName_
+                anchors.left: parent.left
+                anchors.top: filename_header.bottom
+                anchors.leftMargin: 50
             }
         }
     }
@@ -1106,4 +978,52 @@ Item {
             }
         }
     }
+
+    CustomPopup {
+        popupName: "LoadingScreen"
+        id: printingPopup
+        popupWidth: 720
+        popupHeight: 200
+
+        ColumnLayout {
+            id: columnLayout_printFeedbackAcknowledgementPopup
+            width: 590
+            height: children.height
+            spacing: 20
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            BusySpinner {
+                id: waitingSpinner
+                spinnerActive: true
+                spinnerSize: 64
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextHeadline{
+                text: {PAUSING
+                    if(bot.process.stateType == ProcessStateType.Pausing){
+                        qsTr("PAUSING")
+                    } else if( bot.process.stateType == ProcessStateType.Resuming){
+                        qsTr("RESUMING")
+                    } else if(bot.process.stateType == ProcessStateType.Cancelling){
+                        qsTr("CANCELLING")
+                    }
+                }
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+    }
+    states: [
+        State {
+            name: "in_transition"
+            when: bot.process.stateType == ProcessStateType.Pausing || bot.process.stateType == ProcessStateType.Resuming || bot.process.stateType == ProcessStateType.Cancelling
+
+            PropertyChanges {
+                target: printingPopup
+                visible: true
+            }
+        }
+
+    ]
 }

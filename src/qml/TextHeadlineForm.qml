@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.12
 Text {
     enum Style {
         Base,
-        Large
+        Large,
+        ExtraLarge
     }
     property int style: TextHeadline.Base
     id: textHeadline
@@ -18,6 +19,9 @@ Text {
         case TextHeadline.Large:
             30
             break;
+        case TextHeadline.ExtraLarge:
+            50
+            break;
         default:
             20
         }
@@ -30,6 +34,9 @@ Text {
             break;
         case TextHeadline.Large:
             6
+            break;
+        case TextHeadline.ExtraLarge:
+            8
             break;
         default:
             2
@@ -46,6 +53,9 @@ Text {
             break;
         case TextHeadline.Large:
             36
+            break;
+        case TextHeadline.ExtraLarge:
+            60
             break;
         default:
             24

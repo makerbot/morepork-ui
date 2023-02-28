@@ -36,18 +36,11 @@ LoggingItem {
         acknowledgePrint()
     }
 
-    Text {
+    TextSubheader {
         id: titleText
-        color: "#cbcbcb"
         text: qsTr("DID THE PRINT SUCCEED?")
         anchors.top: parent.top
         anchors.topMargin: 15
-        antialiasing: false
-        smooth: false
-        font.letterSpacing: 3
-        font.family: defaultFont.name
-        font.weight: Font.Light
-        font.pixelSize: 18
     }
 
     ColumnLayout {
@@ -128,9 +121,10 @@ LoggingItem {
         label: qsTr("SKIP")
         visible: true
         border.width: 0
-        anchors.top : buttonContainerPrintCompleted.bottom
-        anchors.horizontalCenter: buttonContainerPrintCompleted.horizontalCenter
-        anchors.topMargin: 34
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 40
+        anchors.rightMargin: 65
         button_mouseArea.onClicked: {
             acknowledgePrint()
         }
@@ -162,10 +156,8 @@ LoggingItem {
             PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("SKIP")
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 40
-                anchors.rightMargin: 65
+                anchors.bottomMargin: 0
+                anchors.rightMargin: 170
                 visible: true
             }
         },
@@ -226,8 +218,8 @@ LoggingItem {
             PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("SKIP")
-                anchors.rightMargin: 175
-                anchors.bottomMargin: -80
+                anchors.rightMargin: 170
+                anchors.bottomMargin: -65
                 visible: true
             }
         }
