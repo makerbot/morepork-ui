@@ -290,11 +290,15 @@ ApplicationWindow {
     //Reset settings swipe view pages (nested pages)
     function resetSettingsSwipeViewPages() {
         console.info("Resetting Settings Pages to their Base Pages...")
-        settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetDate)
-        settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
-        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-        settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+        settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.BasePage, false)
+        settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage, false)
+        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage, false)
+        settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage, false)
+        settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BasePage, false)
+        // After resetting the pages we generally navigate to the desired
+        // page from the base page, so we allow the base page to be set as
+        // the current item in case this is our destination page.
+        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
     }
 
     FontLoader {

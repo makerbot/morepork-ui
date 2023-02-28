@@ -16,7 +16,7 @@ SwipeView {
     anchors.fill: parent
     interactive: false
 
-    function swipeToItem(idx) {
+    function swipeToItem(idx, setTargetAsCurrentItem=true) {
         logAction("Swipe requested to page", idx)
         if(idx == currentIndex) {
             logAction("Warning: Already on requested page", idx)
@@ -45,7 +45,12 @@ SwipeView {
         if(typeof customSetCurrentItem === "function" && customSetCurrentItem(idx)) {
             return
         }
-        setCurrentItem(itemAt(idx))
+        // The default behavior is to set the target being swiped to as
+        // the current item (which defines the appropriate back button
+        // behavior) unless we are swiping to just reset the pages.
+        if (setTargetAsCurrentItem) {
+            setCurrentItem(itemAt(idx))
+        }
     }
 
     function logAction(action, idx) {
