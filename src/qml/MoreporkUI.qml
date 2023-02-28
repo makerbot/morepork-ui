@@ -2316,189 +2316,48 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
-            popupName: "CancelPrint"
+        CustomPopup {
             id: cancelPrintPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
-            closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim_cancel_print_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            popupWidth: 720
+            popupHeight: 275
+            showTwoButtons: true
+            left_button_text: qsTr("BACK")
+            left_button.onClicked: {
+                cancelPrintPopup.close()
             }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            right_button_text: qsTr("CONFIRM")
+            right_button.onClicked: {
+                bot.cancel()
+                printPage.clearErrors()
+                cancelPrintPopup.close()
             }
 
-            Rectangle {
-                id: basePopupItem_cancel_print_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 220
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
+            ColumnLayout {
+                width: parent.width
+                height: children.height
+                spacing: 20
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenterOffset: -45
 
-                Rectangle {
-                    id: horizontal_divider_cancel_print_popup
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                }
-
-                Rectangle {
-                    id: vertical_divider_cancel_print_popup
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
+                Image{
+                    id: error_icon
+                    source: "qrc:/img/popup_error.png"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                Item {
-                    id: buttonBar_cancel_print_popup
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: cancel_rectangle_cancel_print_popup
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_text_cancel_print_popup
-                            color: "#ffffff"
-                            text: qsTr("CANCEL PRINT")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "cancelPrintPopup [_" + cancel_text_cancel_print_popup.text + "|]"
-                            id: cancel_mouseArea_cancel_print_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                cancel_text_cancel_print_popup.color = "#000000"
-                                cancel_rectangle_cancel_print_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_text_cancel_print_popup.color = "#ffffff"
-                                cancel_rectangle_cancel_print_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.cancel()
-                                printPage.clearErrors()
-                                cancelPrintPopup.close()
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: continue_rectangle_cancel_print_popup
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: continue_text_cancel_print_popup
-                            color: "#ffffff"
-                            text: qsTr("CONTINUE PRINT")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "cancelPrintPopup [|" + continue_text_cancel_print_popup.text + "_]"
-                            id: continue_mouseArea_cancel_print_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                continue_text_cancel_print_popup.color = "#000000"
-                                continue_rectangle_cancel_print_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                continue_text_cancel_print_popup.color = "#ffffff"
-                                continue_rectangle_cancel_print_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                cancelPrintPopup.close()
-                            }
-                        }
-                    }
+                Text {
+                    id: cancel_popup_header
+                    color: "#cbcbcb"
+                    text: qsTr("CANCEL PRINT?")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 25
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
                 }
 
-                ColumnLayout {
-                    id: columnLayout_cancel_print_popup
-                    width: 590
-                    height: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: cancel_title_text_cancel_print_popup
-                        color: "#cbcbcb"
-                        text: qsTr("CANCEL PRINT")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
-
-                    Text {
-                        id: cancel_description_text_cancel_print_popup
-                        color: "#cbcbcb"
-                        text: qsTr("Are you sure?")
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.3
-                    }
-                }
             }
         }
 

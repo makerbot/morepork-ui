@@ -80,15 +80,27 @@ LoggingItem {
         id: buttonContainerPrintCompleted
         anchors.top: titleText.bottom
         anchors.topMargin: 20
-        spacing: 35
+        spacing: 8
 
-        RoundedButton {
+        ButtonRectanglePrimary {
+            id: successButton
+            onClicked: {
+                submitFeedbackAndAcknowledge(true)
+            }
+            text: ""
+            Layout.preferredWidth: 178
+            Image {
+                id: thumbs_up
+                source: "qrc:/img/print_feedback_thumbs_up.png"
+                sourceSize: Qt.size(20, 20)
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        ButtonRectanglePrimary {
             id: failedButton
-            buttonWidth: 87
-            buttonHeight: 87
-            radius: Math.min(buttonHeight, buttonWidth)/2
-            forceButtonWidth: true
-            button_mouseArea.onClicked: {
+            onClicked: {
                 failureFeedbackSelected = true
                 // Make a deep copy of the print defects dict. template which will
                 // be updated in the print feedback component with the selected
@@ -98,49 +110,16 @@ LoggingItem {
                 // success feedback.
                 defects = JSON.parse(JSON.stringify(print_defects_template))
             }
-
+            Layout.preferredWidth: 178
+            text: ""
             Image {
                 id: thumbs_down
                 source: "qrc:/img/print_feedback_thumbs_down.png"
-                sourceSize: Qt.size(source.width, source.height)
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 3
-            }
-
-            ColorOverlay {
-                anchors.fill: thumbs_down
-                source: thumbs_down
-                color: failedButton.button_mouseArea.pressed ? "#000000" : "#00000000"
             }
         }
 
-        RoundedButton {
-            id: successButton
-            buttonWidth: 87
-            buttonHeight: 87
-            radius: Math.min(buttonHeight, buttonWidth)/2
-            forceButtonWidth: true
-
-            button_mouseArea.onClicked: {
-                submitFeedbackAndAcknowledge(true)
-            }
-
-            Image {
-                id: thumbs_up
-                source: "qrc:/img/print_feedback_thumbs_up.png"
-                sourceSize: Qt.size(source.width, source.height)
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -3
-            }
-
-            ColorOverlay {
-                anchors.fill: thumbs_up
-                source: thumbs_up
-                color: successButton.button_mouseArea.pressed ? "#000000" : "#00000000"
-            }
-        }
     }
 
     RoundedButton {
@@ -149,10 +128,9 @@ LoggingItem {
         label: qsTr("SKIP")
         visible: true
         border.width: 0
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 40
-        anchors.rightMargin: 65
+        anchors.top : buttonContainerPrintCompleted.bottom
+        anchors.horizontalCenter: buttonContainerPrintCompleted.horizontalCenter
+        anchors.topMargin: 34
         button_mouseArea.onClicked: {
             acknowledgePrint()
         }

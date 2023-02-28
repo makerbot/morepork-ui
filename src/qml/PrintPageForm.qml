@@ -1273,6 +1273,12 @@ Item {
             anchors.verticalCenterOffset: -30
             anchors.horizontalCenter: parent.horizontalCenter
 
+            Image{
+                id: blue_check
+                source: "qrc:/img/popup_complete.png"
+                Layout.alignment: Qt.AlignHCenter
+            }
+
             Text {
                 id: alert_text_printFeedbackAcknowledgementPopup
                 color: "#cbcbcb"
