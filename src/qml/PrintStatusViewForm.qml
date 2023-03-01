@@ -61,11 +61,11 @@ Item {
         }
 
         if (daysLeft > 1) {
-            doneByDayString = qsTr("DONE IN %1 DAYS BY").arg(daysLeft)
+            doneByDayString = qsTr("%1 DAYS").arg(daysLeft)
         } else if (daysLeft === 1) {
-            doneByDayString = qsTr("DONE TOMORROW BY")
+            doneByDayString = qsTr("TOMORROW")
         } else {
-            doneByDayString = qsTr("DONE TODAY BY")
+            doneByDayString = qsTr("TODAY")
         }
 
         doneByTimeString = endTime.toLocaleTimeString(Qt.locale(),"hh:mm")
@@ -293,6 +293,8 @@ Item {
                     }
                     Layout.preferredWidth: parent.width - 40
                     horizontalAlignment: Text.AlignTop
+                    elide: Text.ElideRight
+                    anchors.right: parent.right
                 }
 
                 TextHeadline{
@@ -1006,7 +1008,7 @@ Item {
                         qsTr("PAUSING")
                     } else if( bot.process.stateType == ProcessStateType.Resuming){
                         qsTr("RESUMING")
-                    } else if(bot.process.stateType == ProcessStateType.Cancelling){
+                    } else if(bot.process.stateType == ProcessStateType.Cancelling || (bot.process.stateType == ProcessStateType.CleaningUp && !bot.process.complete)){
                         qsTr("CANCELLING")
                     }
                 }
@@ -1017,7 +1019,7 @@ Item {
     states: [
         State {
             name: "in_transition"
-            when: bot.process.stateType == ProcessStateType.Pausing || bot.process.stateType == ProcessStateType.Resuming || bot.process.stateType == ProcessStateType.Cancelling
+            when: bot.process.stateType == ProcessStateType.Pausing || bot.process.stateType == ProcessStateType.Resuming || bot.process.stateType == ProcessStateType.Cancelling || (bot.process.stateType == ProcessStateType.CleaningUp && !bot.process.complete)
 
             PropertyChanges {
                 target: printingPopup

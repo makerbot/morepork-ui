@@ -219,7 +219,7 @@ LoggingItem {
                 target: done_button
                 button_text.text: qsTr("SKIP")
                 anchors.rightMargin: 170
-                anchors.bottomMargin: -65
+                anchors.bottomMargin: -75
                 visible: true
             }
         }
