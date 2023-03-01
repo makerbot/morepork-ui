@@ -20,7 +20,7 @@ Text {
             30
             break;
         case TextHeadline.ExtraLarge:
-            50
+            48
             break;
         default:
             20
@@ -36,7 +36,7 @@ Text {
             6
             break;
         case TextHeadline.ExtraLarge:
-            8
+            7.2
             break;
         default:
             2
@@ -55,7 +55,7 @@ Text {
             36
             break;
         case TextHeadline.ExtraLarge:
-            60
+            52
             break;
         default:
             24

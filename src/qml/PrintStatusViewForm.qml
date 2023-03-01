@@ -158,7 +158,7 @@ Item {
             }
 
             TextSubheader {
-                style: Style.Base
+                style: TextSubheader.Base
                 text: qsTr("PAUSE")
                 anchors.verticalCenter: pause.verticalCenter
                 anchors.top : pause.bottom
@@ -180,11 +180,12 @@ Item {
                         skipFreStepPopup.open()
                         return;
                      }
-                     cancelPrintPopup.open()                }
+                     cancelPrintPopup.open()
+                }
             }
 
             TextSubheader {
-                style: Style.Base
+                style: TextSubheader.Base
                 text: qsTr("CANCEL")
                 anchors.verticalCenter: cancel.verticalCenter
                 anchors.horizontalCenter: cancel.horizontalCenter
@@ -211,7 +212,7 @@ Item {
                 }
                 TextHeadline {
                     id: status_text0
-                    style: Style.Large
+                    style: TextHeadline.Large
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
@@ -257,7 +258,7 @@ Item {
 
                 TextSubheader {
                     id: subtext0
-                    style: Style.Base
+                    style: TextSubheader.Base
                     visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
@@ -301,14 +302,14 @@ Item {
                 TextHeadline{
                     id: minutes_remaining_printing_paused
                     visible: (bot.process.stateType == ProcessStateType.Paused || bot.process.stateType == ProcessStateType.Printing)
-                    style: Style.Large
+                    style: TextHeadline.Large
 
                     text: qsTr("%1").arg(timeLeftString)
                 }
 
                 TextBody {
                     id: subtext1
-                    style: Style.Large
+                    style: TextBody.Large
                     visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
@@ -899,14 +900,16 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            TextHuge{
+            TextHeadline{
                 id: name_printer
                 text: printerName
+                style: TextHeadline.ExtraLarge
                 anchors.top : parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.leftMargin: 50
                 anchors.topMargin: 50
+                anchors.bottomMargin: 40
                 anchors.rightMargin: 50
                 elide: Text.ElideRight
             }
@@ -917,24 +920,27 @@ Item {
                 anchors.left: parent.left
                 anchors.top: name_printer.bottom
                 anchors.leftMargin: 50
+                anchors.topMargin: 20
             }
 
             TextHeadline{
                 id: day
                 text: doneByDayString
-                style: Style.ExtraLarge
+                style: TextHeadline.ExtraLarge
                 anchors.left: parent.left
                 anchors.top: done_by.bottom
                 anchors.leftMargin: 50
+                anchors.topMargin: 10
             }
 
             TextHeadline{
                 id: time
                 text: doneByTimeString
-                style: Style.ExtraLarge
+                style: TextHeadline.ExtraLarge
                 anchors.left: parent.left
                 anchors.top: day.bottom
                 anchors.leftMargin: 50
+                anchors.topMargin: 10
             }
 
             TextSubheader{
@@ -943,6 +949,7 @@ Item {
                 anchors.left: parent.left
                 anchors.top: time.bottom
                 anchors.leftMargin: 50
+                anchors.topMargin: 10
             }
 
             TextBody{
@@ -950,6 +957,7 @@ Item {
                 text: fileName_
                 anchors.left: parent.left
                 anchors.top: filename_header.bottom
+                anchors.topMargin: 10
                 anchors.leftMargin: 50
             }
         }
