@@ -124,7 +124,7 @@ Item {
 
             ButtonRoundPrintIcon {
                 id: pause
-                radius: 25
+                radius: 30
                 anchors.left: parent.left
                 anchors.leftMargin: 100.64
                 anchors.bottom: parent.bottom
@@ -168,7 +168,7 @@ Item {
 
             ButtonRoundPrintIcon {
                 id: cancel
-                radius: 27
+                radius: 30
                 anchors.left: pause.right
                 anchors.leftMargin: 66
                 anchors.bottom: parent.bottom
