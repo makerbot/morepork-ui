@@ -295,6 +295,7 @@ Item {
                     horizontalAlignment: Text.AlignTop
                     elide: Text.ElideRight
                     anchors.right: parent.right
+                    anchors.left: parent.left
                 }
 
                 TextHeadline{
