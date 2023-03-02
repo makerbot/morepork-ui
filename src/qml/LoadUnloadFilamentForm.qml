@@ -228,7 +228,7 @@ LoggingItem {
         id: enableRetryButton
         interval: 3000
         onTriggered: {
-            retryButton.disable_button = false
+            retryButton.enabled = true
         }
     }
 
@@ -849,7 +849,7 @@ LoggingItem {
                     }
                 }
 
-                label: {
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             qsTr("DONE")
@@ -905,7 +905,7 @@ LoggingItem {
             PropertyChanges {
                 target: temperatureDisplay
                 anchors.topMargin: 12
-                visible: true
+                visible: false
             }
 
             PropertyChanges {
