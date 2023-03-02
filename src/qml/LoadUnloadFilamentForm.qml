@@ -353,23 +353,19 @@ LoggingItem {
             anchors.topMargin: 30
         }
 
-        RoundedButton {
+        ButtonRectangleSecondary {
             id: acknowledgeButton
-            label_width: 180
-            label: qsTr("CONTINUE")
-            buttonWidth: 180
-            buttonHeight: 50
+            text: qsTr("CONTINUE")
+            Layout.preferredWidth : parent.width
             anchors.top: instruction_description_text.bottom
             anchors.topMargin: 20
             opacity: 0
         }
 
-        RoundedButton {
+        ButtonRectangleSecondary {
             id: retryButton
-            label: qsTr("RETRY")
-            label_size: 18
-            buttonWidth: 150
-            buttonHeight: 50
+            text: qsTr("RETRY")
+            Layout.preferredWidth : parent.width
             anchors.left: acknowledgeButton.left
             anchors.top: acknowledgeButton.bottom
             anchors.leftMargin: 0
@@ -666,7 +662,7 @@ LoggingItem {
                 buttonHeight: 80
                 anchors.topMargin: 20
                 opacity: 1
-                label: qsTr("CONFIRM\nMATERIAL EXTRUSION")
+                text: qsTr("CONFIRM\nMATERIAL EXTRUSION")
             }
 
             PropertyChanges {
