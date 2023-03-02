@@ -433,7 +433,7 @@ LoggingItem {
             PropertyChanges {
                 target: acknowledgeButton
                 opacity: 0
-                label: qsTr("CONTINUE")
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -870,7 +870,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: retryButton
-                label: {
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             qsTr("RETRY PURGING")
@@ -957,7 +957,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: retryButton
-                label: {
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             qsTr("RETRY UNLOADING")
@@ -1050,7 +1050,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: retryButton
-                label: {
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
