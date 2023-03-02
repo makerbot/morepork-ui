@@ -307,20 +307,13 @@ LoggingItem {
         anchors.left: parent.left
         anchors.leftMargin: 400
 
-        Text {
+        TextHeadline {
             id: main_instruction_text
             width: 375
-            color: "#cbcbcb"
             text: qsTr("OPEN BAY %1").arg(bayID)
-            font.capitalization: Font.AllUppercase
+            style: TextHeadline.Large
             anchors.top: parent.top
             anchors.topMargin: 100
-            font.letterSpacing: 4
-            wrapMode: Text.WordWrap
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            lineHeight: 1.3
         }
 
         ColumnLayout {
@@ -351,18 +344,13 @@ LoggingItem {
             }
         }
 
-        Text {
+        TextBody {
             id: instruction_description_text
             width: 350
             color: "#cbcbcb"
             text: "\n\n\n"
             anchors.top: main_instruction_text.bottom
             anchors.topMargin: 30
-            wrapMode: Text.WordWrap
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.pixelSize: 18
-            lineHeight: 1.35
         }
 
         RoundedButton {
@@ -398,31 +386,10 @@ LoggingItem {
             spacing: 10
             visible: false
 
-            Text {
-                id: extruder_current_temperature_text
-                text: qsTr("%1C").arg(currentTemperature)
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                id: divider_rectangle
-                width: 1
-                height: 25
-                color: "#ffffff"
-            }
-
-            Text {
-                id: extruder_target_temperature_text
-                text: qsTr("%1C").arg(targetTemperature)
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
+            TemperatureStatusElement {
+                customCurrentTemperature : currentTemperature
+                customTargetTemperature : targetTemperature
+                type: qsTr("EXTRUDER %1").arg(bayID)
             }
         }
     }
@@ -605,9 +572,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: main_instruction_text
-                text: (targetTemperature > currentTemperature) ?
-                          qsTr("EXTRUDER %1 IS\nHEATING UP").arg(bayID) :
-                          qsTr("EXTRUDER %1 IS\nCOOLING DOWN").arg(bayID)
+                text: qsTr("HEATING")
                 anchors.topMargin: 140
             }
 
@@ -622,62 +587,13 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: extruder_current_temperature_text
-                text: qsTr("%1C").arg(currentTemperature)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: extruder_target_temperature_text
-                text: qsTr("%1C").arg(targetTemperature)
-                visible: true
-            }
-
-            PropertyChanges {
                 target: animated_image
                 opacity: 0
             }
 
             PropertyChanges {
                 target: static_image
-                source: {
-                    if(bayID == 1) {
-                        switch(bot.extruderAType) {
-                        case ExtruderType.MK14:
-                            "qrc:/img/extruder_1_heating.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/extruder_1XA_heating.png"
-                            break;
-                        case ExtruderType.MK14_EXP:
-                            "qrc:/img/extruder_labs_heating.png"
-                            break;
-                        case ExtruderType.MK14_COMP:
-                            "qrc:/img/extruder_1c_heating.png"
-                            break;
-                        case ExtruderType.MK14_HOT_E:
-                            "qrc:/img/extruder_labs_1_ht_heating.png"
-                            break;
-                        default:
-                            "qrc:/img/broken.png"
-                            break;
-                        }
-                    } else if(bayID == 2) {
-                        switch(bot.extruderBType) {
-                        case ExtruderType.MK14:
-                            "qrc:/img/extruder_2_heating.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/extruder_2XA_heating.png"
-                            break;
-                        default:
-                            "qrc:/img/broken.png"
-                            break;
-                        }
-                    } else {
-                        "qrc:/img/broken.png"
-                    }
-                }
+                visible: false
             }
 
             PropertyChanges {
@@ -693,6 +609,11 @@ LoggingItem {
             PropertyChanges {
                 target: retryButton
                 visible: false
+            }
+
+            PropertyChanges {
+                target: loading_gear
+                loading: true
             }
         },
         State {
@@ -796,7 +717,7 @@ LoggingItem {
             PropertyChanges {
                 target: main_instruction_text
                 text: {
-                    doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("UNLOADING")
+                    doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("MATERIAL\nUNLOADING")
                 }
                 anchors.topMargin: 165
             }
@@ -988,18 +909,6 @@ LoggingItem {
             PropertyChanges {
                 target: temperatureDisplay
                 anchors.topMargin: 12
-                visible: true
-            }
-
-            PropertyChanges {
-                target: extruder_current_temperature_text
-                text: qsTr("%1C").arg(bot.extruderACurrentTemp)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: extruder_target_temperature_text
-                text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
                 visible: true
             }
 
