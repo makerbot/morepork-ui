@@ -353,7 +353,7 @@ LoggingItem {
             anchors.topMargin: 30
         }
 
-        ButtonRectangleSecondary {
+        ButtonRectanglePrimary {
             id: acknowledgeButton
             text: qsTr("CONTINUE")
             Layout.preferredWidth : parent.width
@@ -656,10 +656,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: acknowledgeButton
-                label_size: 18
-                label_width: 350
-                buttonWidth: 350
-                buttonHeight: 80
                 anchors.topMargin: 20
                 opacity: 1
                 text: qsTr("CONFIRM\nMATERIAL EXTRUSION")
@@ -796,60 +792,6 @@ LoggingItem {
                 target: acknowledgeButton
                 opacity: 1
                 anchors.topMargin: 20
-                label_width: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            100
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                                375
-                            } else if(bayID == 2) {
-                                100
-                            }
-                        }
-                    }
-                    else {
-                        100
-                    }
-                }
-
-                buttonWidth: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            100
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                                375
-                            } else if(bayID == 2) {
-                                100
-                            }
-                        }
-                    }
-                    else {
-                        100
-                    }
-                }
-
-                label_size: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            18
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                               14
-                            } else if(bayID == 2) {
-                                18
-                            }
-                        }
-                    }
-                    else {
-                        18
-                    }
-                }
-
                 text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
@@ -884,9 +826,6 @@ LoggingItem {
                         qsTr("RETRY LOADING")
                     }
                 }
-                label_size: 18
-                buttonWidth: 260
-                buttonHeight: 50
                 visible: true
             }
 
@@ -950,10 +889,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: acknowledgeButton
-                buttonWidth: 120
                 anchors.topMargin: 30
                 opacity: 1
-                label: qsTr("DONE")
+                text: qsTr("DONE")
             }
 
             PropertyChanges {
@@ -971,10 +909,6 @@ LoggingItem {
                         qsTr("RETRY UNLOADING")
                     }
                 }
-                label_size: 18
-                label_width: 260
-                buttonWidth: 260
-                buttonHeight: 50
                 visible: true
             }
 
@@ -1043,10 +977,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: acknowledgeButton
-                buttonWidth: 120
                 anchors.topMargin: 50
                 opacity: 1
-                label: qsTr("DONE")
+                text: qsTr("DONE")
             }
 
             PropertyChanges {
@@ -1064,10 +997,6 @@ LoggingItem {
                         isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
                     }
                 }
-                label_size: 18
-                label_width: 260
-                buttonWidth: 260
-                buttonHeight: 50
                 visible: true
             }
 
