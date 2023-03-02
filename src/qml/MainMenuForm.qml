@@ -153,6 +153,18 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         image.source: "qrc:/img/material_icon.png"
         textIconDesc.text: qsTr("MATERIAL")
+
+        Image {
+            id: no_material_warning
+            width: 30
+            height: 30
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 75
+            anchors.right: parent.right
+            anchors.rightMargin: 35
+            source: "qrc:/img/extruder_material_error.png"
+            visible: !bot["extruder0Present"] || !bot["extruder0FilamentPresent"]
+        }
     }
 
     MainMenuIcon {
