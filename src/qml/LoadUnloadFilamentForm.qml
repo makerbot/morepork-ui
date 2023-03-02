@@ -680,6 +680,7 @@ LoggingItem {
                 source: bayID == 1 ?
                             "qrc:/img/confirm_extrusion_1.png" :
                             "qrc:/img/confirm_extrusion_2.png"
+                visible: true
             }
 
             PropertyChanges {
