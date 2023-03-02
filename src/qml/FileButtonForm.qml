@@ -130,6 +130,7 @@ Button {
         antialiasing: false
         smooth: false
         source: "qrc:/img/circle_alert_112px.png"
+        visible: false
     }
 
     Image {
