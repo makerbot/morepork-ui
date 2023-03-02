@@ -116,7 +116,7 @@ LoggingItem {
         // to not start properly, so disabling the retry
         // button and then enabling after a few seconds is
         // a quick hacky fix for this before launch.
-        retryButton.disable_button = true
+        retryButton.enabled = false
         enableRetryButton.start()
     }
 
