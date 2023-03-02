@@ -236,13 +236,13 @@ Item {
         buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
-        if(!startPrintMaterialCheck()) {
+        /*if(!startPrintMaterialCheck()) {
             startPrintErrorsPopup.open()
         }
-        else {
+        else {*/
             startPrintSource = PrintPage.FromPrintQueue
             printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
-        }
+        //}
     }
 
     function fetchMetadataFailed() {
@@ -590,7 +590,7 @@ Item {
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
-                            if(false) {//!startPrintMaterialCheck()) {
+                            if(false) {//!startPrintMaterialCheck()) { TODO: We want to allow user to see start print page but get error when selecting start
                                 startPrintErrorsPopup.open()
                             }
                             else {
@@ -886,7 +886,12 @@ Item {
                 height: sourceSize.height -10
                 Layout.alignment: Qt.AlignHCenter
                 source: "qrc:/img/process_complete_small.png"
+            }
 
+            BusySpinner {
+                id: busy_spinner_img
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                spinnerSize: 64
             }
 
             TextHeadline {
@@ -903,12 +908,12 @@ Item {
                 wrapMode: Text.WordWrap
             }
 
-            ProgressBar {
+            /*ProgressBar {
                 id: progressBar
                 Layout.alignment: Qt.AlignHCenter
                 value: (storage.fileCopyProgress).toFixed(2)
                 visible: false
-            }
+            }*/
             states: [
                 State {
                     name: "file_added"
@@ -921,6 +926,11 @@ Item {
                     }
 
                     PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
                         target: alert_text_copy_file_popup
                         text: qsTr("FILE ADDED")
                     }
@@ -929,13 +939,12 @@ Item {
                         target: description_text_copy_file_popup
                         text: qsTr("The following file has been added to internal storage:"
                                    +"<br><br><br><b>%1</b>").arg(file_name)
-                        visible: true
                     }
 
-                    PropertyChanges {
-                        target: progressBar
-                        visible: false
-                    }
+                    //PropertyChanges {
+                    //    target: progressBar
+                    //    visible: false
+                    //}
                 },
                 State {
                     name: "copying"
@@ -947,19 +956,24 @@ Item {
                     }
 
                     PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
                         target: alert_text_copy_file_popup
                         text: qsTr("COPYING")
                     }
 
                     PropertyChanges {
                         target: description_text_copy_file_popup
-                        visible: false
+                        text: qsTr("%1").arg(storage.fileCopyProgress*100) + "%"
                     }
 
-                    PropertyChanges {
-                        target: progressBar
-                        visible: true
-                    }
+                    //PropertyChanges {
+                    //    target: progressBar
+                    //    visible: true
+                    //}
                 },
                 State {
                     name: "storage_full"
@@ -979,13 +993,12 @@ Item {
                     PropertyChanges {
                         target: description_text_copy_file_popup
                         text: qsTr("Remove unwanted files from the printer's internal storage to free up space.")
-                        visible: true
-                    }
+                        }
 
-                    PropertyChanges {
-                        target: progressBar
-                        visible: false
-                    }
+                    //PropertyChanges {
+                    //    target: progressBar
+                     //   visible: false
+                    //}
                 }
 
             ]
@@ -1098,8 +1111,13 @@ Item {
     CustomPopup {
         popupName: "CloudPrintQueue"
         id: printQueuePopup
-        popupWidth: 720
-        popupHeight: 320
+        popupHeight: {
+            if(printFromQueueState == PrintPage.WaitingToStartPrint) {
+                columnLayout_print_queue_popup.height+ 80
+            } else {
+                columnLayout_print_queue_popup.height+145
+            }
+        }
         visible: false
         showOneButton: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails ||
@@ -1136,10 +1154,18 @@ Item {
             id: columnLayout_print_queue_popup
             width: 650
             height: children.height
-            spacing: 35
-            anchors.top: parent.top
-            anchors.topMargin: 140
+            anchors.top: printQueuePopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: error_image_print_queue
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_error_small.png"
+            }
 
             BusySpinner {
                 id: waitingSpinner
@@ -1160,18 +1186,18 @@ Item {
                     when: printFromQueueState == PrintPage.FetchingPrintDetails
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 140
-                    }
-
-                    PropertyChanges {
                         target: alert_text_print_queue_popup
                         text: qsTr("LOADING PRINT DETAILS")
                     }
 
                     PropertyChanges {
+                        target: error_image_print_queue
+                        visible: false
+                    }
+
+                    PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: true
+                        visible: true
                     }
                 },
                 State {
@@ -1179,18 +1205,18 @@ Item {
                     when: printFromQueueState == PrintPage.FailedToGetPrintDetails
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 185
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Failed to get print details")
                     }
 
                     PropertyChanges {
-                        target: alert_text_print_queue_popup
-                        text: qsTr("Failed to get print details.")
+                        target: error_image_print_queue
+                        visible: true
                     }
 
                     PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: false
+                        visible: false
                     }
                 },
                 State {
@@ -1198,18 +1224,18 @@ Item {
                     when: printFromQueueState == PrintPage.WaitingToStartPrint
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 160
-                    }
-
-                    PropertyChanges {
                         target: alert_text_print_queue_popup
                         text: qsTr("Your print will start momentarily...")
                     }
 
                     PropertyChanges {
+                        target: error_image_print_queue
+                        visible: false
+                    }
+
+                    PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: true
+                        visible: true
                     }
                 },
                 State {
@@ -1217,18 +1243,18 @@ Item {
                     when: printFromQueueState == PrintPage.FailedToStartPrint
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 180
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Failed to start the print")
                     }
 
                     PropertyChanges {
-                        target: alert_text_print_queue_popup
-                        text: qsTr("Failed to start the print.")
+                        target: error_image_print_queue
+                        visible: true
                     }
 
                     PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: false
+                        visible: false
                     }
                 }
             ]

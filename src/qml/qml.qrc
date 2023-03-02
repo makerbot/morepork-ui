@@ -260,5 +260,7 @@
         <file>WiFiButtonForm.qml</file>
         <file>ButtonOptionsForm.qml</file>
         <file>ButtonOptions.qml</file>
+        <file>PrintModelInfoPageForm.qml</file>
+        <file>PrintModelInfoPage.qml</file>
     </qresource>
 </RCC>
