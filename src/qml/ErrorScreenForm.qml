@@ -138,84 +138,67 @@ LoggingItem {
     Item {
         id: mainItem
         anchors.fill: parent
+        width: 350
+        height: 350
 
-        Image {
-            id: errorImage
-            width: sourceSize.width
-            height: sourceSize.height
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.verticalCenter: parent.verticalCenter
-            source: "qrc:/img/error_close_door.png"
-        }
-
-        Item {
-            id: errorMessageContainer
-            width: 350
-            height: 350
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: errorImage.right
-            anchors.leftMargin: 0
+        RowLayout {
+            spacing: 5
 
             Image {
-                id: errorIcon
-                width: 35
-                height: 35
-                anchors.top: parent.top
-                anchors.topMargin: 10
-                source: "qrc:/img/alert.png"
+                id: errorImage
+                width: sourceSize.width
+                height: sourceSize.height
+                anchors.left: parent.left
+                anchors.leftMargin: 0
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/img/error_close_door.png"
             }
 
-            Text {
-                id: errorMessageTitle
-                text: qsTr("ERROR TITLE")
-                anchors.top: parent.top
-                anchors.topMargin: 65
-                font.bold: true
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 26
-                font.letterSpacing: 2
-                lineHeight: 1.1
-                color: "#ffffff"
-                smooth: false
-                antialiasing: false
-            }
+            ColumnLayout {
+                id: errorText
+                Text {
+                    id: errorMessageTitle
+                    text: qsTr("ERROR TITLE")
+                    anchors.top: parent.top
+                    anchors.topMargin: 65
+                    font.bold: true
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 26
+                    font.letterSpacing: 2
+                    lineHeight: 1.1
+                    color: "#ffffff"
+                    smooth: false
+                    antialiasing: false
+                }
 
-            Text {
-                id: errorMessageDescription
-                text: qsTr("Error description")
-                anchors.top: errorMessageTitle.bottom
-                anchors.topMargin: 20
-                font.family: defaultFont.name
-                font.weight: Font.Light
-                font.pixelSize: 18
-                lineHeight: 1.2
-                color: "#e8e8e8"
-                smooth: false
-                antialiasing: false
-            }
+                Text {
+                    id: errorMessageDescription
+                    text: qsTr("Error description")
+                    anchors.top: errorMessageTitle.bottom
+                    anchors.topMargin: 20
+                    font.family: defaultFont.name
+                    font.weight: Font.Light
+                    font.pixelSize: 18
+                    lineHeight: 1.2
+                    color: "#e8e8e8"
+                    smooth: false
+                    antialiasing: false
+                }
 
-            RoundedButton {
-                id: button1
-                anchors.top: errorMessageDescription.bottom
-                anchors.topMargin: 20
-                label: "BUTTON 1"
-                label_width: 200
-                label_size: 22
-                buttonWidth: 200
-                buttonHeight: 50
-            }
+                ButtonRectanglePrimary {
+                    id: button1
+                    anchors.top: errorMessageDescription.bottom
+                    anchors.topMargin: 20
+                    text: "BUTTON 1"
+                }
 
-            RoundedButton {
-                id: button2
-                anchors.top: button1.bottom
-                anchors.topMargin: 20
-                label: "BUTTON 2"
-                label_width: 200
-                label_size: 22
-                buttonWidth: 200
-                buttonHeight: 50
+                ButtonRectangleSecondary {
+                    id: button2
+                    anchors.top: button1.bottom
+                    anchors.topMargin: 20
+                    text: "BUTTON 2"
+                }
             }
         }
     }
