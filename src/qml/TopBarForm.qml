@@ -53,9 +53,8 @@ Item {
 
     LinearGradient {
         id: topFadeIn
-        // height: 30
         height: 102
-        width: parent.width
+        // width: parent.width
         smooth: false
         cached: true
         z: 1
