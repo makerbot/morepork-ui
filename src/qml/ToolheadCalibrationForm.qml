@@ -98,6 +98,12 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftSide
                 visible: true
+                image {
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
