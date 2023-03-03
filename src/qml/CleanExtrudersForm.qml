@@ -8,11 +8,12 @@ LoggingItem {
     itemName: "CleanExtruders"
     id: cleanExtrudersPage
     width: 800
-    height: 420
-    smooth: false
-    antialiasing: false
+    height: 408
+
+    property alias contentLeftSide: contentLeftSide
+    property alias contentRightSide: contentRightSide
+    property alias cleanExtrudersSequence: cleanExtrudersSequence
     property alias cancelCleanExtrudersPopup: cancelCleanExtrudersPopup
-    property alias actionButton: actionButton
     property int currentStep: bot.process.stateType
     signal processDone
     property bool hasFailed: bot.process.errorCode > 0
@@ -20,20 +21,13 @@ LoggingItem {
     onCurrentStepChanged: {
         if(bot.process.type == ProcessType.NozzleCleaningProcess) {
             switch(currentStep) {
-                case ProcessStateType.HeatingNozzle:
-                    state = "heating_nozzle"
-                    break;
-                case ProcessStateType.CleanNozzle:
-                    state = "clean_nozzle"
-                    break;
-                case ProcessStateType.Done:
-                    if(state != "cancelling" &&
+                case ProcessStateType.CleaningUp:
+                   if (state != "cancelling" &&
                        state != "clean_extruders_failed" &&
-                       state != "base state" &&
                        !bot.process.cancelled) {
-                        state = "clean_extruders_complete"
-                    }
-                    break;
+                       state = "clean_extruders_complete"
+                   }
+                   break;
                 case ProcessStateType.Cancelling:
                     state = "cancelling"
                     break;
@@ -51,86 +45,39 @@ LoggingItem {
         }
     }
 
-    Image {
-        id: image
-        width: sourceSize.width
-        height: sourceSize.height
-        anchors.verticalCenterOffset: -20
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/check_nozzles_clean.png"
-        opacity: 1.0
-    }
-
-    LoadingIcon {
-        id: loadingIcon
-        anchors.verticalCenterOffset: -30
-        anchors.left: parent.left
-        anchors.leftMargin: 80
-        anchors.verticalCenter: parent.verticalCenter
-        opacity: 0
-    }
-
-    Item {
-        id: mainItem
-        width: 400
-        height: 250
+    ContentLeftSide {
+        id: contentLeftSide
+        image {
+            source: "qrc:/img/check_nozzles_clean.png"
+            visible: true
+        }
+        loadingIcon {
+            visible: false
+        }
         visible: true
-        anchors.left: parent.left
-        anchors.leftMargin: 420
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -15
-        opacity: 1.0
+    }
 
-        Text {
-            id: title
-            width: 350
+    ContentRightSide {
+        id: contentRightSide
+        textHeader {
             text: qsTr("CLEAN EXTRUDER NOZZLES")
-            antialiasing: false
-            smooth: false
-            font.letterSpacing: 3
-            wrapMode: Text.WordWrap
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 22
-            font.weight: Font.Bold
-            lineHeight: 1.2
-            opacity: 1.0
+            visible: true
         }
+        textBody {
+            text: qsTr("Cleaning is not required the first time using the extruders. Otherwise, inspect the tips of the extruder for excess material.")
+            visible: true
+        }
+        buttonPrimary {
+            text: qsTr("START")
+            visible: true
+        }
+        visible: true
+    }
 
-        Text {
-            id: subtitle
-            width: 350
-            wrapMode: Text.WordWrap
-            anchors.top: title.bottom
-            anchors.topMargin: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 18
-            font.weight: Font.Light
-            text: qsTr("If there is material on the tips of the extruders, use the provided steel brush to clean them in the next steps.")
-            lineHeight: 1.2
-            opacity: 1.0
-        }
-
-        RoundedButton {
-            id: actionButton
-            label: qsTr("CLEAN EXTRUDERS")
-            buttonWidth: 310
-            buttonHeight: 50
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: subtitle.bottom
-            anchors.topMargin: 25
-            opacity: 1.0
-        }
+    CleanExtrudersSequence {
+        id: cleanExtrudersSequence
+        visible: false
+        enabled: bot.process.type == ProcessType.NozzleCleaningProcess
     }
 
     CleanExtruderSettings {
@@ -138,71 +85,48 @@ LoggingItem {
         visible: false
     }
 
-    CleanExtrudersSequence {
-        id: cleanExtruders
-        visible: false
-    }
-
     states: [
         State {
-            name: "choose_material"
+            name: "base state"
 
             PropertyChanges {
-                target: image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: materialSelector
+                target: contentLeftSide
                 visible: true
             }
 
             PropertyChanges {
-                target: loadingIcon
-                opacity: 0
-            }
-        },
-
-        State {
-            name: "loading"
-            when: bot.process.type == ProcessType.NozzleCleaningProcess &&
-                  (bot.process.stateType == ProcessStateType.Running ||
-                   bot.process.stateType == ProcessStateType.CleaningUp)
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 1
+                target: contentRightSide
+                visible: true
             }
 
             PropertyChanges {
-                target: image
-                opacity: 0
+                target: contentLeftSide.image
+                visible: true
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
+                target: contentLeftSide.loadingIcon
+                visible: false
             }
 
             PropertyChanges {
-                target: title
-                text: qsTr("LOADING")
-                anchors.topMargin: 70
+                target: contentRightSide.textHeader
+                visible: true
             }
 
             PropertyChanges {
-                target: subtitle
-                text: qsTr("Please wait")
+                target: contentRightSide.textBody
+                visible: true
             }
 
             PropertyChanges {
-                target: actionButton
-                opacity: 0
+                target: contentRightSide.buttonPrimary
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
 
             PropertyChanges {
@@ -211,7 +135,80 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: cleanExtruders
+                target: cleanExtrudersSequence
+                visible: false
+            }
+        },
+
+        State {
+            name: "choose_material"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: cleanExtrudersSequence
+                visible: false
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: true
+            }
+        },
+
+        State {
+            name: "loading"
+            when: bot.process.type == ProcessType.NozzleCleaningProcess &&
+                  (bot.process.stateType == ProcessStateType.Running)
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                icon_image: LoadingIcon.Loading
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("LOADING")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Please wait.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                visible: false
+            }
+
+            PropertyChanges {
+                target: materialSelector
                 visible: false
             }
         },
@@ -224,28 +221,23 @@ LoggingItem {
                    bot.process.stateType == ProcessStateType.FinishCleaning)
 
             PropertyChanges {
-                target: image
-                opacity: 0
+                target: contentLeftSide
+                visible: false
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 0
+                target: contentRightSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: cleanExtrudersSequence
+                visible: true
             }
 
             PropertyChanges {
                 target: materialSelector
                 visible: false
-            }
-
-            PropertyChanges {
-                target: cleanExtruders
-                visible: true
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 0
             }
         },
 
@@ -253,123 +245,78 @@ LoggingItem {
             name: "clean_extruders_complete"
 
             PropertyChanges {
-                target: image
-                source: "qrc:/img/process_successful.png"
-                anchors.leftMargin: 80
-                opacity: 1
+                target: contentLeftSide
+                visible: true
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
+                target: contentRightSide
+                visible: true
             }
 
             PropertyChanges {
-                target: title
+                target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                icon_image: LoadingIcon.Success
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
                 text: qsTr("PROCESS COMPLETE")
-                anchors.topMargin: 40
+                visible: true
             }
 
             PropertyChanges {
-                target: subtitle
-                text: qsTr("")
+                target: contentRightSide.textBody
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("DONE")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: cleanExtrudersSequence
+                visible: false
             }
 
             PropertyChanges {
                 target: materialSelector
                 visible: false
             }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("DONE")
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 0
-            }
         },
+
         State {
             name: "clean_extruders_failed"
-            PropertyChanges {
-                target: image
-                source: "qrc:/img/error.png"
-                opacity: 1
-                anchors.leftMargin: 80
-            }
+            extend: "clean_extruders_complete"
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
+                target: contentRightSide.textHeader
                 text: qsTr("PROCESS FAILED")
-                anchors.topMargin: 50
+                visible: true
             }
 
             PropertyChanges {
-                target: subtitle
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                anchors.topMargin: -50
-                button_text.text: qsTr("DONE")
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: materialSelector
-                visible: false
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 0
+                target: contentLeftSide.loadingIcon
+                icon_image: LoadingIcon.Failure
+                visible: true
             }
         },
+
         State {
             name: "cancelling"
+            extend: "loading"
             PropertyChanges {
-                target: image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
+                target: contentRightSide.textHeader
                 text: qsTr("CANCELLING")
-                opacity: 1
-                anchors.topMargin: 80
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Please wait.")
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: materialSelector
-                visible: false
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 1
+                visible: true
             }
         }
     ]
@@ -393,38 +340,21 @@ LoggingItem {
         }
 
         ColumnLayout {
-            id: columnLayout_clean_extruders_popup
+            id: columnLayout
             width: 590
-            height: children.height
-            spacing: 20
+            height: 100
             anchors.top: parent.top
-            anchors.topMargin: 165
+            anchors.topMargin: 145
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Text {
-                id: alert_text_clean_extruders_popup
-                color: "#cbcbcb"
+            TextHeadline {
                 text: qsTr("CANCEL CLEAN EXTRUDERS")
-                font.letterSpacing: 3
-                Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
-            Text {
-                id: description_text_clean_extruders_popup
-                color: "#cbcbcb"
+            TextBody {
                 text: qsTr("Are you sure you want to exit the clean extruders process?")
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
             }
         }
     }

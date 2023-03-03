@@ -13,6 +13,7 @@ LoggingItem {
     height: 408
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
+    property alias cleanExtrudersSequence: cleanExtrudersSequence
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     signal processDone
 
@@ -74,9 +75,10 @@ LoggingItem {
     }
 
     CleanExtrudersSequence {
-        id: cleanExtruders
+        id: cleanExtrudersSequence
         anchors.verticalCenter: parent.verticalCenter
         visible: false
+        enabled: bot.process.type == ProcessType.CalibrationProcess
     }
 
     CleanExtruderSettings {
@@ -96,6 +98,12 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftSide
                 visible: true
+                image {
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
@@ -119,7 +127,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: cleanExtruders
+                target: cleanExtrudersSequence
                 visible: false
             }
 
@@ -160,7 +168,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: cleanExtruders
+                target: cleanExtrudersSequence
                 visible: true
             }
 
@@ -177,7 +185,17 @@ LoggingItem {
                   chooseMaterial
 
             PropertyChanges {
-                target: cleanExtruders
+                target: contentLeftSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: cleanExtrudersSequence
                 visible: false
             }
 
@@ -232,7 +250,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: cleanExtruders
+                target: cleanExtrudersSequence
                 visible: false
             }
 
@@ -286,7 +304,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: cleanExtruders
+                target: cleanExtrudersSequence
                 visible: false
             }
 

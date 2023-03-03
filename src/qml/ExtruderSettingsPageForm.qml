@@ -7,7 +7,6 @@ import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
 Item {
-
     id: extruderSettingsPage
     smooth: false
     anchors.fill: parent
@@ -179,7 +178,6 @@ Item {
                 onProcessDone: {
                     state = "base state"
                     extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }
