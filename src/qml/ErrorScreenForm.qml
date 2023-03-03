@@ -130,19 +130,9 @@ LoggingItem {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
-    Item {
-        id: mainItem
-        anchors.fill: parent
-        width: 350
-        height: 350
-
         RowLayout {
             spacing: 5
+            anchors.fill: parent
 
             Image {
                 id: errorImage
@@ -156,52 +146,29 @@ LoggingItem {
 
             ColumnLayout {
                 id: errorText
-                Text {
+                spacing: 20
+                TextHeadline {
                     id: errorMessageTitle
                     text: qsTr("ERROR TITLE")
-                    anchors.top: parent.top
-                    anchors.topMargin: 65
-                    font.bold: true
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 26
-                    font.letterSpacing: 2
-                    lineHeight: 1.1
-                    color: "#ffffff"
-                    smooth: false
-                    antialiasing: false
+                    style: TextHeadline.Base
                 }
 
-                Text {
+                TextBody {
                     id: errorMessageDescription
                     text: qsTr("Error description")
-                    anchors.top: errorMessageTitle.bottom
-                    anchors.topMargin: 20
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pixelSize: 18
-                    lineHeight: 1.2
-                    color: "#e8e8e8"
-                    smooth: false
-                    antialiasing: false
                 }
 
                 ButtonRectanglePrimary {
                     id: button1
-                    anchors.top: errorMessageDescription.bottom
-                    anchors.topMargin: 20
                     text: "BUTTON 1"
                 }
 
                 ButtonRectangleSecondary {
                     id: button2
-                    anchors.top: button1.bottom
-                    anchors.topMargin: 20
                     text: "BUTTON 2"
                 }
             }
         }
-    }
     states: [
         State {
             name: "door_open_error"
