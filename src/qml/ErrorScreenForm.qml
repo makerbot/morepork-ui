@@ -233,9 +233,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 200
-                buttonWidth: 200
-                label: qsTr("TRY AGAIN")
+                text: qsTr("TRY AGAIN")
             }
         },
 
@@ -269,9 +267,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 200
-                buttonWidth: 200
-                label: qsTr("TRY AGAIN")
+                text: qsTr("TRY AGAIN")
             }
         },
 
@@ -309,9 +305,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 260
-                buttonWidth: 260
-                label: {
+                text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("RESUME PRINT")
@@ -358,9 +352,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 260
-                buttonWidth: 260
-                label: {
+                text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("RESUME PRINT")
@@ -389,7 +381,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("TRY AGAIN")
+                text: qsTr("TRY AGAIN")
             }
         },
 
@@ -454,9 +446,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                buttonWidth: 340
-                label_width: 300
-                label: {
+                text: {
                     qsTr("PURGE EXTRUDER %1").arg((bot.process.extruderAJammed ?
                                                        qsTr("1") : qsTr("2")))
                 }
@@ -465,9 +455,7 @@ LoggingItem {
             PropertyChanges {
                 target: button2
                 visible: true
-                buttonWidth: 340
-                label_width: 320
-                label: {
+                text: {
                     qsTr("UNLOAD EXTRUDER %1").arg((bot.process.extruderAJammed ?
                                                         qsTr("1") : qsTr("2")))
                 }
@@ -516,9 +504,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                buttonWidth: 280
-                label_width: 280
-                label: {
+                text: {
                     qsTr("LOAD MATERIAL")
                 }
             }
@@ -569,9 +555,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 200
-                buttonWidth: 200
-                label: {
+                text: {
                     qsTr("CONTINUE")
                 }
             }
@@ -618,9 +602,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 280
-                buttonWidth: 280
-                label: {
+                text: {
                     qsTr("LOAD MATERIAL")
                 }
             }
@@ -667,9 +649,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 340
-                buttonWidth: 340
-                label: {
+                text: {
                     qsTr("ATTACH EXTRUDER %1").arg(bot.process.errorSource + 1)
                 }
             }
@@ -715,9 +695,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label_width: 200
-                buttonWidth: 200
-                label: qsTr("CONTINUE")
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -747,7 +725,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("TRY AGAIN")
+                text: qsTr("TRY AGAIN")
             }
 
             PropertyChanges {
@@ -772,7 +750,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("CONTINUE")
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -797,7 +775,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("CONTINUE")
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -822,7 +800,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("CONTINUE")
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -857,7 +835,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("CONTINUE")
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
@@ -882,7 +860,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("OK")
+                text: qsTr("OK")
             }
 
             PropertyChanges {
@@ -912,7 +890,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: button1
-                label: qsTr("OK")
+                text: qsTr("OK")
             }
 
             PropertyChanges {
