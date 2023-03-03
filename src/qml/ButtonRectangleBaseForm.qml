@@ -54,7 +54,7 @@ Button {
     }
 
     Component.onCompleted: {
-        this.onClicked.connect(logClick)
+        this.onReleased.connect(logClick)
     }
 
     function logClick() {

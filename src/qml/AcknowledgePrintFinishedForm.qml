@@ -166,6 +166,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: titleText
+                visible: true
                 text: qsTr("DID THE PRINT SUCCEED?")
             }
 
@@ -231,6 +232,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: titleText
+                visible: true
                 text: qsTr("WHY WAS THIS PRINT CANCELLED?")
                 font.pixelSize: 16
             }
