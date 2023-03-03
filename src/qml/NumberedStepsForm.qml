@@ -11,6 +11,7 @@ ColumnLayout {
 
         RowLayout {
             spacing: 12
+            Layout.preferredWidth: parent.width
 
             Rectangle {
                 id: numberCircle
@@ -37,6 +38,7 @@ ColumnLayout {
                 width: parent.width
                 text: modelData
                 font.weight: Font.Normal
+                Layout.preferredWidth: parent.width
             }
         }
     }

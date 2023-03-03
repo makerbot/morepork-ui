@@ -223,15 +223,15 @@ PrintPageForm {
         if(!printingDrawer.buttonChangeFilament.disableButton) {
             if(bot.process.stateType == ProcessStateType.Paused) {
                 printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 resetSettingsSwipeViewPages()
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 printingDrawer.close()
             }
             else if(bot.process.stateType == ProcessStateType.Printing) {
                 bot.pauseResumePrint("suspend")
                 printPage.printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 resetSettingsSwipeViewPages()
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                 printingDrawer.close()
             }
         }

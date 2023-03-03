@@ -9,7 +9,6 @@ Text {
     }
     property int style: TextBody.Base
     id: textBody
-    width: 360
     text: "text-base"
     font.family: "Roboto"
     font.pixelSize: {

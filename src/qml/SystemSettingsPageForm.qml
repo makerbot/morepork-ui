@@ -67,7 +67,6 @@ Item {
             resetToFactoryPopup.close()
             // Reset all screen positions
             resetSettingsSwipeViewPages()
-            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
         }
@@ -291,7 +290,6 @@ Item {
 
             function skipFreStepAction() {
                 resetSettingsSwipeViewPages()
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             WiFiPage {

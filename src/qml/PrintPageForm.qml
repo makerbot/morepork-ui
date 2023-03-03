@@ -92,6 +92,7 @@ Item {
             //assuming the user had navigated to other
             //pages before the print starts.
             resetSettingsSwipeViewPages()
+            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
             printSwipeView.swipeToItem(PrintPage.BasePage)
             setDrawerState(false)
             activeDrawer = printPage.printingDrawer
