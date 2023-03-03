@@ -1,4 +1,6 @@
 import QtQuick 2.10
+import ProcessStateTypeEnum 1.0
+import ExtruderTypeEnum 1.0
 
 ToolheadCalibrationForm {
     contentRightSide {
@@ -20,6 +22,53 @@ ToolheadCalibrationForm {
                 } else {
                     // Button action in 'base state'
                     bot.calibrateToolheads(["x","y"])
+                }
+            }
+        }
+    }
+
+    cleanExtrudersSequence {
+        contentRightSide {
+            buttonPrimary {
+                onClicked: {
+                    if(toolheadCalibration.state == "clean_nozzles" &&
+                       bot.process.stateType == ProcessStateType.CheckNozzleClean) {
+                        if(bot.extruderAType == ExtruderType.MK14_EXP) {
+                            toolheadCalibration.chooseMaterial = true
+                        } else {
+                            bot.doNozzleCleaning(true)
+                        }
+                    } else if(toolheadCalibration.state == "clean_nozzles" &&
+                              bot.process.stateType == ProcessStateType.FinishCleaning) {
+                        bot.acknowledgeNozzleCleaned()
+                    }
+                }
+            }
+
+            buttonSecondary1 {
+                onClicked: {
+                    if(toolheadCalibration.state == "clean_nozzles") {
+                        bot.doNozzleCleaning(false)
+                    }
+                }
+            }
+
+            temperatureStatus {
+                modelExtruder {
+                    customTargetTemperature: {
+                        if(toolheadCalibration.state == "clean_nozzles" &&
+                           bot.process.stateType == ProcessStateType.CoolingNozzle) {
+                            50
+                        }
+                    }
+                }
+                supportExtruder {
+                    customTargetTemperature: {
+                        if(toolheadCalibration.state == "clean_nozzles" &&
+                           bot.process.stateType == ProcessStateType.CoolingNozzle) {
+                            50
+                        }
+                    }
                 }
             }
         }
