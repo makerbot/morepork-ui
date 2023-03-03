@@ -83,8 +83,8 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: 35
                 source: "qrc:/img/extruder_material_error.png"
-                visible: !bot["extruder0Present"] || !bot["extruder0FilamentPresent"]
-        }
+                visible: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
+            }
         }
 
         MainMenuIcon {
