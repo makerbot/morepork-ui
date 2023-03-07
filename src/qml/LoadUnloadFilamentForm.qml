@@ -17,8 +17,6 @@ LoggingItem {
     property alias acknowledgeButton: contentRightItem.buttonPrimary
     property alias retryButton: contentRightItem.buttonSecondary1
     property bool snipMaterialAlertAcknowledged: false
-    property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
-    property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
     property int retryTemperature: 0
@@ -116,7 +114,7 @@ LoggingItem {
         // to not start properly, so disabling the retry
         // button and then enabling after a few seconds is
         // a quick hacky fix for this before launch.
-        buttonSecondary1.enabled = false
+        contentRightItem.buttonSecondary1.enabled = false
         enableRetryButton.start()
     }
 
@@ -228,7 +226,7 @@ LoggingItem {
         id: enableRetryButton
         interval: 3000
         onTriggered: {
-            buttonSecondary1.enabled = true
+            contentRightItem.buttonSecondary1.enabled = true
         }
     }
     SnipMaterialScreen {
@@ -392,6 +390,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds.")
+                visible: true
             }
 
             PropertyChanges {
@@ -554,6 +553,7 @@ LoggingItem {
                              qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
                                 ""))
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -627,6 +627,7 @@ LoggingItem {
                         qsTr("Please wait while the remaining material backs out of the printer.") :
                         qsTr("The material is backing out of the extruder, please wait.")
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -685,11 +686,13 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Wait a few moments until the material has cooled. Close the build chamber and material drawer.")
+                visible: true
             }
 
             PropertyChanges {
@@ -785,11 +788,13 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("REWIND SPOOL")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
+                visible: true
             }
 
             PropertyChanges {
@@ -881,6 +886,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Error %1").arg(errorCode)
+                visible: true
             }
 
             PropertyChanges {
