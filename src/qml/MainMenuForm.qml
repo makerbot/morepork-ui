@@ -73,6 +73,18 @@ Item {
                 actionButton: false
                 visible: !parent.imageVisible
             }
+
+            Image {
+                id: no_material_warning
+                width: 30
+                height: 30
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 75
+                anchors.right: parent.right
+                anchors.rightMargin: 35
+                source: "qrc:/img/extruder_material_error.png"
+                visible: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
+            }
         }
 
         MainMenuIcon {
