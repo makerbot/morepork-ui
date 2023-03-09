@@ -197,7 +197,9 @@ Item {
         support_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
                                                          (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
         modelMaterialRequired = (file.extrusionMassGramsA/1000).toFixed(3)
+        console.log("Model Material: " + modelMaterialRequired)
         supportMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
+        console.log("Support Material: " + supportMaterialRequired)
         layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
         infill_density = file.infillDensity

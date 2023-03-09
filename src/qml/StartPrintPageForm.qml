@@ -36,7 +36,7 @@ Item {
             anchors.bottomMargin: 20
 
             PrintModelInfoPage {
-                startPrintButtonVisible: false
+                startPrintButtonVisible: true
             }
         }
 
@@ -47,103 +47,8 @@ Item {
             anchors.fill: parent.fill
             smooth: false
 
-            ColumnLayout {
-                id: columnLayout
-                width: parent.width
-                smooth: false
-                spacing: 20
-                anchors.top: parent.top
-                anchors.topMargin: 60
-                anchors.left: parent.left
-                anchors.leftMargin: 60
-                anchors.horizontalCenter: parent.horizontalCenter
+            PrintFileInfoPage {
 
-                InfoItem {
-                    id: filename_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("FILENAME")
-                    //dataElement.Layout.preferredWidth: parent.width
-                    dataElement.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    dataText: file_name
-                }
-
-                InfoItem {
-                    id: submitted_by_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("SUBMITTED BY")
-                    dataText: ""
-                    visible: (startPrintSource == PrintPage.FromPrintQueue)
-                }
-
-                InfoItem {
-                    id: print_time_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("PRINT TIME")
-                    dataText: print_time.replace("HR"," HOURS").replace("M"," MINUTES")
-                }
-
-                InfoItem {
-                    id: material_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("MATERIAL")
-                    dataText: qsTr("%1 + %2").arg(print_model_material_name).arg(print_support_material_name)
-                }
-
-                InfoItem {
-                    id: print_mode_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("PRINT MODE")
-                    dataText: qsTr("BALANCED*")
-
-                }
-
-                InfoItem {
-                    id: extruder_temp_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("EXTRUDER TEMP.")
-                    dataText: extruder_temp.replace("+","|")
-                }
-
-                InfoItem {
-                    id: notes_info
-                    Layout.preferredHeight: dataElement.height
-                    labelText: qsTr("NOTES")
-                    dataText: ""
-                    visible: (startPrintSource == PrintPage.FromPrintQueue)
-                }
-
-                /*InfoItem {
-                    id: infill_info
-                    labelText: qsTr("INFILL")
-                    dataText: qsTr("99.99%")
-
-                }
-
-                InfoItem {
-                    id: layer_height_info
-                    labelText: qsTr("LAYER HEIGHT")
-                    dataText: layer_height_mm
-
-                }
-
-                InfoItem {
-                    id: shells_info
-                    labelText: qsTr("SHELLS")
-                    dataText: qsTr("2")
-                }*/
-
-                /*InfoItem {
-                    id: model_info
-                    labelText: qsTr("MODEL")
-                    dataText: qsTr("%1 %2").arg(model_mass).arg(print_model_material_name)
-                }
-
-                InfoItem {
-                    id: support_item
-                    labelText: qsTr("SUPPORT")
-                    dataText: qsTr("%1 %2").arg(support_mass).arg(print_support_material_name)
-
-                }*/
             }
         }
     }

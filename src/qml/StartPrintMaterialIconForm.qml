@@ -11,20 +11,27 @@ Item {
 
     property int filamentBayID: 0
     property real filamentRequired: 0
+    property bool noSpoolInfo: (bot.machineType == MachineType.Magma) || !bot.hasFilamentBay
+    property bool materialMatch: false
 
     property int filamentPercentRequired: {
-        switch(filamentBayID) {
-        case 1:
-            (filamentRequired/
-            materialPage.bay1.filamentQuantity) * 100
-            break;
-        case 2:
-            (filamentRequired/
-            materialPage.bay2.filamentQuantity) * 100
-            break;
-        default:
-            0
-            break;
+        if(noSpoolInfo) {
+            (filamentRequired*2) * 100
+        }
+        else {
+            switch(filamentBayID) {
+            case 1:
+                (filamentRequired/
+                materialPage.bay1.filamentQuantity) * 100
+                break;
+            case 2:
+                (filamentRequired/
+                materialPage.bay2.filamentQuantity) * 100
+                break;
+            default:
+                0
+                break;
+            }
         }
     }
 
@@ -51,19 +58,29 @@ Item {
     property string filamentRequiredColor: {
         switch(filamentBayID) {
         case 1:
-            Qt.rgba(bot.spoolAColorRGB[0]/255,
-                    bot.spoolAColorRGB[1]/255,
-                    bot.spoolAColorRGB[2]/255,
-                    1)
+            if(noSpoolInfo) {
+                "#E85A4F"
+            }
+            else {
+                Qt.rgba(bot.spoolAColorRGB[0]/255,
+                        bot.spoolAColorRGB[1]/255,
+                        bot.spoolAColorRGB[2]/255,
+                        1)
+            }
             break;
         case 2:
-            Qt.rgba(bot.spoolBColorRGB[0]/255,
-                    bot.spoolBColorRGB[1]/255,
-                    bot.spoolBColorRGB[2]/255,
-                    1)
+            if(noSpoolInfo) {
+                "#FFFFFF"
+            }
+            else {
+                Qt.rgba(bot.spoolBColorRGB[0]/255,
+                        bot.spoolBColorRGB[1]/255,
+                        bot.spoolBColorRGB[2]/255,
+                        1)
+            }
             break;
         default:
-            "#000000"
+            "#FFFFFF"
             break;
         }
     }
@@ -95,7 +112,6 @@ Item {
         anchors.topMargin: 0
         visible: true
         border.width: 2
-        //border.color: "#c4c4c4"
         border.color: "#ffffff"
     }
     Rectangle {
@@ -142,8 +158,11 @@ Item {
             rotation: -90
             anchors.fill: parent
             visible: {
-                if(isLabsMaterial) {
+                // Check material match before displaying
+                if(isLabsMaterial || !materialMatch) {
                     false
+                } else if(noSpoolInfo) {
+                    true
                 } else {
                     switch(filamentBayID) {
                     case 1:
@@ -163,7 +182,7 @@ Item {
                 context.reset();
                 var centreX = parent.width * 0.5;
                 var centreY = parent.height * 0.5;
-                if(bot.machineType == MachineType.Magma) {
+                if(noSpoolInfo) {
                     // Do not know filament spool amount
                     if(filamentPercentRequired > 0) {
 
@@ -173,7 +192,7 @@ Item {
                                     0,filamentPercentRequired*0.06283185, false);
                         context.lineWidth = 10;
                         context.lineCap = "round";
-                        context.strokeStyle = filamentAvailableColor;
+                        context.strokeStyle = filamentRequiredColor;
                         context.stroke()
                     }
                 }

@@ -5,9 +5,29 @@ import QtQuick.Layouts 1.3
 Item {
     id: item1
     width: 350
-    height: 82
+    height: 65
 
     property int filamentBayID: 0
+    property bool materialMismatchCheck: {
+        if(filamentBayID == 1 &&
+           materialPage.bay1.filamentMaterial == print_model_material ||
+           materialPage.bay1.usingExperimentalExtruder) {
+            // Disable material quantity check before print for now
+            // until the spool quantity reading becomes reliable
+               // && materialPage.bay1.filamentQuantity > materialRequired) {
+            false
+        }
+        else if(filamentBayID == 2 &&
+                materialPage.bay2.filamentMaterial == print_support_material) {
+            // Disable material quantity check before print for now
+            // until the spool quantity reading becomes reliable
+            // && materialPage.bay2.filamentQuantity > materialRequired) {
+            false
+        }
+        else {
+            true
+        }
+    }
 
     property bool isLabsMaterial: {
         switch(filamentBayID) {
@@ -53,7 +73,21 @@ Item {
         }
     }
 
-    property string materialName: {
+    property string materialRequiredName: {
+        switch(filamentBayID) {
+        case 1:
+            print_model_material_name
+            break;
+        case 2:
+            print_support_material_name
+            break;
+        default:
+            "MAT"
+            break;
+        }
+    }
+
+    property string materialAvailableName: {
         switch(filamentBayID) {
         case 1:
             materialPage.bay1.filamentMaterialName
@@ -85,6 +119,7 @@ Item {
         id: startPrintMaterialIcon
         filamentBayID: parent.filamentBayID
         filamentRequired: materialRequired
+        materialMatch: !materialMismatchCheck
     }
 
     Image {
@@ -97,26 +132,7 @@ Item {
         antialiasing: false
         smooth: false
         source: "qrc:/img/error_image_overlay.png"
-        visible: {
-            if(filamentBayID == 1 &&
-               materialPage.bay1.filamentMaterial == print_model_material ||
-               materialPage.bay1.usingExperimentalExtruder) {
-                // Disable material quantity check before print for now
-                // until the spool quantity reading becomes reliable
-                   // && materialPage.bay1.filamentQuantity > materialRequired) {
-                false
-            }
-            else if(filamentBayID == 2 &&
-                    materialPage.bay2.filamentMaterial == print_support_material) {
-                // Disable material quantity check before print for now
-                // until the spool quantity reading becomes reliable
-                // && materialPage.bay2.filamentQuantity > materialRequired) {
-                false
-            }
-            else {
-                true
-            }
-        }
+        visible: materialMismatchCheck
     }
 
     Item {
@@ -124,18 +140,18 @@ Item {
         width: 218
         height: 82
         anchors.left: startPrintMaterialIcon.right
-        anchors.leftMargin: 12
+        anchors.leftMargin: 20
 
         TextSubheader {
             id: materialNameOrBayIDText
             text: {
                 if(isLabsMaterial) {
                     qsTr("NOT USING BAY %1").arg(filamentBayID)
-                } else if(isSpoolPresent || !bot.hasFilamentBay) {
-                    materialName
-                } else {
+                } else {//if(isSpoolPresent || !bot.hasFilamentBay) {
+                    materialRequiredName
+                } /*else {
                     qsTr("BAY %1").arg(filamentBayID)
-                }
+                }*/
             }
             anchors.top: parent.top
             anchors.topMargin: 8
@@ -143,7 +159,7 @@ Item {
             font.weight: Font.Bold
         }
 
-        TextSubheader {
+        /*TextSubheader {
             id: materialColorText
             text: materialColorName
             anchors.top: materialNameOrBayIDText.bottom
@@ -151,7 +167,7 @@ Item {
             font.capitalization: Font.AllUppercase
             font.weight: Font.Bold
             visible: {
-                if(isLabsMaterial) {
+                if(isLabsMaterial || materialMismatchCheck) {
                     false
                 } else {
                     isSpoolPresent
@@ -170,26 +186,21 @@ Item {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             font.capitalization: Font.AllUppercase
             font.weight: Font.Normal
-            visible: bot.hasFilamentBay && (!isSpoolPresent || isLabsMaterial)
-        }
+            visible: false//bot.hasFilamentBay && (!isSpoolPresent || isLabsMaterial)
+        }*/
 
         TextSubheader {
             id: materialRequiredText
-            text: {
-                if(materialColorName != "Reading Spool...") {
-                    qsTr("%1KG OF %2KG").arg(materialRequired).arg(materialAvailable)
-                } else {
-                    emptyString
-                }
-            }
-            anchors.top: materialColorText.bottom
+            text: qsTr("%1 GRAMS").arg(materialRequired*1000)
+            anchors.top: materialNameOrBayIDText.bottom
             anchors.topMargin: 8
             font.weight: Font.Light
+            opacity: 0.7
             visible: {
                 if(isLabsMaterial) {
                     false
                 } else {
-                    isSpoolPresent
+                    !materialMismatchCheck
                 }
             }
         }

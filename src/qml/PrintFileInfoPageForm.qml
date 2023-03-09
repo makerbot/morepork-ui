@@ -4,102 +4,71 @@ import QtQuick.Layouts 1.3
 
 Item {
     anchors.fill: parent.fill
-    property alias file_name: file_name
-    property alias print_time: print_time
-    property alias print_material: print_material
-    property alias uses_support: uses_support
-    property alias print_page: print_page
-
 
     ColumnLayout {
-        id: layout
+        id: columnLayout
         width: parent.width
         smooth: false
-        spacing: 40
+        spacing: 20
         anchors.top: parent.top
         anchors.topMargin: 60
         anchors.left: parent.left
         anchors.leftMargin: 60
         anchors.horizontalCenter: parent.horizontalCenter
-        /*width: 600
-        spacing: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 65
-        anchors.top: parent.top
-        anchors.topMargin: 50
-        smooth: false*/
 
         InfoItem {
-            id: printInfo_fileName
-            labelText: qsTr("Filename")
-            dataText: print_page.file_name
+            id: filename_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("FILENAME")
+            //dataElement.Layout.preferredWidth: parent.width
+            dataElement.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            dataText: file_name
         }
 
         InfoItem {
-            id: printInfo_timeEstimate
-            labelText: qsTr("Print Time Estimate")
-            dataText: print_time
+            id: submitted_by_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("SUBMITTED BY")
+            dataText: ""
+            visible: (startPrintSource == PrintPage.FromPrintQueue)
         }
 
         InfoItem {
-            id: printInfo_material
-            labelText: qsTr("Print Material")
-            dataText: print_material
+            id: print_time_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("PRINT TIME")
+            dataText: print_time.replace("HR"," HOURS").replace("M"," MINUTES")
         }
 
         InfoItem {
-            id: printInfo_usesSupport
-            labelText: qsTr("Supports")
-            dataText: uses_support
-            visible: false
+            id: material_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("MATERIAL")
+            dataText: qsTr("%1 + %2").arg(print_model_material_name).arg(print_support_material_name)
         }
 
         InfoItem {
-            id: printInfo_usesRaft
-            labelText: qsTr("Rafts")
-            dataText: uses_raft
-            visible: false
+            id: print_mode_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("PRINT MODE")
+            dataText: qsTr("BALANCED*")
+
         }
 
         InfoItem {
-            id: printInfo_modelMass
-            labelText: qsTr("Model")
-            dataText: model_mass
+            id: extruder_temp_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("EXTRUDER TEMP.")
+            dataText: extruder_temp.replace("+","|")
         }
 
         InfoItem {
-            id: printInfo_supportMass
-            labelText: qsTr("Support")
-            dataText: support_mass
-            visible: support_extruder_used
+            id: notes_info
+            Layout.preferredHeight: dataElement.height
+            labelText: qsTr("NOTES")
+            dataText: ""
+            visible: (startPrintSource == PrintPage.FromPrintQueue)
         }
 
-        InfoItem {
-            id: printInfo_Shells
-            labelText: qsTr("Shells")
-            dataText: num_shells
-            visible: false
-        }
-
-        InfoItem {
-            id: printInfo_extruderTemperature
-            labelText: qsTr("Extruder Temperature")
-            dataText: extruder_temp
-        }
-
-        InfoItem {
-            id: printInfo_buildplaneTemperature
-            labelText: qsTr("Chamber Temp. (Build Plane)")
-            dataText: buildplane_temp
-            labelElement.font.pixelSize: 16
-            labelElement.font.letterSpacing: 2
-        }
-
-        InfoItem {
-            id: printInfo_slicerName
-            labelText: qsTr("Slicer Name")
-            dataText: slicer_name
-            visible: false
-        }
     }
 }

@@ -41,7 +41,7 @@ Item {
             id: details_item
             Layout.maximumWidth: 365
             visible: true
-            spacing: 15
+            spacing: 25
 
             ColumnLayout {
                 id: details_column
@@ -53,15 +53,15 @@ Item {
                     text: file_name
                     Layout.maximumWidth: details_item.width
                     elide: Text.ElideRight
-                    maximumLineCount: 2
                     font.weight: Font.Bold
                 }
 
                 RowLayout {
                     id: printTimeRowLayout
                     spacing: 10
+                    opacity: 0.7
 
-                    TextBody {
+                    TextSubheader {
                         id: printTimeLabel
                         text: "PRINT TIME"
                         font.weight: Font.Light
@@ -76,7 +76,7 @@ Item {
                         smooth: false
                     }
 
-                    TextBody {
+                    TextSubheader {
                         id: printTime
                         text: print_time
                         font.weight: Font.Light
