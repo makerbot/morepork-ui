@@ -141,8 +141,8 @@ LoggingItem {
 
         Image {
             id: errorIcon
-            width: 30
-            height: 30
+            width: 60
+            height: 60
             source: "qrc:/img/extruder_material_error.png"
             anchors.left: image.left
             anchors.top: image.top
