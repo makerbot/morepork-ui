@@ -98,7 +98,7 @@ ErrorScreenForm {
                 // material spool on the bay for the paused print. Skip
                 // the material check when using experimental extruder.
                 if(bot.process.stateType != ProcessStateType.Paused) {
-                   true
+                   false
                 } else if(bot.process.stateType == ProcessStateType.Paused) {
                     if(materialPage.isUsingExpExtruder(bot.process.errorSource + 1)) {
                         // Allow loading if the offending extruder is an experimental
@@ -109,13 +109,13 @@ ErrorScreenForm {
                         // matches the print material which is the same logic used in the
                         // material page.
                         isExtruderAError() ?
-                            !printPage.print_model_material != materialPage.bay1.filamentMaterial :
-                            !printPage.print_support_material != materialPage.bay2.filamentMaterial
+                            !(printPage.print_model_material != materialPage.bay1.filamentMaterial) :
+                            !(printPage.print_support_material != materialPage.bay2.filamentMaterial)
                     }
                 }
             }
             else if (state == "calibration_failed") {
-                !(bot.process.type != ProcessType.None)
+                bot.process.type == ProcessType.None
             }
             else {
                 true
@@ -204,7 +204,7 @@ ErrorScreenForm {
     button2 {
         enabled: {
             if (state == "filament_jam_error") {
-                !bot.process.stateType != ProcessStateType.Paused
+                bot.process.stateType == ProcessStateType.Paused
             } else {
                 true
             }

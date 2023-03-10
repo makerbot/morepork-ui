@@ -138,17 +138,6 @@ LoggingItem {
             source: "qrc:/img/error_close_door.png"
             visible:  true
         }
-
-        Image {
-            id: errorIcon
-            width: 60
-            height: 60
-            source: "qrc:/img/extruder_material_error.png"
-            anchors.left: image.left
-            anchors.top: image.top
-            anchors.leftMargin: 20
-            anchors.topMargin: 34
-        }
     }
 
     ContentRightSide {
@@ -191,16 +180,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftItem.image
                 source: "qrc:/img/error_close_door.png"
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("PROCESS FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Close the build chamber door and\ntry again.")
+                visible: true
             }
 
             PropertyChanges {
@@ -211,6 +203,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("TRY AGAIN")
+                visible: true
             }
         },
 
@@ -225,16 +218,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftItem.image
                 source: "qrc:/img/error_close_lid.png"
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("PROCESS FAILED.\nCLOSE THE\nTOP LID.")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Put the lid back on the printer\nand try again.")
+                visible: true
             }
 
             PropertyChanges {
@@ -245,6 +241,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("TRY AGAIN")
+                visible: true
             }
         },
 
@@ -264,6 +261,7 @@ LoggingItem {
                         emptyString
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -278,6 +276,7 @@ LoggingItem {
                         emptyString
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -292,6 +291,7 @@ LoggingItem {
                         emptyString
                     }
                 }
+                visible: true
             }
         },
 
@@ -311,6 +311,7 @@ LoggingItem {
                         emptyString
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -325,6 +326,7 @@ LoggingItem {
                         emptyString
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -339,6 +341,7 @@ LoggingItem {
                         emptyString
                     }
                 }
+                visible: true
             }
         },
 
@@ -349,16 +352,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("CALIBRATION FAILED.\nCLOSE THE\nTOP LID.")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Put the lid back on the printer\nand retry calibrating")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("TRY AGAIN")
+                visible: true
             }
         },
 
@@ -393,6 +399,7 @@ LoggingItem {
                         "qrc:/img/broken.png"
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -403,6 +410,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("MATERIAL JAM\nDETECTED")
+                visible: true
             }
 
             PropertyChanges {
@@ -415,6 +423,7 @@ LoggingItem {
                                                                                                 materialPage.bay1 :
                                                                                                 materialPage.bay2).printMaterialName)) : (emptyString))
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -423,6 +432,7 @@ LoggingItem {
                     qsTr("PURGE EXTRUDER %1").arg((bot.process.extruderAJammed ?
                                                        qsTr("1") : qsTr("2")))
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -432,6 +442,7 @@ LoggingItem {
                     qsTr("UNLOAD EXTRUDER %1").arg((bot.process.extruderAJammed ?
                                                         qsTr("1") : qsTr("2")))
                 }
+                visible: true
             }
         },
         State {
@@ -442,6 +453,7 @@ LoggingItem {
                 source: bot.process.filamentBayAOOF ?
                             "qrc:/img/error_oof_bay1.png" :
                             "qrc:/img/error_oof_bay2.png"
+                visible: true
             }
 
             PropertyChanges {
@@ -456,6 +468,7 @@ LoggingItem {
                         (bot.process.filamentBayAOOF ?
                              qsTr("MODEL") : qsTr("SUPPORT")))
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -472,6 +485,7 @@ LoggingItem {
                              printPage.print_model_material_name :
                              printPage.print_support_material_name)
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -479,6 +493,7 @@ LoggingItem {
                 text: {
                     qsTr("LOAD MATERIAL")
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -494,6 +509,7 @@ LoggingItem {
                 source: bot.process.extruderAOOF ?
                             "qrc:/img/error_oof_extruder1.png" :
                             "qrc:/img/error_oof_extruder2.png"
+                visible: true
             }
 
             PropertyChanges {
@@ -508,6 +524,7 @@ LoggingItem {
                                 bot.process.extruderAOOF ?
                                     qsTr("MODEL") : qsTr("SUPPORT"))
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -522,6 +539,7 @@ LoggingItem {
                               qsTr("Support Extruder 2")) +
                     qsTr(" This\nprocess can take up to 60 seconds.")
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -529,6 +547,7 @@ LoggingItem {
                 text: {
                     qsTr("CONTINUE")
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -544,6 +563,7 @@ LoggingItem {
                 source: bot.process.extruderAOOF ?
                             "qrc:/img/error_oof_bay1.png" :
                             "qrc:/img/error_oof_bay1.png"
+                visible: true
             }
 
             PropertyChanges {
@@ -556,6 +576,7 @@ LoggingItem {
                 text: {
                     qsTr("REMOVE EMPTY\nSPOOL")
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -568,6 +589,7 @@ LoggingItem {
                              printPage.print_model_material_name :
                              printPage.print_support_material_name)
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -575,6 +597,7 @@ LoggingItem {
                 text: {
                     qsTr("LOAD MATERIAL")
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -596,6 +619,7 @@ LoggingItem {
                 source: bot.process.errorSource?
                             "qrc:/img/error_filament_jam_2.png" :
                             "qrc:/img/error_filament_jam_1.png"
+                visible: true
             }
 
             PropertyChanges {
@@ -604,11 +628,13 @@ LoggingItem {
                     qsTr("PRINT PAUSED.\nEXTRUDER %1\nDISCONNECTED.").arg(
                         bot.process.errorSource + 1);
                 }
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Ensure the extruder is attached and\npress the button below to continue.")
+                visible: true
             }
 
             PropertyChanges {
@@ -616,6 +642,7 @@ LoggingItem {
                 text: {
                     qsTr("ATTACH EXTRUDER %1").arg(bot.process.errorSource + 1)
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -632,6 +659,7 @@ LoggingItem {
                 anchors.verticalCenterOffset: -25
                 anchors.leftMargin: 100
                 source: "qrc:/img/error.png"
+                visible: true
             }
 
             PropertyChanges {
@@ -642,6 +670,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("ERROR")
+                visible: true
             }
 
             PropertyChanges {
@@ -649,11 +678,13 @@ LoggingItem {
                 text: {
                     qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(lastReportedErrorCode)
                 }
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("CONTINUE")
+                visible: true
             }
 
             PropertyChanges {
@@ -669,16 +700,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("CALIBRATION\nERROR")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error %1").arg(lastReportedErrorCode)
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("TRY AGAIN")
+                visible: true
             }
         },
 
@@ -689,16 +723,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("HEATING ERROR")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("CONTINUE")
+                visible: true
             }
         },
 
@@ -709,16 +746,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("HEATER\nTEMPERATURE\nERROR")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("CONTINUE")
+                visible: true
             }
         },
 
@@ -729,16 +769,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("CARRIAGE\nCOMMUNICATION\nERROR")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact MakerBot\nsupport. Error %1").arg(lastReportedErrorCode)
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("CONTINUE")
+                visible: true
             }
         },
         State {
@@ -752,11 +795,13 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftItem.image
                 source: "qrc:/img/error_chamber_fan_failure.png"
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("PRINT FAILED.\nFAN ERROR.")
+                visible: true
             }
 
             PropertyChanges {
@@ -764,11 +809,13 @@ LoggingItem {
                 text: qsTr("Please clear the chamber and make\n" +
                       "sure no filament is caught in the\n" +
                       "chamber heater fans.")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("CONTINUE")
+                visible: true
             }
 
             PropertyChanges {
@@ -784,16 +831,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("INCOMPATIBLE\nPRINT FILE")
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("This .Makerbot was prepared for\na different type of printer. Please\nexport it again for this printer type.\nError %1").arg(lastReportedErrorCode)
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("OK")
+                visible: true
             }
 
         },
@@ -805,6 +855,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("EXTRUDER MISMATCH")
+                visible: true
             }
 
             PropertyChanges {
@@ -815,11 +866,13 @@ LoggingItem {
                 arg(formatExtruderNames(bot.process.currentTools)).
                 arg(formatExtruderNames(bot.process.fileTools)).
                 arg(lastReportedErrorCode)
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("OK")
+                visible: true
             }
 
         }
