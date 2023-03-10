@@ -6,101 +6,86 @@ Item {
     id: failurePrintFeedback
     anchors.fill: parent
 
+    ListModel {
+        id: options
+        ListElement { name: "Warping from buildplate"}
+        ListElement { name: "stringiness"}
+        ListElement { name: "Gap in walls"}
+        ListElement { name: "Bad layer alignment"}
+        ListElement { name: "Small feature defects"}
+        ListElement { name: "Frequent extruder jams"}
+    }
     Rectangle {
         anchors.fill: parent
         color: "#000000"
     }
 
-    Text {
-        id: instructionText
-        color: "#cbcbcb"
-        text: qsTr("TAP ANY NOTICEABLE PRINT DEFECTS")
-        antialiasing: false
-        smooth: false
-        font.letterSpacing: 3
-        font.family: defaultFont.name
-        font.weight: Font.Light
-        font.pixelSize: 20
-        anchors.horizontalCenter: parent.horizontalCenter
+    ColumnLayout {
+        id: colums
+        width: parent.width
         anchors.top: parent.top
         anchors.topMargin: 25
+        anchors.left: parent.left
+        anchors.right: parent.right
+        spacing: 20
+
+        TextBody {
+            id: instructionText
+            color: "#cbcbcb"
+            text: qsTr("TAP ANY NOTICEABLE PRINT DEFECTS")
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        ButtonRectanglePrimary {
+            id: submitFeedbackButton
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("SUBMIT FEEDBACK")
+            onClicked: {
+                acknowledgePrintFinished.submitFeedbackAndAcknowledge(false)
+            }
+            Layout.preferredWidth: 600
+            Layout.preferredHeight: 52
+        }
+
     }
 
-
-    ColumnLayout {
-        width: parent.width
-        anchors.top: instructionText.bottom
-        anchors.topMargin: 30
-        spacing: 15
-
-        RowLayout {
-            width: parent.width
-            spacing: 25
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            FeedbackButton {
-                label: "WARPING FROM BUILDPLATE"
-                key: "warping_from_buildplate"
-            }
-
-            FeedbackButton {
-                label: "STRINGINESS"
-                key: "stringiness"
-            }
-        }
-
-        RowLayout {
-            width: parent.width
-            spacing: 25
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            FeedbackButton {
-                label: "GAPS IN WALLS"
-                key: "gaps_in_walls"
-            }
-
-            FeedbackButton {
-                label: "BAD LAYER ALIGNMENT"
-                key: "bad_layer_alignment"
-            }
-        }
-
-        RowLayout {
-            width: parent.width
-            spacing: 25
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            FeedbackButton {
-                label: "SMALL FEATURE DEFECTS"
-                key: "small_feature_defects"
-            }
-
-            FeedbackButton {
-                label: "OTHER"
-                key: "other"
-            }
-        }
-
-        RowLayout {
-            width: parent.width
-            spacing: 25
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            FeedbackButton {
-                label: "FREQUENT EXTRUDER JAMS"
-                key: "frequent_extruder_jams"
-            }
-        }
-    }
-
-    RoundedButton {
-        id: submitFeedbackButton
-        anchors.horizontalCenter: parent.horizontalCenter
+    ListView {
+        id: options_list
+        layoutDirection: Qt.LeftToRight
+        boundsBehavior: Flickable.DragOverBounds
+        spacing: 32
+        orientation: ListView.Vertical
+        anchors.top : colums.bottom
+        anchors.topMargin: 20
+        anchors.left: parent.left
+        anchors.leftMargin: 34
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 35
-        buttonHeight: 50
-        label: qsTr("SUBMIT FEEDBACK")
-        button_mouseArea.onClicked: {
-            acknowledgePrintFinished.submitFeedbackAndAcknowledge(false)
-        }
+        anchors.right: parent.right
+        model: options
+        delegate:
+            RadioButton {
+                id: control
+
+                indicator:
+                    Rectangle {
+                        width: 36
+                        height: 36
+                        color: control.checked ? "#ffffff" : "#000000"
+                        border.width: 2
+                        border.color: "#ffffff"
+
+                   }
+                contentItem: TextBody {
+                    style: TextBody.Large
+                    font.weight: Font.Bold
+                    text: name
+                    color: "#ffffff"
+                    anchors.left: indicator.left
+                    anchors.leftMargin: 50
+
+                }
+            }
     }
+
+
 }
