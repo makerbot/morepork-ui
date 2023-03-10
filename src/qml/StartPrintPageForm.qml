@@ -11,12 +11,6 @@ Item {
 
     property alias startPrintSwipeView: startPrintSwipeView
 
-    Rectangle {
-        width: parent.width
-        height: parent.height
-        color: "#000000"
-    }
-
     enum SwipeIndex {
         BasePage,
         PrintFileDetails
@@ -36,16 +30,15 @@ Item {
             anchors.bottomMargin: 20
 
             PrintModelInfoPage {
+                anchors.fill: parent.fill
                 startPrintButtonVisible: true
             }
         }
-
 
         // StartPrintPage.PrintFileDetails
         Item {
             id: startPrintPage2
             anchors.fill: parent.fill
-            smooth: false
 
             PrintFileInfoPage {
 

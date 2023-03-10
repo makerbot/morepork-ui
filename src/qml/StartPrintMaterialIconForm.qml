@@ -11,11 +11,12 @@ Item {
 
     property int filamentBayID: 0
     property real filamentRequired: 0
-    property bool noSpoolInfo: (bot.machineType == MachineType.Magma) || !bot.hasFilamentBay
+    property bool noFilamentBayInfo: (bot.machineType == MachineType.Magma) ||
+                                     !bot.hasFilamentBay
     property bool materialMatch: false
 
     property int filamentPercentRequired: {
-        if(noSpoolInfo) {
+        if(noFilamentBayInfo) {
             (filamentRequired*2) * 100
         }
         else {
@@ -58,7 +59,7 @@ Item {
     property string filamentRequiredColor: {
         switch(filamentBayID) {
         case 1:
-            if(noSpoolInfo) {
+            if(noFilamentBayInfo) {
                 "#E85A4F"
             }
             else {
@@ -69,7 +70,7 @@ Item {
             }
             break;
         case 2:
-            if(noSpoolInfo) {
+            if(noFilamentBayInfo) {
                 "#FFFFFF"
             }
             else {
@@ -80,7 +81,7 @@ Item {
             }
             break;
         default:
-            "#FFFFFF"
+            "#000000"
             break;
         }
     }
@@ -161,7 +162,7 @@ Item {
                 // Check material match before displaying
                 if(isLabsMaterial || !materialMatch) {
                     false
-                } else if(noSpoolInfo) {
+                } else if(noFilamentBayInfo) {
                     true
                 } else {
                     switch(filamentBayID) {
@@ -182,7 +183,7 @@ Item {
                 context.reset();
                 var centreX = parent.width * 0.5;
                 var centreY = parent.height * 0.5;
-                if(noSpoolInfo) {
+                if(noFilamentBayInfo) {
                     // Do not know filament spool amount
                     if(filamentPercentRequired > 0) {
 

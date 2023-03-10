@@ -20,7 +20,6 @@ Item {
             id: filename_info
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("FILENAME")
-            //dataElement.Layout.preferredWidth: parent.width
             dataElement.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             dataText: file_name
         }
@@ -30,7 +29,8 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("SUBMITTED BY")
             dataText: ""
-            visible: (startPrintSource == PrintPage.FromPrintQueue)
+            // Info not available from cloudprint at the moment
+            visible: false // (startPrintSource == PrintPage.FromPrintQueue)
         }
 
         InfoItem {
@@ -52,6 +52,8 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("PRINT MODE")
             dataText: qsTr("BALANCED*")
+            // Info not available from slice file at the moment
+            visible: false
 
         }
 
@@ -67,7 +69,8 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("NOTES")
             dataText: ""
-            visible: (startPrintSource == PrintPage.FromPrintQueue)
+            // Info not available from cloudprint at the moment
+            visible: false // (startPrintSource == PrintPage.FromPrintQueue)
         }
 
     }

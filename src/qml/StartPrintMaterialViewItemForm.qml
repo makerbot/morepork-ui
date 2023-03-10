@@ -9,23 +9,17 @@ Item {
 
     property int filamentBayID: 0
     property bool materialMismatchCheck: {
-        if(filamentBayID == 1 &&
-           materialPage.bay1.filamentMaterial == print_model_material ||
-           materialPage.bay1.usingExperimentalExtruder) {
-            // Disable material quantity check before print for now
-            // until the spool quantity reading becomes reliable
-               // && materialPage.bay1.filamentQuantity > materialRequired) {
+        switch(filamentBayID) {
+        case 1:
+            !(materialPage.bay1.filamentMaterial == print_model_material ||
+                    materialPage.bay1.usingExperimentalExtruder)
+            break
+        case 2:
+            !(materialPage.bay2.filamentMaterial == print_support_material)
+            break
+        default:
             false
-        }
-        else if(filamentBayID == 2 &&
-                materialPage.bay2.filamentMaterial == print_support_material) {
-            // Disable material quantity check before print for now
-            // until the spool quantity reading becomes reliable
-            // && materialPage.bay2.filamentQuantity > materialRequired) {
-            false
-        }
-        else {
-            true
+            break
         }
     }
 
@@ -135,37 +129,30 @@ Item {
         visible: materialMismatchCheck
     }
 
-    Item {
-        id: materialItem
+    ColumnLayout {
+        id: materialColumn
         width: 218
-        height: 82
+        height: children.height
         anchors.left: startPrintMaterialIcon.right
         anchors.leftMargin: 20
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: materialColorText.visible ? 5 : 8
 
         TextSubheader {
             id: materialNameOrBayIDText
-            text: {
-                if(isLabsMaterial) {
-                    qsTr("NOT USING BAY %1").arg(filamentBayID)
-                } else {//if(isSpoolPresent || !bot.hasFilamentBay) {
-                    materialRequiredName
-                } /*else {
-                    qsTr("BAY %1").arg(filamentBayID)
-                }*/
-            }
-            anchors.top: parent.top
-            anchors.topMargin: 8
+            text: isLabsMaterial ?
+                     qsTr("LABS MATERIAL") :
+                     materialRequiredName
             font.capitalization: Font.AllUppercase
             font.weight: Font.Bold
         }
 
-        /*TextSubheader {
+        TextSubheader {
             id: materialColorText
             text: materialColorName
-            anchors.top: materialNameOrBayIDText.bottom
-            anchors.topMargin: 8
             font.capitalization: Font.AllUppercase
-            font.weight: Font.Bold
+            font.weight: Font.Light
+            opacity: 0.7
             visible: {
                 if(isLabsMaterial || materialMismatchCheck) {
                     false
@@ -175,12 +162,10 @@ Item {
             }
         }
 
-        TextSubheader {
+       /* TextSubheader {
             id: noMaterialText
             width: 210
-            text: isLabsMaterial ?
-                      qsTr("LABS MATERIAL LOADED") :
-                      qsTr("NO MATERIAL DETECTED")
+            text:
             anchors.top: materialNameOrBayIDText.bottom
             anchors.topMargin: 8
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -192,17 +177,9 @@ Item {
         TextSubheader {
             id: materialRequiredText
             text: qsTr("%1 GRAMS").arg(materialRequired*1000)
-            anchors.top: materialNameOrBayIDText.bottom
-            anchors.topMargin: 8
             font.weight: Font.Light
             opacity: 0.7
-            visible: {
-                if(isLabsMaterial) {
-                    false
-                } else {
-                    !materialMismatchCheck
-                }
-            }
+            //visible: !isLabsMaterial
         }
     }
 }

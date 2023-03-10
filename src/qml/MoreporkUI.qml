@@ -2671,19 +2671,13 @@ ApplicationWindow {
             }
             left_button.onClicked: {
                 startPrintErrorsPopup.close()
-                if(printPage.startPrintNoFilament) {
-                    // Do Nothing
-                }
-                else if(printPage.startPrintMaterialMismatch ||
-                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                    startPrintErrorsPopup.close()
-                }
-                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                if(printPage.startPrintUnknownSliceGenuineMaterial ||
                         printPage.startPrintWithUnknownMaterials ||
                         printPage.startPrintWithInsufficientModelMaterial ||
                         printPage.startPrintWithInsufficientSupportMaterial) {
+
+
                     if(printPage.startPrintDoorLidCheck()) {
-                        //printPage.startPrint()
                         printPage.confirm_build_plate_popup.open()
                     }
                     else {
@@ -2702,10 +2696,8 @@ ApplicationWindow {
                     qsTr("LOAD MATERIAL")
                 }
                 else if(printPage.startPrintMaterialMismatch ||
-                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                    qsTr("CHANGE MATERIAL")
-                }
-                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                        printPage.startPrintGenuineSliceUnknownMaterial ||
+                        printPage.startPrintUnknownSliceGenuineMaterial ||
                         printPage.startPrintWithUnknownMaterials ||
                         printPage.startPrintWithInsufficientModelMaterial ||
                         printPage.startPrintWithInsufficientSupportMaterial) {
@@ -2717,19 +2709,7 @@ ApplicationWindow {
             }
             right_button.onClicked: {
                 startPrintErrorsPopup.close()
-                if(printPage.startPrintNoFilament) {
-                    resetDetailsAndGoToMaterialsPage()
-                }
-                else if(printPage.startPrintMaterialMismatch ||
-                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                    resetDetailsAndGoToMaterialsPage()
-                }
-                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                        printPage.startPrintWithUnknownMaterials ||
-                        printPage.startPrintWithInsufficientModelMaterial ||
-                        printPage.startPrintWithInsufficientSupportMaterial) {
-                    resetDetailsAndGoToMaterialsPage()
-                }
+                resetDetailsAndGoToMaterialsPage()
             }
 
             ColumnLayout {

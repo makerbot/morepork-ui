@@ -15,7 +15,6 @@ PopupMenu {
         itemAt(count - 1).isLastItem = true
     }
 
-
     PopupMenuItem {
         id: addRemoveFileButton
         label: browsingUsbStorage ?
@@ -52,12 +51,4 @@ PopupMenu {
         }
         enabled: browsingUsbStorage
     }
-
-    /*PopupMenuItem {
-        id: closeMenuButton
-        label: qsTr("Close")
-        onClicked: {
-            optionsMenu.close()
-        }
-    }*/
 }

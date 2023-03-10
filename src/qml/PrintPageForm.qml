@@ -8,7 +8,6 @@ import ErrorTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
-    id: print_page
     anchors.fill: parent
     smooth: false
     property string fileName: "unknown.makerbot"
@@ -25,7 +24,6 @@ Item {
     property real modelMaterialRequired
     property real supportMaterialRequired
     property int num_shells
-    property real infill_density
     property real layer_height_mm
     property string extruder_temp
     property string buildplane_temp
@@ -197,12 +195,9 @@ Item {
         support_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
                                                          (file.extrusionMassGramsB * 0.001).toFixed(1) + " Kg"
         modelMaterialRequired = (file.extrusionMassGramsA/1000).toFixed(3)
-        console.log("Model Material: " + modelMaterialRequired)
         supportMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
-        console.log("Support Material: " + supportMaterialRequired)
         layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
-        infill_density = file.infillDensity
         extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
                                               file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
         buildplane_temp = file.buildplaneTempCelcius + "C"
@@ -239,13 +234,8 @@ Item {
         buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
-        /*if(!startPrintMaterialCheck()) {
-            startPrintErrorsPopup.open()
-        }
-        else {*/
-            startPrintSource = PrintPage.FromPrintQueue
-            printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
-        //}
+        startPrintSource = PrintPage.FromPrintQueue
+        printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
 
     function fetchMetadataFailed() {
@@ -272,7 +262,6 @@ Item {
         modelMaterialRequired = 0.0
         supportMaterialRequired = 0.0
         num_shells = ""
-        infill_density = ""
         extruder_temp = ""
         buildplane_temp = ""
         slicer_name = ""
@@ -593,15 +582,11 @@ Item {
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
-                            if(false) {//!startPrintMaterialCheck()) { TODO: We want to allow user to see start print page but get error when selecting start
-                                startPrintErrorsPopup.open()
-                            }
-                            else {
-                                startPrintSource = PrintPage.FromLocal
-                                setDrawerState(false)
-                                startPrintInstructionsItem.acknowledged = false
-                                printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
-                            }
+                            startPrintSource = PrintPage.FromLocal
+                            setDrawerState(false)
+                            startPrintInstructionsItem.acknowledged = false
+                            printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+
                         }
                     }
 
@@ -911,12 +896,6 @@ Item {
                 wrapMode: Text.WordWrap
             }
 
-            /*ProgressBar {
-                id: progressBar
-                Layout.alignment: Qt.AlignHCenter
-                value: (storage.fileCopyProgress).toFixed(2)
-                visible: false
-            }*/
             states: [
                 State {
                     name: "file_added"
@@ -943,11 +922,6 @@ Item {
                         text: qsTr("The following file has been added to internal storage:"
                                    +"<br><br><br><b>%1</b>").arg(file_name)
                     }
-
-                    //PropertyChanges {
-                    //    target: progressBar
-                    //    visible: false
-                    //}
                 },
                 State {
                     name: "copying"
@@ -972,11 +946,6 @@ Item {
                         target: description_text_copy_file_popup
                         text: qsTr("%1").arg(storage.fileCopyProgress*100) + "%"
                     }
-
-                    //PropertyChanges {
-                    //    target: progressBar
-                    //    visible: true
-                    //}
                 },
                 State {
                     name: "storage_full"
@@ -996,12 +965,7 @@ Item {
                     PropertyChanges {
                         target: description_text_copy_file_popup
                         text: qsTr("Remove unwanted files from the printer's internal storage to free up space.")
-                        }
-
-                    //PropertyChanges {
-                    //    target: progressBar
-                     //   visible: false
-                    //}
+                    }
                 }
 
             ]

@@ -8,6 +8,8 @@ Item {
     width: parent.width
     height: parent.height
     anchors.fill: parent.fill
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.horizontalCenter: parent.horizontalCenter
 
     property alias startPrintButtonVisible: startPrintButtonRow.visible
 
@@ -19,7 +21,6 @@ Item {
         anchors.top: parent.top
         anchors.topMargin: 15
         anchors.bottomMargin: 15
-        anchors.leftMargin: 40
         spacing: 40
 
         Item {
@@ -39,7 +40,8 @@ Item {
 
         ColumnLayout {
             id: details_item
-            Layout.maximumWidth: 365
+            width: 365
+            Layout.preferredWidth: 365
             visible: true
             spacing: 25
 
@@ -51,7 +53,8 @@ Item {
                 TextBody {
                     id: printName
                     text: file_name
-                    Layout.maximumWidth: details_item.width
+                    width: details_item.width
+                    Layout.preferredWidth: details_item.width
                     elide: Text.ElideRight
                     font.weight: Font.Bold
                 }
@@ -138,8 +141,8 @@ Item {
     FileOptionsPopupMenu {
         id: optionsMenu
         width: details_item.width+15
-        x: startPrintButtonRow.x+width+45//410
-        y: startPrintButtonRow.y-startPrintButtonRow.height-8//200
+        x: startPrintButtonRow.x+width+45
+        y: startPrintButtonRow.y-startPrintButtonRow.height-8
 
         onClosed: {
             startPrintButton.enabled = true
@@ -147,3 +150,5 @@ Item {
         }
     }
 }
+
+
