@@ -442,7 +442,6 @@ LoggingItem {
                     qsTr("UNLOAD EXTRUDER %1").arg((bot.process.extruderAJammed ?
                                                         qsTr("1") : qsTr("2")))
                 }
-                visible: true
             }
         },
         State {
