@@ -99,6 +99,11 @@ Item {
                         border.width: 2
                         border.color: "#ffffff"
 
+                        Image{
+                            source: "qrc:/img/check_mark_small_black.png"
+                            visible: selected
+                            anchors.fill: parent
+                        }
                    }
                 contentItem: TextBody {
                     style: TextBody.Large
