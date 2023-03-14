@@ -365,9 +365,9 @@ LoggingItem {
                 target: contentLeftItem.image
                 source: {
                     if(bot.process.extruderAJammed) {
-                        "qrc:/img/extruder_filament_jam_left.png"
+                        "qrc:/img/error_extruder_filament_jam_1.png"
                     } else if(bot.process.extruderBJammed) {
-                        "qrc:/img/extruder_filament_jam_right.png"
+                        "qrc:/img/error_extruder_filament_jam_2.png"
                     } else {
                         "qrc:/img/broken.png"
                     }
