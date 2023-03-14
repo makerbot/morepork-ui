@@ -502,23 +502,11 @@ ApplicationWindow {
                             mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                         }
 
-                        mainMenuIcon_extruder.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
-                        }
-
-                        mainMenuIcon_settings.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                        }
-
-                        mainMenuIcon_info.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.InfoPage)
-                        }
-
                         mainMenuIcon_material.mouseArea.onClicked: {
                             mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         }
 
-                        mainMenuIcon_advanced.mouseArea.onClicked: {
+                        mainMenuIcon_settings.mouseArea.onClicked: {
                             mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                         }
                     }
