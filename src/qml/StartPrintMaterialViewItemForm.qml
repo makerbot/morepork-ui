@@ -162,24 +162,11 @@ Item {
             }
         }
 
-       /* TextSubheader {
-            id: noMaterialText
-            width: 210
-            text:
-            anchors.top: materialNameOrBayIDText.bottom
-            anchors.topMargin: 8
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            font.capitalization: Font.AllUppercase
-            font.weight: Font.Normal
-            visible: false//bot.hasFilamentBay && (!isSpoolPresent || isLabsMaterial)
-        }*/
-
         TextSubheader {
             id: materialRequiredText
             text: qsTr("%1 GRAMS").arg(materialRequired*1000)
             font.weight: Font.Light
             opacity: 0.7
-            //visible: !isLabsMaterial
         }
     }
 }
