@@ -23,7 +23,6 @@ LoggingItem {
             systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
         }
     }
-
     property bool isUsbStorageConnected: storage.usbStorageConnected
     property bool isFirmwareFileCopying: storage.fileIsCopying
 
@@ -210,6 +209,7 @@ LoggingItem {
                 anchors.topMargin: 275
                 text: qsTr("INSTALL VIA USB")
                 visible: true
+                enabled: !isProcessRunning()
             }
 
             PropertyChanges {
@@ -222,6 +222,11 @@ LoggingItem {
             PropertyChanges {
                 target: firmwareFileListUsb
                 visible: false
+            }
+
+            PropertyChanges {
+                target: printerNotIdlePopup
+                visible: firmwareUpdateItem.visible && isProcessRunning()
             }
         },
         State {

@@ -90,6 +90,11 @@ Item {
                         buttonImage.source: "qrc:/img/icon_extruder_settings.png"
                         buttonText.text: qsTr("EXTRUDER SETTINGS")
                         openMenuItemArrow.visible: true
+                        onClicked: {
+                            if(isProcessRunning()){
+                                printerNotIdlePopup.open()
+                            }
+                        }
                     }
 
                     MenuButton {
@@ -97,6 +102,11 @@ Item {
                         buttonImage.source: "qrc:/img/icon_build_plate_settings.png"
                         buttonText.text: qsTr("BUILD PLATE SETTINGS")
                         openMenuItemArrow.visible: true
+                        onClicked: {
+                            if(isProcessRunning()){
+                                printerNotIdlePopup.open()
+                            }
+                        }
                     }
 
                     MenuButton {

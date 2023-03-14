@@ -171,6 +171,11 @@ Item {
                         buttonImage.source: "qrc:/img/icon_software_update.png"
                         buttonText.text: qsTr("FIRMWARE UPDATE")
                         buttonAlertImage.visible: isfirmwareUpdateAvailable
+                        onClicked: {
+                            if(isProcessRunning() && isfirmwareUpdateAvailable){
+                                printerNotIdlePopup.open()
+                            }
+                        }
                     }
 
                     MenuButton {
@@ -343,6 +348,9 @@ Item {
                     if(firmwareUpdatePage.state == "install_from_usb") {
                         if(isfirmwareUpdateAvailable) {
                             firmwareUpdatePage.state = "firmware_update_available"
+                            if(isProcessRunning()) {
+                                printerNotIdlePopup.open()
+                            }
                         }
                         else {
                             firmwareUpdatePage.state = "no_firmware_update_available"
