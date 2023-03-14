@@ -8,429 +8,220 @@ LoggingItem {
     itemName: "CleanExtrudersSequence"
     id: cleanExtrudersSequence
     width: 800
-    height: 440
+    height: 408
 
-    property alias actionButton: actionButton
-    property alias actionButton2: actionButton2
+    property alias contentLeftSide: contentLeftSide
+    property alias contentRightSide: contentRightSide
 
-    AnimatedImage {
-        id: animated_image
-        width: 400
-        height: 480
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -20
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        source: ""
-        cache: false
-        playing: false
-        opacity: 0
-        smooth: false
-    }
-
-    Image {
-        id: header_image
-        width: sourceSize.width
-        height: sourceSize.height
-        anchors.verticalCenterOffset: -20
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
-        source: ""
-        opacity: 1.0
-    }
-
-    Item {
-        id: mainItem
-        width: 400
-        height: 250
+    ContentLeftSide {
+        id: contentLeftSide
+        animatedImage {
+            source: "qrc:/img/scrub_nozzles.gif"
+            visible: false
+        }
+        image {
+            source: "qrc:/img/check_nozzles_clean.png"
+            visible: true
+        }
+        loadingIcon {
+            visible: false
+        }
         visible: true
-        anchors.left: parent.left
-        anchors.leftMargin: 400
-        anchors.verticalCenter: parent.verticalCenter
-        opacity: 1.0
-
-        Text {
-            id: title
-            width: 350
-            text: qsTr("CHECK EXTRUDER NOZZLES")
-            antialiasing: false
-            smooth: false
-            font.letterSpacing: 3
-            wrapMode: Text.WordWrap
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 26
-            font.weight: Font.Bold
-            lineHeight: 1.2
-            opacity: 1.0
-        }
-
-        Text {
-            id: subtitle
-            width: 350
-            wrapMode: Text.WordWrap
-            anchors.top: title.bottom
-            anchors.topMargin: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 18
-            font.weight: Font.Light
-            text: qsTr("If there is material on the tips of the extruders, use the steel brush to clean them in the next steps.")
-            lineHeight: 1.2
-            opacity: 1.0
-        }
-
-        RoundedButton {
-            id: actionButton
-            label: qsTr("CLEAN EXTRUDERS")
-            buttonWidth: 310
-            buttonHeight: 50
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: subtitle.bottom
-            anchors.topMargin: 25
-            opacity: 1.0
-        }
-
-        RoundedButton {
-            id: actionButton2
-            label: qsTr("SKIP")
-            buttonWidth: 120
-            buttonHeight: 50
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: actionButton.bottom
-            anchors.topMargin: 15
-            opacity: 0.0
-        }
-
-        RowLayout {
-            id: temperatureDisplay
-            anchors.top: subtitle.bottom
-            anchors.topMargin: 25
-            width: children.width
-            height: 35
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            spacing: 10
-            opacity: 0
-
-            Text {
-                id: extruder_A_current_temperature_text
-                text: bot.extruderACurrentTemp + "C"
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                id: divider_rectangle1
-                width: 1
-                height: 25
-                color: "#ffffff"
-            }
-
-            Text {
-                id: extruder_A_target_temperature_text
-                text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
-                           "50C" :
-                           (bot.extruderATargetTemp + "C")
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                width: 10
-                color: "#000000"
-            }
-
-            Text {
-                id: extruder_B_current_temperature_text
-                text: bot.extruderBCurrentTemp + "C"
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                id: divider_rectangle2
-                width: 1
-                height: 25
-                color: "#ffffff"
-            }
-
-            Text {
-                id: extruder_B_target_temperature_text
-                text: (bot.process.stateType == ProcessStateType.CoolingNozzle) ?
-                          "50C" :
-                          (bot.extruderBTargetTemp + "C")
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-        }
     }
 
-    LoadingIcon {
-        id: loadingIcon
-        anchors.verticalCenterOffset: -30
-        anchors.left: parent.left
-        anchors.leftMargin: 80
-        anchors.verticalCenter: parent.verticalCenter
-        opacity: 0
+    ContentRightSide {
+        id: contentRightSide
+        textHeader {
+            text: qsTr("CLEAN EXTRUDER NOZZLES")
+            visible: true
+        }
+        textBody {
+            text: qsTr("Cleaning is not required the first time using the extruders. Otherwise, inspect the tips of the extruder for excess material.")
+            visible: true
+        }
+        buttonPrimary {
+            text: qsTr("CLEAN EXTRUDERS")
+            visible: true
+        }
+        buttonSecondary1 {
+            text: qsTr("SKIP")
+            visible: true
+        }
+        temperatureStatus {
+            visible: false
+        }
+
         visible: true
     }
 
     states: [
         State {
             name: "check_nozzle_clean"
-            when: bot.process.stateType == ProcessStateType.CheckNozzleClean
+            when: enabled && bot.process.stateType == ProcessStateType.CheckNozzleClean
 
             PropertyChanges {
-                target: animated_image
-                source: ""
-                opacity: 0
+                target: contentLeftSide.animatedImage
+                visible: false
             }
 
             PropertyChanges {
-                target: header_image
-                source: "qrc:/img/check_nozzles_clean.png"
-                opacity: 1
+                target: contentLeftSide.image
+                visible: true
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
+                target: contentLeftSide.loadingIcon
+                visible: false
             }
 
             PropertyChanges {
-                target: title
-                text: qsTr("CHECK EXTRUDER NOZZLES")
-                anchors.topMargin: -20
-                font.pixelSize: 22
-                opacity: 1.0
+                target: contentRightSide.textHeader
+                visible: true
             }
 
             PropertyChanges {
-                target: subtitle
-                text: qsTr("If there is material on the tips of the extruders, use the steel brush to clean them in the next steps.")
-                font.pixelSize: 18
-                opacity: 1.0
+                target: contentRightSide.textBody
+                visible: true
             }
 
             PropertyChanges {
-                target: actionButton
-                label_width: 300
-                buttonWidth: 300
-                label: qsTr("CLEAN EXTRUDERS")
-                opacity: 1.0
+                target: contentRightSide.buttonPrimary
+                visible: true
             }
 
             PropertyChanges {
-                target: actionButton2
-                label: qsTr("SKIP")
-                buttonWidth: 120
-                buttonHeight: 50
-                opacity: 1.0
+                target: contentRightSide.buttonSecondary1
+                visible: true
             }
 
             PropertyChanges {
-                target: loadingIcon
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
+                target: contentRightSide.temperatureStatus
+                visible: false
             }
         },
 
         State {
             name: "heating_nozzle"
-            when: bot.process.stateType == ProcessStateType.HeatingNozzle
+            when: enabled && bot.process.stateType == ProcessStateType.HeatingNozzle
 
             PropertyChanges {
-                target: animated_image
-                source: ""
-                opacity: 0
+                target: contentLeftSide.animatedImage
+                visible: false
             }
 
             PropertyChanges {
-                target: header_image
-                opacity: 0
+                target: contentLeftSide.image
+                visible: false
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
+                target: contentLeftSide.loadingIcon
+                icon_image: LoadingIcon.Loading
+                visible: true
             }
 
             PropertyChanges {
-                target: title
-                text: qsTr("EXTRUDERS\nHEATING UP")
-                font.pixelSize: 22
-                opacity: 1.0
+                target: contentRightSide.textHeader
+                text: qsTr("HEATING")
+                visible: true
             }
 
             PropertyChanges {
-                target: subtitle
-                text: qsTr("The extruders are heating up. Please wait to clean nozzles.")
-                font.pixelSize: 18
-                opacity: 1.0
+                target: contentRightSide.temperatureStatus
+                visible: true
             }
 
             PropertyChanges {
-                target: actionButton
-                opacity: 0
+                target: contentRightSide.textBody
+                visible: false
             }
 
             PropertyChanges {
-                target: actionButton2
-                opacity: 0
+                target: contentRightSide.buttonPrimary
+                visible: false
             }
 
             PropertyChanges {
-                target: temperatureDisplay
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 1.0
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
         },
 
         State {
             name: "clean_nozzle"
-            when: bot.process.stateType == ProcessStateType.CleanNozzle ||
-                  bot.process.stateType == ProcessStateType.FinishCleaning
+            when: enabled && bot.process.stateType == ProcessStateType.CleanNozzle
 
             PropertyChanges {
-                target: header_image
-                opacity: 0
+                target: contentLeftSide.animatedImage
+                visible: true
             }
 
             PropertyChanges {
-                target: animated_image
-                source: "qrc:/img/scrub_nozzles.gif"
-                playing: true
-                opacity: 1
+                target: contentLeftSide.image
+                visible: false
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
+                target: contentLeftSide.loadingIcon
+                visible: false
             }
 
             PropertyChanges {
-                target: title
+                target: contentRightSide.textHeader
                 text: qsTr("CLEAN EXTRUDER NOZZLES")
-                font.pixelSize: 22
-                opacity: 1.0
+                visible: true
             }
 
             PropertyChanges {
-                target: subtitle
+                target: contentRightSide.textBody
                 text: qsTr("Use the provided brush to clean the tips of the extruders for the most accurate calibration.")
-                font.pixelSize: 18
-                opacity: 1.0
+                visible: true
             }
 
             PropertyChanges {
-                target: actionButton
-                label_width: 100
-                buttonWidth: 100
-                label: qsTr("NEXT")
-                opacity: {
-                    bot.process.stateType == ProcessStateType.FinishCleaning ?
-                                1.0 : 0
-                }
+                target: contentRightSide.temperatureStatus
+                visible: false
             }
 
             PropertyChanges {
-                target: actionButton2
-                opacity: 0
+                target: contentRightSide.buttonPrimary
+                visible: false
             }
 
             PropertyChanges {
-                target: loadingIcon
-                opacity: 0
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
 
+
+        },
+
+        State {
+            name: "finish_cleaning"
+            when: enabled && bot.process.stateType == ProcessStateType.FinishCleaning
+            extend: "clean_nozzle"
             PropertyChanges {
-                target: temperatureDisplay
-                opacity: 0
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+                visible: true
             }
         },
 
         State {
             name: "cooling_nozzle"
-            when: bot.process.stateType == ProcessStateType.CoolingNozzle
+            when: enabled && bot.process.stateType == ProcessStateType.CoolingNozzle
+            extend: "heating_nozzle"
 
             PropertyChanges {
-                target: animated_image
-                source: ""
-                opacity: 0
+                target: contentRightSide.textHeader
+                text: qsTr("COOLING")
+                visible: true
             }
 
             PropertyChanges {
-                target: header_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("COOLING EXTRUDER NOZZLES")
-                font.pixelSize: 22
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: subtitle
+                target: contentRightSide.textBody
                 text: qsTr("The process will continue after the nozzles cool down.")
-                font.pixelSize: 18
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton2
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: temperatureDisplay
-                opacity: 1.0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                opacity: 1.0
+                visible: true
             }
         }
     ]

@@ -24,7 +24,7 @@ ListView {
         }
 
         Component.onCompleted: {
-            this.onClicked.connect(uiLogClBtn)
+            this.onReleased.connect(uiLogClBtn)
         }
 
         function uiLogClBtn() {

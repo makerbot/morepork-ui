@@ -76,13 +76,13 @@ ErrorScreenForm {
     }
 
     button1 {
-        disable_button: {
+        enabled: {
             if (state == "print_lid_open_error" ||
                state == "print_door_open_error" ||
                state == "filament_jam_error" ||
                state == "extruder_oof_error_state1") {
-                bot.process.stateType != ProcessStateType.Paused &&
-                bot.process.stateType != ProcessStateType.Failed
+                bot.process.stateType == ProcessStateType.Paused ||
+                bot.process.stateType == ProcessStateType.Failed
             }
             else if (state == "filament_bay_oof_error" ||
                      state == "extruder_oof_error_state2") {
@@ -98,31 +98,30 @@ ErrorScreenForm {
                 // material spool on the bay for the paused print. Skip
                 // the material check when using experimental extruder.
                 if(bot.process.stateType != ProcessStateType.Paused) {
-                   true
+                   false
                 } else if(bot.process.stateType == ProcessStateType.Paused) {
                     if(materialPage.isUsingExpExtruder(bot.process.errorSource + 1)) {
                         // Allow loading if the offending extruder is an experimental
                         // extruder
-                        false
+                        true
                     } else {
                         // For normal extruders only allow loading if the bay material
                         // matches the print material which is the same logic used in the
                         // material page.
                         isExtruderAError() ?
-                            printPage.print_model_material != materialPage.bay1.filamentMaterial :
-                            printPage.print_support_material != materialPage.bay2.filamentMaterial
+                            !(printPage.print_model_material != materialPage.bay1.filamentMaterial) :
+                            !(printPage.print_support_material != materialPage.bay2.filamentMaterial)
                     }
                 }
             }
             else if (state == "calibration_failed") {
-                bot.process.type != ProcessType.None
+                bot.process.type == ProcessType.None
             }
             else {
-                false
+                true
             }
         }
 
-        button_mouseArea {
             onClicked: {
                 // Some errors have multiple instructional screens
                 // so the button in the first of such screens shouldn't
@@ -200,22 +199,20 @@ ErrorScreenForm {
                     // just clear the error
                 }
             }
-        }
     }
 
     button2 {
-        disable_button: {
+        enabled: {
             if (state == "filament_jam_error") {
-                bot.process.stateType != ProcessStateType.Paused
+                bot.process.stateType == ProcessStateType.Paused
             } else {
-                false
+                true
             }
         }
 
-        button_mouseArea {
-            onClicked: {
-                if(state == "filament_jam_error") {
-                    if(bot.process.stateType == ProcessStateType.Paused) {
+        onClicked: {
+            if(state == "filament_jam_error") {
+                if(bot.process.stateType == ProcessStateType.Paused) {
                         // Unload
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
@@ -223,7 +220,6 @@ ErrorScreenForm {
                     }
                 }
                 acknowledgeError()
-            }
         }
     }
 }
