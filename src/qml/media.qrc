@@ -198,6 +198,8 @@
         <file alias="extruder_labs.png">images/extruder_id/extruder_labs.png</file>
         <file alias="extruder_labs_ht.png">images/extruder_id/extruder_labs_ht.png</file>
         <file alias="extruder_material_error.png">images/extruder_material_error.png</file>
+        <file alias="extruder_filament_jam_left.png">images/extruder_filament_jam_left.png</file>
+        <file alias="extruder_filament_jam_right.png">images/extruder_filament_jam_right.png</file>
         <file alias="process_complete_small.png">images/process_complete_small.png</file>
         <file alias="process_error_small.png">images/process_error_small.png</file>
         <file alias="icon_factory_reset.png">images/icon_factory_reset.png</file>
