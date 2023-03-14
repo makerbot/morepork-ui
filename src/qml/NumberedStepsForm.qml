@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.12
 ColumnLayout {
     property var steps: []
     property int stepBegin: 1
+    property int usedTextWidth: parent.width
     spacing: 24
 
     Repeater {
@@ -39,8 +40,13 @@ ColumnLayout {
                 width: parent.width
                 text: modelData
                 font.weight: Font.Normal
-                Layout.preferredWidth: parent.width
+                Layout.alignment: Text.AlignLeft
+                Layout.preferredWidth: usedTextWidth
+
             }
+
+
         }
     }
+
 }
