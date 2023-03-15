@@ -254,7 +254,7 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR.")
+                        qsTr("PRINT PAUSED\n\nCLOSE PRINTER DOOR")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
                     } else {
@@ -269,7 +269,7 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("Close the build chamber door to\ncontinue printing.")
+                        qsTr("Close the printer door to resume.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("Close the build chamber door and\nrestart print.")
                     } else {
@@ -292,6 +292,7 @@ LoggingItem {
                     }
                 }
                 visible: true
+                enabled: (bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
             }
         },
 
