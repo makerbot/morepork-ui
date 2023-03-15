@@ -375,17 +375,15 @@ Item {
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
+            property var imageString: getImageForPrinter("remove_top_lid.png")
 
             Image {
                 id: handle_top_lid_image
                 width: sourceSize.width
                 height: sourceSize.height
-                source: (bot.machineType == MachineType.Magma)
-                        ? "qrc:/img/methodxl_remove_top_lid.png"
-                        : "qrc:/img/method_remove_top_lid.png"
+                source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
                 visible: true
                 smooth: false
-
             }
 
             AnimatedImage {
@@ -555,11 +553,10 @@ Item {
 
                     PropertyChanges {
                         target: handle_top_lid_image
-                        source:  (bot.machineType == MachineType.Magma)
-                                 ? "qrc:/img/methodxl_error_close_lid.png"
-                                 : "qrc:/img/method_error_close_lid.png"
+                        source:  qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
                         visible: true
                     }
+
                     PropertyChanges {
                         target: attach_extruder_image
                         playing: false
