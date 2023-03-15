@@ -325,8 +325,9 @@ ApplicationWindow {
     // in BW-4975 (https://makerbot.atlassian.net/browse/BW-4975)
     // or atleast until single extruder support is launched to public?
     property bool extruderComboMismatch: {
+        (bot.extruderAPresent && bot.extruderBPresent) && (
         (bot.extruderAType == ExtruderType.MK14 && bot.extruderBType == ExtruderType.MK14_HOT) ||
-        (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14)
+        (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14))
     }
 
     property bool experimentalExtruderInstalled: {
@@ -543,17 +544,18 @@ ApplicationWindow {
                     }
                 }
 
+
                 // MoreporkUI.ExtruderPage
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     smooth: false
                     visible: false
-                    ExtruderPage {
+                    MaterialPage {
                         id: extruderPage
+                        anchors.fill: parent
                     }
                 }
-
                 // MoreporkUI.SettingsPage
                 Item {
                     property var backSwiper: mainSwipeView
@@ -1861,8 +1863,10 @@ ApplicationWindow {
             }
         }
 
-        ModalPopup {
+        CustomPopup {
+            id: wrongExtruderPopup
             popupName: "ExtruderMismatch"
+            popupHeight: wrongExtColumnLayout.height+70
             // tool_type_correct flag is sent in system notification by
             // kaiten which determines the "correctness" by looking through
             // printer settings.json under 'supported_tool_types' key.
@@ -1876,60 +1880,78 @@ ApplicationWindow {
                                          !extruderAToolTypeCorrect
             property bool supportExtWrong: extruderBPresent &&
                                          !extruderBToolTypeCorrect
-            id: wrongExtruderPopup
             visible: modelExtWrong || supportExtWrong || extruderComboMismatch
-            disableUserClose: true
-            popup_contents.contentItem: Item {
-                anchors.fill: parent
-                ColumnLayout {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    height: 150
 
-                    TitleText {
-                        text: qsTr("WRONG EXTRUDER TYPE DETECTED")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    }
-                    BodyText{
-                        text: {
-                            if (extruderComboMismatch) {
-                                qsTr("A Model 1XA Extruder can only be used with a " +
-                                     "Support 2XA Extruder.\nA Model 1A Extruder can " +
-                                     "only be used with a Support 2A Extruder.")
-                            }
-                            else if (bot.machineType == MachineType.Fire) {
-                                // V1 printers support only mk14 extruders.
-                                if (wrongExtruderPopup.modelExtWrong) {
-                                    qsTr("Please insert a Model 1A Performance Extruder "+
-                                         "into slot 1\nto continue attaching the "+
-                                         "extruders.")
-                                } else if (wrongExtruderPopup.supportExtWrong) {
-                                    qsTr("Please insert a Support 2A Performance Extruder "+
-                                         "into slot 2\nto continue attaching the "+
-                                         "extruders. Currently only model\nand support "+
-                                         "printing is supported.")
-                                } else {
-                                    ""
-                                }
+            ColumnLayout {
+                id: wrongExtColumnLayout
+                height: children.height
+                width: 630
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 20
+                //height: 150
+
+                Image {
+                    source: "qrc:/img/process_error_small.png"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextHeadline {
+                    text: qsTr("WRONG EXTRUDER TYPE DETECTED")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+                TextBody{
+                    text: {
+                        if (extruderComboMismatch) {
+                            qsTr("A Model 1XA Extruder can only be used with a " +
+                                 "Support 2XA Extruder. A Model 1A Extruder can " +
+                                 "only be used with a Support 2A Extruder.")
+                        }
+                        else if (bot.machineType == MachineType.Fire) {
+                            // V1 printers support only mk14 extruders.
+                            if (wrongExtruderPopup.modelExtWrong) {
+                                qsTr("Please insert a Model 1A Performance Extruder "+
+                                "into slot 1\nto continue attaching the "+
+                                "extruders.")
+                            } else if (wrongExtruderPopup.supportExtWrong) {
+                                qsTr("Please insert a Support 2A Performance Extruder "+
+                                "into slot 2\nto continue attaching the "+
+                                "extruders. Currently only model\nand support "+
+                                "printing is supported.")
                             } else {
-                                // Hot bot (V2) supports both mk14 and mk14_hot extruders.
-                                if (wrongExtruderPopup.modelExtWrong) {
-                                    qsTr("Please insert a Model 1A or Model 1XA Performance\n" +
-                                         "Extruder into slot 1 to continue attaching the " +
-                                         "extruders.")
-                                } else if (wrongExtruderPopup.supportExtWrong) {
-                                    qsTr("Please insert a Support 2A or Support 2XA Performance\n" +
-                                         "Extruder into slot 2 to continue attaching the extruders.\n" +
-                                         "Currently only model and support printing is supported. ")
-                                } else {
-                                    ""
-                                }
+                                emptyString
+                            }
+                        } else {
+                            // Hot bot (V2) supports both mk14 and mk14_hot extruders.
+                            if (wrongExtruderPopup.modelExtWrong) {
+                                qsTr("Please insert a Model 1A or Model 1XA Performance " +
+                                     "Extruder into slot 1 to continue attaching the " +
+                                     "extruders.")
+                            } else if (wrongExtruderPopup.supportExtWrong) {
+                                qsTr("Please insert a Support 2A or Support 2XA Performance " +
+                                     "Extruder into slot 2 to continue attaching the extruders. " +
+                                     "Currently only model and support printing is supported.")
+                            } else {
+                                emptyString
                             }
                         }
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
+                    style: TextBody.Large
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    wrapMode: Text.WordWrap
+                }
+
+                TextBody {
+                    text: "\nmakerbot.com/compatibility"
+                    style: TextBody.Large
+                    font.weight: Font.Bold
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    wrapMode: Text.WordWrap
+                    font.letterSpacing: 1.1
                 }
             }
         }

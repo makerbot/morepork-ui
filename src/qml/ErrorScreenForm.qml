@@ -217,7 +217,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: "qrc:/img/error_close_lid.png"
+                source: bot.MachineType == MachineType.Magma ?
+                            "qrc:/img/methodxl_error_close_lid.png":
+                            "qrc:/img/method_error_close_lid.png"
                 visible: true
             }
 
