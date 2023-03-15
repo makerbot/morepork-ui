@@ -375,7 +375,6 @@ Item {
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
-            property var imageString: getImageForPrinter("remove_top_lid.png")
 
             Image {
                 id: handle_top_lid_image
