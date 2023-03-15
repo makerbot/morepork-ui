@@ -5,6 +5,7 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "ErrorScreen"
@@ -179,7 +180,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: "qrc:/img/error_close_door.png"
+                source: {
+                    if(bot.machineType == MachineType.Magma){
+                        "qrc:/img/methodxl_error_close_door.png"
+                    } else {
+                        "qrc:/img/error_close_door.png"
+                    }
+                }
                 visible: true
             }
 
@@ -217,7 +224,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: "qrc:/img/error_close_lid.png"
+                source: {
+                    if(bot.machineType == MachineType.Magma){
+                        "qrc:/img/methodxl_error_close_lid.png"
+                    } else {
+                        "qrc:/img/error_close_lid.png"
+                    }
+                }
                 visible: true
             }
 
@@ -292,7 +305,7 @@ LoggingItem {
                     }
                 }
                 visible: true
-                enabled: (bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
+                enabled: !(bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
             }
         },
 
@@ -305,9 +318,9 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED.\nCLOSE THE\nTOP LID.")
+                        qsTr("PRINT PAUSED\n\nCLOSE TOP LID")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("PRINT FAILED.\nCLOSE THE\nTOP LID.")
+                        qsTr("PRINT FAILED.\nCLOSE TOP LID.")
                     } else {
                         emptyString
                     }
@@ -320,7 +333,7 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("Put the lid back on the printer\nto continue printing.")
+                        qsTr("Close the top lid to resume")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("Put the lid back on the printer and\nrestart print.")
                     } else {
@@ -343,6 +356,7 @@ LoggingItem {
                     }
                 }
                 visible: true
+                enabled: !(bot.chamberErrorCode == 45)
             }
         },
 
