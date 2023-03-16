@@ -11,18 +11,20 @@ Item {
         // the key here corresponds to the key there, so if more options need to be added
         // make sure to add the key in both places.
         id: options
-        ListElement { name: "Warping from buildplate"
+        ListElement { name: "WARPING FROM BUILDPLATE"
                       key: "warping_from_buildplate"}
-        ListElement { name: "Stringiness"
+        ListElement { name: "STRINGINESS"
                       key: "stringiness"}
-        ListElement { name: "Gap in walls"
-                      key: "gap_in_walls"}
-        ListElement { name: "Bad layer alignment"
+        ListElement { name: "GAP IN WALLS"
+                      key: "gaps_in_walls"}
+        ListElement { name: "BAD LAYER ALIGNMENT"
                       key: "bad_layer_alignment"}
-        ListElement { name: "Small feature defects"
+        ListElement { name: "SMALL FEATURE DEFECTS"
                       key: "small_feature_defects"}
-        ListElement { name: "Frequent extruder jams"
+        ListElement { name: "FREQUENCT EXTRUDER JAMS"
                       key: "frequent_extruder_jams"}
+        ListElement { name: "OTHER"
+                      key: "other"}
     }
     Rectangle {
         anchors.fill: parent
@@ -98,12 +100,6 @@ Item {
                         color:  selected ? "#ffffff" : "#000000"
                         border.width: 2
                         border.color: "#ffffff"
-
-                        Image{
-                            source: "qrc:/img/check_mark_small_black.png"
-                            visible: selected
-                            anchors.fill: parent
-                        }
                    }
                 contentItem: TextBody {
                     style: TextBody.Large
