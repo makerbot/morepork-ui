@@ -180,13 +180,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: {
-                    if(bot.machineType == MachineType.Magma){
-                        "qrc:/img/methodxl_error_close_door.png"
-                    } else {
-                        "qrc:/img/error_close_door.png"
-                    }
-                }
+                source: ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_door"))
                 visible: true
             }
 
@@ -224,13 +218,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: {
-                    if(bot.machineType == MachineType.Magma){
-                        "qrc:/img/methodxl_error_close_lid.png"
-                    } else {
-                        "qrc:/img/error_close_lid.png"
-                    }
-                }
+                source:  ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_lid"))
                 visible: true
             }
 
