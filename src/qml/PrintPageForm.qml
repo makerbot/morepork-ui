@@ -502,7 +502,7 @@ Item {
 
             TextSubheader {
                 id: noFilesText
-                font.weight: Font.Bold
+                style: TextSubheader.Bold
                 text: qsTr("NO PRINTABLE FILES")
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter

@@ -20,7 +20,6 @@ MenuItem {
         id: menuItemLabel
         text: qsTr("Menu Item")
         horizontalAlignment: Text.AlignHCenter
-        font.weight: Font.Light
         color: parent.enabled ? pressed ? "#000000" : "#ffffff" : "#4d4d4d"
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter

@@ -22,12 +22,10 @@ Item {
         else {
             switch(filamentBayID) {
             case 1:
-                (filamentRequired/
-                materialPage.bay1.filamentQuantity) * 100
+                (filamentRequired/materialPage.bay1.filamentQuantity) * 100
                 break;
             case 2:
-                (filamentRequired/
-                materialPage.bay2.filamentQuantity) * 100
+                (filamentRequired/materialPage.bay2.filamentQuantity) * 100
                 break;
             default:
                 0
