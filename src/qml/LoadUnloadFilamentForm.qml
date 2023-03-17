@@ -6,6 +6,7 @@ import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "LoadUnloadFilament"
@@ -793,7 +794,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
+                text: {
+                    if(bot.machineType != MachineType.Magma) {
+                        qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
+                    }else {
+                        qsTr("Open the latch to access the material case. Carefully rewind the material onto the spool and seal in bag.\n\nClose the latch to prevent moisture intake.")
+                    }
+                }
                 visible: true
             }
 
@@ -823,7 +830,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.animatedImage
-                visible: true
+                visible: bot.machineType != MachineType.Magma
                 source: bayID == 1 ?
                             "qrc:/img/rewind_spool_1.gif" :
                             "qrc:/img/rewind_spool_2.gif"
@@ -831,7 +838,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                visible: false
+                source: bayID == 1 ?
+                            "qrc:/img/methodxl_rewind_spool_1.png" :
+                            "qrc:/img/methodxl_rewind_spool_2.png"
             }
 
             PropertyChanges {
