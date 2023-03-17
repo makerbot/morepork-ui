@@ -15,7 +15,7 @@ Item {
                     materialPage.bay1.usingExperimentalExtruder)
             break
         case 2:
-            !(materialPage.bay2.filamentMaterial == print_support_material)
+            materialPage.bay2.filamentMaterial != print_support_material
             break
         default:
             false
