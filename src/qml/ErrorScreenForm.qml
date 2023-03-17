@@ -9,9 +9,6 @@ import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "ErrorScreen"
-    width: 800
-    height: 440
-    smooth: false
 
     // Qt JS engine updates the dependency graph
     // for all components in the DOM even when they
@@ -174,11 +171,6 @@ LoggingItem {
             name: "door_open_error"
 
             PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: true
-            }
-
-            PropertyChanges {
                 target: contentLeftItem.image
                 source: ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_door"))
                 visible: true
@@ -210,11 +202,6 @@ LoggingItem {
 
         State {
             name: "lid_open_error"
-
-            PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: true
-            }
 
             PropertyChanges {
                 target: contentLeftItem.image
@@ -406,11 +393,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textHeader
                 text: qsTr("MATERIAL JAM\nDETECTED")
                 visible: true
@@ -420,7 +402,7 @@ LoggingItem {
                 target: contentRightItem.textBody
                 text: {
                     qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.%2").arg(
-                    (bot.process.extruderAJammed ? qsTr("Model Extruder 1") : qsTr("Support Extruder 2")),
+                    (bot.process.extruderAJammed ? qsTr("Model Extruder 1") : qsTr("Support Extruder 2"))).arg(
                     (materialPage.shouldUserAssistPurging(bot.process.errorSource+1)) ?
                              (qsTr("\n%1 may require manual\nassistance for purging.").arg((((bot.process.errorSource+1) == 1) ?
                                                                                                 materialPage.bay1 :
@@ -456,11 +438,6 @@ LoggingItem {
                             "qrc:/img/error_oof_bay1.png" :
                             "qrc:/img/error_oof_bay2.png"
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
             }
 
             PropertyChanges {
@@ -515,11 +492,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textHeader
                 text: {
                     qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
@@ -569,11 +541,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textHeader
                 text: {
                     qsTr("REMOVE EMPTY\nSPOOL")
@@ -610,11 +577,6 @@ LoggingItem {
 
         State {
             name: "no_tool_connected"
-
-            PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
-            }
 
             PropertyChanges {
                 target: contentLeftItem.image
@@ -662,11 +624,6 @@ LoggingItem {
                 anchors.leftMargin: 100
                 source: "qrc:/img/error.png"
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
             }
 
             PropertyChanges {
@@ -788,11 +745,6 @@ LoggingItem {
         },
         State {
             name: "chamber_fan_failure"
-
-            PropertyChanges {
-                target: contentLeftItem.errorIcon
-                visible: false
-            }
 
             PropertyChanges {
                 target: contentLeftItem.image
