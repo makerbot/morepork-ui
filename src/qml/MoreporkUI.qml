@@ -57,6 +57,10 @@ ApplicationWindow {
         }
     }
 
+    Keys.onPressed: (event)=> {
+                        console.log("Key %1 pressed".arg(event.key))
+                    }
+
     property bool inFreStep: false
     property bool isFreComplete: fre.currentFreStep == FreStep.FreComplete
     property int currentFreStep: fre.currentFreStep
