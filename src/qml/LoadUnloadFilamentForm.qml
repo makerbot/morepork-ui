@@ -253,8 +253,6 @@ LoggingItem {
         id: contentLeftItem
         smooth: false
         animatedImage.visible: true
-
-        image.visible: (animatedImage.visible == false) ? true : false
     }
 
     ContentRightSide {
@@ -358,6 +356,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 visible: false
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "pushing_filament"
@@ -428,6 +430,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 loading: true
                 visible: true
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
             }
         },
         State {
@@ -518,6 +524,10 @@ LoggingItem {
                 loading: true
                 visible: true
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "extrusion"
@@ -590,6 +600,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 visible: false
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "unloading_filament"
@@ -660,6 +674,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 loading: true
                 visible: true
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
             }
         },
         State {
@@ -763,6 +781,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 visible: false
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "unloaded_filament"
@@ -795,13 +817,19 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    if(bot.machineType != MachineType.Magma) {
-                        qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
+                    if(bot.machineType == MachineType.Magma) {
+                        qsTr("Open the latch to access the material case. Carefully rewind the material onto the spool and seal in bag.")
                     }else {
-                        qsTr("Open the latch to access the material case. Carefully rewind the material onto the spool and seal in bag.\n\nClose the latch to prevent moisture intake.")
+                        qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
                     }
                 }
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: (bot.machineType == MachineType.Magma)
+                text: qsTr("Close the latch to prevent moisture intake.")
             }
 
             PropertyChanges {
@@ -841,6 +869,7 @@ LoggingItem {
                 source: bayID == 1 ?
                             "qrc:/img/methodxl_rewind_spool_1.png" :
                             "qrc:/img/methodxl_rewind_spool_2.png"
+                visible: bot.machineType == MachineType.Magma
             }
 
             PropertyChanges {
@@ -850,6 +879,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
+                visible: false
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
                 visible: false
             }
         },
@@ -941,6 +974,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
+                visible: false
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
                 visible: false
             }
         }
