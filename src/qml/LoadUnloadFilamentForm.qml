@@ -830,6 +830,7 @@ LoggingItem {
                 target: contentRightItem.textBody1
                 visible: (bot.machineType == MachineType.Magma)
                 text: qsTr("Close the latch to prevent moisture intake.")
+                font.weight: Font.Normal
             }
 
             PropertyChanges {
