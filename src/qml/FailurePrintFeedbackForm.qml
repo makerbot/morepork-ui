@@ -15,7 +15,7 @@ Item {
                       key: "warping_from_buildplate"}
         ListElement { name: "STRINGINESS"
                       key: "stringiness"}
-        ListElement { name: "GAP IN WALLS"
+        ListElement { name: "GAPS IN WALLS"
                       key: "gaps_in_walls"}
         ListElement { name: "BAD LAYER ALIGNMENT"
                       key: "bad_layer_alignment"}
@@ -94,13 +94,12 @@ Item {
                     }
                 }
                 indicator:
-                    Rectangle {
-                        width: 36
-                        height: 36
-                        color:  selected ? "#ffffff" : "#000000"
-                        border.width: 2
-                        border.color: "#ffffff"
-                   }
+                    Image {
+                        id: checkboxContent
+                        sourceSize.width: 36
+                        sourceSize.height: 36
+                        source: selected ? "qrc:/img/feedback_selected_box.png" : "qrc:/img/feedback_checkbox.png"
+                    }
                 contentItem: TextBody {
                     style: TextBody.Large
                     font.weight: Font.Bold

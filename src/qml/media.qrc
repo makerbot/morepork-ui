@@ -223,5 +223,7 @@
         <file alias="setup_procedures.png">images/setup_procedures.png</file>
         <file alias="icon_fingerprint.png">images/icon_fingerprint.png</file>
         <file alias="error_image_overlay.png">images/error_image_overlay.png</file>
+        <file alias="feedback_checkbox.png">images/feedback_checkbox.png</file>
+        <file alias="feedback_selected_box.png">images/feedback_selected_box.png</file>
     </qresource>
 </RCC>
