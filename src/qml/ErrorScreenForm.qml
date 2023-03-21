@@ -242,9 +242,9 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED\n\nCLOSE PRINTER DOOR")
+                        qsTr("PRINT PAUSED.\n\nCLOSE PRINTER DOOR")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
+                        qsTr("PRINT FAILED.\nCLOSE PRINTER DOOR.")
                     } else {
                         emptyString
                     }
@@ -259,7 +259,7 @@ LoggingItem {
                        bot.process.stateType == ProcessStateType.Paused) {
                         qsTr("Close the printer door to resume.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("Close the build chamber door and\nrestart print.")
+                        qsTr("Close the printer door and restart print.")
                     } else {
                         emptyString
                     }
@@ -293,7 +293,7 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED\n\nCLOSE TOP LID")
+                        qsTr("PRINT PAUSED.\n\nCLOSE TOP LID")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("PRINT FAILED.\nCLOSE TOP LID.")
                     } else {
