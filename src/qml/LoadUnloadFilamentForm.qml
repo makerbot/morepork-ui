@@ -320,6 +320,7 @@ LoggingItem {
                         qsTr("LOADING FILAMENT")
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -345,6 +346,10 @@ LoggingItem {
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
+            }
+            PropertyChanges {
+                target: contentLeftItem.animatedImage
+                visible: false
             }
 
             PropertyChanges {
@@ -966,6 +971,7 @@ LoggingItem {
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
+                visible: true
             }
 
             PropertyChanges {
