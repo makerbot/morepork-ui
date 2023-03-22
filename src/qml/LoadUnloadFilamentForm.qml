@@ -6,6 +6,7 @@ import ProcessStateTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "LoadUnloadFilament"
@@ -252,8 +253,6 @@ LoggingItem {
         id: contentLeftItem
         smooth: false
         animatedImage.visible: true
-
-        image.visible: (animatedImage.visible == false) ? true : false
     }
 
     ContentRightSide {
@@ -321,6 +320,7 @@ LoggingItem {
                         qsTr("LOADING FILAMENT")
                     }
                 }
+                visible: true
             }
 
             PropertyChanges {
@@ -347,6 +347,10 @@ LoggingItem {
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
             }
+            PropertyChanges {
+                target: contentLeftItem.animatedImage
+                visible: false
+            }
 
             PropertyChanges {
                 target: contentRightItem.numberedSteps
@@ -355,6 +359,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
+                visible: false
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
                 visible: false
             }
         },
@@ -427,6 +435,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 loading: true
                 visible: true
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
             }
         },
         State {
@@ -517,6 +529,10 @@ LoggingItem {
                 loading: true
                 visible: true
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "extrusion"
@@ -589,6 +605,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 visible: false
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "unloading_filament"
@@ -659,6 +679,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 loading: true
                 visible: true
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
             }
         },
         State {
@@ -762,6 +786,10 @@ LoggingItem {
                 target: contentLeftItem.loadingIcon
                 visible: false
             }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: false
+            }
         },
         State {
             name: "unloaded_filament"
@@ -793,8 +821,21 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
+                text: {
+                    if(bot.machineType == MachineType.Magma) {
+                        qsTr("Open the latch to access the material case. Carefully rewind the material onto the spool and seal in bag.")
+                    }else {
+                        qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
+                    }
+                }
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: (bot.machineType == MachineType.Magma)
+                text: qsTr("Close the latch to prevent moisture intake.")
+                font.weight: Font.Normal
             }
 
             PropertyChanges {
@@ -823,7 +864,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.animatedImage
-                visible: true
+                visible: bot.machineType != MachineType.Magma
                 source: bayID == 1 ?
                             "qrc:/img/rewind_spool_1.gif" :
                             "qrc:/img/rewind_spool_2.gif"
@@ -831,7 +872,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                visible: false
+                source: bayID == 1 ?
+                            "qrc:/img/methodxl_rewind_spool_1.png" :
+                            "qrc:/img/methodxl_rewind_spool_2.png"
+                visible: bot.machineType == MachineType.Magma
             }
 
             PropertyChanges {
@@ -841,6 +885,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
+                visible: false
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
                 visible: false
             }
         },
@@ -923,6 +971,7 @@ LoggingItem {
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
+                visible: true
             }
 
             PropertyChanges {
@@ -932,6 +981,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
+                visible: false
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
                 visible: false
             }
         }
