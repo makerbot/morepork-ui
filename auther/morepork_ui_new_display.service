@@ -9,6 +9,8 @@ StartLimitBurst=2
 Nice=10
 Environment=QT_QPA_EGLFS_INTEGRATION=none
 Environment=QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS="rotate=180"
+Environment=QWS_KEYBOARD="LinuxInput:/dev/input/event0"
+Environment=QT_LOGGING_RULES=qt.qpa.input=true
 Type=simple
 ExecStart=/usr/bin/morepork_ui
 StandardOutput=null
