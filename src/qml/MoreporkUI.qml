@@ -61,7 +61,9 @@ ApplicationWindow {
         anchors.fill:parent
         focus: true
         Keys.onPressed: (event)=> {
-            console.info("Key %1 pressed".arg(event.key))
+            if(event.key == 16777399) {
+                console.info("Power key pressed")
+            }
         }
     }
 
