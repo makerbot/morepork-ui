@@ -5,8 +5,6 @@ import StorageFileTypeEnum 1.0
 import ProcessTypeEnum 1.0
 
 Item {
-    width: parent.width
-    height: parent.height
     anchors.fill: parent.fill
     anchors.verticalCenter: parent.verticalCenter
     anchors.horizontalCenter: parent.horizontalCenter
@@ -15,10 +13,9 @@ Item {
 
     RowLayout {
         id: print_page_row_layout
-        anchors.bottom: parent.bottom
+        anchors.fill: parent.fill
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
         anchors.topMargin: 15
         anchors.bottomMargin: 15
         spacing: 40
@@ -134,21 +131,18 @@ Item {
                     }
                 }
             }
-        }
-    }
+            // The File Options Pop up for this page
+            FileOptionsPopupMenu {
+                id: optionsMenu
+                width: details_item.width
+                y: startPrintButtonRow.y-height-8
 
-    // The File Options Pop up for this page
-    FileOptionsPopupMenu {
-        id: optionsMenu
-        width: details_item.width+15
-        x: startPrintButtonRow.x+width+45
-        y: startPrintButtonRow.y-startPrintButtonRow.height-8
-
-        onClosed: {
-            startPrintButton.enabled = true
-            moreOptionsButton.was_pressed = false
+                onClosed: {
+                    startPrintButton.enabled = true
+                    moreOptionsButton.was_pressed = false
+                }
+            }
         }
+
     }
 }
-
-
