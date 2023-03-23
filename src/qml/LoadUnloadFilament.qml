@@ -10,7 +10,7 @@ LoadUnloadFilamentForm {
     }
 
     acknowledgeButton {
-        button_mouseArea.onClicked: {
+        onClicked: {
             if(state == "feed_filament") {
                 state = "preheating"
             }
@@ -54,7 +54,7 @@ LoadUnloadFilamentForm {
     }
 
     retryButton {
-        button_mouseArea.onClicked: {
+        onClicked: {
             state = "base state"
             var temperature_list = [0,0]
             if(retryTemperature > 0) {

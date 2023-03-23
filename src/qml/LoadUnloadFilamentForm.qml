@@ -14,11 +14,9 @@ LoggingItem {
     height: 420
 
     property alias snipMaterial: snipMaterial
-    property alias acknowledgeButton: acknowledgeButton
-    property alias retryButton: retryButton
+    property alias acknowledgeButton: contentRightItem.buttonPrimary
+    property alias retryButton: contentRightItem.buttonSecondary1
     property bool snipMaterialAlertAcknowledged: false
-    property int currentTemperature: bayID == 1 ? bot.extruderACurrentTemp : bot.extruderBCurrentTemp
-    property int targetTemperature: bayID == 1 ? bot.extruderATargetTemp : bot.extruderBTargetTemp
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
     property int retryTemperature: 0
@@ -116,7 +114,7 @@ LoggingItem {
         // to not start properly, so disabling the retry
         // button and then enabling after a few seconds is
         // a quick hacky fix for this before launch.
-        retryButton.disable_button = true
+        contentRightItem.buttonSecondary1.enabled = false
         enableRetryButton.start()
     }
 
@@ -141,7 +139,7 @@ LoggingItem {
         case ProcessStateType.Done:
             snipMaterialAlertAcknowledged = false
             delayedEnableRetryButton()
-            // (sorry)
+            // (sorry) Update 2023 (from Shirley) sorry about the janky error checking here ;) 
             if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
                 state = "error"
@@ -228,19 +226,9 @@ LoggingItem {
         id: enableRetryButton
         interval: 3000
         onTriggered: {
-            retryButton.disable_button = false
+            contentRightItem.buttonSecondary1.enabled = true
         }
     }
-
-    LoadingIcon {
-        id: loading_gear
-        anchors.left: parent.left
-        anchors.leftMargin: 70
-        anchors.verticalCenterOffset: -20
-        anchors.verticalCenter: parent.verticalCenter
-        loading: false
-    }
-
     SnipMaterialScreen {
         id: snipMaterial
         z: 1
@@ -260,171 +248,45 @@ LoggingItem {
         visible: false
     }
 
-    Image {
-        id: static_image
-        width: 400
-        height: 480
-        anchors.verticalCenterOffset: -10
-        anchors.verticalCenter: parent.verticalCenter
-        source: ""
-        cache: false
-        opacity: (animated_image.opacity == 0) ?
-                     1 : 0
+    ContentLeftSide {
+        id: contentLeftItem
         smooth: false
+        animatedImage.visible: true
+
+        image.visible: (animatedImage.visible == false) ? true : false
     }
 
-    AnimatedImage {
-        id: animated_image
-        width: 400
-        height: 480
-        anchors.verticalCenterOffset: -10
-        anchors.verticalCenter: parent.verticalCenter
-        source: bayID == 1 ?
-                    "qrc:/img/place_spool_bay1.gif" :
-                    "qrc:/img/place_spool_bay2.gif"
-        cache: false
-        // Since this is the base state, settting playing to true
-        // makes the gif always keep playing even when this page is
-        // not visible which makes the entire UI lag.
-        playing: materialSwipeView.currentIndex == 2 &&
-                 (loadUnloadForm.state == "base state" ||
-                  loadUnloadForm.state == "feed_filament" ||
-                  loadUnloadForm.state == "loaded_filament" ||
-                  loadUnloadForm.state == "unloaded_filament") &&
-                 (!materialWarningPopup.opened &&
-                  !cancelLoadUnloadPopup.opened &&
-                  !materialPageDrawer.opened)
-        opacity: 1
-        smooth: false
-    }
+    ContentRightSide {
+        id: contentRightItem
 
-    Item {
-        id: contentItem
-        x: 400
-        y: -40
-        width: 400
-        height: 420
-        anchors.left: parent.left
-        anchors.leftMargin: 400
-
-        Text {
-            id: main_instruction_text
-            width: 375
-            color: "#cbcbcb"
+        textHeader {
             text: qsTr("OPEN BAY %1").arg(bayID)
-            font.capitalization: Font.AllUppercase
-            anchors.top: parent.top
-            anchors.topMargin: 100
-            font.letterSpacing: 4
-            wrapMode: Text.WordWrap
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            font.pixelSize: 20
-            lineHeight: 1.3
+            visible: true
         }
 
-        ColumnLayout {
-            id: instructionsList
-            width: 300
-            height: 200
-            anchors.top: main_instruction_text.bottom
-            anchors.topMargin: 18
-            opacity: 1.0
-
-            BulletedListItem {
-                id: bulletItem1
-                bulletNumber: "1"
-                bulletText: qsTr("Press side latch to unlock and\nopen bay %1").arg(bayID)
-            }
-
-            BulletedListItem {
-                id: bulletItem2
-                bulletNumber: "2"
-                bulletText: qsTr("Place a %1 material spool in\nthe bay").arg(
-                                    bayID == 1 ? qsTr("Model") : qsTr("Support"))
-            }
-
-            BulletedListItem {
-                id: bulletItem3
-                bulletNumber: "3"
-                bulletText: qsTr("Push the end of the material into\nthe slot until you feel it being\npulled in.")
-            }
+        numberedSteps {
+            steps: [
+                qsTr("Press side latch to unlock and\nopen bay %1").arg(bayID),
+                qsTr("Place a %1 material spool in\nthe bay").arg(
+                                    bayID == 1 ? qsTr("Model") : qsTr("Support")),
+                qsTr("Push the end of the material into\nthe slot until you feel it being\npulled in.")
+            ]
         }
 
-        Text {
-            id: instruction_description_text
-            width: 350
-            color: "#cbcbcb"
+        textBody {
             text: "\n\n\n"
-            anchors.top: main_instruction_text.bottom
-            anchors.topMargin: 30
-            wrapMode: Text.WordWrap
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.pixelSize: 18
-            lineHeight: 1.35
+        }
+        buttonPrimary {
+            text: qsTr("CONTINUE")
+        }
+        buttonSecondary1 {
+            text: qsTr("RETRY")   
         }
 
-        RoundedButton {
-            id: acknowledgeButton
-            label_width: 180
-            label: qsTr("CONTINUE")
-            buttonWidth: 180
-            buttonHeight: 50
-            anchors.top: instruction_description_text.bottom
-            anchors.topMargin: 20
-            opacity: 0
+        temperatureStatus {
+            showExtruder: (bayID == 1) ? TemperatureStatus.Extruder.Model : TemperatureStatus.Extruder.Support
         }
 
-        RoundedButton {
-            id: retryButton
-            label: qsTr("RETRY")
-            label_size: 18
-            buttonWidth: 150
-            buttonHeight: 50
-            anchors.left: acknowledgeButton.left
-            anchors.top: acknowledgeButton.bottom
-            anchors.leftMargin: 0
-            anchors.topMargin: 15
-            visible: false
-        }
-
-        RowLayout {
-            id: temperatureDisplay
-            anchors.top: main_instruction_text.bottom
-            anchors.topMargin: 20
-            width: children.width
-            height: 35
-            spacing: 10
-            visible: false
-
-            Text {
-                id: extruder_current_temperature_text
-                text: qsTr("%1C").arg(currentTemperature)
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Rectangle {
-                id: divider_rectangle
-                width: 1
-                height: 25
-                color: "#ffffff"
-            }
-
-            Text {
-                id: extruder_target_temperature_text
-                text: qsTr("%1C").arg(targetTemperature)
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-        }
     }
 
     states: [
@@ -451,7 +313,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
+                target: contentRightItem.textHeader
                 text: {
                     if (bot.hasFilamentBay) {
                         qsTr("%1 DETECTED").arg(materialName)
@@ -462,33 +324,38 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: qsTr("Push the end of the material into the slot until you feel it being pulled in.")
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: acknowledgeButton
-                opacity: 0
-                label: qsTr("CONTINUE")
-            }
-
-            PropertyChanges {
-                target: retryButton
                 visible: false
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 1
+                target: contentRightItem.buttonPrimary
+                visible: false
+                text: qsTr("CONTINUE")
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.image
+                visible: true
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
             }
 
             PropertyChanges {
-                target: instructionsList
-                opacity: 1
+                target: contentRightItem.numberedSteps
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
         State {
@@ -515,49 +382,51 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
+                target: contentRightItem.textHeader
                 text: qsTr("MATERIAL LOADING")
                 anchors.topMargin: 160
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: qsTr("Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds.")
+                visible: true
             }
 
             PropertyChanges {
-                target: temperatureDisplay
+                target: contentRightItem.temperatureStatus
                 visible: false
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: static_image
+                target: contentLeftItem.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: instructionsList
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: acknowledgeButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: retryButton
+                target: contentLeftItem.image
                 visible: false
             }
 
             PropertyChanges {
-                target: loading_gear
+                target: contentRightItem.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonPrimary
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
                 loading: true
+                visible: true
             }
         },
         State {
@@ -604,95 +473,49 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
-                text: (targetTemperature > currentTemperature) ?
-                          qsTr("EXTRUDER %1 IS\nHEATING UP").arg(bayID) :
-                          qsTr("EXTRUDER %1 IS\nCOOLING DOWN").arg(bayID)
-                anchors.topMargin: 140
+                target: contentRightItem.textHeader
+                text: qsTr("HEATING")
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: ""
             }
 
             PropertyChanges {
-                target: temperatureDisplay
+                target: contentRightItem.temperatureStatus
                 visible: true
             }
 
             PropertyChanges {
-                target: extruder_current_temperature_text
-                text: qsTr("%1C").arg(currentTemperature)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: extruder_target_temperature_text
-                text: qsTr("%1C").arg(targetTemperature)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: animated_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: static_image
-                source: {
-                    if(bayID == 1) {
-                        switch(bot.extruderAType) {
-                        case ExtruderType.MK14:
-                            "qrc:/img/extruder_1_heating.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/extruder_1XA_heating.png"
-                            break;
-                        case ExtruderType.MK14_EXP:
-                            "qrc:/img/extruder_labs_heating.png"
-                            break;
-                        case ExtruderType.MK14_COMP:
-                            "qrc:/img/extruder_1c_heating.png"
-                            break;
-                        case ExtruderType.MK14_HOT_E:
-                            "qrc:/img/extruder_labs_1_ht_heating.png"
-                            break;
-                        default:
-                            "qrc:/img/broken.png"
-                            break;
-                        }
-                    } else if(bayID == 2) {
-                        switch(bot.extruderBType) {
-                        case ExtruderType.MK14:
-                            "qrc:/img/extruder_2_heating.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/extruder_2XA_heating.png"
-                            break;
-                        default:
-                            "qrc:/img/broken.png"
-                            break;
-                        }
-                    } else {
-                        "qrc:/img/broken.png"
-                    }
-                }
-            }
-
-            PropertyChanges {
-                target: instructionsList
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: acknowledgeButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: retryButton
+                target: contentLeftItem.animatedImage
                 visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonPrimary
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                loading: true
+                visible: true
             }
         },
         State {
@@ -717,16 +540,12 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
+                target: contentRightItem.textHeader
                 text: qsTr("EXTRUSION CONFIRMATION")
-                anchors.topMargin: {
-                    instruction_description_text.height < 100 ?
-                                140 : 75
-                }
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: {
                     qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
                            ((shouldUserAssistPurging(bayID) ?
@@ -734,40 +553,41 @@ LoggingItem {
                              qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
                                 ""))
                 }
-                anchors.topMargin: 25
+                visible: true
             }
 
             PropertyChanges {
-                target: acknowledgeButton
-                label_size: 18
-                label_width: 350
-                buttonWidth: 350
-                buttonHeight: 80
-                anchors.topMargin: 20
-                opacity: 1
-                label: qsTr("CONFIRM\nMATERIAL EXTRUSION")
+                target: contentRightItem.buttonPrimary
+                visible: true
+                text: qsTr("CONFIRM\nMATERIAL EXTRUSION")
             }
 
             PropertyChanges {
-                target: retryButton
+                target: contentRightItem.buttonSecondary1
                 visible: false
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 0
+                target: contentLeftItem.animatedImage
+                visible: false
             }
 
             PropertyChanges {
-                target: static_image
+                target: contentLeftItem.image
                 source: bayID == 1 ?
                             "qrc:/img/confirm_extrusion_1.png" :
                             "qrc:/img/confirm_extrusion_2.png"
+                visible: true
             }
 
             PropertyChanges {
-                target: instructionsList
-                opacity: 0
+                target: contentRightItem.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
         State {
@@ -794,51 +614,51 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
+                target: contentRightItem.textHeader
                 text: {
-                    doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("UNLOADING")
+                    doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("MATERIAL\nUNLOADING")
                 }
-                anchors.topMargin: 165
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: {
                     doingAutoUnload ?
                         qsTr("Please wait while the remaining material backs out of the printer.") :
                         qsTr("The material is backing out of the extruder, please wait.")
                 }
-                anchors.topMargin: 30
+                visible: true
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: static_image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: instructionsList
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: acknowledgeButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: retryButton
+                target: contentLeftItem.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: loading_gear
+                target: contentLeftItem.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonPrimary
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
                 loading: true
+                visible: true
             }
         },
         State {
@@ -864,75 +684,21 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
+                target: contentRightItem.textHeader
                 text: qsTr("CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN")
+                visible: true
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: qsTr("Wait a few moments until the material has cooled. Close the build chamber and material drawer.")
-                anchors.topMargin: 60
+                visible: true
             }
 
             PropertyChanges {
-                target: acknowledgeButton
-                opacity: 1
-                anchors.topMargin: 20
-                label_width: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            100
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                                375
-                            } else if(bayID == 2) {
-                                100
-                            }
-                        }
-                    }
-                    else {
-                        100
-                    }
-                }
-
-                buttonWidth: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            100
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                                375
-                            } else if(bayID == 2) {
-                                100
-                            }
-                        }
-                    }
-                    else {
-                        100
-                    }
-                }
-
-                label_size: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            18
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                               14
-                            } else if(bayID == 2) {
-                                18
-                            }
-                        }
-                    }
-                    else {
-                        18
-                    }
-                }
-
-                label: {
+                target: contentRightItem.buttonPrimary
+                visible: true
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             qsTr("DONE")
@@ -952,8 +718,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: retryButton
-                label: {
+                target: contentRightItem.buttonSecondary1
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             qsTr("RETRY PURGING")
@@ -966,46 +732,35 @@ LoggingItem {
                         qsTr("RETRY LOADING")
                     }
                 }
-                label_size: 18
-                buttonWidth: 260
-                buttonHeight: 50
                 visible: true
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 1
+                target: contentLeftItem.animatedImage
+                visible: true
                 source: bayID == 1 ?
                             "qrc:/img/close_bay1.gif" :
                             "qrc:/img/close_bay2.gif"
             }
 
             PropertyChanges {
-                target: static_image
-                opacity: 0
+                target: contentLeftItem.image
+                visible: false
             }
 
             PropertyChanges {
-                target: temperatureDisplay
-                anchors.topMargin: 12
-                visible: true
+                target: contentRightItem.temperatureStatus
+                visible: false
             }
 
             PropertyChanges {
-                target: extruder_current_temperature_text
-                text: qsTr("%1C").arg(bot.extruderACurrentTemp)
-                visible: true
+                target: contentRightItem.numberedSteps
+                visible: false
             }
 
             PropertyChanges {
-                target: extruder_target_temperature_text
-                text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: instructionsList
-                opacity: 0
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
         State {
@@ -1031,28 +786,26 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
+                target: contentRightItem.textHeader
                 text: qsTr("REWIND SPOOL")
-                anchors.topMargin: 120
+                visible: true
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
-                anchors.topMargin: 30
+                visible: true
             }
 
             PropertyChanges {
-                target: acknowledgeButton
-                buttonWidth: 120
-                anchors.topMargin: 30
-                opacity: 1
-                label: qsTr("DONE")
+                target: contentRightItem.buttonPrimary
+                visible: true
+                text: qsTr("DONE")
             }
 
             PropertyChanges {
-                target: retryButton
-                label: {
+                target: contentRightItem.buttonSecondary1
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             qsTr("RETRY UNLOADING")
@@ -1065,29 +818,30 @@ LoggingItem {
                         qsTr("RETRY UNLOADING")
                     }
                 }
-                label_size: 18
-                label_width: 260
-                buttonWidth: 260
-                buttonHeight: 50
                 visible: true
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 1
+                target: contentLeftItem.animatedImage
+                visible: true
                 source: bayID == 1 ?
                             "qrc:/img/rewind_spool_1.gif" :
                             "qrc:/img/rewind_spool_2.gif"
             }
 
             PropertyChanges {
-                target: static_image
-                opacity: 0
+                target: contentLeftItem.image
+                visible: false
             }
 
             PropertyChanges {
-                target: instructionsList
-                opacity: 0
+                target: contentRightItem.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
         State {
@@ -1113,8 +867,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: main_instruction_text
-                width: 300
+                target: contentRightItem.textHeader
                 text: {
                     switch(bot.process.type) {
                       case ProcessType.Load:
@@ -1131,21 +884,20 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instruction_description_text
+                target: contentRightItem.textBody
                 text: qsTr("Error %1").arg(errorCode)
+                visible: true
             }
 
             PropertyChanges {
-                target: acknowledgeButton
-                buttonWidth: 120
-                anchors.topMargin: 50
-                opacity: 1
-                label: qsTr("DONE")
+                target: contentRightItem.buttonPrimary
+                visible: true
+                text: qsTr("DONE")
             }
 
             PropertyChanges {
-                target: retryButton
-                label: {
+                target: contentRightItem.buttonSecondary1
+                text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
                             isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
@@ -1158,28 +910,29 @@ LoggingItem {
                         isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
                     }
                 }
-                label_size: 18
-                label_width: 260
-                buttonWidth: 260
-                buttonHeight: 50
                 visible: true
             }
 
             PropertyChanges {
-                target: animated_image
-                opacity: 0
+                target: contentLeftItem.animatedImage
+                visible: false
             }
 
             PropertyChanges {
-                target: static_image
+                target: contentLeftItem.image
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
             }
 
             PropertyChanges {
-                target: instructionsList
-                opacity: 0
+                target: contentRightItem.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         }
     ]

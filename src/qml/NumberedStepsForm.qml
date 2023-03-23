@@ -3,6 +3,8 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property var steps: []
+    property int stepBegin: 1
+    property int usedTextWidth: parent.width
     spacing: 24
 
     Repeater {
@@ -23,7 +25,7 @@ ColumnLayout {
                 TextSubheader {
                     id: stepNumber
                     style: TextSubheader.Bold
-                    text: index + 1
+                    text: index + stepBegin
                     color: "#000000"
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.horizontalCenterOffset: 1
@@ -38,8 +40,13 @@ ColumnLayout {
                 width: parent.width
                 text: modelData
                 font.weight: Font.Normal
-                Layout.preferredWidth: parent.width
+                Layout.alignment: Text.AlignLeft
+                Layout.preferredWidth: usedTextWidth
+
             }
+
+
         }
     }
+
 }
