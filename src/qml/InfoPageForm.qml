@@ -20,7 +20,7 @@ Item {
         anchors.leftMargin: 60
         anchors.topMargin: 37
 
-        InfoItemForm {
+        InfoItem {
             id: info_firmwareVersion
             labelText: qsTr("Firmware Version")
             dataText: bot.version
