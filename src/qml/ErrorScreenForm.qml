@@ -117,6 +117,9 @@ LoggingItem {
                     state = "incompatible_slice"
                 }
                 break;
+            case ErrorType.HomingError:
+                state = "homing_error"
+                break;
             case ErrorType.NoFilamentAtExtruder:
             case ErrorType.OtherError:
                 state = "generic_error"
@@ -134,7 +137,9 @@ LoggingItem {
 
         image {
             source: "qrc:/img/error_close_door.png"
-            visible:  true
+        }
+        loadingIcon {
+            loading: LoadingIcon.Failure
         }
     }
 
@@ -162,8 +167,6 @@ LoggingItem {
             text: "BUTTON 2"
             visible: true
         }
-
-
     }
 
     states: [
@@ -198,6 +201,10 @@ LoggingItem {
                 text: qsTr("TRY AGAIN")
                 visible: true
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -230,6 +237,10 @@ LoggingItem {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("TRY AGAIN")
                 visible: true
+            }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
 
@@ -282,6 +293,10 @@ LoggingItem {
                 visible: true
                 enabled: !(bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -333,6 +348,10 @@ LoggingItem {
                 visible: true
                 enabled: !(bot.chamberErrorCode == 45)
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -355,6 +374,10 @@ LoggingItem {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("TRY AGAIN")
                 visible: true
+            }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
 
@@ -428,6 +451,10 @@ LoggingItem {
                                                         qsTr("1") : qsTr("2")))
                 }
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
         State {
             name: "filament_bay_oof_error"
@@ -479,6 +506,10 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: false
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -528,6 +559,10 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: false
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -573,6 +608,10 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: false
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -613,37 +652,49 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: false
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
             name: "generic_error"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                anchors.verticalCenterOffset: -25
-                anchors.leftMargin: 100
-                source: "qrc:/img/error.png"
+                target: contentLeftItem.loadingIcon
+                icon_image: LoadingIcon.Failure
                 visible: true
             }
 
             PropertyChanges {
+                target: contentLeftItem.image
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textHeader
-                text: qsTr("ERROR")
+                text: qsTr("PRINT FAILED\n\nERROR %1").arg(lastReportedErrorCode)
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(lastReportedErrorCode)
+                    qsTr("Please visit the support page to learn more information about this error and contact our support team.")
                 }
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("EXIT")
                 visible: true
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: true
+                text: qsTr("support.makerbot.com")
             }
 
             PropertyChanges {
@@ -673,6 +724,10 @@ LoggingItem {
                 text: qsTr("TRY AGAIN")
                 visible: true
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -695,6 +750,10 @@ LoggingItem {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("CONTINUE")
                 visible: true
+            }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
             }
         },
 
@@ -719,6 +778,10 @@ LoggingItem {
                 text: qsTr("CONTINUE")
                 visible: true
             }
+            PropertyChanges {
+                target: contentLeftItem.loadingIcon
+                visible: false
+            }
         },
 
         State {
@@ -727,19 +790,25 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textHeader
-                text: qsTr("CARRIAGE\nCOMMUNICATION\nERROR")
+                text: qsTr("PRINT FAILED\n\nCARRIAGE COMMUNICATION ERROR")
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: qsTr("The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact MakerBot\nsupport. Error %1").arg(lastReportedErrorCode)
+                text: qsTr("The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact support.")
                 visible: true
             }
 
             PropertyChanges {
+                target: contentRightItem.textBody1
+                visible: true
+                text: qsTr("support.makerbot.com")
+            }
+
+            PropertyChanges {
                 target: contentRightItem.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("EXIT")
                 visible: true
             }
         },
@@ -826,6 +895,28 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: qsTr("OK")
+                visible: true
+            }
+
+        },
+        State {
+            name: "homing_error"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: contentRightItem.textHeader
+                text: qsTr("PRINT FAILED\n\nHOMING ERROR")
+                visible: true
+            }
+            PropertyChanges {
+                target: contentRightItem.textBody
+                text: qsTr("Confirm the build plate is installed correctly and clear any debris.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.buttonPrimary
+                text: qsTr("EXIT")
                 visible: true
             }
 

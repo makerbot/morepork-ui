@@ -88,6 +88,7 @@ class ProcessModel : public BaseModel {
         ExtruderOutOfFilament,
         ToolMismatch,
         IncompatibleSlice,
+        HomingError,
         OtherError
     };
 
