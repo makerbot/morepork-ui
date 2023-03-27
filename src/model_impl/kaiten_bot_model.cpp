@@ -582,6 +582,16 @@ void KaitenBotModel::extrudersConfigsUpdate(const Json::Value &result) {
       } \
       extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
     } \
+    const Json::Value &supported_extruders = result[IDX]["all_dual_tool_types"]; \
+    if(supported_extruders.isArray()) { \
+      QStringList extruders = {}; \
+      for(const Json::Value ext : supported_extruders) { \
+        extruders.append(getExtruderName(ext.asString().c_str())); \
+      } \
+      extruder ## EXT_SYM ## SupportedTypesSet(extruders); \
+    } \
+    const Json::Value &can_pair_tools = result[IDX]["can_pair_tools"]; \
+    extruder ## EXT_SYM ## CanPairToolsSet(can_pair_tools.asBool()); \
   } \
 
   UPDATE_EXTRUDER_PROPS(0, A);
@@ -1594,6 +1604,8 @@ void KaitenBotModel::extChangeUpdate(const Json::Value &params) {
         } \
         extruder ## EXT_SYM ## SupportedMaterialsSet(materials); \
       } \
+      const Json::Value &can_pair_tools = params["config"]["can_pair_tools"]; \
+      extruder ## EXT_SYM ## CanPairToolsSet(can_pair_tools.asBool()); \
     }
     switch (params["index"].asInt()) {
       case 0:

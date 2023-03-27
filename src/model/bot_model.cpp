@@ -22,6 +22,26 @@ void BotModel::firmwareReleaseNotesListReset() {
     m_firmwareReleaseNotes.clear();
 }
 
+QString BotModel::getExtruderName(QString apiName) {
+    if(apiName == "mk14") {
+        return "Model 1A";
+    } else if(apiName == "mk14_hot") {
+        return "Model 1XA";
+    } else if(apiName == "mk14_e") {
+        return "Labs";
+    } else if(apiName == "mk14_c") {
+        return "Composites";
+    } else if(apiName == "mk14_hot_e") {
+        return "Labs High Temp"; // Unreleased
+    } else if(apiName == "mk14_s") {
+        return "Support 2A";
+    } else if(apiName == "mk14_hot_s") {
+        return "Suport 2XA";
+    } else {
+        return apiName.toUpper();
+    }
+}
+
 QString BotModel::getMaterialName(QString apiName) {
     if(apiName == "im-pla") {
         return "Tough";
