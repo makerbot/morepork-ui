@@ -36,7 +36,7 @@ Item {
             // height: 48
             visible: true
         }
-        InfoItemForm {
+        InfoItem {
             id: info_firmwareVersion
             labelText: qsTr("Firmware Version")
             dataText: bot.version
@@ -85,6 +85,7 @@ Item {
                 delegate:
                     TextBody {
                         style: TextBody.Base
+
                         text: model.modelData
                         font.weight: Font.Bold
                     }

@@ -497,23 +497,11 @@ ApplicationWindow {
                             mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
                         }
 
-                        mainMenuIcon_extruder.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
-                        }
-
-                        mainMenuIcon_settings.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                        }
-
-                        mainMenuIcon_info.mouseArea.onClicked: {
-                            mainSwipeView.swipeToItem(MoreporkUI.InfoPage)
-                        }
-
                         mainMenuIcon_material.mouseArea.onClicked: {
                             mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                         }
 
-                        mainMenuIcon_advanced.mouseArea.onClicked: {
+                        mainMenuIcon_settings.mouseArea.onClicked: {
                             mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                         }
                     }
@@ -550,17 +538,18 @@ ApplicationWindow {
                     }
                 }
 
+
                 // MoreporkUI.ExtruderPage
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     smooth: false
                     visible: false
-                    ExtruderPage {
+                    MaterialPage {
                         id: extruderPage
+                        anchors.fill: parent
                     }
                 }
-
                 // MoreporkUI.SettingsPage
                 Item {
                     property var backSwiper: mainSwipeView
@@ -1869,7 +1858,9 @@ ApplicationWindow {
         }
 
         CustomPopup {
+            id: wrongExtruderPopup
             popupName: "ExtruderMismatch"
+            popupHeight: wrongExtColumnLayout.height+70
             // tool_type_correct flag is sent in system notification by
             // kaiten which determines the "correctness" by looking through
             // printer settings.json under 'supported_tool_types' key.
@@ -1888,20 +1879,28 @@ ApplicationWindow {
                 (!bot.extruderACanPairTools || !bot.extruderBCanPairTools)
             }
 
-            id: wrongExtruderPopup
             showOneButton: false
             showTwoButtons: false
             visible: modelExtWrong || supportExtWrong || extruderComboMismatch
+
             ColumnLayout {
+                id: wrongExtColumnLayout
+                height: children.height
+                width: 630
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                height: 150
-                width: 600
+                spacing: 20
+
+                Image {
+                    source: "qrc:/img/process_error_small.png"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
 
                 TextHeadline {
                     text: qsTr("WRONG EXTRUDER TYPE DETECTED")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
+
                 TextBody {
                     text: {
                         if (wrongExtruderPopup.extruderComboMismatch) {
@@ -1925,6 +1924,19 @@ ApplicationWindow {
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    style: TextBody.Large
+                    Layout.preferredWidth: parent.width
+                    wrapMode: Text.WordWrap
+                }
+
+                TextBody {
+                    text: "\nmakerbot.com/compatibility"
+                    style: TextBody.Large
+                    font.weight: Font.Bold
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    wrapMode: Text.WordWrap
                 }
             }
         }
