@@ -57,16 +57,6 @@ ApplicationWindow {
         }
     }
 
-    Item {
-        anchors.fill:parent
-        focus: true
-        Keys.onPressed: (event)=> {
-            if(event.key == 16777399) {
-                console.info("Power key pressed")
-            }
-        }
-    }
-
     property bool inFreStep: false
     property bool isFreComplete: fre.currentFreStep == FreStep.FreComplete
     property int currentFreStep: fre.currentFreStep
@@ -376,6 +366,12 @@ ApplicationWindow {
             smooth: false
             z: -1
             anchors.fill: parent
+        }
+
+        Keys.onPressed: (event)=> {
+            if(event.key == 16777399) {
+                console.info("Power key pressed")
+            }
         }
 
         Item {
