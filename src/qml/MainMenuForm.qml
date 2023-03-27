@@ -8,6 +8,8 @@ Item {
     property alias mainMenuIcon_print: mainMenuIcon_print
     property alias mainMenuIcon_material: mainMenuIcon_material
     property alias mainMenuIcon_settings: mainMenuIcon_settings
+    property string topBarTitle: "Home"
+
     smooth: false
     anchors.fill: parent
 
