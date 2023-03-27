@@ -148,7 +148,7 @@ LoggingItem {
             visible: true
         }
 
-        textHeader2 {
+        textHeader1 {
             text: qsTr("ERROR 2")
             style: TextHeadline.Base
             visible: false
@@ -189,7 +189,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -229,7 +229,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -271,7 +271,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -326,7 +326,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -372,7 +372,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -430,7 +430,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -485,7 +485,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 text: {
                     qsTr("MATERIAL %1\nOUT OF FILAMENT").arg(
                         (bot.process.filamentBayAOOF ?
@@ -535,7 +535,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 text: {
                     qsTr("MATERIAL %1\nOUT OF FILAMENT").arg(
                         (bot.process.extruderAOOF ?
@@ -589,7 +589,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -631,7 +631,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -666,7 +666,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -694,7 +694,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -722,7 +722,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -750,7 +750,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -782,7 +782,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -817,7 +817,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 
@@ -846,7 +846,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader2
+                target: contentRightItem.textHeader1
                 visible: false
             }
 

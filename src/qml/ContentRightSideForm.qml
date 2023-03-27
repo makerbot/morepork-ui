@@ -16,7 +16,7 @@ Item {
     }
 
     property alias textHeader: textHeader
-    property alias textHeader2: textHeader2
+    property alias textHeader1: textHeader1
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
@@ -47,7 +47,7 @@ Item {
             }
 
             TextHeadline {
-                id: textHeader2
+                id: textHeader1
                 style: TextHeadline.Base
                 Layout.preferredWidth: parent.width
                 text: "standard header"
