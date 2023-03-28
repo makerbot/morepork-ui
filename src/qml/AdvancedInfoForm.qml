@@ -29,25 +29,8 @@ Item {
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.top: parent.top
+            anchors.topMargin: 52
             spacing: 50
-
-            Item {
-                id: setting_top_margins_is_hard
-                width: parent.width
-                height: 12
-                // when top bar gets reduced, change this to 40
-                // height: 40
-
-                TextBody {
-                    style: TextBody.Base
-                    text: qsTr("SENSOR INFORMATION")
-                    font.weight: Font.Bold
-                    font.letterSpacing: 4
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.top: parent.top
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-            }
 
             AdvancedInfoToolheadsItem {
                 anchors.left: parent.left

@@ -48,6 +48,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: "Choose Authorization Method"
             smooth: false
             visible: true
 
@@ -94,6 +95,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: authorizeAccountSwipeView
             property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
+            property string topBarTitle: "Authorize With Code"
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -115,6 +117,7 @@ Item {
             id: loginToAccountItem
             property var backSwiper: authorizeAccountSwipeView
             property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
+            property string topBarTitle: "Log In to Makerbot Account"
             smooth: false
             visible: false
 

@@ -4,20 +4,11 @@ import QtQuick.Layouts 1.3
 import QtGraphicalEffects 1.0
 
 Item {
+    id: baseItem
+    property string topBarTitle: "Printer Info"
+
     smooth: false
     anchors.fill: parent
-
-    TextBody {
-        style: TextBody.Large
-        text: qsTr("PRINTER INFO")
-        font.weight: Font.Bold
-        font.letterSpacing: 3
-        horizontalAlignment: Text.AlignHCenter
-
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
-    width: parent.width
 
     ColumnLayout {
         id: columnLayout
@@ -27,16 +18,9 @@ Item {
         spacing: 34
         anchors.fill: parent
         anchors.leftMargin: 60
+        anchors.topMargin: 37
 
-        Item {
-            id: spacing_item
-            width: 200
-            height: 18
-            // return to 48 when topbar gets reduced
-            // height: 48
-            visible: true
-        }
-        InfoItemForm {
+        InfoItem {
             id: info_firmwareVersion
             labelText: qsTr("Firmware Version")
             dataText: bot.version
@@ -85,6 +69,7 @@ Item {
                 delegate:
                     TextBody {
                         style: TextBody.Base
+
                         text: model.modelData
                         font.weight: Font.Bold
                     }
