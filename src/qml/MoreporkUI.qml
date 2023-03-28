@@ -179,6 +179,8 @@ ApplicationWindow {
         calibratePopupDeterminant()
     }
 
+    
+
     // When firmware is finished updating for an extruder, the progress doesn't
     // go to 100 and instead returns to 0. In a situation where both extruders are
     // programming, one could finish before the other and when it finishes, 0% will
@@ -352,6 +354,7 @@ ApplicationWindow {
         MaterialPage    // 5
     }
 
+
     Item {
         id: rootItem
         smooth: false
@@ -368,9 +371,13 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
-        Keys.onPressed: (event)=> {
-            if(event.key == 16777399) {
-                console.info("Power key pressed")
+        Item {
+            anchors.fill:parent
+            focus: true
+            Keys.onPressed: (event)=> {
+                if(event.key == 16777399) {
+                    console.info("Power key pressed")
+                }
             }
         }
 
