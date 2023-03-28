@@ -454,6 +454,7 @@ Item {
                             "Open the lock",
                             "Open the handle",
                             extruderAttachText()]
+                        numberedSteps.inactiveSteps: [false, false, false]
                         buttonPrimary.text: (itemAttachExtruder.extruder == 1 ?
                                                  bot.extruderAPresent : bot.extruderBPresent)
                                             ? "NEXT" : "WAITING FOR EXTRUDER..."
