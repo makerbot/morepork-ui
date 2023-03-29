@@ -293,6 +293,10 @@ LoggingItem {
                 target: firmwareFileListUsb
                 visible: false
             }
+            PropertyChanges {
+                target: printerNotIdlePopup
+                visible: firmwareUpdateItem.visible && isProcessRunning()
+            }
         },
         State {
             name: "updating_firmware"
