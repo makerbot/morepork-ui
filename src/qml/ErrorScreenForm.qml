@@ -385,7 +385,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    "Ensure the spool isn't tangled and try purging the extruder.If the issue recurs, unload and reload the material"
+                    "Ensure the spool isn't tangled and try purging the extruder. If the issue recurs, unload and reload the material."
                 }
                 visible: true
             }
