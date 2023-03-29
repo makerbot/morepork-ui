@@ -70,8 +70,6 @@
         <file alias="extruder_right.png">images/extruder_right.png</file>
         <file alias="extruder_none.png">images/extruder_none.png</file>
         <file alias="extruder_both.png">images/extruder_both.png</file>
-
-        <!-- Assisted Level -->
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
         <file alias="method_insert_build_plate.png">images/assisted_level/method/insert_build_plate.png</file>
         <file alias="method_remove_build_plate.png">images/assisted_level/method/remove_build_plate.png</file>
@@ -82,7 +80,6 @@
         <file alias="method_adjust_right_to_move_up_plate.png">images/assisted_level/method/adjust_right_to_move_up_plate.png</file>
         <file alias="method_adjust_right_to_move_down_plate.png">images/assisted_level/method/adjust_right_to_move_down_plate.png</file>
         <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
-
         <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
         <file alias="methodxl_insert_build_plate.png">images/assisted_level/methodxl/insert_build_plate.png</file>
         <file alias="methodxl_remove_build_plate.png">images/assisted_level/methodxl/remove_build_plate.png</file>
@@ -93,23 +90,12 @@
         <file alias="methodxl_adjust_right_to_move_up_plate.png">images/assisted_level/methodxl/adjust_right_to_move_up_plate.png</file>
         <file alias="methodxl_adjust_right_to_move_down_plate.png">images/assisted_level/methodxl/adjust_right_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_done.png">images/assisted_level/methodxl/adjust_done.png</file>
-
         <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
         <file alias="leveler_indicator_orange.png">images/assisted_level/leveler_indicator_orange.png</file>
         <file alias="leveling_good.png">images/assisted_level/leveling_good.png</file>
-        <!-- End Assisted Level -->
-
-        <!-- Calibration -->
         <file alias="calibrate_extruders.png">images/calibration/calibrate_extruders.png</file>
-        <!-- Nozzle cleaning assets for the calibration process are reused from clean extruders nozzles -->
-        <!-- Insert and remove build plate images for the calibration process are reused from assisted level -->
-        <!-- End Calibration -->
-
-        <!-- Clean Extruders Nozzles -->
         <file alias="check_nozzles_clean.png">images/clean_extruders/check_nozzles_clean.png</file>
         <file alias="scrub_nozzles.gif">images/clean_extruders/scrub_nozzles.gif</file>
-        <!-- End Calibration -->
-
         <file alias="refresh.png">images/refresh.png</file>
         <file alias="refresh_black.png">images/refresh_black.png</file>
         <file alias="icon_printer_info.png">images/icon_printer_info.png</file>
@@ -220,6 +206,8 @@
         <file alias="setup_procedures.png">images/setup_procedures.png</file>
         <file alias="icon_fingerprint.png">images/icon_fingerprint.png</file>
         <file alias="error_image_overlay.png">images/error_image_overlay.png</file>
+        <file alias="error_extruder_filament_jam_2.png">images/error_extruder_filament_jam_2.png</file>
+        <file alias="error_extruder_filament_jam_1.png">images/error_extruder_filament_jam_1.png</file>
         <file alias="feedback_checkbox.png">images/feedback_checkbox.png</file>
         <file alias="feedback_selected_box.png">images/feedback_selected_box.png</file>
         <file alias="method_error_close_lid.png">images/attach_extruders/method_error_close_lid.png</file>

@@ -17,7 +17,7 @@ LoggingItem {
     // which can in theory slow things down and also
     // make them hold residual states uneccessarily.
     // isActive flag is used because of this.
-    property bool isActive: false
+    property bool isActive: true
     property alias button1: contentRightItem.buttonPrimary
     property alias button2: contentRightItem.buttonSecondary1
     property int processType: bot.process.type
@@ -396,26 +396,9 @@ LoggingItem {
                 target: contentLeftItem.image
                 source: {
                     if(bot.process.extruderAJammed) {
-                        switch(bot.extruderAType) {
-                        case ExtruderType.MK14:
-                        case ExtruderType.MK14_EXP:
-                        case ExtruderType.MK14_COMP:
-                        case ExtruderType.MK14_HOT_E:
-                            "qrc:/img/error_filament_jam_1.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/error_filament_jam_1XA.png"
-                            break;
-                        }
+                        "qrc:/img/error_extruder_filament_jam_1.png"
                     } else if(bot.process.extruderBJammed) {
-                        switch(bot.extruderBType) {
-                        case ExtruderType.MK14:
-                            "qrc:/img/error_filament_jam_2.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/error_filament_jam_2XA.png"
-                            break;
-                        }
+                        "qrc:/img/error_extruder_filament_jam_2.png"
                     } else {
                         "qrc:/img/broken.png"
                     }
@@ -425,7 +408,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textHeader
-                text: qsTr("MATERIAL JAM\nDETECTED")
+                text: qsTr("PRINT PAUSED\n\nEXTRUDER %1 JAM\nDETECTED").arg((bot.process.extruderAJammed ?
+                                                                 qsTr("1") : qsTr("2")))
                 visible: true
             }
 
@@ -437,12 +421,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.%2").arg(
-                    (bot.process.extruderAJammed ? qsTr("Model Extruder 1") : qsTr("Support Extruder 2"))).arg(
-                    (materialPage.shouldUserAssistPurging(bot.process.errorSource+1)) ?
-                             (qsTr("\n%1 may require manual\nassistance for purging.").arg((((bot.process.errorSource+1) == 1) ?
-                                                                                                materialPage.bay1 :
-                                                                                                materialPage.bay2).printMaterialName)) : (emptyString))
+                    "Ensure the spool isn't tangled and try purging the extruder. If the issue recurs, unload and reload the material."
                 }
                 visible: true
             }
@@ -450,7 +429,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: {
-                    qsTr("PURGE EXTRUDER %1").arg((bot.process.extruderAJammed ?
+                    qsTr("PURGE MATERIAL %1").arg((bot.process.extruderAJammed ?
                                                        qsTr("1") : qsTr("2")))
                 }
                 visible: true
@@ -460,9 +439,17 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: true
                 text: {
-                    qsTr("UNLOAD EXTRUDER %1").arg((bot.process.extruderAJammed ?
+                    qsTr("UNLOAD MATERIAL %1").arg((bot.process.extruderAJammed ?
                                                         qsTr("1") : qsTr("2")))
                 }
+            }
+
+            PropertyChanges {
+                target: contentRightItem
+                x: 400
+                y: 0
+                width: 400
+                height: 440
             }
         },
         State {
