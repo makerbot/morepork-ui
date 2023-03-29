@@ -110,7 +110,8 @@ Item {
                     text: inFreStep ? qsTr("START TEST PRINT") : qsTr("START")
                     onClicked: {
 
-                        if(startPrintSource == PrintPage.FromLocal & !startPrintCheck()) {
+                        if((startPrintSource == PrintPage.FromLocal && !startPrintCheck())
+                            || (startPrintSource == PrintPage.FromPrintQueue && !startPrintMaterialCheck())) {
                             startPrintErrorsPopup.open()
                         } else {
                             confirm_build_plate_popup.open()
