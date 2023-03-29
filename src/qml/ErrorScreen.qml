@@ -80,12 +80,11 @@ ErrorScreenForm {
             if (state == "print_lid_open_error" ||
                state == "print_door_open_error" ||
                state == "filament_jam_error" ||
-               state == "extruder_oof_error_state1") {
+               state == "extruder_oof_error") {
                 bot.process.stateType == ProcessStateType.Paused ||
                 bot.process.stateType == ProcessStateType.Failed
             }
-            else if (state == "filament_bay_oof_error" ||
-                     state == "extruder_oof_error_state2") {
+            else if (state == "filament_bay_oof_error") {
                 // Loading can directly be started from these error
                 // screens so use the same material matching check
                 // as in the material page when trying to load mid-
@@ -127,7 +126,7 @@ ErrorScreenForm {
                 // so the button in the first of such screens shouldn't
                 // clear the error but just move to the following screens.
                 // Add all such intermediate screens to this if condition.
-                if(state != "extruder_oof_error_state1") {
+                if(state != "extruder_oof_error") {
                     acknowledgeError()
                 }
 
@@ -157,25 +156,14 @@ ErrorScreenForm {
                         loadPurgeFromErrorScreen()
                     }
                 }
-                else if(state == "extruder_oof_error_state1") {
+                else if(state == "extruder_oof_error") {
                     if(bot.process.stateType == ProcessStateType.Paused) {
-                        if(bot.extruderAType == ExtruderType.MK14_EXP || !bot.hasFilamentBay) {
-                            acknowledgeError()
-                            resetSwipeViews()
-                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                        } else {
-                            state = "extruder_oof_error_state2"
-                        }
-                    }
-                }
-                else if(state == "extruder_oof_error_state2") {
-                    if(bot.process.stateType == ProcessStateType.Paused) {
-                        // Load material
+                        acknowledgeError()
                         resetSwipeViews()
                         mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                        loadPurgeFromErrorScreen()
                     }
-                } else if (state == "no_tool_connected") {
+                }
+                else if (state == "no_tool_connected") {
                     resetSwipeViews()
                     mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                     // sigh

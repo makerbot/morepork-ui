@@ -17,7 +17,7 @@ LoggingItem {
     // which can in theory slow things down and also
     // make them hold residual states uneccessarily.
     // isActive flag is used because of this.
-    property bool isActive: false
+    property bool isActive: true
     property alias button1: contentRightItem.buttonPrimary
     property alias button2: contentRightItem.buttonSecondary1
     property int processType: bot.process.type
@@ -80,7 +80,7 @@ LoggingItem {
                 break;
             case ErrorType.ExtruderOutOfFilament:
                 if(lastReportedProcessType == ProcessType.Print) {
-                    state = "extruder_oof_error_state1"
+                    state = "extruder_oof_error"
                 }
                 break;
             case ErrorType.NoToolConnected:
@@ -148,6 +148,12 @@ LoggingItem {
             visible: true
         }
 
+        textHeader1 {
+            text: qsTr("ERROR 2")
+            style: TextHeadline.Base
+            visible: false
+        }
+
         textBody {
             text: qsTr("Error description")
             visible: true
@@ -183,6 +189,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Close the build chamber door and\ntry again.")
                 visible: true
@@ -213,6 +224,11 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("PROCESS FAILED.\nCLOSE THE\nTOP LID.")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
@@ -250,6 +266,11 @@ LoggingItem {
                     }
                 }
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
@@ -304,6 +325,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
@@ -346,6 +372,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Put the lid back on the printer\nand retry calibrating")
                 visible: true
@@ -365,26 +396,9 @@ LoggingItem {
                 target: contentLeftItem.image
                 source: {
                     if(bot.process.extruderAJammed) {
-                        switch(bot.extruderAType) {
-                        case ExtruderType.MK14:
-                        case ExtruderType.MK14_EXP:
-                        case ExtruderType.MK14_COMP:
-                        case ExtruderType.MK14_HOT_E:
-                            "qrc:/img/error_filament_jam_1.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/error_filament_jam_1XA.png"
-                            break;
-                        }
+                        "qrc:/img/error_extruder_filament_jam_1.png"
                     } else if(bot.process.extruderBJammed) {
-                        switch(bot.extruderBType) {
-                        case ExtruderType.MK14:
-                            "qrc:/img/error_filament_jam_2.png"
-                            break;
-                        case ExtruderType.MK14_HOT:
-                            "qrc:/img/error_filament_jam_2XA.png"
-                            break;
-                        }
+                        "qrc:/img/error_extruder_filament_jam_2.png"
                     } else {
                         "qrc:/img/broken.png"
                     }
@@ -394,19 +408,20 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textHeader
-                text: qsTr("MATERIAL JAM\nDETECTED")
+                text: qsTr("PRINT PAUSED\n\nEXTRUDER %1 JAM\nDETECTED").arg((bot.process.extruderAJammed ?
+                                                                 qsTr("1") : qsTr("2")))
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    qsTr("%1 seems to be\njammed. Be sure the spool isn't\ntangled and try purging the extruder.\nIf it remains jammed, unload the\nmaterial and snip off the end of it.%2").arg(
-                    (bot.process.extruderAJammed ? qsTr("Model Extruder 1") : qsTr("Support Extruder 2"))).arg(
-                    (materialPage.shouldUserAssistPurging(bot.process.errorSource+1)) ?
-                             (qsTr("\n%1 may require manual\nassistance for purging.").arg((((bot.process.errorSource+1) == 1) ?
-                                                                                                materialPage.bay1 :
-                                                                                                materialPage.bay2).printMaterialName)) : (emptyString))
+                    "Ensure the spool isn't tangled and try purging the extruder. If the issue recurs, unload and reload the material."
                 }
                 visible: true
             }
@@ -414,7 +429,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: {
-                    qsTr("PURGE EXTRUDER %1").arg((bot.process.extruderAJammed ?
+                    qsTr("PURGE MATERIAL %1").arg((bot.process.extruderAJammed ?
                                                        qsTr("1") : qsTr("2")))
                 }
                 visible: true
@@ -424,9 +439,17 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: true
                 text: {
-                    qsTr("UNLOAD EXTRUDER %1").arg((bot.process.extruderAJammed ?
+                    qsTr("UNLOAD MATERIAL %1").arg((bot.process.extruderAJammed ?
                                                         qsTr("1") : qsTr("2")))
                 }
+            }
+
+            PropertyChanges {
+                target: contentRightItem
+                x: 400
+                y: 0
+                width: 400
+                height: 440
             }
         },
         State {
@@ -443,34 +466,33 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: {
-                    qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
+                    qsTr("PRINT PAUSED")
+                }
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                text: {
+                    qsTr("MATERIAL %1\nOUT OF FILAMENT").arg(
                         (bot.process.filamentBayAOOF ?
-                             qsTr("MODEL") : qsTr("SUPPORT")))
+                             qsTr("1") : qsTr("2")))
                 }
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: {
-                    qsTr("The printer has run out of %1").arg(
-                        bot.process.filamentBayAOOF ?
-                             printPage.print_model_material_name :
-                             printPage.print_support_material_name) +
-                    qsTr(". Open\nmaterial bay %1 and carefully pull out\nany material still in the guide tube,\nthen remove the empty material spool.\nThis may take up to 60 seconds.\n").arg(
-                        bot.process.filamentBayAOOF ? qsTr("1") : qsTr("2")) +
-                    qsTr("Then place a MakerBot %1 spool\nin the bay to load material.").arg(
-                        bot.process.filamentBayAOOF ?
-                             printPage.print_model_material_name :
-                             printPage.print_support_material_name)
-                }
+                text: qsTr("Open the material bay and remove the empty spool, as well as any excess material.")
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: {
-                    qsTr("LOAD MATERIAL")
+                    qsTr("LOAD MATERIAL %1").arg(
+                                (bot.process.filamentBayAOOF ?
+                                     qsTr("1") : qsTr("2")))
                 }
                 visible: true
             }
@@ -482,7 +504,7 @@ LoggingItem {
         },
 
         State {
-            name: "extruder_oof_error_state1"
+            name: "extruder_oof_error"
             PropertyChanges {
                 target: contentLeftItem.image
                 source: bot.process.extruderAOOF ?
@@ -494,9 +516,17 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: {
-                    qsTr("PRINT PAUSING\nOUT OF %1\nMATERIAL").arg(
-                                bot.process.extruderAOOF ?
-                                    qsTr("MODEL") : qsTr("SUPPORT"))
+                    qsTr("PRINT PAUSED")
+                }
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                text: {
+                    qsTr("MATERIAL %1\nOUT OF FILAMENT").arg(
+                        (bot.process.extruderAOOF ?
+                             qsTr("1") : qsTr("2")))
                 }
                 visible: true
             }
@@ -504,14 +534,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    qsTr("Remove the lid and swivel clip then\ngently pull out the remaining %1\nmaterial from %2.").arg(
-                        bot.process.extruderAOOF ?
-                              qsTr("model") :
-                              qsTr("support")).arg(
-                        bot.process.extruderAOOF ?
-                              qsTr("Model Extruder 1") :
-                              qsTr("Support Extruder 2")) +
-                    qsTr(" This\nprocess can take up to 60 seconds.")
+                    qsTr("Open the top lid and remove material clip to pull the remaining material out of the extruder.")
                 }
                 visible: true
             }
@@ -519,52 +542,9 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.buttonPrimary
                 text: {
-                    qsTr("CONTINUE")
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-        },
-
-        State {
-            name: "extruder_oof_error_state2"
-            PropertyChanges {
-                target: contentLeftItem.image
-                source: bot.process.extruderAOOF ?
-                            "qrc:/img/error_oof_bay1.png" :
-                            "qrc:/img/error_oof_bay1.png"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    qsTr("REMOVE EMPTY\nSPOOL")
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    qsTr("Open material bay %1 and remove the\nempty material spool.").arg(
-                            bot.process.extruderAOOF ? qsTr("1") : qsTr("2")) +
-                    qsTr(" Then place a\nMakerBot %1 spool in the bay\nto load material.").arg(
-                        bot.process.extruderAOOF ?
-                             printPage.print_model_material_name :
-                             printPage.print_support_material_name)
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    qsTr("LOAD MATERIAL")
+                    qsTr("LOAD MATERIAL %1").arg(
+                                (bot.process.extruderAOOF ?
+                                     qsTr("1") : qsTr("2")))
                 }
                 visible: true
             }
@@ -593,6 +573,11 @@ LoggingItem {
                         bot.process.errorSource + 1);
                 }
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
@@ -633,6 +618,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
                     qsTr("Error %1\nVisit MakerBot.com/support\nfor more info.").arg(lastReportedErrorCode)
@@ -663,6 +653,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error %1").arg(lastReportedErrorCode)
                 visible: true
@@ -683,6 +678,11 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("HEATING ERROR")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
@@ -709,6 +709,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
                 visible: true
@@ -729,6 +734,11 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("CARRIAGE\nCOMMUNICATION\nERROR")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
@@ -756,6 +766,11 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("PRINT FAILED.\nFAN ERROR.")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {
@@ -789,6 +804,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("This .Makerbot was prepared for\na different type of printer. Please\nexport it again for this printer type.\nError %1").arg(lastReportedErrorCode)
                 visible: true
@@ -810,6 +830,11 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("EXTRUDER MISMATCH")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textHeader1
+                visible: false
             }
 
             PropertyChanges {

@@ -120,6 +120,9 @@ class BotModel : public BaseModel {
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
     void firmwareReleaseNotesListReset();
 
+    // Internal name to display/marketing name. e.g. mk14 -> Model 1A
+    Q_INVOKABLE QString getExtruderName(QString extruderTypeName);
+
     // Helper function to change material API names (used for all
     // compatibility checks) to user facing (marketing) names
     // for display use only.
@@ -164,21 +167,25 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, extruderACurrentTemp, -999)
     MODEL_PROP(int, extruderATargetTemp, -999)
     MODEL_PROP(bool, extruderAToolTypeCorrect, false)
+    MODEL_PROP(bool, extruderACanPairTools, true)
     MODEL_PROP(bool, extruderAPresent, false)
     MODEL_PROP(bool, extruderAFilamentPresent, false)
     MODEL_PROP(QString, extruderAErrorCode, 0)
     MODEL_PROP(bool, extruderAToolheadDisconnect, false)
     MODEL_PROP(bool, extruderACalibrated, true)
     MODEL_PROP(bool, extruderAJamDetectionDisabled, false)
+    MODEL_PROP(QStringList, extruderASupportedTypes, {"None"})
     MODEL_PROP(QStringList, extruderASupportedMaterials, {"None"})
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)
+    MODEL_PROP(bool, extruderBCanPairTools, true)
     MODEL_PROP(bool, extruderBPresent, false)
     MODEL_PROP(bool, extruderBFilamentPresent, false)
     MODEL_PROP(QString, extruderBErrorCode, 0)
     MODEL_PROP(bool, extruderBToolheadDisconnect, false)
     MODEL_PROP(bool, extruderBCalibrated, true)
+    MODEL_PROP(QStringList, extruderBSupportedTypes, {"None"})
     MODEL_PROP(QStringList, extruderBSupportedMaterials, {"None"})
     MODEL_PROP(bool, extrudersCalibrated, true)
     MODEL_PROP(bool, noFilamentErrorDisabled, false)

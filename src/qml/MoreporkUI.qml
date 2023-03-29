@@ -161,6 +161,14 @@ ApplicationWindow {
     }
 
     function calibratePopupDeterminant() {
+        // If extruders are mismatching dont bother showing the
+        // calibration required popup
+        if(wrongExtruderPopup.modelExtWrong ||
+           wrongExtruderPopup.supportExtWrong ||
+           wrongExtruderPopup.extruderComboMismatch) {
+            return
+        }
+
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
         }
@@ -314,20 +322,6 @@ ApplicationWindow {
         } else if (bot.machineType == MachineType.Magma) {
             "Method XL"
         }
-    }
-
-    // Machine/Kaiten doesn't evaluate extruder combos, they just
-    // check if an extruder is valid on the installed slot for that
-    // machine. So the 'tool_type_correct' flag cannot be used to
-    // show the extruder combo warning.
-    //
-    // This is required now to cover a specific case described
-    // in BW-4975 (https://makerbot.atlassian.net/browse/BW-4975)
-    // or atleast until single extruder support is launched to public?
-    property bool extruderComboMismatch: {
-        (bot.extruderAPresent && bot.extruderBPresent) && (
-        (bot.extruderAType == ExtruderType.MK14 && bot.extruderBType == ExtruderType.MK14_HOT) ||
-        (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14))
     }
 
     property bool experimentalExtruderInstalled: {
@@ -1880,6 +1874,13 @@ ApplicationWindow {
                                          !extruderAToolTypeCorrect
             property bool supportExtWrong: extruderBPresent &&
                                          !extruderBToolTypeCorrect
+            property bool extruderComboMismatch: {
+                (bot.extruderAPresent && bot.extruderBPresent) &&
+                (!bot.extruderACanPairTools || !bot.extruderBCanPairTools)
+            }
+
+            showOneButton: false
+            showTwoButtons: false
             visible: modelExtWrong || supportExtWrong || extruderComboMismatch
 
             ColumnLayout {
@@ -1889,7 +1890,6 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 20
-                //height: 150
 
                 Image {
                     source: "qrc:/img/process_error_small.png"
@@ -1900,46 +1900,32 @@ ApplicationWindow {
                     text: qsTr("WRONG EXTRUDER TYPE DETECTED")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
-                TextBody{
+
+                TextBody {
                     text: {
-                        if (extruderComboMismatch) {
-                            qsTr("A Model 1XA Extruder can only be used with a " +
-                                 "Support 2XA Extruder. A Model 1A Extruder can " +
-                                 "only be used with a Support 2A Extruder.")
-                        }
-                        else if (bot.machineType == MachineType.Fire) {
-                            // V1 printers support only mk14 extruders.
-                            if (wrongExtruderPopup.modelExtWrong) {
-                                qsTr("Please insert a Model 1A Performance Extruder "+
-                                "into slot 1\nto continue attaching the "+
-                                "extruders.")
-                            } else if (wrongExtruderPopup.supportExtWrong) {
-                                qsTr("Please insert a Support 2A Performance Extruder "+
-                                "into slot 2\nto continue attaching the "+
-                                "extruders. Currently only model\nand support "+
-                                "printing is supported.")
+                        if (wrongExtruderPopup.extruderComboMismatch) {
+                            if(bot.machineType == MachineType.Magma && bot.extruderAType == ExtruderType.MK14_COMP) {
+                                // Composites with 2A combo on magma
+                                qsTr("The Composites extruder cannot be used with a Support 2A extruder. Please use the Labs extruder in the model slot to support this configuration.")
                             } else {
-                                emptyString
+                                // Normal + Hot Extruders combo
+                                 qsTr("A Model 1XA Extruder can only be used with a Support 2XA Extruder. A Model 1A Extruder can only be used with a Support 2A Extruder.")
                             }
                         } else {
-                            // Hot bot (V2) supports both mk14 and mk14_hot extruders.
                             if (wrongExtruderPopup.modelExtWrong) {
-                                qsTr("Please insert a Model 1A or Model 1XA Performance " +
-                                     "Extruder into slot 1 to continue attaching the " +
-                                     "extruders.")
+                                qsTr("Please insert a %1 extruder into slot 1.").arg(bot.extruderASupportedTypes.join("/"))
                             } else if (wrongExtruderPopup.supportExtWrong) {
-                                qsTr("Please insert a Support 2A or Support 2XA Performance " +
-                                     "Extruder into slot 2 to continue attaching the extruders. " +
-                                     "Currently only model and support printing is supported.")
+                                qsTr("Please insert a %1 extruder into slot 2. Currently only model and support printing is supported.").arg(bot.extruderBSupportedTypes.join("/"))
                             } else {
                                 emptyString
                             }
                         }
                     }
-                    style: TextBody.Large
                     horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: parent.width
+                    Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    style: TextBody.Large
+                    Layout.preferredWidth: parent.width
                     wrapMode: Text.WordWrap
                 }
 
@@ -1951,7 +1937,6 @@ ApplicationWindow {
                     Layout.preferredWidth: parent.width
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     wrapMode: Text.WordWrap
-                    font.letterSpacing: 1.1
                 }
             }
         }
