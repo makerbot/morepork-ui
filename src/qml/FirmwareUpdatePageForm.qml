@@ -279,6 +279,7 @@ LoggingItem {
                 target: button2
                 text: qsTr("INSTALL VIA USB")
                 visible: true
+                enabled: !isProcessRunning()
             }
 
             PropertyChanges {
