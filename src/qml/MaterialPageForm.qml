@@ -39,6 +39,12 @@ Item {
     property bool isSpoolValidityCheckPending: bot.spoolValidityCheckPending
     property bool isMaterialMismatch: false
 
+    // Extruder
+    property bool isTopLidOpen: bot.chamberErrorCode == 45
+    property alias itemAttachExtruder: itemAttachExtruder
+    property alias attach_extruder: attach_extruder_content
+    property alias calibrateExtrudersPopup: calibrateExtrudersPopup
+
     property alias moistureWarningPopup: moistureWarningPopup
 
     property alias uncapped1CExtruderAlert: uncapped1CExtruderAlert
@@ -52,13 +58,10 @@ Item {
            // reason, quick hack to fix this.
            (bot.process.errorCode != 1041)) {
 
-            if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage){
-                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-            }
+            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             enableMaterialDrawer()
-            if(materialSwipeView.currentIndex != MaterialPage.LoadUnloadPage){
-                materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
-            }
+            materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+
             switch(bot.process.type) {
             case ProcessType.Load:
                 isLoadFilament = true
@@ -210,7 +213,8 @@ Item {
     enum SwipeIndex {
         BasePage,
         LoadMaterialSettingsPage,
-        LoadUnloadPage
+        LoadUnloadPage,
+        AttachExtruderPage
     }
 
     LoggingSwipeView {
@@ -331,7 +335,307 @@ Item {
                 }
             }
         }
+
+        // MaterialPage.AttachExtruderPage
+        LoggingItem {
+            itemName: "MaterialPage.AttachExtruderPage"
+            id: itemAttachExtruder
+            property var backSwiper: materialSwipeView
+            property int backSwipeIndex: 0
+            property int extruder
+            property bool isAttached: {
+                switch(extruder) {
+                case 1:
+                    bot.extruderAPresent
+                    break;
+                case 2:
+                    bot.extruderBPresent
+                    break;
+                default:
+                    false
+                    break;
+                }
+            }
+            property bool hasAltBack: true
+
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if(!inFreStep) {
+                    itemAttachExtruder.state = "base state"
+                    materialSwipeView.swipeToItem(MaterialPage.BasePage)
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            Image {
+                id: handle_top_lid_image
+                width: sourceSize.width
+                height: sourceSize.height
+                source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
+                visible: true
+                smooth: false
+            }
+
+            AnimatedImage {
+                id: attach_extruder_image
+                width: sourceSize.width
+                height: sourceSize.height
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                source: ""
+                playing: false
+                visible: false
+                cache: false
+                smooth: false
+
+            }
+
+            ContentRightSide {
+                id: attach_extruder_content
+                textHeader.visible:true
+                textHeader.text:  {
+                    if(bot.chamberErrorCode == 48) {
+                        qsTr("CLOSE CHAMBER DOOR")
+                    } else if(bot.chamberErrorCode == 45) {
+                        qsTr("REMOVE TOP LID")
+                    } else if(bot.chamberErrorCode == 0) {
+                        qsTr("REMOVE TOP LID")
+                    } else {
+                        emptyString
+                    }
+                }
+                textBody.visible: true
+                textBody.text: "Remove the top lid from the printer to access the carriage"
+                buttonPrimary.visible: true
+                buttonPrimary.text: "NEXT"
+                buttonPrimary.enabled: {
+                    !(bot.chamberErrorCode == 0 ||
+                     bot.chamberErrorCode == 48)
+                }
+            }
+            states: [
+
+                State {
+                    name: "attach_extruder_step1"
+
+                    PropertyChanges {
+                        target: handle_top_lid_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_image
+                        source: {
+                            itemAttachExtruder.extruder == 1 ?
+                                        "qrc:/img/attach_extruder_1_step1.gif" :
+                                        "qrc:/img/attach_extruder_2_step1.gif"
+                        }
+                        playing: true
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: {
+                            qsTr("ATTACH MODEL EXTRUDER TO SLOT %1").arg(itemAttachExtruder.extruder)
+                        }
+                        textBody.visible: false
+                        numberedSteps.visible: true
+                        numberedSteps.steps: [
+                            "Open the lock",
+                            "Open the handle",
+                            extruderAttachText()]
+                        numberedSteps.inactiveSteps: [false, false, false]
+                        buttonPrimary.text: (itemAttachExtruder.extruder == 1 ?
+                                                 bot.extruderAPresent : bot.extruderBPresent)
+                                            ? "NEXT" : "WAITING FOR EXTRUDER..."
+                        buttonPrimary.enabled: (itemAttachExtruder.extruder == 1 ?
+                                                    bot.extruderAPresent : bot.extruderBPresent)
+                    }
+                },
+
+                State {
+                    name: "attach_extruder_step2"
+
+                    PropertyChanges {
+                        target: handle_top_lid_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_image
+                        source: {
+                            itemAttachExtruder.extruder == 1 ?
+                                        "qrc:/img/attach_extruder_1_step2.gif" :
+                                        "qrc:/img/attach_extruder_2_step2.gif"
+                        }
+                        playing: true
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: qsTr("LOCK THE EXTRUDER IN PLACE AND ATTACH THE SWIVEL CLIP")
+                        textBody.visible: false
+                        numberedSteps.visible: true
+                        numberedSteps.stepBegin: 4
+                        numberedSteps.steps: [
+                            "Close the front latch",
+                            "Flip the lock closed",
+                            qsTr("Attach swivel clip %1").arg(itemAttachExtruder.extruder)
+                        ]
+                        buttonPrimary.text: {
+                            if (itemAttachExtruder.isAttached) {
+                                if (itemAttachExtruder.extruder == 1 &&
+                                        (inFreStep)) {
+                                    qsTr("NEXT: Attach Support Extruder")
+                                } else {
+                                    qsTr("NEXT")
+                                }
+                            }
+                        }
+                        buttonPrimary.enabled: true
+                    }
+                },
+
+                State {
+                    name: "attach_swivel_clips"
+
+                    PropertyChanges {
+                        target: handle_top_lid_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_image
+                        source: {
+                            // At places where images of both the extruders are displayed
+                            // together we just check the model extruder since the support
+                            // extruder has to correspond to it for the printer to be usable,
+                            // to determine which version of extruders to display as a set.
+                            switch(bot.extruderAType) {
+                            case ExtruderType.MK14:
+                                "qrc:/img/attach_extruder_swivel_clips.gif"
+                                break;
+                            case ExtruderType.MK14_HOT:
+                                "qrc:/img/attach_extruder_swivel_clips_XA.gif"
+                                break;
+                            default:
+                                "qrc:/img/attach_extruder_swivel_clips.gif"
+                                break;
+                            }
+                        }
+                        playing: true
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
+                        textBody.visible: true
+                        textBody.text: qsTr("The material clips guide the material into the correct extruders.")
+                        numberedSteps.visible: false
+                        buttonPrimary.text: qsTr("NEXT")
+                        buttonPrimary.enabled: true
+                    }
+                },
+                State {
+                    name: "close_top_lid"
+
+                    PropertyChanges {
+                        target: handle_top_lid_image
+                        source:  qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_image
+                        playing: false
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: {
+                            if(bot.chamberErrorCode == 48) {
+                                qsTr("CLOSE CHAMBER DOOR")
+                            } else if(bot.chamberErrorCode == 45) {
+                                qsTr("PLACE TOP LID")
+                            } else if(bot.chamberErrorCode == 0) {
+                                qsTr("PLACE TOP LID")
+                            } else {
+                                emptyString
+                            }
+                        }
+                        textBody.text: "Place the top lid from the printer to access the carriage"
+                        buttonPrimary.text: (bot.process.type == ProcessType.Print) ? qsTr("RESUME PRINT") : qsTr("DONE")
+                        buttonPrimary.enabled: {
+                            !(bot.chamberErrorCode == 45 ||
+                             bot.chamberErrorCode == 48)
+                        }
+                    }
+                }
+            ]
+        }
     }
+
+    CustomPopup {
+        popupName: "CalibrateExtruders"
+        id: calibrateExtrudersPopup
+        popupHeight: columnLayout_next_step.height + 130
+        showTwoButtons: true
+        visible: false
+
+        left_button_text: qsTr("SKIP")
+        left_button.onClicked: {
+            calibrateExtrudersPopup.close()
+        }
+
+        right_button_text: qsTr("GO TO PAGE")
+        right_button.onClicked: {
+            // go to calibrate screen
+            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+            settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            calibrateExtrudersPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_next_step
+            width: 650
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: 150
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            TextHeadline {
+                id: headline_text
+                text: qsTr("CALIBRATE EXTRUDERS")
+                Layout.alignment: Qt.AlignHCenter
+                visible: true
+            }
+
+            TextBody {
+                text: "Calibration enables precise 3D printing. The printer must calibrate new extruders to ensure print quality"
+                Layout.preferredWidth: parent.width
+                wrapMode: Text.WordWrap
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                visible: true
+            }
+        }
+    }
+
 
     LoggingPopup {
         popupName: "MaterialWarning"

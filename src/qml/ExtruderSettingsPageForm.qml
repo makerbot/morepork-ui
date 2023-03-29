@@ -35,6 +35,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: qsTr("Extruder Settings")
             smooth: false
 
             Flickable {
@@ -97,6 +98,7 @@ Item {
             id: calibrateToolheadsItem
             property var backSwiper: extruderSettingsSwipeView
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Calibrate Extruders")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -160,6 +162,7 @@ Item {
             id: cleanExtrudersItem
             property var backSwiper: extruderSettingsSwipeView
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Clean Extruders")
             property bool hasAltBack: true
             smooth: false
             visible: false

@@ -51,6 +51,7 @@ Item {
                 steps: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"]
+                inactiveSteps: [false, false, false]
                 visible: false || showAllElements
             }
 

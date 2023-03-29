@@ -2,6 +2,7 @@ import QtQuick 2.10
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 MaterialPageForm {
 
@@ -197,21 +198,69 @@ MaterialPageForm {
         materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
-    bay1 {
-        loadButton {
-            onClicked: {
-                toolIdx = 0
-                if(restartPendingCheck(toolIdx)) { return }
-                var while_printing = (printPage.isPrintProcess &&
-                        bot.process.stateType == ProcessStateType.Paused)
-                if(shouldSelectMaterial(toolIdx) && !while_printing) {
-                    isLoadFilament = true
-                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                    return
-                }
-                load(toolIdx, false)
+    // Text dependent on type of extruder
+    function extruderAttachText() {
+        var output = defaultString
+        if(itemAttachExtruder.extruder == 1) {
+            output = "Load Model Extruder into Slot 1"
+            if(bot.machineType == MachineType.Fire) {
+                output = qsTr("Load Model 1A or 1C Extruder into\nSlot 1")
             }
-            enabled: canLoadUnloadStart(bay1.filamentBayID)
+            else {
+                output = qsTr("Load Model 1A, 1X or 1C Extruder into\nSlot 1")
+            }
+        } else if(itemAttachExtruder.extruder == 2) {
+            output = "Load Support Extruder into Slot 2"
+            if(bot.extruderAType == ExtruderType.MK14) {
+                output = qsTr("Load Support 2A Extruder into\nSlot 2")
+            } else if(bot.extruderAType == ExtruderType.MK14_HOT) {
+                output = qsTr("Load Support 2X Extruder into\nSlot 2")
+            }
+            else if(bot.extruderAType == ExtruderType.MK14_EXP ||
+                      bot.extruderAType == ExtruderType.MK14_COMP) {
+                if(bot.machineType == MachineType.Fire) {
+                    output = qsTr("Load Support 2A Extruder into\nSlot 2")
+                } else {
+                    output = qsTr("Load Support 2A or 2X Extruder into\nSlot 2")
+                }
+            } else {
+                output = defaultString
+            }
+        } else {
+            output = defaultString
+        }
+        return output
+    }
+
+    bay1 {
+        loadAttachButton {
+            onClicked: {
+                if(!bot.extruderAPresent) {
+                    // Attach extruder A
+                    itemAttachExtruder.extruder = 1
+                    itemAttachExtruder.state = "base state"
+                    materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
+                } else {
+                    // Load Material
+                    toolIdx = 0
+                    if(restartPendingCheck(toolIdx)) { return }
+                    var while_printing = (printPage.isPrintProcess &&
+                            bot.process.stateType == ProcessStateType.Paused)
+                    if(shouldSelectMaterial(toolIdx) && !while_printing) {
+                        isLoadFilament = true
+                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                        return
+                    }
+                    load(toolIdx, false)
+                }
+            }
+            enabled:  {
+                if(!bot.extruderAPresent) {
+                    true
+                } else {
+                    canLoadUnloadStart(bay1.filamentBayID)
+                }
+            }
         }
 
         purgeButton {
@@ -242,19 +291,33 @@ MaterialPageForm {
     }
 
     bay2 {
-        loadButton {
+        loadAttachButton {
             onClicked: {
-                toolIdx = 1
-                var while_printing = (printPage.isPrintProcess &&
-                        bot.process.stateType == ProcessStateType.Paused)
-                if(shouldSelectMaterial(toolIdx) && !while_printing) {
-                    isLoadFilament = true
-                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                    return
+                if(!bot.extruderBPresent) {
+                    // Attach Extruder B
+                    itemAttachExtruder.extruder = 2
+                    itemAttachExtruder.state = "base state"
+                    materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
+                } else {
+                    // Load Material
+                    toolIdx = 1
+                    var while_printing = (printPage.isPrintProcess &&
+                            bot.process.stateType == ProcessStateType.Paused)
+                    if(shouldSelectMaterial(toolIdx) && !while_printing) {
+                        isLoadFilament = true
+                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                        return
+                    }
+                    load(toolIdx, false)
                 }
-                load(toolIdx, false)
             }
-            enabled: canLoadUnloadStart(bay2.filamentBayID)
+            enabled: {
+                if(!bot.extruderBPresent) {
+                    true
+                } else {
+                    canLoadUnloadStart(bay2.filamentBayID)
+                }
+            }
         }
 
         purgeButton {
@@ -378,5 +441,59 @@ MaterialPageForm {
 
     materialPageDrawer.buttonResume.onClicked: {
         materialPageDrawer.close()
+    }
+
+    attach_extruder.buttonPrimary.onClicked: {
+        switch(itemAttachExtruder.state) {
+        case "base state":
+            itemAttachExtruder.state = "attach_extruder_step1"
+            break
+        case "attach_extruder_step1":
+            itemAttachExtruder.state = "attach_extruder_step2"
+            break
+        case "attach_extruder_step2":
+            if(inFreStep) {
+                if(itemAttachExtruder.extruder == 1 &&
+                        itemAttachExtruder.isAttached) {
+                        itemAttachExtruder.extruder = 2
+                        itemAttachExtruder.state = "attach_extruder_step1"
+
+                } else if(itemAttachExtruder.extruder == 2 &&
+                        itemAttachExtruder.isAttached) {
+                    itemAttachExtruder.state = "attach_swivel_clips"
+                }
+            } else {
+                itemAttachExtruder.state = "close_top_lid"
+            }
+            break
+         case "attach_swivel_clips":
+               itemAttachExtruder.state = "close_top_lid"
+               break
+         case "close_top_lid":
+            // done or run calibration
+            itemAttachExtruder.state = "base state"
+            materialSwipeView.swipeToItem(MaterialPage.BasePage)
+
+            if (!inFreStep) {
+                if(bot.process.type == ProcessType.None) {
+                    if(bot.extruderAPresent && bot.extruderBPresent) {
+                        calibrateExtrudersPopup.open()
+                    }
+                }
+                else if(bot.process.type == ProcessType.Print) {
+                    // go to print screen
+                    bot.pauseResumePrint("resume")
+                    mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                    printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
+               }
+            } else {
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                fre.gotoNextStep(currentFreStep)
+            }
+            break
+        default:
+            //default behavior
+            break
+        }
     }
 }

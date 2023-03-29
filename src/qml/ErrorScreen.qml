@@ -177,11 +177,11 @@ ErrorScreenForm {
                     }
                 } else if (state == "no_tool_connected") {
                     resetSwipeViews()
-                    mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
+                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                     // sigh
-                    extruderPage.itemAttachExtruder.extruder = bot.process.errorSource + 1
-                    extruderPage.itemAttachExtruder.state = "base state"
-                    extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
+                    materialPage.itemAttachExtruder.extruder = bot.process.errorSource + 1
+                    materialPage.itemAttachExtruder.state = "base state"
+                    materialPage.materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
                 }
                 else if(state == "generic_error") {
                     // just clear the error

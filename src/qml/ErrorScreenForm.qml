@@ -5,12 +5,10 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import ErrorTypeEnum 1.0
 import ExtruderTypeEnum 1.0
+import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "ErrorScreen"
-    width: 800
-    height: 440
-    smooth: false
 
     // Qt JS engine updates the dependency graph
     // for all components in the DOM even when they
@@ -174,7 +172,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: "qrc:/img/error_close_door.png"
+                source: ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_door"))
                 visible: true
             }
 
@@ -207,7 +205,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftItem.image
-                source: "qrc:/img/error_close_lid.png"
+                source:  ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_lid"))
                 visible: true
             }
 
@@ -244,9 +242,9 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED.\nCLOSE BUILD\nCHAMBER DOOR.")
+                        qsTr("PRINT PAUSED.\n\nCLOSE PRINTER DOOR")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("PRINT FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
+                        qsTr("PRINT FAILED.\nCLOSE PRINTER DOOR.")
                     } else {
                         emptyString
                     }
@@ -259,9 +257,9 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("Close the build chamber door to\ncontinue printing.")
+                        qsTr("Close the printer door to resume.")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("Close the build chamber door and\nrestart print.")
+                        qsTr("Close the printer door and restart print.")
                     } else {
                         emptyString
                     }
@@ -282,6 +280,7 @@ LoggingItem {
                     }
                 }
                 visible: true
+                enabled: !(bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
             }
         },
 
@@ -294,9 +293,9 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED.\nCLOSE THE\nTOP LID.")
+                        qsTr("PRINT PAUSED.\n\nCLOSE TOP LID")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("PRINT FAILED.\nCLOSE THE\nTOP LID.")
+                        qsTr("PRINT FAILED.\nCLOSE TOP LID.")
                     } else {
                         emptyString
                     }
@@ -309,7 +308,7 @@ LoggingItem {
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
                        bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("Put the lid back on the printer\nto continue printing.")
+                        qsTr("Close the top lid to resume")
                     } else if(bot.process.stateType == ProcessStateType.Failed) {
                         qsTr("Put the lid back on the printer and\nrestart print.")
                     } else {
@@ -332,6 +331,7 @@ LoggingItem {
                     }
                 }
                 visible: true
+                enabled: !(bot.chamberErrorCode == 45)
             }
         },
 
