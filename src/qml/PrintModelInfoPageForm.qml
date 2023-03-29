@@ -56,31 +56,11 @@ Item {
                     font.weight: Font.Bold
                 }
 
-                RowLayout {
-                    id: printTimeRowLayout
-                    spacing: 10
+                TextSubheader {
+                    id: printTime
+                    text: qsTr("PRINT TIME | %1").arg(print_time)
+                    font.weight: Font.Light
                     opacity: 0.7
-
-                    TextSubheader {
-                        id: printTimeLabel
-                        text: "PRINT TIME"
-                        font.weight: Font.Light
-                    }
-
-                    Rectangle {
-                        id: dividerRectangle
-                        width: 1
-                        height: 18
-                        color: "#ffffff"
-                        antialiasing: false
-                        smooth: false
-                    }
-
-                    TextSubheader {
-                        id: printTime
-                        text: print_time
-                        font.weight: Font.Light
-                    }
                 }
             }
 
@@ -97,10 +77,11 @@ Item {
                 visible: support_extruder_used
             }
 
-            Item {
+            RowLayout {
                 id: startPrintButtonRow
                 width: children.width
                 height: startPrintButton.height
+                spacing: 10
                 visible: false
 
                 ButtonRectanglePrimary {
@@ -121,8 +102,7 @@ Item {
 
                 ButtonOptions {
                     id: moreOptionsButton
-                    anchors.left: startPrintButton.right
-                    anchors.leftMargin: 10
+                    Layout.preferredWidth: width
                     visible: !inFreStep
                     enabled: !(startPrintSource == PrintPage.FromPrintQueue)
                     onClicked: {
