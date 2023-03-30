@@ -234,13 +234,8 @@ Item {
         buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
-        if(!startPrintMaterialCheck()) {
-            startPrintErrorsPopup.open()
-        }
-        else {
-            startPrintSource = PrintPage.FromPrintQueue
-            printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
-        }
+        startPrintSource = PrintPage.FromPrintQueue
+        printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
 
     function fetchMetadataFailed() {
@@ -308,8 +303,7 @@ Item {
         BasePage,
         FileBrowser,
         PrintQueueBrowser,
-        StartPrintConfirm,
-        FileInfoPage
+        StartPrintConfirm
     }
 
     enum QueuedPrintState {
@@ -506,31 +500,24 @@ Item {
                 }
             }
 
-            Text {
+            TextSubheader {
                 id: noFilesText
-                color: "#ffffff"
-                font.weight: Font.Bold
+                style: TextSubheader.Bold
                 text: qsTr("NO PRINTABLE FILES")
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -40
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: 19
-                font.letterSpacing: 2
                 visible: storage.storageIsEmpty
 
-                Text {
-                    color: "#ffffff"
-                    font.family: "Antennae"
+                TextBody {
+                    style: TextBody.Large
                     font.weight: Font.Light
-                    text: qsTr("Choose another folder or export a .MakerBot\nfile from the MakerBot Print app.")
+                    text: qsTr("Choose another folder or export a .MakerBot file from the MakerBot Print app.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 17
-                    font.letterSpacing: 1
-                    lineHeight: 1.4
                 }
             }
 
@@ -595,15 +582,11 @@ Item {
                         }
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
-                            if(!startPrintMaterialCheck()) {
-                                startPrintErrorsPopup.open()
-                            }
-                            else {
-                                startPrintSource = PrintPage.FromLocal
-                                setDrawerState(false)
-                                startPrintInstructionsItem.acknowledged = false
-                                printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
-                            }
+                            startPrintSource = PrintPage.FromLocal
+                            setDrawerState(false)
+                            startPrintInstructionsItem.acknowledged = false
+                            printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+
                         }
                     }
 
@@ -635,31 +618,24 @@ Item {
             smooth: false
             visible: false
 
-            Text {
+            TextSubheader {
                 id: noPrintsInQueueText
-                color: "#ffffff"
                 font.weight: Font.Bold
                 text: qsTr("NO PRINT JOBS IN QUEUE")
                 horizontalAlignment: Text.AlignHCenter
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: -40
                 anchors.horizontalCenter: parent.horizontalCenter
-                font.pixelSize: 19
-                font.letterSpacing: 2
                 visible: bot.net.printQueueEmpty
 
-                Text {
-                    color: "#ffffff"
-                    font.family: "Antennae"
+                TextBody {
+                    style: TextBody.Large
                     font.weight: Font.Light
                     text: qsTr("Use MakerBot CloudPrint to add to your printer's queue.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: 17
-                    font.letterSpacing: 1
-                    lineHeight: 1.4
                 }
             }
 
@@ -849,119 +825,23 @@ Item {
                 id: startPrintItem
             }
         }
-
-        // PrintPage.FileInfoPage
-        Item {
-            id: itemPrintInfoOpt
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: printSwipeView
-            property int backSwipeIndex: isPrintProcess ? PrintPage.BasePage : PrintPage.StartPrintConfirm
-            smooth: false
-            visible: false
-
-            ColumnLayout {
-                id: layout
-                width: 600
-                spacing: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 65
-                anchors.top: parent.top
-                anchors.topMargin: 50
-                smooth: false
-
-                InfoItem {
-                    id: printInfo_fileName
-                    labelText: qsTr("Filename")
-                    dataText: file_name
-                }
-
-                InfoItem {
-                    id: printInfo_timeEstimate
-                    labelText: qsTr("Print Time Estimate")
-                    dataText: print_time
-                }
-
-                InfoItem {
-                    id: printInfo_material
-                    labelText: qsTr("Print Material")
-                    dataText: print_material
-                }
-
-                InfoItem {
-                    id: printInfo_usesSupport
-                    labelText: qsTr("Supports")
-                    dataText: uses_support
-                    visible: false
-                }
-
-                InfoItem {
-                    id: printInfo_usesRaft
-                    labelText: qsTr("Rafts")
-                    dataText: uses_raft
-                    visible: false
-                }
-
-                InfoItem {
-                    id: printInfo_modelMass
-                    labelText: qsTr("Model")
-                    dataText: model_mass
-                }
-
-                InfoItem {
-                    id: printInfo_supportMass
-                    labelText: qsTr("Support")
-                    dataText: support_mass
-                    visible: support_extruder_used
-                }
-
-                InfoItem {
-                    id: printInfo_Shells
-                    labelText: qsTr("Shells")
-                    dataText: num_shells
-                    visible: false
-                }
-
-                InfoItem {
-                    id: printInfo_extruderTemperature
-                    labelText: qsTr("Extruder Temperature")
-                    dataText: extruder_temp
-                }
-
-                InfoItem {
-                    id: printInfo_buildplaneTemperature
-                    labelText: qsTr("Chamber Temp. (Build Plane)")
-                    dataText: buildplane_temp
-                    labelElement.font.pixelSize: 16
-                    labelElement.font.letterSpacing: 2
-                }
-
-                InfoItem {
-                    id: printInfo_slicerName
-                    labelText: qsTr("Slicer Name")
-                    dataText: slicer_name
-                    visible: false
-                }
-            }
-        }
     }
 
     CustomPopup {
         popupName: "CopyFileToInternalStorage"
         id: copyingFilePopup
-        popupWidth: 720
-        popupHeight: 265
-
+        popupHeight: columnLayout_copy_file_popup.height+145
         onClosed: {
             internalStorageFull = false
         }
 
-        showTwoButtons: isFileCopySuccessful || internalStorageFull
-        left_button_text: internalStorageFull ? qsTr("OK") : qsTr("DONE")
+        showTwoButtons: internalStorageFull
+        left_button_text: qsTr("OK")
         left_button.onClicked: {
             copyingFilePopup.close()
         }
 
-        right_button_text: internalStorageFull ? qsTr("VIEW FILES") : qsTr("VIEW FILE")
+        right_button_text: qsTr("VIEW FILES")
         right_button.onClicked: {
             browsingUsbStorage = false
             storage.setStorageFileType(StorageFileType.Print)
@@ -972,8 +852,8 @@ Item {
             copyingFilePopup.close()
         }
 
-        showOneButton: isFileCopying
-        full_button_text: qsTr("CANCEL")
+        showOneButton: isFileCopySuccessful || isFileCopying
+        full_button_text: isFileCopySuccessful ? qsTr("CLOSE") : qsTr("CANCEL")
         full_button.onClicked: {
             storage.cancelCopy()
             copyingFilePopup.close()
@@ -981,63 +861,163 @@ Item {
 
         ColumnLayout {
             id: columnLayout_copy_file_popup
-            width: 590
+            width: 650
             height: children.height
-            spacing: 35
-            anchors.top: parent.top
-            anchors.topMargin: 150
+            anchors.top: copyingFilePopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
 
-            Text {
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_complete_small.png"
+            }
+
+            BusySpinner {
+                id: busy_spinner_img
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                spinnerSize: 64
+            }
+
+            TextHeadline {
                 id: alert_text_copy_file_popup
-                color: "#cbcbcb"
-                text: {
-                    if(internalStorageFull) {
-                        qsTr("PRINTER STORAGE IS FULL")
-                    } else if(isFileCopying) {
-                        qsTr("COPYING")
-                    } else if(isFileCopySuccessful) {
-                        qsTr("FILE ADDED")
-                    } else {
-                        defaultString
-                    }
-                }
-                font.letterSpacing: 3
                 Layout.alignment: Qt.AlignHCenter
-                font.family: "Antennae"
                 font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
-            Text {
+            TextBody {
                 id: description_text_copy_file_popup
-                color: "#cbcbcb"
-                text: {
-                    if (internalStorageFull) {
-                        qsTr("Remove unwanted files from the printer's internal storage to free up space")
-                    } else if(isFileCopySuccessful) {
-                        qsTr("<b>%1</b> has been added to internal storage.").arg(file_name)
-                    } else {
-                        defaultString
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: 600
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                wrapMode: Text.WordWrap
+            }
+
+            states: [
+                State {
+                    name: "file_added"
+                    when: isFileCopySuccessful
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_complete_small.png"
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("FILE ADDED")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("The following file has been added to internal storage:"
+                                   +"<br><br><br><b>%1</b>").arg(file_name)
+                    }
+                },
+                State {
+                    name: "copying"
+                    when: isFileCopying
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("COPYING")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("%1").arg(storage.fileCopyProgress*100) + "%"
+                    }
+                },
+                State {
+                    name: "storage_full"
+                    when: internalStorageFull
+
+                    PropertyChanges {
+                        target: error_image
+                        source: "qrc:/img/process_error_small.png"
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("PRINTER STORAGE IS FULL")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("Remove unwanted files from the printer's internal storage to free up space.")
                     }
                 }
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: "Antennae"
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
-                visible: isFileCopySuccessful || internalStorageFull
+
+            ]
+        }
+    }
+
+    CustomPopup {
+        id: confirm_build_plate_popup
+        popupName: "ConfirmBuildPlate"
+        popupHeight: confirm_build_column_layout.height+145
+        showTwoButtons: true
+        right_button_text: qsTr("CONFIRM")
+        left_button_text: qsTr("BACK")
+        right_button.onClicked: {
+            // start print
+            confirm_build_plate_popup.close()
+            if(startPrintSource == PrintPage.FromPrintQueue) {
+                print_queue.startQueuedPrint(print_url_prefix,
+                                             print_job_id,
+                                             print_token)
+                printFromQueueState = PrintPage.WaitingToStartPrint
+            }
+            else {
+                startPrint()
+            }
+        }
+        left_button.onClicked: {
+            // don't start print
+            confirm_build_plate_popup.close()
+        }
+
+        ColumnLayout {
+            id: confirm_build_column_layout
+            width: 650
+            height: children.height
+            anchors.top: confirm_build_plate_popup.popupContainer.top
+            anchors.topMargin: 35
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: build_plate_error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_error_small.png"
             }
 
-            ProgressBar {
-                id: progressBar
+            TextHeadline {
+                id: title
+                text: "CONFIRM BUILD PLATE IS CLEAR"
                 Layout.alignment: Qt.AlignHCenter
-                value: (storage.fileCopyProgress).toFixed(2)
-                visible: isFileCopying
             }
         }
     }
@@ -1098,8 +1078,13 @@ Item {
     CustomPopup {
         popupName: "CloudPrintQueue"
         id: printQueuePopup
-        popupWidth: 720
-        popupHeight: 320
+        popupHeight: {
+            if(printFromQueueState == PrintPage.WaitingToStartPrint) {
+                columnLayout_print_queue_popup.height+ 80
+            } else {
+                columnLayout_print_queue_popup.height+145
+            }
+        }
         visible: false
         showOneButton: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails ||
@@ -1136,10 +1121,18 @@ Item {
             id: columnLayout_print_queue_popup
             width: 650
             height: children.height
-            spacing: 35
-            anchors.top: parent.top
-            anchors.topMargin: 140
+            anchors.top: printQueuePopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: error_image_print_queue
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_error_small.png"
+            }
 
             BusySpinner {
                 id: waitingSpinner
@@ -1148,14 +1141,10 @@ Item {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
-            Text {
+            TextHeadline {
                 id: alert_text_print_queue_popup
-                color: "#cbcbcb"
-                font.letterSpacing: 3
                 Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
                 font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
             states: [
@@ -1164,18 +1153,18 @@ Item {
                     when: printFromQueueState == PrintPage.FetchingPrintDetails
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 140
+                        target: alert_text_print_queue_popup
+                        text: qsTr("LOADING PRINT DETAILS")
                     }
 
                     PropertyChanges {
-                        target: alert_text_print_queue_popup
-                        text: qsTr("LOADING PRINT DETAILS...")
+                        target: error_image_print_queue
+                        visible: false
                     }
 
                     PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: true
+                        visible: true
                     }
                 },
                 State {
@@ -1183,18 +1172,18 @@ Item {
                     when: printFromQueueState == PrintPage.FailedToGetPrintDetails
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 185
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Failed to get print details")
                     }
 
                     PropertyChanges {
-                        target: alert_text_print_queue_popup
-                        text: qsTr("Failed to get print details.")
+                        target: error_image_print_queue
+                        visible: true
                     }
 
                     PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: false
+                        visible: false
                     }
                 },
                 State {
@@ -1202,18 +1191,18 @@ Item {
                     when: printFromQueueState == PrintPage.WaitingToStartPrint
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 160
-                    }
-
-                    PropertyChanges {
                         target: alert_text_print_queue_popup
                         text: qsTr("Your print will start momentarily...")
                     }
 
                     PropertyChanges {
+                        target: error_image_print_queue
+                        visible: false
+                    }
+
+                    PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: true
+                        visible: true
                     }
                 },
                 State {
@@ -1221,18 +1210,18 @@ Item {
                     when: printFromQueueState == PrintPage.FailedToStartPrint
 
                     PropertyChanges {
-                        target: columnLayout_print_queue_popup
-                        anchors.topMargin: 180
+                        target: alert_text_print_queue_popup
+                        text: qsTr("Failed to start the print")
                     }
 
                     PropertyChanges {
-                        target: alert_text_print_queue_popup
-                        text: qsTr("Failed to start the print.")
+                        target: error_image_print_queue
+                        visible: true
                     }
 
                     PropertyChanges {
                         target: waitingSpinner
-                        spinnerActive: false
+                        visible: false
                     }
                 }
             ]
