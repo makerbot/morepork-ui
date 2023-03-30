@@ -2021,6 +2021,46 @@ ApplicationWindow {
             }
         }
 
+        CustomPopup {
+            id: printerNotIdlePopup
+            popupName: "PrinterNotIdleWarning"
+
+            showOneButton: true
+            full_button_text: qsTr("CLOSE")
+            full_button.onClicked: {
+                printerNotIdlePopup.close()
+            }
+
+            ColumnLayout {
+                width: parent.width
+                height: children.height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenterOffset: -25
+
+                Image{
+                    id: error_icon
+                    source: "qrc:/img/popup_error.png"
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.bottomMargin: 10
+                }
+
+                TextHeadline {
+                    id: cancel_popup_header
+                    style: TextHeadline.Base
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTr("PRINTER IS BUSY")
+                    Layout.bottomMargin: 7
+                }
+
+                TextBody {
+                    text: "Please wait until the printer is idle."
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.bottomMargin: 30
+                }
+            }
+        }
+
         LoggingPopup {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
