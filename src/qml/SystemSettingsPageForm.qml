@@ -438,7 +438,7 @@ Item {
             id: timeItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
-            property string topBarTitle: qsTr("Set Date")
+            property string topBarTitle: qsTr("Time and Date")
             property bool hasAltBack: true
             smooth: false
             visible: false
