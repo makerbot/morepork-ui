@@ -371,15 +371,6 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
-        Item {
-            anchors.fill:parent
-            focus: true
-            Keys.onPressed: (event)=> {
-                if(event.key == 16777399) {
-                    console.info("Power key pressed")
-                }
-            }
-        }
 
         Item {
             id: inputPanelContainer
@@ -487,6 +478,14 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
+            Item {
+                anchors.fill:parent
+                focus: true
+                Keys.onPressed: (event)=> {
+                        console.info("Power key pressed")
+                }
+            }
+
             LoggingSwipeView {
                 id: mainSwipeView
                 itemWithEnum: rootAppWindow
@@ -504,7 +503,6 @@ ApplicationWindow {
                         topBar.backButton.visible = true
                     }
                 }
-
                 // MoreporkUI.BasePage
                 Item {
                     smooth: false
@@ -556,7 +554,6 @@ ApplicationWindow {
                         id: printPage
                     }
                 }
-
 
                 // MoreporkUI.ExtruderPage
                 Item {
