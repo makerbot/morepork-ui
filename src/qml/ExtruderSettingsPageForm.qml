@@ -7,7 +7,6 @@ import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
 Item {
-
     id: extruderSettingsPage
     smooth: false
     anchors.fill: parent
@@ -36,6 +35,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: qsTr("Extruder Settings")
             smooth: false
 
             Flickable {
@@ -98,6 +98,7 @@ Item {
             id: calibrateToolheadsItem
             property var backSwiper: extruderSettingsSwipeView
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Calibrate Extruders")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -161,6 +162,7 @@ Item {
             id: cleanExtrudersItem
             property var backSwiper: extruderSettingsSwipeView
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Clean Extruders")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -179,7 +181,6 @@ Item {
                 onProcessDone: {
                     state = "base state"
                     extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                 }
             }
         }

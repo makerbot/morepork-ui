@@ -130,6 +130,7 @@ Button {
         antialiasing: false
         smooth: false
         source: "qrc:/img/circle_alert_112px.png"
+        visible: false
     }
 
     Image {
@@ -143,7 +144,7 @@ Button {
     }
 
     Component.onCompleted: {
-        this.onClicked.connect(logClick)
+        this.onReleased.connect(logClick)
     }
 
     function logClick() {

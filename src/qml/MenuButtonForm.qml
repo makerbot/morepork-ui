@@ -122,7 +122,7 @@ Button {
     }
 
     Component.onCompleted: {
-        this.onClicked.connect(uiLogBtn)
+        this.onReleased.connect(uiLogBtn)
     }
 
     function uiLogBtn() {

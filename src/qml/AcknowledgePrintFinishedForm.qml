@@ -28,6 +28,15 @@ LoggingItem {
         defects[key] = selected
     }
 
+    function defectReasonAdded() {
+        for (var key in defects) {
+            if(defects[key] == true) {
+                return true
+            }
+        }
+        return false
+    }
+
     function submitFeedbackAndAcknowledge(success) {
         printFeedbackAcknowledgementPopup.open()
         printFeedbackAcknowledgementPopup.feedbackGood = success
@@ -138,6 +147,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: titleText
+                visible: true
                 text: qsTr("DID THE PRINT SUCCEED?")
             }
 
@@ -201,6 +211,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: titleText
+                visible: true
                 text: qsTr("WHY WAS THIS PRINT CANCELLED?")
                 font.pixelSize: 16
             }

@@ -36,6 +36,7 @@ Item {
     property string lightBlue: "#3183af"
     property string otherBlue: "#45a2d3"
 
+
     smooth: false
 
     enum SwipeIndex {
@@ -60,6 +61,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: MoreporkUI.BasePage
+            property string topBarTitle: "Settings"
             smooth: false
 
             Flickable {
@@ -90,6 +92,11 @@ Item {
                         buttonImage.source: "qrc:/img/icon_extruder_settings.png"
                         buttonText.text: qsTr("EXTRUDER SETTINGS")
                         openMenuItemArrow.visible: true
+                        onClicked: {
+                            if(isProcessRunning()){
+                                printerNotIdlePopup.open()
+                            }
+                        }
                     }
 
                     MenuButton {
@@ -97,6 +104,11 @@ Item {
                         buttonImage.source: "qrc:/img/icon_build_plate_settings.png"
                         buttonText.text: qsTr("BUILD PLATE SETTINGS")
                         openMenuItemArrow.visible: true
+                        onClicked: {
+                            if(isProcessRunning()){
+                                printerNotIdlePopup.open()
+                            }
+                        }
                     }
 
                     MenuButton {
@@ -147,6 +159,7 @@ Item {
             id: systemSettingsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "System Settings"
             smooth: false
             visible: false
 
@@ -160,6 +173,7 @@ Item {
             id: extruderSettingsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "Extruder Settings"
             smooth: false
             visible: false
 
@@ -173,6 +187,7 @@ Item {
             id: buildPlateSettingsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "BuildPlate Settings"
             smooth: false
             visible: false
 
@@ -186,6 +201,7 @@ Item {
             id: cleanAirSettingsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "CleanAir Settings"
             smooth: false
             visible: false
 
@@ -199,6 +215,7 @@ Item {
             id: preheatItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "Preheat"
             smooth: false
             visible: false
 
@@ -212,6 +229,7 @@ Item {
             id: dryMaterialItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "Dry Material"
             property bool hasAltBack: true
             property bool backIsCancel: bot.process.type == ProcessType.DryingCycleProcess &&
                                         dryMaterial.state != "choose_material" &&
@@ -252,6 +270,7 @@ Item {
             id: annealPrintItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: "Anneal Print"
             property bool hasAltBack: true
             property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
             smooth: false

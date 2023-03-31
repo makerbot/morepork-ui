@@ -10,7 +10,7 @@ import ProcessStateTypeEnum 1.0
 
 Item {
     width: 800
-    height: 440
+    height: 408
     smooth: false
 
     property alias cleanExtruderMaterialSelectorPage: cleanExtruderMaterialSelectorPage
@@ -37,7 +37,7 @@ Item {
         currentIndex: CleanExtruderSettings.MaterialSelector
 
         function customSetCurrentItem(swipeToIndex) {
-            if(swipeToIndex == 0) {
+            if(swipeToIndex == CleanExtruderSettings.MaterialSelector) {
                 if(bot.process.type == ProcessType.CalibrationProcess) {
                     // Use back button action specific to calibration process UI
                     setCurrentItem(extruderSettingsSwipeView.itemAt(ExtruderSettingsPage.CalibrateExtrudersPage))

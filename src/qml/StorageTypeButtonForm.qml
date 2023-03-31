@@ -146,7 +146,7 @@ Button {
     }
 
     Component.onCompleted: {
-        this.onClicked.connect(uiLogSTBtn)
+        this.onReleased.connect(uiLogSTBtn)
     }
 
     function uiLogSTBtn() {
