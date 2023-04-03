@@ -259,5 +259,6 @@
         <file>WiFiButtonForm.qml</file>
         <file>TemperatureStatusElement.qml</file>
         <file>TemperatureStatus.qml</file>
+        <file>PowerButtonScreen.qml</file>
     </qresource>
 </RCC>

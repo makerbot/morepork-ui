@@ -410,6 +410,12 @@ ApplicationWindow {
                      connectionState == ConnectionState.Connected
         }
 
+        PowerButtonScreen {
+            id: powerButtonScreen
+            z: 2
+            visible: false
+        }
+
         HeatShieldInstructions {
             anchors.fill: parent
             z: 2
