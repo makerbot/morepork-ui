@@ -129,6 +129,9 @@ Item {
                 anchors.leftMargin: 100.64
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 30
+                visible: bot.process.stateType != ProcessStateType.Cancelled &&
+                         bot.process.stateType != ProcessStateType.Completed &&
+                         bot.process.stateType != ProcessStateType.Failed
                 image_source: (bot.process.stateType == ProcessStateType.Paused ||
                                bot.process.stateType == ProcessStateType.Pausing ||
                                bot.process.stateType == ProcessStateType.Resuming ||
@@ -155,21 +158,23 @@ Item {
                         break;
                     }
                 }
+
+                TextSubheader {
+                    style: TextSubheader.Base
+                    text: (bot.process.stateType == ProcessStateType.Paused ||
+                           bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Resuming ||
+                           bot.process.stateType == ProcessStateType.Preheating ||
+                           bot.process.stateType == ProcessStateType.UnloadingFilament) ?
+                              qsTr("RESUME") : qsTr("PAUSE")
+                    anchors.verticalCenter: pause.verticalCenter
+                    anchors.top : pause.bottom
+                    anchors.horizontalCenter: pause.horizontalCenter
+                    anchors.topMargin: 15.7
+                }
             }
 
-            TextSubheader {
-                style: TextSubheader.Base
-                text: (bot.process.stateType == ProcessStateType.Paused ||
-                       bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Resuming ||
-                       bot.process.stateType == ProcessStateType.Preheating ||
-                       bot.process.stateType == ProcessStateType.UnloadingFilament) ?
-                          qsTr("RESUME") : qsTr("PAUSE")
-                anchors.verticalCenter: pause.verticalCenter
-                anchors.top : pause.bottom
-                anchors.horizontalCenter: pause.horizontalCenter
-                anchors.topMargin: 15.7
-            }
+
 
             ButtonRoundPrintIcon {
                 id: cancel
@@ -179,6 +184,9 @@ Item {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 30
                 image_source: "qrc:/img/cancel.png"
+                visible: bot.process.stateType != ProcessStateType.Cancelled &&
+                         bot.process.stateType != ProcessStateType.Completed &&
+                         bot.process.stateType != ProcessStateType.Failed
 
                 mouseArea.onClicked: {
                     if(inFreStep) {
@@ -187,16 +195,18 @@ Item {
                      }
                      cancelPrintPopup.open()
                 }
+
+                TextSubheader {
+                    style: TextSubheader.Base
+                    text: qsTr("CANCEL")
+                    anchors.verticalCenter: cancel.verticalCenter
+                    anchors.horizontalCenter: cancel.horizontalCenter
+                    anchors.top : cancel.bottom
+                    anchors.topMargin: 15.7
+                }
             }
 
-            TextSubheader {
-                style: TextSubheader.Base
-                text: qsTr("CANCEL")
-                anchors.verticalCenter: cancel.verticalCenter
-                anchors.horizontalCenter: cancel.horizontalCenter
-                anchors.top : cancel.bottom
-                anchors.topMargin: 15.7
-            }
+
 
             ColumnLayout {
                 id: columnLayout_page0
