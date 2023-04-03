@@ -22,9 +22,6 @@ Item {
 
         MainMenuIcon {
             id: mainMenuIcon_print
-            // anchors.horizontalCenter: parent.horizontalCenter
-            // anchors.verticalCenter: parent.verticalCenter
-            // anchors.verticalCenterOffset: -2
             Layout.margins: 14
             Layout.alignment: Qt.AlignHCenter
             smooth: false
@@ -82,6 +79,18 @@ Item {
             smooth: false
             image.source: "qrc:/img/material_icon.png"
             textIconDesc.text: qsTr("MATERIAL")
+
+            Image {
+                id: no_material_warning
+                width: 30
+                height: 30
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 75
+                anchors.right: parent.right
+                anchors.rightMargin: 35
+                source: "qrc:/img/extruder_material_error.png"
+                visible: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
+            }
         }
 
         MainMenuIcon {
