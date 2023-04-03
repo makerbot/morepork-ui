@@ -64,7 +64,7 @@ LoadUnloadFilamentForm {
             if(bot.process.type == ProcessType.None) {
                 while_printing = false;
             } else if(bot.process.type == ProcessType.Print) {
-                while_printing = false;
+                while_printing = true;
             } else {
                 return;
             }
