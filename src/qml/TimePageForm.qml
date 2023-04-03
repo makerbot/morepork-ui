@@ -37,6 +37,7 @@ LoggingItem {
             id: itemBasePage
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Time and Date")
             smooth: false
             visible: true
 
@@ -50,6 +51,7 @@ LoggingItem {
             id: itemSetTimeZone
             property var backSwiper: timeSwipeView
             property int backSwipeIndex: TimePage.BasePage
+            property string topBarTitle: qsTr("Edit Time Zone")
             smooth: false
             visible: false
 
@@ -63,6 +65,7 @@ LoggingItem {
             id: itemSetDate
             property var backSwiper: timeSwipeView
             property int backSwipeIndex: TimePage.BasePage
+            property string topBarTitle: qsTr("Edit Date")
             smooth: false
             visible: false
 
@@ -76,6 +79,7 @@ LoggingItem {
             id: itemSetTime
             property var backSwiper: timeSwipeView
             property int backSwipeIndex: TimePage.BasePage
+            property string topBarTitle: qsTr("Edit Time")
             smooth: false
             visible: false
 
