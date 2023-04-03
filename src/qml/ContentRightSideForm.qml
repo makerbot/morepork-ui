@@ -16,6 +16,7 @@ Item {
     }
 
     property alias textHeader: textHeader
+    property alias textHeader1: textHeader1
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
@@ -45,12 +46,21 @@ Item {
                 visible: false || showAllElements
             }
 
+            TextHeadline {
+                id: textHeader1
+                style: TextHeadline.Base
+                Layout.preferredWidth: parent.width
+                text: "standard header"
+                visible: false || showAllElements
+            }
+
             NumberedSteps {
                 id: numberedSteps
                 Layout.preferredWidth: parent.width
                 steps: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"]
+                inactiveSteps: [false, false, false]
                 visible: false || showAllElements
             }
 

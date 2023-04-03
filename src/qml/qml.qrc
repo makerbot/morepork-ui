@@ -259,6 +259,12 @@
         <file>WiFiButtonForm.qml</file>
         <file>TemperatureStatusElement.qml</file>
         <file>TemperatureStatus.qml</file>
+        <file>PrintModelInfoPageForm.qml</file>
+        <file>PrintModelInfoPage.qml</file>
+        <file>ButtonOptionsForm.qml</file>
+        <file>ButtonOptions.qml</file>
+        <file>PrintFileInfoPageForm.qml</file>
+        <file>PrintFileInfoPage.qml</file>
         <file>PowerButtonScreen.qml</file>
     </qresource>
 </RCC>

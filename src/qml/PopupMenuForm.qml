@@ -6,7 +6,7 @@ Menu {
     id: popupMenu
     x: 0
     y: 0
-    property int menuWidth: 230
+    property int menuWidth: 500
     property int menuHeight: 60
 
     background: Rectangle {

@@ -7,7 +7,7 @@ import MachineTypeEnum 1.0
 Item {
     id: printStatusPage
     width: 800
-    height: 440
+    height: 408
     smooth: false
     property string fileName_
     property string filePathName

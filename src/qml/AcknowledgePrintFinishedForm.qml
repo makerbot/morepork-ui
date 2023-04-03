@@ -28,6 +28,15 @@ LoggingItem {
         defects[key] = selected
     }
 
+    function defectReasonAdded() {
+        for (var key in defects) {
+            if(defects[key] == true) {
+                return true
+            }
+        }
+        return false
+    }
+
     function submitFeedbackAndAcknowledge(success) {
         printFeedbackAcknowledgementPopup.open()
         printFeedbackAcknowledgementPopup.feedbackGood = success
