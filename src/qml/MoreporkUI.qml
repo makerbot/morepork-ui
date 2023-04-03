@@ -2380,13 +2380,11 @@ ApplicationWindow {
                 anchors.verticalCenterOffset: -45
 
                 Image{
-                    id: error_icon
                     source: "qrc:/img/popup_error.png"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
                 Text {
-                    id: cancel_popup_header
                     color: "#cbcbcb"
                     text: qsTr("CANCEL PRINT?")
                     font.letterSpacing: 3
