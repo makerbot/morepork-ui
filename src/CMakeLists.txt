@@ -75,6 +75,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} model model_impl)
 set(MOREPORK_UI_HEADERS
     logging.h
     ui_translator.h
+    power_key_event.h
     model/base_model.h
     model/logger.h
     model/bot_model.h
