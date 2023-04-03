@@ -6,6 +6,7 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QDebug>
+#include <QKeyEvent>
 
 class UiTranslator : public QObject {
     Q_OBJECT

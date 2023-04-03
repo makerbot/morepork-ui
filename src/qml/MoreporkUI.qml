@@ -425,6 +425,14 @@ ApplicationWindow {
             z: 2
         }
 
+        Connections {
+            target: power_key
+            onPowerbuttonPressed: {
+                console.log("Power button is pressed!")
+            }
+
+        }
+
         Flickable {
             id: backSwipeHandler
             z: 1
@@ -482,7 +490,7 @@ ApplicationWindow {
                 anchors.fill:parent
                 focus: true
                 Keys.onPressed: (event)=> {
-                        console.info("Power key pressed")
+                    console.info("Power key pressed")
                 }
             }
 

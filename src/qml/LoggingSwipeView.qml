@@ -57,10 +57,4 @@ SwipeView {
         console.info(logName, action, log.getEnumName(itemWithEnum, "SwipeIndex", idx))
     }
 
-    Keys.onPressed: (event)=> {
-        if(event.key == 16777399) {
-            console.info("Power key pressed")
-        }
-    }
-
 }
