@@ -8,6 +8,7 @@ Item {
     height: 200
     smooth: false
     property alias mouseArea: mouseArea
+    property alias imageItem: imageItem
     property alias image: image
     property alias textIconDesc: textIconDesc
     property bool imageVisible: true
@@ -25,32 +26,34 @@ Item {
         antialiasing: false
         opacity: isDisabled ? 0.3 : 1
 
-        ColumnLayout {
-            id:iconColumnLayout
-            spacing: 19
+        Item {
+            id: imageItem
+            height: image.height
+            width: image.width
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-
+            anchors.verticalCenterOffset: -23
             Image {
                 id: image
                 source: "qrc:/qtquickplugin/images/template_image.png"
                 smooth: false
-                Layout.alignment: Qt.AlignHCenter
                 visible: imageVisible
                 width: sourceSize.width
                 height: sourceSize.height
             }
+        }
 
-            TextBody {
-                style: TextBody.ExtraLarge
-                font.weight: Font.Light
-                id: textIconDesc
-                text: qsTr("Icon Name")
-                antialiasing: false
-                smooth: false
-                Layout.alignment: Qt.AlignHCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
+        TextBody {
+            style: TextBody.ExtraLarge
+            font.weight: Font.Light
+            id: textIconDesc
+            text: qsTr("Icon Name")
+            antialiasing: false
+            smooth: false
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 61
+            horizontalAlignment: Text.AlignHCenter
         }
 
         LoggingMouseArea {
