@@ -19,7 +19,6 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override {
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            qInfo() << "Ate key press" << keyEvent->key();
             emit powerbuttonPressed();
             return true;
         } else {
