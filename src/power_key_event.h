@@ -19,8 +19,12 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event) override {
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            emit powerbuttonPressed();
-            return true;
+            if(keyEvent->key() == 16777399) {
+                qInfo() << "Registered power button event, emitting to QML";
+                emit powerbuttonPressed();
+                return true;
+            }
+            return QObject::eventFilter(obj, event);
         } else {
             // standard event processing
             return QObject::eventFilter(obj, event);
