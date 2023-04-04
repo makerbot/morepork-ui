@@ -428,7 +428,7 @@ ApplicationWindow {
         Connections {
             target: power_key
             onPowerbuttonPressed: {
-                console.log("Power button is pressed!")
+                console.info("Power button is pressed!")
             }
 
         }

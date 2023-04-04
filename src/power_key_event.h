@@ -20,7 +20,6 @@ protected:
         if (event->type() == QEvent::KeyPress) {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
             if(keyEvent->key() == 16777399) {
-                qInfo() << "Registered power button event, emitting to QML";
                 emit powerbuttonPressed();
                 return true;
             }
