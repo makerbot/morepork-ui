@@ -5,7 +5,7 @@ import QtGraphicalEffects 1.0
 
 Item {
     id: baseItem
-    property string topBarTitle: "Printer Info"
+    property string topBarTitle: qsTr("Printer Info")
 
     smooth: false
     anchors.fill: parent

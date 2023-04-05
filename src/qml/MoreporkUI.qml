@@ -488,6 +488,7 @@ ApplicationWindow {
 
                 // MoreporkUI.BasePage
                 Item {
+                    property string topBarTitle: qsTr("Home")
                     smooth: false
                     MainMenu {
                         id: mainMenu
@@ -512,6 +513,7 @@ ApplicationWindow {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
+                    property string topBarTitle: qsTr("Choose a File")
                     smooth: false
                     visible: false
 
@@ -543,6 +545,7 @@ ApplicationWindow {
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
+                    property string topBarTitle: qsTr("Material")
                     smooth: false
                     visible: false
                     MaterialPage {
@@ -554,6 +557,7 @@ ApplicationWindow {
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
+                    property string topBarTitle: qsTr("Settings")
                     smooth: false
                     visible: false
                     SettingsPage {
