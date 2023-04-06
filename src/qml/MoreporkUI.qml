@@ -486,14 +486,6 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Item {
-                anchors.fill:parent
-                focus: true
-                Keys.onPressed: (event)=> {
-                    console.info("Power key pressed")
-                }
-            }
-
             LoggingSwipeView {
                 id: mainSwipeView
                 itemWithEnum: rootAppWindow

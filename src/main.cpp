@@ -87,7 +87,7 @@ int main(int argc, char ** argv) {
     SettingsInterface settings;
     DiskManager disk_manager;
     DFSSettings dfs_settings;
-    KeyPressEater power_key;
+    PowerKeyEventHandler power_key;
 
     QLocale::setDefault(QLocale(settings.getLanguageCode()));
 

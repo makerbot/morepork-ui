@@ -7,12 +7,9 @@
 #include <QDebug>
 #include <QKeyEvent>
 
-class KeyPressEater : public QObject
+class PowerKeyEventHandler : public QObject
 {
     Q_OBJECT
-public:
-    KeyPressEater(){}
-
 signals:
     void powerbuttonPressed();
 protected:
