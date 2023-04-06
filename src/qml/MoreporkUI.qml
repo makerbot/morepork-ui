@@ -187,6 +187,8 @@ ApplicationWindow {
         calibratePopupDeterminant()
     }
 
+    
+
     // When firmware is finished updating for an extruder, the progress doesn't
     // go to 100 and instead returns to 0. In a situation where both extruders are
     // programming, one could finish before the other and when it finishes, 0% will
@@ -346,6 +348,7 @@ ApplicationWindow {
         MaterialPage    // 5
     }
 
+
     Item {
         id: rootItem
         smooth: false
@@ -361,6 +364,7 @@ ApplicationWindow {
             z: -1
             anchors.fill: parent
         }
+
 
         Item {
             id: inputPanelContainer
@@ -413,6 +417,14 @@ ApplicationWindow {
         HeatShieldInstructions {
             anchors.fill: parent
             z: 2
+        }
+
+        Connections {
+            target: power_key
+            onPowerbuttonPressed: {
+                console.info("Power button is pressed!")
+            }
+
         }
 
         Flickable {
@@ -485,7 +497,6 @@ ApplicationWindow {
                         topBar.backButton.visible = true
                     }
                 }
-
                 // MoreporkUI.BasePage
                 Item {
                     smooth: false
@@ -537,7 +548,6 @@ ApplicationWindow {
                         id: printPage
                     }
                 }
-
 
                 // MoreporkUI.ExtruderPage
                 Item {
