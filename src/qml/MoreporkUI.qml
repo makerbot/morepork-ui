@@ -340,10 +340,8 @@ ApplicationWindow {
     enum SwipeIndex {
         BasePage,       // 0
         PrintPage,      // 1
-        ExtruderPage,   // 2
-        SettingsPage,   // 3
-        InfoPage,       // 4
-        MaterialPage    // 5
+        MaterialPage,   // 2
+        SettingsPage    // 3
     }
 
     Item {
@@ -541,7 +539,7 @@ ApplicationWindow {
                 }
 
 
-                // MoreporkUI.ExtruderPage
+                // MoreporkUI.MaterialPage
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
@@ -549,7 +547,7 @@ ApplicationWindow {
                     smooth: false
                     visible: false
                     MaterialPage {
-                        id: extruderPage
+                        id: materialPage
                         anchors.fill: parent
                     }
                 }
@@ -562,28 +560,6 @@ ApplicationWindow {
                     visible: false
                     SettingsPage {
                         id: settingsPage
-                    }
-                }
-
-                // MoreporkUI.InfoPage
-                Item {
-                    property var backSwiper: mainSwipeView
-                    property int backSwipeIndex: MoreporkUI.BasePage
-                    smooth: false
-                    visible: false
-                    InfoPage {
-                        id: infoPage
-                    }
-                }
-
-                // MoreporkUI.MaterialPage
-                Item {
-                    property var backSwiper: mainSwipeView
-                    property int backSwipeIndex: MoreporkUI.BasePage
-                    smooth: false
-                    visible: false
-                    MaterialPage {
-                        id: materialPage
                     }
                 }
             }
