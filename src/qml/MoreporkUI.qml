@@ -429,8 +429,8 @@ ApplicationWindow {
             target: power_key
             onPowerbuttonPressed: {
                 console.info("Power button is pressed!")
+                powerButtonScreen.visible = true
             }
-
         }
 
         Flickable {
