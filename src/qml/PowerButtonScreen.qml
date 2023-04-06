@@ -17,7 +17,7 @@ LoggingItem {
         visible: true
         anchors.verticalCenter: parent.verticalCenter
         buttonPrimary {
-            text: qsTr("SHUTDOWN")
+            text: qsTr("SHUT DOWN")
             visible: true
             onClicked: {
                 bot.shutdown()

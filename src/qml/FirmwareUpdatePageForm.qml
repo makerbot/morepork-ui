@@ -58,11 +58,6 @@ LoggingItem {
            return "makerbot.com/methodfw"
     }
 
-    Rectangle {
-        color: "#000000"
-        anchors.fill: parent
-    }
-
     FirmwareFileListUsb {
         id: firmwareFileListUsb
         anchors.verticalCenter: parent.verticalCenter
