@@ -414,6 +414,12 @@ ApplicationWindow {
                      connectionState == ConnectionState.Connected
         }
 
+        PowerButtonScreen {
+            id: powerButtonScreen
+            z: 2
+            visible: false
+        }
+
         HeatShieldInstructions {
             anchors.fill: parent
             z: 2
@@ -423,8 +429,8 @@ ApplicationWindow {
             target: power_key
             onPowerbuttonPressed: {
                 console.info("Power button is pressed!")
+                powerButtonScreen.visible = true
             }
-
         }
 
         Flickable {

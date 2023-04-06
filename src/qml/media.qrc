@@ -220,5 +220,6 @@
         <file alias="attach_extruder_1_step2.gif">images/attach_extruders/attach_extruder_1_step2.gif</file>
         <file alias="attach_extruder_2_step1.gif">images/attach_extruders/attach_extruder_2_step1.gif</file>
         <file alias="attach_extruder_swivel_clips.gif">images/attach_extruders/attach_extruder_swivel_clips.gif</file>
+        <file alias="power_button_screen.png">images/power_button/power_button_screen.png</file>
     </qresource>
 </RCC>

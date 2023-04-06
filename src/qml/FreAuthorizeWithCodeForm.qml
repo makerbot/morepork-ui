@@ -64,11 +64,6 @@ LoggingItem {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Text {
         id: title_text
         color: "#ffffff"

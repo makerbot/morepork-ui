@@ -265,5 +265,6 @@
         <file>ButtonOptions.qml</file>
         <file>PrintFileInfoPageForm.qml</file>
         <file>PrintFileInfoPage.qml</file>
+        <file>PowerButtonScreen.qml</file>
     </qresource>
 </RCC>
