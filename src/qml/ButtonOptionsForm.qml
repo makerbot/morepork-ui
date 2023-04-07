@@ -8,7 +8,7 @@ ButtonRectangleBase {
     logKey: "ButtonOptions"
     color:(was_pressed ? "#FFFFFF" : "transparent")
     border.width: 0
-    opacity: control.enabled ? 1 : 0.5
+    opacity: enabled ? 1 : 0.5
 
     property bool was_pressed: false
     property var text_color: enabled ? (was_pressed ? "#000000" : "#FFFFFF") : "#555555"

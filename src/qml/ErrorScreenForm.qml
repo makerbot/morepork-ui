@@ -133,7 +133,7 @@ LoggingItem {
         visible: true
 
         image {
-            source: "qrc:/img/error_close_door.png"
+            source: "qrc:/img/method_error_close_door.png"
             visible:  true
         }
     }
