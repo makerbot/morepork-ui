@@ -396,9 +396,9 @@ LoggingItem {
                 target: contentLeftItem.image
                 source: {
                     if(bot.process.extruderAJammed) {
-                        "qrc:/img/error_extruder_filament_jam_1.png"
+                        "qrc:/img/error_filament_jam_1.png"
                     } else if(bot.process.extruderBJammed) {
-                        "qrc:/img/error_extruder_filament_jam_2.png"
+                        "qrc:/img/error_filament_jam_2.png"
                     } else {
                         "qrc:/img/broken.png"
                     }
@@ -561,8 +561,8 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftItem.image
                 source: bot.process.errorSource?
-                            "qrc:/img/error_filament_jam_2.png" :
-                            "qrc:/img/error_filament_jam_1.png"
+                            "qrc:/img/error_tool_2.png" :
+                            "qrc:/img/error_tool_1.png"
                 visible: true
             }
 
