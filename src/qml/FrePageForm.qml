@@ -8,7 +8,7 @@ LoggingItem {
     id: main_fre_item
     width: 800
     height: 480
-    property alias continueButton: continueButton
+    property alias continueButton: freContentRight.buttonPrimary
 
     Image {
         id: bot_image
@@ -22,68 +22,40 @@ LoggingItem {
         source: "qrc:/img/sombrero_welcome.png"
     }
 
-    Item {
-        id: instructions_item
-        width: 400
-        height: 300
-        visible: {
-            // Login step has it's own flow within the FRE unlike the
-            // other steps which use the same template.
-            currentFreStep != FreStep.LoginMbAccount
-        }
-        anchors.left: parent.left
-        anchors.leftMargin: 400
-        anchors.verticalCenter: parent.verticalCenter
-
-        Text {
-            id: title_text
-            color: "#ffffff"
+    ContentRightSide {
+        id: freContentRight
+        textHeader {
             text: qsTr("WELCOME")
-            font.letterSpacing: 2
-            anchors.top: parent.top
-            anchors.topMargin: 35
-            font.family: defaultFont.name
-            font.weight: Font.Bold
-            font.pixelSize: 28
-            lineHeight: 1.2
+            visible: true
         }
 
-        Text {
-            id: subtitle_text
-            color: "#cbcbcb"
+        textBody {
             text: qsTr("Follow these steps to set up your\n%1 Performance 3D Printer.").arg(productName)
-            anchors.top: title_text.bottom
-            anchors.topMargin: 20
-            font.family: defaultFont.name
-            font.weight: Font.Light
-            font.pixelSize: 20
-            lineHeight: 1.3
+            visible: true
         }
 
-        RoundedButton {
-            id: continueButton
-            anchors.top: subtitle_text.bottom
-            anchors.topMargin: 30
-            label: qsTr("BEGIN SETUP")
-            buttonHeight: 50
+        buttonPrimary {
+            text: qsTr("BEGIN SETUP")
+            visible: true
         }
+
     }
 
     Item {
         id: progress_item
-        width: 800
-        height: 100
+        width: 400
+        height: 480
         visible: false
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 45
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.left
 
         Rectangle {
             id: progress_rectangle
             width: 2
             height: parent.width
-            anchors.centerIn: parent
-            rotation: -90
+            anchors.left: parent.left
+            anchors.leftMargin: 59
+            anchors.top: parent.top
             gradient: Gradient {
                 GradientStop {
                     id: startStep
@@ -105,120 +77,48 @@ LoggingItem {
             }
         }
 
-        RowLayout {
+        ColumnLayout {
             id: progress_circle_layout
-            width: 650
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.verticalCenter: parent.verticalCenter
+            width: 400
+            anchors.left: parent.left
+            anchors.leftMargin: 53
+            anchors.top: parent.top
+            anchors.topMargin: 67
+            spacing: 60
 
-            Rectangle {
-                id: rectangle1
-                width: 14
-                height: 14
-                color: "#ffffff"
-                radius: 7
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                Text {
-                    id: text1
-                    color: parent.color
-                    text: qsTr("SET UP")
-                    font.letterSpacing: 2
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 18
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 14
-                }
+            FreProgressItem{
+                id: setup
+                text: qsTr("SET UP")
+                Layout.leftMargin: 32
+                state: FreProgressItem.Active
             }
 
-            Rectangle {
-                id: rectangle2
-                width: 14
-                height: 14
-                color: "#ffffff"
-                radius: 7
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                Text {
-                    id: text2
-                    color: parent.color
-                    text: qsTr("EXTRUDERS")
-                    font.letterSpacing: 2
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 18
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 14
-                }
+            FreProgressItem{
+                id: extruders
+                text: qsTr("EXTRUDERS")
+                Layout.leftMargin: 32
+                state: FreProgressItem.Disabled
             }
 
-            Rectangle {
-                id: rectangle3
-                width: 14
-                height: 14
-                color: "#ffffff"
-                radius: 7
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                Text {
-                    id: text3
-                    color: parent.color
-                    text: qsTr("MATERIAL")
-                    font.letterSpacing: 2
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 18
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 14
-                }
+            FreProgressItem{
+                id: material
+                text: qsTr("MATERIAL")
+                Layout.leftMargin: 32
+                state: FreProgressItem.Disabled
             }
 
-            Rectangle {
-                id: rectangle4
-                width: 14
-                height: 14
-                color: "#ffffff"
-                radius: 7
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                Text {
-                    id: text4
-                    color: parent.color
-                    text: qsTr("PRINT")
-                    font.letterSpacing: 2
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 18
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 14
-                }
+            FreProgressItem{
+                id: print
+                text: qsTr("PRINT")
+                Layout.leftMargin: 32
+                state: FreProgressItem.Disabled
             }
 
-            Rectangle {
-                id: rectangle5
-                width: 14
-                height: 14
-                color: "#ffffff"
-                radius: 7
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                Text {
-                    id: text5
-                    color: parent.color
-                    text: qsTr("CONNECT")
-                    font.letterSpacing: 2
-                    anchors.top: parent.bottom
-                    anchors.topMargin: 18
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 14
-                }
+            FreProgressItem{
+                id: connect
+                text: qsTr("CONNECT")
+                Layout.leftMargin: 32
+                state: FreProgressItem.Disabled
             }
         }
     }
@@ -241,12 +141,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: {
                     if(isNetworkConnectionAvailable) {
                         qsTr("CONNECTED TO NETWORK")
@@ -255,11 +150,10 @@ LoggingItem {
                         qsTr("WI-FI SETUP")
                     }
                 }
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: {
                     if(isNetworkConnectionAvailable) {
                         qsTr("You seem to be connected to a network.")
@@ -271,8 +165,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: continueButton
-                label: {
+                target: freContentRight.buttonPrimary
+                text: {
                     if(isNetworkConnectionAvailable) {
                         qsTr("CONTINUE")
                     }
@@ -283,23 +177,28 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#595959"
+                target: setup
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -316,44 +215,44 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("PRINTER SOFTWARE UPDATE AVAILABLE")
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Update the %1's printer software for the most up to date\nfeatures and quality.").arg(productName)
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#595959"
+                target: setup
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -370,44 +269,43 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("NAME PRINTER")
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Give this printer a name to find it easier.")
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#595959"
+                target: setup
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -424,44 +322,43 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("SET THE PRINTER'S CLOCK")
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Input your local date and time for accurate print estimates.")
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#595959"
+                target: setup
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -477,40 +374,40 @@ LoggingItem {
                 visible: false
             }
 
-            PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
 
             PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("ATTACH EXTRUDERS")
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
+                target: setup
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -542,39 +439,38 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("LEVEL BUILD PLATFORM")
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
+                target: setup
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -606,41 +502,39 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("CALIBRATE EXTRUDERS")
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
+                target: setup
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#595959"
+                target: extruders
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
             }
 
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
+            }
             PropertyChanges {
                 target: progress_item
                 visible: true
@@ -670,39 +564,39 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("LOAD MATERIAL")
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
+                target: setup
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#ffffff"
+                target: extruders
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#595959"
+                target: material
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
@@ -734,41 +628,39 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
-            }
-
-            PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("READY TO PRINT")
-                anchors.topMargin: 25
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("CONTINUE")
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
+                target: setup
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#ffffff"
+                target: extruders
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#ffffff"
+                target: material
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#595959"
+                target: print
+                state: FreProgressItem.Active
             }
 
+            PropertyChanges {
+                target: connect
+                state: FreProgressItem.Disabled
+            }
             PropertyChanges {
                 target: progress_item
                 visible: true
@@ -798,28 +690,28 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 50
+                target: setup
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle2
-                color: "#ffffff"
+                target: extruders
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle3
-                color: "#ffffff"
+                target: material
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle4
-                color: "#ffffff"
+                target: print
+                state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: rectangle5
-                color: "#ffffff"
+                target: connect
+                state: FreProgressItem.Active
             }
 
             PropertyChanges {
@@ -846,27 +738,19 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: title_text
+                target: freContentRight.textHeader
                 text: qsTr("YOUR PRINTER IS\nSUCCESSFULLY SET UP")
-                lineHeight: 1.4
-                font.pixelSize: 25
-                anchors.topMargin: 35
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Log onto MakerBot CloudPrint<br>to prepare your own files for this<br>printer.")
                 anchors.topMargin: 20
             }
 
             PropertyChanges {
-                target: continueButton
-                label: qsTr("DONE")
-            }
-
-            PropertyChanges {
-                target: instructions_item
-                anchors.leftMargin: 400
+                target: freContentRight.buttonPrimary
+                text: qsTr("DONE")
             }
 
             PropertyChanges {
