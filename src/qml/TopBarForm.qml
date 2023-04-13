@@ -231,14 +231,18 @@ Item {
                         status_text = qsTr("IDLE")
                         break;
                     }
-                    if ((currentItem.topBarTitle == qsTr("Choose a File")) &&
+                    if ((currentItem.topBarTitle == qsTr("Select Source")) &&
                         (bot.process.type == ProcessType.Print)) {
                         processed_title = qsTr("Print")
                     }
                     else {
                         processed_title = currentItem.topBarTitle
                     }
-                    qsTr("%1 - %2 - %3").arg(bot.name).arg(status_text).arg(processed_title)
+                    if (status_text == qsTr("IDLE")) {
+                        qsTr("%1 - %2").arg(bot.name).arg(processed_title)
+                    } else {
+                        qsTr("%1 - %2").arg(bot.name).arg(status_text)
+                    }
                 }
                 antialiasing: false
                 smooth: false

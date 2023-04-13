@@ -511,7 +511,7 @@ ApplicationWindow {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
-                    property string topBarTitle: qsTr("Choose a File")
+                    property string topBarTitle: qsTr("Select Source")
                     smooth: false
                     visible: false
 

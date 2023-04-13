@@ -228,6 +228,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
             property int backSwipeIndex: MoreporkUI.BasePage
+            property string topBarTitle: qsTr("Material")
             smooth: false
 
             RowLayout {
@@ -251,6 +252,7 @@ Item {
             id: itemSelectMaterial
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
+            property string topBarTitle: qsTr("Select Material")
             visible: false
 
             LoadMaterialSettings {
@@ -263,6 +265,7 @@ Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
+            property string topBarTitle: qsTr("Load/Unload")
             property bool hasAltBack: true
             visible: false
 
@@ -342,6 +345,7 @@ Item {
             id: itemAttachExtruder
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: 0
+            property string topBarTitle: qsTr("Attach Extruder")
             property int extruder
             property bool isAttached: {
                 switch(extruder) {

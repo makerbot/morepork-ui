@@ -201,7 +201,7 @@ Item {
             id: cleanAirSettingsItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
-            property string topBarTitle: qsTr("CleanAir Settings")
+            property string topBarTitle: qsTr("Clean Air Settings")
             smooth: false
             visible: false
 
