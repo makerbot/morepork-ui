@@ -274,6 +274,7 @@ Item {
                 TextSubheader {
                     id: subtext0
                     style: TextSubheader.Base
+                    opacity: 0.7
                     visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
@@ -487,6 +488,8 @@ Item {
             TextSubheader{
                 id: done_by
                 text: qsTr("DONE BY")
+                font.weight: Font.Light
+                opacity: 0.7
                 anchors.left: parent.left
                 anchors.top: name_printer.bottom
                 anchors.leftMargin: 50
@@ -516,6 +519,8 @@ Item {
             TextSubheader{
                 id: filename_header
                 text: qsTr("FILENAME")
+                font.weight: Font.Light
+                opacity: 0.7
                 anchors.left: parent.left
                 anchors.top: time.bottom
                 anchors.leftMargin: 50
@@ -524,7 +529,9 @@ Item {
 
             TextBody{
                 id: printjob_name
-                text: fileName_
+                text: qsTr(fileName_)
+                opacity: 0.7
+                font.capitalization: Font.AllUppercase
                 anchors.left: parent.left
                 anchors.top: filename_header.bottom
                 anchors.topMargin: 10
