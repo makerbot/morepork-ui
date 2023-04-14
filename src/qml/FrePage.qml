@@ -89,10 +89,10 @@ FrePageForm {
                 settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.SetTimeZone)
             } else if(state == "attach_extruders") {
                 inFreStep = true
-                mainSwipeView.swipeToItem(MoreporkUI.ExtruderPage)
-                extruderPage.itemAttachExtruder.extruder = 1
-                extruderPage.itemAttachExtruder.state = "base state"
-                extruderPage.extruderSwipeView.swipeToItem(ExtruderPage.AttachExtruderPage)
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                materialPage.itemAttachExtruder.extruder = 1
+                materialPage.itemAttachExtruder.state = "base state"
+                materialPage.materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
             } else if(state == "level_build_plate") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)

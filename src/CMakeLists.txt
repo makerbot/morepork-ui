@@ -41,7 +41,10 @@ endif()
 # so this just magically works.
 find_package(Qt5 COMPONENTS Core Quick Multimedia Gui REQUIRED)
 find_package(Qt5LinguistTools)
-find_package(Qt5QuickCompiler)
+# Not precompiling for Qt creator build so no need to include this package.
+if(NOT ${QT_CREATOR_BUILD})
+    find_package(Qt5QuickCompiler)
+endif()
 
 # Model impl sources aren't built for Qt creator so they just live here
 set(SOURCES
@@ -125,7 +128,15 @@ qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC
 file(GLOB TS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_SOURCES})
 
-qtquick_compiler_add_resources(MOREPORK_UI_RESOURCES qml/media.qrc qml/qml.qrc)
+# Only precompile for toolchain release builds. Precompiling for qt creator
+# builds breaks a few convenient Qt creator features. (compilation happens at
+# runtime superfast anyway and we see the errors too in the output panel so
+# turning off precompiling doesnt hurt.
+if(NOT ${QT_CREATOR_BUILD})
+    qtquick_compiler_add_resources(MOREPORK_UI_RESOURCES qml/media.qrc qml/qml.qrc)
+else()
+    qt5_add_resources(MOREPORK_UI_RESOURCES qml/media.qrc qml/qml.qrc)
+endif()
 
 # Take care of host code
 if(${QT_CREATOR_BUILD})
