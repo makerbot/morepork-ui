@@ -44,7 +44,7 @@ Item {
             id: authorizeAccountView
             property var backSwiper: authorizeAccountSwipeView
             property int backSwipeIndex: AuthorizeAccountPage.ChooseAuthMethod
-            property string topBarTitle: "Log In to Makerbot Account"
+            property string topBarTitle: qsTr("Log In to Makerbot Account")
             smooth: false
             visible: true
 
@@ -123,7 +123,7 @@ Item {
             id: enterUsernameView
             property var backSwiper: signInSwipeView
             property int backSwipeIndex: SignInPage.BasePage
-            property string topBarTitle: "Enter Username or Email"
+            property string topBarTitle: qsTr("Enter Username or Email")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -220,7 +220,7 @@ Item {
             id: enterPasswordView
             property var backSwiper: signInSwipeView
             property int backSwipeIndex: SignInPage.UsernamePage
-            property string topBarTitle: "Enter Password"
+            property string topBarTitle: qsTr("Enter Password")
             smooth: false
             visible: false
             property bool hasAltBack: true

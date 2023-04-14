@@ -37,7 +37,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
-            property string topBarTitle: "Buildplate Settings"
+            property string topBarTitle: qsTr("Buildplate Settings")
 
             smooth: false
 
@@ -80,7 +80,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: buildPlateSettingsSwipeView
             property int backSwipeIndex: BuildPlateSettingsPage.BasePage
-            property string topBarTitle: "Assisted Leveling"
+            property string topBarTitle: qsTr("Assisted Leveling")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -126,7 +126,7 @@ Item {
             id: raiseLowerBuildPlateItem
             property var backSwiper: buildPlateSettingsSwipeView
             property int backSwipeIndex: BuildPlateSettingsPage.BasePage
-            property string topBarTitle: "Raise/Lower Buildplate"
+            property string topBarTitle: qsTr("Raise/Lower Buildplate")
             smooth: false
             visible: false
 
