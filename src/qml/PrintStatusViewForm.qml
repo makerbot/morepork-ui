@@ -594,8 +594,10 @@ Item {
                         qsTr("PAUSING")
                     } else if( bot.process.stateType == ProcessStateType.Resuming){
                         qsTr("RESUMING")
-                    } else if(bot.process.stateType == ProcessStateType.Cancelling || (bot.process.stateType == ProcessStateType.CleaningUp && !bot.process.complete)){
+                    } else if(bot.process.stateType == ProcessStateType.Cancelling){
                         qsTr("CANCELLING")
+                    } else if(bot.process.stateType == ProcessStateType.CleaningUp && !bot.process.complete){
+                        qsTr("FINISHING")
                     }
                 }
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
