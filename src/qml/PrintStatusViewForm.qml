@@ -483,13 +483,13 @@ Item {
                 anchors.bottomMargin: 40
                 anchors.rightMargin: 50
                 elide: Text.ElideRight
+                font.weight: Font.Light
             }
 
-            TextSubheader{
+            TextBody{
                 id: done_by
                 text: qsTr("DONE BY")
                 font.weight: Font.Light
-                opacity: 0.7
                 anchors.left: parent.left
                 anchors.top: name_printer.bottom
                 anchors.leftMargin: 50
@@ -504,6 +504,7 @@ Item {
                 anchors.top: done_by.bottom
                 anchors.leftMargin: 50
                 anchors.topMargin: 10
+                font.weight: Font.Light
             }
 
             TextHeadline{
@@ -514,13 +515,13 @@ Item {
                 anchors.top: day.bottom
                 anchors.leftMargin: 50
                 anchors.topMargin: 10
+                font.weight: Font.Light
             }
 
-            TextSubheader{
+            TextBody{
                 id: filename_header
                 text: qsTr("FILENAME")
                 font.weight: Font.Light
-                opacity: 0.7
                 anchors.left: parent.left
                 anchors.top: time.bottom
                 anchors.leftMargin: 50
@@ -530,7 +531,6 @@ Item {
             TextBody{
                 id: printjob_name
                 text: qsTr(fileName_)
-                opacity: 0.7
                 font.capitalization: Font.AllUppercase
                 anchors.left: parent.left
                 anchors.top: filename_header.bottom
