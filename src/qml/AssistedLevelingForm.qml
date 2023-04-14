@@ -6,12 +6,6 @@ import ProcessStateTypeEnum 1.0
 import MachineTypeEnum 1.0
 
 LoggingItem {
-
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     itemName: "AssistedLeveling"
     id: assistedLevelingPage
     width: 800

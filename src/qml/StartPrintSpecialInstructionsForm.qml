@@ -18,11 +18,6 @@ LoggingItem {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Image {
         id: image
         width: sourceSize.width

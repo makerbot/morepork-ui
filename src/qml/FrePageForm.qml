@@ -10,11 +10,6 @@ LoggingItem {
     height: 480
     property alias continueButton: continueButton
 
-    Rectangle {
-        anchors.fill: parent
-        color: "#000000"
-    }
-
     Image {
         id: bot_image
         width: sourceSize.width

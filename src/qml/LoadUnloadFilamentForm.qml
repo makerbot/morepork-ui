@@ -867,8 +867,8 @@ LoggingItem {
                 target: contentLeftItem.animatedImage
                 visible: bot.machineType != MachineType.Magma
                 source: bayID == 1 ?
-                            "qrc:/img/rewind_spool_1.gif" :
-                            "qrc:/img/rewind_spool_2.gif"
+                            "qrc:/img/method_rewind_spool_1.gif" :
+                            "qrc:/img/method_rewind_spool_2.gif"
             }
 
             PropertyChanges {
