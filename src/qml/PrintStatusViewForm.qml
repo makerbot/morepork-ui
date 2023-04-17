@@ -271,9 +271,9 @@ Item {
                     Layout.preferredWidth: parent.width - 40
                 }
 
-                TextSubheader {
+                TextBody {
                     id: subtext0
-                    style: TextSubheader.Base
+                    style: TextBody.Base
                     opacity: 0.7
                     visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
@@ -325,7 +325,8 @@ Item {
 
                 TextBody {
                     id: subtext1
-                    style: TextBody.Large
+                    style: TextBody.Base
+                    opacity: 0.7
                     visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
@@ -342,13 +343,13 @@ Item {
                         case ProcessStateType.Paused:
                             timeLeftString == "0M" ?
                                         qsTr("FINISHING UP") :
-                                        qsTr("REMAINING")
+                                        qsTr("Remaining")
                             break;
                         case ProcessStateType.Failed:
-                            qsTr("%1 PRINT TIME").arg(print_time_)
+                            qsTr("%1 Print Time").arg(print_time_)
                             break;
                         case ProcessStateType.Completed:
-                            qsTr("%1 PRINT TIME").arg(print_time_)
+                            qsTr("%1 Print Time").arg(print_time_)
                             break;
                         default:
                             emptyString
@@ -449,6 +450,7 @@ Item {
             PrintModelInfoPage {
                 anchors.fill: parent.fill
                 startPrintButtonVisible: false
+                customModelSource: "image://thumbnail/" + filePathName
             }
         }
 
