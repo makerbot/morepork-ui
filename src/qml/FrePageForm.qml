@@ -489,7 +489,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Follow the on-screen steps to level the build plate.")
             }
         },
@@ -551,7 +551,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
             }
         },
@@ -615,7 +615,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Follow the on screen steps to load material into each bay.")
             }
         },
@@ -677,7 +677,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("Start a test print to ensure the printer is set up correctly.")
             }
         },
