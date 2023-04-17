@@ -87,35 +87,35 @@ LoggingItem {
             spacing: 60
 
             FreProgressItem{
-                id: setup
+                id: setupProgress
                 text: qsTr("SET UP")
                 Layout.leftMargin: 32
                 state: FreProgressItem.Active
             }
 
             FreProgressItem{
-                id: extruders
+                id: extrudersProgress
                 text: qsTr("EXTRUDERS")
                 Layout.leftMargin: 32
                 state: FreProgressItem.Disabled
             }
 
             FreProgressItem{
-                id: material
+                id: materialProgress
                 text: qsTr("MATERIAL")
                 Layout.leftMargin: 32
                 state: FreProgressItem.Disabled
             }
 
             FreProgressItem{
-                id: print
+                id: printProgress
                 text: qsTr("PRINT")
                 Layout.leftMargin: 32
                 state: FreProgressItem.Disabled
             }
 
             FreProgressItem{
-                id: connect
+                id: connectProgress
                 text: qsTr("CONNECT")
                 Layout.leftMargin: 32
                 state: FreProgressItem.Disabled
@@ -177,27 +177,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -231,27 +231,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -284,27 +284,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -337,27 +337,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -386,27 +386,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -449,27 +449,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -512,27 +512,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
             PropertyChanges {
@@ -575,27 +575,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Disabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
 
@@ -638,27 +638,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Active
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Disabled
             }
             PropertyChanges {
@@ -690,27 +690,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: setup
+                target: setupProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: extruders
+                target: extrudersProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: material
+                target: materialProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: print
+                target: printProgress
                 state: FreProgressItem.Enabled
             }
 
             PropertyChanges {
-                target: connect
+                target: connectProgress
                 state: FreProgressItem.Active
             }
 
