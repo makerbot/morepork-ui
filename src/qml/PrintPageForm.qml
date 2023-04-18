@@ -1236,8 +1236,8 @@ Item {
     CustomPopup {
         popupName: "PrintFeedbackAcknowledgement"
         id: printFeedbackAcknowledgementPopup
-        popupWidth: 720
-        popupHeight: 275
+        popupWidth: 715
+        popupHeight: 336
         showOneButton: true
         full_button_text: qsTr("OK")
         full_button.onClicked: {
@@ -1268,36 +1268,39 @@ Item {
             anchors.verticalCenterOffset: -30
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Text {
-                id: alert_text_printFeedbackAcknowledgementPopup
-                color: "#cbcbcb"
-                text: qsTr("FEEDBACK SUBMITTED")
-                font.letterSpacing: 3
+            Image{
+                id: blue_check
+                source: "qrc:/img/popup_complete.png"
                 Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
-            Text {
+            TextHeadline {
+                id: alert_text_printFeedbackAcknowledgementPopup
+                text: qsTr("FEEDBACK SUBMITTED")
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
                 id: description_text_printFeedbackAcknowledgementPopup
-                color: "#cbcbcb"
                 text: {
                     if(printFeedbackAcknowledgementPopup.feedbackGood) {
-                        qsTr("Thanks for providing feedback. This will help us make improvements to your printer.")
+                        qsTr("Thank you for your feedback. If you encounter issues, visit:")
                     } else {
-                        qsTr("We are sorry that your print had trouble. If problems continue, please visit support.makerbot.com")
+                        qsTr("Thank you for your feedback. If you encounter ongoing issues, visit:")
                     }
                 }
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
+                id: support_link
+                text: qsTr("support.makerbot.com")
+                horizontalAlignment: Text.AlignHCenter
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
+                font.weight: Font.DemiBold
             }
         }
     }

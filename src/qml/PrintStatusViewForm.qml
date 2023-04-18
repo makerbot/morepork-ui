@@ -61,11 +61,11 @@ Item {
         }
 
         if (daysLeft > 1) {
-            doneByDayString = qsTr("DONE IN %1 DAYS BY").arg(daysLeft)
+            doneByDayString = qsTr("%1 DAYS").arg(daysLeft)
         } else if (daysLeft === 1) {
-            doneByDayString = qsTr("DONE TOMORROW BY")
+            doneByDayString = qsTr("TOMORROW")
         } else {
-            doneByDayString = qsTr("DONE TODAY BY")
+            doneByDayString = qsTr("TODAY")
         }
 
         doneByTimeString = endTime.toLocaleTimeString(Qt.locale(),"hh:mm")
@@ -107,17 +107,106 @@ Item {
         Item {
             id: page0
             width: 800
-            height: 420
+            height: 408
             smooth: false
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
             PrintIcon {
+                id: printIcon
                 anchors.verticalCenterOffset: 7
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
                 anchors.leftMargin: 65
+                anchors.top: parent.top
+                anchors.topMargin: 50 
             }
+
+            ButtonRoundPrintIcon {
+                id: pause
+                radius: 30
+                anchors.left: parent.left
+                anchors.leftMargin: 100.64
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                visible: bot.process.stateType != ProcessStateType.Cancelled &&
+                         bot.process.stateType != ProcessStateType.Completed &&
+                         bot.process.stateType != ProcessStateType.Failed
+                image_source: (bot.process.stateType == ProcessStateType.Paused ||
+                               bot.process.stateType == ProcessStateType.Pausing ||
+                               bot.process.stateType == ProcessStateType.Resuming ||
+                               bot.process.stateType == ProcessStateType.Preheating ||
+                               bot.process.stateType == ProcessStateType.UnloadingFilament) ?
+                                  "qrc:/img/play.png" : "qrc:/img/pause.png"
+
+
+                opacity: (bot.process.stateType == ProcessStateType.Paused ||
+                          bot.process.stateType == ProcessStateType.Printing) ?
+                          1 : 0.3
+
+                mouseArea.onClicked: {
+                    switch(bot.process.stateType) {
+                        case ProcessStateType.Printing:
+                            //In Printing State
+                            bot.pauseResumePrint("suspend")
+                            break;
+                        case ProcessStateType.Paused:
+                            //In Paused State
+                            bot.pauseResumePrint("resume")
+                        break;
+                    default:
+                        break;
+                    }
+                }
+
+                TextSubheader {
+                    style: TextSubheader.Base
+                    text: (bot.process.stateType == ProcessStateType.Paused ||
+                           bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Resuming ||
+                           bot.process.stateType == ProcessStateType.Preheating ||
+                           bot.process.stateType == ProcessStateType.UnloadingFilament) ?
+                              qsTr("RESUME") : qsTr("PAUSE")
+                    anchors.verticalCenter: pause.verticalCenter
+                    anchors.top : pause.bottom
+                    anchors.horizontalCenter: pause.horizontalCenter
+                    anchors.topMargin: 15.7
+                }
+            }
+
+
+
+            ButtonRoundPrintIcon {
+                id: cancel
+                radius: 30
+                anchors.left: pause.right
+                anchors.leftMargin: 66
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 30
+                image_source: "qrc:/img/cancel.png"
+                visible: bot.process.stateType != ProcessStateType.Cancelled &&
+                         bot.process.stateType != ProcessStateType.Completed &&
+                         bot.process.stateType != ProcessStateType.Failed
+
+                mouseArea.onClicked: {
+                    if(inFreStep) {
+                        skipFreStepPopup.open()
+                        return;
+                     }
+                     cancelPrintPopup.open()
+                }
+
+                TextSubheader {
+                    style: TextSubheader.Base
+                    text: qsTr("CANCEL")
+                    anchors.verticalCenter: cancel.verticalCenter
+                    anchors.horizontalCenter: cancel.horizontalCenter
+                    anchors.top : cancel.bottom
+                    anchors.topMargin: 15.7
+                }
+            }
+
+
 
             ColumnLayout {
                 id: columnLayout_page0
@@ -128,28 +217,22 @@ Item {
                 anchors.leftMargin: 400
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: {
-                    if(acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
-                       acknowledgePrintFinished.state == "print_failed") {
-                        50
-                    } else {
-                        0
-                    }
+                    acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
+                       acknowledgePrintFinished.state == "print_failed" ?
+                        50 : 0
                 }
                 spacing: {
-                    if(bot.process.stateType == ProcessStateType.Cancelled) {
-                        -10
-                    } else {
-                        20
-                    }
+                    bot.process.stateType == ProcessStateType.Cancelled ?
+                        -10 : 20
                 }
-
-                Text {
+                TextHeadline {
                     id: status_text0
-                    color: "#cbcbcb"
+                    style: TextHeadline.Large
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
-                            qsTr("GETTING READY")
+                            (bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer") ?
+                                qsTr("GETTING READY") : qsTr("HEATING")
                             break;
                         case ProcessStateType.Printing:
                             qsTr("PRINTING")
@@ -166,7 +249,7 @@ Item {
                             qsTr("PAUSED")
                             break;
                         case ProcessStateType.Completed:
-                            fileName_
+                            qsTr("COMPLETED")
                             break;
                         case ProcessStateType.Failed:
                             qsTr("PRINT FAILED")
@@ -178,31 +261,21 @@ Item {
                             qsTr("CANCELLING")
                             break;
                         case ProcessStateType.CleaningUp:
-                            if(bot.process.complete) {
-                                qsTr("FINISHING UP")
-                            }
-                            else {
-                                qsTr("CANCELLING")
-                            }
+                            (bot.process.complete) ? qsTr("FINISHING UP") : qsTr("CANCELLING")
                             break;
                         default:
                             ""
                             break;
                         }
                     }
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 5
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 18
-                    elide: Text.ElideMiddle
                     Layout.preferredWidth: parent.width - 40
                 }
 
-                Text {
+                TextBody {
                     id: subtext0
-                    color: "#cbcbcb"
+                    style: TextBody.Base
+                    opacity: 0.7
+                    visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
@@ -210,14 +283,6 @@ Item {
                                 qsTr("WAITING FOR PRINT FILE")
                             } else if(bot.process.stepStr == "transfer") {
                                 qsTr("TRANSFERRING PRINT FILE")
-                            } else if(bot.process.stepStr == "heating_chamber") {
-                                qsTr("HEATING UP CHAMBER")
-                            } else if(bot.process.stepStr == "heating_build_platform") {
-                                qsTr("HEATING UP BUILD PLATFORM")
-                            } else if(bot.extruderATargetTemp > 0) {
-                                qsTr("HEATING UP EXTRUDER")
-                            } else {
-                                qsTr("HEATING UP CHAMBER")
                             }
                             break;
                         case ProcessStateType.Printing:
@@ -226,12 +291,10 @@ Item {
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
                         case ProcessStateType.Paused:
-                            (bot.process.errorCode?
-                                qsTr("Error %1").arg(bot.process.errorCode) :
-                                fileName_)
+                            fileName_
                             break;
                         case ProcessStateType.Completed:
-                            qsTr("%1 PRINT TIME").arg(print_time_)
+                            fileName_
                             break;
                         case ProcessStateType.Failed:
                             qsTr("Error %1").arg(bot.process.errorCode)
@@ -245,19 +308,26 @@ Item {
                             break;
                         }
                     }
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pixelSize: 18
-                    elide: Text.ElideMiddle
                     Layout.preferredWidth: parent.width - 40
+                    horizontalAlignment: Text.AlignTop
+                    elide: Text.ElideRight
+                    anchors.right: parent.right
+                    anchors.left: parent.left
                 }
 
-                Text {
+                TextHeadline{
+                    id: minutes_remaining_printing_paused
+                    visible: (bot.process.stateType == ProcessStateType.Paused || bot.process.stateType == ProcessStateType.Printing)
+                    style: TextHeadline.Large
+
+                    text: qsTr("%1").arg(timeLeftString)
+                }
+
+                TextBody {
                     id: subtext1
-                    color: "#cbcbcb"
+                    style: TextBody.Base
+                    opacity: 0.7
+                    visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
                     text: {
                         switch(bot.process.stateType) {
                         case ProcessStateType.Loading:
@@ -265,46 +335,76 @@ Item {
                                 ""
                             } else if(bot.process.stepStr == "transfer") {
                                 bot.process.printPercentage + "%"
-                            } else if(bot.process.stepStr == "heating_chamber") {
-                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
-                            } else if(bot.process.stepStr == "heating_build_platform") {
-                                (qsTr("%1 C").arg(Math.floor(bot.hbpCurrentTemp)) + " | " + qsTr("%1 C").arg(bot.hbpTargetTemp))
-                            } else if(bot.extruderATargetTemp > 0) {
-                                (qsTr("%1 C").arg(bot.extruderACurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderATargetTemp) +
-                                 (support_extruder_used_ ?
-                                     (qsTr("\n%1 C").arg(bot.extruderBCurrentTemp) + " | " + qsTr("%1 C").arg(bot.extruderBTargetTemp)) :
-                                     "\n"))
-                            } else {
-                                (qsTr("%1 C").arg(bot.buildplaneCurrentTemp) + " | " + qsTr("%1 C").arg(bot.buildplaneTargetTemp))
                             }
                             break;
                         case ProcessStateType.Printing:
                         case ProcessStateType.Pausing:
                         case ProcessStateType.Resuming:
-                        case ProcessStateType.Paused: {
+                        case ProcessStateType.Paused:
                             timeLeftString == "0M" ?
                                         qsTr("FINISHING UP") :
-                                        qsTr("%1 REMAINING").arg(timeLeftString)
-                        }
+                                        qsTr("Remaining")
                             break;
                         case ProcessStateType.Failed:
-                            qsTr("%1 PRINT TIME").arg(print_time_)
+                            qsTr("%1 Print Time").arg(print_time_)
                             break;
                         case ProcessStateType.Completed:
-                            qsTr("PRINT COMPLETE")
+                            qsTr("%1 Print Time").arg(print_time_)
                             break;
                         default:
                             emptyString
                             break;
                         }
                     }
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pixelSize: 18
-                    lineHeight: 1.4
+                }
+
+                TemperatureStatusElement {
+                    visible: (bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
+                    customCurrentTemperature: {
+                        if(bot.process.stepStr == "heating_chamber"){
+                            bot.buildplaneCurrentTemp
+                        } else if(bot.process.stepStr == "heating_build_platform"){
+                            bot.hbpCurrentTemp
+                        } else if(bot.extruderATargetTemp > 0) {
+                            bot.extruderACurrentTemp
+                        } else {
+                            bot.buildplaneCurrentTemp
+                        }
+                    }
+                    customTargetTemperature: {
+                        if(bot.process.stepStr == "heating_chamber"){
+                            bot.buildplaneTargetTemp
+                        } else if(bot.process.stepStr == "heating_build_platform"){
+                            bot.hbpTargetTemp
+                        } else if(bot.extruderATargetTemp > 0) {
+                            bot.extruderATargetTemp
+                        } else {
+                            bot.buildplaneTargetTemp
+                        }
+                    }
+
+                    type: {
+                        if (bot.process.stateType == ProcessStateType.Loading) {
+                            if(bot.process.stepStr == "heating_chamber") {
+                                qsTr("CHAMBER")
+                            } else if(bot.process.stepStr == "heating_build_platform") {
+                                qsTr("BUILD PLATE")
+                            } else if(bot.extruderATargetTemp > 0) {
+                                qsTr("EXTRUDER 1")
+                            } else {
+                                qsTr("CHAMBER")
+                            }
+                        }
+                    }
+                }
+
+                TemperatureStatusElement {
+                    visible: (bot.extruderBTargetTemp > 0 && bot.process.stateType == ProcessStateType.Loading &&
+                              !(bot.process.stepStr == "heating_chamber" || bot.process.stepStr == "heating_build_platform"))
+                    customCurrentTemperature: bot.extruderBCurrentTemp
+                    customTargetTemperature: bot.extruderBTargetTemp
+
+                    type: qsTr("EXTRUDER 2")
                 }
 
                 RoundedButton {
@@ -347,206 +447,10 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            Image {
-                id: model_image2
-                smooth: false
-                sourceSize.width: 212
-                sourceSize.height: 300
-                anchors.left: parent.left
-                anchors.leftMargin: 100
-                anchors.verticalCenter: parent.verticalCenter
-                source: "image://thumbnail/" + filePathName
-            }
-
-            ColumnLayout {
-                id: columnLayout_page1
-                width: 400
-                height: 195
-                smooth: false
-                spacing: 3
-                anchors.left: parent.left
-                anchors.leftMargin: 400
-                anchors.verticalCenter: parent.verticalCenter
-
-                Text {
-                    id: fileName_text1
-                    color: "#cbcbcb"
-                    text: fileName_
-                    antialiasing: false
-                    smooth: false
-                    font.letterSpacing: 3
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                    Layout.preferredWidth: parent.width
-                    elide: Text.ElideMiddle
-                }
-
-                Item {
-                    id: divider_item1
-                    width: 200
-                    height: 15
-                    smooth: false
-                }
-
-                RowLayout {
-                    id: rowLayout1
-                    width: 100
-                    height: 100
-                    smooth: false
-                    spacing: 50
-
-                    ColumnLayout {
-                        id: columnLayout1
-                        width: 100
-                        height: 100
-                        smooth: false
-                        spacing: 10
-
-                        Text {
-                            id: infill_label
-                            color: "#cbcbcb"
-                            text: qsTr("INFILL")
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: false
-                        }
-
-                        Text {
-                            id: supports_label
-                            color: "#cbcbcb"
-                            text: qsTr("SUPPORTS")
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: false
-                        }
-
-                        Text {
-                            id: rafts_label
-                            color: "#cbcbcb"
-                            text: qsTr("RAFTS")
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: false
-                        }
-
-                        Text {
-                            id: model_label
-                            color: "#cbcbcb"
-                            text: qsTr("MODEL")
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                        }
-
-                        Text {
-                            id: support_label
-                            color: "#cbcbcb"
-                            text: qsTr("SUPPORT")
-                            antialiasing: false
-                            smooth: false
-                            font.wordSpacing: 2
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: support_extruder_used_
-                        }
-                    }
-
-                    ColumnLayout {
-                        id: columnLayout2
-                        width: 100
-                        height: 100
-                        smooth: false
-                        spacing: 10
-
-                        Text {
-                            id: infill_text
-                            color: "#ffffff"
-                            text: qsTr("99.99%")
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: false
-                        }
-
-                        Text {
-                            id: supports_text
-                            color: "#ffffff"
-                            text: uses_support_
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: false
-                        }
-
-                        Text {
-                            id: rafts_text
-                            color: "#ffffff"
-                            text: uses_raft_
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            visible: false
-                        }
-
-                        Text {
-                            id: model_text
-                            color: "#ffffff"
-                            text: qsTr("%1 %2").arg(model_mass_).arg(print_model_material_)
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            font.capitalization: Font.AllUppercase
-                        }
-
-                        Text {
-                            id: support_text
-                            color: "#ffffff"
-                            text: qsTr("%1 %2").arg(support_mass_).arg(print_support_material_)
-                            antialiasing: false
-                            smooth: false
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            font.pixelSize: 18
-                            font.capitalization: Font.AllUppercase
-                            visible: support_extruder_used_
-                        }
-                    }
-                }
+            PrintModelInfoPage {
+                anchors.fill: parent.fill
+                startPrintButtonVisible: false
+                customModelSource: "image://thumbnail/" + filePathName
             }
         }
 
@@ -558,333 +462,7 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            Image {
-                id: sombrero_image
-                smooth: false
-                sourceSize.height: 342
-                sourceSize.width: 221
-                anchors.left: parent.left
-                anchors.leftMargin: 100
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/img/sombrero.png"
-            }
-
-            ColumnLayout {
-                id: columnLayout_page2
-                width: 400
-                height: 195
-                smooth: false
-                anchors.leftMargin: 400
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 3
-
-                Text {
-                    id: printerName_text2
-                    color: "#cbcbcb"
-                    text: qsTr("%1 INFO").arg(printerName)
-                    antialiasing: false
-                    smooth: false
-                    font.family: defaultFont.name
-                    font.pixelSize: 20
-                    font.weight: Font.Bold
-                    font.letterSpacing: 3
-                }
-
-                Item {
-                    id: divider_item2
-                    width: 200
-                    height: 15
-                    smooth: false
-                }
-
-                ColumnLayout {
-                    id: column_printer_info
-                    width: 100
-                    height: 100
-                    smooth: false
-                    spacing: 10
-
-
-                    RowLayout {
-                        id: row_extruder_info
-                        width: 100
-                        height: 100
-                        smooth: false
-                        spacing: 35
-
-                        ColumnLayout {
-                            id: column_labels_1
-                            width: 100
-                            height: 100
-                            smooth: false
-                            spacing: 10
-
-                            Text {
-                                id: extruder1_temp_label
-                                color: "#cbcbcb"
-                                text: qsTr("EX 1 TEMP")
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Light
-                                font.letterSpacing: 3
-                                font.wordSpacing: 2
-                            }
-
-                            Text {
-                                id: extruder2_temp_label
-                                color: "#cbcbcb"
-                                text: qsTr("EX 2 TEMP")
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Light
-                                font.letterSpacing: 3
-                                font.wordSpacing: 2
-                            }
-
-                            Text {
-                                id: extruder1_life_label
-                                color: "#cbcbcb"
-                                text: qsTr("EX 1 LIFE")
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Light
-                                font.letterSpacing: 3
-                                font.wordSpacing: 2
-                            }
-
-                            Text {
-                                id: extruder2_life_label
-                                color: "#cbcbcb"
-                                text: qsTr("EX 2 LIFE")
-                                antialiasing: false
-                                smooth: false
-                                font.pixelSize: 18
-                                font.family: defaultFont.name
-                                font.weight: Font.Light
-                                font.letterSpacing: 3
-                                font.wordSpacing: 2
-                            }
-                        }
-
-                        ColumnLayout {
-                            id: column_text_1
-                            width: 100
-                            height: 100
-                            smooth: false
-                            spacing: 10
-
-                            Text {
-                                id: extruder1_temp_text
-                                color: "#ffffff"
-                                text: qsTr("%1C").arg(bot.extruderACurrentTemp)
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-
-                            Text {
-                                id: extruder2_temp_text
-                                color: "#ffffff"
-                                text: qsTr("%1C").arg(bot.extruderBCurrentTemp)
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-
-                            Text {
-                                id: extruder1_life_text
-                                color: "#ffffff"
-                                text: qsTr("%1mm").arg(extruderAExtrusionDistance)
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-
-                            Text {
-                                id: extruder2_life_text
-                                color: "#ffffff"
-                                text: qsTr("%1mm").arg(extruderBExtrusionDistance)
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        id: row_buildplane_info
-                        width: 100
-                        height: 100
-                        smooth: false
-                        spacing: 18
-
-
-                        ColumnLayout {
-                            id: column_labels_2
-                            width: 100
-                            height: 100
-                            smooth: false
-                            spacing: 10
-
-                            Text {
-                                id: buildplane_temp_label
-                                color: "#cbcbcb"
-                                text: qsTr("CHAMBER TEMP. (BUILD PLANE)")
-                                antialiasing: false
-                                smooth: false
-                                font.pixelSize: 16
-                                font.family: defaultFont.name
-                                font.weight: Font.Light
-                                font.letterSpacing: 1
-                            }
-
-                            Text {
-                                id: hbp_temp_label
-                                color: "#cbcbcb"
-                                text: qsTr("HEATED BP TEMP")
-                                antialiasing: false
-                                smooth: false
-                                font.pixelSize: 18
-                                font.family: defaultFont.name
-                                font.weight: Font.Light
-                                font.letterSpacing: 3
-                                font.wordSpacing: 2
-                                visible: bot.machineType == MachineType.Magma
-                            }
-                        }
-
-                        ColumnLayout {
-                            id: column_text_2
-                            width: 100
-                            height: 100
-                            smooth: false
-                            spacing: 10
-
-                            Text {
-                                id: buildplane_temp_text
-                                color: "#ffffff"
-                                text: qsTr("%1C").arg(bot.buildplaneCurrentTemp)
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-
-                            Text {
-                                id: hbp_temp_text
-                                color: "#ffffff"
-                                text: qsTr("%1C").arg(bot.hbpCurrentTemp)
-                                antialiasing: false
-                                smooth: false
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                                visible: bot.machineType == MachineType.Magma
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        Item {
-            id: page3
-            width: 800
-            height: 420
-            smooth: false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
-
-            ColumnLayout {
-                id: columnLayout_page3
-                smooth: false
-                spacing: 10
-                width: page3.width - 80
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: done_by_label0
-                    color: "#cbcbcb"
-                    text: doneByDayString
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.pixelSize: 15
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-
-                Text {
-                    id: end_time_text
-                    color: "#ffffff"
-                    text: doneByTimeString
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    font.pixelSize: 145
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-
-                Text {
-                    id: printer_name_is_printing_text
-                    color: "#cbcbcb"
-                    text: qsTr("%1 IS PRINTING").arg(printerName)
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.pixelSize: 15
-                    font.weight: Font.Light
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-
-                Text {
-                    id: fileName_text3
-                    color: "#ffffff"
-                    text: fileName_
-                    horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.pixelSize: 15
-                    font.weight: Font.Bold
-                    font.letterSpacing: 3
-                    elide: Text.ElideMiddle
-                }
-            }
+            PrintFileInfoPage {}
         }
 
         Item {
@@ -895,84 +473,71 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 20
 
-            Item {
-                id: baseItem
-                width: 750
-                height: 160
-                smooth: false
+            TextHeadline{
+                id: name_printer
+                text: printerName
+                style: TextHeadline.ExtraLarge
+                anchors.top : parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: 20
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.leftMargin: 50
+                anchors.topMargin: 50
+                anchors.bottomMargin: 40
+                anchors.rightMargin: 50
+                elide: Text.ElideRight
+                font.weight: Font.Light
+            }
 
-                Text {
-                    id: printerName_text4
-                    color: "#ffffff"
-                    text: printerName
-                    antialiasing: false
-                    smooth: false
-                    font.pixelSize: 85
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.letterSpacing: 0
+            TextBody{
+                id: done_by
+                text: qsTr("DONE BY")
+                font.weight: Font.Light
+                anchors.left: parent.left
+                anchors.top: name_printer.bottom
+                anchors.leftMargin: 50
+                anchors.topMargin: 20
+            }
 
-                    Text {
-                        id: is_printing_label
-                        color: "#cbcbcb"
-                        text: qsTr("IS PRINTING")
-                        antialiasing: false
-                        smooth: false
-                        anchors.bottom: parent.bottom
-                        anchors.bottomMargin: -30
-                        font.pixelSize: 16
-                        font.family: defaultFont.name
-                        font.weight: Font.Light
-                        font.letterSpacing: 3
+            TextHeadline{
+                id: day
+                text: doneByDayString
+                style: TextHeadline.ExtraLarge
+                anchors.left: parent.left
+                anchors.top: done_by.bottom
+                anchors.leftMargin: 50
+                anchors.topMargin: 10
+                font.weight: Font.Light
+            }
 
-                        Text {
-                            id: filename_text4
-                            color: "#ffffff"
-                            text: fileName_
-                            antialiasing: false
-                            smooth: false
-                            anchors.left: parent.right
-                            anchors.leftMargin: 10
-                            font.pixelSize: 16
-                            font.family: defaultFont.name
-                            font.weight: Font.Bold
-                            font.letterSpacing: 3
-                            width: page4.width - 200
-                            elide: Text.ElideMiddle
-                        }
+            TextHeadline{
+                id: time
+                text: doneByTimeString
+                style: TextHeadline.ExtraLarge
+                anchors.left: parent.left
+                anchors.top: day.bottom
+                anchors.leftMargin: 50
+                anchors.topMargin: 10
+                font.weight: Font.Light
+            }
 
-                        Text {
-                            id: done_by_label1
-                            color: "#cbcbcb"
-                            text: doneByDayString
-                            antialiasing: false
-                            smooth: false
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: -30
-                            font.pixelSize: 16
-                            font.family: defaultFont.name
-                            font.weight: Font.Light
-                            font.letterSpacing: 3
+            TextBody{
+                id: filename_header
+                text: qsTr("FILENAME")
+                font.weight: Font.Light
+                anchors.left: parent.left
+                anchors.top: time.bottom
+                anchors.leftMargin: 50
+                anchors.topMargin: 10
+            }
 
-                            Text {
-                                id: end_time_text4
-                                color: "#ffffff"
-                                text: doneByTimeString
-                                antialiasing: false
-                                smooth: false
-                                anchors.left: parent.right
-                                anchors.leftMargin: 10
-                                font.pixelSize: 16
-                                font.family: defaultFont.name
-                                font.weight: Font.Bold
-                                font.letterSpacing: 3
-                            }
-                        }
-                    }
-                }
+            TextBody{
+                id: printjob_name
+                text: qsTr(fileName_)
+                font.capitalization: Font.AllUppercase
+                anchors.left: parent.left
+                anchors.top: filename_header.bottom
+                anchors.topMargin: 10
+                anchors.leftMargin: 50
             }
         }
     }
@@ -1003,4 +568,54 @@ Item {
             }
         }
     }
+
+    CustomPopup {
+        popupName: "LoadingScreen"
+        id: printingPopup
+        popupWidth: 720
+        popupHeight: 200
+
+        ColumnLayout {
+            id: columnLayout_printFeedbackAcknowledgementPopup
+            width: 590
+            height: children.height
+            spacing: 20
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            BusySpinner {
+                id: waitingSpinner
+                spinnerActive: true
+                spinnerSize: 64
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextHeadline{
+                text: {
+                    if(bot.process.stateType == ProcessStateType.Pausing){
+                        qsTr("PAUSING")
+                    } else if( bot.process.stateType == ProcessStateType.Resuming){
+                        qsTr("RESUMING")
+                    } else if(bot.process.stateType == ProcessStateType.Cancelling){
+                        qsTr("CANCELLING")
+                    } else if(bot.process.stateType == ProcessStateType.CleaningUp && !bot.process.complete){
+                        qsTr("FINISHING")
+                    }
+                }
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+    }
+    states: [
+        State {
+            name: "in_transition"
+            when: bot.process.stateType == ProcessStateType.Pausing || bot.process.stateType == ProcessStateType.Resuming || bot.process.stateType == ProcessStateType.Cancelling || (bot.process.stateType == ProcessStateType.CleaningUp && !bot.process.complete)
+
+            PropertyChanges {
+                target: printingPopup
+                visible: true
+            }
+        }
+
+    ]
 }

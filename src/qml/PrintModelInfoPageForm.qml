@@ -10,6 +10,7 @@ Item {
     anchors.horizontalCenter: parent.horizontalCenter
 
     property alias startPrintButtonVisible: startPrintButtonRow.visible
+    property alias customModelSource: model_image1.customSource
 
     RowLayout {
         id: print_page_row_layout
