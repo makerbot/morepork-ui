@@ -212,6 +212,8 @@
         <file alias="feedback_selected_box.png">images/feedback_selected_box.png</file>
         <file alias="method_remove_top_lid.png">images/attach_extruders/method_remove_top_lid.png</file>
         <file alias="methodxl_remove_top_lid.png">images/attach_extruders/methodxl_remove_top_lid.png</file>
+        <file alias="method_fre_attach_extruders_remove_packaging.png">images/attach_extruders/method_fre_attach_extruders_remove_packaging.png</file>
+        <file alias="methodxl_fre_attach_extruders_remove_packaging.png">images/attach_extruders/methodxl_fre_attach_extruders_remove_packaging.png</file>
         <file alias="attach_extruder_swivel_clips_XA.gif">images/attach_extruders/attach_extruder_swivel_clips_XA.gif</file>
         <file alias="attach_extruder_2_step2.gif">images/attach_extruders/attach_extruder_2_step2.gif</file>
         <file alias="attach_extruder_1_step1.gif">images/attach_extruders/attach_extruder_1_step1.gif</file>
