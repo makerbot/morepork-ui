@@ -674,15 +674,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textHeader
-                text: qsTr("PRINT FAILED\n\nERROR %1").arg(lastReportedErrorCode)
+                text: qsTr("PROCESS FAILED\n\nERROR %1").arg(lastReportedErrorCode)
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: {
-                    qsTr("Please visit the support page to learn more information about this error and contact our support team.")
-                }
+                text: qsTr("Please visit the support page to learn more information about this error and contact our support team.")
                 visible: true
             }
 
@@ -790,7 +788,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textHeader
-                text: qsTr("PRINT FAILED\n\nCARRIAGE COMMUNICATION ERROR")
+                text: qsTr("PROCESS FAILED\n\nCARRIAGE COMMUNICATION ERROR")
                 visible: true
             }
 
