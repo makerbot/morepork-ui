@@ -140,7 +140,6 @@ LoggingItem {
         }
         loadingIcon {
             loading: LoadingIcon.Failure
-            source: "qrc:/img/method_error_close_door.png"
             visible:  true
         }
     }
