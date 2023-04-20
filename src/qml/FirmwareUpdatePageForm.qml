@@ -23,7 +23,6 @@ LoggingItem {
             systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
         }
     }
-
     property bool isUsbStorageConnected: storage.usbStorageConnected
     property bool isFirmwareFileCopying: storage.fileIsCopying
 
@@ -57,11 +56,6 @@ LoggingItem {
 
     function getUrlForMethod() {
            return "makerbot.com/methodfw"
-    }
-
-    Rectangle {
-        color: "#000000"
-        anchors.fill: parent
     }
 
     FirmwareFileListUsb {
@@ -210,6 +204,7 @@ LoggingItem {
                 anchors.topMargin: 275
                 text: qsTr("INSTALL VIA USB")
                 visible: true
+                enabled: !isProcessRunning()
             }
 
             PropertyChanges {
@@ -222,6 +217,11 @@ LoggingItem {
             PropertyChanges {
                 target: firmwareFileListUsb
                 visible: false
+            }
+
+            PropertyChanges {
+                target: printerNotIdlePopup
+                visible: firmwareUpdateItem.visible && isProcessRunning()
             }
         },
         State {
@@ -274,6 +274,7 @@ LoggingItem {
                 target: button2
                 text: qsTr("INSTALL VIA USB")
                 visible: true
+                enabled: !isProcessRunning()
             }
 
             PropertyChanges {
@@ -286,6 +287,10 @@ LoggingItem {
             PropertyChanges {
                 target: firmwareFileListUsb
                 visible: false
+            }
+            PropertyChanges {
+                target: printerNotIdlePopup
+                visible: firmwareUpdateItem.visible && isProcessRunning()
             }
         },
         State {

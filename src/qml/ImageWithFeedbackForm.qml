@@ -3,6 +3,7 @@ import QtQuick 2.12
 Image {
     id: image_with_feedback
     property alias loadingSpinnerSize: spinner.spinnerSize
+    property alias customSource : image_with_feedback.source
 
     asynchronous: true
     smooth: false

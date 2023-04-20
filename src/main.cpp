@@ -11,6 +11,7 @@
 #include "logger.h"
 #include "logging.h"
 #include "network.h"
+#include "power_key_event.h"
 
 // TODO: We should probably be able to set this up so that
 //       the qrc thing works for all builds...
@@ -86,6 +87,7 @@ int main(int argc, char ** argv) {
     SettingsInterface settings;
     DiskManager disk_manager;
     DFSSettings dfs_settings;
+    PowerKeyEventHandler power_key;
 
     QLocale::setDefault(QLocale(settings.getLanguageCode()));
 
@@ -95,6 +97,7 @@ int main(int argc, char ** argv) {
     engine.rootContext()->setContextProperty("bot", bot.data());
     // Context Property UI Translator
     engine.rootContext()->setContextProperty("translate", (QObject*)&ui_trans);
+    engine.rootContext()->setContextProperty("power_key", (QObject*)&power_key);
     engine.rootContext()->setContextProperty("storage", (QObject*)&storage);
     engine.rootContext()->setContextProperty("fre", (QObject*)&fre_tracker);
     engine.rootContext()->setContextProperty("settings", (QObject*)&settings);
@@ -125,11 +128,13 @@ int main(int argc, char ** argv) {
 
     QObject *rootObject = rootObjects.first();
     QObject *qmlObject = rootObject->findChild<QObject*>("morepork_main_qml");
-    if(argc > 1 && std::string(argv[1]) == "--rotate_display_180")
-        if (qmlObject)
+    if(argc > 1 && std::string(argv[1]) == "--rotate_display_180") {
+        if (qmlObject) {
             qmlObject->setProperty("rotation", 180);
-        else
+        } else {
             qCritical() << "Cannot find morepork_main_qml";
-
+        }
+    }
+    qapp.installEventFilter((QObject*) &power_key);
     return qapp.exec();
 }

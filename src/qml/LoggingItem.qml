@@ -11,6 +11,11 @@ Item {
         console.info("Item", itemName, "changed state to", state)
     }
 
+    Rectangle {
+        anchors.fill: parent
+        color: "#000000"
+    }
+
     // String that goes before the image name
     property string imagePrefixString: {
         if (bot.machineType == MachineType.Fire) {

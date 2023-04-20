@@ -8,6 +8,8 @@ Item {
     property alias mainMenuIcon_print: mainMenuIcon_print
     property alias mainMenuIcon_material: mainMenuIcon_material
     property alias mainMenuIcon_settings: mainMenuIcon_settings
+    property string topBarTitle: qsTr("Home")
+
     smooth: false
     anchors.fill: parent
 
@@ -19,12 +21,23 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
 
         MainMenuIcon {
+            id: mainMenuIcon_print
             Layout.margins: 14
             Layout.alignment: Qt.AlignHCenter
-            id: mainMenuIcon_print
             smooth: false
-            image.source: "qrc:/img/print_icon.png"
             imageVisible: !(bot.process.type == ProcessType.Print)
+            image.source: "qrc:/img/print_icon.png"
+
+            PrintIcon {
+                smooth: false
+                scale: 0.4
+                actionButton: false
+                visible: !parent.imageVisible
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -20
+            }
+
             textIconDesc.text: {
                 if(bot.process.type == ProcessType.Print) {
                     switch(bot.process.stateType) {
@@ -56,23 +69,16 @@ Item {
                     qsTr("PRINT")
                 }
             }
+
         }
 
         MainMenuIcon {
+            id: mainMenuIcon_material
             Layout.margins: 13
             Layout.alignment: Qt.AlignHCenter
-            id: mainMenuIcon_material
             smooth: false
             image.source: "qrc:/img/material_icon.png"
             textIconDesc.text: qsTr("MATERIAL")
-
-            PrintIcon {
-                smooth: false
-                anchors.verticalCenter: parent.verticalCenter
-                scale: 0.3
-                actionButton: false
-                visible: !parent.imageVisible
-            }
 
             Image {
                 id: no_material_warning
@@ -88,9 +94,9 @@ Item {
         }
 
         MainMenuIcon {
+            id: mainMenuIcon_settings
             Layout.margins: 14
             Layout.alignment: Qt.AlignHCenter
-            id: mainMenuIcon_settings
             smooth: false
             image.source: "qrc:/img/settings_icon.png"
             textIconDesc.text: qsTr("SETTINGS")

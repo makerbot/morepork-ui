@@ -161,6 +161,14 @@ ApplicationWindow {
     }
 
     function calibratePopupDeterminant() {
+        // If extruders are mismatching dont bother showing the
+        // calibration required popup
+        if(wrongExtruderPopup.modelExtWrong ||
+           wrongExtruderPopup.supportExtWrong ||
+           wrongExtruderPopup.extruderComboMismatch) {
+            return
+        }
+
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
         }
@@ -178,6 +186,8 @@ ApplicationWindow {
     onExtrudersPresentChanged: {
         calibratePopupDeterminant()
     }
+
+    
 
     // When firmware is finished updating for an extruder, the progress doesn't
     // go to 100 and instead returns to 0. In a situation where both extruders are
@@ -316,20 +326,6 @@ ApplicationWindow {
         }
     }
 
-    // Machine/Kaiten doesn't evaluate extruder combos, they just
-    // check if an extruder is valid on the installed slot for that
-    // machine. So the 'tool_type_correct' flag cannot be used to
-    // show the extruder combo warning.
-    //
-    // This is required now to cover a specific case described
-    // in BW-4975 (https://makerbot.atlassian.net/browse/BW-4975)
-    // or atleast until single extruder support is launched to public?
-    property bool extruderComboMismatch: {
-        (bot.extruderAPresent && bot.extruderBPresent) && (
-        (bot.extruderAType == ExtruderType.MK14 && bot.extruderBType == ExtruderType.MK14_HOT) ||
-        (bot.extruderAType == ExtruderType.MK14_HOT && bot.extruderBType == ExtruderType.MK14))
-    }
-
     property bool experimentalExtruderInstalled: {
         (materialPage.bay1.usingExperimentalExtruder ||
          materialPage.bay2.usingExperimentalExtruder)
@@ -346,10 +342,8 @@ ApplicationWindow {
     enum SwipeIndex {
         BasePage,       // 0
         PrintPage,      // 1
-        ExtruderPage,   // 2
-        SettingsPage,   // 3
-        InfoPage,       // 4
-        MaterialPage    // 5
+        MaterialPage,   // 2
+        SettingsPage    // 3
     }
 
     Item {
@@ -367,6 +361,7 @@ ApplicationWindow {
             z: -1
             anchors.fill: parent
         }
+
 
         Item {
             id: inputPanelContainer
@@ -416,9 +411,23 @@ ApplicationWindow {
                      connectionState == ConnectionState.Connected
         }
 
+        PowerButtonScreen {
+            id: powerButtonScreen
+            z: 2
+            visible: false
+        }
+
         HeatShieldInstructions {
             anchors.fill: parent
             z: 2
+        }
+
+        Connections {
+            target: power_key
+            onPowerbuttonPressed: {
+                console.info("Power button is pressed!")
+                powerButtonScreen.visible = true
+            }
         }
 
         Flickable {
@@ -491,9 +500,9 @@ ApplicationWindow {
                         topBar.backButton.visible = true
                     }
                 }
-
                 // MoreporkUI.BasePage
                 Item {
+                    property string topBarTitle: qsTr("Home")
                     smooth: false
                     MainMenu {
                         id: mainMenu
@@ -518,6 +527,7 @@ ApplicationWindow {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
+                    property string topBarTitle: qsTr("Select Source")
                     smooth: false
                     visible: false
 
@@ -544,15 +554,15 @@ ApplicationWindow {
                     }
                 }
 
-
-                // MoreporkUI.ExtruderPage
+                // MoreporkUI.MaterialPage
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
+                    property string topBarTitle: qsTr("Material")
                     smooth: false
                     visible: false
                     MaterialPage {
-                        id: extruderPage
+                        id: materialPage
                         anchors.fill: parent
                     }
                 }
@@ -560,32 +570,11 @@ ApplicationWindow {
                 Item {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
+                    property string topBarTitle: qsTr("Settings")
                     smooth: false
                     visible: false
                     SettingsPage {
                         id: settingsPage
-                    }
-                }
-
-                // MoreporkUI.InfoPage
-                Item {
-                    property var backSwiper: mainSwipeView
-                    property int backSwipeIndex: MoreporkUI.BasePage
-                    smooth: false
-                    visible: false
-                    InfoPage {
-                        id: infoPage
-                    }
-                }
-
-                // MoreporkUI.MaterialPage
-                Item {
-                    property var backSwiper: mainSwipeView
-                    property int backSwipeIndex: MoreporkUI.BasePage
-                    smooth: false
-                    visible: false
-                    MaterialPage {
-                        id: materialPage
                     }
                 }
             }
@@ -1880,6 +1869,13 @@ ApplicationWindow {
                                          !extruderAToolTypeCorrect
             property bool supportExtWrong: extruderBPresent &&
                                          !extruderBToolTypeCorrect
+            property bool extruderComboMismatch: {
+                (bot.extruderAPresent && bot.extruderBPresent) &&
+                (!bot.extruderACanPairTools || !bot.extruderBCanPairTools)
+            }
+
+            showOneButton: false
+            showTwoButtons: false
             visible: modelExtWrong || supportExtWrong || extruderComboMismatch
 
             ColumnLayout {
@@ -1889,7 +1885,6 @@ ApplicationWindow {
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 20
-                //height: 150
 
                 Image {
                     source: "qrc:/img/process_error_small.png"
@@ -1900,46 +1895,32 @@ ApplicationWindow {
                     text: qsTr("WRONG EXTRUDER TYPE DETECTED")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
-                TextBody{
+
+                TextBody {
                     text: {
-                        if (extruderComboMismatch) {
-                            qsTr("A Model 1XA Extruder can only be used with a " +
-                                 "Support 2XA Extruder. A Model 1A Extruder can " +
-                                 "only be used with a Support 2A Extruder.")
-                        }
-                        else if (bot.machineType == MachineType.Fire) {
-                            // V1 printers support only mk14 extruders.
-                            if (wrongExtruderPopup.modelExtWrong) {
-                                qsTr("Please insert a Model 1A Performance Extruder "+
-                                "into slot 1\nto continue attaching the "+
-                                "extruders.")
-                            } else if (wrongExtruderPopup.supportExtWrong) {
-                                qsTr("Please insert a Support 2A Performance Extruder "+
-                                "into slot 2\nto continue attaching the "+
-                                "extruders. Currently only model\nand support "+
-                                "printing is supported.")
+                        if (wrongExtruderPopup.extruderComboMismatch) {
+                            if(bot.machineType == MachineType.Magma && bot.extruderAType == ExtruderType.MK14_COMP) {
+                                // Composites with 2A combo on magma
+                                qsTr("The Composites extruder cannot be used with a Support 2A extruder. Please use the Labs extruder in the model slot to support this configuration.")
                             } else {
-                                emptyString
+                                // Normal + Hot Extruders combo
+                                 qsTr("A Model 1XA Extruder can only be used with a Support 2XA Extruder. A Model 1A Extruder can only be used with a Support 2A Extruder.")
                             }
                         } else {
-                            // Hot bot (V2) supports both mk14 and mk14_hot extruders.
                             if (wrongExtruderPopup.modelExtWrong) {
-                                qsTr("Please insert a Model 1A or Model 1XA Performance " +
-                                     "Extruder into slot 1 to continue attaching the " +
-                                     "extruders.")
+                                qsTr("Please insert a %1 extruder into slot 1.").arg(bot.extruderASupportedTypes.join("/"))
                             } else if (wrongExtruderPopup.supportExtWrong) {
-                                qsTr("Please insert a Support 2A or Support 2XA Performance " +
-                                     "Extruder into slot 2 to continue attaching the extruders. " +
-                                     "Currently only model and support printing is supported.")
+                                qsTr("Please insert a %1 extruder into slot 2. Currently only model and support printing is supported.").arg(bot.extruderBSupportedTypes.join("/"))
                             } else {
                                 emptyString
                             }
                         }
                     }
-                    style: TextBody.Large
                     horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: parent.width
+                    Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    style: TextBody.Large
+                    Layout.preferredWidth: parent.width
                     wrapMode: Text.WordWrap
                 }
 
@@ -1951,7 +1932,6 @@ ApplicationWindow {
                     Layout.preferredWidth: parent.width
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     wrapMode: Text.WordWrap
-                    font.letterSpacing: 1.1
                 }
             }
         }
@@ -2032,6 +2012,46 @@ ApplicationWindow {
                     Layout.preferredWidth: 620
                     wrapMode: "WordWrap"
 
+                }
+            }
+        }
+
+        CustomPopup {
+            id: printerNotIdlePopup
+            popupName: "PrinterNotIdleWarning"
+
+            showOneButton: true
+            full_button_text: qsTr("CLOSE")
+            full_button.onClicked: {
+                printerNotIdlePopup.close()
+            }
+
+            ColumnLayout {
+                width: parent.width
+                height: children.height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenterOffset: -25
+
+                Image{
+                    id: error_icon
+                    source: "qrc:/img/popup_error.png"
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.bottomMargin: 10
+                }
+
+                TextHeadline {
+                    id: cancel_popup_header
+                    style: TextHeadline.Base
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTr("PRINTER IS BUSY")
+                    Layout.bottomMargin: 7
+                }
+
+                TextBody {
+                    text: "Please wait until the printer is idle."
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.bottomMargin: 30
                 }
             }
         }
@@ -2330,189 +2350,46 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
-            popupName: "CancelPrint"
+        CustomPopup {
             id: cancelPrintPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
-            closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim_cancel_print_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            popupWidth: 720
+            popupHeight: 275
+            showTwoButtons: true
+            left_button_text: qsTr("BACK")
+            left_button.onClicked: {
+                cancelPrintPopup.close()
             }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            right_button_text: qsTr("CONFIRM")
+            right_button.onClicked: {
+                bot.cancel()
+                printPage.clearErrors()
+                cancelPrintPopup.close()
             }
 
-            Rectangle {
-                id: basePopupItem_cancel_print_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 220
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
+            ColumnLayout {
+                width: parent.width
+                height: children.height
+                spacing: 20
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenterOffset: -45
 
-                Rectangle {
-                    id: horizontal_divider_cancel_print_popup
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                }
-
-                Rectangle {
-                    id: vertical_divider_cancel_print_popup
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
+                Image{
+                    source: "qrc:/img/popup_error.png"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                Item {
-                    id: buttonBar_cancel_print_popup
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: cancel_rectangle_cancel_print_popup
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_text_cancel_print_popup
-                            color: "#ffffff"
-                            text: qsTr("CANCEL PRINT")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "cancelPrintPopup [_" + cancel_text_cancel_print_popup.text + "|]"
-                            id: cancel_mouseArea_cancel_print_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                cancel_text_cancel_print_popup.color = "#000000"
-                                cancel_rectangle_cancel_print_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_text_cancel_print_popup.color = "#ffffff"
-                                cancel_rectangle_cancel_print_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.cancel()
-                                printPage.clearErrors()
-                                cancelPrintPopup.close()
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: continue_rectangle_cancel_print_popup
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: continue_text_cancel_print_popup
-                            color: "#ffffff"
-                            text: qsTr("CONTINUE PRINT")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "cancelPrintPopup [|" + continue_text_cancel_print_popup.text + "_]"
-                            id: continue_mouseArea_cancel_print_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                continue_text_cancel_print_popup.color = "#000000"
-                                continue_rectangle_cancel_print_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                continue_text_cancel_print_popup.color = "#ffffff"
-                                continue_rectangle_cancel_print_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                cancelPrintPopup.close()
-                            }
-                        }
-                    }
+                Text {
+                    color: "#cbcbcb"
+                    text: qsTr("CANCEL PRINT?")
+                    font.letterSpacing: 3
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 25
+                    font.family: defaultFont.name
+                    font.weight: Font.Bold
+                    font.pixelSize: 20
                 }
 
-                ColumnLayout {
-                    id: columnLayout_cancel_print_popup
-                    width: 590
-                    height: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: cancel_title_text_cancel_print_popup
-                        color: "#cbcbcb"
-                        text: qsTr("CANCEL PRINT")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
-
-                    Text {
-                        id: cancel_description_text_cancel_print_popup
-                        color: "#cbcbcb"
-                        text: qsTr("Are you sure?")
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.3
-                    }
-                }
             }
         }
 
@@ -2634,36 +2511,11 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "StartPrintError"
             id: startPrintErrorsPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
+            popupHeight: columnLayout_start_print_errors_popup.height +145
             closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim_start_print_errors_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
-            }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                if(!printPage.startPrintBuildDoorOpen && !printPage.startPrintTopLidOpen) {
-                    right_text_start_print_errors_popup.color = "#000000"
-                    right_rectangle_start_print_errors_popup.color = "#ffffff"
-                }
-            }
-
             onClosed: {
                 printPage.startPrintBuildDoorOpen = false
                 printPage.startPrintTopLidOpen = false
@@ -2676,354 +2528,168 @@ ApplicationWindow {
                 printPage.startPrintMaterialMismatch = false
             }
 
-            Rectangle {
-                id: basePopupItem_start_print_errors_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: {
-                    (printPage.startPrintTopLidOpen ||
-                     printPage.startPrintBuildDoorOpen) ?
-                                220 : 300
+            showOneButton: (printPage.startPrintBuildDoorOpen ||
+                            printPage.startPrintTopLidOpen)
+            showTwoButtons: (!printPage.startPrintBuildDoorOpen &&
+                             !printPage.startPrintTopLidOpen)
+            full_button_text: qsTr("OK")
+
+            full_button.onClicked: {
+                startPrintErrorsPopup.close()
+            }
+            left_button_text: {
+                if(printPage.startPrintNoFilament) {
+                    qsTr("CANCEL")
                 }
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+                else if(printPage.startPrintMaterialMismatch ||
+                        printPage.startPrintGenuineSliceUnknownMaterial) {
+                    qsTr("BACK")
+                }
+                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                        printPage.startPrintWithUnknownMaterials) {
+                    qsTr("START ANYWAY")
+                }
+                else if(printPage.startPrintWithInsufficientModelMaterial ||
+                        printPage.startPrintWithInsufficientSupportMaterial) {
+                    qsTr("START PRINT")
+                } else {
+                    emptyString
+                }
+            }
+            left_button.onClicked: {
+                startPrintErrorsPopup.close()
+                if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                        printPage.startPrintWithUnknownMaterials ||
+                        printPage.startPrintWithInsufficientModelMaterial ||
+                        printPage.startPrintWithInsufficientSupportMaterial) {
+
+
+                    if(printPage.startPrintDoorLidCheck()) {
+                        printPage.confirm_build_plate_popup.open()
+                    }
+                    else {
+                        startPrintErrorsPopup.open()
+                    }
+                }
+            }
+
+            function resetDetailsAndGoToMaterialsPage() {
+                printPage.resetPrintFileDetails()
+                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+            }
+            right_button_text: {
+                if(printPage.startPrintNoFilament) {
+                    qsTr("LOAD MATERIAL")
+                }
+                else if(printPage.startPrintMaterialMismatch ||
+                        printPage.startPrintGenuineSliceUnknownMaterial ||
+                        printPage.startPrintUnknownSliceGenuineMaterial ||
+                        printPage.startPrintWithUnknownMaterials ||
+                        printPage.startPrintWithInsufficientModelMaterial ||
+                        printPage.startPrintWithInsufficientSupportMaterial) {
+                    qsTr("CHANGE MATERIAL")
+                }
+                else {
+                    emptyString
+                }
+            }
+            right_button.onClicked: {
+                startPrintErrorsPopup.close()
+                resetDetailsAndGoToMaterialsPage()
+            }
+
+            ColumnLayout {
+                id: columnLayout_start_print_errors_popup
+                width: 650
+                height: children.height
+                anchors.top: startPrintErrorsPopup.popupContainer.top
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
                 Image {
-                    id: close_popup_start_print_errors_popup
-                    height: sourceSize.height
-                    width: sourceSize.width
-                    anchors.top: parent.top
-                    anchors.topMargin: 10
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    source: "qrc:/img/skip.png"
-                    visible: (printPage.startPrintWithUnknownMaterials ||
-                              printPage.startPrintWithInsufficientModelMaterial ||
-                              printPage.startPrintWithInsufficientSupportMaterial ||
-                              printPage.startPrintUnknownSliceGenuineMaterial) &&
-                             !printPage.startPrintBuildDoorOpen &&
-                             !printPage.startPrintTopLidOpen
-
-                    LoggingMouseArea {
-                        logText: "startPrintErrorsPopup [X]"
-                        id: closePopup_start_print_errors_popup
-                        anchors.fill: parent
-                        onClicked: startPrintErrorsPopup.close()
-                    }
+                    id: error_image
+                    width: sourceSize.width - 10
+                    height: sourceSize.height -10
+                    Layout.alignment: Qt.AlignHCenter
+                    source: "qrc:/img/process_error_small.png"
                 }
 
-                Rectangle {
-                    id: horizontal_divider_start_print_errors_popup
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
+                TextHeadline {
+                    id: main_text_start_print_errors_popup
+                    text: qsTr("START PRINT ERROR")
+                    Layout.alignment: Qt.AlignHCenter
                 }
 
-                Rectangle {
-                    id: vertical_divider_start_print_errors_popup
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: {
-                        (!printPage.startPrintBuildDoorOpen &&
-                         !printPage.startPrintTopLidOpen)
-                    }
+                TextBody {
+                    id: sub_text_start_print_errors_popup
+                    Layout.preferredWidth: parent.width
+                    text: qsTr("Error message")
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.alignment: Qt.AlignHCenter
+                    wrapMode: Text.WordWrap
                 }
 
-                Item {
-                    id: buttonBar_start_print_errors_popup
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
+                TextBody {
+                    id: mb_compatibility_link_error_popup
+                    text: qsTr("<br><b>makerbot.com/combatibility</b>")
+                    Layout.alignment: Qt.AlignHCenter
+                    visible: false
+                }
 
-                    Rectangle {
-                        id: full_rectangle_start_print_errors_popup
-                        x: 0
-                        y: 0
-                        width: 720
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-                        visible: {
-                            (printPage.startPrintBuildDoorOpen ||
-                             printPage.startPrintTopLidOpen)
+                states: [
+                    State {
+                        name: "close_top_lid"
+                        when: printPage.startPrintTopLidOpen
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("CLOSE THE TOP LID")
+                        }
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("Put the top lid back on the printer to start the print.")
                         }
 
-                        Text {
-                            id: full_text_start_print_errors_popup
-                            color: "#ffffff"
-                            text: qsTr("OK")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "close_build_chamber_door"
+                        when: printPage.startPrintBuildDoorOpen
+
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("CLOSE BUILD CHAMBER DOOR")
                         }
 
-                        LoggingMouseArea {
-                            logText: "startPrintErrorsPopup [_" + full_text_start_print_errors_popup.text + "_]"
-                            id: full_mouseArea_start_print_errors_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                full_text_start_print_errors_popup.color = "#000000"
-                                full_rectangle_start_print_errors_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                full_text_start_print_errors_popup.color = "#ffffff"
-                                full_rectangle_start_print_errors_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                startPrintErrorsPopup.close()
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: left_rectangle_start_print_errors_popup
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-                        visible: {
-                            (!printPage.startPrintBuildDoorOpen &&
-                             !printPage.startPrintTopLidOpen)
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("Close the build chamber door to start the print.")
                         }
 
-                        Text {
-                            id: left_text_start_print_errors_popup
-                            color: "#ffffff"
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "no_material_detected"
+                        when: printPage.startPrintNoFilament
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("NO MATERIAL DETECTED")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
                             text: {
-                                if(printPage.startPrintNoFilament) {
-                                    qsTr("CANCEL")
-                                }
-                                else if(printPage.startPrintMaterialMismatch ||
-                                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                                    qsTr("OK")
-                                }
-                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                                        printPage.startPrintWithUnknownMaterials) {
-                                    qsTr("START ANYWAY")
-                                }
-                                else if(printPage.startPrintWithInsufficientModelMaterial ||
-                                        printPage.startPrintWithInsufficientSupportMaterial) {
-                                    qsTr("START PRINT")
-                                } else {
-                                    ""
-                                }
-                            }
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
 
-                        LoggingMouseArea {
-                            logText: "startPrintErrorsPopup [_" + left_text_start_print_errors_popup.text + "|]"
-                            id: left_mouseArea_start_print_errors_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                left_text_start_print_errors_popup.color = "#000000"
-                                left_rectangle_start_print_errors_popup.color = "#ffffff"
-                                right_text_start_print_errors_popup.color = "#ffffff"
-                                right_rectangle_start_print_errors_popup.color = "#00000000"
-                            }
-                            onReleased: {
-                                left_text_start_print_errors_popup.color = "#ffffff"
-                                left_rectangle_start_print_errors_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                startPrintErrorsPopup.close()
-                                if(printPage.startPrintNoFilament) {
-                                    // Do Nothing
-                                }
-                                else if(printPage.startPrintMaterialMismatch ||
-                                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                                    startPrintErrorsPopup.close()
-                                }
-                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                                        printPage.startPrintWithUnknownMaterials ||
-                                        printPage.startPrintWithInsufficientModelMaterial ||
-                                        printPage.startPrintWithInsufficientSupportMaterial) {
-                                    if(printPage.startPrintDoorLidCheck()) {
-                                        printPage.startPrint()
-                                    }
-                                    else {
-                                        startPrintErrorsPopup.open()
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: right_rectangle_start_print_errors_popup
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-                        visible: {
-                            (!printPage.startPrintBuildDoorOpen &&
-                             !printPage.startPrintTopLidOpen)
-                        }
-
-                        Text {
-                            id: right_text_start_print_errors_popup
-                            color: "#ffffff"
-                            text: {
-                                if(printPage.startPrintNoFilament) {
-                                    qsTr("LOAD MATERIAL")
-                                }
-                                else if(printPage.startPrintMaterialMismatch ||
-                                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                                    qsTr("CHANGE MATERIAL")
-                                }
-                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                                        printPage.startPrintWithUnknownMaterials ||
-                                        printPage.startPrintWithInsufficientModelMaterial ||
-                                        printPage.startPrintWithInsufficientSupportMaterial) {
-                                    qsTr("CHANGE MATERIAL")
-                                }
-                                else {
-                                    ""
-                                }
-                            }
-
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "startPrintErrorsPopup [|" + right_text_start_print_errors_popup.text + "_]"
-                            id: right_mouseArea_start_print_errors_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                right_text_start_print_errors_popup.color = "#000000"
-                                right_rectangle_start_print_errors_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                right_text_start_print_errors_popup.color = "#ffffff"
-                                right_rectangle_start_print_errors_popup.color = "#00000000"
-                            }
-
-                            function resetDetailsAndGoToMaterialsPage() {
-                                printPage.resetPrintFileDetails()
-                                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
-                                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                            }
-
-                            onClicked: {
-                                startPrintErrorsPopup.close()
-                                if(printPage.startPrintNoFilament) {
-                                    resetDetailsAndGoToMaterialsPage()
-                                }
-                                else if(printPage.startPrintMaterialMismatch ||
-                                        printPage.startPrintGenuineSliceUnknownMaterial) {
-                                    resetDetailsAndGoToMaterialsPage()
-                                }
-                                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                                        printPage.startPrintWithUnknownMaterials ||
-                                        printPage.startPrintWithInsufficientModelMaterial ||
-                                        printPage.startPrintWithInsufficientSupportMaterial) {
-                                    resetDetailsAndGoToMaterialsPage()
-                                }
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout_start_print_errors_popup
-                    width: 590
-                    height: {
-                        (printPage.startPrintBuildDoorOpen ||
-                         printPage.startPrintTopLidOpen) ? 100 : 180
-                    }
-                    anchors.top: parent.top
-                    anchors.topMargin: 30
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: main_text_start_print_errors_popup
-                        color: "#cbcbcb"
-                        text: {
-                            if(printPage.startPrintTopLidOpen) {
-                                qsTr("CLOSE THE TOP LID")
-                            }
-                            else if(printPage.startPrintBuildDoorOpen) {
-                                qsTr("CLOSE BUILD CHAMBER DOOR")
-                            }
-                            else if(printPage.startPrintNoFilament) {
-                                qsTr("NO MATERIAL DETECTED")
-                            }
-                            else if(printPage.startPrintMaterialMismatch) {
-                                qsTr("MATERIAL MISMATCH WARNING")
-                            }
-                            else if(printPage.startPrintGenuineSliceUnknownMaterial) {
-                                qsTr("UNKNOWN MATERIAL WARNING")
-                            }
-                            else if(printPage.startPrintUnknownSliceGenuineMaterial) {
-                                qsTr("MAKERBOT GENUINE MATERIALS")
-                            }
-                            else if(printPage.startPrintWithUnknownMaterials) {
-                                qsTr("UNKNOWN MATERIAL DETECTED")
-                            }
-                            else if(printPage.startPrintWithInsufficientModelMaterial ||
-                                    printPage.startPrintWithInsufficientSupportMaterial) {
-                                qsTr("LOW MATERIAL")
-                            }
-                            else {
-                                emptyString
-                            }
-                        }
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
-
-                    Text {
-                        id: sub_text_start_print_errors_popup
-                        color: "#cbcbcb"
-                        text: {
-                            if(printPage.startPrintTopLidOpen) {
-                                qsTr("Put the top lid back on the printer to start the print.")
-                            }
-                            else if(printPage.startPrintBuildDoorOpen) {
-                                qsTr("Close the build chamber door to start the print.")
-                            }
-                            else if(printPage.startPrintNoFilament) {
                                 if (printPage.model_extruder_used && printPage.support_extruder_used) {
                                     qsTr("There is no material detected in at least one of the extruders." +
                                          " Please load material to start a print.")
@@ -3032,7 +2698,25 @@ ApplicationWindow {
                                          " Please load material to start a print.")
                                 }
                             }
-                            else if(printPage.startPrintMaterialMismatch) {
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "material_mismatch_warning"
+                        when: printPage.startPrintMaterialMismatch
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("MATERIAL MISMATCH")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: {
                                 (materialPage.bay1.usingExperimentalExtruder ?
                                         qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
                                                     printPage.print_support_material_name) :
@@ -3044,28 +2728,96 @@ ApplicationWindow {
                                                     printPage.print_support_material_name))) +
                                 qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
                             }
-                            else if(printPage.startPrintGenuineSliceUnknownMaterial) {
-                                qsTr("This .MakerBot was exported for MakerBot materials. Use custom settings to" +
-                                     " re-export this file for unknown materials. The limited warranty included" +
-                                     " with this 3D printer does not apply to damage caused by the use of materials" +
-                                     " not certified or approved by MakerBot. For additional information, please visit" +
-                                     " MakerBot.com/legal/warranty.")
-                            }
-                            else if(printPage.startPrintUnknownSliceGenuineMaterial) {
-                                qsTr("This .MakerBot is exported for unknown materials. It is recommended" +
-                                     " to re-export this file for the correct materials for best results.")
-                            }
-                            else if(printPage.startPrintWithUnknownMaterials) {
-                                qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
-                                     printPage.print_model_material_name) +
-                                 (printPage.support_extruder_used ?
-                                            qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
-                                                 printPage.print_support_material_name) :
-                                            qsTr(".")) +
-                                  qsTr("\nThis printer is optimized for genuine MakerBot materials.")
-                            }
-                            else if(printPage.startPrintWithInsufficientModelMaterial ||
-                                    printPage.startPrintWithInsufficientSupportMaterial) {
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: true
+                        }
+                    },
+                    State {
+                        name: "unknown_material_warning"
+                        when: printPage.startPrintGenuineSliceUnknownMaterial
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("UNKNOWN MATERIAL")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("This .MakerBot was exported for MakerBot materials. Use custom settings to" +
+                                         " re-export this file for unknown materials. The limited warranty included" +
+                                         " with this 3D printer does not apply to damage caused by the use of materials" +
+                                         " not certified or approved by MakerBot. For additional information, please visit" +
+                                         " MakerBot.com/legal/warranty.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "makerbot_genuine_materials"
+                        when: printPage.startPrintUnknownSliceGenuineMaterial
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("MAKERBOT GENUINE MATERIALS")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("This .MakerBot is exported for unknown materials. It is recommended" +
+                             " to re-export this file for the correct materials for best results.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "unknown_material_detected"
+                        when: printPage.startPrintWithUnknownMaterials
+
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("UNKNOWN MATERIAL DETECTED")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
+                                 printPage.print_model_material_name) +
+                             (printPage.support_extruder_used ?
+                                        qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
+                                             printPage.print_support_material_name) :
+                                        qsTr(".")) +
+                              qsTr("\nThis printer is optimized for genuine MakerBot materials.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "low_material"
+                        when: (printPage.startPrintWithInsufficientModelMaterial ||
+                                printPage.startPrintWithInsufficientSupportMaterial)
+
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("LOW MATERIAL")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: {
                                 var insufficientModel = printPage.startPrintWithInsufficientModelMaterial
                                 var insufficientSupport = printPage.startPrintWithInsufficientSupportMaterial
                                 var modelMatStr = printPage.print_model_material_name
@@ -3080,22 +2832,17 @@ ApplicationWindow {
                                                     qsTr("</b>")))) +
                                 qsTr(" to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now.")
                             }
-                             else {
-                                emptyString
-                            }
                         }
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 20
-                        lineHeight: 1.35
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
                     }
-                }
+                ]
             }
         }
+
 
         CustomPopup {
             popupName: "LabsExtruderDetected"

@@ -27,14 +27,14 @@ Drawer {
         if(position > 0.5) {
             topBar.backButton.visible = false
             topBar.imageDrawerArrow.rotation = 90
-            topBar.text_printerName.color = "#ffffff"
+            topBar.textNameStatusTitle.color = "#ffffff"
         }
         else {
             if(mainSwipeView.currentIndex != 0) {
                 topBar.backButton.visible = true
             }
             topBar.imageDrawerArrow.rotation = -90
-            topBar.text_printerName.color = "#a0a0a0"
+            topBar.textNameStatusTitle.color = "#a0a0a0"
         }
     }
 

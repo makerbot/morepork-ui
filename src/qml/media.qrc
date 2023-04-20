@@ -30,15 +30,19 @@
         <file alias="filamentbay_loaded.png">images/filamentbay_loaded.png</file>
         <file alias="place_spool_bay1.gif">images/place_spool_bay1.gif</file>
         <file alias="place_spool_bay2.gif">images/place_spool_bay2.gif</file>
-        <file alias="insert_filament_bay1.gif">images/insert_filament_bay1.gif</file>
-        <file alias="insert_filament_bay2.gif">images/insert_filament_bay2.gif</file>
-        <file alias="close_bay1.gif">images/close_bay1.gif</file>
-        <file alias="close_bay2.gif">images/close_bay2.gif</file>
-        <file alias="confirm_extrusion_1.png">images/confirm_extrusion_1.png</file>
-        <file alias="confirm_extrusion_2.png">images/confirm_extrusion_2.png</file>
-        <file alias="extruder_1_heating.png">images/extruder_1_heating.png</file>
+        <file alias="insert_filament_bay1.gif">images/load_unload/insert_filament_bay1.gif</file>
+        <file alias="insert_filament_bay2.gif">images/load_unload/insert_filament_bay2.gif</file>
+        <file alias="close_bay1.gif">images/load_unload/close_bay1.gif</file>
+        <file alias="close_bay2.gif">images/load_unload/close_bay2.gif</file>
+        <file alias="confirm_extrusion_1.png">images/load_unload/confirm_extrusion_1.png</file>
+        <file alias="confirm_extrusion_2.png">images/load_unload/confirm_extrusion_2.png</file>
+        <file alias="method_rewind_spool_1.gif">images/load_unload/method_rewind_spool_1.gif</file>
+        <file alias="method_rewind_spool_2.gif">images/load_unload/method_rewind_spool_2.gif</file>
+        <file alias="methodxl_rewind_spool_1.png">images/load_unload/methodxl_rewind_spool_1.png</file>
+        <file alias="methodxl_rewind_spool_2.png">images/load_unload/methodxl_rewind_spool_2.png</file>
+        <file alias="extruder_1_heating.png">images/load_unload/extruder_1_heating.png</file>
+        <file alias="extruder_2_heating.png">images/load_unload/extruder_2_heating.png</file>
         <file alias="extruder_1XA_heating.png">images/extruder_1XA_heating.png</file>
-        <file alias="extruder_2_heating.png">images/extruder_2_heating.png</file>
         <file alias="extruder_2XA_heating.png">images/extruder_2XA_heating.png</file>
         <file alias="extruder_labs_heating.png">images/extruder_labs_heating.png</file>
         <file alias="extruder_labs_1_ht_heating.png">images/extruder_labs_1_ht_heating.png</file>
@@ -70,8 +74,6 @@
         <file alias="extruder_right.png">images/extruder_right.png</file>
         <file alias="extruder_none.png">images/extruder_none.png</file>
         <file alias="extruder_both.png">images/extruder_both.png</file>
-
-        <!-- Assisted Level -->
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
         <file alias="method_insert_build_plate.png">images/assisted_level/method/insert_build_plate.png</file>
         <file alias="method_remove_build_plate.png">images/assisted_level/method/remove_build_plate.png</file>
@@ -82,7 +84,6 @@
         <file alias="method_adjust_right_to_move_up_plate.png">images/assisted_level/method/adjust_right_to_move_up_plate.png</file>
         <file alias="method_adjust_right_to_move_down_plate.png">images/assisted_level/method/adjust_right_to_move_down_plate.png</file>
         <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
-
         <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
         <file alias="methodxl_insert_build_plate.png">images/assisted_level/methodxl/insert_build_plate.png</file>
         <file alias="methodxl_remove_build_plate.png">images/assisted_level/methodxl/remove_build_plate.png</file>
@@ -93,23 +94,12 @@
         <file alias="methodxl_adjust_right_to_move_up_plate.png">images/assisted_level/methodxl/adjust_right_to_move_up_plate.png</file>
         <file alias="methodxl_adjust_right_to_move_down_plate.png">images/assisted_level/methodxl/adjust_right_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_done.png">images/assisted_level/methodxl/adjust_done.png</file>
-
         <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
         <file alias="leveler_indicator_orange.png">images/assisted_level/leveler_indicator_orange.png</file>
         <file alias="leveling_good.png">images/assisted_level/leveling_good.png</file>
-        <!-- End Assisted Level -->
-
-        <!-- Calibration -->
         <file alias="calibrate_extruders.png">images/calibration/calibrate_extruders.png</file>
-        <!-- Nozzle cleaning assets for the calibration process are reused from clean extruders nozzles -->
-        <!-- Insert and remove build plate images for the calibration process are reused from assisted level -->
-        <!-- End Calibration -->
-
-        <!-- Clean Extruders Nozzles -->
         <file alias="check_nozzles_clean.png">images/clean_extruders/check_nozzles_clean.png</file>
         <file alias="scrub_nozzles.gif">images/clean_extruders/scrub_nozzles.gif</file>
-        <!-- End Calibration -->
-
         <file alias="refresh.png">images/refresh.png</file>
         <file alias="refresh_black.png">images/refresh_black.png</file>
         <file alias="icon_printer_info.png">images/icon_printer_info.png</file>
@@ -146,23 +136,21 @@
         <file alias="file_no_preview_small.png">images/file_no_preview_small.png</file>
         <file alias="file_no_preview_medium.png">images/file_no_preview_medium.png</file>
         <file alias="back_button.png">images/back_button.png</file>
-        <file alias="rewind_spool_1.gif">images/rewind_spool_1.gif</file>
-        <file alias="rewind_spool_2.gif">images/rewind_spool_2.gif</file>
-        <file alias="method_error_close_door.png">images/method_error_close_door.png</file>
-        <file alias="method_error_close_lid.png">images/method_error_close_lid.png</file>
-        <file alias="methodxl_error_close_door.png">images/methodxl_error_close_door.png</file>
-        <file alias="methodxl_error_close_lid.png">images/methodxl_error_close_lid.png</file>
-        <file alias="methodxl_rewind_spool_1.png">images/methodxl_rewind_spool_1.png</file>
-        <file alias="methodxl_rewind_spool_2.png">images/methodxl_rewind_spool_2.png</file>
-        <file alias="error_oof_bay1.png">images/error_oof_bay1.png</file>
-        <file alias="error_oof_bay2.png">images/error_oof_bay2.png</file>
-        <file alias="error_filament_jam_1.png">images/error_filament_jam_1.png</file>
-        <file alias="error_filament_jam_1XA.png">images/error_filament_jam_1XA.png</file>
-        <file alias="error_filament_jam_2.png">images/error_filament_jam_2.png</file>
-        <file alias="error_filament_jam_2XA.png">images/error_filament_jam_2XA.png</file>
-        <file alias="error_oof_extruder1.png">images/error_oof_extruder1.png</file>
-        <file alias="error_oof_extruder2.png">images/error_oof_extruder2.png</file>
-        <file alias="error_chamber_fan_failure.png">images/error_chamber_fan_failure.png</file>
+        <file alias="method_error_close_door.png">images/errors/method/error_close_door.png</file>
+        <file alias="method_error_close_lid.png">images/errors/method/error_close_lid.png</file>
+        <file alias="methodxl_error_close_door.png">images/errors/methodxl/error_close_door.png</file>
+        <file alias="methodxl_error_close_lid.png">images/errors/methodxl/error_close_lid.png</file>
+        <file alias="error_oof_bay1.png">images/errors/oof_bay1.png</file>
+        <file alias="error_oof_bay2.png">images/errors/oof_bay2.png</file>
+        <file alias="error_tool_1.png">images/errors/error_tool_1.png</file>
+        <file alias="error_tool_2.png">images/errors/error_tool_2.png</file>
+        <file alias="error_filament_jam_1XA.png">images/errors/filament_jam_1XA.png</file>
+        <file alias="error_filament_jam_2XA.png">images/errors/filament_jam_2XA.png</file>
+        <file alias="error_oof_extruder1.png">images/errors/oof_extruder1.png</file>
+        <file alias="error_oof_extruder2.png">images/errors/oof_extruder2.png</file>
+        <file alias="error_chamber_fan_failure.png">images/errors/chamber_fan_failure.png</file>
+        <file alias="error_filament_jam_1.png">images/errors/filament_jam_1.png</file>
+        <file alias="error_filament_jam_2.png">images/errors/filament_jam_2.png</file>
         <file alias="calib_verification.png">images/calib_verification.png</file>
         <file alias="cut_filament_tip.png">images/cut_filament_tip.png</file>
         <file alias="exp_extruder_instructions.png">images/exp_extruder_instructions.png</file>
@@ -220,15 +208,16 @@
         <file alias="setup_procedures.png">images/setup_procedures.png</file>
         <file alias="icon_fingerprint.png">images/icon_fingerprint.png</file>
         <file alias="error_image_overlay.png">images/error_image_overlay.png</file>
-        <file alias="method_error_close_lid.png">images/attach_extruders/method_error_close_lid.png</file>
-        <file alias="methodxl_error_close_lid.png">images/attach_extruders/methodxl_error_close_lid.png</file>
-        <file alias="methodxl_remove_top_lid.png">images/attach_extruders/methodxl_remove_top_lid.png</file>
+        <file alias="feedback_checkbox.png">images/feedback_checkbox.png</file>
+        <file alias="feedback_selected_box.png">images/feedback_selected_box.png</file>
         <file alias="method_remove_top_lid.png">images/attach_extruders/method_remove_top_lid.png</file>
+        <file alias="methodxl_remove_top_lid.png">images/attach_extruders/methodxl_remove_top_lid.png</file>
         <file alias="attach_extruder_swivel_clips_XA.gif">images/attach_extruders/attach_extruder_swivel_clips_XA.gif</file>
         <file alias="attach_extruder_2_step2.gif">images/attach_extruders/attach_extruder_2_step2.gif</file>
         <file alias="attach_extruder_1_step1.gif">images/attach_extruders/attach_extruder_1_step1.gif</file>
         <file alias="attach_extruder_1_step2.gif">images/attach_extruders/attach_extruder_1_step2.gif</file>
         <file alias="attach_extruder_2_step1.gif">images/attach_extruders/attach_extruder_2_step1.gif</file>
         <file alias="attach_extruder_swivel_clips.gif">images/attach_extruders/attach_extruder_swivel_clips.gif</file>
+        <file alias="power_button_screen.png">images/power_button/power_button_screen.png</file>
     </qresource>
 </RCC>
