@@ -263,6 +263,12 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             case 1001:
                 errorTypeSet(ErrorType::HeaterNotReachingTemp);
                 break;
+            case 1013:
+                errorTypeSet(ErrorType::HomingError);
+                break;
+            case 1016:
+                errorTypeSet(ErrorType::HomingError);
+                break;
             case 1032:
                 errorTypeSet(ErrorType::BadHESCalibrationFail);
                 break;
