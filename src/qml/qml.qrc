@@ -266,5 +266,6 @@
         <file>PrintFileInfoPageForm.qml</file>
         <file>PrintFileInfoPage.qml</file>
         <file>PowerButtonScreen.qml</file>
+        <file>FreProgressItem.qml</file>
     </qresource>
 </RCC>
