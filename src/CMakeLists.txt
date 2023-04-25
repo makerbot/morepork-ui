@@ -229,10 +229,8 @@ if(NOT ${QT_CREATOR_BUILD})
         DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/lava/"
 	    DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/lava/rootfs/usr/test_prints")
-    # TODO(chris) Actually make test prints for magma.  These won't actually
-    #             print so we will hopefully catch this before shipping...
     install(
-        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/lava/"
+        DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/magma/"
 	    DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/test_prints")
 endif()
