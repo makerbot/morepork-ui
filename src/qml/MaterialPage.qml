@@ -337,7 +337,7 @@ MaterialPageForm {
         }
     }
 
-    cancel_mouseArea.onClicked: {
+    cancelLoadUnloadButton.onClicked: {
         cancelLoadUnloadPopup.close()
         // Call the appropriate cancel function depending on the
         // the current process. While loading/unloading in the
@@ -403,11 +403,11 @@ MaterialPageForm {
         }
     }
 
-    continue_mouseArea.onClicked: {
+    continueLoadUnloadButton.onClicked: {
         cancelLoadUnloadPopup.close()
     }
 
-    ok_unk_mat_loading_mouseArea.onClicked: {
+    oKButtonMaterialWarningPopup.onClicked: {
         bot.acknowledgeMaterial(false)
         materialChangeCancelled = true
         bot.cancel()

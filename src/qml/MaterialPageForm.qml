@@ -18,13 +18,11 @@ Item {
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
 
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
-    property alias cancel_mouseArea: cancel_mouseArea
-    property alias cancel_rectangle: cancel_rectangle
-    property alias continue_mouseArea: continue_mouseArea
-    property alias continue_rectangle: continue_rectangle
+    property alias cancelLoadUnloadButton: cancelLoadUnloadPopup.leftButton
+    property alias continueLoadUnloadButton: cancelLoadUnloadPopup.rightButton
 
     property alias materialWarningPopup: materialWarningPopup
-    property alias ok_unk_mat_loading_mouseArea: ok_mat_warning_mouseArea
+    property alias oKButtonMaterialWarningPopup: materialWarningPopup.fullButton
 
     property alias materialPageDrawer: materialPageDrawer
     property bool isLoadFilament: false
@@ -176,7 +174,6 @@ Item {
             }
             else {
                 waitUntilUnloadedPopup.open()
-                closeWaitUntilUnloadedPopup.start()
             }
         }
         else if(printPage.isPrintProcess) {
@@ -400,7 +397,6 @@ Item {
                 visible: false
                 cache: false
                 smooth: false
-
             }
 
             ContentRightSide {
@@ -458,7 +454,6 @@ Item {
                             "Open the lock",
                             "Open the handle",
                             extruderAttachText()]
-                        numberedSteps.inactiveSteps: [false, false, false]
                         buttonPrimary.text: (itemAttachExtruder.extruder == 1 ?
                                                  bot.extruderAPresent : bot.extruderBPresent)
                                             ? "NEXT" : "WAITING FOR EXTRUDER..."
@@ -640,400 +635,101 @@ Item {
         }
     }
 
-
-    LoggingPopup {
+    CustomPopup {
+        // This popup is used in two cases, when a user puts a mismatching
+        // spool on the drawer bay or when a user attempts top loading (i.e
+        // triggers the extruder switch first without triggering the drawer
+        // bay switch) on a non-labs extruder. isMaterialMismatch flag is
+        // used in the former case.
         popupName: "MaterialWarning"
         id: materialWarningPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.CloseOnPressOutside
-        background: Rectangle {
-            id: popupBackgroundDim_mat_warning_popup
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
-        }
-        enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-        }
-        exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-        }
+        popupHeight: columnLayout_material_warning_popup.height + 130
+        showOneButton: !isMaterialMismatch
+        showTwoButtons: false
 
         onClosed: {
             isMaterialMismatch = false
         }
 
-        Rectangle {
-            id: basePopupItem_mat_warning_popup
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: isMaterialMismatch ? 250 : 280
-            radius: 10
-            border.width: 2
-            border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
+        ColumnLayout {
+            id: columnLayout_material_warning_popup
+            width: 650
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: isMaterialMismatch ? 110 : 90
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Rectangle {
-                id: horizontal_divider_mat_warning_popup
-                width: 720
-                height: 2
-                color: "#ffffff"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
-                visible: !isMaterialMismatch
+            Image {
+                width: 63
+                height: 63
+                source: "qrc:/img/extruder_material_error.png"
+                Layout.alignment: Qt.AlignHCenter
             }
 
-            Rectangle {
-                id: vertical_divider_mat_warning_popup
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-                visible: false
+            TextHeadline {
+                text: qsTr("INCOMPATIBLE MATERIAL DETECTED")
+                Layout.alignment: Qt.AlignHCenter
+                visible: true
             }
 
-            Item {
-                id: buttonBar_mat_warning_popup
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                visible: !isMaterialMismatch
-
-                Rectangle {
-                    id: ok_rectangle_mat_warning_popup
-                    x: 0
-                    y: 0
-                    width: 720
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: ok_text_mat_warning_popup
-                        color: "#ffffff"
-                        text: qsTr("OK")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "material_warning_popup: [OK]"
-                        id: ok_mat_warning_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            ok_text_mat_warning_popup.color = "#000000"
-                            ok_rectangle_mat_warning_popup.color = "#ffffff"
-                        }
-                        onReleased: {
-                            ok_text_mat_warning_popup.color = "#ffffff"
-                            ok_rectangle_mat_warning_popup.color = "#00000000"
-                        }
-                    }
-                }
-            }
-
-            ColumnLayout {
-                id: columnLayout_mat_warning_popup
-                width: 680
-                height: isMaterialMismatch ? 135 : 150
-                anchors.top: parent.top
-                anchors.topMargin: isMaterialMismatch ? 60 : 35
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: title_text_mat_warning_popup
-                    color: "#cbcbcb"
-                    text: {
-                        if(isMaterialMismatch) {
-                            if (loadUnloadFilamentProcess.currentActiveTool == 1) {
-                                if (bot.machineType != MachineType.Fire &&
-                                        (materialPage.bay1.filamentMaterial == "abs" ||
-                                         materialPage.bay1.filamentMaterial == "asa")) {
-                                    qsTr("UNSUPPORTED MATERIAL DETECTED")
-                                } else {
-                                    qsTr("MODEL MATERIAL REQUIRED")
-                                }
-                            } else if (loadUnloadFilamentProcess.currentActiveTool == 2) {
-                                qsTr("SUPPORT MATERIAL REQUIRED")
-                            }
+            TextBody {
+                text: {
+                    if(isMaterialMismatch) {
+                        // User puts an unsupported spool on the bay
+                        if(loadUnloadFilamentProcess.currentActiveTool == 1) {
+                            qsTr("Only <b>%1</b> model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.supportedMaterials.map(bot.getMaterialName).join(", "))
+                        } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
+                            qsTr("Only <b>%1</b> model materials are compatible in material bay 2. Insert MakerBot model material in material bay 2 to continue.").arg(materialPage.bay2.supportedMaterials.map(bot.getMaterialName).join(", "))
                         } else {
-                            qsTr("MATERIAL NOT SUPPORTED")
+                            defaultString
                         }
+                    } else {
+                        // User attempts top loading without labs extruder installed
+                        qsTr("This material is incompatible with the extruder and/or printer. Visit the following site for information:<br><br><b>makerbot.com/compatibility</b>")
                     }
-                    font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
                 }
-
-                Text {
-                    id: description_text_mat_warning_popup
-                    color: "#cbcbcb"
-                    text: {
-                        if(isMaterialMismatch) {
-                            if(loadUnloadFilamentProcess.currentActiveTool == 1) {
-                                switch (bot.extruderAType) {
-                                case ExtruderType.MK14:
-                                    // This is a special case when V1 extruder is being used on
-                                    // a V2 printer and the user tries to load a V2 hot extruder
-                                    // specific material. This warning can be made generic for
-                                    // all such materials.
-                                    if (bot.machineType != MachineType.Fire &&
-                                        (materialPage.bay1.filamentMaterial == "abs" ||
-                                         materialPage.bay1.filamentMaterial == "asa")) {
-                                        qsTr("Only PLA, Tough and PETG model material are compatible with a Model 1A Extruder. Insert a Model 1XA Extruder to print ABS or ASA.")
-                                    } else {
-                                        qsTr("Only PLA, Tough and PETG model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
-                                    }
-                                    break;
-                                case ExtruderType.MK14_HOT:
-                                    qsTr("Only ABS and ASA model material are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
-                                    break;
-                                case ExtruderType.MK14_COMP:
-                                    qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.supportedMaterials.map(bot.getMaterialName).join(", "))
-                                    break;
-                                default:
-                                    defaultString
-                                    break;
-                                }
-                            } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
-                                switch (bot.extruderBType) {
-                                case ExtruderType.MK14:
-                                    qsTr("Only PVA support material is compatible in material bay 2. Insert PVA support material in material bay 2 to continue.")
-                                    break;
-                                case ExtruderType.MK14_HOT:
-                                    qsTr("Only SR-30 support material is compatible in material bay 2. Insert MakerBot SR-30 support material in material bay 2 to continue.")
-                                    break;
-                                default:
-                                    defaultString
-                                    break;
-                                }
-                            }
-                        } else {
-                            if(loadUnloadFilamentProcess.currentActiveTool == 1) {
-                                qsTr("The Performance Model extruder is only compatible with\n" +
-                                "MakerBot Method materials. To use 3rd Party Materials, please\n" +
-                                "use a MakerBot Labs Extruder. Learn more at Makerbot.com/Labs")
-                            } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
-                                qsTr("The Performance Support extruder is only compatible with\n" +
-                                "MakerBot Method support materials.")
-                            }
-                            else {
-                                defaultString
-                            }
-                        }
-                    }
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    font.family: defaultFont.name
-                    font.pixelSize: 20
-                    lineHeight: 1.4
-                }
+                Layout.preferredWidth: parent.width
+                wrapMode: Text.WordWrap
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                visible: true
             }
         }
     }
 
-    LoggingPopup {
+    CustomPopup {
         popupName: "CancelLoadUnload"
         id: cancelLoadUnloadPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.CloseOnPressOutside
-        background: Rectangle {
-            id: popupBackgroundDim
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
-        }
-        enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-        }
-        exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-        }
+        popupHeight: columnLayout_cancel_load_unload_popup.height + 150
+        showTwoButtons: true
 
-        Rectangle {
-            id: basePopupItem
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: 220
-            radius: 10
-            border.width: 2
-            border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
+        leftButtonText: isLoadFilament ? qsTr("CANCEL LOADING") : qsTr("CANCEL UNLOADING")
+        rightButtonText: isLoadFilament ? qsTr("CONTINUE LOADING") : qsTr("CONTINUE UNLOADING")
+        // Button actions defined in MaterialPage.qml
+
+        ColumnLayout {
+            id: columnLayout_cancel_load_unload_popup
+            width: 650
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: 160
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Rectangle {
-                id: horizontal_divider
-                width: 720
-                height: 2
-                color: "#ffffff"
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 72
+            TextHeadline {
+                text: isLoadFilament ? qsTr("CANCEL MATERIAL LOADING?") :
+                                       qsTr("CANCEL MATERIAL UNLOADING?")
+                Layout.alignment: Qt.AlignHCenter
             }
 
-            Rectangle {
-                id: vertical_divider
-                x: 359
-                y: 328
-                width: 2
-                height: 72
-                color: "#ffffff"
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                anchors.horizontalCenter: parent.horizontalCenter
-            }
-
-            Item {
-                id: buttonBar
-                width: 720
-                height: 72
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-
-                Rectangle {
-                    id: cancel_rectangle
-                    x: 0
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: cancel_loading_text
-                        color: "#ffffff"
-                        text: isLoadFilament ? qsTr("CANCEL LOADING") : qsTr("CANCEL UNLOADING")
-                        Layout.fillHeight: false
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "[_" + cancel_loading_text.text + "|]"
-                        id: cancel_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            cancel_loading_text.color = "#000000"
-                            cancel_rectangle.color = "#ffffff"
-                        }
-                        onReleased: {
-                            cancel_loading_text.color = "#ffffff"
-                            cancel_rectangle.color = "#00000000"
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id: continue_rectangle
-                    x: 360
-                    y: 0
-                    width: 360
-                    height: 72
-                    color: "#00000000"
-                    radius: 10
-
-                    Text {
-                        id: continue_loading_text
-                        color: "#ffffff"
-                        text: isLoadFilament ? qsTr("CONTINUE LOADING") : qsTr("CONTINUE UNLOADING")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 3
-                        font.weight: Font.Bold
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.horizontalCenter: parent.horizontalCenter
-                    }
-
-                    LoggingMouseArea {
-                        logText: "[|" + continue_loading_text.text + "_]"
-                        id: continue_mouseArea
-                        anchors.fill: parent
-                        onPressed: {
-                            continue_loading_text.color = "#000000"
-                            continue_rectangle.color = "#ffffff"
-                        }
-                        onReleased: {
-                            continue_loading_text.color = "#ffffff"
-                            continue_rectangle.color = "#00000000"
-                        }
-                    }
-                }
-            }
-
-            ColumnLayout {
-                id: columnLayout
-                width: 590
-                height: 100
-                anchors.top: parent.top
-                anchors.topMargin: 25
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Text {
-                    id: cancel_text
-                    color: "#cbcbcb"
-                    text: isLoadFilament ? qsTr("CANCEL MATERIAL LOADING?") :
-                                           qsTr("CANCEL MATERIAL UNLOADING?")
-                    font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
-                }
-
-                Text {
-                    id: cancel_description_text
-                    color: "#cbcbcb"
-                    text: qsTr("Are you sure you want to cancel the material %1 process?").arg(
-                                    isLoadFilament ? qsTr("loading") : qsTr("unloading"))
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    font.family: defaultFont.name
-                    font.pixelSize: 18
-                    lineHeight: 1.3
-                }
+            TextBody {
+                text: qsTr("Are you sure you want to cancel the material %1 process?").arg(
+                          isLoadFilament ? qsTr("loading") : qsTr("unloading"))
+                Layout.preferredWidth: parent.width
+                wrapMode: Text.WordWrap
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }
@@ -1046,57 +742,32 @@ Item {
         }
     }
 
-    LoggingPopup {
+    CustomPopup {
         popupName: "WaitUntilUnloaded"
         id: waitUntilUnloadedPopup
-        width: 800
-        height: 480
-        modal: true
-        dim: false
-        focus: true
-        parent: overlay
-        closePolicy: Popup.CloseOnPressOutside
-        background: Rectangle {
-            id: popupBackgroundDim1
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.5
-            anchors.fill: parent
-        }
-        enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-        }
-        exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+        popupWidth: 720
+        popupHeight: 125
+        showOneButton: false
+        showTwoButtons: false
+        onOpened: {
+            closeWaitUntilUnloadedPopup.start()
         }
 
-        Rectangle {
-            id: basePopupItem1
-            color: "#000000"
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            width: 720
-            height: 100
-            radius: 10
-            border.width: 2
-            border.color: "#ffffff"
-            anchors.verticalCenter: parent.verticalCenter
+        ColumnLayout {
+            id: columnLayout_wait_until_unloaded_popup
+            width: 590
+            height: children.height
+            spacing: 20
+            anchors.top: parent.top
+            anchors.topMargin: 220
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Text {
-                id: popup_content_text
-                color: "#cbcbcb"
+            TextBody {
                 text: qsTr("Please wait until the unloading process completes.")
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
+                Layout.preferredWidth: parent.width
                 wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                lineHeight: 1.3
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }
@@ -1104,53 +775,45 @@ Item {
     CustomPopup {
         popupName: "MoistureSensitiveMaterialAlert"
         id: moistureWarningPopup
-        popupWidth: 720
-        popupHeight: 320
+        popupWidth: 715
+        popupHeight: columnLayout_moisture_warning_popup.height + 150
         showOneButton: true
-        full_button_text: qsTr("OK")
-        full_button.onClicked: {
+        fullButtonText: qsTr("CLOSE")
+        fullButton.onClicked: {
             moistureWarningPopup.close()
         }
 
         ColumnLayout {
             id: columnLayout_moisture_warning_popup
-            width: 590
+            width: 650
             height: children.height
             spacing: 20
             anchors.top: parent.top
-            anchors.topMargin: 115
+            anchors.topMargin: 80
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Text {
-                id: alert_text_moisture_warning_popup
-                color: "#cbcbcb"
-                text: qsTr("MOISTURE SENSITIVE MATERIAL DETECTED")
-                font.letterSpacing: 3
+            Image {
+                Layout.preferredWidth: 63
+                Layout.preferredHeight: 63
+                source: "qrc:/img/extruder_material_error.png"
                 Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
-            Text {
-                id: description_text_moisture_warning_popup
-                color: "#cbcbcb"
-                text: {
-                    qsTr("The detected material is prone to absorbing moisture " +
-                         "from the air. Always keep the material sealed in the " +
-                         "material bay, an air tight bag or case. If exposed for " +
-                         "more than 15 minutes, you can use the material drying " +
-                         "feature located in advanced settings on this printer.")
-                }
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+            TextHeadline {
+                text: qsTr("MOISTURE SENSITIVE MATERIAL")
                 Layout.alignment: Qt.AlignHCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
+            }
+
+            TextBody {
+                text: {
+                    qsTr("This material is prone to absorbing moisture from the air. Always " +
+                         "keep the material sealed in the bay or an air tight bag.<br><br>" +
+                         "If exposed for more than 15 minutes, you can use the material drying " +
+                         "feature located in the printer settings.")
+                }
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

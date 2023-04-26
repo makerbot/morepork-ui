@@ -15,15 +15,14 @@ LoggingItem {
     height: 420
 
     property alias snipMaterial: snipMaterial
-    property alias acknowledgeButton: contentRightItem.buttonPrimary
-    property alias retryButton: contentRightItem.buttonSecondary1
+    property alias acknowledgeButton: contentRightSide.buttonPrimary
+    property alias retryButton: contentRightSide.buttonSecondary1
     property bool snipMaterialAlertAcknowledged: false
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
     property int retryTemperature: 0
     property string retryMaterial: "None"
     property int bayID: 0
-    property bool isExpExtruder: bayID == 1 ? bay1.usingExperimentalExtruder : false
     property int currentActiveTool: bot.process.currentToolIndex + 1
     // Hold onto the current bay ID even after the process completes
     onCurrentActiveToolChanged: {
@@ -115,7 +114,7 @@ LoggingItem {
         // to not start properly, so disabling the retry
         // button and then enabling after a few seconds is
         // a quick hacky fix for this before launch.
-        contentRightItem.buttonSecondary1.enabled = false
+        contentRightSide.buttonSecondary1.enabled = false
         enableRetryButton.start()
     }
 
@@ -140,7 +139,6 @@ LoggingItem {
         case ProcessStateType.Done:
             snipMaterialAlertAcknowledged = false
             delayedEnableRetryButton()
-            // (sorry) Update 2023 (from Shirley) sorry about the janky error checking here ;) 
             if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
                 state = "error"
@@ -227,14 +225,15 @@ LoggingItem {
         id: enableRetryButton
         interval: 3000
         onTriggered: {
-            contentRightItem.buttonSecondary1.enabled = true
+            contentRightSide.buttonSecondary1.enabled = true
         }
     }
+
     SnipMaterialScreen {
         id: snipMaterial
         z: 1
         anchors.verticalCenterOffset: -20
-        visible: !snipMaterialAlertAcknowledged && !isExpExtruder && !bayFilamentSwitch
+        visible: !snipMaterialAlertAcknowledged && !usingExpExtruder && !bayFilamentSwitch
     }
 
     ExpExtruderInstructionsScreen {
@@ -250,13 +249,13 @@ LoggingItem {
     }
 
     ContentLeftSide {
-        id: contentLeftItem
+        id: contentLeftSide
         smooth: false
         animatedImage.visible: true
     }
 
     ContentRightSide {
-        id: contentRightItem
+        id: contentRightSide
 
         textHeader {
             text: qsTr("OPEN BAY %1").arg(bayID)
@@ -270,15 +269,17 @@ LoggingItem {
                                     bayID == 1 ? qsTr("Model") : qsTr("Support")),
                 qsTr("Push the end of the material into\nthe slot until you feel it being\npulled in.")
             ]
-            inactiveSteps: [false, false, false]
+            activeSteps: [true, true, true]
         }
 
         textBody {
             text: "\n\n\n"
         }
+
         buttonPrimary {
             text: qsTr("CONTINUE")
         }
+
         buttonSecondary1 {
             text: qsTr("RETRY")   
         }
@@ -286,20 +287,19 @@ LoggingItem {
         temperatureStatus {
             showExtruder: (bayID == 1) ? TemperatureStatus.Extruder.Model : TemperatureStatus.Extruder.Support
         }
-
     }
 
     states: [
         State {
             name: "feed_filament"
-            when: isMaterialValid && !isExpExtruder && !bayFilamentSwitch &&
+            when: isMaterialValid && !usingExpExtruder && !bayFilamentSwitch &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged && !isExpExtruder
+                visible: !snipMaterialAlertAcknowledged && !usingExpExtruder
             }
 
             PropertyChanges {
@@ -313,7 +313,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: {
                     if (bot.hasFilamentBay) {
                         qsTr("%1 DETECTED").arg(materialName)
@@ -325,45 +325,47 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: qsTr("Push the end of the material into the slot until you feel it being pulled in.")
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: false
                 text: qsTr("CONTINUE")
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 visible: true
                 source: bayID == 1 ?
                             "qrc:/img/insert_filament_bay1.gif" :
                             "qrc:/img/insert_filament_bay2.gif"
             }
+
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: true
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 visible: false
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
@@ -377,7 +379,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged && !isExpExtruder
+                visible: !snipMaterialAlertAcknowledged && !usingExpExtruder
             }
 
             PropertyChanges {
@@ -391,60 +393,61 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: qsTr("MATERIAL LOADING")
                 anchors.topMargin: 160
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: qsTr("Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds.")
                 visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.temperatureStatus
+                target: contentRightSide.temperatureStatus
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 loading: true
                 visible: true
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
         State {
             name: "preheating"
-            when: (extruderFilamentSwitch || isExpExtruder) &&
+            when: (extruderFilamentSwitch || usingExpExtruder) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
@@ -474,7 +477,7 @@ LoggingItem {
                     !extruderFilamentSwitch &&
                     (bot.process.type == ProcessType.Print ||
                      bot.process.type == ProcessType.Load) &&
-                    isExpExtruder &&
+                    usingExpExtruder &&
                     targetTemperature > 0 &&
                     ((currentTemperature + 30) >= targetTemperature)
                 }
@@ -486,52 +489,53 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: qsTr("HEATING")
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: ""
             }
 
             PropertyChanges {
-                target: contentRightItem.temperatureStatus
+                target: contentRightSide.temperatureStatus
                 visible: true
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 loading: true
                 visible: true
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
@@ -557,12 +561,12 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: qsTr("EXTRUSION CONFIRMATION")
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: {
                     qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
                            ((shouldUserAssistPurging(bayID) ?
@@ -574,23 +578,23 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: true
                 text: qsTr("CONFIRM\nMATERIAL EXTRUSION")
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 source: bayID == 1 ?
                             "qrc:/img/confirm_extrusion_1.png" :
                             "qrc:/img/confirm_extrusion_2.png"
@@ -598,16 +602,17 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 visible: false
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
@@ -635,14 +640,14 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: {
                     doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("MATERIAL\nUNLOADING")
                 }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: {
                     doingAutoUnload ?
                         qsTr("Please wait while the remaining material backs out of the printer.") :
@@ -652,37 +657,37 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 loading: true
                 visible: true
             }
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
@@ -709,19 +714,19 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: qsTr("CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN")
                 visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: qsTr("Wait a few moments until the material has cooled. Close the build chamber and material drawer.")
                 visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: true
                 text: {
                     if(inFreStep) {
@@ -743,7 +748,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
@@ -761,7 +766,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: true
                 source: bayID == 1 ?
                             "qrc:/img/close_bay1.gif" :
@@ -769,26 +774,27 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.temperatureStatus
+                target: contentRightSide.temperatureStatus
                 visible: false
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 visible: false
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
@@ -815,13 +821,13 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: qsTr("REWIND SPOOL")
                 visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: {
                     if(bot.machineType == MachineType.Magma) {
                         qsTr("Open the latch to access the material case. Carefully rewind the material onto the spool and seal in bag.")
@@ -833,20 +839,20 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: (bot.machineType == MachineType.Magma)
                 text: qsTr("Close the latch to prevent moisture intake.")
                 font.weight: Font.Normal
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: true
                 text: qsTr("DONE")
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
@@ -864,7 +870,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: bot.machineType != MachineType.Magma
                 source: bayID == 1 ?
                             "qrc:/img/method_rewind_spool_1.gif" :
@@ -872,7 +878,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 source: bayID == 1 ?
                             "qrc:/img/methodxl_rewind_spool_1.png" :
                             "qrc:/img/methodxl_rewind_spool_2.png"
@@ -880,16 +886,17 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 visible: false
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         },
@@ -916,7 +923,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
+                target: contentRightSide.textHeader
                 text: {
                     switch(bot.process.type) {
                       case ProcessType.Load:
@@ -933,19 +940,19 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
+                target: contentRightSide.textBody
                 text: qsTr("Error %1").arg(errorCode)
                 visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
+                target: contentRightSide.buttonPrimary
                 visible: true
                 text: qsTr("DONE")
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
+                target: contentRightSide.buttonSecondary1
                 text: {
                     if(inFreStep) {
                         if(bot.process.type == ProcessType.Print) {
@@ -963,12 +970,12 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftItem.animatedImage
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
+                target: contentLeftSide.image
                 source: bayID == 1 ?
                             "qrc:/img/extruder_1_heating.png" :
                             "qrc:/img/extruder_2_heating.png"
@@ -976,16 +983,17 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.numberedSteps
+                target: contentRightSide.numberedSteps
                 visible: false
             }
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
+                target: contentLeftSide.loadingIcon
                 visible: false
             }
+
             PropertyChanges {
-                target: contentRightItem.textBody1
+                target: contentRightSide.textBody1
                 visible: false
             }
         }
