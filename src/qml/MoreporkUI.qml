@@ -3133,5 +3133,105 @@ ApplicationWindow {
                 }
             }
         }
+
+        CustomPopup {
+            popupName: "HelpPopup"
+            id: helpPopup
+            popupWidth: 720
+            popupHeight: columnLayout_help_popup.height + 130
+            showOneButton: true
+            full_button_text: qsTr("CLOSE")
+            full_button.onClicked: {
+                helpPopup.close()
+            }
+            property alias state: columnLayout_help_popup.state
+
+            ColumnLayout {
+                id: columnLayout_help_popup
+                width: 600
+                height: children.height
+                spacing: 0
+                anchors.top: parent.top
+                anchors.topMargin: 90
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                RowLayout {
+                    spacing: 100
+                    Layout.preferredHeight: children.height
+                    Layout.preferredWidth: children.width
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                    Image {
+                        id: help_qr_code
+                        Layout.preferredHeight: 200
+                        Layout.preferredWidth: 200
+                        source: "qrc:/img/broken.png"
+                        visible: true
+                        Layout.alignment: Qt.AlignVCenter
+                    }
+
+                    ColumnLayout {
+                        spacing: 16
+                        Layout.preferredWidth: 340
+                        Layout.preferredHeight: children.height
+                        TextHeadline {
+                            id: help_title
+                            text: qsTr("METHOD COMPATIBILITY")
+                            Layout.alignment: Qt.AlignLeft
+                            Layout.preferredWidth: parent.width
+                            visible: true
+                        }
+
+                        TextBody {
+                            id: help_description
+                            text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
+                            Layout.preferredWidth: parent.width
+                            Layout.alignment: Qt.AlignLeft
+                            visible: true
+                        }
+                    }
+                }
+
+                states: [
+                    State {
+                        name: "attach_extruders" // e.g.
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("CLOSE THE TOP LID")
+                        }
+
+                        PropertyChanges {
+                            target: help_description
+                            text: qsTr("Put the top lid back on the printer to start the print.")
+                        }
+                    },
+
+                    State {
+                        name: "load_material"  // e.g.
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("CLOSE THE TOP LID")
+                        }
+
+                        PropertyChanges {
+                            target: help_description
+                            text: qsTr("Put the top lid back on the printer to start the print.")
+                        }
+                    }
+                ]
+            }
+        }
     }
 }
