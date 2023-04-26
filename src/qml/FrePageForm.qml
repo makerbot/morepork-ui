@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import FreStepEnum 1.0
+import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "FrePage"
@@ -129,6 +130,17 @@ LoggingItem {
         anchors.topMargin: 40
         anchors.horizontalCenter: parent.horizontalCenter
         visible: currentFreStep == FreStep.LoginMbAccount
+    }
+
+    property bool skipUnpacking: bot.machineType != MachineType.Magma
+
+    onSkipUnpackingChanged: {
+        fre.setStepEnable(FreStep.SunflowerUnpacking, !skipUnpacking)
+    }
+
+    SunflowerUnpacking {
+        id: sunflowerUnpacking
+        visible: currentFreStep == FreStep.SunflowerUnpacking
     }
 
     states: [
