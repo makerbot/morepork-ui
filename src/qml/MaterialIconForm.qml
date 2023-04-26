@@ -93,6 +93,7 @@ Item {
             }
         }
     }
+
     Image {
         id: material_image_error
         anchors.right: parent.right
@@ -101,6 +102,7 @@ Item {
         height: sourceSize.height
         source: "qrc:/img/error_image_overlay.png"
     }
+
     states: [
         State {
             name: "not_loaded_no_rfid"
@@ -147,7 +149,7 @@ Item {
 
             PropertyChanges {
                 target: material_image_error
-                visible: false
+                visible: materialError
             }
         },
         State {

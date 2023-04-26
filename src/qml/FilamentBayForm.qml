@@ -11,7 +11,8 @@ Item {
     width: 360
     smooth: false
     antialiasing: false
-    property alias loadAttachButton: loadAttachButton
+    property alias attachExtruderButton: attachExtruderButton
+    property alias loadButton: loadButton
     property alias unloadButton: unloadButton
     property alias purgeButton: purgeButton
 
@@ -102,6 +103,10 @@ Item {
         supportedMaterials.indexOf(filamentMaterial) >= 0
     }
 
+    property bool materialError: {
+        spoolPresent && !isMaterialValid
+    }
+
     function checkSliceValid(material) {
         return usingExperimentalExtruder ||
             supportedMaterials.indexOf(material) >= 0;
@@ -189,39 +194,59 @@ Item {
             antialiasing: false
 
             ButtonRectanglePrimary {
-                id: loadAttachButton
-                text: {
-                    if(!extruderPresent) {
-                        qsTr("ATTACH EXTRUDER")
-                    } else {
-                        qsTr("LOAD")
-                    }
-                }
-                logKey: text
-                visible: !extruderPresent || !extruderFilamentPresent ||
-                         (!bot.hasFilamentBay && filamentMaterial == "unknown")
-            }
-
-            ButtonRectangleSecondary {
-                id: unloadButton
-                text: qsTr("UNLOAD")
-                logKey: text
-                visible: extruderPresent
-
-            }
-
-            ButtonRectangleSecondary {
-                id: purgeButton
-                text: qsTr("PURGE")
-                logKey: text
-                visible: extruderPresent && ((bot.hasFilamentBay) ? extruderFilamentPresent :
-                         (extruderFilamentPresent && filamentMaterial != "unknown"))
-            }
-
-            Item {
-                height: purgeButton.height
-                width:purgeButton.width
+                id: attachExtruderButton
+                text: qsTr("ATTACH EXTRUDER")
                 visible: !extruderPresent
+            }
+
+            // This is just an informational button and cannot
+            // be clicked. Why you ask?
+            ButtonRectanglePrimary {
+                id: materialErrorInformationalButton
+                text: qsTr("MATERIAL INCOMPATIBLE")
+                enabled: false
+                visible: extruderPresent && materialError
+            }
+
+            ButtonRectanglePrimary {
+                id: dummySpacingButton
+                opacity: 0
+                enabled: false
+                visible: attachExtruderButton.visible ||
+                         materialErrorInformationalButton.visible
+            }
+
+            // These all are relevant only when an extruder is installed
+            // and there is no material error. Unload will be disabled
+            // when there is a material error which seems counter-intuitive
+            // but the user wouldn't have been able to load an incompatible
+            // material into the extruder in the first place to end up wanting
+            // to unload it later. Material error concept is only applicable
+            // for printers with filament bay.
+            ColumnLayout {
+                spacing: 16
+                smooth: false
+                antialiasing: false
+                visible: extruderPresent && !materialError
+
+                ButtonRectanglePrimary {
+                    id: loadButton
+                    text: qsTr("LOAD")
+                    visible: !extruderFilamentPresent ||
+                             (!bot.hasFilamentBay && filamentMaterial == "unknown")
+                }
+
+                ButtonRectangleSecondary {
+                    id: unloadButton
+                    text: qsTr("UNLOAD")
+                }
+
+                ButtonRectangleSecondary {
+                    id: purgeButton
+                    text: qsTr("PURGE")
+                    visible: bot.hasFilamentBay ? extruderFilamentPresent :
+                             (extruderFilamentPresent && filamentMaterial != "unknown")
+                }
             }
         }
     }
