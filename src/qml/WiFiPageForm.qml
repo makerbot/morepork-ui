@@ -52,12 +52,7 @@ Item {
             systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             settingsSwipeView.swipeToItem(SettingsPage.BasePage)
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            if(isfirmwareUpdateAvailable) {
-                fre.gotoNextStep(currentFreStep)
-            }
-            else {
-                fre.setFreStep(FreStep.NamePrinter)
-            }
+            fre.gotoNextStep(currentFreStep)
         }
     }
 

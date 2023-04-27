@@ -37,8 +37,13 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+
     property bool isNetworkConnectionAvailable: (bot.net.interface == "ethernet" ||
                                                  bot.net.interface == "wifi")
+    onIsNetworkConnectionAvailableChanged: {
+        fre.setStepEnable(FreStep.SetupWifi, !isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.LoginMbAccount, isNetworkConnectionAvailable)
+    }
 
     property bool safeToRemoveUsb: bot.safeToRemoveUsb
     onSafeToRemoveUsbChanged: {
@@ -212,6 +217,7 @@ ApplicationWindow {
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
 
     onIsfirmwareUpdateAvailableChanged: {
+        fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
         if(isfirmwareUpdateAvailable && isFreComplete) {
             if(settingsPage.settingsSwipeView.currentIndex != 3) {
                 firmwareUpdatePopup.open()
@@ -728,31 +734,13 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 skipFreStepPopup.close()
-                                // Login step has a flow within the FRE screen unlike
-                                // other steps, so it doesnt require the skip function
-                                // like the other steps. The skip function brings the
-                                // user back to the main FRE screen, undoing the UI
-                                // navigations, resetting states etc.
-                                if(currentFreStep != FreStep.LoginMbAccount) {
-                                    currentItem.skipFreStepAction()
-                                }
+                                currentItem.skipFreStepAction()
                                 if(currentFreStep == FreStep.AttachExtruders ||
                                    currentFreStep == FreStep.LevelBuildPlate ||
                                    currentFreStep == FreStep.CalibrateExtruders ||
                                    currentFreStep == FreStep.LoadMaterial ||
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
-                                }
-                                else if(currentFreStep == FreStep.SetupWifi) {
-                                    if(isNetworkConnectionAvailable &&
-                                       isfirmwareUpdateAvailable) {
-                                        // Go to software update step only if
-                                        // network connection is available
-                                        fre.gotoNextStep(currentFreStep)
-                                    }
-                                    else {
-                                        fre.setFreStep(FreStep.NamePrinter)
-                                    }
                                 }
                                 else {
                                     fre.gotoNextStep(currentFreStep)

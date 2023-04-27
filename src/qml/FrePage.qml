@@ -53,12 +53,7 @@ FrePageForm {
 
             if(state == "wifi_setup") {
                 if(isNetworkConnectionAvailable) {
-                    if(isfirmwareUpdateAvailable) {
-                        fre.gotoNextStep(currentFreStep)
-                    }
-                    else {
-                        fre.setFreStep(FreStep.NamePrinter)
-                    }
+                    fre.gotoNextStep(currentFreStep)
                 }
                 else {
                     inFreStep = true
@@ -74,12 +69,6 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
-            } else if(state == "name_printer") {
-                inFreStep = true
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
-                settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "set_time_date") {
                 inFreStep = true
                 bot.getSystemTime()
@@ -110,21 +99,29 @@ FrePageForm {
                 inFreStep = true
                 startTestPrint()
             } else if(state == "log_in") {
-                // login has a separate flow within the fre screen.
-            } else if(state == "setup_complete") {
-                fre.setFreStep(FreStep.FreComplete)
+                inFreStep = true
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AuthorizeAccountsPage)
+                settingsPage.systemSettingsPage.authorizeAccountPage.authorizeAccountWithCodePage.beginAuthWithCode()
+                settingsPage.systemSettingsPage.authorizeAccountPage.authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCode)
             } else {
-                // At base state screen
-                if(!isNetworkConnectionAvailable) {
-                    // Goto Wifi Setup step
-                    fre.gotoNextStep(currentFreStep)
-                }
-                else if(isfirmwareUpdateAvailable) {
-                    fre.setFreStep(FreStep.SoftwareUpdate)
-                }
-                else {
-                    fre.setFreStep(FreStep.NamePrinter)
-                }
+                // For all screens not listed above, the default behavior
+                // is to go to the next step
+                fre.gotoNextStep(currentFreStep)
+            }
+        }
+    }
+
+    skipButton {
+        onClicked: {
+            if (state == "name_printer") {
+                // Skipping this step is the default 
+                inFreStep = true
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
+                settingsPage.namePrinter.nameField.forceActiveFocus()
             }
         }
     }

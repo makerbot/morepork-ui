@@ -10,17 +10,15 @@ LoggingItem {
     width: 800
     height: 480
     property alias continueButton: freContentRight.buttonPrimary
+    property alias skipButton: freContentRight.buttonSecondary1
 
-    Image {
-        id: bot_image
-        width: sourceSize.width
-        height: sourceSize.height
-        visible: currentFreStep == FreStep.Welcome ||
-                 currentFreStep == FreStep.SetupComplete
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/sombrero_welcome.png"
+    ContentLeftSide {
+        id: freContentLeft
+        loadingIcon {
+            visible: true
+            icon_image: LoadingIcon.Success
+        }
+        visible: false
     }
 
     ContentRightSide {
@@ -124,14 +122,6 @@ LoggingItem {
         }
     }
 
-    FreAuthorizeWithCode {
-        id: authorizeWithCode
-        anchors.top: parent.top
-        anchors.topMargin: 40
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: currentFreStep == FreStep.LoginMbAccount
-    }
-
     property bool skipUnpacking: bot.machineType != MachineType.Magma
 
     onSkipUnpackingChanged: {
@@ -146,11 +136,6 @@ LoggingItem {
     states: [
         State {
             name: "wifi_setup"
-
-            PropertyChanges {
-                target: bot_image
-                visible: false
-            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
@@ -222,11 +207,6 @@ LoggingItem {
             name: "software_update"
 
             PropertyChanges {
-                target: bot_image
-                visible: false
-            }
-
-            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("PRINTER SOFTWARE UPDATE AVAILABLE")
                 anchors.topMargin: 25
@@ -273,65 +253,7 @@ LoggingItem {
             }
         },
         State {
-            name: "name_printer"
-
-            PropertyChanges {
-                target: bot_image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: freContentRight.textHeader
-                text: qsTr("NAME PRINTER")
-            }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Give this printer a name to find it easier.")
-            }
-
-            PropertyChanges {
-                target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
-            }
-
-            PropertyChanges {
-                target: setupProgress
-                state: FreProgressItem.Active
-            }
-
-            PropertyChanges {
-                target: extrudersProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: materialProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: printProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: connectProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: progress_item
-                visible: true
-            }
-        },
-        State {
             name: "set_time_date"
-
-            PropertyChanges {
-                target: bot_image
-                visible: false
-            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
@@ -380,11 +302,6 @@ LoggingItem {
         },
         State {
             name: "attach_extruders"
-
-            PropertyChanges {
-                target: bot_image
-                visible: false
-            }
 
 
             PropertyChanges {
@@ -446,11 +363,6 @@ LoggingItem {
             name: "level_build_plate"
 
             PropertyChanges {
-                target: bot_image
-                visible: false
-            }
-
-            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("LEVEL BUILD PLATFORM")
             }
@@ -509,11 +421,6 @@ LoggingItem {
             name: "calibrate_extruders"
 
             PropertyChanges {
-                target: bot_image
-                visible: false
-            }
-
-            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("CALIBRATE EXTRUDERS")
             }
@@ -569,11 +476,6 @@ LoggingItem {
         },
         State {
             name: "load_material"
-
-            PropertyChanges {
-                target: bot_image
-                visible: false
-            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
@@ -635,11 +537,6 @@ LoggingItem {
             name: "test_print"
 
             PropertyChanges {
-                target: bot_image
-                visible: false
-            }
-
-            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("READY TO PRINT")
             }
@@ -694,11 +591,27 @@ LoggingItem {
             }
         },
         State {
-            name: "log_in"
+            name: "name_printer"
 
             PropertyChanges {
-                target: bot_image
-                visible: false
+                target: freContentRight.textHeader
+                text: qsTr("PRINTER NAME:\n\n") + bot.name
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("You can change the printer name at any point in the system settings.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("NEXT")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                text: qsTr("CHANGE PRINTER NAME")
+                visible: true
             }
 
             PropertyChanges {
@@ -742,27 +655,97 @@ LoggingItem {
             }
         },
         State {
+            name: "log_in"
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("CONNECT")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONNECT ACCOUNT")
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.833
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.968
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("CloudPrint is a browser-based app that enables you to prepare & send files directly to your printer.\n\nCreate a MakerBot account and connect your printer to CloudPrint at:")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                text: qsTr("cloudprint.makerbot.com")
+                visible: true
+            }
+        },
+        State {
             name: "setup_complete"
 
             PropertyChanges {
-                target: bot_image
+                target: freContentLeft
                 visible: true
             }
 
             PropertyChanges {
                 target: freContentRight.textHeader
-                text: qsTr("YOUR PRINTER IS\nSUCCESSFULLY SET UP")
+                text: qsTr("SETUP COMPLETE")
             }
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("Log onto MakerBot CloudPrint<br>to prepare your own files for this<br>printer.")
+                text: qsTr("To learn how to prepare and send files to your printer, follow the instructions at:")
                 anchors.topMargin: 20
             }
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("DONE")
+                text: qsTr("FINISH")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                text: qsTr("cloudprint.makerbot.com")
+                visible: true
             }
 
             PropertyChanges {
