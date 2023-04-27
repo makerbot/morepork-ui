@@ -186,7 +186,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: unpackingContentRightSide.textHeader
-                text: qsTr("PROCEDURE PAUSED")
+                text: qsTr("PROCEDURE PAUSED\n\nCLOSE PRINTER DOOR")
                 visible: true
             }
 
