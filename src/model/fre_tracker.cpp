@@ -58,6 +58,8 @@ void FreTracker::initialize() {
                     currentFreStepSet(FreStep::NamePrinter);
                 } else if (step == "set_time_date") {
                     currentFreStepSet(FreStep::SetTimeDate);
+                } else if (step == "sunflower_unpacking") {
+                    currentFreStepSet(FreStep::SunflowerUnpacking);
                 } else if (step == "attach_extruders") {
                     currentFreStepSet(FreStep::AttachExtruders);
                 } else if (step == "level_build_plate") {
@@ -81,7 +83,10 @@ void FreTracker::initialize() {
 }
 
 void FreTracker::gotoNextStep(uint current_step) {
-    currentFreStepSet(static_cast<FreStep>(++current_step));
+    do {
+        ++current_step;
+    } while (disabled_steps_.count(current_step));
+    currentFreStepSet(static_cast<FreStep>(current_step));
     next_step_ = step_str_[current_step];
     logFreStatus();
 }
@@ -125,4 +130,12 @@ void FreTracker::acknowledgeFirstBoot() {
 // elsewhere before deleting it
     remove(first_boot_path_.c_str());
     isFirstBootSet(false);
+}
+
+void FreTracker::setStepEnable(uint step, bool enabled) {
+    if (enabled) {
+        disabled_steps_.erase(step);
+    } else {
+        disabled_steps_.insert(step);
+    }
 }

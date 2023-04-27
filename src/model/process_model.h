@@ -22,6 +22,7 @@ class ProcessModel : public BaseModel {
         DryingCycleProcess,
         NozzleCleaningProcess,
         AnnealPrintProcess,
+        MoveBuildPlateProcess,
         Other
     };
     //MOREPORK_QML_ENUM
