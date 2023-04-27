@@ -46,7 +46,7 @@ Item {
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
     property alias printErrorScreen: errorScreen
-    readonly property int waitToCoolTemperature: 70
+    readonly property int waitToCoolTemperature: 50
     property bool isFileCopying: storage.fileIsCopying
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
 
