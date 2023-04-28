@@ -11,7 +11,12 @@ LoggingItem {
     width: 800
     property alias continueButton: freContentRight.buttonPrimary
     property alias skipButton: freContentRight.buttonSecondary1
-    property bool languageSelectionComplete: false
+
+    // For testing purposes if we are not starting in "WELCOME"
+    // we may not want to be showing the language selector
+    // I don't believe there is a use-case where someone would
+    // not be starting at the "WELCOME" step
+    property bool languageSelectionComplete: !(currentFreStep == FreStep.Welcome) // init false
 
     // Select Language before FRE
     ColumnLayout {
@@ -163,7 +168,6 @@ LoggingItem {
 
         ContentRightSide {
             id: freContentRight
-            visible: languageSelectionComplete
             textHeader {
                 text: qsTr("WELCOME")
                 visible: true
