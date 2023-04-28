@@ -244,6 +244,65 @@ LoggingItem {
         },
 
         State {
+            name: "fre_start_screen"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: true
+                source: "qrc:/img/hex_key_guide.png"
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                visible: true
+                text: qsTr("TOOLS REQUIRED")
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                visible: true
+                text: bot.machineType == MachineType.Magma ?
+                      qsTr("3mm Hex Key (included in Box 2)\n\nConfirm you have the correct key to prevent damage to screws.") :
+                      qsTr("2.5mm Hex Key (included)\n\nConfirm you have the correct key to prevent damage to screws.")
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.temperatureStatus
+                visible: false
+            }
+
+            PropertyChanges {
+                target: leveler
+                visible: false
+            }
+        },
+
+        State {
             name: "remove_build_plate"
             when: bot.process.type == ProcessType.AssistedLeveling &&
                   bot.process.stateType == ProcessStateType.BuildPlateInstructions
@@ -271,7 +330,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: qsTr("OPEN DOOR AND REMOVE BUILD PLATE")
+                text: qsTr("CONFIRM BUILD PLATE IS REMOVED")
                 visible: true
             }
 
@@ -288,7 +347,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                text: qsTr("NEXT")
+                text: qsTr("CONFIRM")
                 visible: true
             }
 
@@ -430,7 +489,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: leveler.instructionsTitle
-                text: qsTr("LOCATE SCREWS HIGHLIGHTED IN WHITE")
+                text: qsTr("LOCATE SCREWS UNDER BUILD PLATFORM")
                 visible: true
             }
 

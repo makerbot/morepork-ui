@@ -97,6 +97,7 @@
         <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
         <file alias="leveler_indicator_orange.png">images/assisted_level/leveler_indicator_orange.png</file>
         <file alias="leveling_good.png">images/assisted_level/leveling_good.png</file>
+        <file alias="hex_key_guide.png">images/assisted_level/hex_key_guide.png</file>
         <file alias="calibrate_extruders.png">images/calibration/calibrate_extruders.png</file>
         <file alias="check_nozzles_clean.png">images/clean_extruders/check_nozzles_clean.png</file>
         <file alias="scrub_nozzles.gif">images/clean_extruders/scrub_nozzles.gif</file>
@@ -228,5 +229,6 @@
         <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
         <file alias="case_divider.png">images/case_divider.png</file>
+        <file alias="fre_qr_code.png">images/fre_qr_code.png</file>
     </qresource>
 </RCC>
