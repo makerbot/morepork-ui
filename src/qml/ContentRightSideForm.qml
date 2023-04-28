@@ -17,6 +17,7 @@ Item {
 
     property alias textHeader: textHeader
     property alias textHeader1: textHeader1
+    property alias textHeader1Loading: textHeader1Loading
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
@@ -49,10 +50,21 @@ Item {
             TextHeadline {
                 id: textHeader1
                 style: TextHeadline.Base
-                Layout.preferredWidth: parent.width
                 text: "standard header"
                 visible: false || showAllElements
+
+                Image{
+                    id: textHeader1Loading
+                    source: "qrc:/img/popup_complete.png"
+                    anchors.verticalCenter: textHeader1.verticalCenter
+                    anchors.left: textHeader1.right
+                    anchors.leftMargin: 25
+                    sourceSize.height: 21
+                    sourceSize.width: 21
+                    visible: false
+                }
             }
+
 
             NumberedSteps {
                 id: numberedSteps

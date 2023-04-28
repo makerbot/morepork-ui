@@ -206,6 +206,37 @@ Item {
         }
     }
 
+    function getExtruderType(extruderNr) {
+        switch(extruderNr) {
+        case 1:
+            switch(bot.extruderAType) {
+                case ExtruderType.MK14:
+                    return "1A"
+                case ExtruderType.MK14_HOT:
+                    return "1XA"
+                case ExtruderType.MK14_EXP:
+                    return "LABS"
+                case ExtruderType.MK14_COMP:
+                    return "1C"
+                case ExtruderType.MK14_HOT_E:
+                    return "LABS_HT"
+                default:
+                    return "UNKNOWN"
+            }
+        case 2:
+            switch(bot.extruderBType) {
+                case ExtruderType.MK14:
+                    return "2A"
+                case ExtruderType.MK14_HOT:
+                    return "2XA"
+                default:
+                    return "UNKNOWN"
+            }
+        default:
+            return "UNKNOWN"
+        }
+    }
+
     MaterialPageDrawer {
         id: materialPageDrawer
     }
@@ -417,6 +448,10 @@ Item {
                         emptyString
                     }
                 }
+                textHeader1.text: qsTr("NOT DETECTED")
+                textHeader1.visible: false
+                textHeader1.opacity: 0.7
+                textHeader1Loading.visible: true
                 textBody.visible: true
                 textBody.text: "Remove the top lid from the printer to access the carriage"
                 buttonPrimary.visible: true
@@ -453,6 +488,11 @@ Item {
                             qsTr("ATTACH MODEL EXTRUDER TO SLOT %1").arg(itemAttachExtruder.extruder)
                         }
                         textBody.visible: false
+                        textHeader1.text: (itemAttachExtruder.extruder == 1 ?
+                                              bot.extruderAPresent : bot.extruderBPresent) ?
+                                              qsTr("%1 DETECTED").arg(getExtruderType(itemAttachExtruder.extruder)) :
+                                              qsTr("NOT DETECTED")
+                        textHeader1.visible: true
                         numberedSteps.visible: true
                         numberedSteps.steps: [
                             "Open the lock",
@@ -490,6 +530,11 @@ Item {
                         target: attach_extruder_content
                         textHeader.text: qsTr("LOCK THE EXTRUDER IN PLACE AND ATTACH THE SWIVEL CLIP")
                         textBody.visible: false
+                        textHeader1.text: (itemAttachExtruder.extruder == 1 ?
+                                              bot.extruderAPresent : bot.extruderBPresent) ?
+                                              qsTr("%1 DETECTED").arg(getExtruderType(itemAttachExtruder.extruder)) :
+                                              qsTr("NOT DETECTED")
+                        textHeader1.visible: true
                         numberedSteps.visible: true
                         numberedSteps.stepBegin: 4
                         numberedSteps.steps: [
