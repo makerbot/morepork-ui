@@ -33,17 +33,17 @@ FrePageForm {
     }
 
     continueButton {
-        disable_button: {
-            if(state == "load_material" ||
-               state == "calibrate_extruders") {
-                isProcessRunning()
+        enabled: {
+            if(state != "load_material" &&
+               state != "calibrate_extruders") {
+                !isProcessRunning()
             }
             else {
-                false
+                true
             }
         }
 
-        button_mouseArea.onClicked: {
+        onClicked: {
             // The primary interaction for moving thorugh the FRE is
             // through this button which has to be clicked atleast once.
             // The NPS survey shouldn't be asked for 3 months after setting

@@ -2,6 +2,8 @@
 
 #ifndef _SRC_FRE_TRACKER_H
 #define _SRC_FRE_TRACKER_H
+#include <set>
+#include <string>
 #include <jsoncpp/json/value.h>
 #include <jsoncpp/json/reader.h>
 #include <QObject>
@@ -21,6 +23,7 @@ class FreTracker : public BaseModel {
         SoftwareUpdate,
         NamePrinter,
         SetTimeDate,
+        SunflowerUnpacking,
         AttachExtruders,
         LevelBuildPlate,
         CalibrateExtruders,
@@ -37,6 +40,13 @@ class FreTracker : public BaseModel {
     Q_INVOKABLE void setFreStep(uint step);
     Q_INVOKABLE void initialize();
     Q_INVOKABLE void acknowledgeFirstBoot();
+
+    // By default all steps are enabled, but steps can also be disabled which
+    // means that gotoNextStep() will skip over any disabled steps.  Disabling
+    // a step you are currently on has no effect and setFreStep can still move
+    // us to a disabled step.
+    Q_INVOKABLE void setStepEnable(uint step, bool enabled);
+
     void logFreStatus();
     explicit FreTracker();
 
@@ -53,6 +63,7 @@ class FreTracker : public BaseModel {
         "software_update",
         "name_prnter",
         "set_time_date",
+        "sunflower_unpacking",
         "attach_extruders",
         "level_build_plate",
         "calibrate_extruders",
@@ -63,6 +74,7 @@ class FreTracker : public BaseModel {
         "fre_complete"
     };
     std::string next_step_;
+    std::set<uint> disabled_steps_;
     MODEL_PROP(FreStep, currentFreStep, FreStep::Welcome)
     MODEL_PROP(bool, isFirstBoot, false)
 };
