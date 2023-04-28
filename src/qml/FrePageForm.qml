@@ -438,7 +438,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: subtitle_text
+                target: freContentRight.textBody
                 text: qsTr("This procedure will guide you through the process of attaching your extruders.")
             }
         },
