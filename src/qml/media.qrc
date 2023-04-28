@@ -220,6 +220,7 @@
         <file alias="attach_extruder_swivel_clips.gif">images/attach_extruders/attach_extruder_swivel_clips.gif</file>
         <file alias="power_button_screen.png">images/power_button/power_button_screen.png</file>
         <file alias="button_help.png">images/button_help.png</file>
+        <file alias="attach_extruder_loading.gif">images/attach_extruders/attach_extruder_loading.gif</file>
         <file alias="remove_upper_material.png">images/remove_upper_material.png</file>
         <file alias="remove_lower_material.png">images/remove_lower_material.png</file>
     </qresource>

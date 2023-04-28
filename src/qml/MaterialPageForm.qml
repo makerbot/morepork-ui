@@ -460,6 +460,15 @@ Item {
                     !(bot.chamberErrorCode == 0 ||
                      bot.chamberErrorCode == 48)
                 }
+                help{
+                    onClicked:{
+                        helpPopup.open()
+                        helpPopup.state = "attach_extruders"
+                    }
+                    visible: false
+                    enabled: false
+                }
+                style: ContentRightSideForm.ButtonWithHelp
             }
             states: [
 
@@ -493,6 +502,7 @@ Item {
                                               qsTr("%1 DETECTED").arg(getExtruderType(itemAttachExtruder.extruder)) :
                                               qsTr("NOT DETECTED")
                         textHeader1.visible: true
+                        textHeader1Loading.isCompleted: (itemAttachExtruder.extruder == 1 ? bot.extruderAPresent : bot.extruderBPresent)
                         numberedSteps.visible: true
                         numberedSteps.steps: [
                             "Open the lock",
@@ -502,8 +512,9 @@ Item {
                         buttonPrimary.text: (itemAttachExtruder.extruder == 1 ?
                                                  bot.extruderAPresent : bot.extruderBPresent)
                                             ? "NEXT" : "WAITING FOR EXTRUDER..."
-                        buttonPrimary.enabled: (itemAttachExtruder.extruder == 1 ?
-                                                    bot.extruderAPresent : bot.extruderBPresent)
+                        buttonPrimary.control.enabled: ((itemAttachExtruder.extruder == 1) ? bot.extruderAPresent : bot.extruderBPresent)
+                        help.visible: true
+                        help.enabled: true
                     }
                 },
 
@@ -553,6 +564,8 @@ Item {
                             }
                         }
                         buttonPrimary.enabled: true
+                        help.visible: false
+                        help.enabled: false
                     }
                 },
 

@@ -3203,12 +3203,12 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_title
-                            text: qsTr("CLOSE THE TOP LID")
+                            text: qsTr("METHOD COMPATIBILITY")
                         }
 
                         PropertyChanges {
                             target: help_description
-                            text: qsTr("Put the top lid back on the printer to start the print.")
+                            text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
                         }
                     },
 
@@ -3222,7 +3222,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_title
-                            text: qsTr("CLOSE THE TOP LID")
+                            text: qsTr("CLOSE  TOP LID")
                         }
 
                         PropertyChanges {
