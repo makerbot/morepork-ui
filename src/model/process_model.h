@@ -22,6 +22,7 @@ class ProcessModel : public BaseModel {
         DryingCycleProcess,
         NozzleCleaningProcess,
         AnnealPrintProcess,
+        MoveBuildPlateProcess,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -88,6 +89,7 @@ class ProcessModel : public BaseModel {
         ExtruderOutOfFilament,
         ToolMismatch,
         IncompatibleSlice,
+        HomingError,
         OtherError
     };
 

@@ -36,6 +36,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::NozzleCleaningProcess);
         else if (kNameStr == "AnnealPrintProcess")
             typeSet(ProcessType::AnnealPrintProcess);
+        else if (kNameStr == "MoveBuildPlateProcess")
+            typeSet(ProcessType::MoveBuildPlateProcess);
         else
             typeSet(ProcessType::None);
     }
@@ -262,6 +264,12 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
                 break;
             case 1001:
                 errorTypeSet(ErrorType::HeaterNotReachingTemp);
+                break;
+            case 1013:
+                errorTypeSet(ErrorType::HomingError);
+                break;
+            case 1016:
+                errorTypeSet(ErrorType::HomingError);
                 break;
             case 1032:
                 errorTypeSet(ErrorType::BadHESCalibrationFail);

@@ -266,5 +266,8 @@
         <file>PrintFileInfoPageForm.qml</file>
         <file>PrintFileInfoPage.qml</file>
         <file>PowerButtonScreen.qml</file>
+        <file>FreProgressItem.qml</file>
+        <file>SunflowerUnpackingForm.qml</file>
+        <file>SunflowerUnpacking.qml</file>
     </qresource>
 </RCC>
