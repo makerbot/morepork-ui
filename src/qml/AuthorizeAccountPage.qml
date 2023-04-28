@@ -100,6 +100,12 @@ AuthorizeAccountPageForm {
         onTriggered: {
             closePopup()
             backToSettings()
+            if (inFreStep) {
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                fre.gotoNextStep(currentFreStep)
+            }
         }
     }
 }
