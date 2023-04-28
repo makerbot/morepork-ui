@@ -222,5 +222,6 @@
         <file alias="button_help.png">images/button_help.png</file>
         <file alias="remove_upper_material.png">images/remove_upper_material.png</file>
         <file alias="remove_lower_material.png">images/remove_lower_material.png</file>
+        <file alias="fre_help_qr_code.png">images/qrcodes/fre_help_qr_code.png</file>
     </qresource>
 </RCC>
