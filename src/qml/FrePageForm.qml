@@ -364,12 +364,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textHeader
-                text: qsTr("LEVEL BUILD PLATFORM")
+                text: qsTr("ASSISTED LEVELING")
             }
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("START")
+                style: ButtonRectanglePrimary.ButtonWithHelp
             }
 
             PropertyChanges {
@@ -414,7 +415,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("Follow the on-screen steps to level the build plate.")
+                text: qsTr("Assisted leveling will check your build platform and prompt you to make any adjustments.")
             }
         },
         State {

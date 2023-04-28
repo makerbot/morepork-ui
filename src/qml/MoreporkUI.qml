@@ -3182,40 +3182,21 @@ ApplicationWindow {
 
                 states: [
                     State {
-                        name: "attach_extruders" // e.g.
+                        name: "fre"
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/fre_qr_code.png"
                         }
 
                         PropertyChanges {
                             target: help_title
-                            text: qsTr("CLOSE THE TOP LID")
+                            text: qsTr("METHOD XL SETUP GUIDE")
                         }
 
                         PropertyChanges {
                             target: help_description
-                            text: qsTr("Put the top lid back on the printer to start the print.")
-                        }
-                    },
-
-                    State {
-                        name: "load_material"  // e.g.
-
-                        PropertyChanges {
-                            target: help_qr_code
-                            source: "qrc:/img/broken.png"
-                        }
-
-                        PropertyChanges {
-                            target: help_title
-                            text: qsTr("CLOSE THE TOP LID")
-                        }
-
-                        PropertyChanges {
-                            target: help_description
-                            text: qsTr("Put the top lid back on the printer to start the print.")
+                            text: qsTr("Scan the QR code for more information and troubleshooting tips.")
                         }
                     }
                 ]

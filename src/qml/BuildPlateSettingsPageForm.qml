@@ -17,6 +17,7 @@ Item {
 
     property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
 
+    property alias assistedLevel: assistedLevel
     property alias raiseLowerBuildPlate: raiseLowerBuildPlate
     property alias doorOpenRaiseLowerBuildPlatePopup: doorOpenRaiseLowerBuildPlatePopup
 
