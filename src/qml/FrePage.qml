@@ -87,6 +87,7 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BuildPlateSettingsPage)
                 settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.AssistedLevelingPage)
+                settingsPage.buildPlateSettingsPage.assistedLevel.state = "fre_start_screen"
             } else if(state == "calibrate_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
@@ -124,5 +125,11 @@ FrePageForm {
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             }
         }
+    }
+
+    continueButton.help.onClicked: {
+        // Currently every help button in the FRE shows the same help
+        helpPopup.state = "fre"
+        helpPopup.open()
     }
 }
