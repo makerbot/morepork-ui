@@ -95,6 +95,9 @@ ApplicationWindow {
         case FreStep.LoadMaterial:
             freScreen.state = "load_material"
             break;
+        case FreStep.MaterialCaseSetup:
+            freScreen.state = "material_case_setup"
+            break;
         case FreStep.TestPrint:
             freScreen.state = "test_print"
             break;
@@ -690,6 +693,7 @@ ApplicationWindow {
                                 case FreStep.AttachExtruders:
                                 case FreStep.LevelBuildPlate:
                                 case FreStep.CalibrateExtruders:
+                                case FreStep.MaterialCaseSetup:
                                 case FreStep.LoadMaterial:
                                     qsTr("SKIP PRINTER SETUP")
                                     break;
@@ -738,6 +742,7 @@ ApplicationWindow {
                                 if(currentFreStep == FreStep.AttachExtruders ||
                                    currentFreStep == FreStep.LevelBuildPlate ||
                                    currentFreStep == FreStep.CalibrateExtruders ||
+                                   currentFreStep == FreStep.MaterialCaseSetup ||
                                    currentFreStep == FreStep.LoadMaterial ||
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
@@ -827,6 +832,9 @@ ApplicationWindow {
                             case FreStep.CalibrateExtruders:
                                 qsTr("SKIP CALIBRATING EXTRUDERS?")
                                 break;
+                            case FreStep.MaterialCaseSetup:
+                                qsTr("SKIP MATERIAL CASE SETUP?")
+                                break;
                             case FreStep.LoadMaterial:
                                 qsTr("SKIP LOADING MATERIAL?")
                                 break;
@@ -882,6 +890,7 @@ ApplicationWindow {
                             case FreStep.CalibrateExtruders:
                                 qsTr("For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached.")
                                 break;
+                            case FreStep.MaterialCaseSetup:
                             case FreStep.LoadMaterial:
                                 qsTr("Printing requires material to be loaded into the extruders.")
                                 break;

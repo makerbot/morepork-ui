@@ -222,5 +222,11 @@
         <file alias="button_help.png">images/button_help.png</file>
         <file alias="remove_upper_material.png">images/remove_upper_material.png</file>
         <file alias="remove_lower_material.png">images/remove_lower_material.png</file>
+        <file alias="case_intro_1.gif">images/case_intro_1.gif</file>
+        <file alias="case_intro_2.png">images/case_intro_2.png</file>
+        <file alias="case_tube_1_case.png">images/case_tube_1_case.png</file>
+        <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
+        <file alias="case_tube_2.png">images/case_tube_2.png</file>
+        <file alias="case_divider.png">images/case_divider.png</file>
     </qresource>
 </RCC>

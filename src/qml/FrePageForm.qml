@@ -122,10 +122,11 @@ LoggingItem {
         }
     }
 
-    property bool skipUnpacking: bot.machineType != MachineType.Magma
+    property bool skipMagmaSteps: bot.machineType != MachineType.Magma
 
-    onSkipUnpackingChanged: {
-        fre.setStepEnable(FreStep.SunflowerUnpacking, !skipUnpacking)
+    onSkipMagmaStepsChanged: {
+        fre.setStepEnable(FreStep.SunflowerUnpacking, !skipMagmaSteps)
+        fre.setStepEnable(FreStep.MaterialCaseSetup, !skipMagmaSteps)
     }
 
     SunflowerUnpacking {
@@ -472,6 +473,65 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.textBody
                 text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
+            }
+        },
+        State {
+            name: "material_case_setup"
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("MATERIAL CASE SET UP")
+                anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("START")
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.499
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.637
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Follow the on screen steps to set up the material case and load materials.")
             }
         },
         State {
