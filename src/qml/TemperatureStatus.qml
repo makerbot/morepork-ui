@@ -12,14 +12,16 @@ ColumnLayout {
     enum Extruder {
         Model,
         Support,
-        ChamberCool,
+        BuildplaneCool,
+        HBPCool,
         Both
     }
 
     property int showExtruder: TemperatureStatus.Extruder.Both
     property alias modelExtruder: modelExtruder
     property alias supportExtruder: supportExtruder
-    property alias chamberCool: chamberCool
+    property alias buildplaneCool: buildplaneCool
+    property alias hbpCool: hbpCool
 
     TemperatureStatusElement {
         id: modelExtruder
@@ -40,11 +42,20 @@ ColumnLayout {
     }
 
     TemperatureStatusElement {
-        id: chamberCool
-        extruderIdx: TemperatureStatus.Extruder.ChamberCool
-        customCurrentTemperature: bot.chamberCurrentTemp
-        customTargetTemperature: printPage.waitToCoolTemperature
+        id: buildplaneCool
+        extruderIdx: TemperatureStatus.Extruder.HBPCool
+        customCurrentTemperature: bot.buildplaneCurrentTemp
+        customTargetTemperature: printPage.waitToCoolBuildplaneTemperature
         headlineVisible: false
-        visible: { showExtruder == TemperatureStatus.Extruder.ChamberCool }
+        visible: { showExtruder == TemperatureStatus.Extruder.BuildplaneCool }
+    }
+
+    TemperatureStatusElement {
+        id: hbpCool
+        extruderIdx: TemperatureStatus.Extruder.HBPCool
+        customCurrentTemperature: bot.hbpCurrentTemp
+        customTargetTemperature: printPage.waitToCoolHBPTemperature
+        headlineVisible: false
+        visible: { showExtruder == TemperatureStatus.Extruder.HBPCool }
     }
 }

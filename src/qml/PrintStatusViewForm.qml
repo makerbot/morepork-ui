@@ -311,8 +311,6 @@ Item {
                     Layout.preferredWidth: parent.width - 40
                     horizontalAlignment: Text.AlignTop
                     elide: Text.ElideRight
-                    anchors.right: parent.right
-                    anchors.left: parent.left
                 }
 
                 TextHeadline{

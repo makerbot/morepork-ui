@@ -23,9 +23,6 @@ ColumnLayout {
             case 1:
                 "B"
                 break
-            case 2:
-                "Chamber"
-                break
             default:
                 "A"
         }
