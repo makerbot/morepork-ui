@@ -42,7 +42,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: caseSetupContentRightSide.textBody
-                text: qsTr("The material case is contained in Box 1.\n\nThis package contains the material case and guide tubes.\n\nLift on the rear of the latch to release the lid and access the guide tubes.")
+                text: qsTr("The material case is contained in Box 1.\n\nThis package contains the material case and guide tubes.\n\nLift on the rear of the latch to release the lid and access the guide tubes.")
                 visible: true
             }
 
