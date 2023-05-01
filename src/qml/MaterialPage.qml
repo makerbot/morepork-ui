@@ -203,29 +203,8 @@ MaterialPageForm {
         var output = defaultString
         if(itemAttachExtruder.extruder == 1) {
             output = "Load Model Extruder into Slot 1"
-            if(bot.machineType == MachineType.Fire) {
-                output = qsTr("Load Model 1A or 1C Extruder into\nSlot 1")
-            }
-            else {
-                output = qsTr("Load Model 1A, 1X or 1C Extruder into\nSlot 1")
-            }
         } else if(itemAttachExtruder.extruder == 2) {
             output = "Load Support Extruder into Slot 2"
-            if(bot.extruderAType == ExtruderType.MK14) {
-                output = qsTr("Load Support 2A Extruder into\nSlot 2")
-            } else if(bot.extruderAType == ExtruderType.MK14_HOT) {
-                output = qsTr("Load Support 2X Extruder into\nSlot 2")
-            }
-            else if(bot.extruderAType == ExtruderType.MK14_EXP ||
-                      bot.extruderAType == ExtruderType.MK14_COMP) {
-                if(bot.machineType == MachineType.Fire) {
-                    output = qsTr("Load Support 2A Extruder into\nSlot 2")
-                } else {
-                    output = qsTr("Load Support 2A or 2X Extruder into\nSlot 2")
-                }
-            } else {
-                output = defaultString
-            }
         } else {
             output = defaultString
         }
@@ -460,7 +439,7 @@ MaterialPageForm {
 
                 } else if(itemAttachExtruder.extruder == 2 &&
                         itemAttachExtruder.isAttached) {
-                    itemAttachExtruder.state = "attach_swivel_clips"
+                    itemAttachExtruder.state = "release_guidelines"
                 }
             } else {
                 itemAttachExtruder.state = "attach_swivel_clips"
@@ -469,6 +448,9 @@ MaterialPageForm {
          case "attach_swivel_clips":
                itemAttachExtruder.state = "close_top_lid"
                break
+         case "release_guidelines":
+                itemAttachExtruder.state = "close_top_lid"
+                break;
          case "close_top_lid":
             // done or run calibration
             itemAttachExtruder.state = "base state"

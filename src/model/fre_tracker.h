@@ -21,7 +21,6 @@ class FreTracker : public BaseModel {
         Welcome,
         SetupWifi,
         SoftwareUpdate,
-        NamePrinter,
         SetTimeDate,
         SunflowerUnpacking,
         AttachExtruders,
@@ -29,6 +28,7 @@ class FreTracker : public BaseModel {
         CalibrateExtruders,
         LoadMaterial,
         TestPrint,
+        NamePrinter,
         LoginMbAccount,
         SetupComplete,
         FreComplete
@@ -61,7 +61,6 @@ class FreTracker : public BaseModel {
         "welcome",
         "setup_wifi",
         "software_update",
-        "name_prnter",
         "set_time_date",
         "sunflower_unpacking",
         "attach_extruders",
@@ -69,6 +68,7 @@ class FreTracker : public BaseModel {
         "calibrate_extruders",
         "load_material",
         "test_print",
+        "name_printer",
         "login_mb_account",
         "setup_complete",
         "fre_complete"

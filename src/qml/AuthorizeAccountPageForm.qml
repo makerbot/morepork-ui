@@ -101,10 +101,24 @@ Item {
             visible: false
 
             function altBack() {
+                if(!inFreStep) {
+                    authorizeAccountWithCodePage.disconnectHandlers()
+                    authorizeAccountWithCodePage.checkAuthTimer.stop()
+                    authorizeAccountWithCodePage.expireOTPTimer.stop()
+                    authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
+                } else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
                 authorizeAccountWithCodePage.disconnectHandlers()
                 authorizeAccountWithCodePage.checkAuthTimer.stop()
                 authorizeAccountWithCodePage.expireOTPTimer.stop()
                 authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.ChooseAuthMethod)
+                backToSettings()
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
             AuthorizeAccountWithCode {
