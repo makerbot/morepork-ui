@@ -38,6 +38,10 @@ LoggingItem {
             visible: true
         }
 
+        buttonSecondary1 {
+            text: qsTr("SKIP")
+        }
+
     }
 
     Item {
@@ -224,6 +228,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
                 target: setupProgress
                 state: FreProgressItem.Active
             }
@@ -272,6 +281,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
                 target: setupProgress
                 state: FreProgressItem.Active
             }
@@ -313,6 +327,11 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
             }
 
             PropertyChanges {
@@ -372,6 +391,11 @@ LoggingItem {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
                 style: ButtonRectanglePrimary.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
             }
 
             PropertyChanges {
@@ -491,6 +515,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
                 target: setupProgress
                 state: FreProgressItem.Enabled
             }
@@ -550,6 +579,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
                 target: setupProgress
                 state: FreProgressItem.Enabled
             }
@@ -605,6 +639,11 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
             }
 
             PropertyChanges {
@@ -726,6 +765,11 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONNECT ACCOUNT")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
             }
 
             PropertyChanges {

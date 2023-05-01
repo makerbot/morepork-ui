@@ -738,7 +738,9 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 skipFreStepPopup.close()
-                                currentItem.skipFreStepAction()
+                                if (inFreStep) {
+                                    currentItem.skipFreStepAction()
+                                }
                                 if(currentFreStep == FreStep.AttachExtruders ||
                                    currentFreStep == FreStep.LevelBuildPlate ||
                                    currentFreStep == FreStep.CalibrateExtruders ||
@@ -3211,5 +3213,11 @@ ApplicationWindow {
                 ]
             }
         }
+    }
+
+    Component.onCompleted: {
+        fre.setStepEnable(FreStep.SetupWifi, !isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.LoginMbAccount, isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
     }
 }
