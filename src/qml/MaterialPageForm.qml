@@ -451,7 +451,6 @@ Item {
                 textHeader1.text: qsTr("NOT DETECTED")
                 textHeader1.visible: false
                 textHeader1.opacity: 0.7
-                textHeader1Loading.visible: true
                 textBody.visible: true
                 textBody.text: "Remove the top lid from the printer to access the carriage"
                 buttonPrimary.visible: true
@@ -502,7 +501,7 @@ Item {
                                               qsTr("%1 DETECTED").arg(getExtruderType(itemAttachExtruder.extruder)) :
                                               qsTr("NOT DETECTED")
                         textHeader1.visible: true
-                        textHeader1Loading.isCompleted: (itemAttachExtruder.extruder == 1 ? bot.extruderAPresent : bot.extruderBPresent)
+                        isCompleted: (itemAttachExtruder.extruder == 1 ? bot.extruderAPresent : bot.extruderBPresent)
                         numberedSteps.visible: true
                         numberedSteps.steps: [
                             "Open the lock",
@@ -515,6 +514,7 @@ Item {
                         buttonPrimary.control.enabled: ((itemAttachExtruder.extruder == 1) ? bot.extruderAPresent : bot.extruderBPresent)
                         help.visible: true
                         help.enabled: true
+                        textHeader1Loading.visible: true
                     }
                 },
 
@@ -541,11 +541,6 @@ Item {
                         target: attach_extruder_content
                         textHeader.text: qsTr("LOCK THE EXTRUDER IN PLACE AND ATTACH THE SWIVEL CLIP")
                         textBody.visible: false
-                        textHeader1.text: (itemAttachExtruder.extruder == 1 ?
-                                              bot.extruderAPresent : bot.extruderBPresent) ?
-                                              qsTr("%1 DETECTED").arg(getExtruderType(itemAttachExtruder.extruder)) :
-                                              qsTr("NOT DETECTED")
-                        textHeader1.visible: true
                         numberedSteps.visible: true
                         numberedSteps.stepBegin: 4
                         numberedSteps.steps: [
@@ -564,6 +559,8 @@ Item {
                             }
                         }
                         buttonPrimary.enabled: true
+                        textHeader1Loading.visible: false
+                        textHeader1.visible: false
                         help.visible: false
                         help.enabled: false
                     }
@@ -579,32 +576,20 @@ Item {
 
                     PropertyChanges {
                         target: attach_extruder_image
-                        source: {
-                            // At places where images of both the extruders are displayed
-                            // together we just check the model extruder since the support
-                            // extruder has to correspond to it for the printer to be usable,
-                            // to determine which version of extruders to display as a set.
-                            switch(bot.extruderAType) {
-                            case ExtruderType.MK14:
-                                "qrc:/img/attach_extruder_swivel_clips.gif"
-                                break;
-                            case ExtruderType.MK14_HOT:
-                                "qrc:/img/attach_extruder_swivel_clips_XA.gif"
-                                break;
-                            default:
-                                "qrc:/img/attach_extruder_swivel_clips.gif"
-                                break;
-                            }
-                        }
+                        source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("attach_extruder_swivel_clips.gif"))
                         playing: true
                         visible: true
                     }
 
                     PropertyChanges {
                         target: attach_extruder_content
-                        textHeader.text: qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
+                        textHeader.text: (bot.machineType == MachineType.Magma) ?
+                                             qsTr("ATTACH MATERIAL CLIPS") :
+                                             qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
                         textBody.visible: true
-                        textBody.text: qsTr("The material clips guide the material into the correct extruders.")
+                        textBody.text: (bot.machineType == MachineType.Magma) ?
+                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:\n\nClip 1 to Extruder 1\nClip 2 to Extruder 2") :
+                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
                         numberedSteps.visible: false
                         buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.enabled: true
