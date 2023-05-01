@@ -18,6 +18,9 @@ MaterialCaseSetupForm {
             } else if (state == "tube_2") {
                 state = "remove_divider"
             } else if (state == "remove_divider") {
+                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                 fre.gotoNextStep(currentFreStep)
             }
         }
