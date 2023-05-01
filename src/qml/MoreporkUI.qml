@@ -3069,25 +3069,7 @@ ApplicationWindow {
                     },
 
                     State {
-                        name: "load_material"  // e.g.
-
-                        PropertyChanges {
-                            target: help_qr_code
-                            source: "qrc:/img/broken.png"
-                        }
-
-                        PropertyChanges {
-                            target: help_title
-                            text: qsTr("CLOSE  TOP LID")
-                        }
-
-                        PropertyChanges {
-                            target: help_description
-                            text: qsTr("Put the top lid back on the printer to start the print.")
-                        }
-                    },
-                    State {
-                        name: "attach_extruders"  // e.g.
+                        name: "attach_extruders"
 
                         PropertyChanges {
                             target: help_qr_code
