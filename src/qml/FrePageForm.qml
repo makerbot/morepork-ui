@@ -355,8 +355,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: subtitle_text
-                text: qsTr("Follow the on screen steps to attach each extruder.")
+                target: freContentRight.textBody
+                text: qsTr("This procedure will guide you through the process of attaching your extruders.")
             }
         },
         State {

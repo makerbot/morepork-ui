@@ -380,27 +380,20 @@ Item {
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
-            Image {
-                id: handle_top_lid_image
-                width: sourceSize.width
-                height: sourceSize.height
-                source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
-                visible: true
-                smooth: false
-            }
+            ContentLeftSide {
+                id: contentLeftItem
 
-            AnimatedImage {
-                id: attach_extruder_image
-                width: sourceSize.width
-                height: sourceSize.height
-                anchors.left: parent.left
-                anchors.bottom: parent.bottom
-                source: ""
-                playing: false
-                visible: false
-                cache: false
-                smooth: false
+                animatedImage{
+                    visible: false
+                    playing: false
+                    source: ""
+                }
 
+                image{
+                    source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
+                    visible: true
+
+                }
             }
 
             ContentRightSide {
@@ -432,12 +425,12 @@ Item {
                     name: "attach_extruder_step1"
 
                     PropertyChanges {
-                        target: handle_top_lid_image
+                        target: contentLeftItem.image
                         visible: false
                     }
 
                     PropertyChanges {
-                        target: attach_extruder_image
+                        target: contentLeftItem.animatedImage
                         source: {
                             itemAttachExtruder.extruder == 1 ?
                                         "qrc:/img/attach_extruder_1_step1.gif" :
@@ -450,7 +443,9 @@ Item {
                     PropertyChanges {
                         target: attach_extruder_content
                         textHeader.text: {
-                            qsTr("ATTACH MODEL EXTRUDER TO SLOT %1").arg(itemAttachExtruder.extruder)
+                           itemAttachExtruder.extruder == 1 ?
+                               qsTr("LOAD MODEL EXTRUDER") :
+                               qsTr("LOAD SUPPORT EXTRUDER")
                         }
                         textBody.visible: false
                         numberedSteps.visible: true
@@ -459,9 +454,7 @@ Item {
                             "Open the handle",
                             extruderAttachText()]
                         numberedSteps.inactiveSteps: [false, false, false]
-                        buttonPrimary.text: (itemAttachExtruder.extruder == 1 ?
-                                                 bot.extruderAPresent : bot.extruderBPresent)
-                                            ? "NEXT" : "WAITING FOR EXTRUDER..."
+                        buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.enabled: (itemAttachExtruder.extruder == 1 ?
                                                     bot.extruderAPresent : bot.extruderBPresent)
                     }
@@ -471,12 +464,12 @@ Item {
                     name: "attach_extruder_step2"
 
                     PropertyChanges {
-                        target: handle_top_lid_image
+                        target: contentLeftItem.image
                         visible: false
                     }
 
                     PropertyChanges {
-                        target: attach_extruder_image
+                        target: contentLeftItem.animatedImage
                         source: {
                             itemAttachExtruder.extruder == 1 ?
                                         "qrc:/img/attach_extruder_1_step2.gif" :
@@ -488,23 +481,17 @@ Item {
 
                     PropertyChanges {
                         target: attach_extruder_content
-                        textHeader.text: qsTr("LOCK THE EXTRUDER IN PLACE AND ATTACH THE SWIVEL CLIP")
+                        textHeader.text: qsTr("LOCK EXTRUDER IN PLACE")
                         textBody.visible: false
                         numberedSteps.visible: true
                         numberedSteps.stepBegin: 4
                         numberedSteps.steps: [
                             "Close the front latch",
-                            "Flip the lock closed",
-                            qsTr("Attach swivel clip %1").arg(itemAttachExtruder.extruder)
+                            "Flip the lock closed"
                         ]
                         buttonPrimary.text: {
                             if (itemAttachExtruder.isAttached) {
-                                if (itemAttachExtruder.extruder == 1 &&
-                                        (inFreStep)) {
-                                    qsTr("NEXT: Attach Support Extruder")
-                                } else {
-                                    qsTr("NEXT")
-                                }
+                                qsTr("NEXT")
                             }
                         }
                         buttonPrimary.enabled: true
@@ -515,12 +502,12 @@ Item {
                     name: "attach_swivel_clips"
 
                     PropertyChanges {
-                        target: handle_top_lid_image
+                        target: contentLeftItem.image
                         visible: false
                     }
 
                     PropertyChanges {
-                        target: attach_extruder_image
+                        target: contentLeftItem.animatedImage
                         source: {
                             // At places where images of both the extruders are displayed
                             // together we just check the model extruder since the support
@@ -544,25 +531,47 @@ Item {
 
                     PropertyChanges {
                         target: attach_extruder_content
-                        textHeader.text: qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
+                        textHeader.text: qsTr("ATTACH MATERIAL CLIPS")
                         textBody.visible: true
-                        textBody.text: qsTr("The material clips guide the material into the correct extruders.")
+                        textBody.text: qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
                         numberedSteps.visible: false
                         buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.enabled: true
                     }
                 },
                 State {
+                    name: "release_guidelines"
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: (bot.machineType == MachineType.Magma) ?
+                                             qsTr("RELEASE GUIDE TUBES") :
+                                             qsTr("REMOVE PROTECTIVE PACKAGING AND TAPE")
+                        textBody.text: (bot.machineType == MachineType.Magma) ?
+                                           qsTr("Remove all tape to release the guide tubes so they can be attached to the extruders in the next step.\n\nNOTE: Ensure the guide tubes are curved to the right like in the image.") :
+                                           qsTr("Please confirm all tape and protective packaging is removed from the top chamber before proceeding.")
+                        numberedSteps.visible: false
+                        buttonPrimary.text: qsTr("NEXT")
+                        buttonPrimary.enabled: true
+                    }
+
+                    PropertyChanges {
+                        target: contentLeftItem.image
+                        source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
+                    }
+                },
+
+                State {
                     name: "close_top_lid"
 
                     PropertyChanges {
-                        target: handle_top_lid_image
+                        target: contentLeftItem.image
                         source:  qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
                         visible: true
                     }
 
                     PropertyChanges {
-                        target: attach_extruder_image
+                        target: contentLeftItem.animatedImage
                         playing: false
                         visible: false
                     }
@@ -573,9 +582,9 @@ Item {
                             if(bot.chamberErrorCode == 48) {
                                 qsTr("CLOSE CHAMBER DOOR")
                             } else if(bot.chamberErrorCode == 45) {
-                                qsTr("PLACE TOP LID")
+                                qsTr("REPLACE TOP LID")
                             } else if(bot.chamberErrorCode == 0) {
-                                qsTr("PLACE TOP LID")
+                                qsTr("REPLACE TOP LID")
                             } else {
                                 emptyString
                             }
