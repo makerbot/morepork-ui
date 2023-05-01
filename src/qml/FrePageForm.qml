@@ -428,7 +428,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("START")
             }
 
             PropertyChanges {
