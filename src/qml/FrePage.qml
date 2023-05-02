@@ -132,7 +132,7 @@ FrePageForm {
         }
     }
 
-    continueButton.help.onClicked: {
+    helpButton.onClicked: {
         // Currently every help button in the FRE shows the same help
         helpPopup.state = "fre"
         helpPopup.open()
