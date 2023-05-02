@@ -88,11 +88,17 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BuildPlateSettingsPage)
                 settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.AssistedLevelingPage)
+                settingsPage.buildPlateSettingsPage.assistedLevel.state = "fre_start_screen"
             } else if(state == "calibrate_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            } else if(state == "material_case_setup") {
+                inFreStep = true
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.MaterialCaseSetup)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad()
@@ -140,7 +146,17 @@ FrePageForm {
             }
             else if("base state" && languageSelectionComplete) {
                 languageSelectionComplete = false
+            } else {
+                // Every page that does not have custom logic for this should
+                // prompt to skip to the next step.
+                skipFreStepPopup.open()
             }
         }
+    }
+
+    continueButton.help.onClicked: {
+        // Currently every help button in the FRE shows the same help
+        helpPopup.state = "fre"
+        helpPopup.open()
     }
 }

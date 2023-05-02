@@ -271,5 +271,7 @@
         <file>SunflowerUnpacking.qml</file>
         <file>FreChooseLanguagePage.qml</file>
         <file>FreChooseLanguagePageForm.qml</file>
+        <file>MaterialCaseSetupForm.qml</file>
+        <file>MaterialCaseSetup.qml</file>
     </qresource>
 </RCC>

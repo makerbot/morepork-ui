@@ -23,7 +23,6 @@ LoggingItem {
         visible: (currentFreStep == FreStep.StartSetLanguage)
     }
 
-
     Item {
         id: progress_item
         width: 400
@@ -149,17 +148,17 @@ LoggingItem {
             }
 
             buttonSecondary1 {
-                text: qsTr("< BACK")
-                visible: currentFreStep == FreStep.Welcome
+                text: (currentFreStep == FreStep.Welcome) ? qsTr("< BACK") : qsTr("SKIP")
             }
         }
     }
 
-    property bool skipUnpacking: bot.machineType != MachineType.Magma
+    property bool skipMagmaSteps: bot.machineType != MachineType.Magma
 
-    onSkipUnpackingChanged: {
-        fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipUnpacking)
-        fre.setStepEnable(FreStep.SunflowerUnpacking, !skipUnpacking)
+    onSkipMagmaStepsChanged: {
+            fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipMagmaSteps)
+        fre.setStepEnable(FreStep.SunflowerUnpacking, !skipMagmaSteps)
+        fre.setStepEnable(FreStep.MaterialCaseSetup, !skipMagmaSteps)
     }
 
     SunflowerUnpacking {
@@ -279,6 +278,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
                 target: setupProgress
                 state: FreProgressItem.Active
             }
@@ -343,6 +347,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
                 target: setupProgress
                 state: FreProgressItem.Active
             }
@@ -388,7 +397,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("Follow the on screen steps to attach each extruder.")
+                text: qsTr("This procedure will guide you through the process of attaching your extruders.")
             }
 
             PropertyChanges {
@@ -520,6 +529,70 @@ LoggingItem {
             }
         },
         State {
+            name: "level_build_plate"
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("ASSISTED LEVELING")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("START")
+                style: ButtonRectanglePrimary.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.334
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.469
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Assisted leveling will check your build platform and prompt you to make any adjustments.")
+            }
+        },
+        State {
             name: "calibrate_extruders"
 
             PropertyChanges {
@@ -593,6 +666,70 @@ LoggingItem {
             }
         },
         State {
+            name: "material_case_setup"
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("MATERIAL CASE SET UP")
+                anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("START")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.499
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.637
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Follow the on screen steps to set up the material case and load materials.")
+            }
+        },
+        State {
             name: "load_material"
 
             PropertyChanges {
@@ -624,7 +761,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
+                visible: true
             }
 
             PropertyChanges {
@@ -698,7 +835,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
+                visible: true
             }
 
             PropertyChanges {
@@ -935,12 +1072,12 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.textBody1
                 text: qsTr("cloudprint.makerbot.com")
-                visible: true
+
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
+                visible: true
             }
 
             PropertyChanges {

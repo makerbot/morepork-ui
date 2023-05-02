@@ -95,6 +95,9 @@ ApplicationWindow {
         case FreStep.LoadMaterial:
             freScreen.state = "load_material"
             break;
+        case FreStep.MaterialCaseSetup:
+            freScreen.state = "material_case_setup"
+            break;
         case FreStep.TestPrint:
             freScreen.state = "test_print"
             break;
@@ -690,6 +693,7 @@ ApplicationWindow {
                                 case FreStep.AttachExtruders:
                                 case FreStep.LevelBuildPlate:
                                 case FreStep.CalibrateExtruders:
+                                case FreStep.MaterialCaseSetup:
                                 case FreStep.LoadMaterial:
                                     qsTr("SKIP PRINTER SETUP")
                                     break;
@@ -734,10 +738,13 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 skipFreStepPopup.close()
-                                currentItem.skipFreStepAction()
+                                if (inFreStep) {
+                                    currentItem.skipFreStepAction()
+                                }
                                 if(currentFreStep == FreStep.AttachExtruders ||
                                    currentFreStep == FreStep.LevelBuildPlate ||
                                    currentFreStep == FreStep.CalibrateExtruders ||
+                                   currentFreStep == FreStep.MaterialCaseSetup ||
                                    currentFreStep == FreStep.LoadMaterial ||
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
@@ -827,6 +834,9 @@ ApplicationWindow {
                             case FreStep.CalibrateExtruders:
                                 qsTr("SKIP CALIBRATING EXTRUDERS?")
                                 break;
+                            case FreStep.MaterialCaseSetup:
+                                qsTr("SKIP MATERIAL CASE SETUP?")
+                                break;
                             case FreStep.LoadMaterial:
                                 qsTr("SKIP LOADING MATERIAL?")
                                 break;
@@ -882,6 +892,7 @@ ApplicationWindow {
                             case FreStep.CalibrateExtruders:
                                 qsTr("For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached.")
                                 break;
+                            case FreStep.MaterialCaseSetup:
                             case FreStep.LoadMaterial:
                                 qsTr("Printing requires material to be loaded into the extruders.")
                                 break;
@@ -3182,44 +3193,31 @@ ApplicationWindow {
 
                 states: [
                     State {
-                        name: "attach_extruders" // e.g.
+                        name: "fre"
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/fre_qr_code.png"
                         }
 
                         PropertyChanges {
                             target: help_title
-                            text: qsTr("CLOSE THE TOP LID")
+                            text: qsTr("METHOD XL SETUP GUIDE")
                         }
 
                         PropertyChanges {
                             target: help_description
-                            text: qsTr("Put the top lid back on the printer to start the print.")
-                        }
-                    },
-
-                    State {
-                        name: "load_material"  // e.g.
-
-                        PropertyChanges {
-                            target: help_qr_code
-                            source: "qrc:/img/broken.png"
-                        }
-
-                        PropertyChanges {
-                            target: help_title
-                            text: qsTr("CLOSE THE TOP LID")
-                        }
-
-                        PropertyChanges {
-                            target: help_description
-                            text: qsTr("Put the top lid back on the printer to start the print.")
+                            text: qsTr("Scan the QR code for more information and troubleshooting tips.")
                         }
                     }
                 ]
             }
         }
+    }
+
+    Component.onCompleted: {
+        fre.setStepEnable(FreStep.SetupWifi, !isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.LoginMbAccount, isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
     }
 }
