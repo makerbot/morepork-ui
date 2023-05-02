@@ -15,6 +15,7 @@ LoggingItem {
 
     FreChooseLanguagePage {
         id: fre_choose_language
+        z: 1
         visible: (currentFreStep == FreStep.StartSetLanguage)
     }
 
@@ -106,7 +107,6 @@ LoggingItem {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         spacing: 10
-        visible: !(currentFreStep == FreStep.StartSetLanguage)
 
         ContentLeftSide {
             id: freContentLeft
