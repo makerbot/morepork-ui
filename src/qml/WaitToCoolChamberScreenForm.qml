@@ -3,10 +3,8 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import MachineTypeEnum 1.0
 
-Item {
+LoggingItem {
     id: mainItem
-    width: 800
-    height: 410
 
     property bool waitToCoolScreenVisible: false           // the container for both cards
     property bool waitToCoolBuildplaneScreenVisible: false // the buildplane cooldown timer card
@@ -112,10 +110,6 @@ Item {
                       qsTr(" Please wait <b>%2</b><br>minutes before removing the build<br>plate from the chamber.").arg(time.text)
                 visible: true
             }
-            temperatureStatus {
-                showExtruder: TemperatureStatus.Extruder.BuildplaneCool
-                visible: true
-            }
             buttonPrimary {
                 text: qsTr("ACKNOWLEDGE")
                 visible: true
@@ -186,6 +180,5 @@ Item {
             }
             visible: true
         }
-
     }
 }
