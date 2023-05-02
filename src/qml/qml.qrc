@@ -269,5 +269,7 @@
         <file>FreProgressItem.qml</file>
         <file>SunflowerUnpackingForm.qml</file>
         <file>SunflowerUnpacking.qml</file>
+        <file>FreChooseLanguagePage.qml</file>
+        <file>FreChooseLanguagePageForm.qml</file>
     </qresource>
 </RCC>

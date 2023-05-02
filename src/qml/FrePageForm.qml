@@ -16,59 +16,19 @@ LoggingItem {
     // we may not want to be showing the language selector
     // I don't believe there is a use-case where someone would
     // not be starting at the "WELCOME" step
-    property bool languageSelectionComplete: !(currentFreStep == FreStep.Welcome) // init false
+    //property bool languageSelectionComplete: !(currentFreStep == FreStep.Welcome) // init false
 
-    // Select Language before FRE
-    ColumnLayout {
-        id: chooseLanguagePage
-        anchors.top: parent.top
-        anchors.topMargin: 30
-        anchors.left: parent.left
-        anchors.leftMargin: 40
-        visible: !languageSelectionComplete
-        spacing: 10
-
-        Item {
-            height: 40
-            width: 720
-
-            TextSubheader {
-                id: titleText
-                text: qsTr("CHOOSE LANGUAGE")
-                style: TextSubheader.Bold
-                width: parent.width
-            }
-        }
-
-        ButtonRectanglePrimary {
-            id: nextButton
-            text: qsTr("NEXT")
-            width: 720
-            Layout.preferredWidth: width
-
-            onClicked: {
-                languageSelectionComplete = true
-            }
-        }
-
-        Item {
-            id: changeLanguageItem
-            width: 800
-            height: 400
-            Layout.preferredHeight: height
-
-            LanguageSelector {
-                id: fre_language_selection
-                clip: true
-            }
-        }
+    FreChooseLanguagePage {
+        z: 1
+        visible: (currentFreStep == FreStep.StartSetLanguage)
     }
+
 
     Item {
         id: progress_item
         width: 400
         height: 480
-        visible: languageSelectionComplete &&
+        visible: !(currentFreStep == FreStep.StartSetLanguage) &&
                  !(currentFreStep == FreStep.SetupComplete)
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -152,7 +112,7 @@ LoggingItem {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         spacing: 10
-        visible: languageSelectionComplete
+        visible: !(currentFreStep == FreStep.StartSetLanguage)
 
         ContentLeftSide {
             id: freContentLeft
@@ -195,18 +155,10 @@ LoggingItem {
         }
     }
 
-
-    FreAuthorizeWithCode {
-        id: authorizeWithCode
-        anchors.top: parent.top
-        anchors.topMargin: 40
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: currentFreStep == FreStep.LoginMbAccount
-    }
-
     property bool skipUnpacking: bot.machineType != MachineType.Magma
 
     onSkipUnpackingChanged: {
+        fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipUnpacking)
         fre.setStepEnable(FreStep.SunflowerUnpacking, !skipUnpacking)
     }
 

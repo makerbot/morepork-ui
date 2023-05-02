@@ -48,8 +48,12 @@ void FreTracker::initialize() {
             const Json::Value kCurrentStep = fre_status["current_step"];
             if (kCurrentStep.isString()) {
                 const QString step = kCurrentStep.asString().c_str();
-                if (step == "welcome") {
+                if (step == "start_set_language") {
+                    currentFreStepSet(FreStep::StartSetLanguage);
+                } else if (step == "welcome") {
                     currentFreStepSet(FreStep::Welcome);
+                } else if (step == "sunflower_setup_guide") {
+                    currentFreStepSet(FreStep::SunflowerSetupGuide);
                 } else if (step == "setup_wifi") {
                     currentFreStepSet(FreStep::SetupWifi);
                 } else if (step == "software_update") {
