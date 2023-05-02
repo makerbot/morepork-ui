@@ -32,8 +32,7 @@ LoggingItem {
             Layout.preferredWidth: width
 
             onClicked: {
-                languageSelectionComplete = true
-                //
+                fre.gotoNextStep(currentFreStep)
             }
         }
 

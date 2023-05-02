@@ -71,6 +71,9 @@ ApplicationWindow {
         case FreStep.Welcome:
             freScreen.state = "base state"
             break;
+        case FreStep.SunflowerSetupGuide:
+            freScreen.state = "magma_setup_guide1"
+            break;
         case FreStep.SetupWifi:
             freScreen.state = "wifi_setup"
             break;

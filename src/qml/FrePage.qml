@@ -115,16 +115,11 @@ FrePageForm {
             } else if(state == "magma_setup_guide1") {
                 state = "magma_setup_guide2"
             } else {
-                // At base state screen
-                if(bot.machineType == MachineType.Magma && state == "base state") {
-                    state = "magma_setup_guide1"
-                }
-                else {
-                    // For all screens not listed above, the default behavior
-                    // is to go to the next step
-                    fre.gotoNextStep(currentFreStep)
+                // For all screens not listed above, the default behavior
+                // is to go to the next step
+                fre.gotoNextStep(currentFreStep)
 
-                }
+
             }
         }
     }
@@ -138,14 +133,12 @@ FrePageForm {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
+            } else if(state == "base state" || state == "welcome") {
+                fre.setFreStep(FreStep.StartSetLanguage)
             } else if(state == "magma_setup_guide1") {
-                state = "base state"
-            }
-            else if(state == "magma_setup_guide2") {
+                 fre.setFreStep(FreStep.Welcome)
+            } else if(state == "magma_setup_guide2") {
                 state = "magma_setup_guide1"
-            }
-            else if("base state" && languageSelectionComplete) {
-                languageSelectionComplete = false
             } else {
                 // Every page that does not have custom logic for this should
                 // prompt to skip to the next step.

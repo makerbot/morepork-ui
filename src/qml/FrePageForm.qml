@@ -11,15 +11,10 @@ LoggingItem {
     width: 800
     property alias continueButton: freContentRight.buttonPrimary
     property alias skipButton: freContentRight.buttonSecondary1
-
-    // For testing purposes if we are not starting in "WELCOME"
-    // we may not want to be showing the language selector
-    // I don't believe there is a use-case where someone would
-    // not be starting at the "WELCOME" step
-    //property bool languageSelectionComplete: !(currentFreStep == FreStep.Welcome) // init false
+    property bool skipMagmaSteps: bot.machineType != MachineType.Magma
 
     FreChooseLanguagePage {
-        z: 1
+        id: fre_choose_language
         visible: (currentFreStep == FreStep.StartSetLanguage)
     }
 
@@ -124,9 +119,9 @@ LoggingItem {
             visible: false
         }
 
-
         ContentRightSide {
             id: freContentRight
+
             textHeader {
                 text: qsTr("WELCOME")
                 visible: true
@@ -148,15 +143,16 @@ LoggingItem {
             }
 
             buttonSecondary1 {
-                text: (currentFreStep == FreStep.Welcome) ? qsTr("< BACK") : qsTr("SKIP")
+                text: (currentFreStep == FreStep.Welcome ||
+                       currentFreStep == FreStep.SunflowerSetupGuide) ?
+                          qsTr("< BACK") : qsTr("SKIP")
+                visible: true
             }
         }
     }
 
-    property bool skipMagmaSteps: bot.machineType != MachineType.Magma
-
     onSkipMagmaStepsChanged: {
-            fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipMagmaSteps)
+        fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipMagmaSteps)
         fre.setStepEnable(FreStep.SunflowerUnpacking, !skipMagmaSteps)
         fre.setStepEnable(FreStep.MaterialCaseSetup, !skipMagmaSteps)
     }
@@ -274,11 +270,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: freContentRight.buttonSecondary1
                 visible: true
             }
 
@@ -343,11 +334,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: freContentRight.buttonSecondary1
                 visible: true
             }
 
@@ -400,79 +386,6 @@ LoggingItem {
                 text: qsTr("This procedure will guide you through the process of attaching your extruders.")
             }
 
-            PropertyChanges {
-                target: freContentRight.textBody1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
-            }
-
-            PropertyChanges {
-                target: freContentRight.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: setupProgress
-                state: FreProgressItem.Enabled
-            }
-
-            PropertyChanges {
-                target: extrudersProgress
-                state: FreProgressItem.Active
-            }
-
-            PropertyChanges {
-                target: materialProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: printProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: connectProgress
-                state: FreProgressItem.Disabled
-            }
-
-            PropertyChanges {
-                target: progress_item
-                visible: true
-            }
-
-            PropertyChanges {
-                target: midStep
-                position: 0.334
-            }
-
-            PropertyChanges {
-                target: endStep
-                position: 0.469
-            }
-        },
-        State {
-            name: "level_build_plate"
-
-            PropertyChanges {
-                target: freContentLeft
-                image.visible: false
-                loadingIcon.visible: false
-            }
-
-            PropertyChanges {
-                target: freContentRight.textHeader
-                text: qsTr("LEVEL BUILD PLATFORM")
-            }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Follow the on-screen steps to level the build plate.")
-            }
             PropertyChanges {
                 target: freContentRight.textBody1
                 visible: false
@@ -675,6 +588,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Follow the on screen steps to set up the material case and load materials.")
+            }
+
+            PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
             }
@@ -722,11 +640,6 @@ LoggingItem {
             PropertyChanges {
                 target: endStep
                 position: 0.637
-            }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Follow the on screen steps to set up the material case and load materials.")
             }
         },
         State {
@@ -910,11 +823,6 @@ LoggingItem {
                 target: freContentRight.buttonSecondary1
                 text: qsTr("CHANGE PRINTER NAME")
                 visible: true
-            }
-
-            PropertyChanges {
-                target: freContentRight.buttonSecondary1
-                visible: false
             }
 
             PropertyChanges {
@@ -1144,7 +1052,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textBody1
-                visible: false
+                font.weight: Font.Bold
+                text: qsTr("cloudprint.makerbot.com")
+                visible: true
             }
 
             PropertyChanges {
@@ -1152,12 +1062,6 @@ LoggingItem {
                 text: qsTr("FINISH")
             }
 
-            PropertyChanges {
-                target: freContentRight.textBody1
-                font.weight: Font.Bold
-                text: qsTr("cloudprint.makerbot.com")
-                visible: true
-            }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1

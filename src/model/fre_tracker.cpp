@@ -33,7 +33,7 @@ void FreTracker::initialize() {
             fre_status["fre_complete"] = Json::Value(false);
         }
         if (!fre_status.isMember("current_step")) {
-            next_step_ = "welcome";
+            next_step_ = "start_set_language";
             fre_status["current_step"] = Json::Value(next_step_);
         }
         logFreStatus();
