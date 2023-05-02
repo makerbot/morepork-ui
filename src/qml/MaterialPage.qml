@@ -442,7 +442,7 @@ MaterialPageForm {
                     itemAttachExtruder.state = "release_guidelines"
                 }
             } else {
-                itemAttachExtruder.state = "close_top_lid"
+                itemAttachExtruder.state = "attach_swivel_clips"
             }
             break
          case "attach_swivel_clips":

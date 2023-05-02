@@ -12,6 +12,7 @@ LoggingItem {
     property alias continueButton: freContentRight.buttonPrimary
     property alias skipButton: freContentRight.buttonSecondary1
     property bool skipMagmaSteps: bot.machineType != MachineType.Magma
+    property alias helpButton: freContentRight.help
 
     FreChooseLanguagePage {
         id: fre_choose_language
@@ -452,7 +453,10 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                style: ButtonRectanglePrimary.ButtonWithHelp
+            }
+            PropertyChanges {
+                target: freContentRight
+                style: ContentRightSideForm.ButtonWithHelp
             }
 
             PropertyChanges {
