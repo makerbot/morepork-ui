@@ -231,16 +231,16 @@ Item {
             RowLayout {
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 43
-                    FilamentBay {
-                        id: bay1
-                        visible: true
-                        filamentBayID: 1
-                    }
-                    FilamentBay {
-                        id: bay2
-                        visible: true
-                        filamentBayID: 2
-                    }
+                FilamentBay {
+                    id: bay1
+                    visible: true
+                    filamentBayID: 1
+                }
+                FilamentBay {
+                    id: bay2
+                    visible: true
+                    filamentBayID: 2
+                }
             }
         }
 
@@ -329,7 +329,6 @@ Item {
                         // but if unloading stay on material page
                         if(isLoadFilament) {
                             mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-
                         }
                     }
                 }

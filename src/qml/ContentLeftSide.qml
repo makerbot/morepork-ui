@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.12
 Item {
     width: 400
     height: 408
+    smooth: false
+    antialiasing: false
 
     // Debug flag to help with development; set to true to
     // view the layout in design view with all elements and

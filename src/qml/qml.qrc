@@ -46,8 +46,6 @@
         <file>FirmwareUpdatePageForm.qml</file>
         <file>MaterialIcon.qml</file>
         <file>MaterialIconForm.qml</file>
-        <file>Extruder.qml</file>
-        <file>ExtruderForm.qml</file>
         <file>AssistedLeveling.qml</file>
         <file>AssistedLevelingForm.qml</file>
         <file>LoadingIcon.qml</file>
@@ -139,8 +137,6 @@
         <file>TimeSelector.qml</file>
         <file>TimeSelectorForm.qml</file>
         <file>VerticalTumbler.qml</file>
-        <file>SnipMaterialScreen.qml</file>
-        <file>SnipMaterialScreenForm.qml</file>
         <file>LanguageSelector.qml</file>
         <file>LanguageSelectorForm.qml</file>
         <file>StorageTypeButton.qml</file>
@@ -165,8 +161,7 @@
         <file>LoadMaterialSelectorForm.qml</file>
         <file>CustomTempSelector.qml</file>
         <file>CustomTempSelectorForm.qml</file>
-        <file>ExpExtruderInstructionsScreen.qml</file>
-        <file>ExpExtruderInstructionsScreenForm.qml</file>
+        <file>LabsExtruderLoadingInstructions.qml</file>
         <file>DryMaterial.qml</file>
         <file>DryMaterialForm.qml</file>
         <file>DryMaterialButton.qml</file>

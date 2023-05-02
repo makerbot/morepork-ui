@@ -3,15 +3,43 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 Button {
+    id: buttonRectangle
     enum Style {
         Button,
-        ButtonWithHelp
+        ButtonWithHelp,
+        DelayedEnable
     }
     property int style: ButtonRectangleBase.Button
 
-    id: control
-    width: style == ButtonRectangleBase.ButtonWithHelp ? 318 : 360
-    Layout.preferredWidth: style == ButtonRectangleBase.ButtonWithHelp ? 318 : 360
+    property int delayedEnableTimeSec: 3
+    property int delayedEnableCountdown
+    onStyleChanged: {
+        delayedEnableTimer.stop()
+        enabled = true
+        if(style == ButtonRectangleBase.DelayedEnable) {
+            enabled = false
+            delayedEnableCountdown = delayedEnableTimeSec
+            delayedEnableTimer.start()
+        }
+    }
+
+    Timer {
+        id: delayedEnableTimer
+        repeat: true
+        interval: 1000
+        onTriggered: {
+            if(delayedEnableCountdown != 0) {
+                delayedEnableCountdown -= 1
+            } else {
+                style = ButtonRectangleBase.Button
+                enabled = true
+                delayedEnableTimer.stop()
+            }
+        }
+    }
+
+    width: style == ButtonRectangleBase.Button ? 360 : 318
+    Layout.preferredWidth: style == ButtonRectangleBase.Button ? 360 : 318
     height: 52
     text: qsTr("Button")
     antialiasing: false
@@ -26,7 +54,7 @@ Button {
 
     contentItem: Text {
         id: textElement
-        text: control.text
+        text: buttonRectangle.text
         font.family: "Antenna"
         font.pixelSize: 17
         font.weight: Font.Bold
@@ -38,7 +66,7 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-        opacity: control.enabled ? 1 : 0.5
+        opacity: buttonRectangle.enabled ? 1 : 0.5
 
         Behavior on opacity {
             OpacityAnimator {
@@ -52,7 +80,7 @@ Button {
         implicitWidth: 136
         implicitHeight: 52
         radius: 5
-        opacity: control.enabled ? 1 : 0.5
+        opacity: buttonRectangle.enabled ? 1 : 0.5
 
         Behavior on opacity {
             OpacityAnimator {
@@ -80,14 +108,14 @@ Button {
         antialiasing: false
         smooth: false
         flat: true
-        visible: style == ButtonRectangleBase.ButtonWithHelp
+        visible: buttonRectangle.style == ButtonRectangleBase.ButtonWithHelp
 
         contentItem: Item {
             Image {
                 source: "qrc:/img/button_help.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                opacity: control.enabled ? 1 : 0.5
+                opacity: buttonRectangle.enabled ? 1 : 0.5
 
                 Behavior on opacity {
                     OpacityAnimator {
@@ -101,7 +129,7 @@ Button {
             id: backgroundElement1
             color: "#00000000"
             radius: 5
-            opacity: control.enabled ? 1 : 0.5
+            opacity: buttonRectangle.enabled ? 1 : 0.5
 
             Behavior on opacity {
                 OpacityAnimator {
@@ -117,5 +145,16 @@ Button {
         function logClick() {
             console.info(logKey + " Help clicked")
         }
+    }
+
+    TextBody {
+        id: disabledCountdown
+        text: ":" + delayedEnableCountdown
+        style: TextBody.Large
+        font.weight: Font.Bold
+        anchors.left: parent.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        visible: buttonRectangle.style == ButtonRectangleBase.DelayedEnable
     }
 }

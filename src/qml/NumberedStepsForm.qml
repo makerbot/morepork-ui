@@ -15,7 +15,7 @@ ColumnLayout {
         RowLayout {
             spacing: 12
             Layout.preferredWidth: parent.width
-            opacity: activeSteps[index] ? 1 : 0.5
+            opacity: activeSteps[index] ? 1 : 0.3
 
             Rectangle {
                 id: numberCircle

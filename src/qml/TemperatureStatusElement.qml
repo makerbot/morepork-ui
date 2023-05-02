@@ -36,7 +36,7 @@ ColumnLayout {
         spacing: 44
 
         ColumnLayout {
-            spacing: 4
+            spacing: 6
 
             TextBody {
                 text: qsTr("Current")
@@ -52,7 +52,7 @@ ColumnLayout {
         }
 
         ColumnLayout {
-            spacing: 4
+            spacing: 6
 
             TextBody {
                 text: qsTr("Target")
