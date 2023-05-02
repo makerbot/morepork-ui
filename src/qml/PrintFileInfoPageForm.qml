@@ -21,7 +21,7 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("FILENAME")
             dataElement.wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            dataText: inFreStep ? qsTr("TEST PRINT") : file_name
+            dataText: file_name
         }
 
         InfoItem {

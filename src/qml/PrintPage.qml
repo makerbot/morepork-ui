@@ -44,7 +44,7 @@ PrintPageForm {
         }
 
         // Dual extruder prints
-        if(support_extruder_used && model_extruder_usedreviewTestPrint) {
+        if(support_extruder_used && model_extruder_used) {
             if(print_model_material == "unknown" || materialPage.bay1.isUnknownMaterial) {
                 if(materialPage.bay1.usingExperimentalExtruder) {
                     modelMaterialOK = true

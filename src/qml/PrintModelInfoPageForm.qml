@@ -50,7 +50,7 @@ Item {
 
                 TextBody {
                     id: printName
-                    text: inFreStep ? qsTr("TEST PRINT") : file_name
+                    text: file_name
                     width: details_item.width
                     Layout.preferredWidth: details_item.width
                     elide: Text.ElideRight
