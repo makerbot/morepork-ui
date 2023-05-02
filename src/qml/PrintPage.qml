@@ -44,7 +44,7 @@ PrintPageForm {
         }
 
         // Dual extruder prints
-        if(support_extruder_used && model_extruder_used) {
+        if(support_extruder_used && model_extruder_usedreviewTestPrint) {
             if(print_model_material == "unknown" || materialPage.bay1.isUnknownMaterial) {
                 if(materialPage.bay1.usingExperimentalExtruder) {
                     modelMaterialOK = true
@@ -269,7 +269,7 @@ PrintPageForm {
         sortingDrawer.close()
     }
 
-    reviewTestPrint.continueButton.button_mouseArea.onClicked: {
+    reviewTestPrint.continueButton.onClicked: {
         if(isNetworkConnectionAvailable) {
             // Go to login to makerbot account step
             // only if network connection is available
@@ -282,7 +282,7 @@ PrintPageForm {
         printStatusView.testPrintComplete = false
     }
 
-    reviewTestPrint.calibrateButton.button_mouseArea.onClicked: {
+    reviewTestPrint.calibrateButton.onClicked: {
         fre.setFreStep(FreStep.CalibrateExtruders)
         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
         printStatusView.testPrintComplete = false

@@ -1017,6 +1017,7 @@ Item {
                 height: sourceSize.height -10
                 Layout.alignment: Qt.AlignHCenter
                 source: "qrc:/img/process_error_small.png"
+                visible: !inFreStep
             }
 
             TextHeadline {

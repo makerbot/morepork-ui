@@ -50,7 +50,7 @@ Item {
 
                 TextBody {
                     id: printName
-                    text: file_name
+                    text: inFreStep ? qsTr("TEST PRINT") : file_name
                     width: details_item.width
                     Layout.preferredWidth: details_item.width
                     elide: Text.ElideRight
@@ -89,7 +89,7 @@ Item {
                     id: startPrintButton
                     width: 300
                     Layout.preferredWidth: 300
-                    text: inFreStep ? qsTr("START TEST PRINT") : qsTr("START")
+                    text: qsTr("START")
                     onClicked: {
 
                         if((startPrintSource == PrintPage.FromLocal && !startPrintCheck())
