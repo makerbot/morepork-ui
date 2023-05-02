@@ -104,13 +104,14 @@ LoggingItem {
         }
     }
 
-    RowLayout {
+    /*RowLayout {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 10
+        spacing: 10*/
 
         ContentLeftSide {
             id: freContentLeft
+            anchors.verticalCenter: parent.verticalCenter
             loadingIcon {
                 icon_image: LoadingIcon.Success
             }
@@ -122,6 +123,7 @@ LoggingItem {
 
         ContentRightSide {
             id: freContentRight
+            anchors.verticalCenter: parent.verticalCenter
 
             textHeader {
                 text: qsTr("WELCOME")
@@ -150,7 +152,7 @@ LoggingItem {
                 visible: true
             }
         }
-    }
+   // }
 
     onSkipMagmaStepsChanged: {
         fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipMagmaSteps)
