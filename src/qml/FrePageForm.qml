@@ -104,55 +104,49 @@ LoggingItem {
         }
     }
 
-    /*RowLayout {
-        anchors.right: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 10*/
 
-        ContentLeftSide {
-            id: freContentLeft
-            anchors.verticalCenter: parent.verticalCenter
-            loadingIcon {
-                icon_image: LoadingIcon.Success
-            }
-            image {
-                source: "qrc:/img/fre_help_qr_code.png"
-            }
+    ContentLeftSide {
+        id: freContentLeft
+        anchors.verticalCenter: parent.verticalCenter
+        loadingIcon {
+            icon_image: LoadingIcon.Success
+        }
+        image {
+            source: "qrc:/img/fre_help_qr_code.png"
+        }
+        visible: false
+    }
+
+    ContentRightSide {
+        id: freContentRight
+        anchors.verticalCenter: parent.verticalCenter
+        visible: true
+
+        textHeader {
+            text: qsTr("WELCOME")
+            visible: true
+        }
+
+        textBody {
+            text: qsTr("The following procedure will help you set up your %1.").arg(productName.toUpperCase())
+            visible: true
+        }
+
+        textBody1 {
+            text: qsTr("")
             visible: false
         }
 
-        ContentRightSide {
-            id: freContentRight
-            anchors.verticalCenter: parent.verticalCenter
-
-            textHeader {
-                text: qsTr("WELCOME")
-                visible: true
-            }
-
-            textBody {
-                text: qsTr("The following procedure will help you set up your %1.").arg(productName.toUpperCase())
-                visible: true
-            }
-
-            textBody1 {
-                text: qsTr("")
-                visible: false
-            }
-
-            buttonPrimary {
-                text: qsTr("BEGIN SETUP")
-                visible: true
-            }
-
-            buttonSecondary1 {
-                text: (currentFreStep == FreStep.Welcome ||
-                       currentFreStep == FreStep.SunflowerSetupGuide) ?
-                          qsTr("< BACK") : qsTr("SKIP")
-                visible: true
-            }
+        buttonPrimary {
+            text: qsTr("BEGIN SETUP")
+            visible: true
         }
-   // }
+
+        buttonSecondary1 {
+            text: qsTr("SKIP")
+            visible: true
+        }
+    }
 
     onSkipMagmaStepsChanged: {
         fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipMagmaSteps)
@@ -166,6 +160,72 @@ LoggingItem {
     }
 
     states: [
+        State {
+            name: "welcome"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("WELCOME")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("The following procedure will help you set up your %1.").arg(productName.toUpperCase())
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("BEGIN SETUP")
+
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                text: qsTr("< BACK")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+        },
         State {
             name: "wifi_setup"
 
@@ -401,7 +461,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
+                visible: true
             }
 
             PropertyChanges {
@@ -542,7 +602,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                visible: false
+                visible: true
             }
 
             PropertyChanges {
@@ -905,6 +965,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
+                text: qsTr("< BACK")
                 visible: true
             }
 
@@ -950,6 +1011,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
+                text: qsTr("< BACK")
                 visible: true
             }
 
@@ -1067,7 +1129,6 @@ LoggingItem {
                 target: freContentRight.buttonPrimary
                 text: qsTr("FINISH")
             }
-
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1

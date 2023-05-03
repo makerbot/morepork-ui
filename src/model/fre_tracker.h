@@ -63,7 +63,7 @@ class FreTracker : public BaseModel {
     {
         "start_set_language",
         "welcome",
-        "sunflower_setup_guide"
+        "sunflower_setup_guide",
         "setup_wifi",
         "software_update",
         "set_time_date",

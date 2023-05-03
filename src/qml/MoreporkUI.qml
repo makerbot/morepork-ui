@@ -69,7 +69,7 @@ ApplicationWindow {
         inFreStep = false
         switch(currentFreStep) {
         case FreStep.Welcome:
-            freScreen.state = "base state"
+            freScreen.state = "welcome"
             break;
         case FreStep.SunflowerSetupGuide:
             freScreen.state = "magma_setup_guide1"
