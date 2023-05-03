@@ -93,7 +93,8 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
-                settingsPage.extruderSettingsPage.toolheadCalibration.state = "remove_build_plate"
+                settingsPage.extruderSettingsPage.toolheadCalibration.state = "calibrating"
+                bot.calibrateToolheads(["x","y"])
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad()
