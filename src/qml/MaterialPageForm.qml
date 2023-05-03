@@ -206,37 +206,6 @@ Item {
         }
     }
 
-    function getExtruderType(extruderNr) {
-        switch(extruderNr) {
-        case 1:
-            switch(bot.extruderAType) {
-                case ExtruderType.MK14:
-                    return "1A"
-                case ExtruderType.MK14_HOT:
-                    return "1XA"
-                case ExtruderType.MK14_EXP:
-                    return "LABS"
-                case ExtruderType.MK14_COMP:
-                    return "1C"
-                case ExtruderType.MK14_HOT_E:
-                    return "LABS_HT"
-                default:
-                    return "UNKNOWN"
-            }
-        case 2:
-            switch(bot.extruderBType) {
-                case ExtruderType.MK14:
-                    return "2A"
-                case ExtruderType.MK14_HOT:
-                    return "2XA"
-                default:
-                    return "UNKNOWN"
-            }
-        default:
-            return "UNKNOWN"
-        }
-    }
-
     MaterialPageDrawer {
         id: materialPageDrawer
     }
@@ -377,20 +346,6 @@ Item {
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: 0
             property string topBarTitle: qsTr("Attach Extruder")
-            property int extruder
-            property bool isAttached: {
-                switch(extruder) {
-                case 1:
-                    bot.extruderAPresent
-                    break;
-                case 2:
-                    bot.extruderBPresent
-                    break;
-                default:
-                    false
-                    break;
-                }
-            }
             property bool hasAltBack: true
 
             smooth: false
@@ -409,6 +364,35 @@ Item {
             function skipFreStepAction() {
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            property int extruder
+            property bool isAttached: {
+                switch(extruder) {
+                case 1:
+                    bot.extruderAPresent
+                    break;
+                case 2:
+                    bot.extruderBPresent
+                    break;
+                default:
+                    false
+                    break;
+                }
+            }
+
+            property string extruderTypeStr: {
+                switch(extruder) {
+                case 1:
+                    bot.extruderATypeStr
+                    break;
+                case 2:
+                    bot.extruderBTypeStr
+                    break;
+                default:
+                    defaultString
+                    break;
+                }
             }
 
             ContentLeftSide {
@@ -441,13 +425,12 @@ Item {
                         emptyString
                     }
                 }
-                textHeader1.text: qsTr("NOT DETECTED")
-                textHeader1.visible: false
-                textHeader1.opacity: 0.7
+                textHeaderWaitingForUser.text: qsTr("NOT DETECTED")
+                textHeaderWaitingForUser.visible: false
                 textBody.visible: true
-                textBody.text: "Remove the top lid from the printer to access the carriage"
+                textBody.text: qsTr("Remove the top lid from the printer to access the carriage")
                 buttonPrimary.visible: true
-                buttonPrimary.text: "NEXT"
+                buttonPrimary.text: qsTr("NEXT")
                 buttonPrimary.enabled: {
                     !(bot.chamberErrorCode == 0 ||
                      bot.chamberErrorCode == 48)
@@ -482,30 +465,28 @@ Item {
                                qsTr("LOAD SUPPORT EXTRUDER")
                         }
                         textBody.visible: false
-                        textHeader1.text: (itemAttachExtruder.extruder == 1 ?
-                                              bot.extruderAPresent : bot.extruderBPresent) ?
-                                              qsTr("%1 DETECTED").arg(getExtruderType(itemAttachExtruder.extruder)) :
-                                              qsTr("NOT DETECTED")
-                        textHeader1.visible: true
-                        isCompleted: (itemAttachExtruder.extruder == 1 ? bot.extruderAPresent : bot.extruderBPresent)
+                        textHeaderWaitingForUser.text: {
+                            itemAttachExtruder.isAttached ?
+                               qsTr("%1 DETECTED").arg(bot.getExtruderName(itemAttachExtruder.extruderTypeStr)) :
+                               qsTr("NOT DETECTED")
+                        }
+                        textHeaderWaitingForUser.visible: true
+                        textHeaderWaitingForUser.waitingForUser: !itemAttachExtruder.isAttached
                         numberedSteps.visible: true
                         numberedSteps.steps: [
-                            "Open the lock",
-                            "Open the handle",
+                            qsTr("Open the lock"),
+                            qsTr("Open the handle"),
                             extruderAttachText()]
                         numberedSteps.inactiveSteps: [false, false, false]
-                        textHeader1Loading.visible: true
                         buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.style: {
                             // We use a custom Button style to selectively disable only the button
                             // instead of messing with the enabled property as we want the adjacent
                             // help button which is a child of this button to be enabled/clickable
                             // even when this button is "disabled".
-                            (itemAttachExtruder.extruder == 1 ?
-                                 bot.extruderAPresent :
-                                 bot.extruderBPresent) ?
-                                        ButtonRectanglePrimary.ButtonWithHelp :
-                                        ButtonRectanglePrimary.ButtonDisabledHelpEnabled
+                            itemAttachExtruder.isAttached ?
+                                 ButtonRectanglePrimary.ButtonWithHelp :
+                                 ButtonRectanglePrimary.ButtonDisabledHelpEnabled
                         }
                     }
                 },
@@ -536,17 +517,12 @@ Item {
                         numberedSteps.visible: true
                         numberedSteps.stepBegin: 4
                         numberedSteps.steps: [
-                            "Close the front latch",
-                            "Flip the lock closed"
+                            qsTr("Close the front latch"),
+                            qsTr("Flip the lock closed")
                         ]
-                        buttonPrimary.text: {
-                            if (itemAttachExtruder.isAttached) {
-                                qsTr("NEXT")
-                            }
-                        }
+                        buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.style: ButtonRectanglePrimary.Button
-                        textHeader1Loading.visible: false
-                        textHeader1.visible: false
+                        textHeaderWaitingForUser.visible: false
                     }
                 },
 
@@ -629,7 +605,7 @@ Item {
                                 emptyString
                             }
                         }
-                        textBody.text: "Place the top lid from the printer to access the carriage"
+                        textBody.text: qsTr("Replace the top lid for safety while extruders are in motion.")
                         buttonPrimary.text: (bot.process.type == ProcessType.Print) ? qsTr("RESUME PRINT") : qsTr("DONE")
                         buttonPrimary.enabled: {
                             !(bot.chamberErrorCode == 45 ||

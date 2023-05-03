@@ -202,9 +202,9 @@ MaterialPageForm {
     function extruderAttachText() {
         var output = defaultString
         if(itemAttachExtruder.extruder == 1) {
-            output = "Load Model Extruder into Slot 1"
+            output = qsTr("Load Model Extruder into Slot 1")
         } else if(itemAttachExtruder.extruder == 2) {
-            output = "Load Support Extruder into Slot 2"
+            output = qsTr("Load Support Extruder into Slot 2")
         } else {
             output = defaultString
         }

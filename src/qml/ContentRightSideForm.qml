@@ -15,11 +15,8 @@ Item {
         visible: showAllElements
     }
 
-    property bool isCompleted: false
-
     property alias textHeader: textHeader
-    property alias textHeader1: textHeader1
-    property alias textHeader1Loading: textHeader1Loading
+    property alias textHeaderWaitingForUser: textHeaderWaitingForUser
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
@@ -50,37 +47,33 @@ Item {
             }
 
             TextHeadline {
-                id: textHeader1
+                id: textHeaderWaitingForUser
                 style: TextHeadline.Base
                 text: "standard header"
                 visible: false || showAllElements
+                opacity: waitingForUser ? 0.7 : 1
+                property bool waitingForUser: false
 
-                Item{
-                    id: textHeader1Loading
-                    visible: false || showAllElements
-                    anchors.verticalCenter: textHeader1.verticalCenter
-                    anchors.left: textHeader1.right
-                    anchors.leftMargin: 25
-                    height: 21
-                    width: 21
+                Image {
+                    id: waitingForUserImage
+                    source: textHeaderWaitingForUser.waitingForUser ?
+                                "qrc:/img/waiting_for_user.png" :
+                                "qrc:/img/waiting_for_user_complete.png"
+                    anchors.verticalCenter: textHeaderWaitingForUser.verticalCenter
+                    anchors.left: textHeaderWaitingForUser.right
+                    anchors.leftMargin: 24
 
-                    Image{
-                        source: "qrc:/img/popup_complete.png"
-                        anchors.verticalCenter: textHeader1.verticalCenter
-                        anchors.left: textHeader1.right
-                        sourceSize.height: 21
-                        sourceSize.width: 21
-                        visible: isCompleted
-                    }
-                    AnimatedImage{
-                        source: "qrc:/img/attach_extruder_loading.gif"
-                        anchors.verticalCenter: textHeader1.verticalCenter
-                        anchors.left: textHeader1.right
-                        anchors.leftMargin: 25
-                        visible: !isCompleted
-                        playing: true
-                        height: 21
-                        width: 21
+                    RotationAnimator {
+                        target: waitingForUserImage
+                        from: 0
+                        to: 360
+                        direction: RotationAnimator.Clockwise
+                        duration: 3000
+                        loops: Animation.Infinite
+                        running: textHeaderWaitingForUser.waitingForUser
+                        onRunningChanged: {
+                            waitingForUserImage.rotation = 0
+                        }
                     }
                 }
             }
