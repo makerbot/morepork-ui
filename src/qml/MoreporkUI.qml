@@ -95,6 +95,9 @@ ApplicationWindow {
         case FreStep.LoadMaterial:
             freScreen.state = "load_material"
             break;
+        case FreStep.MaterialCaseSetup:
+            freScreen.state = "material_case_setup"
+            break;
         case FreStep.TestPrint:
             freScreen.state = "test_print"
             break;
@@ -690,6 +693,7 @@ ApplicationWindow {
                                 case FreStep.AttachExtruders:
                                 case FreStep.LevelBuildPlate:
                                 case FreStep.CalibrateExtruders:
+                                case FreStep.MaterialCaseSetup:
                                 case FreStep.LoadMaterial:
                                     qsTr("SKIP PRINTER SETUP")
                                     break;
@@ -734,10 +738,13 @@ ApplicationWindow {
                             }
                             onClicked: {
                                 skipFreStepPopup.close()
-                                currentItem.skipFreStepAction()
+                                if (inFreStep) {
+                                    currentItem.skipFreStepAction()
+                                }
                                 if(currentFreStep == FreStep.AttachExtruders ||
                                    currentFreStep == FreStep.LevelBuildPlate ||
                                    currentFreStep == FreStep.CalibrateExtruders ||
+                                   currentFreStep == FreStep.MaterialCaseSetup ||
                                    currentFreStep == FreStep.LoadMaterial ||
                                    currentFreStep == FreStep.TestPrint) {
                                     fre.setFreStep(FreStep.FreComplete)
@@ -827,6 +834,9 @@ ApplicationWindow {
                             case FreStep.CalibrateExtruders:
                                 qsTr("SKIP CALIBRATING EXTRUDERS?")
                                 break;
+                            case FreStep.MaterialCaseSetup:
+                                qsTr("SKIP MATERIAL CASE SETUP?")
+                                break;
                             case FreStep.LoadMaterial:
                                 qsTr("SKIP LOADING MATERIAL?")
                                 break;
@@ -882,6 +892,7 @@ ApplicationWindow {
                             case FreStep.CalibrateExtruders:
                                 qsTr("For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached.")
                                 break;
+                            case FreStep.MaterialCaseSetup:
                             case FreStep.LoadMaterial:
                                 qsTr("Printing requires material to be loaded into the extruders.")
                                 break;
@@ -2044,180 +2055,48 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            closePolicy: Popup.CloseOnPressOutside
-            parent: overlay
-
-            background: Rectangle {
-                id: extNotCalibratedPopupBackgroundDim
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            showTwoButtons: true
+            left_button_text: qsTr("SKIP")
+            left_button.onClicked: {
+                extNotCalibratedPopup.close()
             }
-            Rectangle {
-                id: basePopupItem3
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 270
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            right_button_text: qsTr("GO TO PAGE")
+            right_button.onClicked: {
+                extNotCalibratedPopup.close()
+                resetSettingsSwipeViewPages()
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            }
+
+            ColumnLayout {
+                width: popupContainer.width
+                height: children.height
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 10
 
-                Rectangle {
-                    id: horizontal_divider3
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
+                TextHeadline {
+                    id: calibrate_extruders
+                    style: TextHeadline.Base
+                    Layout.alignment: Qt.AlignHCenter
+                    text: qsTr("CALIBRATE EXTRUDERS?")
+                    Layout.bottomMargin: 7
                 }
 
-                Rectangle {
-                    id: vertical_divider3
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Item {
-                    id: buttonBar2
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: calib_rectangle
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: calib_text
-                            color: "#ffffff"
-                            text: "CALIBRATE NOW"
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "extNotCalibratedPopup [_" + calib_text.text + "|]"
-                            id: calib_mouseArea
-                            anchors.fill: parent
-                            onClicked: {
-                                extNotCalibratedPopup.close()
-                                resetSettingsSwipeViewPages()
-                                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
-                            }
-                            onPressed: {
-                                calib_text.color = "#000000"
-                                calib_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                calib_text.color = "#ffffff"
-                                calib_rectangle.color = "#00000000"
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: cancel_calib_rectangle
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_calib_text
-                            color: "#ffffff"
-                            text: "CANCEL"
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "extNotCalibratedPopup [|" + cancel_calib_text.text + "_]"
-                            id: cancel_calib_mouseArea
-                            anchors.fill: parent
-                            onClicked: {
-                                extNotCalibratedPopup.close()
-                            }
-                            onPressed: {
-                                cancel_calib_text.color = "#000000"
-                                cancel_calib_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_calib_text.color = "#ffffff"
-                                cancel_calib_rectangle.color = "#00000000"
-                            }
-                        }
-                    }
-                }
-                ColumnLayout {
-                    height: 140
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: -20
-
-                    TitleText {
-                        font.weight: Font.Bold
-                        text: "CALIBRATION REQUIRED"
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    }
-                    BodyText {
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.3
-                        text: {
-                            "Automatic calibration must be run when "+
-                            "attaching extruders for best\nprint quality. "+
-                            "Be sure the extruders are latched into place "+
-                            "before\ncalibrating."
-                        }
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    }
+                TextBody {
+                    text: "Calibration enables precise 3D printing. The printer must calibrate new extruders to ensure print quality"
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.bottomMargin: 30
+                    wrapMode: Text.WordWrap
+                    Layout.preferredWidth: 600
+                    horizontalAlignment: Text.AlignHCenter
                 }
             }
+
         }
 
         LoggingPopup {
@@ -3196,11 +3075,36 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_description
-                            text: qsTr("Scan the QR code for more information and troubleshooting tips.")
+                            text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
+                        }
+                    },
+
+                    State {
+                        name: "attach_extruders"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("METHOD COMPATIBILITY")
+                        }
+
+                        PropertyChanges {
+                            target: help_description
+                            text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
                         }
                     }
                 ]
             }
         }
+    }
+
+    Component.onCompleted: {
+        fre.setStepEnable(FreStep.SetupWifi, !isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.LoginMbAccount, isNetworkConnectionAvailable)
+        fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
     }
 }
