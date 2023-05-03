@@ -452,18 +452,9 @@ Item {
                     !(bot.chamberErrorCode == 0 ||
                      bot.chamberErrorCode == 48)
                 }
-                help{
-                    onClicked:{
-                        helpPopup.open()
-                        helpPopup.state = "attach_extruders"
-                    }
-                    visible: false
-                    enabled: false
-                }
-                style: ContentRightSideForm.ButtonWithHelp
             }
-            states: [
 
+            states: [
                 State {
                     name: "attach_extruder_step1"
 
@@ -503,12 +494,19 @@ Item {
                             "Open the handle",
                             extruderAttachText()]
                         numberedSteps.inactiveSteps: [false, false, false]
-                        help.visible: true
-                        help.enabled: true
                         textHeader1Loading.visible: true
                         buttonPrimary.text: qsTr("NEXT")
-                        buttonPrimary.enabled: (itemAttachExtruder.extruder == 1 ?
-                                                    bot.extruderAPresent : bot.extruderBPresent)
+                        buttonPrimary.style: {
+                            // We use a custom Button style to selectively disable only the button
+                            // instead of messing with the enabled property as we want the adjacent
+                            // help button which is a child of this button to be enabled/clickable
+                            // even when this button is "disabled".
+                            (itemAttachExtruder.extruder == 1 ?
+                                 bot.extruderAPresent :
+                                 bot.extruderBPresent) ?
+                                        ButtonRectanglePrimary.ButtonWithHelp :
+                                        ButtonRectanglePrimary.ButtonDisabledHelpEnabled
+                        }
                     }
                 },
 
@@ -546,11 +544,9 @@ Item {
                                 qsTr("NEXT")
                             }
                         }
-                        buttonPrimary.enabled: true
+                        buttonPrimary.style: ButtonRectanglePrimary.Button
                         textHeader1Loading.visible: false
                         textHeader1.visible: false
-                        help.visible: false
-                        help.enabled: false
                     }
                 },
 
@@ -692,7 +688,6 @@ Item {
             }
         }
     }
-
 
     LoggingPopup {
         popupName: "MaterialWarning"

@@ -3,9 +3,16 @@ import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 
 Button {
-    id: control
-    width: 360
-    Layout.preferredWidth:360
+    id: buttonRectangle
+    enum Style {
+        Button,
+        ButtonWithHelp,
+        ButtonDisabledHelpEnabled
+    }
+    property int style: ButtonRectangleBase.Button
+
+    width: style == ButtonRectangleBase.Button ? 360 : 318
+    Layout.preferredWidth: style == ButtonRectangleBase.Button ? 360 : 318
     height: 52
     text: qsTr("Button")
     antialiasing: false
@@ -16,11 +23,11 @@ Button {
     property alias color: backgroundElement.color
     property alias textColor: textElement.color
     property alias border: backgroundElement.border
-    property alias control: control
+    property alias help: helpButton
 
     contentItem: Text {
         id: textElement
-        text: control.text
+        text: buttonRectangle.text
         font.family: "Antenna"
         font.pixelSize: 17
         font.weight: Font.Bold
@@ -32,7 +39,14 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-        opacity: control.enabled ? 1 : 0.5
+        opacity: {
+            if(!buttonRectangle.enabled ||
+                buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled) {
+                0.5
+            } else {
+                1
+            }
+        }
 
         Behavior on opacity {
             OpacityAnimator {
@@ -46,7 +60,14 @@ Button {
         implicitWidth: 136
         implicitHeight: 52
         radius: 5
-        opacity: control.enabled ? 1 : 0.5
+        opacity: {
+            if(!buttonRectangle.enabled ||
+                buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled) {
+                0.5
+            } else {
+                1
+            }
+        }
 
         Behavior on opacity {
             OpacityAnimator {
@@ -61,5 +82,54 @@ Button {
 
     function logClick() {
         console.info(logKey + " " + text + " clicked")
+    }
+
+    Button {
+        id: helpButton
+        width: 32
+        Layout.preferredWidth: 32
+        height: 52
+        anchors.left: parent.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        antialiasing: false
+        smooth: false
+        flat: true
+        visible: buttonRectangle.style == ButtonRectangleBase.ButtonWithHelp ||
+                 buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled
+
+        contentItem: Item {
+            Image {
+                source: "qrc:/img/button_help.png"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Behavior on opacity {
+                    OpacityAnimator {
+                        duration: 100
+                    }
+                }
+            }
+        }
+
+        background: Rectangle {
+            id: backgroundElement1
+            color: "#00000000"
+            radius: 5
+
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: 100
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            this.onReleased.connect(logClick)
+        }
+
+        function logClick() {
+            console.info(logKey + " Help clicked")
+        }
     }
 }

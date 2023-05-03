@@ -22,11 +22,11 @@ LoggingItem {
         buttonPrimary {
             text: qsTr("NEXT")
             visible: true
-        }
-        style: ContentRightSideForm.ButtonWithHelp
-        help.onClicked: {
-            helpPopup.state = "fre"
-            helpPopup.open()
+            style: ButtonRectanglePrimary.ButtonWithHelp
+            help.onClicked: {
+                helpPopup.state = "fre"
+                helpPopup.open()
+            }
         }
     }
 

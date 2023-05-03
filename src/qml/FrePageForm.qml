@@ -11,7 +11,6 @@ LoggingItem {
     height: 480
     property alias continueButton: freContentRight.buttonPrimary
     property alias skipButton: freContentRight.buttonSecondary1
-    property alias helpButton: freContentRight.help
 
     ContentLeftSide {
         id: freContentLeft
@@ -42,7 +41,6 @@ LoggingItem {
         buttonSecondary1 {
             text: qsTr("SKIP")
         }
-
     }
 
     Item {
@@ -391,10 +389,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-            }
-            PropertyChanges {
-                target: freContentRight
-                style: ContentRightSideForm.ButtonWithHelp
             }
 
             PropertyChanges {

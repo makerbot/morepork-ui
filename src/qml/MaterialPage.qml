@@ -428,6 +428,10 @@ MaterialPageForm {
             itemAttachExtruder.state = "attach_extruder_step1"
             break
         case "attach_extruder_step1":
+            if(attach_extruder.buttonPrimary.style ==
+               ButtonRectanglePrimary.ButtonDisabledHelpEnabled) {
+                return
+            }
             itemAttachExtruder.state = "attach_extruder_step2"
             break
         case "attach_extruder_step2":
@@ -477,5 +481,10 @@ MaterialPageForm {
             //default behavior
             break
         }
+    }
+
+    attach_extruder.buttonPrimary.help.onClicked: {
+        helpPopup.open()
+        helpPopup.state = "attach_extruders"
     }
 }

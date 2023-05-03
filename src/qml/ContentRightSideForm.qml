@@ -1,13 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+
 Item {
-
-    enum Style {
-        Button,
-        ButtonWithHelp
-    }
-
     width: 400
     height: 408
 
@@ -21,7 +15,6 @@ Item {
         visible: showAllElements
     }
 
-    property int style: ContentRightSideForm.Button
     property bool isCompleted: false
 
     property alias textHeader: textHeader
@@ -35,7 +28,6 @@ Item {
     property alias buttonSecondary1: buttonSecondary1
     property alias buttonSecondary2: buttonSecondary2
     property alias slidingSwitch: slidingSwitch
-    property alias help: helpButton
 
     anchors.right: parent.right
     anchors.bottom: parent.bottom
@@ -131,47 +123,10 @@ Item {
         ColumnLayout {
             spacing: 24
 
-            RowLayout {
-                Layout.preferredWidth: 360
-                ButtonRectanglePrimary {
-                    id: buttonPrimary
-                    text: "label"
-                    Layout.preferredWidth: helpButton.visible ? 318 : 360
-                    visible: false || showAllElements
-                }
-
-                Button {
-                    id: helpButton
-                    Layout.preferredWidth: 32
-                    antialiasing: false
-                    smooth: false
-                    flat: true
-                    visible: style == ContentRightSideForm.ButtonWithHelp || showAllElements
-                    enabled: true
-
-                    contentItem: Item {
-                        Image {
-                            source: "qrc:/img/button_help.png"
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-
-                            Behavior on opacity {
-                                OpacityAnimator {
-                                    duration: 100
-                                }
-                            }
-                        }
-                    }
-                    Component.onCompleted: {
-                        this.onReleased.connect(logClick)
-                    }
-
-                    function logClick() {
-                        console.info(" Help clicked")
-                    }
-                }
-
-
+            ButtonRectanglePrimary {
+                id: buttonPrimary
+                text: "label"
+                visible: false || showAllElements
             }
 
             ButtonRectangleSecondary {
