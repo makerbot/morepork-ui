@@ -18,7 +18,9 @@ class FreTracker : public BaseModel {
   public:
     // MOREPORK_QML_ENUM
     enum FreStep {
+        StartSetLanguage,
         Welcome,
+        SunflowerSetupGuide,
         SetupWifi,
         SoftwareUpdate,
         SetTimeDate,
@@ -59,7 +61,9 @@ class FreTracker : public BaseModel {
     const std::string first_boot_path_;
     const std::vector<std::string> step_str_ =
     {
+        "start_set_language",
         "welcome",
+        "sunflower_setup_guide",
         "setup_wifi",
         "software_update",
         "set_time_date",
