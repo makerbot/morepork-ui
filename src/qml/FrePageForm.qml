@@ -389,6 +389,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
+                style: ButtonRectanglePrimary.ButtonWithHelp
             }
 
             PropertyChanges {
