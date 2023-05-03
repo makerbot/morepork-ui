@@ -57,7 +57,7 @@ LoggingItem {
             // decrements to zero.
             timeLeftSeconds--
 
-            if ((timeLeftSeconds <= 0) || (bot.buildplaneCurrentTemp <= printPage.waitToCoolBuildplaneTemperature)) {
+            if (timeLeftSeconds <= 0) {
                 countdownTimer.stop()
                 waitToCoolScreenVisible = false
                 return "00:00"
