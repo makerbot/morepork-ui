@@ -532,7 +532,7 @@ Item {
 
             TextBody{
                 id: printjob_name
-                text: qsTr(fileName_)
+                text: fileName_
                 font.capitalization: Font.AllUppercase
                 anchors.left: parent.left
                 anchors.top: filename_header.bottom
