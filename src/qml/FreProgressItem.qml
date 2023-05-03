@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-TextHeadline {
+Text {
     id: text1
     enum State {
         Active,
@@ -12,8 +12,14 @@ TextHeadline {
 
     color: (state == FreProgressItem.Active || state == FreProgressItem.Enabled) ?
                "#ffffff" : "#595959"
-    text: qsTr("SET UP")
-
+    text: qsTr("SETUP")
+    font.family: "Antenna"
+    font.pixelSize: 17
+    font.weight: Font.DemiBold
+    font.letterSpacing: 3.2
+    font.capitalization: Font.AllUppercase
+    lineHeightMode: Text.FixedHeight
+    lineHeight: 20
 
     Rectangle {
         id: circle_indicator

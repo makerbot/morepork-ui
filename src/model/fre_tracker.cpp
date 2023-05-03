@@ -26,14 +26,14 @@ FreTracker::FreTracker() :
 
 void FreTracker::initialize() {
     if (!fre_status_.isMember("fre_status")) {
-        currentFreStepSet(FreStep::Welcome);
+        currentFreStepSet(FreStep::StartSetLanguage);
         fre_status_["fre_status"] = Json::Value();
         Json::Value &fre_status = fre_status_["fre_status"];
         if (!fre_status.isMember("fre_complete")) {
             fre_status["fre_complete"] = Json::Value(false);
         }
         if (!fre_status.isMember("current_step")) {
-            next_step_ = "welcome";
+            next_step_ = "start_set_language";
             fre_status["current_step"] = Json::Value(next_step_);
         }
         logFreStatus();
@@ -48,8 +48,12 @@ void FreTracker::initialize() {
             const Json::Value kCurrentStep = fre_status["current_step"];
             if (kCurrentStep.isString()) {
                 const QString step = kCurrentStep.asString().c_str();
-                if (step == "welcome") {
+                if (step == "start_set_language") {
+                    currentFreStepSet(FreStep::StartSetLanguage);
+                } else if (step == "welcome") {
                     currentFreStepSet(FreStep::Welcome);
+                } else if (step == "sunflower_setup_guide") {
+                    currentFreStepSet(FreStep::SunflowerSetupGuide);
                 } else if (step == "setup_wifi") {
                     currentFreStepSet(FreStep::SetupWifi);
                 } else if (step == "software_update") {

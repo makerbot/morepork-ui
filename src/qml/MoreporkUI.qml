@@ -69,7 +69,10 @@ ApplicationWindow {
         inFreStep = false
         switch(currentFreStep) {
         case FreStep.Welcome:
-            freScreen.state = "base state"
+            freScreen.state = "welcome"
+            break;
+        case FreStep.SunflowerSetupGuide:
+            freScreen.state = "magma_setup_guide1"
             break;
         case FreStep.SetupWifi:
             freScreen.state = "wifi_setup"
@@ -3065,7 +3068,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/fre_qr_code.png"
+                            source: "qrc:/img/fre_help_qr_code.png"
                         }
 
                         PropertyChanges {

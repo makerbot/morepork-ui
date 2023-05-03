@@ -67,7 +67,7 @@ Item {
             resetToFactoryPopup.close()
             // Reset all screen positions
             resetSettingsSwipeViewPages()
-            fre.setFreStep(FreStep.Welcome)
+            fre.setFreStep(FreStep.StartSetLanguage)
             settings.resetPreferences()
         }
     }

@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import FreStepEnum 1.0
 import WifiStateEnum 1.0
+import MachineTypeEnum 1.0
 
 FrePageForm {
     function getTestPrint() {
@@ -111,10 +112,14 @@ FrePageForm {
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AuthorizeAccountsPage)
                 settingsPage.systemSettingsPage.authorizeAccountPage.authorizeAccountWithCodePage.beginAuthWithCode()
                 settingsPage.systemSettingsPage.authorizeAccountPage.authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCode)
+            } else if(state == "magma_setup_guide1") {
+                state = "magma_setup_guide2"
             } else {
                 // For all screens not listed above, the default behavior
                 // is to go to the next step
                 fre.gotoNextStep(currentFreStep)
+
+
             }
         }
 
@@ -136,6 +141,12 @@ FrePageForm {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
+            } else if(state == "base state" || state == "welcome") {
+                fre.setFreStep(FreStep.StartSetLanguage)
+            } else if(state == "magma_setup_guide1") {
+                 fre.setFreStep(FreStep.Welcome)
+            } else if(state == "magma_setup_guide2") {
+                state = "magma_setup_guide1"
             } else {
                 // Every page that does not have custom logic for this should
                 // prompt to skip to the next step.
