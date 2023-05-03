@@ -456,6 +456,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight
+                style: ContentRightSideForm.ButtonWithHelp
+            }
+
+            PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
             }
