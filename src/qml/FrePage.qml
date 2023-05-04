@@ -122,6 +122,14 @@ FrePageForm {
 
             }
         }
+
+        help {
+            onClicked: {
+                // Currently every help button in the FRE shows the same help
+                helpPopup.state = "fre"
+                helpPopup.open()
+            }
+        }
     }
 
     skipButton {
@@ -145,11 +153,5 @@ FrePageForm {
                 skipFreStepPopup.open()
             }
         }
-    }
-
-    helpButton.onClicked: {
-        // Currently every help button in the FRE shows the same help
-        helpPopup.state = "fre"
-        helpPopup.open()
     }
 }

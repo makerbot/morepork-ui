@@ -154,12 +154,6 @@ LoggingItem {
             visible: true
         }
 
-        textHeader1 {
-            text: qsTr("ERROR 2")
-            style: TextHeadline.Base
-            visible: false
-        }
-
         textBody {
             text: qsTr("Error description")
             visible: true
@@ -190,11 +184,6 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("PROCESS FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
             }
 
             PropertyChanges {
@@ -232,11 +221,6 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("PROCESS FAILED.\nCLOSE THE\nTOP LID.")
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
             }
 
             PropertyChanges {
@@ -278,11 +262,6 @@ LoggingItem {
                     }
                 }
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
             }
 
             PropertyChanges {
@@ -341,11 +320,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
                     if(bot.process.stateType == ProcessStateType.Pausing ||
@@ -392,11 +366,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Put the lid back on the printer\nand retry calibrating")
                 visible: true
@@ -438,14 +407,9 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: {
-                    "Ensure the spool isn't tangled and try purging the extruder. If the issue recurs, unload and reload the material."
+                    qsTr("Ensure the spool isn't tangled and try purging the extruder. If the issue recurs, unload and reload the material.")
                 }
                 visible: true
             }
@@ -493,17 +457,10 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: {
-                    qsTr("PRINT PAUSED")
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                text: {
-                    qsTr("MATERIAL %1\nOUT OF FILAMENT").arg(
-                        (bot.process.filamentBayAOOF ?
-                             qsTr("1") : qsTr("2")))
+                    qsTr("PRINT PAUSED<br><br>") +
+                    qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
+                                       (bot.process.filamentBayAOOF ?
+                                         qsTr("1") : qsTr("2")))
                 }
                 visible: true
             }
@@ -553,7 +510,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
+                target: contentRightItem.buttonPrimary
                 text: {
                     qsTr("CONTINUE")
                 }
@@ -640,11 +597,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Ensure the extruder is attached and\npress the button below to continue.")
                 visible: true
@@ -689,11 +641,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Please visit the support page to learn more information about this error and contact our support team.")
                 visible: true
@@ -727,11 +674,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error %1").arg(lastReportedErrorCode)
                 visible: true
@@ -756,11 +698,6 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("HEATING ERROR")
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
             }
 
             PropertyChanges {
@@ -791,11 +728,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
                 visible: true
@@ -820,11 +752,6 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("PROCESS FAILED\n\nCARRIAGE COMMUNICATION ERROR")
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
             }
 
             PropertyChanges {
@@ -861,11 +788,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Please clear the chamber and make\n" +
                       "sure no filament is caught in the\n" +
@@ -896,11 +818,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("This .Makerbot was prepared for\na different type of printer. Please\nexport it again for this printer type.\nError %1").arg(lastReportedErrorCode)
                 visible: true
@@ -922,11 +839,6 @@ LoggingItem {
                 target: contentRightItem.textHeader
                 text: qsTr("EXTRUDER MISMATCH")
                 visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader1
-                visible: false
             }
 
             PropertyChanges {

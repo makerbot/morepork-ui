@@ -1,13 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Controls 2.12
+
 Item {
-
-    enum Style {
-        Button,
-        ButtonWithHelp
-    }
-
     width: 400
     height: 408
 
@@ -21,12 +15,8 @@ Item {
         visible: showAllElements
     }
 
-    property int style: ContentRightSideForm.Button
-    property bool isCompleted: false
-
     property alias textHeader: textHeader
-    property alias textHeader1: textHeader1
-    property alias textHeader1Loading: textHeader1Loading
+    property alias textHeaderWaitingForUser: textHeaderWaitingForUser
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
@@ -35,7 +25,6 @@ Item {
     property alias buttonSecondary1: buttonSecondary1
     property alias buttonSecondary2: buttonSecondary2
     property alias slidingSwitch: slidingSwitch
-    property alias help: helpButton
 
     anchors.right: parent.right
     anchors.bottom: parent.bottom
@@ -58,37 +47,33 @@ Item {
             }
 
             TextHeadline {
-                id: textHeader1
+                id: textHeaderWaitingForUser
                 style: TextHeadline.Base
                 text: "standard header"
                 visible: false || showAllElements
+                opacity: waitingForUser ? 0.7 : 1
+                property bool waitingForUser: false
 
-                Item{
-                    id: textHeader1Loading
-                    visible: false || showAllElements
-                    anchors.verticalCenter: textHeader1.verticalCenter
-                    anchors.left: textHeader1.right
-                    anchors.leftMargin: 25
-                    height: 21
-                    width: 21
+                Image {
+                    id: waitingForUserImage
+                    source: textHeaderWaitingForUser.waitingForUser ?
+                                "qrc:/img/waiting_for_user.png" :
+                                "qrc:/img/waiting_for_user_complete.png"
+                    anchors.verticalCenter: textHeaderWaitingForUser.verticalCenter
+                    anchors.left: textHeaderWaitingForUser.right
+                    anchors.leftMargin: 24
 
-                    Image{
-                        source: "qrc:/img/popup_complete.png"
-                        anchors.verticalCenter: textHeader1.verticalCenter
-                        anchors.left: textHeader1.right
-                        sourceSize.height: 21
-                        sourceSize.width: 21
-                        visible: isCompleted
-                    }
-                    AnimatedImage{
-                        source: "qrc:/img/attach_extruder_loading.gif"
-                        anchors.verticalCenter: textHeader1.verticalCenter
-                        anchors.left: textHeader1.right
-                        anchors.leftMargin: 25
-                        visible: !isCompleted
-                        playing: true
-                        height: 21
-                        width: 21
+                    RotationAnimator {
+                        target: waitingForUserImage
+                        from: 0
+                        to: 360
+                        direction: RotationAnimator.Clockwise
+                        duration: 3000
+                        loops: Animation.Infinite
+                        running: textHeaderWaitingForUser.waitingForUser
+                        onRunningChanged: {
+                            waitingForUserImage.rotation = 0
+                        }
                     }
                 }
             }
@@ -131,47 +116,10 @@ Item {
         ColumnLayout {
             spacing: 24
 
-            RowLayout {
-                Layout.preferredWidth: 360
-                ButtonRectanglePrimary {
-                    id: buttonPrimary
-                    text: "label"
-                    Layout.preferredWidth: helpButton.visible ? 318 : 360
-                    visible: false || showAllElements
-                }
-
-                Button {
-                    id: helpButton
-                    Layout.preferredWidth: 32
-                    antialiasing: false
-                    smooth: false
-                    flat: true
-                    visible: style == ContentRightSideForm.ButtonWithHelp || showAllElements
-                    enabled: true
-
-                    contentItem: Item {
-                        Image {
-                            source: "qrc:/img/button_help.png"
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-
-                            Behavior on opacity {
-                                OpacityAnimator {
-                                    duration: 100
-                                }
-                            }
-                        }
-                    }
-                    Component.onCompleted: {
-                        this.onReleased.connect(logClick)
-                    }
-
-                    function logClick() {
-                        console.info(" Help clicked")
-                    }
-                }
-
-
+            ButtonRectanglePrimary {
+                id: buttonPrimary
+                text: "label"
+                visible: false || showAllElements
             }
 
             ButtonRectangleSecondary {
