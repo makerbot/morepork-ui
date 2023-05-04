@@ -13,6 +13,7 @@ ColumnLayout {
     property int customCurrentTemperature: -999
     property int customTargetTemperature: -999
     property alias type: headline.text
+    property bool headlineVisible: true
 
     property string idxAsAxis: {
         switch (extruderIdx) {
@@ -30,6 +31,7 @@ ColumnLayout {
     TextHeadline {
         id: headline
         text: qsTr("Extruder %1").arg(extruderIdx + 1)
+        visible: headlineVisible
     }
 
     RowLayout {

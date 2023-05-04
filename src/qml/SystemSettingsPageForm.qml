@@ -67,7 +67,7 @@ Item {
             resetToFactoryPopup.close()
             // Reset all screen positions
             resetSettingsSwipeViewPages()
-            fre.setFreStep(FreStep.Welcome)
+            fre.setFreStep(FreStep.StartSetLanguage)
             settings.resetPreferences()
         }
     }
@@ -313,18 +313,7 @@ Item {
             visible: false
 
             function altBack() {
-                if(!inFreStep) {
-                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-                }
-                else {
-                    skipFreStepPopup.open()
-                }
-            }
-
-            function skipFreStepAction() {
-                authorizeAccountPage.backToSettings()
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             }
 
             AuthorizeAccountPage {

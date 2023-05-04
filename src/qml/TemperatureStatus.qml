@@ -12,12 +12,14 @@ ColumnLayout {
     enum Extruder {
         Model,
         Support,
+        HBPCool,
         Both
     }
 
     property int showExtruder: TemperatureStatus.Extruder.Both
     property alias modelExtruder: modelExtruder
     property alias supportExtruder: supportExtruder
+    property alias hbpCool: hbpCool
 
     TemperatureStatusElement {
         id: modelExtruder
@@ -35,5 +37,14 @@ ColumnLayout {
             showExtruder == TemperatureStatus.Extruder.Support ||
             showExtruder == TemperatureStatus.Extruder.Both
         }
+    }
+
+    TemperatureStatusElement {
+        id: hbpCool
+        extruderIdx: TemperatureStatus.Extruder.HBPCool
+        customCurrentTemperature: bot.hbpCurrentTemp
+        customTargetTemperature: printPage.waitToCoolHBPTemperature
+        headlineVisible: false
+        visible: { showExtruder == TemperatureStatus.Extruder.HBPCool }
     }
 }

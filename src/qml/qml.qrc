@@ -262,5 +262,11 @@
         <file>PrintFileInfoPage.qml</file>
         <file>PowerButtonScreen.qml</file>
         <file>FreProgressItem.qml</file>
+        <file>SunflowerUnpackingForm.qml</file>
+        <file>SunflowerUnpacking.qml</file>
+        <file>FreChooseLanguagePage.qml</file>
+        <file>FreChooseLanguagePageForm.qml</file>
+        <file>MaterialCaseSetupForm.qml</file>
+        <file>MaterialCaseSetup.qml</file>
     </qresource>
 </RCC>

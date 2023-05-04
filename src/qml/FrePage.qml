@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import FreStepEnum 1.0
 import WifiStateEnum 1.0
+import MachineTypeEnum 1.0
 
 FrePageForm {
     function getTestPrint() {
@@ -53,12 +54,7 @@ FrePageForm {
 
             if(state == "wifi_setup") {
                 if(isNetworkConnectionAvailable) {
-                    if(isfirmwareUpdateAvailable) {
-                        fre.gotoNextStep(currentFreStep)
-                    }
-                    else {
-                        fre.setFreStep(FreStep.NamePrinter)
-                    }
+                    fre.gotoNextStep(currentFreStep)
                 }
                 else {
                     inFreStep = true
@@ -74,12 +70,6 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
-            } else if(state == "name_printer") {
-                inFreStep = true
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
-                settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "set_time_date") {
                 inFreStep = true
                 bot.getSystemTime()
@@ -98,11 +88,17 @@ FrePageForm {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.BuildPlateSettingsPage)
                 settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.AssistedLevelingPage)
+                settingsPage.buildPlateSettingsPage.assistedLevel.state = "fre_start_screen"
             } else if(state == "calibrate_extruders") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            } else if(state == "material_case_setup") {
+                inFreStep = true
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.MaterialCaseSetup)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad()
@@ -110,21 +106,51 @@ FrePageForm {
                 inFreStep = true
                 startTestPrint()
             } else if(state == "log_in") {
-                // login has a separate flow within the fre screen.
-            } else if(state == "setup_complete") {
-                fre.setFreStep(FreStep.FreComplete)
+                inFreStep = true
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AuthorizeAccountsPage)
+                settingsPage.systemSettingsPage.authorizeAccountPage.authorizeAccountWithCodePage.beginAuthWithCode()
+                settingsPage.systemSettingsPage.authorizeAccountPage.authorizeAccountSwipeView.swipeToItem(AuthorizeAccountPage.AuthorizeWithCode)
+            } else if(state == "magma_setup_guide1") {
+                state = "magma_setup_guide2"
             } else {
-                // At base state screen
-                if(!isNetworkConnectionAvailable) {
-                    // Goto Wifi Setup step
-                    fre.gotoNextStep(currentFreStep)
-                }
-                else if(isfirmwareUpdateAvailable) {
-                    fre.setFreStep(FreStep.SoftwareUpdate)
-                }
-                else {
-                    fre.setFreStep(FreStep.NamePrinter)
-                }
+                // For all screens not listed above, the default behavior
+                // is to go to the next step
+                fre.gotoNextStep(currentFreStep)
+
+
+            }
+        }
+
+        help {
+            onClicked: {
+                // Currently every help button in the FRE shows the same help
+                helpPopup.state = "fre"
+                helpPopup.open()
+            }
+        }
+    }
+
+    skipButton {
+        onClicked: {
+            if (state == "name_printer") {
+                // Skipping this step is the default
+                inFreStep = true
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
+                settingsPage.namePrinter.nameField.forceActiveFocus()
+            } else if(state == "base state" || state == "welcome") {
+                fre.setFreStep(FreStep.StartSetLanguage)
+            } else if(state == "magma_setup_guide1") {
+                 fre.setFreStep(FreStep.Welcome)
+            } else if(state == "magma_setup_guide2") {
+                state = "magma_setup_guide1"
+            } else {
+                // Every page that does not have custom logic for this should
+                // prompt to skip to the next step.
+                skipFreStepPopup.open()
             }
         }
     }

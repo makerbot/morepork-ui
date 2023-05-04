@@ -16,7 +16,7 @@ Item {
     }
 
     property alias textHeader: textHeader
-    property alias textHeader1: textHeader1
+    property alias textHeaderWaitingForUser: textHeaderWaitingForUser
     property alias numberedSteps: numberedSteps
     property alias textBody: textBody
     property alias textBody1: textBody1
@@ -47,12 +47,37 @@ Item {
             }
 
             TextHeadline {
-                id: textHeader1
+                id: textHeaderWaitingForUser
                 style: TextHeadline.Base
-                Layout.preferredWidth: parent.width
                 text: "standard header"
                 visible: false || showAllElements
+                opacity: waitingForUser ? 0.7 : 1
+                property bool waitingForUser: false
+
+                Image {
+                    id: waitingForUserImage
+                    source: textHeaderWaitingForUser.waitingForUser ?
+                                "qrc:/img/waiting_for_user.png" :
+                                "qrc:/img/waiting_for_user_complete.png"
+                    anchors.verticalCenter: textHeaderWaitingForUser.verticalCenter
+                    anchors.left: textHeaderWaitingForUser.right
+                    anchors.leftMargin: 24
+
+                    RotationAnimator {
+                        target: waitingForUserImage
+                        from: 0
+                        to: 360
+                        direction: RotationAnimator.Clockwise
+                        duration: 3000
+                        loops: Animation.Infinite
+                        running: textHeaderWaitingForUser.waitingForUser
+                        onRunningChanged: {
+                            waitingForUserImage.rotation = 0
+                        }
+                    }
+                }
             }
+
 
             NumberedSteps {
                 id: numberedSteps

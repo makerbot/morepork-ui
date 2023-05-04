@@ -202,30 +202,9 @@ MaterialPageForm {
     function extruderAttachText() {
         var output = defaultString
         if(itemAttachExtruder.extruder == 1) {
-            output = "Load Model Extruder into Slot 1"
-            if(bot.machineType == MachineType.Fire) {
-                output = qsTr("Load Model 1A or 1C Extruder into\nSlot 1")
-            }
-            else {
-                output = qsTr("Load Model 1A, 1X or 1C Extruder into\nSlot 1")
-            }
+            output = qsTr("Load Model Extruder into Slot 1")
         } else if(itemAttachExtruder.extruder == 2) {
-            output = "Load Support Extruder into Slot 2"
-            if(bot.extruderAType == ExtruderType.MK14) {
-                output = qsTr("Load Support 2A Extruder into\nSlot 2")
-            } else if(bot.extruderAType == ExtruderType.MK14_HOT) {
-                output = qsTr("Load Support 2X Extruder into\nSlot 2")
-            }
-            else if(bot.extruderAType == ExtruderType.MK14_EXP ||
-                      bot.extruderAType == ExtruderType.MK14_COMP) {
-                if(bot.machineType == MachineType.Fire) {
-                    output = qsTr("Load Support 2A Extruder into\nSlot 2")
-                } else {
-                    output = qsTr("Load Support 2A or 2X Extruder into\nSlot 2")
-                }
-            } else {
-                output = defaultString
-            }
+            output = qsTr("Load Support Extruder into Slot 2")
         } else {
             output = defaultString
         }
@@ -441,6 +420,10 @@ MaterialPageForm {
             itemAttachExtruder.state = "attach_extruder_step1"
             break
         case "attach_extruder_step1":
+            if(attach_extruder.buttonPrimary.style ==
+               ButtonRectanglePrimary.ButtonDisabledHelpEnabled) {
+                return
+            }
             itemAttachExtruder.state = "attach_extruder_step2"
             break
         case "attach_extruder_step2":
@@ -452,15 +435,18 @@ MaterialPageForm {
 
                 } else if(itemAttachExtruder.extruder == 2 &&
                         itemAttachExtruder.isAttached) {
-                    itemAttachExtruder.state = "attach_swivel_clips"
+                    itemAttachExtruder.state = "release_guidelines"
                 }
             } else {
-                itemAttachExtruder.state = "close_top_lid"
+                itemAttachExtruder.state = "attach_swivel_clips"
             }
             break
          case "attach_swivel_clips":
                itemAttachExtruder.state = "close_top_lid"
                break
+         case "release_guidelines":
+                itemAttachExtruder.state = "close_top_lid"
+                break;
          case "close_top_lid":
             // done or run calibration
             itemAttachExtruder.state = "base state"
@@ -487,5 +473,10 @@ MaterialPageForm {
             //default behavior
             break
         }
+    }
+
+    attach_extruder.buttonPrimary.help.onClicked: {
+        helpPopup.open()
+        helpPopup.state = "attach_extruders"
     }
 }

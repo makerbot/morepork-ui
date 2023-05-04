@@ -7,6 +7,7 @@ Button {
     enum Style {
         Button,
         ButtonWithHelp,
+        ButtonDisabledHelpEnabled,
         DelayedEnable
     }
     property int style: ButtonRectangleBase.Button
@@ -41,7 +42,7 @@ Button {
     width: style == ButtonRectangleBase.Button ? 360 : 318
     Layout.preferredWidth: style == ButtonRectangleBase.Button ? 360 : 318
     height: 52
-    text: qsTr("Button")
+    text: "Button"
     antialiasing: false
     smooth: false
     flat: true
@@ -66,7 +67,8 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-        opacity: buttonRectangle.enabled ? 1 : 0.5
+        opacity: !buttonRectangle.enabled ||
+                  buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled ? 0.5 : 1
 
         Behavior on opacity {
             OpacityAnimator {
@@ -80,7 +82,8 @@ Button {
         implicitWidth: 136
         implicitHeight: 52
         radius: 5
-        opacity: buttonRectangle.enabled ? 1 : 0.5
+        opacity: !buttonRectangle.enabled ||
+                  buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled ? 0.5 : 1
 
         Behavior on opacity {
             OpacityAnimator {
@@ -94,7 +97,7 @@ Button {
     }
 
     function logClick() {
-        console.info(logKey + " " + text + " clicked")
+        console.info(logKey + " [" + text + "] clicked")
     }
 
     Button {
@@ -108,14 +111,14 @@ Button {
         antialiasing: false
         smooth: false
         flat: true
-        visible: buttonRectangle.style == ButtonRectangleBase.ButtonWithHelp
+        visible: buttonRectangle.style == ButtonRectangleBase.ButtonWithHelp ||
+                 buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled
 
         contentItem: Item {
             Image {
                 source: "qrc:/img/button_help.png"
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                opacity: buttonRectangle.enabled ? 1 : 0.5
 
                 Behavior on opacity {
                     OpacityAnimator {
@@ -129,7 +132,6 @@ Button {
             id: backgroundElement1
             color: "#00000000"
             radius: 5
-            opacity: buttonRectangle.enabled ? 1 : 0.5
 
             Behavior on opacity {
                 OpacityAnimator {
