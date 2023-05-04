@@ -488,6 +488,7 @@ Item {
                                  ButtonRectanglePrimary.ButtonWithHelp :
                                  ButtonRectanglePrimary.ButtonDisabledHelpEnabled
                         }
+                        buttonPrimary.enabled: true
                     }
                 },
 
@@ -522,6 +523,7 @@ Item {
                         ]
                         buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.style: ButtonRectanglePrimary.Button
+                        buttonPrimary.enabled: true
                         textHeaderWaitingForUser.visible: false
                     }
                 },

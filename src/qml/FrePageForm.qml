@@ -13,7 +13,6 @@ LoggingItem {
     property alias skipButton: freContentRight.buttonSecondary1
 
     property bool skipMagmaSteps: bot.machineType != MachineType.Magma
-    property alias helpButton: freContentRight.help
 
     FreChooseLanguagePage {
         id: fre_choose_language
