@@ -106,6 +106,9 @@ LoggingItem {
                                                bay2.filamentMaterialName
 
     function delayedEnableRetryButton() {
+        if(state != "loaded_filament" || state != "unloaded_filament") {
+            return
+        }
         // Immediately starting the load/unload process
         // after it completes, presumably while kaiten is
         // still not fully finished cleaning up, causes it
@@ -145,7 +148,6 @@ LoggingItem {
             break;
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
-            delayedEnableRetryButton()
             if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
                 state = "error"
@@ -213,6 +215,7 @@ LoggingItem {
                     state = "error"
                 }
             }
+            delayedEnableRetryButton()
             break;
             //The case when loading/unloading completes normally by
             //itself, in the middle of print process. Then the bot doesn't
@@ -1160,6 +1163,10 @@ LoggingItem {
                 target: contentRightSide
                 textBody {
                    visible: false
+                }
+                buttonPrimary {
+                    text: qsTr("RETRY EXTRUDING")
+                    visible: true
                 }
             }
         }
