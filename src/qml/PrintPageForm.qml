@@ -183,7 +183,7 @@ Item {
     function getPrintFileDetails(file) {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
-        file_name = file.fileBaseName
+        file_name = inFreStep ? "TEST PRINT" : file.fileBaseName
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
         print_model_material = file.materialA
@@ -1017,6 +1017,7 @@ Item {
                 height: sourceSize.height -10
                 Layout.alignment: Qt.AlignHCenter
                 source: "qrc:/img/process_error_small.png"
+                visible: !inFreStep
             }
 
             TextHeadline {
