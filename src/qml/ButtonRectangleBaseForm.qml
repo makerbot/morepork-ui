@@ -81,7 +81,7 @@ Button {
     }
 
     function logClick() {
-        console.info(logKey + " " + text + " clicked")
+        console.info(logKey + " [" + text + "] clicked")
     }
 
     Button {

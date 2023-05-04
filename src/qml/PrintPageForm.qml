@@ -6,6 +6,7 @@ import ProcessStateTypeEnum 1.0
 import StorageFileTypeEnum 1.0
 import ErrorTypeEnum 1.0
 import FreStepEnum 1.0
+import MachineTypeEnum 1.0
 
 Item {
     anchors.fill: parent
@@ -46,7 +47,8 @@ Item {
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
     property alias printErrorScreen: errorScreen
-    readonly property int waitToCoolTemperature: 70
+    readonly property int waitToCoolBuildplaneTemperature: 70
+    readonly property int waitToCoolHBPTemperature: 50
     property bool isFileCopying: storage.fileIsCopying
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
 
@@ -154,22 +156,28 @@ Item {
     }
 
     WaitToCoolChamberScreen {
-        id: waitToCoolChamber
+        id: waitToCoolScreen
         z: 1
         anchors.verticalCenterOffset: -20
-        visible: waitToCoolChamberScreenVisible
-        continueButton.button_mouseArea.onClicked: {
-            waitToCoolChamberScreenVisible = false
-        }
+        visible: waitToCoolScreenVisible
     }
 
     property bool isPrintDone: bot.process.stateType == ProcessStateType.Completed ||
                                bot.process.stateType == ProcessStateType.Failed ||
                                bot.process.stateType == ProcessStateType.Cancelling
     onIsPrintDoneChanged: {
-        if(isPrintDone && bot.buildplaneCurrentTemp > waitToCoolTemperature) {
-            waitToCoolChamber.waitToCoolChamberScreenVisible = true
-            waitToCoolChamber.startTimer()
+        if (bot.machineType != MachineType.Magma) {
+            if (isPrintDone && (bot.buildplaneCurrentTemp > waitToCoolBuildplaneTemperature)) {
+                waitToCoolScreen.waitToCoolScreenVisible = true
+                waitToCoolScreen.waitToCoolBuildplaneScreenVisible = true
+                waitToCoolScreen.initMon()
+            }
+        } else { // MachineType.Magma
+            if (isPrintDone && (bot.hbpCurrentTemp > waitToCoolHBPTemperature)) {
+                waitToCoolScreen.waitToCoolScreenVisible = true
+                waitToCoolScreen.waitToCoolHBPScreenVisible = true
+                waitToCoolScreen.initMon()
+            }
         }
     }
 
