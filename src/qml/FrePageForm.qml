@@ -460,15 +460,18 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("START")
                 enabled: true
+                style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
                 enabled: true
+                Layout.preferredWidth: (freContentRight.buttonPrimary.style == ButtonRectangleBaseForm.ButtonWithHelp) ? 318 : 360
             }
+
 
             PropertyChanges {
                 target: setupProgress
@@ -522,15 +525,14 @@ LoggingItem {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
                 enabled: true
-            }
-            PropertyChanges {
-                target: freContentRight
-                style: ContentRightSideForm.ButtonWithHelp
+                style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                enabled: true
+                Layout.preferredWidth: freContentRight.buttonPrimary.width
             }
 
             PropertyChanges {
@@ -606,12 +608,16 @@ LoggingItem {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
                 enabled: true
+                style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                enabled: true
+                Layout.preferredWidth: freContentRight.buttonPrimary.width
             }
+
 
             PropertyChanges {
                 target: setupProgress
@@ -670,11 +676,13 @@ LoggingItem {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
                 enabled: true
+                style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                Layout.preferredWidth: freContentRight.buttonPrimary.width
             }
 
             PropertyChanges {
@@ -746,11 +754,13 @@ LoggingItem {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
                 enabled: true
+                style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                Layout.preferredWidth: freContentRight.buttonPrimary.width
             }
 
             PropertyChanges {
