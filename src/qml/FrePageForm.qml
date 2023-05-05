@@ -596,7 +596,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
+                text: qsTr("Calibration enables precise 3D printing. The printer must calibrate new extruders for best print quality.")
             }
 
             PropertyChanges {
