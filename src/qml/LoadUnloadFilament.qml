@@ -12,6 +12,9 @@ LoadUnloadFilamentForm {
                 state = "cut_filament_tip"
             } else if(state == "place_material") {
                 state = "no_nfc_reader_feed_filament"
+            } else if(state == "no_nfc_reader_feed_filament") {
+                // Do nothing. The button is disabled with the button style
+                // and only the help button is enabled in this screen.
             } else if(state == "extrusion") {
                 bot.loadFilamentStop()
             } else if(state == "loaded_filament") {
@@ -55,7 +58,7 @@ LoadUnloadFilamentForm {
                 } else {
                     state = "unloaded_filament_1"
                 }
-            } else if(state = "unloaded_filament_1") {
+            } else if(state == "unloaded_filament_1") {
                 processDone()
             } else if(state == "error" || "error_not_extruding") {
                 retryLoadUnload()

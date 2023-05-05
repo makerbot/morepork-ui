@@ -439,7 +439,12 @@ LoggingItem {
 
                 textHeader {
                     style: TextHeadline.Base
-                    text: qsTr("FEED INTO PORT %1<br>WAITING FOR MATERIAL...").arg(bayID)
+                    text: qsTr("FEED INTO PORT %1").arg(bayID)
+                    visible: true
+                }
+                textHeaderWaitingForUser {
+                    text: qsTr("WAITING FOR MATERIAL")
+                    waitingForUser: true
                     visible: true
                 }
                 textBody {
@@ -451,7 +456,7 @@ LoggingItem {
                     visible: false
                 }
                 buttonPrimary {
-                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    style: ButtonRectanglePrimary.ButtonDisabledHelpEnabled
                     text: qsTr("NEXT")
                     visible: true
                 }
