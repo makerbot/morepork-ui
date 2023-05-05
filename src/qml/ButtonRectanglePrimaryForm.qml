@@ -4,5 +4,8 @@ import QtQuick.Layouts 1.12
 
 ButtonRectangleBase {
     logKey: "ButtonRectanglePrimary"
-    color: enabled ? (pressed ? "#B2B2B2" : "#FFFFFF") : "#808080"
+    color: {
+        (!enabled || style == ButtonRectangleBase.ButtonDisabledHelpEnabled) ?
+               "#808080" : (pressed ? "#B2B2B2" : "#FFFFFF")
+    }
 }

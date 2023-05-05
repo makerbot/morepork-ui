@@ -89,7 +89,7 @@ Item {
                     id: startPrintButton
                     width: 300
                     Layout.preferredWidth: 300
-                    text: inFreStep ? qsTr("START TEST PRINT") : qsTr("START")
+                    text: qsTr("START")
                     onClicked: {
 
                         if((startPrintSource == PrintPage.FromLocal && !startPrintCheck())

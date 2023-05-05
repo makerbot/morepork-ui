@@ -7,49 +7,25 @@ import MachineTypeEnum 1.0
 LoggingItem {
     itemName: "FrePage"
     id: main_fre_item
-    width: 800
     height: 480
+    width: 800
     property alias continueButton: freContentRight.buttonPrimary
     property alias skipButton: freContentRight.buttonSecondary1
-    property alias helpButton: freContentRight.help
 
-    ContentLeftSide {
-        id: freContentLeft
-        loadingIcon {
-            visible: true
-            icon_image: LoadingIcon.Success
-        }
-        visible: false
-    }
+    property bool skipMagmaSteps: bot.machineType != MachineType.Magma
 
-    ContentRightSide {
-        id: freContentRight
-        textHeader {
-            text: qsTr("WELCOME")
-            visible: true
-        }
-
-        textBody {
-            text: qsTr("Follow these steps to set up your\n%1 Performance 3D Printer.").arg(productName)
-            visible: true
-        }
-
-        buttonPrimary {
-            text: qsTr("BEGIN SETUP")
-            visible: true
-        }
-
-        buttonSecondary1 {
-            text: qsTr("SKIP")
-        }
-
+    FreChooseLanguagePage {
+        id: fre_choose_language
+        z: 1
+        visible: (currentFreStep == FreStep.StartSetLanguage)
     }
 
     Item {
         id: progress_item
         width: 400
         height: 480
-        visible: false
+        visible: !(currentFreStep == FreStep.StartSetLanguage) &&
+                 !(currentFreStep == FreStep.SetupComplete)
         anchors.bottom: parent.bottom
         anchors.left: parent.left
 
@@ -61,6 +37,7 @@ LoggingItem {
             anchors.leftMargin: 59
             anchors.top: parent.top
             gradient: Gradient {
+
                 GradientStop {
                     id: startStep
                     position: 0.0
@@ -92,7 +69,7 @@ LoggingItem {
 
             FreProgressItem{
                 id: setupProgress
-                text: qsTr("SET UP")
+                text: qsTr("SETUP")
                 Layout.leftMargin: 32
                 state: FreProgressItem.Active
             }
@@ -127,9 +104,52 @@ LoggingItem {
         }
     }
 
-    property bool skipMagmaSteps: bot.machineType != MachineType.Magma
+
+    ContentLeftSide {
+        id: freContentLeft
+        anchors.verticalCenter: parent.verticalCenter
+        loadingIcon {
+            icon_image: LoadingIcon.Success
+        }
+        image {
+            source: "qrc:/img/fre_help_qr_code.png"
+        }
+        visible: false
+    }
+
+    ContentRightSide {
+        id: freContentRight
+        anchors.verticalCenter: parent.verticalCenter
+        visible: true
+
+        textHeader {
+            text: qsTr("WELCOME")
+            visible: true
+        }
+
+        textBody {
+            text: qsTr("The following procedure will help you set up your %1.").arg(productName.toUpperCase())
+            visible: true
+        }
+
+        textBody1 {
+            text: qsTr("")
+            visible: false
+        }
+
+        buttonPrimary {
+            text: qsTr("BEGIN SETUP")
+            visible: true
+        }
+
+        buttonSecondary1 {
+            text: qsTr("SKIP")
+            visible: true
+        }
+    }
 
     onSkipMagmaStepsChanged: {
+        fre.setStepEnable(FreStep.SunflowerSetupGuide, !skipMagmaSteps)
         fre.setStepEnable(FreStep.SunflowerUnpacking, !skipMagmaSteps)
         fre.setStepEnable(FreStep.MaterialCaseSetup, !skipMagmaSteps)
     }
@@ -141,30 +161,95 @@ LoggingItem {
 
     states: [
         State {
-            name: "wifi_setup"
+            name: "welcome"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
-                text: {
-                    if(isNetworkConnectionAvailable) {
-                        qsTr("CONNECTED TO NETWORK")
-                    }
-                    else {
-                        qsTr("WI-FI SETUP")
-                    }
-                }
+                text: qsTr("WELCOME")
             }
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: {
-                    if(isNetworkConnectionAvailable) {
-                        qsTr("You seem to be connected to a network.")
-                    }
-                    else {
-                        qsTr("Connect to the internet to enable remote monitoring and\nprinting from any connected device.")
-                    }
-                }
+                text: qsTr("The following procedure will help you set up your %1.").arg(productName.toUpperCase())
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("BEGIN SETUP")
+
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                text: qsTr("< BACK")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+        },
+        State {
+            name: "wifi_setup"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("WIFI AND NETWORK")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("For the best experience using METHOD printers, "+
+                           "it is recommended that you connect to a wi-fi network "+
+                           "or plug in an ethernet cable.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
             }
 
             PropertyChanges {
@@ -174,9 +259,15 @@ LoggingItem {
                         qsTr("CONTINUE")
                     }
                     else {
-                        qsTr("CHOOSE NETWORK")
+                        qsTr("CONNECT TO NETWORK")
                     }
                 }
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                text: qsTr("OFFLINE SET UP")
+                enabled: !isNetworkConnectionAvailable
             }
 
             PropertyChanges {
@@ -213,19 +304,31 @@ LoggingItem {
             name: "software_update"
 
             PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
+
+            PropertyChanges {
                 target: freContentRight.textHeader
-                text: qsTr("PRINTER SOFTWARE UPDATE AVAILABLE")
+                text: qsTr("FIRMWARE UPDATE")
                 anchors.topMargin: 25
             }
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("Update the %1's printer software for the most up to date\nfeatures and quality.").arg(productName)
+                text: qsTr("The latest firmware update is recommended to improve "+
+                           "machine reliablility and print quality.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
             }
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("START")
             }
 
             PropertyChanges {
@@ -267,6 +370,12 @@ LoggingItem {
             name: "set_time_date"
 
             PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
+
+            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("SET THE PRINTER'S CLOCK")
             }
@@ -277,8 +386,13 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("NEXT")
             }
 
             PropertyChanges {
@@ -319,10 +433,25 @@ LoggingItem {
         State {
             name: "attach_extruders"
 
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("ATTACH EXTRUDERS")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("This procedure will guide you through the process of attaching your extruders.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
             }
 
             PropertyChanges {
@@ -374,11 +503,6 @@ LoggingItem {
                 target: endStep
                 position: 0.469
             }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("This procedure will guide you through the process of attaching your extruders.")
-            }
         },
         State {
             name: "level_build_plate"
@@ -391,10 +515,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-            }
-            PropertyChanges {
-                target: freContentRight
-                style: ContentRightSideForm.ButtonWithHelp
+                style: ButtonRectanglePrimary.ButtonWithHelp
             }
 
             PropertyChanges {
@@ -451,18 +572,34 @@ LoggingItem {
             name: "calibrate_extruders"
 
             PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
+
+            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("CALIBRATE EXTRUDERS")
             }
 
             PropertyChanges {
-                target: freContentRight
-                style: ContentRightSideForm.ButtonWithHelp
+                target: freContentRight.textBody
+                text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
             }
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: true
             }
 
             PropertyChanges {
@@ -503,11 +640,6 @@ LoggingItem {
                 target: endStep
                 position: 0.469
             }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Calibration enables precise 3d printing. The printer must calibrate\nnew extruders for best print quality.")
-            }
         },
         State {
             name: "material_case_setup"
@@ -516,6 +648,11 @@ LoggingItem {
                 target: freContentRight.textHeader
                 text: qsTr("MATERIAL CASE SET UP")
                 anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Follow the on screen steps to set up the material case and load materials.")
             }
 
             PropertyChanges {
@@ -567,19 +704,30 @@ LoggingItem {
                 target: endStep
                 position: 0.637
             }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Follow the on screen steps to set up the material case and load materials.")
-            }
         },
         State {
             name: "load_material"
 
             PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
+
+            PropertyChanges {
                 target: freContentRight.textHeader
                 text: qsTr("LOAD MATERIAL")
                 anchors.topMargin: 25
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Follow the on screen steps to load material into each bay.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
             }
 
             PropertyChanges {
@@ -631,14 +779,15 @@ LoggingItem {
                 target: endStep
                 position: 0.637
             }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Follow the on screen steps to load material into each bay.")
-            }
         },
         State {
             name: "test_print"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
@@ -646,8 +795,18 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Start a test print to ensure the printer is set up correctly.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("CONTINUE")
+                text: qsTr("START")
             }
 
             PropertyChanges {
@@ -693,14 +852,15 @@ LoggingItem {
                 target: endStep
                 position: 0.8
             }
-
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("Start a test print to ensure the printer is set up correctly.")
-            }
         },
         State {
             name: "name_printer"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
@@ -710,6 +870,11 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.textBody
                 text: qsTr("You can change the printer name at any point in the system settings.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
             }
 
             PropertyChanges {
@@ -764,7 +929,103 @@ LoggingItem {
             }
         },
         State {
+            name: "magma_setup_guide1"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.source: "qrc:/img/fre_help_qr_code.png"
+                image.visible: true
+                loadingIcon.visible: false
+                visible: true
+            }
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("METHOD XL SETUP GUIDE")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("We highly recommend following along for additional "+
+                           "instructions + videos to guide you through your set up.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("NEXT")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                text: qsTr("< BACK")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: false
+            }
+        },
+        State {
+            name: "magma_setup_guide2"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.source: "qrc:/img/remove_upper_material.png"
+                image.visible: true
+                loadingIcon.visible: false
+                visible: true
+            }
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("Box 1 contains your material case and can be removed now.")
+            }
+
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                text: qsTr("Box 2 contains extruders and tools. The onboarding will "+
+                           "guide you to remove that later in the process.")
+                font.weight: Font.Normal
+                visible: true
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("NEXT")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                text: qsTr("< BACK")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: false
+            }
+        },
+
+        State {
             name: "log_in"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: false
+            }
 
             PropertyChanges {
                 target: freContentRight.textHeader
@@ -774,6 +1035,17 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONNECT ACCOUNT")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("CloudPrint is a browser-based app that enables you to prepare & send files directly to your printer.\n\nCreate a MakerBot account and connect your printer to CloudPrint at:")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody1
+                text: qsTr("cloudprint.makerbot.com")
+
             }
 
             PropertyChanges {
@@ -821,22 +1093,14 @@ LoggingItem {
                 position: 0.968
             }
 
-            PropertyChanges {
-                target: freContentRight.textBody
-                text: qsTr("CloudPrint is a browser-based app that enables you to prepare & send files directly to your printer.\n\nCreate a MakerBot account and connect your printer to CloudPrint at:")
-            }
-
-            PropertyChanges {
-                target: freContentRight.textBody1
-                text: qsTr("cloudprint.makerbot.com")
-                visible: true
-            }
         },
         State {
             name: "setup_complete"
 
             PropertyChanges {
                 target: freContentLeft
+                image.visible: false
+                loadingIcon.visible: true
                 visible: true
             }
 
@@ -852,14 +1116,20 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: freContentRight.textBody1
+                font.weight: Font.Bold
+                text: qsTr("cloudprint.makerbot.com")
+                visible: true
+            }
+
+            PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("FINISH")
             }
 
             PropertyChanges {
-                target: freContentRight.textBody1
-                text: qsTr("cloudprint.makerbot.com")
-                visible: true
+                target: freContentRight.buttonSecondary1
+                visible: false
             }
 
             PropertyChanges {

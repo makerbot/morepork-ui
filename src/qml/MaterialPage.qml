@@ -202,9 +202,9 @@ MaterialPageForm {
     function extruderAttachText() {
         var output = defaultString
         if(itemAttachExtruder.extruder == 1) {
-            output = "Load Model Extruder into Slot 1"
+            output = qsTr("Load Model Extruder into Slot 1")
         } else if(itemAttachExtruder.extruder == 2) {
-            output = "Load Support Extruder into Slot 2"
+            output = qsTr("Load Support Extruder into Slot 2")
         } else {
             output = defaultString
         }
@@ -428,6 +428,10 @@ MaterialPageForm {
             itemAttachExtruder.state = "attach_extruder_step1"
             break
         case "attach_extruder_step1":
+            if(attach_extruder.buttonPrimary.style ==
+               ButtonRectanglePrimary.ButtonDisabledHelpEnabled) {
+                return
+            }
             itemAttachExtruder.state = "attach_extruder_step2"
             break
         case "attach_extruder_step2":
@@ -477,5 +481,10 @@ MaterialPageForm {
             //default behavior
             break
         }
+    }
+
+    attach_extruder.buttonPrimary.help.onClicked: {
+        helpPopup.open()
+        helpPopup.state = "attach_extruders"
     }
 }
