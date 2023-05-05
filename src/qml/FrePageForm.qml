@@ -262,6 +262,7 @@ LoggingItem {
                         qsTr("CONNECT TO NETWORK")
                     }
                 }
+                enabled: true
             }
 
             PropertyChanges {
@@ -328,7 +329,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("START")
+                text: qsTr("CONTINUE")
+                enabled: true
             }
 
             PropertyChanges {
@@ -392,12 +394,14 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("NEXT")
+                text: qsTr("CONTINUE")
+                enabled: true
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                enabled: true
             }
 
             PropertyChanges {
@@ -457,11 +461,13 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
+                enabled: true
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                enabled: true
             }
 
             PropertyChanges {
@@ -515,7 +521,11 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                style: ButtonRectanglePrimary.ButtonWithHelp
+                enabled: true
+            }
+            PropertyChanges {
+                target: freContentRight
+                style: ContentRightSideForm.ButtonWithHelp
             }
 
             PropertyChanges {
@@ -595,6 +605,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
+                enabled: true
             }
 
             PropertyChanges {
@@ -658,6 +669,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
+                enabled: true
             }
 
             PropertyChanges {
@@ -733,6 +745,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
+                enabled: true
             }
 
             PropertyChanges {
@@ -806,7 +819,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("START")
+                text: qsTr("CONTINUE")
+                enabled: true
             }
 
             PropertyChanges {
@@ -880,6 +894,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("NEXT")
+                enabled: true
             }
 
             PropertyChanges {
@@ -1035,6 +1050,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONNECT ACCOUNT")
+                enabled: true
             }
 
             PropertyChanges {
@@ -1051,6 +1067,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 visible: true
+                enabled: true
             }
 
             PropertyChanges {
@@ -1125,6 +1142,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("FINISH")
+                enabled: true
             }
 
             PropertyChanges {
