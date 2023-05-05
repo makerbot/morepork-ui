@@ -264,6 +264,7 @@ Item {
             property int backSwipeIndex: MaterialPage.BasePage
             property string topBarTitle: qsTr("Load/Unload")
             property bool hasAltBack: true
+            property bool backIsCancel: true
             visible: false
 
             function altBack() {
@@ -472,7 +473,6 @@ Item {
                             qsTr("Open the lock"),
                             qsTr("Open the handle"),
                             extruderAttachText()]
-                        numberedSteps.inactiveSteps: [false, false, false]
                         buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.style: {
                             // We use a custom Button style to selectively disable only the button

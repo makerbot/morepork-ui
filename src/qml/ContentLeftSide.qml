@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
+import QtGraphicalEffects 1.0
 
 Item {
     width: 400
@@ -23,6 +24,22 @@ Item {
 
     anchors.left: parent.left
     anchors.bottom: parent.bottom
+
+    LinearGradient {
+        z: 1
+        rotation: -90
+        width: parent.height
+        height: 90
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenterOffset: parent.width/2 - height/2
+        anchors.verticalCenter: parent.verticalCenter
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: "#00000000" }
+            GradientStop { position: 1.0; color: "#000000" }
+        }
+        visible: animatedImage.visible || image.visible
+        cached: true
+    }
 
     AnimatedImage {
         id: animatedImage
