@@ -139,8 +139,10 @@ LoggingItem {
         switch(currentState) {
         case ProcessStateType.WaitingForFilament:
             // Landing screen depending on whether we're loading on
-            // Method/X or XL.
-            if(bot.hasFilamentBay) {
+            // Method/X or XL or purging.
+            if(extruderFilamentSwitch) {
+                state = "preheating"
+            } else if(bot.hasFilamentBay) {
                 state = "cut_filament_tip"
             } else {
                 state = "place_dessicant"
