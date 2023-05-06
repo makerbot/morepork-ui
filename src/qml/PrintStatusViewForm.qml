@@ -105,7 +105,9 @@ LoggingItem {
                     showActionButtons: {
                         bot.process.stateType != ProcessStateType.Cancelled &&
                         bot.process.stateType != ProcessStateType.Completed &&
-                        bot.process.stateType != ProcessStateType.Failed
+                        bot.process.stateType != ProcessStateType.Failed &&
+                        bot.process.stateType != ProcessStateType.Cancelling &&
+                        bot.process.stateType != ProcessStateType.CleaningUp
                     }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
