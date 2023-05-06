@@ -73,8 +73,7 @@ LoggingItem {
         Page0,
         Page1,
         Page2,
-        Page3,
-        Page4
+        Page3
     }
 
     FailurePrintFeedback {
@@ -270,53 +269,21 @@ LoggingItem {
                     }
                 }
 
-                TemperatureStatusElement {
-                    visible: (bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
-                    customCurrentTemperature: {
-                        if(bot.process.stepStr == "heating_chamber"){
-                            bot.buildplaneCurrentTemp
-                        } else if(bot.process.stepStr == "heating_build_platform"){
-                            bot.hbpCurrentTemp
+                TemperatureStatus {
+                    visible: bot.process.stateType == ProcessStateType.Loading &&
+                             bot.process.stepStr != "waiting_for_file" &&
+                             bot.process.stepStr != "transfer"
+                    showComponent: {
+                        if(bot.process.stepStr == "heating_chamber") {
+                            TemperatureStatus.Chamber
+                        } else if(bot.process.stepStr == "heating_build_platform") {
+                            TemperatureStatus.HeatedBuildPlate
                         } else if(bot.extruderATargetTemp > 0) {
-                            bot.extruderACurrentTemp
+                            TemperatureStatus.BothExtruders
                         } else {
-                            bot.buildplaneCurrentTemp
+                            TemperatureStatus.Chamber
                         }
                     }
-                    customTargetTemperature: {
-                        if(bot.process.stepStr == "heating_chamber"){
-                            bot.buildplaneTargetTemp
-                        } else if(bot.process.stepStr == "heating_build_platform"){
-                            bot.hbpTargetTemp
-                        } else if(bot.extruderATargetTemp > 0) {
-                            bot.extruderATargetTemp
-                        } else {
-                            bot.buildplaneTargetTemp
-                        }
-                    }
-
-                    type: {
-                        if (bot.process.stateType == ProcessStateType.Loading) {
-                            if(bot.process.stepStr == "heating_chamber") {
-                                qsTr("CHAMBER")
-                            } else if(bot.process.stepStr == "heating_build_platform") {
-                                qsTr("BUILD PLATE")
-                            } else if(bot.extruderATargetTemp > 0) {
-                                qsTr("EXTRUDER 1")
-                            } else {
-                                qsTr("CHAMBER")
-                            }
-                        }
-                    }
-                }
-
-                TemperatureStatusElement {
-                    visible: (bot.extruderBTargetTemp > 0 && bot.process.stateType == ProcessStateType.Loading &&
-                              !(bot.process.stepStr == "heating_chamber" || bot.process.stepStr == "heating_build_platform"))
-                    customCurrentTemperature: bot.extruderBCurrentTemp
-                    customTargetTemperature: bot.extruderBTargetTemp
-
-                    type: qsTr("EXTRUDER 2")
                 }
 
                 RoundedButton {
@@ -370,7 +337,7 @@ LoggingItem {
         }
 
         Item {
-            id: page4
+            id: page3
 
             TextHeadline{
                 id: name_printer

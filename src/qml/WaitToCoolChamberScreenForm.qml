@@ -167,7 +167,12 @@ LoggingItem {
                 visible: true
             }
             temperatureStatus {
-                showExtruder: TemperatureStatus.Extruder.HBPCool
+                showComponent: TemperatureStatus.Generic
+                component1 {
+                    showComponentName: false
+                    customCurrentTemperature: bot.hbpCurrentTemp
+                    customTargetTemperature: printPage.waitToCoolHBPTemperature
+                }
                 visible: true
             }
             buttonPrimary {

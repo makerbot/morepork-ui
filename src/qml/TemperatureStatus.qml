@@ -7,44 +7,73 @@ import MachineTypeEnum 1.0
 
 ColumnLayout {
     width: 360
+    height: children.height
     spacing: 20
 
-    enum Extruder {
-        Model,
-        Support,
-        HBPCool,
-        Both
+    enum Component {
+        ModelExtruder,
+        SupportExtruder,
+        BothExtruders,
+        Chamber,
+        HeatedBuildPlate,
+        Generic
     }
 
-    property int showExtruder: TemperatureStatus.Extruder.Both
-    property alias modelExtruder: modelExtruder
-    property alias supportExtruder: supportExtruder
-    property alias hbpCool: hbpCool
+    property int showComponent: TemperatureStatus.BothExtruders
+    property alias component1: component1
+    property alias component2: component2
 
     TemperatureStatusElement {
-        id: modelExtruder
-        extruderIdx: TemperatureStatus.Extruder.Model
-        visible: {
-            showExtruder == TemperatureStatus.Extruder.Model ||
-            showExtruder == TemperatureStatus.Extruder.Both
+        id: component1
+        componentName: {
+            if(showComponent == TemperatureStatus.ModelExtruder ||
+               showComponent == TemperatureStatus.BothExtruders) {
+                qsTr("EXTRUDER 1")
+            } else if(showComponent == TemperatureStatus.SupportExtruder) {
+                qsTr("EXTRUDER 2")
+            } else if(showComponent == TemperatureStatus.Chamber) {
+                qsTr("CHAMBER")
+            } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
+                qsTr("BUILD PLATE")
+            } else if(showComponent == TemperatureStatus.Generic) {
+                qsTr("GENERIC HEATER")
+            }
+        }
+        customCurrentTemperature: {
+            if(showComponent == TemperatureStatus.ModelExtruder ||
+               showComponent == TemperatureStatus.BothExtruders) {
+                bot.extruderACurrentTemp
+            } else if(showComponent == TemperatureStatus.SupportExtruder) {
+                bot.extruderBCurrentTemp
+            } else if(showComponent == TemperatureStatus.Chamber) {
+                bot.chamberCurrentTemp
+            } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
+                bot.hbpCurrentTemp
+            } else if(showComponent == TemperatureStatus.Generic) {
+                -999
+            }
+        }
+        customTargetTemperature: {
+            if(showComponent == TemperatureStatus.ModelExtruder ||
+               showComponent == TemperatureStatus.BothExtruders) {
+                bot.extruderATargetTemp
+            } else if(showComponent == TemperatureStatus.SupportExtruder) {
+                bot.extruderBTargetTemp
+            } else if(showComponent == TemperatureStatus.Chamber) {
+                bot.chamberTargetTemp
+            } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
+                bot.hbpTargetTemp
+            } else if(showComponent == TemperatureStatus.Generic) {
+                -999
+            }
         }
     }
 
     TemperatureStatusElement {
-        id: supportExtruder
-        extruderIdx: TemperatureStatus.Extruder.Support
-        visible: {
-            showExtruder == TemperatureStatus.Extruder.Support ||
-            showExtruder == TemperatureStatus.Extruder.Both
-        }
-    }
-
-    TemperatureStatusElement {
-        id: hbpCool
-        extruderIdx: TemperatureStatus.Extruder.HBPCool
-        customCurrentTemperature: bot.hbpCurrentTemp
-        customTargetTemperature: printPage.waitToCoolHBPTemperature
-        headlineVisible: false
-        visible: { showExtruder == TemperatureStatus.Extruder.HBPCool }
+        id: component2
+        componentName: qsTr("EXTRUDER 2")
+        customCurrentTemperature: bot.extruderBCurrentTemp
+        customTargetTemperature: bot.extruderBTargetTemp
+        visible: showComponent == TemperatureStatus.BothExtruders
     }
 }

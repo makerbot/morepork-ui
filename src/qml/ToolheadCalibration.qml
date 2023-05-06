@@ -54,7 +54,7 @@ ToolheadCalibrationForm {
             }
 
             temperatureStatus {
-                modelExtruder {
+                component1 {
                     customTargetTemperature: {
                         if(toolheadCalibration.state == "clean_nozzles" &&
                            bot.process.stateType == ProcessStateType.CoolingNozzle) {
@@ -62,7 +62,7 @@ ToolheadCalibrationForm {
                         }
                     }
                 }
-                supportExtruder {
+                component2 {
                     customTargetTemperature: {
                         if(toolheadCalibration.state == "clean_nozzles" &&
                            bot.process.stateType == ProcessStateType.CoolingNozzle) {

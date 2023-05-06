@@ -284,7 +284,7 @@ LoggingItem {
         }
 
         temperatureStatus {
-            showExtruder: (bayID == 1) ? TemperatureStatus.Extruder.Model : TemperatureStatus.Extruder.Support
+            showComponent: (bayID == 1) ? TemperatureStatus.ModelExtruder : TemperatureStatus.SupportExtruder
         }
 
     }
