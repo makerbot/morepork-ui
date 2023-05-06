@@ -339,71 +339,56 @@ LoggingItem {
         Item {
             id: page3
 
-            TextHeadline{
-                id: name_printer
-                text: printerName
-                style: TextHeadline.ExtraLarge
-                anchors.top : parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
+            ColumnLayout {
+                anchors.fill: parent
                 anchors.leftMargin: 50
-                anchors.topMargin: 50
-                anchors.bottomMargin: 40
-                anchors.rightMargin: 50
-                elide: Text.ElideRight
-                font.weight: Font.Light
-            }
+                anchors.topMargin: 15
+                spacing: -55
 
-            TextBody{
-                id: done_by
-                text: qsTr("DONE BY")
-                font.weight: Font.Light
-                anchors.left: parent.left
-                anchors.top: name_printer.bottom
-                anchors.leftMargin: 50
-                anchors.topMargin: 20
-            }
+                TextHeadline{
+                    id: name_printer
+                    text: printerName
+                    style: TextHeadline.ExtraLarge
+                    font.weight: Font.Light
+                }
 
-            TextHeadline{
-                id: day
-                text: doneByDayString
-                style: TextHeadline.ExtraLarge
-                anchors.left: parent.left
-                anchors.top: done_by.bottom
-                anchors.leftMargin: 50
-                anchors.topMargin: 10
-                font.weight: Font.Light
-            }
+                ColumnLayout {
+                    spacing: 15
 
-            TextHeadline{
-                id: time
-                text: doneByTimeString
-                style: TextHeadline.ExtraLarge
-                anchors.left: parent.left
-                anchors.top: day.bottom
-                anchors.leftMargin: 50
-                anchors.topMargin: 10
-                font.weight: Font.Light
-            }
+                    TextBody {
+                        id: done_by
+                        text: qsTr("DONE BY")
+                        font.weight: Font.Light
+                        opacity: 0.8
+                    }
 
-            TextBody{
-                id: filename_header
-                text: qsTr("FILENAME")
-                font.weight: Font.Light
-                anchors.left: parent.left
-                anchors.top: time.bottom
-                anchors.leftMargin: 50
-                anchors.topMargin: 10
-            }
+                    TextHeadline {
+                        id: day
+                        text: doneByDayString
+                        style: TextHeadline.ExtraLarge
+                        font.weight: Font.Light
+                    }
 
-            TextBody{
-                id: printjob_name
-                text: fileName_
-                font.capitalization: Font.AllUppercase
-                anchors.left: parent.left
-                anchors.top: filename_header.bottom
-                anchors.topMargin: 10
-                anchors.leftMargin: 50
+                    TextHeadline {
+                        id: time
+                        text: doneByTimeString
+                        style: TextHeadline.ExtraLarge
+                        font.weight: Font.Light
+                    }
+
+                    TextBody {
+                        id: filename_header
+                        text: qsTr("FILENAME")
+                        font.weight: Font.Light
+                        opacity: 0.8
+                    }
+
+                    TextBody {
+                        id: printjob_name
+                        text: fileName_
+                        font.capitalization: Font.AllUppercase
+                    }
+                }
             }
         }
     }
