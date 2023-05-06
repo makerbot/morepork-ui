@@ -12,6 +12,7 @@ ColumnLayout {
         width: 250
         height: 250
         smooth: false
+        Layout.alignment: Qt.AlignHCenter
 
         Rectangle {
             id: base_circle
@@ -282,6 +283,7 @@ ColumnLayout {
         id: actionButtons
         visible: showActionButtons
         spacing: 0
+        Layout.alignment: Qt.AlignHCenter
 
         ButtonRoundPrintIcon {
             id: pauseResumePrintButton
@@ -315,9 +317,8 @@ ColumnLayout {
                 }
             }
 
-            opacity: (bot.process.stateType == ProcessStateType.Paused ||
-                      bot.process.stateType == ProcessStateType.Printing) ?
-                      1 : 0.3
+            enabled: (bot.process.stateType == ProcessStateType.Paused ||
+                      bot.process.stateType == ProcessStateType.Printing)
         }
 
         ButtonRoundPrintIcon {
