@@ -21,7 +21,7 @@ Item {
                       key: "bad_layer_alignment"}
         ListElement { name: "SMALL FEATURE DEFECTS"
                       key: "small_feature_defects"}
-        ListElement { name: "FREQUENCT EXTRUDER JAMS"
+        ListElement { name: "FREQUENT EXTRUDER JAMS"
                       key: "frequent_extruder_jams"}
         ListElement { name: "OTHER"
                       key: "other"}
@@ -35,15 +35,15 @@ Item {
         id: colums
         width: parent.width
         anchors.top: parent.top
-        anchors.topMargin: 25
+        anchors.topMargin: 20
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 20
+        spacing: 15
 
         TextBody {
             id: instructionText
             color: "#cbcbcb"
-            text: "Select any noticable print defects."
+            text: "Select any noticeable print defects."
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -58,7 +58,6 @@ Item {
             Layout.preferredHeight: 52
             Layout.alignment: Qt.AlignHCenter
         }
-
     }
 
     ListView {
@@ -72,7 +71,7 @@ Item {
         anchors.left: parent.left
         anchors.leftMargin: 34
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 36
+        anchors.bottomMargin: 10
         anchors.right: parent.right
         anchors.rightMargin: 34
         boundsBehavior: Flickable.StopAtBounds
