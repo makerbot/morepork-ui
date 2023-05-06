@@ -14,6 +14,8 @@
         <file alias="play.png">images/print/play.png</file>
         <file alias="pause.png">images/print/pause.png</file>
         <file alias="cancel.png">images/print/cancel.png</file>
+        <file alias="thumbs_up_feedback.png">images/print/thumbs_up_feedback.png</file>
+        <file alias="thumbs_down_feedback.png">images/print/thumbs_down_feedback.png</file>
         <file alias="wifi_connected.png">images/wifi_connected.png</file>
         <file alias="ethernet_connected.png">images/ethernet_connected.png</file>
         <file alias="no_wifi.png">images/no_wifi.png</file>
@@ -170,8 +172,6 @@
         <file alias="filter.png">images/filter.png</file>
         <file alias="yellow_hepa_blink.gif">images/yellow_hepa_blink.gif</file>
         <file alias="white_hepa_no_blink.gif">images/white_hepa_no_blink.gif</file>
-        <file alias="print_feedback_thumbs_up.png">images/print_feedback_thumbs_up.png</file>
-        <file alias="print_feedback_thumbs_down.png">images/print_feedback_thumbs_down.png</file>
         <file alias="refresh_otp.png">images/refresh_otp.png</file>
         <file alias="replace_desiccant.png">images/replace_desiccant.png</file>
         <file alias="spool_bag.png">images/spool_bag.png</file>
