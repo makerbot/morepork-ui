@@ -7,13 +7,13 @@
         <file alias="info_icon.png">images/info_icon.png</file>
         <file alias="material_icon.png">images/material_icon.png</file>
         <file alias="advanced_icon.png">images/advanced_icon.png</file>
-        <file alias="cancel.png">images/cancel.png</file>
         <file alias="check_mark.png">images/check_mark.png</file>
         <file alias="loading_rings.png">images/loading_rings.png</file>
         <file alias="loading_gears.png">images/loading_gear.png</file>
         <file alias="paused_rings.png">images/paused_rings.png</file>
-        <file alias="play.png">images/play.png</file>
-        <file alias="pause.png">images/pause.png</file>
+        <file alias="play.png">images/print/play.png</file>
+        <file alias="pause.png">images/print/pause.png</file>
+        <file alias="cancel.png">images/print/cancel.png</file>
         <file alias="wifi_connected.png">images/wifi_connected.png</file>
         <file alias="ethernet_connected.png">images/ethernet_connected.png</file>
         <file alias="no_wifi.png">images/no_wifi.png</file>

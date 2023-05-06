@@ -1,13 +1,11 @@
-import QtQuick 2.10
+import QtQuick 2.12
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import ProcessStateTypeEnum 1.0
 import MachineTypeEnum 1.0
 
-Item {
+LoggingItem {
     id: printStatusPage
-    width: 800
-    height: 408
     smooth: false
     property string fileName_
     property string filePathName
@@ -104,109 +102,25 @@ Item {
                 bot.getToolStats(1);
             }
         }
+
         Item {
             id: page0
-            width: 800
-            height: 408
-            smooth: false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
 
-            PrintIcon {
-                id: printIcon
-                anchors.verticalCenterOffset: 7
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                height: parent.height
+                width: parent.width/2
                 anchors.left: parent.left
-                anchors.leftMargin: 65
-                anchors.top: parent.top
-                anchors.topMargin: 50 
-            }
 
-            ButtonRoundPrintIcon {
-                id: pause
-                radius: 30
-                anchors.left: parent.left
-                anchors.leftMargin: 100.64
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 30
-                visible: bot.process.stateType != ProcessStateType.Cancelled &&
-                         bot.process.stateType != ProcessStateType.Completed &&
-                         bot.process.stateType != ProcessStateType.Failed
-                image_source: (bot.process.stateType == ProcessStateType.Paused ||
-                               bot.process.stateType == ProcessStateType.Pausing ||
-                               bot.process.stateType == ProcessStateType.Resuming ||
-                               bot.process.stateType == ProcessStateType.Preheating ||
-                               bot.process.stateType == ProcessStateType.UnloadingFilament) ?
-                                  "qrc:/img/play.png" : "qrc:/img/pause.png"
-
-
-                opacity: (bot.process.stateType == ProcessStateType.Paused ||
-                          bot.process.stateType == ProcessStateType.Printing) ?
-                          1 : 0.3
-
-                mouseArea.onClicked: {
-                    switch(bot.process.stateType) {
-                        case ProcessStateType.Printing:
-                            //In Printing State
-                            bot.pauseResumePrint("suspend")
-                            break;
-                        case ProcessStateType.Paused:
-                            //In Paused State
-                            bot.pauseResumePrint("resume")
-                        break;
-                    default:
-                        break;
+                PrintIcon {
+                    id: printIcon
+                    showActionButtons: {
+                        bot.process.stateType != ProcessStateType.Cancelled &&
+                        bot.process.stateType != ProcessStateType.Completed &&
+                        bot.process.stateType != ProcessStateType.Failed
                     }
-                }
-
-                TextSubheader {
-                    style: TextSubheader.Base
-                    text: (bot.process.stateType == ProcessStateType.Paused ||
-                           bot.process.stateType == ProcessStateType.Pausing ||
-                           bot.process.stateType == ProcessStateType.Resuming ||
-                           bot.process.stateType == ProcessStateType.Preheating ||
-                           bot.process.stateType == ProcessStateType.UnloadingFilament) ?
-                              qsTr("RESUME") : qsTr("PAUSE")
-                    anchors.verticalCenter: pause.verticalCenter
-                    anchors.top : pause.bottom
-                    anchors.horizontalCenter: pause.horizontalCenter
-                    anchors.topMargin: 15.7
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
-
-
-
-            ButtonRoundPrintIcon {
-                id: cancel
-                radius: 30
-                anchors.left: pause.right
-                anchors.leftMargin: 66
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 30
-                image_source: "qrc:/img/cancel.png"
-                visible: bot.process.stateType != ProcessStateType.Cancelled &&
-                         bot.process.stateType != ProcessStateType.Completed &&
-                         bot.process.stateType != ProcessStateType.Failed
-
-                mouseArea.onClicked: {
-                    if(inFreStep) {
-                        skipFreStepPopup.open()
-                        return;
-                     }
-                     cancelPrintPopup.open()
-                }
-
-                TextSubheader {
-                    style: TextSubheader.Base
-                    text: qsTr("CANCEL")
-                    anchors.verticalCenter: cancel.verticalCenter
-                    anchors.horizontalCenter: cancel.horizontalCenter
-                    anchors.top : cancel.bottom
-                    anchors.topMargin: 15.7
-                }
-            }
-
-
 
             ColumnLayout {
                 id: columnLayout_page0
@@ -439,11 +353,6 @@ Item {
 
         Item {
             id: page1
-            width: 800
-            height: 420
-            smooth: false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
 
             PrintModelInfoPage {
                 anchors.fill: parent.fill
@@ -454,22 +363,14 @@ Item {
 
         Item {
             id: page2
-            width: 800
-            height: 420
-            smooth: false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
 
-            PrintFileInfoPage {}
+            PrintFileInfoPage {
+
+            }
         }
 
         Item {
             id: page4
-            width: 800
-            height: 420
-            smooth: false
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 20
 
             TextHeadline{
                 id: name_printer
