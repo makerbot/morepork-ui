@@ -92,16 +92,6 @@ LoggingItem {
         anchors.fill: parent
         visible: true
 
-        // The third page of the Print Status is the Extruder Page
-        // with the Extruder Lifetime stats. Make sure these update
-        // similar to the same way that the ExtruderForm.qml updates.
-        onCurrentIndexChanged: {
-            if(currentIndex == PrintStatusView.Page2) {
-                bot.getToolStats(0);
-                bot.getToolStats(1);
-            }
-        }
-
         Item {
             id: page0
 
