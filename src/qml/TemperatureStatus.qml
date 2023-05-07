@@ -15,6 +15,7 @@ ColumnLayout {
         SupportExtruder,
         BothExtruders,
         Chamber,
+        ChamberBuildPlane,
         HeatedBuildPlate,
         Generic
     }
@@ -31,7 +32,8 @@ ColumnLayout {
                 qsTr("EXTRUDER 1")
             } else if(showComponent == TemperatureStatus.SupportExtruder) {
                 qsTr("EXTRUDER 2")
-            } else if(showComponent == TemperatureStatus.Chamber) {
+            } else if(showComponent == TemperatureStatus.Chamber ||
+                      showComponent == TemperatureStatus.ChamberBuildPlane) {
                 qsTr("CHAMBER")
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 qsTr("BUILD PLATE")
@@ -47,6 +49,8 @@ ColumnLayout {
                 bot.extruderBCurrentTemp
             } else if(showComponent == TemperatureStatus.Chamber) {
                 bot.chamberCurrentTemp
+            } else if(showComponent == TemperatureStatus.ChamberBuildPlane) {
+                bot.buildplaneCurrentTemp
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 bot.hbpCurrentTemp
             } else if(showComponent == TemperatureStatus.Generic) {
@@ -61,6 +65,8 @@ ColumnLayout {
                 bot.extruderBTargetTemp
             } else if(showComponent == TemperatureStatus.Chamber) {
                 bot.chamberTargetTemp
+            } else if(showComponent == TemperatureStatus.ChamberBuildPlane) {
+                bot.buildplaneTargetTemp
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 bot.hbpTargetTemp
             } else if(showComponent == TemperatureStatus.Generic) {

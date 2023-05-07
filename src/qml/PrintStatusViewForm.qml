@@ -299,13 +299,13 @@ LoggingItem {
                              bot.process.stepStr != "downloadingext"
                     showComponent: {
                         if(bot.process.stepStr == "heating_chamber") {
-                            TemperatureStatus.Chamber
+                            TemperatureStatus.ChamberBuildPlane
                         } else if(bot.process.stepStr == "heating_build_platform") {
                             TemperatureStatus.HeatedBuildPlate
                         } else if(bot.extruderATargetTemp > 0) {
                             TemperatureStatus.BothExtruders
                         } else {
-                            TemperatureStatus.Chamber
+                            TemperatureStatus.ChamberBuildPlane
                         }
                     }
                 }
