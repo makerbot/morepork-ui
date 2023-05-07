@@ -52,25 +52,6 @@ ToolheadCalibrationForm {
                     }
                 }
             }
-
-            temperatureStatus {
-                component1 {
-                    customTargetTemperature: {
-                        if(toolheadCalibration.state == "clean_nozzles" &&
-                           bot.process.stateType == ProcessStateType.CoolingNozzle) {
-                            50
-                        }
-                    }
-                }
-                component2 {
-                    customTargetTemperature: {
-                        if(toolheadCalibration.state == "clean_nozzles" &&
-                           bot.process.stateType == ProcessStateType.CoolingNozzle) {
-                            50
-                        }
-                    }
-                }
-            }
         }
     }
 }

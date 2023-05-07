@@ -223,6 +223,13 @@ LoggingItem {
                 text: qsTr("The process will continue after the nozzles cool down.")
                 visible: true
             }
+
+            PropertyChanges {
+                target: contentRightSide.temperatureStatus
+                component1.customTargetTemperature: 50
+                component2.customCurrentTemperature: 50
+                visible: true
+            }
         }
     ]
 }
