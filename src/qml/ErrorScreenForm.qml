@@ -17,7 +17,7 @@ LoggingItem {
     // which can in theory slow things down and also
     // make them hold residual states uneccessarily.
     // isActive flag is used because of this.
-    property bool isActive: true
+    property bool isActive: false
     property alias button1: contentRightItem.buttonPrimary
     property alias button2: contentRightItem.buttonSecondary1
     property int processType: bot.process.type
