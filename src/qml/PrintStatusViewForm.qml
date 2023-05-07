@@ -114,157 +114,189 @@ LoggingItem {
             }
 
             ColumnLayout {
-                id: columnLayout_page0
-                width: 400
-                height: children.height
-                smooth: false
-                anchors.left: parent.left
-                anchors.leftMargin: 400
+                width: parent.width/2
+                anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
+
+                // There are too many components on the right side layout container
+                // in this screen that in these following states the contents are
+                // pushed to the top or bottom of the screen so we manually offset
+                // the position of the entire container in these specific states.
+                // By default it is centered vertically (0) in every other case.
                 anchors.verticalCenterOffset: {
-                    acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
-                       acknowledgePrintFinished.state == "print_failed" ?
-                        50 : 0
-                }
-                spacing: {
-                    bot.process.stateType == ProcessStateType.Cancelled ?
-                        -10 : 20
-                }
-                TextHeadline {
-                    id: status_text0
-                    style: TextHeadline.Large
-                    text: {
-                        switch(bot.process.stateType) {
-                        case ProcessStateType.Loading:
-                            (bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer") ?
-                                qsTr("GETTING READY") : qsTr("HEATING")
-                            break;
-                        case ProcessStateType.Printing:
-                            qsTr("PRINTING")
-                            break;
-                        case ProcessStateType.Pausing:
-                            qsTr("PAUSING")
-                            break;
-                        case ProcessStateType.Resuming:
-                            qsTr("RESUMING")
-                            break;
-                        case ProcessStateType.Paused:
-                        case ProcessStateType.UnloadingFilament: // Out of filament during print
-                        case ProcessStateType.Preheating:
-                            qsTr("PAUSED")
-                            break;
-                        case ProcessStateType.Completed:
-                            qsTr("COMPLETED")
-                            break;
-                        case ProcessStateType.Failed:
-                            qsTr("PRINT FAILED")
-                            break;
-                        case ProcessStateType.Cancelled:
-                            qsTr("PRINT CANCELLED")
-                            break;
-                        case ProcessStateType.Cancelling:
-                            qsTr("CANCELLING")
-                            break;
-                        case ProcessStateType.CleaningUp:
-                            (bot.process.complete) ? qsTr("FINISHING UP") : qsTr("CANCELLING")
-                            break;
-                        default:
-                            ""
-                            break;
-                        }
+                    if(bot.process.stateType == ProcessStateType.Cancelled) {
+                        -35
+                    } else if(acknowledgePrintFinished.state == "print_successful_feedback_reported" ||
+                              acknowledgePrintFinished.state == "print_failed") {
+                        50
+                    } else {
+                        0
                     }
-                    Layout.preferredWidth: parent.width - 40
                 }
 
-                TextBody {
-                    id: subtext0
-                    style: TextBody.Base
-                    opacity: 0.7
-                    visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
-                    text: {
-                        switch(bot.process.stateType) {
-                        case ProcessStateType.Loading:
+                spacing: 20
+
+                // Main status layout containing the main status header and two
+                // subheaders showing additional details.
+                ColumnLayout {
+                    id: printingStatusColumnLayout
+                    Layout.preferredHeight: children.height
+                    Layout.preferredWidth: parent.width
+                    spacing: 8
+
+                    // This is the main status header that will always be displayed
+                    // no matter what step the print process is in.
+                    TextHeadline {
+                        id: printStatusHeader
+                        style: TextHeadline.Large
+                        text: {
+                            switch(bot.process.stateType) {
+                            case ProcessStateType.Loading:
+                                (bot.process.stepStr == "waiting_for_file" ||
+                                 bot.process.stepStr == "transfer" ||
+                                 bot.process.stepStr == "downloadingext") ?
+                                    qsTr("GETTING READY") : qsTr("HEATING")
+                                break;
+                            case ProcessStateType.Printing:
+                                qsTr("PRINTING")
+                                break;
+                            case ProcessStateType.Pausing:
+                                qsTr("PAUSING")
+                                break;
+                            case ProcessStateType.Resuming:
+                                qsTr("RESUMING")
+                                break;
+                            case ProcessStateType.Paused:
+                            case ProcessStateType.UnloadingFilament: // Out of filament during print
+                            case ProcessStateType.Preheating:
+                                qsTr("PAUSED")
+                                break;
+                            case ProcessStateType.Completed:
+                                qsTr("COMPLETED")
+                                break;
+                            case ProcessStateType.Failed:
+                                qsTr("PRINT<br>FAILED")
+                                break;
+                            case ProcessStateType.Cancelled:
+                                qsTr("CANCELLED")
+                                break;
+                            case ProcessStateType.Cancelling:
+                                qsTr("CANCELLING")
+                                break;
+                            case ProcessStateType.CleaningUp:
+                                (bot.process.complete) ?
+                                    qsTr("FINISHING UP") : qsTr("CANCELLING")
+                                break;
+                            default:
+                                emptyString
+                                break;
+                            }
+                        }
+                        Layout.preferredWidth: parent.width - 40
+                    }
+
+                    // This is a subheader that will display additional status after
+                    // the printer has finished the initial loading steps like heating
+                    // up and has started printing.
+                    TextBody {
+                        id: printStatusSubheader
+                        style: TextBody.Base
+                        opacity: 0.7
+                        visible: bot.process.stateType != ProcessStateType.Loading
+                        text: {
+                            switch(bot.process.stateType) {
+                            case ProcessStateType.Printing:
+                            case ProcessStateType.Pausing:
+                            case ProcessStateType.Resuming:
+                            case ProcessStateType.Paused:
+                            case ProcessStateType.Completed:
+                            case ProcessStateType.Cancelled:
+                                fileName_
+                                break;
+                            case ProcessStateType.Failed:
+                                qsTr("Error %1").arg(bot.process.errorCode)
+                                break;
+                            case ProcessStateType.UnloadingFilament:
+                            case ProcessStateType.Preheating: //Out of filament while printing
+                                qsTr("OUT OF FILAMENT - UNLOADING")
+                                break;
+                            default:
+                                emptyString
+                                break;
+                            }
+                        }
+                        Layout.preferredWidth: parent.width - 40
+                        horizontalAlignment: Text.AlignTop
+                        elide: Text.ElideRight
+                    }
+
+                    // Miscellaneous subheader that is only used to display additional information
+                    // about specific steps in the print process that have been clubbed into one
+                    // top level stateType.
+                    TextBody {
+                        id: printStatusMiscSubheader
+                        visible: bot.process.stateType == ProcessStateType.Loading &&
+                                 (bot.process.stepStr == "waiting_for_file" ||
+                                  bot.process.stepStr == "transfer" ||
+                                  bot.process.stepStr == "downloadingext")
+                        opacity: 0.7
+                        text: {
                             if(bot.process.stepStr == "waiting_for_file") {
                                 qsTr("WAITING FOR PRINT FILE")
-                            } else if(bot.process.stepStr == "transfer") {
+                            } else if(bot.process.stepStr == "transfer" ||
+                                      bot.process.stepStr == "downloadingext") {
                                 qsTr("TRANSFERRING PRINT FILE")
+                            } else {
+                                emptyString
                             }
-                            break;
-                        case ProcessStateType.Printing:
-                            fileName_
-                            break;
-                        case ProcessStateType.Pausing:
-                        case ProcessStateType.Resuming:
-                        case ProcessStateType.Paused:
-                            fileName_
-                            break;
-                        case ProcessStateType.Completed:
-                            fileName_
-                            break;
-                        case ProcessStateType.Failed:
-                            qsTr("Error %1").arg(bot.process.errorCode)
-                            break;
-                        case ProcessStateType.UnloadingFilament:
-                        case ProcessStateType.Preheating: //Out of filament while printing
-                            qsTr("OUT OF FILAMENT - UNLOADING")
-                            break;
-                        default:
-                            ""
-                            break;
                         }
                     }
-                    Layout.preferredWidth: parent.width - 40
-                    horizontalAlignment: Text.AlignTop
-                    elide: Text.ElideRight
                 }
 
-                TextHeadline{
-                    id: minutes_remaining_printing_paused
-                    visible: (bot.process.stateType == ProcessStateType.Paused || bot.process.stateType == ProcessStateType.Printing)
-                    style: TextHeadline.Large
+                // This is the time remaining status layout that will only be displayed
+                // when we are actively printing or when we are paused.
+                ColumnLayout {
+                    id: timeRemainingStatusColumnLayout
+                    spacing: 8
+                    Layout.preferredWidth: parent.width
+                    visible: (bot.process.stateType == ProcessStateType.Printing ||
+                              bot.process.stateType == ProcessStateType.Paused)
 
-                    text: qsTr("%1").arg(timeLeftString)
+                    TextHeadline {
+                        id: timeRemainingStatus
+                        style: TextHeadline.Large
+                        visible: timeLeftString != "0M"
+                        text: timeLeftString
+                    }
+
+                    TextBody {
+                        id: subtext1
+                        style: TextBody.Base
+                        opacity: 0.7
+                        text: timeLeftString == "0M" ? qsTr("Finishing up") : qsTr("Remaining")
+                    }
                 }
 
+                // This is the total elapsed print time at the end of the print
+                // It is only shown in the completed or failed step.
                 TextBody {
-                    id: subtext1
+                    id: totalElapsedTimeAtPrintFinishText
                     style: TextBody.Base
                     opacity: 0.7
-                    visible: !(bot.process.stateType == ProcessStateType.Loading && !(bot.process.stepStr == "waiting_for_file" || bot.process.stepStr == "transfer"))
-                    text: {
-                        switch(bot.process.stateType) {
-                        case ProcessStateType.Loading:
-                            if(bot.process.stepStr == "waiting_for_file") {
-                                ""
-                            } else if(bot.process.stepStr == "transfer") {
-                                bot.process.printPercentage + "%"
-                            }
-                            break;
-                        case ProcessStateType.Printing:
-                        case ProcessStateType.Pausing:
-                        case ProcessStateType.Resuming:
-                        case ProcessStateType.Paused:
-                            timeLeftString == "0M" ?
-                                        qsTr("FINISHING UP") :
-                                        qsTr("Remaining")
-                            break;
-                        case ProcessStateType.Failed:
-                            qsTr("%1 Print Time").arg(print_time_)
-                            break;
-                        case ProcessStateType.Completed:
-                            qsTr("%1 Print Time").arg(print_time_)
-                            break;
-                        default:
-                            emptyString
-                            break;
-                        }
-                    }
+                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed
+                    text: qsTr("%1 Print Time").arg(print_time_)
                 }
 
+                // Extruders/Chamber/Heated Build Plate heating up status shown during
+                // the initial loading step. Since they're all clubbed together into one
+                // Loading ProcessStateType we look for the step string to determine what
+                // to display.
                 TemperatureStatus {
                     visible: bot.process.stateType == ProcessStateType.Loading &&
                              bot.process.stepStr != "waiting_for_file" &&
-                             bot.process.stepStr != "transfer"
+                             bot.process.stepStr != "transfer" &&
+                             bot.process.stepStr != "downloadingext"
                     showComponent: {
                         if(bot.process.stepStr == "heating_chamber") {
                             TemperatureStatus.Chamber
@@ -278,6 +310,14 @@ LoggingItem {
                     }
                 }
 
+                AcknowledgePrintFinished {
+                    id: acknowledgePrintFinished
+                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                             bot.process.stateType == ProcessStateType.Failed ||
+                             bot.process.stateType == ProcessStateType.Cancelled
+                }
+
+                // I dont think this button is even being used currently.
                 RoundedButton {
                     id: print_again_button
                     buttonWidth: 290
@@ -299,13 +339,6 @@ LoggingItem {
                             printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
                         }
                     }
-                }
-
-                AcknowledgePrintFinished {
-                    id: acknowledgePrintFinished
-                    visible: bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed ||
-                             bot.process.stateType == ProcessStateType.Cancelled
                 }
             }
         }
@@ -337,7 +370,7 @@ LoggingItem {
                 anchors.topMargin: 15
                 spacing: -55
 
-                TextHeadline{
+                TextHeadline {
                     id: name_printer
                     text: printerName
                     style: TextHeadline.ExtraLarge

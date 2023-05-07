@@ -62,7 +62,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             kStepStr == "position_found" ||
             kStepStr == "preheating_resuming" ||
             kStepStr == "waiting_for_file" ||
-            kStepStr == "transfer")
+            kStepStr == "transfer" ||
+            kStepStr == "downloadingext")
             stateTypeSet(ProcessStateType::Loading);
         else if (kStepStr == "suspending")
             stateTypeSet(ProcessStateType::Pausing);
