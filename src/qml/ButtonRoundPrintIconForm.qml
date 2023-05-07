@@ -10,11 +10,10 @@ Item {
     property alias buttonText: button_text.text
     property alias mouseArea: action_mousearea
 
-    opacity: enabled ? 1 : 0.3
-
     ColumnLayout {
         anchors.fill: parent
         spacing: 15
+        opacity: parent.enabled ? 1 : 0.3
 
         Image {
             id: button_image
