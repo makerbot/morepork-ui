@@ -72,7 +72,7 @@ MaterialPageForm {
             // situation is reversible and the user can choose to cancel or use a different
             // material to proceed with the loading.
             var bay = (extruderID == 1 ? bay1 : bay2)
-            if(bay.spoolPresent && !bay.isMaterialValid) {return false}
+            if(bay.materialError) {return false}
             return true
         } else if(!printPage.isPrintProcess || bot.process.stateType != ProcessStateType.Paused) {
             // During a paused print is the only non-idle state that allows filament change
@@ -212,34 +212,30 @@ MaterialPageForm {
     }
 
     bay1 {
-        loadAttachButton {
+        attachExtruderButton {
             onClicked: {
-                if(!bot.extruderAPresent) {
-                    // Attach extruder A
-                    itemAttachExtruder.extruder = 1
-                    itemAttachExtruder.state = "base state"
-                    materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
-                } else {
-                    // Load Material
-                    toolIdx = 0
-                    if(restartPendingCheck(toolIdx)) { return }
-                    var while_printing = (printPage.isPrintProcess &&
-                            bot.process.stateType == ProcessStateType.Paused)
-                    if(shouldSelectMaterial(toolIdx) && !while_printing) {
-                        isLoadFilament = true
-                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                        return
-                    }
-                    load(toolIdx, false)
-                }
+                // Attach extruder A
+                itemAttachExtruder.extruder = 1
+                itemAttachExtruder.state = "base state"
+                materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
             }
-            enabled:  {
-                if(!bot.extruderAPresent) {
-                    true
-                } else {
-                    canLoadUnloadStart(bay1.filamentBayID)
+        }
+
+        loadButton {
+            onClicked: {
+                // Load Material
+                toolIdx = 0
+                if(restartPendingCheck(toolIdx)) { return }
+                var while_printing = (printPage.isPrintProcess &&
+                        bot.process.stateType == ProcessStateType.Paused)
+                if(shouldSelectMaterial(toolIdx) && !while_printing) {
+                    isLoadFilament = true
+                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return
                 }
+                load(toolIdx, false)
             }
+            enabled: canLoadUnloadStart(bay1.filamentBayID)
         }
 
         purgeButton {
@@ -270,33 +266,29 @@ MaterialPageForm {
     }
 
     bay2 {
-        loadAttachButton {
+        attachExtruderButton {
             onClicked: {
-                if(!bot.extruderBPresent) {
-                    // Attach Extruder B
-                    itemAttachExtruder.extruder = 2
-                    itemAttachExtruder.state = "base state"
-                    materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
-                } else {
-                    // Load Material
-                    toolIdx = 1
-                    var while_printing = (printPage.isPrintProcess &&
-                            bot.process.stateType == ProcessStateType.Paused)
-                    if(shouldSelectMaterial(toolIdx) && !while_printing) {
-                        isLoadFilament = true
-                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                        return
-                    }
-                    load(toolIdx, false)
-                }
+                // Attach Extruder B
+                itemAttachExtruder.extruder = 2
+                itemAttachExtruder.state = "base state"
+                materialSwipeView.swipeToItem(MaterialPage.AttachExtruderPage)
             }
-            enabled: {
-                if(!bot.extruderBPresent) {
-                    true
-                } else {
-                    canLoadUnloadStart(bay2.filamentBayID)
+        }
+
+        loadButton {
+            onClicked: {
+                // Load Material
+                toolIdx = 1
+                var while_printing = (printPage.isPrintProcess &&
+                        bot.process.stateType == ProcessStateType.Paused)
+                if(shouldSelectMaterial(toolIdx) && !while_printing) {
+                    isLoadFilament = true
+                    materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return
                 }
+                load(toolIdx, false)
             }
+            enabled: canLoadUnloadStart(bay2.filamentBayID)
         }
 
         purgeButton {
@@ -316,7 +308,7 @@ MaterialPageForm {
         }
     }
 
-    cancel_mouseArea.onClicked: {
+    cancelLoadUnloadButton.onClicked: {
         cancelLoadUnloadPopup.close()
         // Call the appropriate cancel function depending on the
         // the current process. While loading/unloading in the
@@ -382,11 +374,11 @@ MaterialPageForm {
         }
     }
 
-    continue_mouseArea.onClicked: {
+    continueLoadUnloadButton.onClicked: {
         cancelLoadUnloadPopup.close()
     }
 
-    ok_unk_mat_loading_mouseArea.onClicked: {
+    oKButtonMaterialWarningPopup.onClicked: {
         bot.acknowledgeMaterial(false)
         materialChangeCancelled = true
         bot.cancel()

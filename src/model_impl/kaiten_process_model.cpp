@@ -81,6 +81,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Cancelled);
         // 'Load' and 'Unload' states (steps)
         // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
+        else if (kStepStr == "waiting_for_filament")
+            stateTypeSet(ProcessStateType::WaitingForFilament);
         else if (kStepStr == "preheating" ||
                  kStepStr == "preheating_loading" ||
                  kStepStr == "preheating_unloading") //preheating while load/unload durng Print Process

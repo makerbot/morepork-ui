@@ -17,6 +17,7 @@ Item {
     property alias calibrateErrorScreen: calibrateErrorScreen
 
     property alias buttonCleanExtruders: buttonCleanExtruders
+    property alias toolheadCalibration: toolheadCalibration
 
     enum SwipeIndex {
         BasePage,               //0

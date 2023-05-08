@@ -1658,6 +1658,7 @@ void KaitenBotModel::spoolChangeUpdate(const Json::Value &si) {
               si["linear_density"]); \
           spool ## BAY_SYM ## MaterialNameSet( \
               getMaterialName(spool ## BAY_SYM ## Material())); \
+          filamentBay ## BAY_SYM ## TagPresentSet(true); \
           spool ## BAY_SYM ## DetailsReadySet(true); \
       } \
     }
@@ -2003,6 +2004,7 @@ void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index)
 void KaitenBotModel::resetSpoolProperties(const int bay_index) {
     LOG(info) << "bay ID: " << bay_index;
 #define RESET_SPOOL_INFO(BAY_SYM) \
+    filamentBay ## BAY_SYM ## TagPresentReset(); \
     spool ## BAY_SYM ## UpdateFinishedReset(); \
     spool ## BAY_SYM ## DetailsReadyReset(); \
     spool ## BAY_SYM ## VersionReset(); \

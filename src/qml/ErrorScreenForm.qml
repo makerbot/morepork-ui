@@ -17,7 +17,7 @@ LoggingItem {
     // which can in theory slow things down and also
     // make them hold residual states uneccessarily.
     // isActive flag is used because of this.
-    property bool isActive: true
+    property bool isActive: false
     property alias button1: contentRightItem.buttonPrimary
     property alias button2: contentRightItem.buttonSecondary1
     property int processType: bot.process.type
@@ -504,65 +504,30 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textHeader
                 text: {
-                    qsTr("PRINT PAUSED")
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    qsTr("CONTINUE")
-                }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-        },
-
-        State {
-            name: "extruder_oof_error_state2"
-            PropertyChanges {
-                target: contentLeftItem.image
-                source: bot.process.extruderAOOF ?
-                            "qrc:/img/error_oof_bay1.png" :
-                            "qrc:/img/error_oof_bay1.png"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    qsTr("REMOVE EMPTY\nSPOOL")
-                    qsTr("MATERIAL %1\nOUT OF FILAMENT").arg(
-                        (bot.process.extruderAOOF ?
-                             qsTr("1") : qsTr("2")))
+                    qsTr("PRINT PAUSED<br><br>") +
+                    qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
+                                       (bot.process.extruderAOOF ?
+                                         qsTr("1") : qsTr("2")))
                 }
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: {
-                    qsTr("Open the top lid and remove material clip to pull the remaining material out of the extruder.")
-                }
+                text: qsTr("Open the top lid and remove material clip to pull " +
+                           "the remaining material out of the extruder.")
                 visible: true
             }
 
             PropertyChanges {
+                // The load button is disabled while the extruder unloads.
+                // Kaiten goes through preheating_unloading and unloading_filament
+                // steps before getting to paused step. The button is only enabled
+                // in the paused step.
                 target: contentRightItem.buttonPrimary
-                text: {
-                    qsTr("LOAD MATERIAL %1").arg(
-                                (bot.process.extruderAOOF ?
-                                     qsTr("1") : qsTr("2")))
-                }
+                text: qsTr("LOAD MATERIAL %1").arg(
+                            bot.process.extruderAOOF ?
+                                 qsTr("1") : qsTr("2"))
                 visible: true
             }
 
@@ -570,6 +535,7 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: false
             }
+
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
                 visible: false
