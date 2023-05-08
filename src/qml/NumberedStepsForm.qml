@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.12
 
 ColumnLayout {
     property var steps: []
-    property var inactiveSteps : []
+    property var activeSteps : []
     property int stepBegin: 1
     property int usedTextWidth: parent.width
     spacing: 24
@@ -15,13 +15,14 @@ ColumnLayout {
         RowLayout {
             spacing: 12
             Layout.preferredWidth: parent.width
+            opacity: activeSteps[index] ? 1 : 0.3
 
             Rectangle {
                 id: numberCircle
                 width: 24
                 height: 24
                 radius: 12
-                color: inactiveSteps[index] ? "#3B3B3B" : "#ffffff"
+                color: "#ffffff"
 
                 TextSubheader {
                     id: stepNumber
@@ -43,12 +44,7 @@ ColumnLayout {
                 font.weight: Font.Normal
                 Layout.alignment: Text.AlignLeft
                 Layout.preferredWidth: usedTextWidth
-                opacity: inactiveSteps[index] ? 0.5 : 1.0
-
             }
-
-
         }
     }
-
 }

@@ -11,19 +11,14 @@ import MachineTypeEnum 1.0
 LoggingItem {
     itemName: "LoadUnloadFilament"
     id: loadUnloadForm
-    width: 800
-    height: 420
 
-    property alias snipMaterial: snipMaterial
-    property alias acknowledgeButton: contentRightItem.buttonPrimary
-    property alias retryButton: contentRightItem.buttonSecondary1
-    property bool snipMaterialAlertAcknowledged: false
+    property alias acknowledgeButton: contentRightSide.buttonPrimary
+    property alias retryButton: contentRightSide.buttonSecondary1
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
     property int retryTemperature: 0
     property string retryMaterial: "None"
     property int bayID: 0
-    property bool isExpExtruder: bayID == 1 ? bay1.usingExperimentalExtruder : false
     property int currentActiveTool: bot.process.currentToolIndex + 1
     // Hold onto the current bay ID even after the process completes
     onCurrentActiveToolChanged: {
@@ -53,6 +48,7 @@ LoggingItem {
                 // Always check for moisture alert when unloading.
                 maybeShowMoistureWarningPopup(bayID)
             }
+            notExtruding = false
         }
     }
 
@@ -76,6 +72,7 @@ LoggingItem {
                 }
             }
             else {
+                state = "place_material"
                 isMaterialValid = false
                 materialWarningPopup.close()
             }
@@ -109,21 +106,25 @@ LoggingItem {
                                                bay2.filamentMaterialName
 
     function delayedEnableRetryButton() {
+        if(state != "loaded_filament" || state != "unloaded_filament") {
+            return
+        }
         // Immediately starting the load/unload process
         // after it completes, presumably while kaiten is
         // still not fully finished cleaning up, causes it
         // to not start properly, so disabling the retry
         // button and then enabling after a few seconds is
         // a quick hacky fix for this before launch.
-        contentRightItem.buttonSecondary1.enabled = false
+        contentRightSide.buttonSecondary1.enabled = false
         enableRetryButton.start()
     }
 
     property int errorCode
     property bool doingAutoUnload: false
-    signal processDone
+    signal processDone()
     property int currentState: bot.process.stateType
     property int errorType: bot.process.errorType
+    property bool notExtruding: false
 
     onErrorTypeChanged: {
         if (errorType === ErrorType.DrawerOutOfFilament &&
@@ -136,20 +137,31 @@ LoggingItem {
             doingAutoUnload = false
         }
         switch(currentState) {
+        case ProcessStateType.WaitingForFilament:
+            // Landing screen depending on whether we're loading on
+            // Method/X or XL or purging.
+            if(extruderFilamentSwitch) {
+                state = "preheating"
+            } else if(bot.hasFilamentBay) {
+                state = "cut_filament_tip"
+            } else {
+                state = "place_dessicant"
+            }
+            break;
         case ProcessStateType.Stopping:
         case ProcessStateType.Done:
-            snipMaterialAlertAcknowledged = false
-            delayedEnableRetryButton()
-            // (sorry) Update 2023 (from Shirley) sorry about the janky error checking here ;) 
             if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
                 state = "error"
             }
             else if(bot.process.type == ProcessType.Load) {
+                if(notExtruding) {
+                    state = "error_not_extruding"
+                }
                 // Cancelling Load/Unload ends with 'done' step
                 // but the UI shouldn't go into load/unload
                 // successful state, but to the default state.
-                if(!materialChangeCancelled) {
+                else if(!materialChangeCancelled) {
                     state = "loaded_filament"
                 }
                 else {
@@ -205,6 +217,7 @@ LoggingItem {
                     state = "error"
                 }
             }
+            delayedEnableRetryButton()
             break;
             //The case when loading/unloading completes normally by
             //itself, in the middle of print process. Then the bot doesn't
@@ -227,18 +240,12 @@ LoggingItem {
         id: enableRetryButton
         interval: 3000
         onTriggered: {
-            contentRightItem.buttonSecondary1.enabled = true
+            contentRightSide.buttonSecondary1.enabled = true
         }
     }
-    SnipMaterialScreen {
-        id: snipMaterial
-        z: 1
-        anchors.verticalCenterOffset: -20
-        visible: !snipMaterialAlertAcknowledged && !isExpExtruder && !bayFilamentSwitch
-    }
 
-    ExpExtruderInstructionsScreen {
-        id: expExtruderInstructions
+    LabsExtruderLoadingInstructions {
+        id: labsExtruderLoadingInstructions
         z: 1
         visible: false
     }
@@ -250,60 +257,225 @@ LoggingItem {
     }
 
     ContentLeftSide {
-        id: contentLeftItem
-        smooth: false
-        animatedImage.visible: true
+        id: contentLeftSide
+        visible: true
     }
 
     ContentRightSide {
-        id: contentRightItem
-
-        textHeader {
-            text: qsTr("OPEN BAY %1").arg(bayID)
-            visible: true
-        }
-
-        numberedSteps {
-            steps: [
-                qsTr("Press side latch to unlock and\nopen bay %1").arg(bayID),
-                qsTr("Place a %1 material spool in\nthe bay").arg(
-                                    bayID == 1 ? qsTr("Model") : qsTr("Support")),
-                qsTr("Push the end of the material into\nthe slot until you feel it being\npulled in.")
-            ]
-            inactiveSteps: [false, false, false]
-        }
-
-        textBody {
-            text: "\n\n\n"
-        }
-        buttonPrimary {
-            text: qsTr("CONTINUE")
-        }
-        buttonSecondary1 {
-            text: qsTr("RETRY")   
-        }
-
-        temperatureStatus {
-            showExtruder: (bayID == 1) ? TemperatureStatus.Extruder.Model : TemperatureStatus.Extruder.Support
-        }
-
+        id: contentRightSide
+        visible: true
     }
 
     states: [
+        // COMMON STEP - cut_filament_tip
         State {
-            name: "feed_filament"
-            when: isMaterialValid && !isExpExtruder && !bayFilamentSwitch &&
-                  bot.process.stateType == ProcessStateType.Preheating &&
+            name: "cut_filament_tip"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    source: "qrc:/img/cut_filament_tip.gif"
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("REMOVE BENT MATERIAL")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Cut the filament below the point at which " +
+                               "any material has been bent or damaged.<br><br>" +
+                               "Cleanly cut any bent material at a 45 degree " +
+                               "angle before inserting into the guide tube.<br><br>" +
+                               "Click the help icon for additional guidance on " +
+                               "best practices for cutting material.")
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    text: qsTr("NEXT")
+                    visible: true
+                }
+            }
+        },
+
+        // WITHOUT FILAMENT BAY ONLY STEP - place_dessicant
+        State {
+            name: "place_dessicant"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    source: ("qrc:/img/methodxl_place_dessicant_%1.gif").arg(bayID)
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("DESSICANT FOR MATERIAL %1").arg(bayID)
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Insert the two desiccant bags into the slots on the " +
+                               "%1 side of the material case.<br><br>Click the help " +
+                               "icon for additional considerations around desiccant.").arg(
+                              bayID == 1 ? "left" : "right")
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    text: qsTr("NEXT")
+                    visible: true
+                }
+            }
+        },
+
+        // COMMON STEP - place_material
+        State {
+            name: "place_material"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter("place_spool_%1".arg(bayID)))
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+
+                textHeader {
+                    style: TextHeadline.Base
+                    text: {
+                        if (bot.hasFilamentBay) {
+                            qsTr("NO MATERIAL DETECTED")
+                        } else {
+                            qsTr("PLACE MATERIAL %1").arg(bayID)
+                        }
+                    }
+                    visible: true
+                }
+                textBody {
+                    visible: false
+                }
+                numberedSteps {
+                    steps: {
+                        if (bot.hasFilamentBay) {
+                            [qsTr("Press side latch to unlock and open bay %1").arg(bayID),
+                             qsTr("Place a %1 material spool in the bay").arg(
+                                            bayID == 1 ? qsTr("Model") : qsTr("Support")),
+                             qsTr("Insert the material into the slot until you feel it being pulled in.")]
+                        } else {
+                            [qsTr("Ensure the spool is oriented correctly with cap on right side."),
+                             qsTr("Place the spool onto the rollers of Bay %1, making sure the " +
+                                  "spool is aligned with the funnel.").arg(bayID)]
+                        }
+                    }
+                    activeSteps: {
+                        if (bot.hasFilamentbay) {
+                            [true, true, false]
+                        } else {
+                            [true, true]
+                        }
+                    }
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    text: qsTr("NEXT")
+                    visible: !bot.hasFilamentBay
+                }
+            }
+        },
+
+        // WITHOUT FILAMENT BAY ONLY STEP - no_nfc_reader_feed_filament
+        State {
+            name: "no_nfc_reader_feed_filament"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("FEED INTO PORT %1").arg(bayID)
+                    visible: true
+                }
+                textHeaderWaitingForUser {
+                    text: qsTr("WAITING FOR MATERIAL")
+                    waitingForUser: true
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Feed material through the funnel until you feel it engage with the extruder.<br>" +
+                               "If you encounter any issues, click the help icon for additional guidance.")
+                    visible: true
+                }
+                numberedSteps {
+                    visible: false
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.ButtonDisabledHelpEnabled
+                    text: qsTr("NEXT")
+                    visible: true
+                }
+            }
+        },
+
+        // WITH FILAMENT BAY ONLY STEP - nfc_detected_feed_filament
+        State {
+            name: "nfc_detected_feed_filament"
+            when: bot.hasFilamentBay &&
+                  isMaterialValid && !usingExpExtruder && !bayFilamentSwitch &&
+                  bot.process.stateType == ProcessStateType.WaitingForFilament &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged && !isExpExtruder
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -313,75 +485,59 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    if (bot.hasFilamentBay) {
-                        qsTr("%1 DETECTED").arg(materialName)
-                    } else {
-                        qsTr("LOADING FILAMENT")
-                    }
+                target: contentLeftSide
+                image {
+                    visible: false
                 }
-                visible: true
+                animatedImage {
+                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
+                    visible: true
+                }
+                loadingIcon{
+                    visible: false
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Push the end of the material into the slot until you feel it being pulled in.")
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: false
-                text: qsTr("CONTINUE")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                visible: true
-                source: bayID == 1 ?
-                            "qrc:/img/insert_filament_bay1.gif" :
-                            "qrc:/img/insert_filament_bay2.gif"
-            }
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("%1 DETECTED<br><br>LOAD MATERIAL INTO BAY %2").arg(materialName).arg(bayID)
+                    visible: true
+                }
+                textBody {
+                    visible: false
+                }
+                numberedSteps {
+                    steps: {
+                        [qsTr("Press side latch to unlock and open bay %1").arg(bayID),
+                         qsTr("Place a %1 material spool in the bay").arg(
+                                        bayID == 1 ? qsTr("Model") : qsTr("Support")),
+                         qsTr("Insert the material into the slot until you feel it being pulled in.")]
+                    }
+                    activeSteps: {
+                        [false, false, true]
+                    }
+                    visible: true
+                }
+                buttonPrimary {
+                    visible: false
+                }
             }
         },
+
+        // WITH FILAMENT BAY ONLY STEP - pushing_filament_up_with_motors
         State {
-            name: "pushing_filament"
-            when: (bayFilamentSwitch && !extruderFilamentSwitch) &&
+            name: "pushing_filament_up_with_motors"
+            when: bot.hasFilamentBay &&
+                  (bayFilamentSwitch && !extruderFilamentSwitch) &&
                    bot.process.stateType == ProcessStateType.Preheating &&
                    (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: snipMaterial
-                visible: !snipMaterialAlertAcknowledged && !isExpExtruder
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -391,72 +547,50 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("MATERIAL LOADING")
-                anchors.topMargin: 160
+                target: contentLeftSide
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    icon_image: LoadingIcon.Loading
+                    visible: true
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Helper motors are pushing material\nup to the extruder. This can take up to\n30 seconds.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.temperatureStatus
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                loading: true
-                visible: true
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Large
+                    text: qsTr("MATERIAL LOADING")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Motors are pushing the material up to the extruder.<br><br>This can take up to 30 seconds.")
+                    visible: true
+                }
+                numberedSteps {
+                    visible: false
+                }
+                buttonPrimary {
+                    visible: false
+                }
             }
         },
+
+        // COMMON STEP - preheating
         State {
             name: "preheating"
-            when: (extruderFilamentSwitch || isExpExtruder) &&
+            when: (extruderFilamentSwitch || usingExpExtruder) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: snipMaterial
-                visible: false
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: {
                     // Dont show this screen when either of the
                     // switches are triggered which means the user
@@ -474,7 +608,7 @@ LoggingItem {
                     !extruderFilamentSwitch &&
                     (bot.process.type == ProcessType.Print ||
                      bot.process.type == ProcessType.Load) &&
-                    isExpExtruder &&
+                    usingExpExtruder &&
                     targetTemperature > 0 &&
                     ((currentTemperature + 30) >= targetTemperature)
                 }
@@ -486,55 +620,47 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("HEATING")
+                target: contentLeftSide
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    icon_image: LoadingIcon.Loading
+                    visible: true
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: ""
-            }
-
-            PropertyChanges {
-                target: contentRightItem.temperatureStatus
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                loading: true
-                visible: true
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Large
+                    text: qsTr("HEATING")
+                    visible: true
+                }
+                temperatureStatus {
+                    showExtruder: {
+                        (bayID == 1) ?
+                           TemperatureStatus.Extruder.Model :
+                           TemperatureStatus.Extruder.Support
+                    }
+                    visible: true
+                }
+                textBody {
+                    visible: false
+                }
+                numberedSteps {
+                    visible: false
+                }
+                buttonPrimary {
+                    visible: false
+                }
             }
         },
+
+        // COMMON STEP - extrusion
         State {
             name: "extrusion"
             when: bot.process.stateType == ProcessStateType.Extrusion &&
@@ -542,12 +668,7 @@ LoggingItem {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: snipMaterial
-                visible: false
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -557,60 +678,56 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("EXTRUSION CONFIRMATION")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
-                           ((shouldUserAssistPurging(bayID) ?
-                             qsTr("\n\n%1 may require assistance to extrude. ").arg(materialName) +
-                             qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
-                                ""))
+                target: contentLeftSide
+                image {
+                    source: ("qrc:/img/extrusion_%1.png").arg(bayID)
+                    visible: true
                 }
-                visible: true
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: true
-                text: qsTr("CONFIRM\nMATERIAL EXTRUSION")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                source: bayID == 1 ?
-                            "qrc:/img/confirm_extrusion_1.png" :
-                            "qrc:/img/confirm_extrusion_2.png"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                target: contentRightSide
+                textHeader {
+                    text: qsTr("EXTRUSION CONFIRMATION")
+                    visible: true
+                }
+                textBody {
+                    text: {
+                        qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
+                               ((shouldUserAssistPurging(bayID) ?
+                                 qsTr("\n\n%1 may require assistance to extrude. ").arg(materialName) +
+                                 qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
+                                    ""))
+                    }
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: qsTr("CONFIRM")
+                    visible: true
+                }
+                buttonSecondary1 {
+                    delayedEnableTimeSec: 30
+                    style: ButtonRectanglePrimary.DelayedEnable
+                    text: qsTr("NOT EXTRUDING")
+                    visible: true
+                }
+                temperatureStatus {
+                    visible: false
+                }
+                numberedSteps {
+                    visible: false
+                }
             }
         },
+
+        // COMMON STEP - unloading_filament
         State {
             name: "unloading_filament"
             when: (bot.process.stateType == ProcessStateType.UnloadingFilament ||
@@ -620,12 +737,7 @@ LoggingItem {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: snipMaterial
-                visible: false
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -635,57 +747,54 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    doingAutoUnload ?  qsTr("OUT OF FILAMENT") : qsTr("MATERIAL\nUNLOADING")
+                target: contentLeftSide
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    icon_image: LoadingIcon.Loading
+                    visible: true
                 }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    doingAutoUnload ?
-                        qsTr("Please wait while the remaining material backs out of the printer.") :
-                        qsTr("The material is backing out of the extruder, please wait.")
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Large
+                    text: {
+                        doingAutoUnload ?
+                           qsTr("OUT OF FILAMENT") :
+                           qsTr("MATERIAL UNLOADING")
+                    }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                loading: true
-                visible: true
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                textBody {
+                    text: {
+                        doingAutoUnload ?
+                           qsTr("Please wait while the remaining material backs out of the printer.") :
+                           qsTr("The material is backing out of the extruder, please wait.")
+                    }
+                    visible: true
+                }
+                buttonPrimary {
+                    visible: false
+                }
+                buttonSecondary1 {
+                    visible: false
+                }
+                numberedSteps {
+                    visible: false
+                }
+                temperatureStatus {
+                    visible: false
+                }
             }
         },
+
+        // COMMON STEP - loaded_filament
         State {
             name: "loaded_filament"
             //this state doesn't have a when condiiton unlike others and
@@ -694,12 +803,7 @@ LoggingItem {
             //even after the process has completed, until the user presses 'done'.
 
             PropertyChanges {
-                target: snipMaterial
-                visible: false
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -709,89 +813,146 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("CLEAR EXCESS MATERIAL AFTER EXTRUDER COOLS DOWN")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Wait a few moments until the material has cooled. Close the build chamber and material drawer.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: true
-                text: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            qsTr("DONE")
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            if(bayID == 1) {
-                                qsTr("NEXT: LOAD SUPPORT MATERIAL")
-                            } else if(bayID == 2) {
-                                qsTr("DONE")
-                            }
-                        }
-                    }
-                    else {
-                        qsTr("DONE")
-                    }
+                target: contentLeftSide
+                image {
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("clear_excess_material"))
+                    visible: true
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: false
                 }
             }
 
             PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                text: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            qsTr("RETRY PURGING")
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("CLEAR EXCESS MATERIAL")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Remove any excess material on the extruder or build plate " +
+                               "and close the build chamber door.")
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: {
+                        if(inFreStep) {
+                            if(bot.process.type == ProcessType.Print) {
+                                qsTr("NEXT")
+                            } else if(bot.process.type == ProcessType.None) {
+                                if(bayID == 1) {
+                                    qsTr("NEXT: LOAD SUPPORT MATERIAL")
+                                } else if(bayID == 2) {
+                                    qsTr("NEXT")
+                                }
+                            }
+                        } else {
+                            qsTr("NEXT")
                         }
-                        else if(bot.process.type == ProcessType.None) {
+                    }
+                    visible: true
+                }
+                buttonSecondary1 {
+                    style: ButtonRectanglePrimary.Button
+                    text: {
+                        if(inFreStep) {
+                            if(bot.process.type == ProcessType.Print) {
+                                qsTr("RETRY PURGING")
+                            }
+                            else if(bot.process.type == ProcessType.None) {
+                                qsTr("RETRY LOADING")
+                            }
+                        } else {
                             qsTr("RETRY LOADING")
                         }
                     }
-                    else {
-                        qsTr("RETRY LOADING")
-                    }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: true
-                source: bayID == 1 ?
-                            "qrc:/img/close_bay1.gif" :
-                            "qrc:/img/close_bay2.gif"
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.temperatureStatus
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                numberedSteps {
+                    visible: false
+                }
+                temperatureStatus {
+                    visible: false
+                }
             }
         },
+
+        // COMMON STEP - Close Latch - loaded_filament_1
+        State {
+            name: "loaded_filament_1"
+
+            PropertyChanges {
+                target: labsExtruderLoadingInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter("close_latch_%1".arg(bayID)))
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: {
+                        if(bot.hasFilamentBay) {
+                            qsTr("CLOSE LATCH")
+                        } else {
+                            qsTr("CLOSE LID AND LATCH")
+                        }
+                    }
+                    visible: true
+                }
+                textBody {
+                    text: {
+                        if(bot.hasFilamentBay) {
+                            qsTr("Keeping the material bay sealed prevents moisture intake and " +
+                                 "ensures best print quality.")
+                        } else {
+                            qsTr("Keeping the material case sealed prevents moisture intake and " +
+                                 "ensures best print quality.")
+                        }
+                    }
+                    visible: true
+                }
+                numberedSteps {
+                    visible: false
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: qsTr("DONE")
+                    visible: true
+                }
+                buttonSecondary1 {
+                    visible: false
+                }
+                temperatureStatus {
+                    visible: false
+                }
+            }
+        },
+
+        // COMMON STEP - unloaded_filament
         State {
             name: "unloaded_filament"
             //this state doesn't have a when condiiton unlike others and
@@ -800,12 +961,7 @@ LoggingItem {
             //even after the process has completed, until the user presses 'done'.
 
             PropertyChanges {
-                target: snipMaterial
-                visible: false
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -815,84 +971,125 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("REWIND SPOOL")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    if(bot.machineType == MachineType.Magma) {
-                        qsTr("Open the latch to access the material case. Carefully rewind the material onto the spool and seal in bag.")
-                    }else {
-                        qsTr("Open material bay %1 and carefully rewind the material onto the spool. Secure the end of the material inside the smart spool bag and seal. Close the bay door.").arg(bayID)
-                    }
+                target: contentLeftSide
+                image {
+                    visible: false
                 }
-                visible: true
+                animatedImage {
+                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter("rewind_spool_%1".arg(bayID)))
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: (bot.machineType == MachineType.Magma)
-                text: qsTr("Close the latch to prevent moisture intake.")
-                font.weight: Font.Normal
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: true
-                text: qsTr("DONE")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                text: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            qsTr("RETRY UNLOADING")
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            qsTr("RETRY UNLOADING")
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("REWIND SPOOL")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Open material bay %1 and carefully rewind the material onto the " +
+                               "spool. Secure the end of the material inside the spool bag and " +
+                               "seal. Close the bay door.").arg(bayID)
+                    visible: bot.hasFilamentBay
+                }
+                numberedSteps {
+                    steps: ["Hold the material at the entry port to maintain tension and prevent unspooling as you rewind.",
+                            "Rewind material using the rollers until material has exited."]
+                    visible: !bot.hasFilamentBay
+                }
+                buttonPrimary {
+                    style: {
+                        if(bot.hasFilamentBay) {
+                            ButtonRectanglePrimary.Button
+                        } else {
+                            ButtonRectanglePrimary.ButtonWithHelp
                         }
                     }
-                    else {
-                        qsTr("RETRY UNLOADING")
+                    text: {
+                        if(bot.hasFilamentBay) {
+                            qsTr("DONE")
+                        } else {
+                            qsTr("NEXT")
+                        }
                     }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: bot.machineType != MachineType.Magma
-                source: bayID == 1 ?
-                            "qrc:/img/method_rewind_spool_1.gif" :
-                            "qrc:/img/method_rewind_spool_2.gif"
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                source: bayID == 1 ?
-                            "qrc:/img/methodxl_rewind_spool_1.png" :
-                            "qrc:/img/methodxl_rewind_spool_2.png"
-                visible: bot.machineType == MachineType.Magma
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                buttonSecondary1 {
+                    delayedEnableTimeSec: 3
+                    style: ButtonRectanglePrimary.DelayedEnable
+                    text: qsTr("RETRY UNLOADING")
+                    visible: bot.hasFilamentBay
+                }
+                temperatureStatus {
+                    visible: false
+                }
             }
         },
+
+        // WITHOUT FILAMENT BAY ONLY STEP - Store Material - unloaded_filament_1
+        State {
+            name: "unloaded_filament_1"
+
+            PropertyChanges {
+                target: labsExtruderLoadingInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide
+                image {
+                    source: "qrc:/img/methodxl_store_material.png"
+                    visible: true
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("STORE MATERIAL + SEAL CASE")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Carefully rewind and secure the tip onto the edge of " +
+                               "the spool.<br><br>Seal the latch of the material case " +
+                               "and store the spool in the bag to prevent moisture intake.")
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: qsTr("DONE")
+                    visible: true
+                }
+                buttonSecondary1 {
+                    visible: false
+                }
+                temperatureStatus {
+                    visible: false
+                }
+                numberedSteps {
+                    visible: false
+                }
+            }
+        },
+
+        // COMMON STEP - error
         State {
             name: "error"
             //this state doesn't have a when condiiton unlike others and
@@ -901,12 +1098,7 @@ LoggingItem {
             //even after the process has completed, until the user presses 'done'.
 
             PropertyChanges {
-                target: snipMaterial
-                visible: false
-            }
-
-            PropertyChanges {
-                target: expExtruderInstructions
+                target: labsExtruderLoadingInstructions
                 visible: false
             }
 
@@ -916,77 +1108,73 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    switch(bot.process.type) {
-                      case ProcessType.Load:
-                          qsTr("FILAMENT LOADING FAILED")
-                          break;
-                      case ProcessType.Unload:
-                          qsTr("FILAMENT UNLOADING FAILED")
-                          break;
-                      default:
-                          defaultString
-                          break;
-                    }
+                target: contentLeftSide
+                image {
+                    visible: false
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    icon_image: LoadingIcon.Failure
+                    visible: true
                 }
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Error %1").arg(errorCode)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                visible: true
-                text: qsTr("DONE")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                text: {
-                    if(inFreStep) {
-                        if(bot.process.type == ProcessType.Print) {
-                            isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
-                        }
-                        else if(bot.process.type == ProcessType.None) {
-                            isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
-                        }
-                    }
-                    else {
-                        isLoadFilament ? "RETRY LOADING" : "RETRY UNLOADING"
-                    }
+                target: contentRightSide
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("PROCEDURE FAILED")
+                    visible: true
                 }
-                visible: true
+                textBody {
+                    text: qsTr("Error %1").arg(errorCode)
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: {
+                        if(inFreStep) {
+                            if(bot.process.type == ProcessType.Print) {
+                                isLoadFilament ? qsTr("RETRY LOADING") : qsTr("RETRY UNLOADING")
+                            }
+                            else if(bot.process.type == ProcessType.None) {
+                                isLoadFilament ? qsTr("RETRY LOADING") : qsTr("RETRY UNLOADING")
+                            }
+                        } else {
+                            isLoadFilament ? qsTr("RETRY LOADING") : qsTr("RETRY UNLOADING")
+                        }
+                    }
+                    visible: true
+                }
+                buttonSecondary1 {
+                    text: qsTr("SWAP MATERIAL")
+                    style: ButtonRectanglePrimary.Button
+                    visible: true
+                }
+                temperatureStatus {
+                    visible: false
+                }
+                numberedSteps {
+                    visible: false
+                }
             }
+        },
 
+        // COMMON STEP - error_not_extruding
+        State {
+            name: "error_not_extruding"
+            extend: "error"
             PropertyChanges {
-                target: contentLeftItem.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.image
-                source: bayID == 1 ?
-                            "qrc:/img/extruder_1_heating.png" :
-                            "qrc:/img/extruder_2_heating.png"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.numberedSteps
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: false
+                target: contentRightSide
+                textBody {
+                   visible: false
+                }
+                buttonPrimary {
+                    text: qsTr("RETRY EXTRUDING")
+                    visible: true
+                }
             }
         }
     ]

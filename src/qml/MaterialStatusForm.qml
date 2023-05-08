@@ -9,9 +9,11 @@ Item {
     id: materialStatusForm
     width: 344
     height: 100
+
     RowLayout {
-        id: rowLayout
+        id: contentContainer
         spacing: 32
+
         MaterialIcon {
             id: materialIcon
             smooth: false
@@ -19,49 +21,36 @@ Item {
         }
 
         ColumnLayout {
+            spacing: 4
             TextSubheader {
                 text: qsTr("MATERIAL %1").arg(filamentBayID)
             }
 
-            RowLayout {
-                spacing: 5
-
-                TextBody {
-                    id: materialText
-                    style: TextBody.ExtraLarge
-                    font.weight: Font.Bold
-                    text: {
-                        // Print paused and extruder switch not triggered. This condition is the LCD
-                        // for all types of printers where we want to prompt the user to load a specific
-                        // material to continue printing when paused either due to OOF or somehow simply
-                        // paused without any filament in the extruder.
-                        if(printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused && !extruderFilamentPresent) {
-                            qsTr("LOAD %1").arg(printMaterialName)
-                        }
-                        // Printers with Filament Bay (Method/X)
-                        else if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
-                            filamentMaterialName.toUpperCase()
-                        }
-                        // Printers without Filament Bay (Method XL) or ones using a labs extruder
-                        else if((!bot.hasFilamentBay || usingExperimentalExtruder) &&
-                                  (bot.loadedMaterials[filamentBayID - 1] != "unknown")) {
-                            bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
-                        } else if(usingExperimentalExtruder && extruderFilamentPresent) {
-                            qsTr("LABS MATERIAL\nLOADED")
-                        } else {
-                            qsTr("NOT DETECTED")
-                        }
+            TextBody {
+                id: materialText
+                style: TextBody.ExtraLarge
+                font.weight: Font.Bold
+                text: {
+                    // Print paused and extruder switch not triggered. This condition is the LCD
+                    // for all types of printers where we want to prompt the user to load a specific
+                    // material to continue printing when paused either due to OOF or somehow simply
+                    // paused without any filament in the extruder.
+                    if(printPage.isPrintProcess && bot.process.stateType == ProcessStateType.Paused && !extruderFilamentPresent) {
+                        qsTr("LOAD %1").arg(printMaterialName)
                     }
-                }
-
-                Image {
-                    id: materialErrorAlertIcon
-                    width: 30
-                    height: 30
-                    antialiasing: false
-                    smooth: false
-                    source: "qrc:/img/alert.png"
-                    visible: !isMaterialValid && !isUnknownMaterial && spoolPresent
+                    // Printers with Filament Bay (Method/X)
+                    else if(bot.hasFilamentBay && spoolPresent && !isUnknownMaterial) {
+                        filamentMaterialName.toUpperCase()
+                    }
+                    // Printers without Filament Bay (Method XL) or ones using a labs extruder
+                    else if((!bot.hasFilamentBay || usingExperimentalExtruder) &&
+                              (bot.loadedMaterials[filamentBayID - 1] != "unknown")) {
+                        bot.loadedMaterialNames[filamentBayID - 1].toUpperCase()
+                    } else if(usingExperimentalExtruder && extruderFilamentPresent) {
+                        qsTr("LABS MATERIAL\nLOADED")
+                    } else {
+                        qsTr("NOT DETECTED")
+                    }
                 }
             }
 
@@ -76,7 +65,6 @@ Item {
                     font.weight: Font.Thin
                     Layout.preferredWidth: parent.width
                     wrapMode: Text.WordWrap
-                    visible: spoolPresent
                     text: filamentColorName.toUpperCase()
                 }
 
@@ -84,28 +72,28 @@ Item {
                     id: materialAmount
                     style: TextBody.Base
                     font.weight: Font.Thin
-                    visible: spoolPresent
                     text: qsTr("%1KG REMAINING").arg(filamentQuantity)
                 }
             }
         }
     }
+
     states: [
         State {
             name: "no_extruder_detected"
             when: !extruderPresent
 
             PropertyChanges {
-                target: rowLayout
+                target: contentContainer
                 visible: false
             }
         },
         State {
             name: "extruder_present_material_details_unknown"
-            when: extruderPresent && !bot.hasFilamentBay
+            when: extruderPresent && (!bot.hasFilamentBay || !spoolPresent)
 
             PropertyChanges {
-                target: rowLayout
+                target: contentContainer
                 visible: true
             }
 
@@ -116,10 +104,10 @@ Item {
         },
         State {
             name: "extruder_present_material_details_known"
-            when: extruderPresent && bot.hasFilamentBay
+            when: extruderPresent && bot.hasFilamentBay && spoolPresent
 
             PropertyChanges {
-                target: rowLayout
+                target: contentContainer
                 visible: true
             }
 

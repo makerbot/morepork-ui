@@ -37,6 +37,7 @@ class ProcessModel : public BaseModel {
         Failed,
         Cancelled,
         Idle, // Load and Unload states
+        WaitingForFilament,
         Preheating,
         Extrusion,
         Stopping,

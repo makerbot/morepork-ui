@@ -3054,7 +3054,7 @@ ApplicationWindow {
 
                         TextBody {
                             id: help_description
-                            text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
+                            text: qsTr("Scan the QR code for more information and troubleshooting tips.")
                             Layout.preferredWidth: parent.width
                             Layout.alignment: Qt.AlignLeft
                             visible: true
@@ -3075,11 +3075,6 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("METHOD XL SETUP GUIDE")
                         }
-
-                        PropertyChanges {
-                            target: help_description
-                            text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
-                        }
                     },
 
                     State {
@@ -3098,6 +3093,61 @@ ApplicationWindow {
                         PropertyChanges {
                             target: help_description
                             text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
+                        }
+                    },
+
+                    State {
+                        name: "cut_filament_tip_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("CUT FILAMENT TIP HELP")
+                        }
+                    },
+
+                    State {
+                        name: "methodxl_place_dessicant_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("PLACE DESSICANT HELP")
+                        }
+                    },
+
+                    State {
+                        name: "methodxl_place_material_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("PLACE MATERIAL HELP")
+                        }
+                    },
+                    State {
+                        name: "methodxl_feed_filament_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("FEED MATERIAL HELP")
                         }
                     }
                 ]

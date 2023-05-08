@@ -7,14 +7,42 @@ Button {
     enum Style {
         Button,
         ButtonWithHelp,
-        ButtonDisabledHelpEnabled
+        ButtonDisabledHelpEnabled,
+        DelayedEnable
     }
     property int style: ButtonRectangleBase.Button
+
+    property int delayedEnableTimeSec: 3
+    property int delayedEnableCountdown
+    onStyleChanged: {
+        delayedEnableTimer.stop()
+        enabled = true
+        if(style == ButtonRectangleBase.DelayedEnable) {
+            enabled = false
+            delayedEnableCountdown = delayedEnableTimeSec
+            delayedEnableTimer.start()
+        }
+    }
+
+    Timer {
+        id: delayedEnableTimer
+        repeat: true
+        interval: 1000
+        onTriggered: {
+            if(delayedEnableCountdown != 0) {
+                delayedEnableCountdown -= 1
+            } else {
+                style = ButtonRectangleBase.Button
+                enabled = true
+                delayedEnableTimer.stop()
+            }
+        }
+    }
 
     width: style == ButtonRectangleBase.Button ? 360 : 318
     Layout.preferredWidth: style == ButtonRectangleBase.Button ? 360 : 318
     height: 52
-    text: qsTr("Button")
+    text: "Button"
     antialiasing: false
     smooth: false
     flat: true
@@ -39,14 +67,8 @@ Button {
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
-        opacity: {
-            if(!buttonRectangle.enabled ||
-                buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled) {
-                0.5
-            } else {
-                1
-            }
-        }
+        opacity: !buttonRectangle.enabled ||
+                  buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled ? 0.5 : 1
 
         Behavior on opacity {
             OpacityAnimator {
@@ -60,14 +82,8 @@ Button {
         implicitWidth: 136
         implicitHeight: 52
         radius: 5
-        opacity: {
-            if(!buttonRectangle.enabled ||
-                buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled) {
-                0.5
-            } else {
-                1
-            }
-        }
+        opacity: !buttonRectangle.enabled ||
+                  buttonRectangle.style == ButtonRectangleBase.ButtonDisabledHelpEnabled ? 0.5 : 1
 
         Behavior on opacity {
             OpacityAnimator {
@@ -131,5 +147,16 @@ Button {
         function logClick() {
             console.info(logKey + " Help clicked")
         }
+    }
+
+    TextBody {
+        id: disabledCountdown
+        text: ":" + delayedEnableCountdown
+        style: TextBody.Large
+        font.weight: Font.Bold
+        anchors.left: parent.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        visible: buttonRectangle.style == ButtonRectangleBase.DelayedEnable
     }
 }

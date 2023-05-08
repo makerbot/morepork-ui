@@ -22,15 +22,22 @@ LoggingPopup {
     property alias popupContainer: popupContainer
     property alias popupWidth: popupContainer.width
     property alias popupHeight: popupContainer.height
+    property alias fullButton: full_button
+    property alias fullButtonText: full_text.text
+    property alias leftButton: left_button
+    property alias leftButtonText: left_text.text
+    property alias rightButton: right_button
+    property alias rightButtonText: right_text.text
+    property bool showOneButton: false
+    property bool showTwoButtons: false
+    property int defaultButton: CustomPopup.Right
+
     property alias full_button: full_button
     property alias full_button_text: full_text.text
     property alias left_button: left_button
     property alias left_button_text: left_text.text
     property alias right_button: right_button
     property alias right_button_text: right_text.text
-    property bool showOneButton: false
-    property bool showTwoButtons: false
-    property int defaultButton: CustomPopup.Right
 
     background: Rectangle {
         id: popupBackgroundDim
