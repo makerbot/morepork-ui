@@ -468,8 +468,13 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightItem.textBody
                 text: qsTr("Open the material bay and remove the empty spool, " +
-                           "as well as any excess material.<br><br>Then place " +
-                           "a MakerBot <b>%1</b> spool in the bay to load material.").arg(
+                           "as well as any excess material.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightItem.textBody1
+                text: qsTr("Place a MakerBot %1 spool in the bay to load material.").arg(
                                 bot.process.filamentBayAOOF ?
                                      printPage.print_model_material_name :
                                      printPage.print_support_material_name)
