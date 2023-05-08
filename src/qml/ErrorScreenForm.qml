@@ -467,7 +467,12 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightItem.textBody
-                text: qsTr("Open the material bay and remove the empty spool, as well as any excess material.")
+                text: qsTr("Open the material bay and remove the empty spool, " +
+                           "as well as any excess material.<br><br>Then place " +
+                           "a MakerBot <b>%1</b> spool in the bay to load material.").arg(
+                                bot.process.filamentBayAOOF ?
+                                     printPage.print_model_material_name :
+                                     printPage.print_support_material_name)
                 visible: true
             }
 
@@ -485,6 +490,7 @@ LoggingItem {
                 target: contentRightItem.buttonSecondary1
                 visible: false
             }
+
             PropertyChanges {
                 target: contentLeftItem.loadingIcon
                 visible: false
