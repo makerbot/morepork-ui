@@ -95,7 +95,7 @@ LoadUnloadFilamentForm {
             } else if(state == "loaded_filament" || state == "unloaded_filament") {
                 state = "base state"
                 retryLoadUnload()
-            } else if(state == "error") {
+            } else if(state == "error" || "error_not_extruding") {
                 processDone()
             }
         }
