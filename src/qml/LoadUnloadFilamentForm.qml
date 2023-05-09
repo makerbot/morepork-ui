@@ -641,10 +641,10 @@ LoggingItem {
                     visible: true
                 }
                 temperatureStatus {
-                    showExtruder: {
+                    showComponent: {
                         (bayID == 1) ?
-                           TemperatureStatus.Extruder.Model :
-                           TemperatureStatus.Extruder.Support
+                           TemperatureStatus.ModelExtruder :
+                           TemperatureStatus.SupportExtruder
                     }
                     visible: true
                 }
