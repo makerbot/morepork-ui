@@ -143,9 +143,10 @@ FrePageForm {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
                 settingsPage.namePrinter.nameField.forceActiveFocus()
-            } else if(state == "base state" || state == "welcome") {
+            } /*else if(state == "base state" || state == "welcome") {
                 fre.setFreStep(FreStep.StartSetLanguage)
-            } else if(state == "magma_setup_guide1") {
+            } BW-5871 */
+            else if(state == "magma_setup_guide1") {
                  fre.setFreStep(FreStep.Welcome)
             } else if(state == "magma_setup_guide2") {
                 state = "magma_setup_guide1"
