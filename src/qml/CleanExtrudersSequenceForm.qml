@@ -227,7 +227,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide.temperatureStatus
                 component1.customTargetTemperature: 50
-                component2.customCurrentTemperature: 50
+                component2.customTargetTemperature: 50
                 visible: true
             }
         }
