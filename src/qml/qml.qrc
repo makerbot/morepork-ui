@@ -200,8 +200,6 @@
         <file>UserAssistedLoadInstructionsForm.qml</file>
         <file>FailurePrintFeedback.qml</file>
         <file>FailurePrintFeedbackForm.qml</file>
-        <file>FeedbackButton.qml</file>
-        <file>FeedbackButtonForm.qml</file>
         <file>HeatShieldInstructions.qml</file>
         <file>HeatShieldInstructionsForm.qml</file>
         <file>CleanAirSettingsPage.qml</file>

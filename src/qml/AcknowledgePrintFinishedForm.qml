@@ -93,8 +93,7 @@ LoggingItem {
             Layout.preferredWidth: 178
             Image {
                 id: thumbs_up
-                source: "qrc:/img/print_feedback_thumbs_up.png"
-                sourceSize: Qt.size(20, 20)
+                source: "qrc:/img/thumbs_up_feedback.png"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -116,12 +115,11 @@ LoggingItem {
             text: ""
             Image {
                 id: thumbs_down
-                source: "qrc:/img/print_feedback_thumbs_down.png"
+                source: "qrc:/img/thumbs_down_feedback.png"
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
-
     }
 
     RoundedButton {

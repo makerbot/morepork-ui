@@ -1,31 +1,42 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 
-Rectangle 
-{
-    id: action_circle
-    property alias mouseArea: action_mouseArea
-    property string image_source: "qrc:/img/pause.png"
-    width: radius * 2
-    height: radius * 2
-    color: "#000000"
-    radius: 40
-    visible: true
+Item {
+    height: 90
+    width: 118
 
-    Image {
-        id: action_image
-        width: parent.width
-        height: parent.height
-        smooth: false
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter: parent.verticalCenter
-        source: image_source
+    property alias buttonImage: button_image.source
+    property alias buttonText: button_text.text
+    property alias mouseArea: action_mousearea
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 15
+        opacity: parent.enabled ? 1 : 0.3
+
+        Image {
+            id: button_image
+            height: sourceSize.height
+            width: sourceSize.width
+            Layout.alignment: Qt.AlignHCenter
+        }
+
+        TextSubheader {
+            id: button_text
+            Layout.preferredWidth: parent.width
+            Layout.alignment: Qt.AlignHCenter
+        }
     }
 
     LoggingMouseArea {
-        logText: "printing - action_circle: [?action image?]"
-        id: action_mouseArea
+        id: action_mousearea
+        logText: "PrintIcon " + buttonText + " clicked"
         smooth: false
         anchors.fill: parent
-    }   
+        onPressed: { parent.opacity = 0.3 }
+        onReleased: { parent.opacity = 1 }
+        onCanceled: { parent.opacity = 1 }
+        enabled: parent.enabled
+    }
 }

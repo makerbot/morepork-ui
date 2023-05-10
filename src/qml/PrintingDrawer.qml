@@ -60,7 +60,7 @@ Drawer {
 
             Item {
                 id: empty
-                height: 40
+                height: 70
                 smooth: false
                 anchors.right: parent.right
                 anchors.rightMargin: 0

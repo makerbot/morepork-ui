@@ -91,9 +91,7 @@ Item {
                     Layout.preferredWidth: 300
                     text: qsTr("START")
                     onClicked: {
-
-                        if((startPrintSource == PrintPage.FromLocal && !startPrintCheck())
-                            || (startPrintSource == PrintPage.FromPrintQueue && !startPrintMaterialCheck())) {
+                        if(!startPrintCheck()) {
                             startPrintErrorsPopup.open()
                         } else {
                             confirm_build_plate_popup.open()
