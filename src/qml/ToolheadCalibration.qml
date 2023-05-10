@@ -52,25 +52,6 @@ ToolheadCalibrationForm {
                     }
                 }
             }
-
-            temperatureStatus {
-                modelExtruder {
-                    customTargetTemperature: {
-                        if(toolheadCalibration.state == "clean_nozzles" &&
-                           bot.process.stateType == ProcessStateType.CoolingNozzle) {
-                            50
-                        }
-                    }
-                }
-                supportExtruder {
-                    customTargetTemperature: {
-                        if(toolheadCalibration.state == "clean_nozzles" &&
-                           bot.process.stateType == ProcessStateType.CoolingNozzle) {
-                            50
-                        }
-                    }
-                }
-            }
         }
     }
 }

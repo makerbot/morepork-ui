@@ -239,6 +239,17 @@ Item {
         extruder_temp = !support_extruder_used ?
                             meta['extruder_temperatures'][0] + "C" :
                             meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
+        if("build_plane_temperature" in meta) {
+            meta["buildplane_target_temperature"] = meta["build_plane_temperature"]
+            delete meta["build_plane_temperature"]
+        } else {
+            // Backwards compatibility, in case the user somehow lost
+            // the .stl, and only has older .makerbot files on hand.
+            meta["buildplane_target_temperature"] =
+                    (meta["chamber_temperature"] > 40) ?
+                        Math.round((meta["chamber_temperature"] * 1.333) - 13) :
+                        meta["chamber_temperature"]
+        }
         buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
@@ -758,18 +769,6 @@ Item {
                                                   function(response) {
                                                       if(response["success"]) {
                                                           metaData = response["meta"]
-                                                          if ("build_plane_temperature" in metaData) {
-                                                              metaData["buildplane_target_temperature"] =
-                                                                  metaData["build_plane_temperature"]
-                                                              delete metaData["build_plane_temperature"]
-                                                          } else {
-                                                              // Backwards compatibility, in case the user somehow lost
-                                                              // the .stl, and only has older .makerbot files on hand.
-                                                              metaData["buildplane_target_temperature"] =
-                                                                  (metaData["chamber_temperature"] > 40) ?
-                                                                  Math.round((metaData["chamber_temperature"] * 1.333) - 13) :
-                                                                  metaData["chamber_temperature"]
-                                                          }
                                                           hasMeta = true
                                                       }
                                                   })

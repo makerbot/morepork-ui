@@ -31,7 +31,7 @@ Item {
             PrintIcon {
                 smooth: false
                 scale: 0.4
-                actionButton: false
+                showActionButtons: false
                 visible: !parent.imageVisible
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter

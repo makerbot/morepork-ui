@@ -1,37 +1,20 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import ProcessTypeEnum 1.0
-import ProcessStateTypeEnum 1.0
-import MachineTypeEnum 1.0
 
 ColumnLayout {
     width: 360
     spacing: 8
 
-    property int extruderIdx: 0
+    property alias componentName: component_name.text
     property int customCurrentTemperature: -999
     property int customTargetTemperature: -999
-    property alias type: headline.text
-    property bool headlineVisible: true
-
-    property string idxAsAxis: {
-        switch (extruderIdx) {
-            case 0:
-                "A"
-                break
-            case 1:
-                "B"
-                break
-            default:
-                "A"
-        }
-    }
+    property alias showComponentName: component_name.visible
 
     TextHeadline {
-        id: headline
-        text: qsTr("Extruder %1").arg(extruderIdx + 1)
-        visible: headlineVisible
+        id: component_name
+        text: "COMPONENT"
+        visible: true
     }
 
     RowLayout {
@@ -45,10 +28,7 @@ ColumnLayout {
             }
 
             TextBody {
-                text: {
-                    customCurrentTemperature > 0 ? customCurrentTemperature :
-                    ("%1 C").arg(bot["extruder%1CurrentTemp".arg(idxAsAxis)])
-                }
+                text: customCurrentTemperature + " C"
                 font.weight: Font.Bold
             }
         }
@@ -61,10 +41,7 @@ ColumnLayout {
             }
 
             TextBody {
-                text: {
-                    customTargetTemperature > 0 ? customTargetTemperature :
-                    ("%1 C").arg(bot["extruder%1TargetTemp".arg(idxAsAxis)])
-                }
+                text: customTargetTemperature + " C"
                 font.weight: Font.Bold
             }
         }

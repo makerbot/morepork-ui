@@ -2503,7 +2503,7 @@ ApplicationWindow {
 
                 TextBody {
                     id: mb_compatibility_link_error_popup
-                    text: qsTr("<br><b>makerbot.com/combatibility</b>")
+                    text: qsTr("<br><b>makerbot.com/compatibility</b>")
                     Layout.alignment: Qt.AlignHCenter
                     visible: false
                 }
