@@ -597,47 +597,7 @@ ApplicationWindow {
 
             showTwoButtons: true
             left_button_text: qsTr("BACK")
-            right_button_text: {
-                switch(currentFreStep) {
-                case FreStep.Welcome:
-                    ""
-                    break;
-                case FreStep.SetupWifi:
-                    qsTr("SKIP WIFI")
-                    break;
-                case FreStep.SoftwareUpdate:
-                    qsTr("SKIP FIRMWARE UPDATE")
-                    break;
-                case FreStep.NamePrinter:
-                    qsTr("SKIP NAMING PRINTER")
-                    break;
-                case FreStep.SetTimeDate:
-                    qsTr("SKIP SETTING TIME")
-                    break;
-                case FreStep.LoginMbAccount:
-                    qsTr("SKIP SIGN IN")
-                    break;
-                case FreStep.AttachExtruders:
-                case FreStep.LevelBuildPlate:
-                case FreStep.CalibrateExtruders:
-                case FreStep.MaterialCaseSetup:
-                case FreStep.LoadMaterial:
-                    qsTr("SKIP PRINTER SETUP")
-                    break;
-                case FreStep.TestPrint:
-                    qsTr("SKIP TEST PRINT")
-                    break;
-                case FreStep.SetupComplete:
-                    ""
-                    break;
-                case FreStep.FreComplete:
-                    ""
-                    break;
-                default:
-                    ""
-                    break;
-                }
-            }
+            right_button_text: qsTr("CONFIRM")
 
             left_button.onClicked: {
                 skipFreStepPopup.close()
@@ -679,7 +639,7 @@ ApplicationWindow {
                             ""
                             break;
                         case FreStep.SetupWifi:
-                            qsTr("SKIP WI-FI SETUP?")
+                            qsTr("OFFLINE SETUP?")
                             break;
                         case FreStep.SoftwareUpdate:
                             qsTr("SKIP FIRMWARE UPDATE?")
@@ -689,18 +649,6 @@ ApplicationWindow {
                             break;
                         case FreStep.SetTimeDate:
                             qsTr("SKIP SETTING TIME?")
-                            break;
-                        case FreStep.AttachExtruders:
-                            qsTr("SKIP ATTACHING EXTRUDERS?")
-                            break;
-                        case FreStep.LevelBuildPlate:
-                            qsTr("SKIP LEVELING BUILD PLATE?")
-                            break;
-                        case FreStep.CalibrateExtruders:
-                            qsTr("SKIP CALIBRATING EXTRUDERS?")
-                            break;
-                        case FreStep.MaterialCaseSetup:
-                            qsTr("SKIP MATERIAL CASE SETUP?")
                             break;
                         case FreStep.LoadMaterial:
                             qsTr("SKIP LOADING MATERIAL?")
@@ -717,7 +665,12 @@ ApplicationWindow {
                         case FreStep.FreComplete:
                             ""
                             break;
+                        case FreStep.AttachExtruders:
+                        case FreStep.LevelBuildPlate:
+                        case FreStep.CalibrateExtruders:
+                        case FreStep.MaterialCaseSetup:
                         default:
+                            qsTr("SKIP THIS STEP?")
                             break;
                         }
                     }
@@ -731,7 +684,7 @@ ApplicationWindow {
                             ""
                             break;
                         case FreStep.SetupWifi:
-                            qsTr("Connecting to Wi-Fi enables remote printing and monitoring from any internet connected device. An Ethernet cable can also be used.")
+                            qsTr("We recommend connecting your printer for the best experience.")
                             break;
                         case FreStep.SoftwareUpdate:
                             qsTr("It is recommended to keep your printer updated for the latest features and quality.")
@@ -742,16 +695,6 @@ ApplicationWindow {
                         case FreStep.SetTimeDate:
                             qsTr("You can set the time later from the printer settings menu.")
                             break;
-                        case FreStep.AttachExtruders:
-                            qsTr("Extruders are required to use the printer.")
-                            break;
-                        case FreStep.LevelBuildPlate:
-                            qsTr("For best print quality and dimensional accuracy, the build plate should be leveled.")
-                            break;
-                        case FreStep.CalibrateExtruders:
-                            qsTr("For best print quality and dimensional accuracy, the extruders should be calibrated each time they are attached.")
-                            break;
-                        case FreStep.MaterialCaseSetup:
                         case FreStep.LoadMaterial:
                             qsTr("Printing requires material to be loaded into the extruders.")
                             break;
@@ -767,7 +710,12 @@ ApplicationWindow {
                         case FreStep.FreComplete:
                             ""
                             break;
+                        case FreStep.AttachExtruders:
+                        case FreStep.LevelBuildPlate:
+                        case FreStep.CalibrateExtruders:
+                        case FreStep.MaterialCaseSetup:
                         default:
+                            qsTr("This may skip other set-up procedures as well. You can all steps of the set-up in the settings.")
                             break;
                         }
                     }
