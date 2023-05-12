@@ -1023,7 +1023,7 @@ LoggingItem {
                     delayedEnableTimeSec: 3
                     style: ButtonRectanglePrimary.DelayedEnable
                     text: qsTr("RETRY UNLOADING")
-                    visible: bot.hasFilamentBay
+                    visible: true
                 }
                 temperatureStatus {
                     visible: false
