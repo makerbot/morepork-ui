@@ -213,7 +213,6 @@ Item {
         LoadUnloadPage,
         AttachExtruderPage,
         FreAdditionalStepsPage
-
     }
 
     LoggingSwipeView {

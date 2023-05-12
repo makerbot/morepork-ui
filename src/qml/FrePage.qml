@@ -36,7 +36,6 @@ FrePageForm {
         }
         bot.loadFilament(0, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
-
     }
 
     continueButton {
