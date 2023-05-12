@@ -145,7 +145,7 @@ LoggingItem {
             } else if(bot.hasFilamentBay) {
                 state = "cut_filament_tip"
             } else {
-                state = "place_dessicant"
+                state = "place_desiccant"
             }
             break;
         case ProcessStateType.Stopping:
@@ -310,9 +310,9 @@ LoggingItem {
             }
         },
 
-        // WITHOUT FILAMENT BAY ONLY STEP - place_dessicant
+        // WITHOUT FILAMENT BAY ONLY STEP - place_desiccant
         State {
-            name: "place_dessicant"
+            name: "place_desiccant"
 
             PropertyChanges {
                 target: contentLeftSide
@@ -321,7 +321,7 @@ LoggingItem {
                     visible: false
                 }
                 animatedImage {
-                    source: ("qrc:/img/methodxl_place_dessicant_%1.gif").arg(bayID)
+                    source: ("qrc:/img/methodxl_place_desiccant_%1.gif").arg(bayID)
                     visible: true
                 }
                 loadingIcon {
@@ -333,7 +333,7 @@ LoggingItem {
                 target: contentRightSide
                 textHeader {
                     style: TextHeadline.Base
-                    text: qsTr("DESSICANT FOR MATERIAL %1").arg(bayID)
+                    text: qsTr("DESICCANT FOR MATERIAL %1").arg(bayID)
                     visible: true
                 }
                 textBody {

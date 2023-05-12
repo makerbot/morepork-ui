@@ -29,8 +29,14 @@ FrePageForm {
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true
         materialPage.enableMaterialDrawer()
+        // Additional Steps for XL Material Loading Setup
+        if(materialPage.shouldSelectMaterial(0)) {
+            materialPage.materialSwipeView.swipeToItem(MaterialPage.FreAdditionalStepsPage)
+            return
+        }
         bot.loadFilament(0, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+
     }
 
     continueButton {

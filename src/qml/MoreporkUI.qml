@@ -3111,7 +3111,7 @@ ApplicationWindow {
                     },
 
                     State {
-                        name: "methodxl_place_dessicant_help"
+                        name: "methodxl_place_desiccant_help"
 
                         PropertyChanges {
                             target: help_qr_code
@@ -3120,7 +3120,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_title
-                            text: qsTr("PLACE DESSICANT HELP")
+                            text: qsTr("PLACE DESICCANT HELP")
                         }
                     },
 

@@ -319,7 +319,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: subtitle
-                text: qsTr("Confirm your re-usable Mylar storage\nbag has no holes.\n\nPlace spool in bag and add additional\nfresh bags of dessicant before sealing.")
+                text: qsTr("Confirm your re-usable Mylar storage\nbag has no holes.\n\nPlace spool in bag and add additional\nfresh bags of desiccant before sealing.")
             }
 
             PropertyChanges {

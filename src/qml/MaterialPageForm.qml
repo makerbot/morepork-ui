@@ -211,7 +211,9 @@ Item {
         BasePage,
         LoadMaterialSettingsPage,
         LoadUnloadPage,
-        AttachExtruderPage
+        AttachExtruderPage,
+        FreAdditionalStepsPage
+
     }
 
     LoggingSwipeView {
@@ -251,6 +253,7 @@ Item {
             property int backSwipeIndex: MaterialPage.BasePage
             property string topBarTitle: qsTr("Select Material")
             visible: false
+
 
             LoadMaterialSettings {
                 id: loadMaterialSettingsPage
@@ -611,6 +614,53 @@ Item {
                     }
                 }
             ]
+        }
+
+        // MaterialPage.FreAdditionalStepsPage
+        Item {
+            id: freAdditionalStepsPage
+            property var backSwiper: materialSwipeView
+            property int backSwipeIndex: MaterialPage.BasePage
+            property string topBarTitle: qsTr("Loading Material")
+
+            ContentLeftSide {
+                visible: true
+                image {
+                    source: ("qrc:/img/methodxl_locate_desiccant.png")
+                    visible: true
+                }
+            }
+            ContentRightSide {
+                visible: true
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("LOCATE DESICCANT IN MATERIAL BAG")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Remove two of the desiccant pouches "+
+                               "located in your material bag.")
+                    visible: true
+                }
+                textBody1 {
+                    text: qsTr("Please note: Materials are purchased "+
+                               "and shipped separately.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("NEXT")
+                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    visible: true
+                    onClicked: {
+                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    }
+
+                    help.onClicked: {
+                        helpPopup.state = "locate_desiccant_help"
+                        helpPopup.open()
+                    }
+                }
+            }
         }
     }
 
