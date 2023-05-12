@@ -3149,7 +3149,21 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("FEED MATERIAL HELP")
                         }
+                    },
+                    State {
+                        name: "methodxl_locate_desiccant_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("LOCATE DESICCANT HELP")
+                        }
                     }
+
                 ]
             }
         }

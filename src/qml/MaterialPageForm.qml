@@ -620,7 +620,7 @@ Item {
             id: freAdditionalStepsPage
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
-            property string topBarTitle: qsTr("Loading Material")
+            property string topBarTitle: qsTr("Load Material")
 
             ContentLeftSide {
                 visible: true
@@ -644,6 +644,7 @@ Item {
                 textBody1 {
                     text: qsTr("Please note: Materials are purchased "+
                                "and shipped separately.")
+                    font.weight: Font.Normal
                     visible: true
                 }
                 buttonPrimary {
