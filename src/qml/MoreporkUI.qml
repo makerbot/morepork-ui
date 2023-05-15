@@ -715,7 +715,7 @@ ApplicationWindow {
                         case FreStep.CalibrateExtruders:
                         case FreStep.MaterialCaseSetup:
                         default:
-                            qsTr("This may skip other set-up procedures as well. You can all steps of the set-up in the settings.")
+                            qsTr("This may skip other set-up procedures as well. You can revisit all steps of the set-up in the settings.")
                             break;
                         }
                     }
