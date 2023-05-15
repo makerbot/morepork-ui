@@ -155,6 +155,16 @@ LoggingItem {
             name: "raising"
 
             PropertyChanges {
+                target: unpackingPopup
+                visible: false
+            }
+
+            PropertyChanges {
+                target: unpackingPopupHeader
+                text: ""
+            }
+
+            PropertyChanges {
                 target: unpackingContentRightSide.textHeader
                 text: qsTr("RAISING BUILD PLATE")
                 visible: true
@@ -215,6 +225,16 @@ LoggingItem {
         },
         State {
             name: "remove_box_2"
+
+            PropertyChanges {
+                target: unpackingPopup
+                visible: false
+            }
+
+            PropertyChanges {
+                target: unpackingPopupHeader
+                text: ""
+            }
 
             PropertyChanges {
                 target: unpackingContentRightSide.textHeader
