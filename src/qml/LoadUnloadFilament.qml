@@ -8,7 +8,7 @@ LoadUnloadFilamentForm {
         onClicked: {
             if(state == "cut_filament_tip") {
                 state = "place_material"
-            } else if(state == "place_dessicant") {
+            } else if(state == "place_desiccant") {
                 state = "cut_filament_tip"
             } else if(state == "place_material") {
                 state = "no_nfc_reader_feed_filament"
@@ -70,8 +70,8 @@ LoadUnloadFilamentForm {
                 if(state == "cut_filament_tip") {
                     helpPopup.state = "cut_filament_tip_help"
                     helpPopup.open()
-                } else if(state == "place_dessicant") {
-                    helpPopup.state = "methodxl_place_dessicant_help"
+                } else if(state == "place_desiccant") {
+                    helpPopup.state = "methodxl_place_desiccant_help"
                     helpPopup.open()
                 } else if (state == "place_material") {
                     helpPopup.state = "methodxl_place_material_help"

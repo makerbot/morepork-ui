@@ -3111,7 +3111,7 @@ ApplicationWindow {
                     },
 
                     State {
-                        name: "methodxl_place_dessicant_help"
+                        name: "methodxl_place_desiccant_help"
 
                         PropertyChanges {
                             target: help_qr_code
@@ -3120,7 +3120,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_title
-                            text: qsTr("PLACE DESSICANT HELP")
+                            text: qsTr("PLACE DESICCANT HELP")
                         }
                     },
 
@@ -3149,7 +3149,21 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("FEED MATERIAL HELP")
                         }
+                    },
+                    State {
+                        name: "methodxl_locate_desiccant_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/broken.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("LOCATE DESICCANT HELP")
+                        }
                     }
+
                 ]
             }
         }
