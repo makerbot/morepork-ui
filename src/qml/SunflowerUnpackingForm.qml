@@ -7,6 +7,7 @@ import ErrorTypeEnum 1.0
 LoggingItem {
     itemName: "SunflowerUnpacking"
     anchors.fill: parent
+    property bool lowering: false
     property alias continueButton: unpackingContentRightSide.buttonPrimary
     property alias unpackingPopup: unpackingPopup
 
@@ -64,11 +65,15 @@ LoggingItem {
         if (bot.process.type == ProcessType.MoveBuildPlateProcess) {
             switch(currentState) {
             case ProcessStateType.Cancelling:
-                state = "raising_paused"
+                state = "move_paused"
                 break;
             case ProcessStateType.CleaningUp:
                if (!bot.process.cancelled) {
-                   state = "remove_box_2"
+                   if (lowering) {
+                       fre.gotoNextStep(currentFreStep)
+                   } else {
+                       state = "remove_box_2"
+                   }
                }
                break;
             default:
@@ -152,11 +157,12 @@ LoggingItem {
             }
         },
         State {
-            name: "raising"
+            name: "moving"
 
             PropertyChanges {
                 target: unpackingContentRightSide.textHeader
-                text: qsTr("RAISING BUILD PLATE")
+                text: lowering? qsTr("LOWERING BUILD PLATE")
+                              : qsTr("RAISING BUILD PLATE")
                 visible: true
             }
 
@@ -182,7 +188,7 @@ LoggingItem {
             }
         },
         State {
-            name: "raising_paused"
+            name: "move_paused"
 
             PropertyChanges {
                 target: unpackingContentRightSide.textHeader
