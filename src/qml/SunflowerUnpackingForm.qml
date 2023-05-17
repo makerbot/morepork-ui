@@ -38,6 +38,7 @@ LoggingItem {
             anchors.verticalCenterOffset: -25
 
             Image{
+                id: unpackingPopupImage
                 source: "qrc:/img/popup_error.png"
                 Layout.alignment: Qt.AlignHCenter
                 Layout.bottomMargin: 10
@@ -165,6 +166,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: unpackingPopupImage
+                visible: false
+            }
+
+            PropertyChanges {
                 target: unpackingContentRightSide.textHeader
                 text: qsTr("RAISING BUILD PLATE")
                 visible: true
@@ -234,6 +240,11 @@ LoggingItem {
             PropertyChanges {
                 target: unpackingPopupHeader
                 text: ""
+            }
+
+            PropertyChanges {
+                target: unpackingPopupImage
+                visible: false
             }
 
             PropertyChanges {
