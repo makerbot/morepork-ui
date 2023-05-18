@@ -228,6 +228,9 @@ LoggingItem {
                         Layout.preferredWidth: parent.width - 40
                         horizontalAlignment: Text.AlignTop
                         elide: Text.ElideRight
+
+                        // local override of wrapping until wider testing can be done
+                        wrapMode: Text.Wrap
                     }
 
                     // Miscellaneous subheader that is only used to display additional information

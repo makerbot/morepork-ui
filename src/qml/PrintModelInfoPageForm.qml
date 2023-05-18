@@ -55,6 +55,9 @@ Item {
                     Layout.preferredWidth: details_item.width
                     elide: Text.ElideRight
                     font.weight: Font.Bold
+
+                    // local override of wrapping until wider testing can be done
+                    wrapMode: Text.Wrap
                 }
 
                 TextSubheader {

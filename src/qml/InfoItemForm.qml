@@ -40,6 +40,15 @@ Item {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             elide: Text.ElideRight
             Layout.minimumWidth: 365
+
+            // local override of wrapping until wider testing can be done
+            wrapMode: {
+                if (text == "FILENAME") {
+                    Text.Wrap
+                } else {
+                    Text.WordWrap
+                }
+            }
         }
     }
 }
