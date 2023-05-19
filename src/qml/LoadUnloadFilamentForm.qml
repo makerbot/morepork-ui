@@ -421,6 +421,17 @@ LoggingItem {
         State {
             name: "no_nfc_reader_feed_filament"
 
+            // We can only get into this state manually or when a user triggers the extruder switch
+            // but due to shaky hands untriggers it. The printer would have begun preheating once
+            // the switch was triggered and the UI moved to the "preheating" state, but as the switch
+            // was untriggered the UI now doesnt have a state to go back to prompt inserting filament
+            // which is what this when condition handles. Note that this is only for Method XL.
+            when: !bot.hasFilamentBay &&
+                  bot.process.type == ProcessType.Load &&
+                  bot.process.type == ProcessType.Print &&
+                  bot.process.stateType == ProcessStateType.Preheating &&
+                  !extruderFilamentSwitch
+
             PropertyChanges {
                 target: contentLeftSide
                 visible: true
@@ -450,7 +461,7 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Feed material through the funnel until you feel it engage with the extruder.<br>" +
+                    text: qsTr("Feed material through the funnel until you feel it engage with the extruder.<br><br>" +
                                "If you encounter any issues, click the help icon for additional guidance.")
                     visible: true
                 }
@@ -845,9 +856,9 @@ LoggingItem {
                             if(bot.process.type == ProcessType.Print) {
                                 qsTr("NEXT")
                             } else if(bot.process.type == ProcessType.None) {
-                                if(bayID == 1) {
+                                if(bayID == 1 && !bot.hasFilamentBay) {
                                     qsTr("NEXT: LOAD SUPPORT MATERIAL")
-                                } else if(bayID == 2) {
+                                } else {
                                     qsTr("NEXT")
                                 }
                             }
@@ -940,7 +951,21 @@ LoggingItem {
                 }
                 buttonPrimary {
                     style: ButtonRectanglePrimary.Button
-                    text: qsTr("DONE")
+                    text: {
+                        if(inFreStep) {
+                            if(bot.process.type == ProcessType.Print) {
+                                qsTr("NEXT")
+                            } else if(bot.process.type == ProcessType.None) {
+                                if(bayID == 1 && bot.hasFilamentBay) {
+                                    qsTr("NEXT: LOAD SUPPORT MATERIAL")
+                                } else if(bayID == 2) {
+                                    qsTr("DONE")
+                                }
+                            }
+                        } else {
+                            qsTr("DONE")
+                        }
+                    }
                     visible: true
                 }
                 buttonSecondary1 {
@@ -1152,6 +1177,7 @@ LoggingItem {
                     text: qsTr("SWAP MATERIAL")
                     style: ButtonRectanglePrimary.Button
                     visible: true
+                    enabled: !inFreStep
                 }
                 temperatureStatus {
                     visible: false

@@ -24,17 +24,19 @@ FrePageForm {
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
 
-    function startFreMaterialLoad() {
+    function startFreMaterialLoad(tool_idx) {
         mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-        materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true
-        materialPage.enableMaterialDrawer()
-        // Additional Steps for XL Material Loading Setup
-        if(materialPage.shouldSelectMaterial(0)) {
+        materialPage.toolIdx = tool_idx
+        // For Method XL the FRE additional steps screen will lead to the
+        // loading flow.
+        if(!bot.hasFilamentBay) {
             materialPage.materialSwipeView.swipeToItem(MaterialPage.FreAdditionalStepsPage)
             return
         }
-        bot.loadFilament(0, false, false)
+        materialPage.startLoadUnloadFromUI = true
+        materialPage.enableMaterialDrawer()
+        bot.loadFilament(tool_idx, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
@@ -108,7 +110,7 @@ FrePageForm {
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.MaterialCaseSetup)
             } else if(state == "load_material") {
                 inFreStep = true
-                startFreMaterialLoad()
+                startFreMaterialLoad(0)
             } else if(state == "test_print") {
                 inFreStep = true
                 startTestPrint()
