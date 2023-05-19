@@ -64,7 +64,8 @@ LoggingItem {
             visible: true
         }
         textBody {
-            text: qsTr("This is the simplest calibration that should be run anytime an extruder is attached to the printer.<br><br>We additionally recommend running the  manual calibration processes for best print quality.")
+            text: qsTr("This is the simplest calibration that should be run " +
+                       "anytime an extruder is attached to the printer.")
             visible: true
         }
         buttonPrimary {

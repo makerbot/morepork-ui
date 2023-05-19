@@ -29,6 +29,11 @@ FrePageForm {
         materialPage.startLoadUnloadFromUI = true
         materialPage.isLoadFilament = true
         materialPage.enableMaterialDrawer()
+        // Additional Steps for XL Material Loading Setup
+        if(materialPage.shouldSelectMaterial(0)) {
+            materialPage.materialSwipeView.swipeToItem(MaterialPage.FreAdditionalStepsPage)
+            return
+        }
         bot.loadFilament(0, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
@@ -120,8 +125,6 @@ FrePageForm {
                 // For all screens not listed above, the default behavior
                 // is to go to the next step
                 fre.gotoNextStep(currentFreStep)
-
-
             }
         }
 
@@ -145,7 +148,8 @@ FrePageForm {
                 settingsPage.namePrinter.nameField.forceActiveFocus()
             } else if(state == "base state" || state == "welcome") {
                 fre.setFreStep(FreStep.StartSetLanguage)
-            } else if(state == "magma_setup_guide1") {
+            }
+            else if(state == "magma_setup_guide1") {
                  fre.setFreStep(FreStep.Welcome)
             } else if(state == "magma_setup_guide2") {
                 state = "magma_setup_guide1"

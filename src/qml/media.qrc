@@ -27,7 +27,6 @@
         <file alias="makerbot_logo_55x40.png">images/makerbot_logo_55x40.png</file>
         <file alias="makerbot_logo_110x80.png">images/makerbot_logo_110x80.png</file>
         <file alias="makerbot_logo_320x200.png">images/makerbot_logo_320x200.png</file>
-
         <file alias="labs_extruder_instructions.png">images/load_unload/labs_extruder_instructions.png</file>
         <file alias="user_assisted_load.png">images/load_unload/user_assisted_load.png</file>
         <file alias="cut_filament_tip.gif">images/load_unload/cut_filament_tip.gif</file>
@@ -42,8 +41,8 @@
         <file alias="extrusion_2.png">images/load_unload/extrusion_2.png</file>
         <file alias="method_rewind_spool_1.gif">images/load_unload/method/rewind_spool_1.gif</file>
         <file alias="method_rewind_spool_2.gif">images/load_unload/method/rewind_spool_2.gif</file>
-        <file alias="methodxl_place_dessicant_1.gif">images/load_unload/methodxl/methodxl_place_dessicant_1.gif</file>
-        <file alias="methodxl_place_dessicant_2.gif">images/load_unload/methodxl/methodxl_place_dessicant_2.gif</file>
+        <file alias="methodxl_place_desiccant_1.gif">images/load_unload/methodxl/methodxl_place_desiccant_1.gif</file>
+        <file alias="methodxl_place_desiccant_2.gif">images/load_unload/methodxl/methodxl_place_desiccant_2.gif</file>
         <file alias="methodxl_place_spool_1.gif">images/load_unload/methodxl/place_spool_1.gif</file>
         <file alias="methodxl_place_spool_2.gif">images/load_unload/methodxl/place_spool_2.gif</file>
         <file alias="methodxl_feed_material_1.gif">images/load_unload/methodxl/feed_material_1.gif</file>
@@ -54,7 +53,6 @@
         <file alias="methodxl_rewind_spool_1.gif">images/load_unload/methodxl/rewind_spool_1.gif</file>
         <file alias="methodxl_rewind_spool_2.gif">images/load_unload/methodxl/rewind_spool_2.gif</file>
         <file alias="methodxl_store_material.png">images/load_unload/methodxl/store_material.png</file>
-
         <file alias="change_filament.png">images/change_filament.png</file>
         <file alias="close.png">images/close.png</file>
         <file alias="icon_directory.png">images/icon_directory.png</file>
@@ -227,5 +225,6 @@
         <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
         <file alias="case_divider.png">images/case_divider.png</file>
+        <file alias="methodxl_locate_desiccant.png">images/load_unload/methodxl/methodxl_locate_desiccant.png</file>
     </qresource>
 </RCC>
