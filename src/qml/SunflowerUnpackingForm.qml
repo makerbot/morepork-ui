@@ -39,6 +39,7 @@ LoggingItem {
             anchors.verticalCenterOffset: -25
 
             Image{
+                id: unpackingPopupImage
                 source: "qrc:/img/popup_error.png"
                 Layout.alignment: Qt.AlignHCenter
                 Layout.bottomMargin: 10
@@ -160,6 +161,21 @@ LoggingItem {
             name: "moving"
 
             PropertyChanges {
+                target: unpackingPopup
+                visible: false
+            }
+
+            PropertyChanges {
+                target: unpackingPopupHeader
+                text: ""
+            }
+
+            PropertyChanges {
+                target: unpackingPopupImage
+                visible: false
+            }
+
+            PropertyChanges {
                 target: unpackingContentRightSide.textHeader
                 text: lowering? qsTr("LOWERING BUILD PLATE")
                               : qsTr("RAISING BUILD PLATE")
@@ -221,6 +237,21 @@ LoggingItem {
         },
         State {
             name: "remove_box_2"
+
+            PropertyChanges {
+                target: unpackingPopup
+                visible: false
+            }
+
+            PropertyChanges {
+                target: unpackingPopupHeader
+                text: ""
+            }
+
+            PropertyChanges {
+                target: unpackingPopupImage
+                visible: false
+            }
 
             PropertyChanges {
                 target: unpackingContentRightSide.textHeader
