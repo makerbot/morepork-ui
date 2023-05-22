@@ -445,8 +445,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.temperatureStatus
-                modelExtruder.customTargetTemperature: 50
-                supportExtruder.customTargetTemperature: 50
+                component1.customTargetTemperature: 50
+                component2.customTargetTemperature: 50
                 visible: bot.process.stepStr == "cooling"
             }
 
