@@ -366,7 +366,7 @@ LoggingItem {
                    bot.process.stateType == ProcessStateType.CheckRightLevel ||
                    bot.process.stateType == ProcessStateType.Running ||
                    (bot.process.stateType == ProcessStateType.CleaningUp &&
-                    state != "cancelling"))
+                    state != "cancelling" && state != "leveling_failed"))
 
             PropertyChanges {
                 target: contentLeftSide
