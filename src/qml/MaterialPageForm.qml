@@ -404,7 +404,7 @@ Item {
                 }
 
                 image {
-                    source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
+                    source: ("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
                     visible: true
                 }
             }
@@ -526,36 +526,7 @@ Item {
                 },
 
                 State {
-                    name: "attach_swivel_clips"
-
-                    PropertyChanges {
-                        target: contentLeftItem.image
-                        visible: false
-                    }
-
-                    PropertyChanges {
-                        target: contentLeftItem.animatedImage
-                        source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("attach_extruder_swivel_clips.gif"))
-                        playing: true
-                        visible: true
-                    }
-
-                    PropertyChanges {
-                        target: attach_extruder_content
-                        textHeader.text: (bot.machineType == MachineType.Magma) ?
-                                             qsTr("ATTACH MATERIAL CLIPS") :
-                                             qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
-                        textBody.visible: true
-                        textBody.text: (bot.machineType == MachineType.Magma) ?
-                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:\n\nClip 1 to Extruder 1\nClip 2 to Extruder 2") :
-                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
-                        numberedSteps.visible: false
-                        buttonPrimary.text: qsTr("NEXT")
-                        buttonPrimary.enabled: true
-                    }
-                },
-                State {
-                    name: "release_guidelines"
+                    name: "remove_packaging_tapes"
 
                     PropertyChanges {
                         target: attach_extruder_content
@@ -573,6 +544,36 @@ Item {
                     PropertyChanges {
                         target: contentLeftItem.image
                         source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
+                    }
+                },
+
+                State {
+                    name: "attach_swivel_clips"
+
+                    PropertyChanges {
+                        target: contentLeftItem.image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: contentLeftItem.animatedImage
+                        source: ("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("attach_extruder_swivel_clips.gif"))
+                        playing: true
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: (bot.machineType == MachineType.Magma) ?
+                                             qsTr("ATTACH MATERIAL CLIPS") :
+                                             qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
+                        textBody.visible: true
+                        textBody.text: (bot.machineType == MachineType.Magma) ?
+                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:\n\nClip 1 to Extruder 1\nClip 2 to Extruder 2") :
+                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
+                        numberedSteps.visible: false
+                        buttonPrimary.text: qsTr("NEXT")
+                        buttonPrimary.enabled: true
                     }
                 },
 
