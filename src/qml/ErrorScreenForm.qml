@@ -245,7 +245,6 @@ LoggingItem {
                         }
                     }
                     visible: true
-                    enabled: !(bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
                 }
             }
         },
@@ -295,7 +294,6 @@ LoggingItem {
                         }
                     }
                     visible: true
-                    enabled: !(bot.chamberErrorCode == 45)
                 }
             }
         },
