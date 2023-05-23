@@ -88,6 +88,21 @@ LoggingItem {
             name: "remove_box_1"
 
             PropertyChanges {
+                target: unpackingPopup
+                visible: false
+            }
+
+            PropertyChanges {
+                target: unpackingPopupHeader
+                text: ""
+            }
+
+            PropertyChanges {
+                target: unpackingPopupImage
+                visible: false
+            }
+
+            PropertyChanges {
                 target: unpackingContentRightSide.textHeader
                 text: qsTr("REMOVE BOX 1 + PACKAGING")
                 visible: true
