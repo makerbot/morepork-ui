@@ -218,7 +218,6 @@
         <file alias="waiting_for_user_complete.png">images/waiting_for_user/waiting_for_user_complete.png</file>
         <file alias="remove_upper_material.png">images/remove_upper_material.png</file>
         <file alias="remove_lower_material.png">images/remove_lower_material.png</file>
-        <file alias="fre_help_qr_code.png">images/qrcodes/fre_help_qr_code.png</file>
         <file alias="case_intro_1.gif">images/case_intro_1.gif</file>
         <file alias="case_intro_2.png">images/case_intro_2.png</file>
         <file alias="case_tube_1_case.png">images/case_tube_1_case.png</file>
@@ -226,5 +225,8 @@
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
         <file alias="case_divider.png">images/case_divider.png</file>
         <file alias="methodxl_locate_desiccant.png">images/load_unload/methodxl/methodxl_locate_desiccant.png</file>
+        <file alias="qr_230_compatibility.png">images/qr_230_compatibility.png</file>
+        <file alias="qr_230_fw_download.png">images/qr_230_fw_download.png</file>
+        <file alias="qr_230_xlsetup.png">images/qr_230_xlsetup.png</file>
     </qresource>
 </RCC>

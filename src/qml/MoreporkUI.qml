@@ -2870,7 +2870,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/fre_help_qr_code.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2884,7 +2884,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_compatibility.png"
                         }
 
                         PropertyChanges {
@@ -2903,7 +2903,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2917,7 +2917,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2931,7 +2931,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2944,7 +2944,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2957,7 +2957,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {

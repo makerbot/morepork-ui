@@ -303,7 +303,9 @@ LoggingItem {
                     visible: true
                 }
                 buttonPrimary {
-                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    style: (bot.machineType == MachineType.Magma)?
+                           ButtonRectanglePrimary.ButtonWithHelp :
+                           ButtonRectanglePrimary.Button
                     text: qsTr("NEXT")
                     visible: true
                 }
