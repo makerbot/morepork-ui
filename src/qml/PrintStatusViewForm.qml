@@ -317,23 +317,17 @@ LoggingItem {
                              bot.process.stateType == ProcessStateType.Cancelled
                 }
 
-                // I dont think this button is even being used currently.
-                RoundedButton {
+
+               // Re-styled incase we want to use this in the future
+               // currently hidden because it was removed from the design
+               ButtonRectangleSecondary {
                     id: print_again_button
-                    buttonWidth: 290
-                    buttonHeight: 50
-                    label: qsTr("RETRY TEST PRINT")
-                    visible: {
-                        if(inFreStep) {
-                            bot.process.stateType == ProcessStateType.Completed ||
-                             bot.process.stateType == ProcessStateType.Failed
-                        }
-                        else {
-                            false
-                        }
-                    }
-                    button_mouseArea.onClicked: {
-                        if(!disable_button) {
+                    text: qsTr("RETRY TEST PRINT")
+                    anchors.top: acknowledgePrintFinished.bottom
+                    anchors.topMargin: bot.process.stateType == ProcessStateType.Failed ? -80 : 5
+                    visible: false
+                    onClicked: {
+                        if(print_again_button.enabled) {
                             printAgain = true
                             printPage.getPrintTimes(printPage.lastPrintTimeSec)
                             printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
