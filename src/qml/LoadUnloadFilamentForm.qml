@@ -247,7 +247,36 @@ LoggingItem {
     LabsExtruderLoadingInstructions {
         id: labsExtruderLoadingInstructions
         z: 1
-        visible: false
+        visible: {
+            // 1.) Do not show this screen on printers without
+            //     filament bay as extruder loading is the only
+            //     option.
+            // 2.) Show this when using the Labs extruder.
+            // 3.) Show this when in the waiting for filament
+            //     kaiten step.
+            // 4.) Do not show this screen when either of the
+            //     filament switches are triggered. That means
+            //     the user has already chosen their loading style.
+            //     Users can very well load from the drawer bay if
+            //     they are using approved materials on Labs extruder
+            //     on Method. Technically kaiten cannot be in this
+            //     waiting for filament step if any of the filament
+            //     switches are triggered and will mvoe to preheating
+            //     but this check is still here to accomodate
+            //     the kaiten delay to go to preheating step when
+            //     trying to purge filament (i.e. extruder switch
+            //     already triggered)
+            // 5.) Show this creen only during a load/print process
+            //     (not during unload)
+
+            bot.machineType != MachineType.Magma &&
+            usingExpExtruder &&
+            bot.process.stateType == ProcessStateType.WaitingForFilament &&
+            !bayFilamentSwitch &&
+            !extruderFilamentSwitch &&
+            (bot.process.type == ProcessType.Load ||
+             bot.process.type == ProcessType.Print)
+        }
     }
 
     UserAssistedLoadInstructions {
@@ -475,11 +504,6 @@ LoggingItem {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
-
-            PropertyChanges {
                 target: userAssistedLoadInstructions
                 visible: shouldUserAssistDrawerLoading(bayID)
             }
@@ -537,11 +561,6 @@ LoggingItem {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
-
-            PropertyChanges {
                 target: userAssistedLoadInstructions
                 visible: shouldUserAssistDrawerLoading(bayID)
             }
@@ -588,31 +607,6 @@ LoggingItem {
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
-
-            PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: {
-                    // Dont show this screen when either of the
-                    // switches are triggered which means the user
-                    // has already chosen their loading style.
-                    // Show this creen only during a load process
-                    // and only when external loading i.e. using
-                    // exp. extruder.
-                    // Show this when the extruder is close to the
-                    // target temperature. The target temp. non
-                    // check is required to accomodate the kaiten
-                    // notification delay and ignore the condition
-                    // (currentTemperature + 30 >= 0).
-
-                    !bayFilamentSwitch &&
-                    !extruderFilamentSwitch &&
-                    (bot.process.type == ProcessType.Print ||
-                     bot.process.type == ProcessType.Load) &&
-                    usingExpExtruder &&
-                    targetTemperature > 0 &&
-                    ((currentTemperature + 30) >= targetTemperature)
-                }
-            }
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
@@ -666,11 +660,6 @@ LoggingItem {
             when: bot.process.stateType == ProcessStateType.Extrusion &&
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Print)
-
-            PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
@@ -737,11 +726,6 @@ LoggingItem {
                    bot.process.type == ProcessType.Print)
 
             PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
-
-            PropertyChanges {
                 target: userAssistedLoadInstructions
                 visible: false
             }
@@ -801,11 +785,6 @@ LoggingItem {
             //instead the switch case above is used to get into this state,
             //since we need the UI to be held at this screen
             //even after the process has completed, until the user presses 'done'.
-
-            PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
@@ -887,11 +866,6 @@ LoggingItem {
             name: "loaded_filament_1"
 
             PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
-
-            PropertyChanges {
                 target: userAssistedLoadInstructions
                 visible: false
             }
@@ -959,11 +933,6 @@ LoggingItem {
             //instead the switch case above is used to get into this state,
             //since we need the UI to be held at this screen
             //even after the process has completed, until the user presses 'done'.
-
-            PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
@@ -1036,11 +1005,6 @@ LoggingItem {
             name: "unloaded_filament_1"
 
             PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
-
-            PropertyChanges {
                 target: userAssistedLoadInstructions
                 visible: false
             }
@@ -1096,11 +1060,6 @@ LoggingItem {
             //instead the switch case above is used to get into this state,
             //since we need the UI to be held at this screen
             //even after the process has completed, until the user presses 'done'.
-
-            PropertyChanges {
-                target: labsExtruderLoadingInstructions
-                visible: false
-            }
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
