@@ -195,39 +195,6 @@ Item {
                             break;
                         }
                         break;
-                    case ProcessType.Load:
-                        switch(bot.process.stateType) {
-                        case ProcessStateType.Preheating:
-                            status_text = qsTr("PREHEATING")
-                            break;
-                        case ProcessStateType.Extrusion:
-                            status_text = qsTr("EXTRUDING")
-                            break;
-                        case ProcessStateType.Stopping:
-                        case ProcessStateType.Done:
-                            status_text = qsTr("MATERIAL LOADED")
-                            break;
-                        default:
-                            status_text = qsTr("LOAD MATERIAL")
-                            break;
-                        }
-                        break;
-                    case ProcessType.Unload:
-                        switch(bot.process.stateType) {
-                        case ProcessStateType.Preheating:
-                            status_text = qsTr("PREHEATING")
-                            break;
-                        case ProcessStateType.UnloadingFilament:
-                            status_text = qsTr("UNLOADING MATERIAL")
-                            break;
-                        case ProcessStateType.Done:
-                            status_text = qsTr("MATERIAL UNLOADED")
-                            break;
-                        default:
-                            status_text = qsTr("UNLOAD MATERIAL")
-                            break;
-                        }
-                        break;
                     default:
                         status_text = qsTr("IDLE")
                         break;

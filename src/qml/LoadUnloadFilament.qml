@@ -24,21 +24,23 @@ LoadUnloadFilamentForm {
                         // a print in the FRE they are trying to clear
                         // jam etc., so the load process should finish
                         // considering that the printer is still in the
-                        // FRE.
-                        // The processDone() signal handler already
-                        // moves to the print page if we are in a print
-                        // process.
-                        processDone()
+                        // FRE printng step.
+                        state = "loaded_filament_1"
                     } else if(bot.process.type == ProcessType.None) {
-                        // During normal load/unload while in FRE
-                        if(bayID == 1) {
+                        // During normal loading in FRE for printers
+                        // without filamenet bay (Method XL) we shouldnt
+                        // go to the next state that asks the user to close
+                        // the material bay/caddy as there is only one
+                        // lid/latch to close unlike Method/X, so we will
+                        // go to that state only at the end of loading the
+                        // support extruder. Here we just directly start the
+                        // support extruder loading.
+                        if(bayID == 1 && !bot.hasFilamentBay) {
                             processDone()
-                            startLoadUnloadFromUI = true
-                            isLoadFilament = true
-                            bot.loadFilament(1, false, false)
-                            setDrawerState(true)
-                            materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
-                        } else if(bayID == 2) {
+                            // Start support extruder loading right from this
+                            // state
+                            freScreen.startFreMaterialLoad(1)
+                        } else {
                             state = "loaded_filament_1"
                         }
                     }
@@ -46,11 +48,35 @@ LoadUnloadFilamentForm {
                     state = "loaded_filament_1"
                 }
             } else if(state == "loaded_filament_1") {
-                processDone()
                 if(inFreStep) {
-                    fre.gotoNextStep(currentFreStep)
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                    inFreStep = false
+                    if(bot.process.type == ProcessType.Print) {
+                        // If user completes load/purge while during
+                        // a print in the FRE they are trying to clear
+                        // jam etc., so the load process should finish
+                        // considering that the printer is still in the
+                        // FRE printng step.
+                        // The processDone() signal handler already
+                        // moves to the print page if we are in a print
+                        // process.
+                        processDone()
+                    } else if(bot.process.type == ProcessType.None) {
+                        processDone()
+                        // During normal loading in the FRE for printers
+                        // with filament bay we get to this state, ask the
+                        // user to close the bay and then allow them to start
+                        // the support extruder loading.
+                        if(bayID == 1 && bot.hasFilamentBay) {
+                            // Start support extruder loading from the close latch
+                            // state.
+                            freScreen.startFreMaterialLoad(1)
+                        } else if(bayID == 2) {
+                            fre.gotoNextStep(currentFreStep)
+                            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                            inFreStep = false
+                        }
+                    }
+                } else {
+                    processDone()
                 }
             } else if(state == "unloaded_filament") {
                 if(bot.hasFilamentBay) {

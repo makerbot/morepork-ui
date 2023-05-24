@@ -209,10 +209,10 @@ Item {
 
     enum SwipeIndex {
         BasePage,
+        FreAdditionalStepsPage,
         LoadMaterialSettingsPage,
         LoadUnloadPage,
-        AttachExtruderPage,
-        FreAdditionalStepsPage
+        AttachExtruderPage
     }
 
     LoggingSwipeView {
@@ -245,6 +245,63 @@ Item {
             }
         }
 
+        // MaterialPage.FreAdditionalStepsPage
+        Item {
+            id: freAdditionalStepsPage
+            property var backSwiper: materialSwipeView
+            property int backSwipeIndex: MaterialPage.BasePage
+            property string topBarTitle: qsTr("Load Material")
+            property bool hasAltBack: true
+            visible: false
+
+            function altBack() {
+                inFreStep = false
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            ContentLeftSide {
+                visible: true
+                image {
+                    source: ("qrc:/img/methodxl_locate_desiccant.png")
+                    visible: true
+                }
+            }
+
+            ContentRightSide {
+                visible: true
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("LOCATE DESICCANT IN MATERIAL BAG")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Remove two of the desiccant pouches "+
+                               "located in your material bag.")
+                    visible: true
+                }
+                textBody1 {
+                    text: qsTr("Please note: Materials are purchased "+
+                               "and shipped separately.")
+                    font.weight: Font.Normal
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("NEXT")
+                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    visible: true
+                    onClicked: {
+                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    }
+
+                    help.onClicked: {
+                        helpPopup.state = "locate_desiccant_help"
+                        helpPopup.open()
+                    }
+                }
+            }
+        }
+
         // MaterialPage.LoadMaterialSettingsPage
         Item {
             id: itemSelectMaterial
@@ -264,7 +321,19 @@ Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
-            property string topBarTitle: qsTr("Load/Unload")
+            property string topBarTitle: {
+                qsTr("%1 Material %2%3").
+                  arg(isLoadFilament ? "Load" : "Unload").
+                  arg(loadUnloadFilamentProcess.bayID).
+                  arg(bot.hasFilamentBay ?
+                      " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName :
+                      // The spool journal isnt updated until after the load process completes,
+                      // so we cant use the filamentMaterialName from the filament bays object.
+                      (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName == "UNKNOWN" ?
+                          " - " + bot.getMaterialName(loadUnloadFilamentProcess.retryMaterial) :
+                          " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName)
+
+            }
             property bool hasAltBack: true
             property bool backIsCancel: true
             visible: false
@@ -614,54 +683,6 @@ Item {
                     }
                 }
             ]
-        }
-
-        // MaterialPage.FreAdditionalStepsPage
-        Item {
-            id: freAdditionalStepsPage
-            property var backSwiper: materialSwipeView
-            property int backSwipeIndex: MaterialPage.BasePage
-            property string topBarTitle: qsTr("Load Material")
-
-            ContentLeftSide {
-                visible: true
-                image {
-                    source: ("qrc:/img/methodxl_locate_desiccant.png")
-                    visible: true
-                }
-            }
-            ContentRightSide {
-                visible: true
-                textHeader {
-                    style: TextHeadline.Base
-                    text: qsTr("LOCATE DESICCANT IN MATERIAL BAG")
-                    visible: true
-                }
-                textBody {
-                    text: qsTr("Remove two of the desiccant pouches "+
-                               "located in your material bag.")
-                    visible: true
-                }
-                textBody1 {
-                    text: qsTr("Please note: Materials are purchased "+
-                               "and shipped separately.")
-                    font.weight: Font.Normal
-                    visible: true
-                }
-                buttonPrimary {
-                    text: qsTr("NEXT")
-                    style: ButtonRectanglePrimary.ButtonWithHelp
-                    visible: true
-                    onClicked: {
-                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                    }
-
-                    help.onClicked: {
-                        helpPopup.state = "locate_desiccant_help"
-                        helpPopup.open()
-                    }
-                }
-            }
         }
     }
 
