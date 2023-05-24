@@ -366,7 +366,7 @@ LoggingItem {
                    bot.process.stateType == ProcessStateType.CheckRightLevel ||
                    bot.process.stateType == ProcessStateType.Running ||
                    (bot.process.stateType == ProcessStateType.CleaningUp &&
-                    state != "cancelling"))
+                    state != "cancelling" && state != "leveling_failed"))
 
             PropertyChanges {
                 target: contentLeftSide
@@ -445,8 +445,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.temperatureStatus
-                modelExtruder.customTargetTemperature: 50
-                supportExtruder.customTargetTemperature: 50
+                component1.customTargetTemperature: 50
+                component2.customTargetTemperature: 50
                 visible: bot.process.stepStr == "cooling"
             }
 

@@ -41,7 +41,6 @@ Item {
     property bool isTopLidOpen: bot.chamberErrorCode == 45
     property alias itemAttachExtruder: itemAttachExtruder
     property alias attach_extruder: attach_extruder_content
-    property alias calibrateExtrudersPopup: calibrateExtrudersPopup
 
     property alias moistureWarningPopup: moistureWarningPopup
 
@@ -209,10 +208,10 @@ Item {
 
     enum SwipeIndex {
         BasePage,
+        FreAdditionalStepsPage,
         LoadMaterialSettingsPage,
         LoadUnloadPage,
-        AttachExtruderPage,
-        FreAdditionalStepsPage
+        AttachExtruderPage
     }
 
     LoggingSwipeView {
@@ -245,6 +244,63 @@ Item {
             }
         }
 
+        // MaterialPage.FreAdditionalStepsPage
+        Item {
+            id: freAdditionalStepsPage
+            property var backSwiper: materialSwipeView
+            property int backSwipeIndex: MaterialPage.BasePage
+            property string topBarTitle: qsTr("Load Material")
+            property bool hasAltBack: true
+            visible: false
+
+            function altBack() {
+                inFreStep = false
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
+
+            ContentLeftSide {
+                visible: true
+                image {
+                    source: ("qrc:/img/methodxl_locate_desiccant.png")
+                    visible: true
+                }
+            }
+
+            ContentRightSide {
+                visible: true
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("LOCATE DESICCANT IN MATERIAL BAG")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Remove two of the desiccant pouches "+
+                               "located in your material bag.")
+                    visible: true
+                }
+                textBody1 {
+                    text: qsTr("Please note: Materials are purchased "+
+                               "and shipped separately.")
+                    font.weight: Font.Normal
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("NEXT")
+                    style: ButtonRectanglePrimary.ButtonWithHelp
+                    visible: true
+                    onClicked: {
+                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    }
+
+                    help.onClicked: {
+                        helpPopup.state = "methodxl_locate_desiccant_help"
+                        helpPopup.open()
+                    }
+                }
+            }
+        }
+
         // MaterialPage.LoadMaterialSettingsPage
         Item {
             id: itemSelectMaterial
@@ -264,7 +320,19 @@ Item {
             id: itemLoadUnloadFilament
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
-            property string topBarTitle: qsTr("Load/Unload")
+            property string topBarTitle: {
+                qsTr("%1 Material %2%3").
+                  arg(isLoadFilament ? "Load" : "Unload").
+                  arg(loadUnloadFilamentProcess.bayID).
+                  arg(bot.hasFilamentBay ?
+                      " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName :
+                      // The spool journal isnt updated until after the load process completes,
+                      // so we cant use the filamentMaterialName from the filament bays object.
+                      (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName == "UNKNOWN" ?
+                          " - " + bot.getMaterialName(loadUnloadFilamentProcess.retryMaterial) :
+                          " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName)
+
+            }
             property bool hasAltBack: true
             property bool backIsCancel: true
             visible: false
@@ -404,7 +472,7 @@ Item {
                 }
 
                 image {
-                    source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
+                    source: ("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("remove_top_lid.png"))
                     visible: true
                 }
             }
@@ -526,36 +594,7 @@ Item {
                 },
 
                 State {
-                    name: "attach_swivel_clips"
-
-                    PropertyChanges {
-                        target: contentLeftItem.image
-                        visible: false
-                    }
-
-                    PropertyChanges {
-                        target: contentLeftItem.animatedImage
-                        source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("attach_extruder_swivel_clips.gif"))
-                        playing: true
-                        visible: true
-                    }
-
-                    PropertyChanges {
-                        target: attach_extruder_content
-                        textHeader.text: (bot.machineType == MachineType.Magma) ?
-                                             qsTr("ATTACH MATERIAL CLIPS") :
-                                             qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
-                        textBody.visible: true
-                        textBody.text: (bot.machineType == MachineType.Magma) ?
-                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:\n\nClip 1 to Extruder 1\nClip 2 to Extruder 2") :
-                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
-                        numberedSteps.visible: false
-                        buttonPrimary.text: qsTr("NEXT")
-                        buttonPrimary.enabled: true
-                    }
-                },
-                State {
-                    name: "release_guidelines"
+                    name: "remove_packaging_tapes"
 
                     PropertyChanges {
                         target: attach_extruder_content
@@ -573,6 +612,36 @@ Item {
                     PropertyChanges {
                         target: contentLeftItem.image
                         source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
+                    }
+                },
+
+                State {
+                    name: "attach_swivel_clips"
+
+                    PropertyChanges {
+                        target: contentLeftItem.image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: contentLeftItem.animatedImage
+                        source: ("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("attach_extruder_swivel_clips.gif"))
+                        playing: true
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: attach_extruder_content
+                        textHeader.text: (bot.machineType == MachineType.Magma) ?
+                                             qsTr("ATTACH MATERIAL CLIPS") :
+                                             qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
+                        textBody.visible: true
+                        textBody.text: (bot.machineType == MachineType.Magma) ?
+                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:\n\nClip 1 to Extruder 1\nClip 2 to Extruder 2") :
+                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
+                        numberedSteps.visible: false
+                        buttonPrimary.text: qsTr("NEXT")
+                        buttonPrimary.enabled: true
                     }
                 },
 
@@ -613,102 +682,6 @@ Item {
                     }
                 }
             ]
-        }
-
-        // MaterialPage.FreAdditionalStepsPage
-        Item {
-            id: freAdditionalStepsPage
-            property var backSwiper: materialSwipeView
-            property int backSwipeIndex: MaterialPage.BasePage
-            property string topBarTitle: qsTr("Load Material")
-
-            ContentLeftSide {
-                visible: true
-                image {
-                    source: ("qrc:/img/methodxl_locate_desiccant.png")
-                    visible: true
-                }
-            }
-            ContentRightSide {
-                visible: true
-                textHeader {
-                    style: TextHeadline.Base
-                    text: qsTr("LOCATE DESICCANT IN MATERIAL BAG")
-                    visible: true
-                }
-                textBody {
-                    text: qsTr("Remove two of the desiccant pouches "+
-                               "located in your material bag.")
-                    visible: true
-                }
-                textBody1 {
-                    text: qsTr("Please note: Materials are purchased "+
-                               "and shipped separately.")
-                    font.weight: Font.Normal
-                    visible: true
-                }
-                buttonPrimary {
-                    text: qsTr("NEXT")
-                    style: ButtonRectanglePrimary.ButtonWithHelp
-                    visible: true
-                    onClicked: {
-                        materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                    }
-
-                    help.onClicked: {
-                        helpPopup.state = "locate_desiccant_help"
-                        helpPopup.open()
-                    }
-                }
-            }
-        }
-    }
-
-    CustomPopup {
-        popupName: "CalibrateExtruders"
-        id: calibrateExtrudersPopup
-        popupHeight: columnLayout_next_step.height + 130
-        showTwoButtons: true
-        visible: false
-
-        left_button_text: qsTr("SKIP")
-        left_button.onClicked: {
-            calibrateExtrudersPopup.close()
-        }
-
-        right_button_text: qsTr("GO TO PAGE")
-        right_button.onClicked: {
-            // go to calibrate screen
-            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-            settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
-            calibrateExtrudersPopup.close()
-        }
-
-        ColumnLayout {
-            id: columnLayout_next_step
-            width: 650
-            height: children.height
-            spacing: 20
-            anchors.top: parent.top
-            anchors.topMargin: 150
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            TextHeadline {
-                id: headline_text
-                text: qsTr("CALIBRATE EXTRUDERS")
-                Layout.alignment: Qt.AlignHCenter
-                visible: true
-            }
-
-            TextBody {
-                text: "Calibration enables precise 3D printing. The printer must calibrate new extruders to ensure print quality"
-                Layout.preferredWidth: parent.width
-                wrapMode: Text.WordWrap
-                Layout.alignment: Qt.AlignHCenter
-                horizontalAlignment: Text.AlignHCenter
-                visible: true
-            }
         }
     }
 

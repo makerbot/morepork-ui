@@ -428,37 +428,31 @@ MaterialPageForm {
             break
         case "attach_extruder_step2":
             if(inFreStep) {
-                if(itemAttachExtruder.extruder == 1 &&
-                        itemAttachExtruder.isAttached) {
-                        itemAttachExtruder.extruder = 2
-                        itemAttachExtruder.state = "attach_extruder_step1"
-
-                } else if(itemAttachExtruder.extruder == 2 &&
-                        itemAttachExtruder.isAttached) {
-                    itemAttachExtruder.state = "release_guidelines"
+                if(itemAttachExtruder.extruder == 1 && itemAttachExtruder.isAttached) {
+                    itemAttachExtruder.extruder = 2
+                    itemAttachExtruder.state = "attach_extruder_step1"
+                } else if(itemAttachExtruder.extruder == 2 && itemAttachExtruder.isAttached) {
+                    itemAttachExtruder.state = "remove_packaging_tapes"
                 }
             } else {
                 itemAttachExtruder.state = "attach_swivel_clips"
             }
             break
-         case "attach_swivel_clips":
-               itemAttachExtruder.state = "close_top_lid"
-               break
-         case "release_guidelines":
-                itemAttachExtruder.state = "close_top_lid"
-                break;
-         case "close_top_lid":
+        case "remove_packaging_tapes":
+            itemAttachExtruder.state = "attach_swivel_clips"
+            break;
+        case "attach_swivel_clips":
+            itemAttachExtruder.state = "close_top_lid"
+            break
+        case "close_top_lid":
             // done or run calibration
             itemAttachExtruder.state = "base state"
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
 
             if (!inFreStep) {
                 if(bot.process.type == ProcessType.None) {
-                    if(bot.extruderAPresent && bot.extruderBPresent) {
-                        calibrateExtrudersPopup.open()
-                    }
-                }
-                else if(bot.process.type == ProcessType.Print) {
+                    calibratePopupDeterminant()
+                } else if(bot.process.type == ProcessType.Print) {
                     // go to print screen
                     bot.pauseResumePrint("resume")
                     mainSwipeView.swipeToItem(MoreporkUI.PrintPage)

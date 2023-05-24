@@ -76,11 +76,8 @@ LoggingItem {
         loading: true
     }
 
-    Image {
-        id: image
-        anchors.left: parent.left
-        anchors.leftMargin: 120
-        anchors.verticalCenterOffset: -20
+    ContentLeftSide {
+        id: updateContentLeft
         anchors.verticalCenter: parent.verticalCenter
         visible: false
     }
@@ -162,7 +159,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: image
+                target: updateContentLeft
                 visible: false
             }
 
@@ -235,7 +232,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: image
+                target: updateContentLeft
                 visible: false
             }
 
@@ -304,7 +301,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: image
+                target: updateContentLeft
                 visible: false
             }
 
@@ -389,11 +386,9 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: image
-                width: sourceSize.width
-                height: sourceSize.height
-                source: "qrc:/img/icon_usb.png"
-
+                target: updateContentLeft
+                image.source: "qrc:/img/qr_230_fw_download.png"
+                image.visible: true
                 visible: true
             }
 
@@ -450,7 +445,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: image
+                target: updateContentLeft
                 visible: false
             }
 

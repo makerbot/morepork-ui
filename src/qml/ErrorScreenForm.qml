@@ -18,8 +18,8 @@ LoggingItem {
     // make them hold residual states uneccessarily.
     // isActive flag is used because of this.
     property bool isActive: false
-    property alias button1: contentRightItem.buttonPrimary
-    property alias button2: contentRightItem.buttonSecondary1
+    property alias button1: contentRightSide.buttonPrimary
+    property alias button2: contentRightSide.buttonSecondary1
     property int processType: bot.process.type
     property int errorType: bot.process.errorType
     property int errorCode: bot.process.errorCode
@@ -132,42 +132,13 @@ LoggingItem {
     }
 
     ContentLeftSide {
-        id: contentLeftItem
+        id: contentLeftSide
         visible: true
-
-        image {
-            source: "qrc:/img/method_error_close_door.png"
-        }
-        loadingIcon {
-            loading: LoadingIcon.Failure
-            visible:  true
-        }
     }
 
     ContentRightSide {
-        id: contentRightItem
+        id: contentRightSide
         visible: true
-
-        textHeader {
-            text: qsTr("ERROR TITLE")
-            style: TextHeadline.Base
-            visible: true
-        }
-
-        textBody {
-            text: qsTr("Error description")
-            visible: true
-        }
-
-        buttonPrimary {
-            text: "BUTTON 1"
-            visible: true
-        }
-
-        buttonSecondary1 {
-            text: "BUTTON 2"
-            visible: true
-        }
     }
 
     states: [
@@ -175,36 +146,28 @@ LoggingItem {
             name: "door_open_error"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                source: ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_door"))
-                visible: true
+                target: contentLeftSide
+                image {
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_door"))
+                    visible: true
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PROCESS FAILED.\nCLOSE BUILD\nCHAMBER DOOR.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Close the build chamber door and\ntry again.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("TRY AGAIN")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: qsTr("PROCESS FAILED.\n\nCLOSE BUILD\nCHAMBER DOOR.")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Close the build chamber door and try again.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("TRY AGAIN")
+                    visible: true
+                }
             }
         },
 
@@ -212,36 +175,28 @@ LoggingItem {
             name: "lid_open_error"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                source:  ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_lid"))
-                visible: true
+                target: contentLeftSide
+                image {
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("error_close_lid"))
+                    visible: true
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PROCESS FAILED.\nCLOSE THE\nTOP LID.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Put the lid back on the printer\nand try again.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("TRY AGAIN")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: qsTr("PROCESS FAILED.\n\nCLOSE THE\nTOP LID.")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Put the lid back on the printer and try again.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("TRY AGAIN")
+                    visible: true
+                }
             }
         },
 
@@ -250,53 +205,47 @@ LoggingItem {
             extend: "door_open_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED.\n\nCLOSE PRINTER DOOR")
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("PRINT FAILED.\nCLOSE PRINTER DOOR.")
-                    } else {
-                        emptyString
-                    }
-                }
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("Close the printer door to resume.")
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("Close the printer door and restart print.")
-                    } else {
-                        emptyString
+                textHeader {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Paused) {
+                            qsTr("PRINT PAUSED\n\nCLOSE PRINTER DOOR")
+                        } else if(bot.process.stateType == ProcessStateType.Failed) {
+                            qsTr("PRINT FAILED\n\nCLOSE PRINTER DOOR")
+                        } else {
+                            emptyString
+                        }
                     }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("RESUME PRINT")
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("CONTINUE")
-                    } else {
-                        emptyString
+                textBody {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Paused) {
+                            qsTr("Close the printer door to resume.")
+                        } else if(bot.process.stateType == ProcessStateType.Failed) {
+                            qsTr("Close the printer door and restart print.")
+                        } else {
+                            emptyString
+                        }
                     }
+                    visible: true
                 }
-                visible: true
-                enabled: !(bot.chamberErrorCode == 48 && !bot.doorErrorDisabled)
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                buttonPrimary {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Paused) {
+                            qsTr("RESUME PRINT")
+                        } else if(bot.process.stateType == ProcessStateType.Failed) {
+                            qsTr("CONTINUE")
+                        } else {
+                            emptyString
+                        }
+                    }
+                    visible: true
+                }
             }
         },
 
@@ -305,53 +254,47 @@ LoggingItem {
             extend: "lid_open_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("PRINT PAUSED.\n\nCLOSE TOP LID")
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("PRINT FAILED.\nCLOSE TOP LID.")
-                    } else {
-                        emptyString
-                    }
-                }
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("Close the top lid to resume")
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("Put the lid back on the printer and\nrestart print.")
-                    } else {
-                        emptyString
+                textHeader {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Paused) {
+                            qsTr("PRINT PAUSED\n\nCLOSE TOP LID")
+                        } else if(bot.process.stateType == ProcessStateType.Failed) {
+                            qsTr("PRINT FAILED\n\nCLOSE TOP LID")
+                        } else {
+                            emptyString
+                        }
                     }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Pausing ||
-                       bot.process.stateType == ProcessStateType.Paused) {
-                        qsTr("RESUME PRINT")
-                    } else if(bot.process.stateType == ProcessStateType.Failed) {
-                        qsTr("CONTINUE")
-                    } else {
-                        emptyString
+                textBody {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Paused) {
+                            qsTr("Close the top lid to resume.")
+                        } else if(bot.process.stateType == ProcessStateType.Failed) {
+                            qsTr("Put the lid back on the printer and restart print.")
+                        } else {
+                            emptyString
+                        }
                     }
+                    visible: true
                 }
-                visible: true
-                enabled: !(bot.chamberErrorCode == 45)
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                buttonPrimary {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Pausing ||
+                           bot.process.stateType == ProcessStateType.Paused) {
+                            qsTr("RESUME PRINT")
+                        } else if(bot.process.stateType == ProcessStateType.Failed) {
+                            qsTr("CONTINUE")
+                        } else {
+                            emptyString
+                        }
+                    }
+                    visible: true
+                }
             }
         },
 
@@ -360,25 +303,16 @@ LoggingItem {
             extend: "lid_open_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("CALIBRATION FAILED.\nCLOSE THE\nTOP LID.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Put the lid back on the printer\nand retry calibrating")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("TRY AGAIN")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: qsTr("CALIBRATION FAILED\n\nCLOSE THE TOP LID")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Put the lid back on the printer and retry calibrating")
+                    visible: true
+                }
             }
         },
 
@@ -386,170 +320,132 @@ LoggingItem {
             name: "filament_jam_error"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                source: {
-                    if(bot.process.extruderAJammed) {
-                        "qrc:/img/error_filament_jam_1.png"
-                    } else if(bot.process.extruderBJammed) {
-                        "qrc:/img/error_filament_jam_2.png"
-                    } else {
-                        "qrc:/img/broken.png"
+                target: contentLeftSide
+                image {
+                    source: {
+                        if(bot.process.extruderAJammed) {
+                            "qrc:/img/error_filament_jam_1.png"
+                        } else if(bot.process.extruderBJammed) {
+                            "qrc:/img/error_filament_jam_2.png"
+                        } else {
+                            "qrc:/img/broken.png"
+                        }
                     }
+                    visible: true
                 }
-                visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PRINT PAUSED\n\nEXTRUDER %1 JAM\nDETECTED").arg((bot.process.extruderAJammed ?
-                                                                 qsTr("1") : qsTr("2")))
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: {
-                    qsTr("Ensure the spool isn't tangled and try purging the extruder. If the issue recurs, unload and reload the material.")
+                textHeader {
+                    text: qsTr("PRINT PAUSED\n\nEXTRUDER %1 JAM\nDETECTED").arg(
+                              (bot.process.extruderAJammed ? qsTr("1") : qsTr("2")))
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    qsTr("PURGE MATERIAL %1").arg((bot.process.extruderAJammed ?
-                                                       qsTr("1") : qsTr("2")))
+                textBody {
+                    text: qsTr("Ensure the spool isn't tangled and try purging the extruder. " +
+                               "If the issue recurs, unload and reload the material.")
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: true
-                text: {
-                    qsTr("UNLOAD MATERIAL %1").arg((bot.process.extruderAJammed ?
-                                                        qsTr("1") : qsTr("2")))
+                buttonPrimary {
+                    text: qsTr("PURGE MATERIAL %1").arg((bot.process.extruderAJammed ?
+                                                                   qsTr("1") : qsTr("2")))
+                    visible: true
                 }
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
-            }
-            PropertyChanges {
-                target: contentRightItem
-                x: 400
-                y: 0
-                width: 400
-                height: 440
+                buttonSecondary1 {
+                    text: qsTr("UNLOAD MATERIAL %1").arg((bot.process.extruderAJammed ?
+                                                                   qsTr("1") : qsTr("2")))
+                    visible: true
+                }
             }
         },
         State {
             name: "filament_bay_oof_error"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                source: bot.process.filamentBayAOOF ?
-                            "qrc:/img/error_oof_bay1.png" :
-                            "qrc:/img/error_oof_bay2.png"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    qsTr("PRINT PAUSED<br><br>") +
-                    qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
-                                       (bot.process.filamentBayAOOF ?
-                                         qsTr("1") : qsTr("2")))
+                target: contentLeftSide
+                image {
+                    source: bot.process.filamentBayAOOF ?
+                                "qrc:/img/error_oof_bay1.png" :
+                                "qrc:/img/error_oof_bay2.png"
+                    visible: true
                 }
-                visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Open the material bay and remove the empty spool, " +
-                           "as well as any excess material.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                text: qsTr("Place a MakerBot %1 spool in the bay to load material.").arg(
-                                bot.process.filamentBayAOOF ?
-                                     printPage.print_model_material_name :
-                                     printPage.print_support_material_name)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    qsTr("LOAD MATERIAL %1").arg(
-                                (bot.process.filamentBayAOOF ?
-                                     qsTr("1") : qsTr("2")))
+                textHeader {
+                    text: {
+                        qsTr("PRINT PAUSED<br><br>") +
+                        qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
+                                           (bot.process.filamentBayAOOF ?
+                                             qsTr("1") : qsTr("2")))
+                    }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textBody {
+                    text: qsTr("Open the material bay and remove the empty spool, " +
+                               "as well as any excess material.")
+                    visible: true
+                }
+                textBody1 {
+                    text: qsTr("Place a MakerBot %1 spool in the bay to load material.").arg(
+                                    bot.process.filamentBayAOOF ?
+                                         printPage.print_model_material_name :
+                                         printPage.print_support_material_name)
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("LOAD MATERIAL %1").arg(
+                              (bot.process.filamentBayAOOF ?
+                                   qsTr("1") : qsTr("2")))
+                    visible: true
+                }
             }
         },
 
         State {
             name: "extruder_oof_error"
-            PropertyChanges {
-                target: contentLeftItem.image
-                source: bot.process.extruderAOOF ?
-                            "qrc:/img/error_oof_extruder1.png" :
-                            "qrc:/img/error_oof_extruder2.png"
-                visible: true
-            }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    qsTr("PRINT PAUSED<br><br>") +
-                    qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
-                                       (bot.process.extruderAOOF ?
-                                         qsTr("1") : qsTr("2")))
+                target: contentLeftSide
+                image {
+                    source: bot.process.extruderAOOF ?
+                                "qrc:/img/error_oof_extruder1.png" :
+                                "qrc:/img/error_oof_extruder2.png"
+                    visible: true
                 }
-                visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Open the top lid and remove material clip to pull " +
-                           "the remaining material out of the extruder.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                // The load button is disabled while the extruder unloads.
-                // Kaiten goes through preheating_unloading and unloading_filament
-                // steps before getting to paused step. The button is only enabled
-                // in the paused step.
-                target: contentRightItem.buttonPrimary
-                text: qsTr("LOAD MATERIAL %1").arg(
-                            bot.process.extruderAOOF ?
-                                 qsTr("1") : qsTr("2"))
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: {
+                        qsTr("PRINT PAUSED<br><br>") +
+                        qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
+                                           (bot.process.extruderAOOF ?
+                                             qsTr("1") : qsTr("2")))
+                    }
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Open the top lid and remove material clip to pull " +
+                               "the remaining material out of the extruder.")
+                    visible: true
+                }
+                buttonPrimary {
+                    // The load button is disabled while the extruder unloads.
+                    // Kaiten goes through preheating_unloading and unloading_filament
+                    // steps before getting to paused step. The button is only enabled
+                    // in the paused step.
+                    text: qsTr("LOAD MATERIAL %1").arg(
+                                bot.process.extruderAOOF ?
+                                     qsTr("1") : qsTr("2"))
+                    visible: true
+                }
             }
         },
 
@@ -557,43 +453,33 @@ LoggingItem {
             name: "no_tool_connected"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                source: bot.process.errorSource?
-                            "qrc:/img/error_tool_2.png" :
-                            "qrc:/img/error_tool_1.png"
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textHeader
-                text: {
-                    qsTr("PRINT PAUSED.\nEXTRUDER %1\nDISCONNECTED.").arg(
-                        bot.process.errorSource + 1);
+                target: contentLeftSide
+                image {
+                    source: bot.process.errorSource?
+                                "qrc:/img/error_tool_2.png" :
+                                "qrc:/img/error_tool_1.png"
+                    visible: true
                 }
-                visible: true
             }
 
             PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Ensure the extruder is attached and\npress the button below to continue.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: {
-                    qsTr("ATTACH EXTRUDER %1").arg(bot.process.errorSource + 1)
+                textHeader {
+                    text: {
+                        qsTr("PRINT PAUSED\n\nEXTRUDER %1\nDISCONNECTED").arg(
+                            bot.process.errorSource + 1);
+                    }
+                    visible: true
                 }
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textBody {
+                    text: qsTr("Ensure the extruder is attached and press the button below to continue.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("ATTACH EXTRUDER %1").arg(bot.process.errorSource + 1)
+                    visible: true
+                }
             }
         },
 
@@ -601,42 +487,34 @@ LoggingItem {
             name: "generic_error"
 
             PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                icon_image: LoadingIcon.Failure
-                visible: true
+                target: contentLeftSide
+
+                loadingIcon {
+                    icon_image: LoadingIcon.Failure
+                    visible: true
+                }
             }
 
             PropertyChanges {
-                target: contentLeftItem.image
-                visible: false
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PROCESS FAILED\n\nERROR %1").arg(lastReportedErrorCode)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Please visit the support page to learn more information about this error and contact our support team.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("EXIT")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: true
-                text: qsTr("support.makerbot.com")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
+                textHeader {
+                    text: qsTr("PROCESS FAILED\n\nERROR %1").arg(lastReportedErrorCode)
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Please visit the support page to learn more information " +
+                               "about this error and contact our support team.")
+                    visible: true
+                }
+                textBody1 {
+                    text: "support.makerbot.com"
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("EXIT")
+                    visible: true
+                }
             }
         },
 
@@ -645,25 +523,22 @@ LoggingItem {
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("CALIBRATION\nERROR")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("There was a problem calibrating the\nprinter. Check the extruders for excess\nmaterial. If this happens again, please\ncontact MakerBot support. Error %1").arg(lastReportedErrorCode)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("TRY AGAIN")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: qsTr("CALIBRATION\nERROR")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("There was a problem calibrating the printer. Check the extruders " +
+                               "for excess material. If this happens again, please contact MakerBot " +
+                               "support. Error %1").arg(lastReportedErrorCode)
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("TRY AGAIN")
+                    visible: true
+                }
             }
         },
 
@@ -672,25 +547,21 @@ LoggingItem {
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("HEATING ERROR")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("CONTINUE")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: qsTr("HEATING ERROR")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("There seems to be a problem with the heaters. If this happens " +
+                               "again, please contact MakerBot support. Error %1").arg(lastReportedErrorCode)
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("CONTINUE")
+                    visible: true
+                }
             }
         },
 
@@ -699,25 +570,21 @@ LoggingItem {
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("HEATER\nTEMPERATURE\nERROR")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("There seems to be a problem with\nthe heaters. If this happens again,\nplease contact MakerBot support.\nError %1").arg(lastReportedErrorCode)
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("CONTINUE")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentLeftItem.loadingIcon
-                visible: false
+                textHeader {
+                    text: qsTr("HEATER\nTEMPERATURE\nERROR")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("There seems to be a problem with the heaters. If this happens " +
+                               "again, please contact MakerBot support. Error %1").arg(lastReportedErrorCode)
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("CONTINUE")
+                    visible: true
+                }
             }
         },
 
@@ -726,61 +593,48 @@ LoggingItem {
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PROCESS FAILED\n\nCARRIAGE COMMUNICATION ERROR")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("The printer’s carriage is reporting\ncommunication drop-outs. Try\nrestarting the printer. If this happens\nagain, please contact support.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.textBody1
-                visible: true
-                text: qsTr("support.makerbot.com")
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("EXIT")
-                visible: true
+                textHeader {
+                    text: qsTr("PROCESS FAILED\n\nCARRIAGE COMMUNICATION ERROR")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("The printer’s carriage is reporting communication drop-outs. " +
+                               "Try restarting the printer. If this happens again, please contact support.")
+                    visible: true
+                }
             }
         },
+
         State {
             name: "chamber_fan_failure"
 
             PropertyChanges {
-                target: contentLeftItem.image
-                source: "qrc:/img/error_chamber_fan_failure.png"
-                visible: true
+                target: contentLeftSide
+
+                image {
+                    source: "qrc:/img/error_chamber_fan_failure.png"
+                    visible: true
+                }
             }
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PRINT FAILED.\nFAN ERROR.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Please clear the chamber and make\n" +
-                      "sure no filament is caught in the\n" +
-                      "chamber heater fans.")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("CONTINUE")
-                visible: true
-            }
-
-            PropertyChanges {
-                target: contentRightItem.buttonSecondary1
-                visible: false
+                textHeader {
+                    text: qsTr("PRINT FAILED\n\nFAN ERROR")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Please clear the chamber and make sure no filament " +
+                               "is caught in the chamber heater fans.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("CONTINUE")
+                    visible: true
+                }
             }
         },
 
@@ -789,23 +643,22 @@ LoggingItem {
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("INCOMPATIBLE\nPRINT FILE")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("This .Makerbot was prepared for\na different type of printer. Please\nexport it again for this printer type.\nError %1").arg(lastReportedErrorCode)
-                visible: true
+                textHeader {
+                    text: qsTr("INCOMPATIBLE\nPRINT FILE")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("This .Makerbot was prepared for a different type of printer. " +
+                               "Please export it again for this printer type. Error %1").arg(lastReportedErrorCode)
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("OK")
+                    visible: true
+                }
             }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("OK")
-                visible: true
-            }
-
         },
 
         State {
@@ -813,50 +666,47 @@ LoggingItem {
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("EXTRUDER MISMATCH")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("This .Makerbot was prepared for a\ndifferent set of extruders.\n\n" +
-                           "Extruders Attached -\n%1\nExtruders Required -\n%2\n\nPlease " +
-                           "export it again for the\nattached extruders. (Error %3)").
-                arg(formatExtruderNames(bot.process.currentTools)).
-                arg(formatExtruderNames(bot.process.fileTools)).
-                arg(lastReportedErrorCode)
-                visible: true
+                textHeader {
+                    text: qsTr("EXTRUDER MISMATCH")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("This .Makerbot was prepared for a different set of extruders.\n\n" +
+                               "Extruders Attached -\n%1\nExtruders Required -\n%2\n\nPlease " +
+                               "export it again for the attached extruders. (Error %3)").
+                                    arg(formatExtruderNames(bot.process.currentTools)).
+                                    arg(formatExtruderNames(bot.process.fileTools)).
+                                    arg(lastReportedErrorCode)
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("OK")
+                    visible: true
+                }
             }
-
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("OK")
-                visible: true
-            }
-
         },
         State {
             name: "homing_error"
             extend: "generic_error"
 
             PropertyChanges {
-                target: contentRightItem.textHeader
-                text: qsTr("PRINT FAILED\n\nHOMING ERROR")
-                visible: true
-            }
-            PropertyChanges {
-                target: contentRightItem.textBody
-                text: qsTr("Confirm the build plate is installed correctly and clear any debris.")
-                visible: true
-            }
+                target: contentRightSide
 
-            PropertyChanges {
-                target: contentRightItem.buttonPrimary
-                text: qsTr("EXIT")
-                visible: true
+                textHeader {
+                    text: qsTr("PRINT FAILED\n\nHOMING ERROR")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Confirm the build plate is installed correctly and clear any debris.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("EXIT")
+                    visible: true
+                }
             }
-
         }
     ]
 }

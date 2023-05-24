@@ -142,8 +142,8 @@ Item {
                 id: toolheadCalibration
                 visible: !calibrateErrorScreen.visible
                 onProcessDone: {
+                    toolheadCalibration.state = "base state"
                     if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
-                        toolheadCalibration.state = "base state"
                         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                     }
                 }

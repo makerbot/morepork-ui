@@ -180,6 +180,13 @@ ApplicationWindow {
             return
         }
 
+        // Do not open this popup while the user is in the process of
+        // attaching the extruders in the attach extruders flow.
+        if(materialPage.materialSwipeView.currentIndex ==
+                MaterialPage.AttachExtruderPage) {
+            return
+        }
+
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
         }
@@ -195,10 +202,12 @@ ApplicationWindow {
     }
 
     onExtrudersPresentChanged: {
+        // Get a fresh update of the extruders configs which will update flags
+        // used to evaluate whether the attached extruders combo is valid, as
+        // well as whether they need to be calibrated.
+        bot.getExtrudersConfigs()
         calibratePopupDeterminant()
     }
-
-    
 
     // When firmware is finished updating for an extruder, the progress doesn't
     // go to 100 and instead returns to 0. In a situation where both extruders are
@@ -1878,10 +1887,11 @@ ApplicationWindow {
             }
 
             ColumnLayout {
-                width: popupContainer.width
+                width: parent.width
                 height: children.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -18
                 spacing: 10
 
                 TextHeadline {
@@ -2870,7 +2880,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/fre_help_qr_code.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2884,7 +2894,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_compatibility.png"
                         }
 
                         PropertyChanges {
@@ -2903,7 +2913,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2917,7 +2927,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2931,7 +2941,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2944,7 +2954,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
@@ -2957,7 +2967,7 @@ ApplicationWindow {
 
                         PropertyChanges {
                             target: help_qr_code
-                            source: "qrc:/img/broken.png"
+                            source: "qrc:/img/qr_230_xlsetup.png"
                         }
 
                         PropertyChanges {
