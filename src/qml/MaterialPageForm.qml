@@ -41,7 +41,6 @@ Item {
     property bool isTopLidOpen: bot.chamberErrorCode == 45
     property alias itemAttachExtruder: itemAttachExtruder
     property alias attach_extruder: attach_extruder_content
-    property alias calibrateExtrudersPopup: calibrateExtrudersPopup
 
     property alias moistureWarningPopup: moistureWarningPopup
 
@@ -683,54 +682,6 @@ Item {
                     }
                 }
             ]
-        }
-    }
-
-    CustomPopup {
-        popupName: "CalibrateExtruders"
-        id: calibrateExtrudersPopup
-        popupHeight: columnLayout_next_step.height + 130
-        showTwoButtons: true
-        visible: false
-
-        left_button_text: qsTr("SKIP")
-        left_button.onClicked: {
-            calibrateExtrudersPopup.close()
-        }
-
-        right_button_text: qsTr("GO TO PAGE")
-        right_button.onClicked: {
-            // go to calibrate screen
-            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-            settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
-            calibrateExtrudersPopup.close()
-        }
-
-        ColumnLayout {
-            id: columnLayout_next_step
-            width: 650
-            height: children.height
-            spacing: 20
-            anchors.top: parent.top
-            anchors.topMargin: 150
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            TextHeadline {
-                id: headline_text
-                text: qsTr("CALIBRATE EXTRUDERS")
-                Layout.alignment: Qt.AlignHCenter
-                visible: true
-            }
-
-            TextBody {
-                text: "Calibration enables precise 3D printing. The printer must calibrate new extruders to ensure print quality"
-                Layout.preferredWidth: parent.width
-                wrapMode: Text.WordWrap
-                Layout.alignment: Qt.AlignHCenter
-                horizontalAlignment: Text.AlignHCenter
-                visible: true
-            }
         }
     }
 

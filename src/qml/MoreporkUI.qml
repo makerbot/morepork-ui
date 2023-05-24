@@ -180,6 +180,13 @@ ApplicationWindow {
             return
         }
 
+        // Do not open this popup while the user is in the process of
+        // attaching the extruders in the attach extruders flow.
+        if(materialPage.materialSwipeView.currentIndex ==
+                MaterialPage.AttachExtruderPage) {
+            return
+        }
+
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
         }
@@ -1880,10 +1887,11 @@ ApplicationWindow {
             }
 
             ColumnLayout {
-                width: popupContainer.width
+                width: parent.width
                 height: children.height
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -18
                 spacing: 10
 
                 TextHeadline {

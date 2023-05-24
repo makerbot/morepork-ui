@@ -451,9 +451,7 @@ MaterialPageForm {
 
             if (!inFreStep) {
                 if(bot.process.type == ProcessType.None) {
-                    if(bot.extruderAPresent && bot.extruderBPresent) {
-                        calibrateExtrudersPopup.open()
-                    }
+                    calibratePopupDeterminant()
                 } else if(bot.process.type == ProcessType.Print) {
                     // go to print screen
                     bot.pauseResumePrint("resume")
