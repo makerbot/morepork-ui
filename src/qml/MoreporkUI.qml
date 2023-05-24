@@ -195,10 +195,12 @@ ApplicationWindow {
     }
 
     onExtrudersPresentChanged: {
+        // Get a fresh update of the extruders configs which will update flags
+        // used to evaluate whether the attached extruders combo is valid, as
+        // well as whether they need to be calibrated.
+        bot.getExtrudersConfigs()
         calibratePopupDeterminant()
     }
-
-    
 
     // When firmware is finished updating for an extruder, the progress doesn't
     // go to 100 and instead returns to 0. In a situation where both extruders are
