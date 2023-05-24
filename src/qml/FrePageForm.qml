@@ -112,7 +112,7 @@ LoggingItem {
             icon_image: LoadingIcon.Success
         }
         image {
-            source: "qrc:/img/fre_help_qr_code.png"
+            source: "qrc:/img/qr_230_xlsetup.png"
         }
         visible: false
     }
@@ -959,7 +959,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentLeft
-                image.source: "qrc:/img/fre_help_qr_code.png"
+                image.source: "qrc:/img/qr_230_xlsetup.png"
                 image.visible: true
                 loadingIcon.visible: false
                 visible: true

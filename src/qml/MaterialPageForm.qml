@@ -295,7 +295,7 @@ Item {
                     }
 
                     help.onClicked: {
-                        helpPopup.state = "locate_desiccant_help"
+                        helpPopup.state = "methodxl_locate_desiccant_help"
                         helpPopup.open()
                     }
                 }
