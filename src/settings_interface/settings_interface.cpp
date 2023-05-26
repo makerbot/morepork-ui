@@ -59,6 +59,7 @@ void SettingsInterface::writeSettings() {
 void SettingsInterface::mergeSettings(Json::Value &s1, Json::Value s2) {
     if (!s1.isObject() || !s2.isObject()) return;
     for (const auto& key : s2.getMemberNames()) {
+        if (!s1.hasMember(key)) continue;
         if (s1[key].isObject()) {
             mergeSettings(s1[key], s2[key]);
         } else {
