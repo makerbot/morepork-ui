@@ -832,21 +832,7 @@ LoggingItem {
                 }
                 buttonPrimary {
                     style: ButtonRectanglePrimary.Button
-                    text: {
-                        if(inFreStep) {
-                            if(bot.process.type == ProcessType.Print) {
-                                qsTr("NEXT")
-                            } else if(bot.process.type == ProcessType.None) {
-                                if(bayID == 1 && !bot.hasFilamentBay) {
-                                    qsTr("NEXT: LOAD SUPPORT MATERIAL")
-                                } else {
-                                    qsTr("NEXT")
-                                }
-                            }
-                        } else {
-                            qsTr("NEXT")
-                        }
-                    }
+                    text: qsTr("NEXT")
                     visible: true
                 }
                 buttonSecondary1 {
@@ -933,7 +919,7 @@ LoggingItem {
                                 qsTr("NEXT")
                             } else if(bot.process.type == ProcessType.None) {
                                 if(bayID == 1 && bot.hasFilamentBay) {
-                                    qsTr("NEXT: LOAD SUPPORT MATERIAL")
+                                    qsTr("NEXT")
                                 } else if(bayID == 2) {
                                     qsTr("DONE")
                                 }
