@@ -102,6 +102,9 @@ LoggingItem {
                 image {
                     visible: true
                 }
+                animatedImage {
+                    visible: false
+                }
                 loadingIcon {
                     visible: false
                 }
@@ -160,6 +163,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
@@ -223,7 +231,12 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
-                source: ("qrc:/img/%1.png").arg(getImageForPrinter("remove_build_plate"))
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                source: ("qrc:/img/%1.gif").arg(getImageForPrinter("remove_build_plate"))
                 visible: true
             }
 
@@ -278,7 +291,17 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
-                source: ("qrc:/img/%1.png").arg(getImageForPrinter("insert_build_plate"))
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                source: ("qrc:/img/%1.gif").arg(getImageForPrinter("insert_build_plate"))
                 visible: true
             }
 
@@ -335,6 +358,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentLeftSide.loadingIcon
                 icon_image: LoadingIcon.Loading
                 visible: true
@@ -375,6 +403,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
@@ -424,6 +457,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
