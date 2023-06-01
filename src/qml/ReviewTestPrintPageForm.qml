@@ -32,7 +32,7 @@ Item {
         }
 
         textBody1 {
-            text: qsTr("makerbot.com/calibration")
+            text: "makerbot.com/calibration"
             font.weight: Font.Bold
             visible: true
         }

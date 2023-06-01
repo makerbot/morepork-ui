@@ -37,14 +37,14 @@ Item {
             id: print_time_info
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("PRINT TIME")
-            dataText: print_time.replace("HR"," HOURS").replace("M"," MINUTES")
+            dataText: print_time.replace("HR",qsTr(" HOURS")).replace("M",qsTr(" MINUTES"))
         }
 
         InfoItem {
             id: material_info
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("MATERIAL")
-            dataText: qsTr("%1 + %2").arg(print_model_material_name).arg(print_support_material_name)
+            dataText: ("%1 + %2").arg(print_model_material_name).arg(print_support_material_name)
         }
 
         InfoItem {

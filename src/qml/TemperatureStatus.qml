@@ -38,7 +38,7 @@ ColumnLayout {
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 qsTr("BUILD PLATE")
             } else if(showComponent == TemperatureStatus.Generic) {
-                qsTr("GENERIC HEATER")
+                "GENERIC HEATER"
             }
         }
         customCurrentTemperature: {

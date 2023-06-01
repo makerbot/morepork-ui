@@ -207,9 +207,9 @@ Item {
                         processed_title = currentItem.topBarTitle
                     }
                     if (status_text == qsTr("IDLE")) {
-                        qsTr("%1 - %2").arg(bot.name).arg(processed_title)
+                        ("%1 - %2").arg(bot.name).arg(processed_title)
                     } else {
-                        qsTr("%1 - %2").arg(bot.name).arg(status_text)
+                        ("%1 - %2").arg(bot.name).arg(status_text)
                     }
                 }
                 antialiasing: false
