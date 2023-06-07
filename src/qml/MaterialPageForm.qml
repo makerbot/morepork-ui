@@ -611,7 +611,7 @@ Item {
 
                     PropertyChanges {
                         target: contentLeftItem.image
-                        source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
+                        source: "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
                     }
                 },
 
@@ -650,7 +650,7 @@ Item {
 
                     PropertyChanges {
                         target: contentLeftItem.image
-                        source:  qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
+                        source:  "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
                         visible: true
                     }
 

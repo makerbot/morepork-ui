@@ -371,7 +371,7 @@ LoggingItem {
                     text: qsTr("Insert the two desiccant bags into the slots on the " +
                                "%1 side of the material case.<br><br>Click the help " +
                                "icon for additional considerations around desiccant.").arg(
-                              bayID == 1 ? "left" : "right")
+                              bayID == 1 ? qsTr("left") : qsTr("right"))
                     visible: true
                 }
                 buttonPrimary {

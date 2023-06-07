@@ -68,7 +68,7 @@ Button {
             Text {
                 id: storageNameText
                 width: 525
-                text: qsTr("Storage Name Text")
+                text: "Storage Name Text"
                 font.family: "Antenna"
                 font.letterSpacing: 3
                 font.weight: Font.Bold
@@ -91,7 +91,7 @@ Button {
 
                 Text {
                     id: storageDescriptionText
-                    text: qsTr("Storage Description")
+                    text: "Storage Description"
                     font.family: "Antenna"
                     font.letterSpacing: 3
                     font.weight: Font.Light

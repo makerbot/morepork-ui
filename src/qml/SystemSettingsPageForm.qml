@@ -1002,8 +1002,8 @@ Item {
         visible: false
         showTwoButtons: true
         defaultButton: LoggingPopup.Right
-        left_button_text: "BACK"
-        right_button_text: "CONFIRM"
+        left_button_text: qsTr("BACK")
+        right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
             right_button.enabled = false
             left_button.enabled = false

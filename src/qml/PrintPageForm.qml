@@ -191,13 +191,13 @@ Item {
     function getPrintFileDetails(file) {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
-        file_name = inFreStep ? "TEST PRINT" : file.fileBaseName
+        file_name = inFreStep ? qsTr("TEST PRINT") : file.fileBaseName
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
         print_model_material = file.materialA
         print_support_material = file.materialB
-        uses_support = file.usesSupport ? "YES" : "NO"
-        uses_raft = file.usesRaft ? "YES" : "NO"
+        uses_support = file.usesSupport ? qsTr("YES") : qsTr("NO")
+        uses_raft = file.usesRaft ? qsTr("YES") : qsTr("NO")
         model_mass = file.extrusionMassGramsA < 1000 ? file.extrusionMassGramsA.toFixed(1) + " g" :
                                                        (file.extrusionMassGramsA * 0.001).toFixed(1) + " Kg"
         support_mass = file.extrusionMassGramsB < 1000 ? file.extrusionMassGramsB.toFixed(1) + " g" :
@@ -284,7 +284,6 @@ Item {
         extruder_temp = ""
         buildplane_temp = ""
         slicer_name = ""
-        startPrintWithUnknownMaterials = false
         print_job_id = ""
         print_token = ""
         print_url_prefix = ""
@@ -301,7 +300,7 @@ Item {
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
-        var doneByDayString = daysLeft > 1 ? daysLeft + " DAYS LATER" : daysLeft == 1 ? "TOMMORROW" : "TODAY"
+        var doneByDayString = daysLeft > 1 ? daysLeft + qsTr(" DAYS LATER") : daysLeft == 1 ? qsTr("TOMMORROW") : qsTr("TODAY")
         var doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() :
                                                                                           "12" + ":" + endTime.getMinutes() :
                                                               endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() :
@@ -956,7 +955,7 @@ Item {
 
                     PropertyChanges {
                         target: description_text_copy_file_popup
-                        text: qsTr("%1").arg(storage.fileCopyProgress*100) + "%"
+                        text: ("%1").arg(storage.fileCopyProgress*100) + "%"
                     }
                 },
                 State {
@@ -1029,7 +1028,7 @@ Item {
 
             TextHeadline {
                 id: title
-                text: "CONFIRM BUILD PLATE IS CLEAR"
+                text: qsTr("CONFIRM BUILD PLATE IS CLEAR")
                 Layout.alignment: Qt.AlignHCenter
             }
         }
@@ -1112,10 +1111,10 @@ Item {
         }
         full_button_text: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails) {
-                "CANCEL"
+                qsTr("CANCEL")
             } else if(printFromQueueState == PrintPage.FailedToStartPrint ||
                       printFromQueueState == PrintPage.FailedToGetPrintDetails) {
-                "OK"
+                qsTr("OK")
             } else {
                 defaultString
             }
@@ -1304,7 +1303,7 @@ Item {
 
             TextBody {
                 id: support_link
-                text: qsTr("support.makerbot.com")
+                text: "support.makerbot.com"
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
