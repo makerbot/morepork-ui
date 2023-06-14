@@ -247,7 +247,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: qsTr("OPEN DOOR AND REMOVE BUILD PLATE")
+                text: qsTr("CONFIRM BUILD PLATE IS REMOVED")
                 visible: true
             }
 
@@ -259,7 +259,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                text: qsTr("NEXT")
+                text: qsTr("CONFIRM")
                 visible: true
             }
 
