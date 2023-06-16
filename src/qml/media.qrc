@@ -228,5 +228,6 @@
         <file alias="methodxl_remove_build_plate.gif">images/assisted_level/methodxl/remove_build_plate.gif</file>
         <file alias="method_insert_build_plate.gif">images/assisted_level/method/insert_build_plate.gif</file>
         <file alias="method_remove_build_plate.gif">images/assisted_level/method/remove_build_plate.gif</file>
+        <file alias="ethernet_connected_large.png">images/ethernet_connected_large.png</file>
     </qresource>
 </RCC>

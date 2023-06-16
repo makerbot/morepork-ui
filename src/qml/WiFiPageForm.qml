@@ -7,8 +7,8 @@ import FreStepEnum 1.0
 
 Item {
     id: wifiPage
-    width: 800
-    height: 440
+    width: parent.width
+    height: parent.height
     smooth: false
     antialiasing: false
     property alias wifiSwipeView: wifiSwipeView
@@ -19,6 +19,7 @@ Item {
     property string selectedWifiName: ""
     property bool selectedWifiSaved: false
     property bool isForgetEnabled: false
+    property bool interfaceEthernet: bot.net.interface == "ethernet"
 
     onIsWifiConnectedChanged: {
         if(isWifiConnected) {
@@ -42,6 +43,13 @@ Item {
     onWifiErrorChanged: {
         if(bot.net.wifiError != WifiError.NoError) {
             bot.net.setWifiState(WifiState.NotConnected)
+        }
+    }
+
+    onInterfaceEthernetChanged: {
+        if(inFreStep && interfaceEthernet) {
+            ethernetDetectedPopup.state = "detection_step"
+            ethernetDetectedPopup.open()
         }
     }
 
@@ -95,7 +103,7 @@ Item {
                 id: ethernetInfoId
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 10
+                anchors.topMargin: 15
                 spacing: 15
 
                 Image {
@@ -104,7 +112,7 @@ Item {
                     Layout.preferredHeight: 30
                     Layout.alignment: Qt.AlignHCenter
                     source: {
-                        if(bot.net.interface == "ethernet") {
+                        if(wifiPage.interfaceEthernet) {
                             "qrc:/img/process_complete_small.png"
                         } else {
                             "qrc:/img/ethernet_connected.png"
@@ -120,7 +128,7 @@ Item {
 
                     Layout.preferredWidth: 400
                     text: {
-                        if(bot.net.interface == "ethernet") {
+                        if(wifiPage.interfaceEthernet) {
                             "You’re connected to the internet through the ethernet port."
                         } else {
                             "Plug an ethernet cable into the rear of the machine to use a wired connection."
@@ -380,6 +388,57 @@ Item {
                         text: qsTr("Show Password")
                     }
                 }
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "EthernetDetected"
+        id: ethernetDetectedPopup
+        popupHeight: columnLayout.height +100
+
+        property string state: "detection_step"
+
+        showOneButton: true
+        full_button_text: state == "detection_step" ?
+                              qsTr("CONFIRM") : qsTr("CLOSE")
+        full_button.onClicked: {
+            if(state == "detection_step") {
+                state = "success_step"
+            } else {
+                wifiFreStepComplete.start()
+                bot.firmwareUpdateCheck(false)
+                ethernetDetectedPopup.close()
+            }
+        }
+
+        ColumnLayout {
+            id: ethernetDetectedColumnLayout
+            height: children.height
+            visible: true
+            anchors.top: ethernetDetectedPopup.popupContainer.top
+            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 30
+
+            Image {
+                id: ethernetDetectedImage
+                width: sourceSize.width
+                height: sourceSize.height
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                source: ethernetDetectedPopup.state == "detection_step" ?
+                            "qrc:/img/ethernet_connected_large.png" :
+                            "qrc:/img/popup_complete.png"
+
+            }
+
+            TextHeadline {
+                id: ethernetDetectedHeader
+                text: ethernetDetectedPopup.state == "detection_step" ?
+                          qsTr("ETHERNET DETECTED") :
+                          qsTr("CONNECTED SUCCESSFULLY")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                visible: true
             }
         }
     }
