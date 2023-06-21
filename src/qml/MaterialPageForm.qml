@@ -497,10 +497,7 @@ Item {
                 textBody.text: qsTr("Remove the top lid from the printer to access the carriage")
                 buttonPrimary.visible: true
                 buttonPrimary.text: qsTr("NEXT")
-                buttonPrimary.enabled: {
-                    !(bot.chamberErrorCode == 0 ||
-                     bot.chamberErrorCode == 48)
-                }
+                buttonPrimary.enabled: true
             }
 
             states: [
