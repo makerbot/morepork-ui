@@ -208,6 +208,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentLeftSide.loadingIcon
                 visible: false
             }
@@ -260,6 +265,11 @@ LoggingItem {
                 target: contentLeftSide.image
                 visible: true
                 source: "qrc:/img/hex_key_guide.png"
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
             }
 
             PropertyChanges {
@@ -319,7 +329,12 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
-                source: ("qrc:/img/%1.png").arg(getImageForPrinter("remove_build_plate"))
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                source: ("qrc:/img/%1.gif").arg(getImageForPrinter("remove_build_plate"))
                 visible: true
             }
 
@@ -380,6 +395,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
@@ -654,9 +674,14 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
-                visible: true
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                source: ("qrc:/img/%1.gif").arg(getImageForPrinter("insert_build_plate"))
                 anchors.leftMargin: 0
-                source: ("qrc:/img/%1.png").arg(getImageForPrinter("insert_build_plate"))
+                visible: true
             }
 
             PropertyChanges {
@@ -717,6 +742,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
+            }
+
+            PropertyChanges {
                 target: contentLeftSide.loadingIcon
                 icon_image: LoadingIcon.Success
                 visible: true
@@ -766,6 +796,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
                 visible: false
             }
 
@@ -820,6 +855,11 @@ LoggingItem {
                 target: contentLeftSide.loadingIcon
                 icon_image: LoadingIcon.Loading
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
             }
 
             PropertyChanges {

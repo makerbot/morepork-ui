@@ -106,7 +106,8 @@ LoadUnloadFilamentForm {
                     helpPopup.state = "methodxl_feed_filament_help"
                     helpPopup.open()
                 } else if(state == "unloaded_filament") {
-                    helpPopup.state = "methodxl_rewind_spool_help"
+                    // Change the QR Code to be safe
+                    helpPopup.state = (inFreStep) ? "fre" : "general_help"
                     helpPopup.open()
                 }
             }
