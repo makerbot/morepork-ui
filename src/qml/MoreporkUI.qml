@@ -2858,7 +2858,7 @@ ApplicationWindow {
                         Layout.preferredHeight: children.height
                         TextHeadline {
                             id: help_title
-                            text: qsTr("METHOD COMPATIBILITY")
+                            text: qsTr("HELP")
                             Layout.alignment: Qt.AlignLeft
                             Layout.preferredWidth: parent.width
                             visible: true
@@ -2886,6 +2886,32 @@ ApplicationWindow {
                         PropertyChanges {
                             target: help_title
                             text: qsTr("METHOD XL SETUP GUIDE")
+                        }
+
+                        PropertyChanges {
+                            target: help_description
+                            text: qsTr("Scan the QR code for more information and troubleshooting tips.")
+                        }
+                    },
+
+                    State {
+                        name: "general_help"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/qr_230_general_help.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("HELP")
+                        }
+
+                        PropertyChanges {
+                            target: help_description
+                            text: qsTr("Scan the QR code or visit the following URL "+
+                                       "for more information and troubleshooting tips."+
+                                       "<br><br><b>support.ultimaker.com</b>")
                         }
                     },
 
