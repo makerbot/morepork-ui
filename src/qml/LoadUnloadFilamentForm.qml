@@ -832,6 +832,11 @@ LoggingItem {
                 }
                 buttonPrimary {
                     style: ButtonRectanglePrimary.Button
+                    // We go through this page during FRE,
+                    // it is worth noting that when we reach
+                    // this page and are at Bay 1 we used to
+                    // check and explain the next step is to
+                    // Load Support Material to the user.
                     text: qsTr("NEXT")
                     visible: true
                 }
