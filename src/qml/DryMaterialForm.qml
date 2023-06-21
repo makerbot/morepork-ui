@@ -185,7 +185,7 @@ LoggingItem {
             font.family: defaultFont.name
             font.pixelSize: 18
             font.weight: Font.Light
-            text: qsTr("")
+            text: ""
             lineHeight: 1.2
             opacity: 1.0
         }

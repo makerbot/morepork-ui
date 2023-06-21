@@ -43,7 +43,7 @@ Item {
         TextBody {
             id: instructionText
             color: "#cbcbcb"
-            text: "Select any noticeable print defects."
+            text: qsTr("Select any noticeable print defects.")
             Layout.alignment: Qt.AlignHCenter
         }
 
