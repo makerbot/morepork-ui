@@ -70,19 +70,20 @@ Item {
             resetSettingsSwipeViewPages()
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
+            // Reboot Printer
+            bot.reboot()
         }
     }
 
     onIsFactoryResetProcessChanged: {
         if(isFactoryResetProcess){
             isResetting = true
-            resetToFactoryPopup.open()
         }
     }
 
     onDoneFactoryResetChanged: {
         if(doneFactoryReset) {
-            closeResetPopupTimer.start()
+            isResetting = false
         }
     }
 
@@ -997,71 +998,81 @@ Item {
     CustomPopup {
         popupName: "ResetToFactory"
         id: resetToFactoryPopup
-        popupWidth: 715
-        popupHeight: 282
+        popupHeight: factoryResetColumnLayout.height + (isResetting ? 90 : 145)
         visible: false
-        showTwoButtons: true
-        defaultButton: LoggingPopup.Right
+        showTwoButtons: !isResetting && !doneFactoryReset
+        showOneButton: !isResetting && doneFactoryReset
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
-            right_button.enabled = false
-            left_button.enabled = false
             isResetting = true
             bot.resetToFactory(true)
         }
         left_button.onClicked: {
             resetToFactoryPopup.close()
         }
-        onClosed: {
-            isResetting = false
-            right_button.enabled = true
-            left_button.enabled = true
+        full_button_text: qsTr("RESTART")
+        full_button.onClicked: {
+            closeResetPopupTimer.start()
         }
 
-        Column {
-            id: user_column
-            width: resetToFactoryPopup.popupContainer.width
-            height: resetToFactoryPopup.popupContainer.height - resetToFactoryPopup.full_button.height
+        onClosed: {
+            isResetting = false
+        }
+
+        ColumnLayout {
+            id: factoryResetColumnLayout
+            width: resetToFactoryPopup.popupContainer.width-140
+            height: children.height
             anchors.top: resetToFactoryPopup.popupContainer.top
-            anchors.horizontalCenter: resetToFactoryPopup.popupContainer.horizontalCenter
-            spacing: 15
-            topPadding: 35
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 35
+            spacing: 20
 
             Image {
-                id: extruder_material_error
-                source: "qrc:/img/extruder_material_error.png"
-                sourceSize.width: 63
-                fillMode: Image.PreserveAspectFit
-                anchors.horizontalCenter: parent.horizontalCenter
+                id: factory_reset_error_image
+                width: sourceSize.width
+                Layout.preferredWidth: sourceSize.width
+                Layout.preferredHeight: sourceSize.height
+                source: "qrc:/img/popup_error.png"
+                Layout.alignment: Qt.AlignHCenter
+                visible: !isResetting
             }
 
-            Text {
+            BusySpinner {
+                id: factory_reset_busy
+                Layout.alignment: Qt.AlignHCenter
+                visible: isResetting
+            }
+
+            TextHeadline {
                 id: alert_text
-                color: "#ffffff"
-                text: isResetting ? qsTr("RESTORING FACTORY SETTINGS...") : qsTr("RESTORE FACTORY SETTINGS?")
-                font.pixelSize: 20
-                font.letterSpacing: 3
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
+                Layout.preferredWidth: parent.width
+                text: {
+                    if(isResetting) {
+                        qsTr("RESTORING FACTORY SETTINGS...")
+                    } else {
+                        doneFactoryReset ? qsTr("RESTART PRINTER")
+                                         : qsTr("RESTORE FACTORY SETTINGS?")
+                    }
+                }
+                horizontalAlignment: Text.AlignHCenter
             }
 
-            Text {
+            TextBody {
                 id: descritpion_text
                 width: parent.width
-                color: "#ffffff"
-                text: isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
-                font.pixelSize: 16
+                Layout.preferredWidth: parent.width
                 horizontalAlignment: Text.AlignHCenter
-                lineHeight: 1.3
-                font.letterSpacing: 3
-                font.family: defaultFont.name
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                rightPadding: 5
-                leftPadding: 5
-                anchors.horizontalCenter: parent.horizontalCenter
+                text: {
+                    if(isResetting) {
+                        qsTr("Please wait.")
+                    } else {
+                        doneFactoryReset ? qsTr("Restart the printer to complete factory reset procedure.")
+                                         : qsTr("This will erase all history, preferences, account information and calibration settings.")
+                    }
+                }
             }
         }
     }
