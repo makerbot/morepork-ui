@@ -52,6 +52,7 @@ Item {
     property alias buttonTouchTest: buttonTouchTest
 
     property bool isResetting: false
+    property bool isFactoryResetDone: false
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetToFactoryPopup: resetToFactoryPopup
     property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
@@ -84,6 +85,7 @@ Item {
     onDoneFactoryResetChanged: {
         if(doneFactoryReset) {
             isResetting = false
+            isFactoryResetDone = true
         }
     }
 
@@ -1000,8 +1002,8 @@ Item {
         id: resetToFactoryPopup
         popupHeight: factoryResetColumnLayout.height + (isResetting ? 90 : 145)
         visible: false
-        showTwoButtons: !isResetting && !doneFactoryReset
-        showOneButton: !isResetting && doneFactoryReset
+        showTwoButtons: !isResetting && !isFactoryResetDone
+        showOneButton: !isResetting && isFactoryResetDone
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
@@ -1018,6 +1020,7 @@ Item {
 
         onClosed: {
             isResetting = false
+            isFactoryResetDone = false
         }
 
         ColumnLayout {
@@ -1053,7 +1056,7 @@ Item {
                     if(isResetting) {
                         qsTr("RESTORING FACTORY SETTINGS...")
                     } else {
-                        doneFactoryReset ? qsTr("RESTART PRINTER")
+                        isFactoryResetDone ? qsTr("RESTART PRINTER")
                                          : qsTr("RESTORE FACTORY SETTINGS?")
                     }
                 }
@@ -1069,7 +1072,7 @@ Item {
                     if(isResetting) {
                         qsTr("Please wait.")
                     } else {
-                        doneFactoryReset ? qsTr("Restart the printer to complete factory reset procedure.")
+                        isFactoryResetDone ? qsTr("Restart the printer to complete factory reset procedure.")
                                          : qsTr("This will erase all history, preferences, account information and calibration settings.")
                     }
                 }
