@@ -1013,7 +1013,7 @@ Item {
         left_button.onClicked: {
             resetToFactoryPopup.close()
         }
-        full_button_text: qsTr("RESTART")
+        full_button_text: qsTr("CONFIRM")
         full_button.onClicked: {
             closeResetPopupTimer.start()
         }
@@ -1054,7 +1054,7 @@ Item {
                 Layout.preferredWidth: parent.width
                 text: {
                     if(isResetting) {
-                        qsTr("RESTORING FACTORY SETTINGS...")
+                        qsTr("RESTORING FACTORY SETTINGS")
                     } else {
                         isFactoryResetDone ? qsTr("RESTART PRINTER")
                                          : qsTr("RESTORE FACTORY SETTINGS?")
@@ -1070,7 +1070,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 text: {
                     if(isResetting) {
-                        qsTr("Please wait.")
+                        qsTr("Please wait...")
                     } else {
                         isFactoryResetDone ? qsTr("Restart the printer to complete factory reset procedure.")
                                          : qsTr("This will erase all history, preferences, account information and calibration settings.")
