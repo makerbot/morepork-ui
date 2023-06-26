@@ -480,21 +480,11 @@ Item {
             ContentRightSide {
                 id: attach_extruder_content
                 textHeader.visible:true
-                textHeader.text:  {
-                    if(bot.chamberErrorCode == 48) {
-                        qsTr("CLOSE CHAMBER DOOR")
-                    } else if(bot.chamberErrorCode == 45) {
-                        qsTr("REMOVE TOP LID")
-                    } else if(bot.chamberErrorCode == 0) {
-                        qsTr("REMOVE TOP LID")
-                    } else {
-                        emptyString
-                    }
-                }
+                textHeader.text: qsTr("REMOVE TOP LID")
                 textHeaderWaitingForUser.text: qsTr("NOT DETECTED")
                 textHeaderWaitingForUser.visible: false
                 textBody.visible: true
-                textBody.text: qsTr("Remove the top lid from the printer to access the carriage")
+                textBody.text: qsTr("Remove the top lid from the printer to access the carriage.")
                 buttonPrimary.visible: true
                 buttonPrimary.text: qsTr("NEXT")
                 buttonPrimary.enabled: true
@@ -647,7 +637,15 @@ Item {
 
                     PropertyChanges {
                         target: contentLeftItem.image
-                        source:  "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
+                        source: {
+                            if(bot.chamberErrorCode == 48) {
+                                "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("error_close_door.png"))
+                            } else if(bot.chamberErrorCode == 45 || bot.chamberErrorCode == 0) {
+                                "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
+                            } else {
+                                emptyString
+                            }
+                        }
                         visible: true
                     }
 
@@ -662,19 +660,24 @@ Item {
                         textHeader.text: {
                             if(bot.chamberErrorCode == 48) {
                                 qsTr("CLOSE CHAMBER DOOR")
-                            } else if(bot.chamberErrorCode == 45) {
-                                qsTr("REPLACE TOP LID")
-                            } else if(bot.chamberErrorCode == 0) {
+                            } else if(bot.chamberErrorCode == 45 || bot.chamberErrorCode == 0) {
                                 qsTr("REPLACE TOP LID")
                             } else {
                                 emptyString
                             }
                         }
-                        textBody.text: qsTr("Replace the top lid for safety while extruders are in motion.")
+                        textBody.text: {
+                            if(bot.chamberErrorCode == 48) {
+                                qsTr("Please close the chamber door.")
+                            } else if(bot.chamberErrorCode == 45 || bot.chamberErrorCode == 0) {
+                                qsTr("Replace the top lid for safety while extruders are in motion.")
+                            } else {
+                                emptyString
+                            }
+                        }
                         buttonPrimary.text: (bot.process.type == ProcessType.Print) ? qsTr("RESUME PRINT") : qsTr("DONE")
                         buttonPrimary.enabled: {
-                            !(bot.chamberErrorCode == 45 ||
-                             bot.chamberErrorCode == 48)
+                            (bot.chamberErrorCode != 45 && bot.chamberErrorCode != 48)
                         }
                     }
                 }
