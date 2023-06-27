@@ -63,14 +63,23 @@ Item {
     property string otherBlue: "#45a2d3"
 
     Timer {
-        id: closeResetPopupTimer
+        id: doFinalResetProceduresTimer
         interval: 2500
         onTriggered: {
-            resetToFactoryPopup.close()
             // Reset all screen positions
             resetSettingsSwipeViewPages()
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
+            // Wait before Reboot
+            closeResetPopupTimer.start()
+        }
+    }
+
+    Timer {
+        id: closeResetPopupTimer
+        interval: 5000
+        onTriggered: {
+            resetToFactoryPopup.close()
             // Reboot Printer
             bot.reboot()
         }
@@ -1000,10 +1009,13 @@ Item {
     CustomPopup {
         popupName: "ResetToFactory"
         id: resetToFactoryPopup
-        popupHeight: factoryResetColumnLayout.height + (isResetting ? 90 : 145)
+        property bool hideButton: false
+        popupHeight: factoryResetColumnLayout.height
+                     + ((isResetting || hideButton) ? 90 : 145)
+        popupWidth: popupContainer.width
         visible: false
         showTwoButtons: !isResetting && !isFactoryResetDone
-        showOneButton: !isResetting && isFactoryResetDone
+        showOneButton: !isResetting && isFactoryResetDone && !hideButton
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
@@ -1015,17 +1027,19 @@ Item {
         }
         full_button_text: qsTr("CONFIRM")
         full_button.onClicked: {
-            closeResetPopupTimer.start()
+            hideButton = true
+            doFinalResetProceduresTimer.start()
         }
 
         onClosed: {
+            hideButton = false
             isResetting = false
             isFactoryResetDone = false
         }
 
         ColumnLayout {
             id: factoryResetColumnLayout
-            width: resetToFactoryPopup.popupContainer.width-140
+            width: parent.width
             height: children.height
             anchors.top: resetToFactoryPopup.popupContainer.top
             anchors.horizontalCenter: parent.horizontalCenter
