@@ -59,6 +59,11 @@ SystemSettingsPageForm {
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
     }
 
+    buttonSetUpProcedures.onClicked: {
+
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetUpProceduresPage)
+    }
+
     buttonCopyLogs.onClicked: {
         if(storage.usbStorageConnected) {
             var now = new Date();
