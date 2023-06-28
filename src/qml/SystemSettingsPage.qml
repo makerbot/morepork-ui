@@ -11,6 +11,7 @@ SystemSettingsPageForm {
 
     buttonAdvancedInfo.onClicked: {
         bot.query_status()
+        bot.get_calibration_offsets()
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.AdvancedInfoPage)
     }
 

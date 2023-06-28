@@ -18,7 +18,7 @@ MenuItem {
 
     TextSubheader {
         id: menuItemLabel
-        text: qsTr("Menu Item")
+        text: "Menu Item"
         horizontalAlignment: Text.AlignHCenter
         color: parent.enabled ? pressed ? "#000000" : "#ffffff" : "#4d4d4d"
         anchors.verticalCenter: parent.verticalCenter

@@ -36,7 +36,7 @@ Rectangle {
 
     Text {
         id: button_text
-        text: qsTr("")
+        text: ""
         anchors.verticalCenterOffset: 7
         font.capitalization: Font.AllUppercase
         anchors.horizontalCenter: parent.horizontalCenter

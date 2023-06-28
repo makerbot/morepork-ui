@@ -371,7 +371,7 @@ LoggingItem {
                     text: qsTr("Insert the two desiccant bags into the slots on the " +
                                "%1 side of the material case.<br><br>Click the help " +
                                "icon for additional considerations around desiccant.").arg(
-                              bayID == 1 ? "left" : "right")
+                              bayID == 1 ? qsTr("left") : qsTr("right"))
                     visible: true
                 }
                 buttonPrimary {
@@ -832,21 +832,12 @@ LoggingItem {
                 }
                 buttonPrimary {
                     style: ButtonRectanglePrimary.Button
-                    text: {
-                        if(inFreStep) {
-                            if(bot.process.type == ProcessType.Print) {
-                                qsTr("NEXT")
-                            } else if(bot.process.type == ProcessType.None) {
-                                if(bayID == 1 && !bot.hasFilamentBay) {
-                                    qsTr("NEXT: LOAD SUPPORT MATERIAL")
-                                } else {
-                                    qsTr("NEXT")
-                                }
-                            }
-                        } else {
-                            qsTr("NEXT")
-                        }
-                    }
+                    // We go through this page during FRE,
+                    // it is worth noting that when we reach
+                    // this page and are at Bay 1 we used to
+                    // check and explain the next step is to
+                    // Load Support Material to the user.
+                    text: qsTr("NEXT")
                     visible: true
                 }
                 buttonSecondary1 {
@@ -933,7 +924,7 @@ LoggingItem {
                                 qsTr("NEXT")
                             } else if(bot.process.type == ProcessType.None) {
                                 if(bayID == 1 && bot.hasFilamentBay) {
-                                    qsTr("NEXT: LOAD SUPPORT MATERIAL")
+                                    qsTr("NEXT")
                                 } else if(bayID == 2) {
                                     qsTr("DONE")
                                 }

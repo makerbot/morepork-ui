@@ -131,14 +131,14 @@ Item {
                         if(wifiPage.interfaceEthernet) {
                             "You’re connected to the internet through the ethernet port."
                         } else {
-                            "Plug an ethernet cable into the rear of the machine to use a wired connection."
+                            qsTr("Plug an ethernet cable into the rear of the machine to use a wired connection.")
                         }
                     }
                 }
                 ButtonRectangleSecondary {
                     width: 750
                     Layout.preferredWidth: 750
-                    text: "SCAN WI-FI NETWORKS"
+                    text: qsTr("SCAN WI-FI NETWORKS")
                     Layout.alignment: Qt.AlignHCenter
                     enabled: (bot.net.wifiState !== WifiState.Searching)
 
@@ -326,7 +326,7 @@ Item {
                         font.weight: Font.Light
                         font.pointSize: (showPassword.checked ||
                                         text == "") ? 14 : 24
-                        placeholderText: "Enter WiFi password"
+                        placeholderText: qsTr("Enter WiFi password")
                         passwordCharacter: "•"
                         echoMode: {
                             showPassword.checked ?

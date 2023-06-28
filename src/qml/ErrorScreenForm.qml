@@ -554,8 +554,9 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("There seems to be a problem with the heaters. If this happens " +
-                               "again, please contact MakerBot support. Error %1").arg(lastReportedErrorCode)
+                    text: qsTr("There seems to be a problem with the heaters. Please make sure that " +
+                               "the top lid is securely seated. If this happens again, please " +
+                               "contact MakerBot support. Error %1").arg(lastReportedErrorCode)
                     visible: true
                 }
                 buttonPrimary {

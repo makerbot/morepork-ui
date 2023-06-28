@@ -33,9 +33,9 @@ ListView {
         materialNameText: model.modelData["label"]
         temperatureAndTimeText: {
             if (model.modelData["temperature"] != 0)
-                model.modelData["temperature"] + "°C for " + model.modelData["time"] + " hours"
+                qsTr("%1°C for %2 hours").arg(model.modelData["temperature"]).arg(model.modelData["time"])
             else
-                "Not available, this material can be damaged by drying."
+               qsTr("Not available, this material can be damaged by drying.")
         }
         smooth: false
         antialiasing: false

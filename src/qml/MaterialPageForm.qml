@@ -497,10 +497,7 @@ Item {
                 textBody.text: qsTr("Remove the top lid from the printer to access the carriage")
                 buttonPrimary.visible: true
                 buttonPrimary.text: qsTr("NEXT")
-                buttonPrimary.enabled: {
-                    !(bot.chamberErrorCode == 0 ||
-                     bot.chamberErrorCode == 48)
-                }
+                buttonPrimary.enabled: true
             }
 
             states: [
@@ -611,7 +608,7 @@ Item {
 
                     PropertyChanges {
                         target: contentLeftItem.image
-                        source: qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
+                        source: "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("fre_attach_extruders_remove_packaging.png"))
                     }
                 },
 
@@ -650,7 +647,7 @@ Item {
 
                     PropertyChanges {
                         target: contentLeftItem.image
-                        source:  qsTr("qrc:/img/%1").arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
+                        source:  "qrc:/img/%1".arg(itemAttachExtruder.getImageForPrinter("error_close_lid.png"))
                         visible: true
                     }
 
