@@ -28,6 +28,7 @@ Item {
     property real layer_height_mm
     property string extruder_temp
     property string buildplane_temp
+    property string buildplatform_temp
     property string slicer_name
     property string print_job_id
     property string print_token
@@ -206,9 +207,10 @@ Item {
         supportMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
         layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
-        extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
-                                              file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
-        buildplane_temp = file.buildplaneTempCelcius + "C"
+        extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + " °C" :
+                                              file.extruderTempCelciusA + " °C" + " | " + file.extruderTempCelciusB + " °C"
+        buildplane_temp = file.buildplaneTempCelcius + " °C"
+        buildplatform_temp = file.buildplatformTempCelcius + " °C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
     }
@@ -237,8 +239,8 @@ Item {
         modelMaterialRequired = (meta['extrusion_masses_g'][0]/1000).toFixed(3)
         supportMaterialRequired = (meta['extrusion_masses_g'][1]/1000).toFixed(3)
         extruder_temp = !support_extruder_used ?
-                            meta['extruder_temperatures'][0] + "C" :
-                            meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
+                            meta['extruder_temperatures'][0] + " °C" :
+                            meta['extruder_temperatures'][0] + " °C" + " | " + meta['extruder_temperatures'][1] + " °C"
         if("build_plane_temperature" in meta) {
             meta["buildplane_target_temperature"] = meta["build_plane_temperature"]
             delete meta["build_plane_temperature"]
@@ -250,7 +252,10 @@ Item {
                         Math.round((meta["chamber_temperature"] * 1.333) - 13) :
                         meta["chamber_temperature"]
         }
-        buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
+        buildplane_temp = Math.round(meta['buildplane_target_temperature']) + " °C"
+        if("platform_temperature" in meta) {
+            buildplatform_temp = meta['platform_temperature'] + " °C"
+        }
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
         startPrintSource = PrintPage.FromPrintQueue
