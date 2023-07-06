@@ -67,19 +67,16 @@ Item {
         interval: 2500
         onTriggered: {
             // Reset all screen positions
-            resetSettingsSwipeViewPages()
+            //resetSettingsSwipeViewPages()
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
-            // Wait before Reboot
-            closeResetPopupTimer.start()
         }
     }
 
     Timer {
-        id: closeResetPopupTimer
+        id: rebootPrinterTimer
         interval: 5000
         onTriggered: {
-            resetToFactoryPopup.close()
             // Reboot Printer
             bot.reboot()
         }
@@ -1021,6 +1018,7 @@ Item {
         right_button.onClicked: {
             isResetting = true
             bot.resetToFactory(true)
+            doFinalResetProceduresTimer.start()
         }
         left_button.onClicked: {
             resetToFactoryPopup.close()
@@ -1028,7 +1026,8 @@ Item {
         full_button_text: qsTr("CONFIRM")
         full_button.onClicked: {
             hideButton = true
-            doFinalResetProceduresTimer.start()
+            // Wait before Reboot
+            rebootPrinterTimer.start()
         }
 
         onClosed: {
