@@ -33,6 +33,7 @@ ApplicationWindow {
     property bool extrudersPresent: extruderAPresent && extruderBPresent
     property bool extrudersCalibrated: bot.extrudersCalibrated
     property bool skipAuthentication: false
+    property bool isFactoryResetting: false
     property bool isAuthenticated: false
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
@@ -192,7 +193,7 @@ ApplicationWindow {
         }
         // Do not open popup in FRE and both extruders must
         // be present for this popup to open
-        if (!extrudersCalibrated && isFreComplete && extrudersPresent) {
+        if (!extrudersCalibrated && isFreComplete && extrudersPresent && !isFactoryResetting) {
             extNotCalibratedPopup.open()
         }
     }

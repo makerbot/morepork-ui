@@ -53,6 +53,7 @@ Item {
 
     property bool isResetting: false
     property bool isFactoryResetDone: false
+    property bool isFinalResetProceduresDone: false
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetToFactoryPopup: resetToFactoryPopup
     property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
@@ -70,12 +71,13 @@ Item {
             //resetSettingsSwipeViewPages()
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
+            isFinalResetProceduresDone = true
         }
     }
 
     Timer {
         id: rebootPrinterTimer
-        interval: 5000
+        interval: 7000
         onTriggered: {
             // Reboot Printer
             bot.reboot()
@@ -1012,7 +1014,8 @@ Item {
         popupWidth: popupContainer.width
         visible: false
         showTwoButtons: !isResetting && !isFactoryResetDone
-        showOneButton: !isResetting && isFactoryResetDone && !hideButton
+        showOneButton: !isResetting && isFactoryResetDone
+                       && isFinalResetProceduresDone && !hideButton
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
@@ -1034,6 +1037,8 @@ Item {
             hideButton = false
             isResetting = false
             isFactoryResetDone = false
+            isFactoryResetting = false
+            isFinalResetProceduresDone = false
         }
 
         ColumnLayout {
@@ -1069,8 +1074,9 @@ Item {
                     if(isResetting) {
                         qsTr("RESTORING FACTORY SETTINGS")
                     } else {
-                        isFactoryResetDone ? qsTr("RESTART PRINTER")
-                                         : qsTr("RESTORE FACTORY SETTINGS?")
+                        (isFactoryResetDone && isFinalResetProceduresDone)
+                                ? qsTr("RESTART PRINTER")
+                                : qsTr("RESTORE FACTORY SETTINGS?")
                     }
                 }
                 horizontalAlignment: Text.AlignHCenter
@@ -1085,8 +1091,9 @@ Item {
                     if(isResetting) {
                         qsTr("Please wait...")
                     } else {
-                        isFactoryResetDone ? qsTr("Restart the printer to complete factory reset procedure.")
-                                         : qsTr("This will erase all history, preferences, account information and calibration settings.")
+                        (isFactoryResetDone && isFinalResetProceduresDone)
+                                ? qsTr("Restart the printer to complete factory reset procedure.")
+                                : qsTr("This will erase all history, preferences, account information and calibration settings.")
                     }
                 }
             }
