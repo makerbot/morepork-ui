@@ -68,7 +68,6 @@ Item {
         interval: 2500
         onTriggered: {
             // Reset all screen positions
-            //resetSettingsSwipeViewPages()
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
             isFinalResetProceduresDone = true
