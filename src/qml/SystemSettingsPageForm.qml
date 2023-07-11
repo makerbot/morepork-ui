@@ -77,7 +77,7 @@ Item {
 
     Timer {
         id: rebootPrinterTimer
-        interval: 7000
+        interval: 5000
         onTriggered: {
             // Reboot Printer
             bot.reboot()
@@ -1014,8 +1014,8 @@ Item {
         popupWidth: popupContainer.width
         visible: false
         showTwoButtons: !isResetting && !isFactoryResetDone
-        showOneButton: !isResetting && isFactoryResetDone
-                       && isFinalResetProceduresDone && !hideButton
+        showOneButton: !isResetting && isFactoryResetDone && !hideButton
+                       && isFinalResetProceduresDone
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
@@ -1037,7 +1037,6 @@ Item {
             hideButton = false
             isResetting = false
             isFactoryResetDone = false
-            isFactoryResetting = false
             isFinalResetProceduresDone = false
         }
 

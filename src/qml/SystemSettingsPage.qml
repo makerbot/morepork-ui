@@ -184,7 +184,6 @@ SystemSettingsPageForm {
 
     buttonResetToFactory.onClicked: {
         isFactoryResetDone = false
-        isFactoryResetting = true
         resetToFactoryPopup.open()
     }
 }
