@@ -54,6 +54,7 @@ Item {
                     width: details_item.width
                     Layout.preferredWidth: details_item.width
                     elide: Text.ElideRight
+                    wrapMode: Text.NoWrap
                     font.weight: Font.Bold
                 }
 

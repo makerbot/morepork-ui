@@ -586,6 +586,7 @@ void KaitenBotModel::extrudersConfigsUpdate(const Json::Value &result) {
     if(supported_extruders.isArray()) { \
       QStringList extruders = {}; \
       for(const Json::Value ext : supported_extruders) { \
+        if(ext.asString() == "mk14_hot_e") continue; \
         extruders.append(getExtruderName(ext.asString().c_str())); \
       } \
       extruder ## EXT_SYM ## SupportedTypesSet(extruders); \
