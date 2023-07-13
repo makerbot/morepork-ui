@@ -25,11 +25,11 @@ Item {
         logName: "setUpProcedureSettingsSwipeView"
         currentIndex: SetUpProcedureSettingsPage.BasePage
 
-        // ExtruderSettingsPage.BasePage
+        // SetUpProcedureSettingsPage.BasePage
         Item {
             id: itemSetUpProcedureSettings
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsPage.systemSettingsSwipeView
+            property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
             property string topBarTitle: qsTr("Set Up Procedure Settings")
             smooth: false
