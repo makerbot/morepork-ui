@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-SetUpProcedureSettingsPageForm {
+SetupProceduresPageForm {
 
     buttonSetupGuide.onClicked: {
         helpPopup.state = "fre"
@@ -8,7 +8,7 @@ SetUpProcedureSettingsPageForm {
     }
 
     buttonMaterialCase.onClicked: {
-        setUpProcedureSettingsSwipeView.swipeToItem(SetUpProcedureSettingsPage.MaterialCaseSetup)
+        setupProceduresSwipeView.swipeToItem(SetupProceduresPage.MaterialCaseSetup)
     }
 
 }

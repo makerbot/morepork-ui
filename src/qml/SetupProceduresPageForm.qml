@@ -7,11 +7,11 @@ import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
 Item {
-    id: setUpProcedureSettingsPage
+    id: setupProceduresPage
     smooth: false
     anchors.fill: parent
 
-    property alias setUpProcedureSettingsSwipeView: setUpProcedureSettingsSwipeView
+    property alias setupProceduresSwipeView: setupProceduresSwipeView
     property alias buttonSetupGuide: buttonSetupGuide
     property alias buttonMaterialCase: buttonMaterialCase
 
@@ -21,29 +21,29 @@ Item {
     }
 
     LoggingSwipeView {
-        id: setUpProcedureSettingsSwipeView
-        logName: "setUpProcedureSettingsSwipeView"
-        currentIndex: SetUpProcedureSettingsPage.BasePage
+        id: setupProceduresSwipeView
+        logName: "setupProceduresSwipeView"
+        currentIndex: SetupProceduresPage.BasePage
 
-        // SetUpProcedureSettingsPage.BasePage
+        // SetupProceduresPage.BasePage
         Item {
-            id: itemSetUpProcedureSettings
+            id: itemSetupProcedures
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
-            property string topBarTitle: qsTr("Set Up Procedure Settings")
+            property string topBarTitle: qsTr("Setup Procedures")
             smooth: false
 
             Flickable {
-                id: flickableSetUpProcedureSettings
+                id: flickableSetupProcedures
                 smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
-                contentHeight: columnSetUpProcedureSettings.height
+                contentHeight: columnSetupProcedures.height
 
                 Column {
-                    id: columnSetUpProcedureSettings
+                    id: columnSetupProcedures
                     smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
@@ -66,11 +66,11 @@ Item {
             }
         }
 
-        // SetUpProcedureSettingsPage.MaterialCaseSetup
+        // SetupProceduresPage.MaterialCaseSetup
         Item {
             id: materialCaseSetupItem
-            property var backSwiper: setUpProcedureSettingsSwipeView
-            property int backSwipeIndex: SetUpProcedureSettingsPage.BasePage
+            property var backSwiper: setupProceduresSwipeView
+            property int backSwipeIndex: SetupProceduresPage.BasePage
             property string topBarTitle: qsTr("Material Case Set Up")
             property bool hasAltBack: true
             smooth: false
@@ -88,7 +88,7 @@ Item {
                 } else if (materialCaseSetup.state == "intro_2") {
                     materialCaseSetup.state = "intro_1"
                 } else {
-                    setUpProcedureSettingsSwipeView.swipeToItem(SetUpProcedureSettingsPage.BasePage)
+                    setupProceduresSwipeView.swipeToItem(SetupProceduresPage.BasePage)
                     if (inFreStep) {
                         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
                         settingsSwipeView.swipeToItem(SettingsPage.BasePage)

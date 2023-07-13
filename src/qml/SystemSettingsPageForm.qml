@@ -27,8 +27,8 @@ Item {
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias firmwareUpdatePage: firmwareUpdatePage
 
-    property alias buttonSetUpProcedures: buttonSetUpProcedures
-    property alias setUpProcedureSettingsPage: setUpProcedureSettingsPage
+    property alias buttonSetupProcedures: buttonSetupProcedures
+    property alias setupProceduresPage: setupProceduresPage
 
     property alias buttonCopyLogs: buttonCopyLogs
     property alias copyingLogsPopup: copyingLogsPopup
@@ -106,7 +106,7 @@ Item {
         WifiPage,               // 3
         AuthorizeAccountsPage,  // 4
         FirmwareUpdatePage,     // 5
-        SetUpProceduresPage,    // 6
+        SetupProceduresPage,    // 6
         ShareAnalyticsPage,     // 7
         ChangePrinterNamePage,  // 8
         TimePage,               // 9
@@ -190,7 +190,7 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonSetUpProcedures
+                        id: buttonSetupProcedures
                         buttonImage.source: "qrc:/img/icon_setup_procedures.png"
                         buttonText.text: qsTr("SETUP PROCEDURES")
                         openMenuItemArrow.visible: true
@@ -401,9 +401,9 @@ Item {
             }
         }
 
-        // SystemSettingsPage.SetUpProceduresPage
+        // SystemSettingsPage.SetupProceduresPage
         Item {
-            id: setUpProceduresItem
+            id: setupProceduresItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
             property string topBarTitle: qsTr("Setup Procedures")
@@ -415,8 +415,8 @@ Item {
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             }
 
-            SetUpProcedureSettingsPage {
-                id: setUpProcedureSettingsPage
+            SetupProceduresPage {
+                id: setupProceduresPage
 
             }
         }

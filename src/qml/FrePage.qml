@@ -107,8 +107,8 @@ FrePageForm {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetUpProceduresPage)
-                settingsPage.systemSettingsPage.setUpProcedureSettingsPage.setUpProcedureSettingsSwipeView.swipeToItem(SetUpProcedureSettingsPage.MaterialCaseSetup)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetupProceduresPage)
+                settingsPage.systemSettingsPage.setupProceduresPage.setupProceduresSwipeView.swipeToItem(SetupProceduresPage.MaterialCaseSetup)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad(0)

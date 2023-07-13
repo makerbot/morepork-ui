@@ -59,9 +59,9 @@ SystemSettingsPageForm {
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
     }
 
-    buttonSetUpProcedures.onClicked: {
+    buttonSetupProcedures.onClicked: {
 
-        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetUpProceduresPage)
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetupProceduresPage)
     }
 
     buttonCopyLogs.onClicked: {
