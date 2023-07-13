@@ -52,6 +52,8 @@ Item {
     property alias buttonTouchTest: buttonTouchTest
 
     property bool isResetting: false
+    property bool isFactoryResetDone: false
+    property bool isFinalResetProceduresDone: false
     property alias buttonResetToFactory: buttonResetToFactory
     property alias resetToFactoryPopup: resetToFactoryPopup
     property bool isFactoryResetProcess: bot.process.type === ProcessType.FactoryResetProcess
@@ -62,27 +64,35 @@ Item {
     property string otherBlue: "#45a2d3"
 
     Timer {
-        id: closeResetPopupTimer
+        id: doFinalResetProceduresTimer
         interval: 2500
         onTriggered: {
-            resetToFactoryPopup.close()
             // Reset all screen positions
-            resetSettingsSwipeViewPages()
             fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
+            isFinalResetProceduresDone = true
+        }
+    }
+
+    Timer {
+        id: rebootPrinterTimer
+        interval: 5000
+        onTriggered: {
+            // Reboot Printer
+            bot.reboot()
         }
     }
 
     onIsFactoryResetProcessChanged: {
         if(isFactoryResetProcess){
             isResetting = true
-            resetToFactoryPopup.open()
         }
     }
 
     onDoneFactoryResetChanged: {
         if(doneFactoryReset) {
-            closeResetPopupTimer.start()
+            isResetting = false
+            isFactoryResetDone = true
         }
     }
 
@@ -997,71 +1007,93 @@ Item {
     CustomPopup {
         popupName: "ResetToFactory"
         id: resetToFactoryPopup
-        popupWidth: 715
-        popupHeight: 282
+        property bool hideButton: false
+        popupHeight: factoryResetColumnLayout.height
+                     + ((isResetting || hideButton) ? 90 : 145)
+        popupWidth: popupContainer.width
         visible: false
-        showTwoButtons: true
-        defaultButton: LoggingPopup.Right
+        showTwoButtons: !isResetting && !isFactoryResetDone
+        showOneButton: !isResetting && isFactoryResetDone && !hideButton
+                       && isFinalResetProceduresDone
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
-            right_button.enabled = false
-            left_button.enabled = false
             isResetting = true
             bot.resetToFactory(true)
+            doFinalResetProceduresTimer.start()
         }
         left_button.onClicked: {
             resetToFactoryPopup.close()
         }
-        onClosed: {
-            isResetting = false
-            right_button.enabled = true
-            left_button.enabled = true
+        full_button_text: qsTr("CONFIRM")
+        full_button.onClicked: {
+            hideButton = true
+            // Wait before Reboot
+            rebootPrinterTimer.start()
         }
 
-        Column {
-            id: user_column
-            width: resetToFactoryPopup.popupContainer.width
-            height: resetToFactoryPopup.popupContainer.height - resetToFactoryPopup.full_button.height
+        onClosed: {
+            hideButton = false
+            isResetting = false
+            isFactoryResetDone = false
+            isFinalResetProceduresDone = false
+        }
+
+        ColumnLayout {
+            id: factoryResetColumnLayout
+            width: parent.width
+            height: children.height
             anchors.top: resetToFactoryPopup.popupContainer.top
-            anchors.horizontalCenter: resetToFactoryPopup.popupContainer.horizontalCenter
-            spacing: 15
-            topPadding: 35
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 35
+            spacing: 20
 
             Image {
-                id: extruder_material_error
-                source: "qrc:/img/extruder_material_error.png"
-                sourceSize.width: 63
-                fillMode: Image.PreserveAspectFit
-                anchors.horizontalCenter: parent.horizontalCenter
+                id: factory_reset_error_image
+                width: sourceSize.width
+                Layout.preferredWidth: sourceSize.width
+                Layout.preferredHeight: sourceSize.height
+                source: "qrc:/img/popup_error.png"
+                Layout.alignment: Qt.AlignHCenter
+                visible: !isResetting
             }
 
-            Text {
+            BusySpinner {
+                id: factory_reset_busy
+                Layout.alignment: Qt.AlignHCenter
+                visible: isResetting
+            }
+
+            TextHeadline {
                 id: alert_text
-                color: "#ffffff"
-                text: isResetting ? qsTr("RESTORING FACTORY SETTINGS...") : qsTr("RESTORE FACTORY SETTINGS?")
-                font.pixelSize: 20
-                font.letterSpacing: 3
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
+                Layout.preferredWidth: parent.width
+                text: {
+                    if(isResetting) {
+                        qsTr("RESTORING FACTORY SETTINGS")
+                    } else {
+                        (isFactoryResetDone && isFinalResetProceduresDone)
+                                ? qsTr("RESTART PRINTER")
+                                : qsTr("RESTORE FACTORY SETTINGS?")
+                    }
+                }
+                horizontalAlignment: Text.AlignHCenter
             }
 
-            Text {
+            TextBody {
                 id: descritpion_text
                 width: parent.width
-                color: "#ffffff"
-                text: isResetting ? qsTr("Please wait.") : qsTr("This will erase all history, preferences, account information and calibration settings.")
-                font.pixelSize: 16
+                Layout.preferredWidth: parent.width
                 horizontalAlignment: Text.AlignHCenter
-                lineHeight: 1.3
-                font.letterSpacing: 3
-                font.family: defaultFont.name
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                rightPadding: 5
-                leftPadding: 5
-                anchors.horizontalCenter: parent.horizontalCenter
+                text: {
+                    if(isResetting) {
+                        qsTr("Please wait...")
+                    } else {
+                        (isFactoryResetDone && isFinalResetProceduresDone)
+                                ? qsTr("Restart the printer to complete factory reset procedure.")
+                                : qsTr("This will erase all history, preferences, account information and calibration settings.")
+                    }
+                }
             }
         }
     }

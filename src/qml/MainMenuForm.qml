@@ -79,18 +79,7 @@ Item {
             smooth: false
             image.source: "qrc:/img/material_icon.png"
             textIconDesc.text: qsTr("MATERIAL")
-
-            Image {
-                id: no_material_warning
-                width: 30
-                height: 30
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 75
-                anchors.right: parent.right
-                anchors.rightMargin: 35
-                source: "qrc:/img/extruder_material_error.png"
-                visible: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
-            }
+            alertVisible: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
         }
 
         MainMenuIcon {
@@ -100,18 +89,7 @@ Item {
             smooth: false
             image.source: "qrc:/img/settings_icon.png"
             textIconDesc.text: qsTr("SETTINGS")
-
-            Image {
-                id: image
-                width: sourceSize.width
-                height: sourceSize.height
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 75
-                anchors.right: parent.right
-                anchors.rightMargin: 35
-                source: "qrc:/img/alert.png"
-                visible: isfirmwareUpdateAvailable
-            }
+            alertVisible: isfirmwareUpdateAvailable
         }
     }
 }
