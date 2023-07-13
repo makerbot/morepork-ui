@@ -28,7 +28,7 @@ Item {
     property alias firmwareUpdatePage: firmwareUpdatePage
 
     property alias buttonSetUpProcedures: buttonSetUpProcedures
-    property alias setUpProceduresPage: setUpProceduresPage
+    property alias setUpProcedureSettingsPage: setUpProcedureSettingsPage
 
     property alias buttonCopyLogs: buttonCopyLogs
     property alias copyingLogsPopup: copyingLogsPopup
@@ -106,7 +106,7 @@ Item {
         WifiPage,               // 3
         AuthorizeAccountsPage,  // 4
         FirmwareUpdatePage,     // 5
-        SetUpProceduresPage, // 6
+        SetUpProceduresPage,    // 6
         ShareAnalyticsPage,     // 7
         ChangePrinterNamePage,  // 8
         TimePage,               // 9
@@ -191,7 +191,7 @@ Item {
 
                     MenuButton {
                         id: buttonSetUpProcedures
-                        //buttonImage.source: "qrc:/img/icon_setup_procedures.png"
+                        buttonImage.source: "qrc:/img/icon_setup_procedures.png"
                         buttonText.text: qsTr("SETUP PROCEDURES")
                         openMenuItemArrow.visible: true
                         visible: bot.machineType == MachineType.Magma
@@ -403,15 +403,16 @@ Item {
 
         // SystemSettingsPage.SetUpProceduresPage
         Item {
-            id: setUpProceduresPage
+            id: setUpProceduresItem
             property var backSwiper: systemSettingsSwipeView
             property int backSwipeIndex: SystemSettingsPage.BasePage
             property string topBarTitle: qsTr("Setup Procedures")
+            property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
-                systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
             }
 
             SetUpProcedureSettingsPage {

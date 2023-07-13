@@ -90,8 +90,8 @@ Item {
                 } else {
                     setUpProcedureSettingsSwipeView.swipeToItem(SetUpProcedureSettingsPage.BasePage)
                     if (inFreStep) {
-                        settingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-                        systemSettingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                         inFreStep = false
                     }

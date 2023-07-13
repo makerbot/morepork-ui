@@ -22,8 +22,7 @@ Item {
     enum SwipeIndex {
         BasePage,               //0
         CalibrateExtrudersPage, //1
-        CleanExtrudersPage,     //2
-        MaterialCaseSetup       //3
+        CleanExtrudersPage      //2
     }
 
     LoggingSwipeView {
@@ -184,42 +183,6 @@ Item {
                     state = "base state"
                     extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                 }
-            }
-        }
-
-        // ExtruderSettingsPage.MaterialCaseSetup
-        Item {
-            id: materialCaseSetupItem
-            property var backSwiper: extruderSettingsSwipeView
-            property int backSwipeIndex: ExtruderSettingsPage.BasePage
-            property string topBarTitle: qsTr("Material Case Set Up")
-            property bool hasAltBack: true
-            smooth: false
-            visible: false
-
-            function altBack() {
-                if (materialCaseSetup.state == "remove_divider") {
-                    materialCaseSetup.state = "tube_2"
-                } else if (materialCaseSetup.state == "tube_2") {
-                    materialCaseSetup.state = "tube_1_printer"
-                } else if (materialCaseSetup.state == "tube_1_printer") {
-                    materialCaseSetup.state = "tube_1_case"
-                } else if (materialCaseSetup.state == "tube_1_case") {
-                    materialCaseSetup.state = "intro_2"
-                } else if (materialCaseSetup.state == "intro_2") {
-                    materialCaseSetup.state = "intro_1"
-                } else {
-                    extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    if (inFreStep) {
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                        inFreStep = false
-                    }
-                }
-            }
-
-            MaterialCaseSetup {
-                id: materialCaseSetup
             }
         }
     }

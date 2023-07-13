@@ -19,15 +19,18 @@ MaterialCaseSetupForm {
                 state = "remove_divider"
             } else if (state == "remove_divider") {
                 state = "intro_1"
-                if(!inFreStep) {
+                /*if(!inFreStep) {
                     goBack()
-                } else {
+                } else {*/
                     setUpProcedureSettingsSwipeView.swipeToItem(SetUpProcedureSettingsPage.BasePage)
-                    systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                    mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                    fre.gotoNextStep(currentFreStep)
-                }
+                    if(inFreStep){
+                        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+                        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+                        fre.gotoNextStep(currentFreStep)
+                    }
+
+               // }
             }
         }
     }
