@@ -50,6 +50,8 @@ Item {
     readonly property int waitToCoolBuildplaneTemperature: 70
     readonly property int waitToCoolHBPTemperature: 50
     property bool isFileCopying: storage.fileIsCopying
+    property bool isFileDownloading: print_queue.downloading
+    property bool fileDownloadFailed: print_queue.downloadingFailed
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
 
     onIsFileCopyingChanged: {
@@ -65,7 +67,7 @@ Item {
         (model_extruder_used? print_model_material_name : "") +
         (support_extruder_used? "+" + print_support_material_name : "")
 
-    property bool isFileCopySuccessful: storage.fileCopySucceeded
+    property bool isFileCopySuccessful: storage.fileCopySucceeded || print_queue.downloadingSucceeded
     property bool internalStorageFull: false
 
     property bool usbStorageConnected: storage.usbStorageConnected
@@ -625,7 +627,6 @@ Item {
 
                 FileOptionsPopupMenu {
                     id: optionsMenu
-
                 }
             }
         }
@@ -743,6 +744,15 @@ Item {
                         }
                     }
 
+                    onPressAndHold: {
+                        file_name = model.modelData.fileName
+                        print_job_id = model.modelData.jobId
+                        print_token = model.modelData.token
+                        print_url_prefix = model.modelData.urlPrefix
+                        queueOptionsMenu.popup(queuedPrintFilebutton.x + 700,
+                            queuedPrintFilebutton.y - printQueueList.contentY + 25)
+                    }
+
                     Component.onCompleted: {
                         // Since components are dynamically created and destroyed based
                         // on whether they are currently visible in the viewport, we dont
@@ -785,6 +795,10 @@ Item {
                             printQueueList.cachedMeta[model.modelData.jobId] = metaData
                         }
                     }
+                }
+
+                CloudQueueOptionsPopupMenu {
+                    id: queueOptionsMenu
                 }
             }
         }
@@ -863,10 +877,11 @@ Item {
             copyingFilePopup.close()
         }
 
-        showOneButton: isFileCopySuccessful || isFileCopying
-        full_button_text: isFileCopySuccessful ? qsTr("CLOSE") : qsTr("CANCEL")
+        showOneButton: !showTwoButtons
+        full_button_text: (isFileCopySuccessful || fileDownloadFailed)? qsTr("CLOSE") : qsTr("CANCEL")
         full_button.onClicked: {
             storage.cancelCopy()
+            print_queue.cancelDownload()
             copyingFilePopup.close()
         }
 
@@ -956,6 +971,56 @@ Item {
                     PropertyChanges {
                         target: description_text_copy_file_popup
                         text: ("%1").arg(storage.fileCopyProgress*100) + "%"
+                    }
+                },
+                State {
+                    name: "downloading"
+                    when: isFileDownloading
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("DOWNLOADING")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: print_queue.downloadTotalBytes > 0 ?
+                            (print_queue.downloadProgressBytes*100/print_queue.downloadTotalBytes).toFixed(1) + "%" :
+                            qsTr("%1 bytes").arg(print_queue.downloadProgressBytes)
+                    }
+                },
+                State {
+                    name: "download_failed"
+                    when: fileDownloadFailed
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("DOWNLOAD FAILED")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("Failed to download file -- please check network connectivity")
                     }
                 },
                 State {

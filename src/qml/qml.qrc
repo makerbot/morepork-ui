@@ -264,5 +264,8 @@
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>MaterialCaseSetupForm.qml</file>
+        <file>CloudQueueOptionsPopupMenu.qml</file>
+        <file>CloudQueueOptionsPopupMenuForm.qml</file>
     </qresource>
 </RCC>
