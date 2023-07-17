@@ -447,7 +447,6 @@ Item {
         id: wifiPopup
         closePolicy: Popup.CloseOnPressOutside
         popupHeight: wifiColumnLayout.height + 100
-        visible: true
 
         // Full Button Bar
         showOneButton: !(isForgetEnabled ||
