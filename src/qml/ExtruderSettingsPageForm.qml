@@ -14,6 +14,7 @@ Item {
     property alias extruderSettingsSwipeView: extruderSettingsSwipeView
 
     property alias buttonCalibrateToolhead: buttonCalibrateToolhead
+    property alias buttonCalibrateZAxisOnly: buttonCalibrateZAxisOnly
     property alias calibrateErrorScreen: calibrateErrorScreen
 
     property alias buttonCleanExtruders: buttonCleanExtruders
@@ -61,6 +62,13 @@ Item {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
                         buttonText.text: qsTr("AUTOMATIC CALIBRATION")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonCalibrateZAxisOnly
+                        buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
+                        buttonText.text: qsTr("Z-ONLY CALIBRATION")
                         enabled: !isProcessRunning()
                     }
 
