@@ -264,5 +264,6 @@
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>DirectionArrowsComponent.qml</file>
     </qresource>
 </RCC>

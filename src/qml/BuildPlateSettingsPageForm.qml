@@ -128,8 +128,15 @@ Item {
             property var backSwiper: buildPlateSettingsSwipeView
             property int backSwipeIndex: BuildPlateSettingsPage.BasePage
             property string topBarTitle: qsTr("Raise/Lower Buildplate")
+            property bool hasAltBack: true
             smooth: false
             visible: false
+
+            function altBack() {
+
+                raiseLowerBuildPlate.disableArrows()
+                buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+            }
 
             RaiseLowerBuildPlate {
                 id: raiseLowerBuildPlate
