@@ -14,7 +14,7 @@ Item {
     onChamberDoorOpenChanged: {
         if(chamberDoorOpen &&
           buildPlateSettingsSwipeView.currentIndex == BuildPlateSettingsPage.RaiseLowerBuildPlatePage) {
-            doorOpenRaiseLowerBuildPlatePopup.open()
+            doorOpenMoveBuildPlatePopup.open()
         }
     }
 

@@ -13,13 +13,11 @@ Item {
 
     property alias buildPlateSettingsSwipeView: buildPlateSettingsSwipeView
 
+    property alias assistedLevel: assistedLevel
     property alias buttonAssistedLeveling: buttonAssistedLeveling
 
-    property alias buttonMoveBuildPlatePage: buttonMoveBuildPlatePage
-
-    property alias assistedLevel: assistedLevel
     property alias moveBuildPlatePage: moveBuildPlatePage
-    property alias doorOpenRaiseLowerBuildPlatePopup: doorOpenRaiseLowerBuildPlatePopup
+    property alias buttonMoveBuildPlatePage: buttonMoveBuildPlatePage
 
     enum SwipeIndex {
         BasePage,                   //0
@@ -127,39 +125,12 @@ Item {
             id: moveBuildPlatePageItem
             property var backSwiper: buildPlateSettingsSwipeView
             property int backSwipeIndex: BuildPlateSettingsPage.BasePage
-            property string topBarTitle: qsTr("Raise/Lower Buildplate")
+            property string topBarTitle: qsTr("Raise/Lower Build Plate")
             smooth: false
             visible: false
 
             MoveBuildPlatePage {
                 id: moveBuildPlatePage
-            }
-        }
-    }
-
-    CustomPopup {
-        popupName: "DoorOpenRaiseLowerBuildPlate"
-        id: doorOpenRaiseLowerBuildPlatePopup
-        showOneButton: true
-        full_button.onClicked: doorOpenRaiseLowerBuildPlatePopup.close()
-        full_button_text: qsTr("CONFIRM")
-
-        ColumnLayout {
-            spacing: 10
-            anchors.top: parent.top
-            anchors.topMargin: 125
-            anchors.horizontalCenter: parent.horizontalCenter
-            Image {
-                source: "qrc:/img/process_error_small.png"
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TextHeadline {
-                text: qsTr("FRONT DOOR OPEN")
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TextBody {
-                text: qsTr("Close the front door to proceed.")
-                Layout.alignment: Qt.AlignHCenter
             }
         }
     }

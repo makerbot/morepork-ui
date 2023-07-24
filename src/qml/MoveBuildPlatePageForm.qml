@@ -17,13 +17,13 @@ Item {
     property alias buttonRaiseToTop: buttonRaiseToTop
     property alias buttonLowerToBottom: buttonLowerToBottom
 
-    property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
-    property alias raiseLowerBuildPlate: raiseLowerBuildPlate
-    property alias doorOpenRaiseLowerBuildPlatePopup: doorOpenRaiseLowerBuildPlatePopup
+    property alias customMoveBuildPlate: customMoveBuildPlate
+    property alias buttonCustomMoveBuildPlate: buttonCustomMoveBuildPlate
+    property alias doorOpenMoveBuildPlatePopup: doorOpenMoveBuildPlatePopup
 
     enum SwipeIndex {
         BasePage,                   //0
-        RaiseLowerBuildPlatePage    //1
+        CustomMoveBuildPlatePage    //1
     }
 
     LoggingSwipeView {
@@ -31,26 +31,25 @@ Item {
         logName: "moveBuildPlatePageSwipeView"
         currentIndex: MoveBuildPlatePage.BasePage
 
-        // BuildPlateSettingsPage.BasePage
+        // MoveBuildPlatePage.BasePage
         Item {
             id: itemMoveBuildPlatePage
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: buildPlateSettingsPage.buildPlateSettingsSwipeView
             property int backSwipeIndex: BuildPlateSettingsPage.BasePage
             property string topBarTitle: qsTr("Raise/Lower Build Plate")
-
             smooth: false
 
             Flickable {
-                id: flickableCustomMoveBuildPlate
+                id: flickableMoveBuildPlate
                 smooth: false
                 flickableDirection: Flickable.VerticalFlick
                 interactive: true
                 anchors.fill: parent
-                contentHeight: columnCustomMoveBuildPlate.height
+                contentHeight: columnMoveBuildPlate.height
 
                 Column {
-                    id: columnCustomMoveBuildPlate
+                    id: columnMoveBuildPlate
                     smooth: false
                     anchors.right: parent.right
                     anchors.left: parent.left
@@ -73,7 +72,7 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonRaiseLowerBuildPlate
+                        id: buttonCustomMoveBuildPlate
                         buttonImage.source: "qrc:/img/icon_raise_lower_bp.png"
                         buttonText.text: qsTr("MOVE TO CUSTOM HEIGHT")
                         enabled: !isProcessRunning()
@@ -82,33 +81,32 @@ Item {
             }
         }
 
-        // BuildPlateSettingsPage.RaiseLowerBuildPlatePage
+        // MoveBuildPlatePage.CustomMoveBuildPlatePage
         Item {
-            id: raiseLowerBuildPlateItem
+            id: customMoveBuildPlateItem
             property var backSwiper: moveBuildPlatePageSwipeView
             property int backSwipeIndex: MoveBuildPlatePage.BasePage
-            property string topBarTitle: qsTr("Raise/Lower Buildplate")
+            property string topBarTitle: qsTr("Move To Custom Height")
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
-
-                raiseLowerBuildPlate.disableArrows()
+                customMoveBuildPlate.disableArrows()
                 moveBuildPlatePageSwipeView.swipeToItem(MoveBuildPlatePage.BasePage)
             }
 
-            RaiseLowerBuildPlate {
-                id: raiseLowerBuildPlate
+            CustomMoveBuildPlate {
+                id: customMoveBuildPlate
             }
         }
     }
 
     CustomPopup {
-        popupName: "DoorOpenRaiseLowerBuildPlate"
-        id: doorOpenRaiseLowerBuildPlatePopup
+        popupName: "DoorOpenMoveBuildPlatePopup"
+        id: doorOpenMoveBuildPlatePopup
         showOneButton: true
-        full_button.onClicked: doorOpenRaiseLowerBuildPlatePopup.close()
+        full_button.onClicked: doorOpenMoveBuildPlatePopup.close()
         full_button_text: qsTr("CONFIRM")
 
         ColumnLayout {
