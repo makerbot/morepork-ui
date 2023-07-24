@@ -38,7 +38,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
-            property string topBarTitle: qsTr("Buildplate Settings")
+            property string topBarTitle: qsTr("Build Plate Settings")
 
             smooth: false
 

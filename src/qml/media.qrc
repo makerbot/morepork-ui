@@ -232,5 +232,7 @@
         <file alias="qr_230_general_help.png">images/qr_230_general_help.png</file>
         <file alias="vector_down_disabled.png">images/vector_down_disabled.png</file>
         <file alias="vector_up_enabled.png">images/vector_up_enabled.png</file>
+        <file alias="icon_lower.png">images/icon_lower.png</file>
+        <file alias="icon_raise.png">images/icon_raise.png</file>
     </qresource>
 </RCC>

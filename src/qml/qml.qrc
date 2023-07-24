@@ -265,5 +265,7 @@
         <file>MaterialCaseSetupForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
         <file>DirectionArrowsComponent.qml</file>
+        <file>MoveBuildPlatePageForm.qml</file>
+        <file>MoveBuildPlatePage.qml</file>
     </qresource>
 </RCC>
