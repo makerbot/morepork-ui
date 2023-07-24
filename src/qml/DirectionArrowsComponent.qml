@@ -31,9 +31,8 @@ Item {
             Layout.preferredWidth: width
             height: sourceSize.height
             Layout.preferredHeight: height
-            source: upEnabled ? "qrc:/img/vector_up_enabled.png"
-                              : "qrc:/img/vector_down_disabled.png"
-            rotation: upEnabled ? 0 : 180
+            source: "qrc:/img/vector_image.png"
+            opacity: upEnabled ? 1 : 0.3
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             MouseArea {
@@ -53,9 +52,9 @@ Item {
             Layout.preferredWidth: width
             height: sourceSize.height
             Layout.preferredHeight: height
-            source: downEnabled ? "qrc:/img/vector_up_enabled.png"
-                                : "qrc:/img/vector_down_disabled.png"
-            rotation: downEnabled ? 180 : 0
+            source: "qrc:/img/vector_image.png"
+            opacity: downEnabled ? 1 : 0.3
+            rotation: 180
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             MouseArea {
