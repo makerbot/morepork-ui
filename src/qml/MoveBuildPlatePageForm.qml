@@ -3,11 +3,23 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
 Item {
     id: moveBuildPlatePage
+    smooth: false
+    anchors.fill: parent
+
+    property alias moveBuildPlatePageSwipeView: moveBuildPlatePageSwipeView
+
+    property alias buttonRaiseToTop: buttonRaiseToTop
+    property alias buttonLowerToBottom: buttonLowerToBottom
+
+    property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
+    property alias raiseLowerBuildPlate: raiseLowerBuildPlate
+    property alias doorOpenRaiseLowerBuildPlatePopup: doorOpenRaiseLowerBuildPlatePopup
 
     enum SwipeIndex {
         BasePage,                   //0
@@ -23,8 +35,8 @@ Item {
         Item {
             id: itemMoveBuildPlatePage
             // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsPage.settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
+            property var backSwiper: buildPlateSettingsPage.buildPlateSettingsSwipeView
+            property int backSwipeIndex: BuildPlateSettingsPage.BasePage
             property string topBarTitle: qsTr("Raise/Lower Build Plate")
 
             smooth: false
@@ -56,6 +68,7 @@ Item {
                         id: buttonLowerToBottom
                         buttonImage.source: "qrc:/img/icon_lower.png"
                         buttonText.text: qsTr("LOWER TO BOTTOM")
+                        visible: bot.machineType == MachineType.Magma
                         enabled: !isProcessRunning()
                     }
 
@@ -72,8 +85,8 @@ Item {
         // BuildPlateSettingsPage.RaiseLowerBuildPlatePage
         Item {
             id: raiseLowerBuildPlateItem
-            property var backSwiper: buildPlateSettingsSwipeView
-            property int backSwipeIndex: CustomMoveBuildPlatePage.BasePage
+            property var backSwiper: moveBuildPlatePageSwipeView
+            property int backSwipeIndex: MoveBuildPlatePage.BasePage
             property string topBarTitle: qsTr("Raise/Lower Buildplate")
             property bool hasAltBack: true
             smooth: false
@@ -82,7 +95,7 @@ Item {
             function altBack() {
 
                 raiseLowerBuildPlate.disableArrows()
-                buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                moveBuildPlatePageSwipeView.swipeToItem(MoveBuildPlatePage.BasePage)
             }
 
             RaiseLowerBuildPlate {

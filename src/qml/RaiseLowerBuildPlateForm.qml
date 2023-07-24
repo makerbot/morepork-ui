@@ -123,7 +123,7 @@ Item {
                         customMoveAttentionPopup.open()
                         return
                     }
-                    bot.moveBuildPlate(value, +20)
+                    bot.moveBuildPlate(value, 20)
                 }
                 enabled: !isProcessRunning() && !chamberDoorOpen
             }

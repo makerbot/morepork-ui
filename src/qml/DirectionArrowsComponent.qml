@@ -41,7 +41,6 @@ Item {
                 width: 60
                 height: 60
                 onClicked: {
-                    console.log("Height " + height + " width " + width)
                     downEnabled= false
                     upEnabled= true
                 }
