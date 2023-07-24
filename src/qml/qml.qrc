@@ -267,5 +267,7 @@
         <file>DirectionArrowsComponent.qml</file>
         <file>MoveBuildPlatePageForm.qml</file>
         <file>MoveBuildPlatePage.qml</file>
+        <file>SetupProceduresPageForm.qml</file>
+        <file>SetupProceduresPage.qml</file>
     </qresource>
 </RCC>
