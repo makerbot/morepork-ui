@@ -27,6 +27,9 @@ Item {
     property alias buttonFirmwareUpdate: buttonFirmwareUpdate
     property alias firmwareUpdatePage: firmwareUpdatePage
 
+    property alias buttonSetupProcedures: buttonSetupProcedures
+    property alias setupProceduresPage: setupProceduresPage
+
     property alias buttonCopyLogs: buttonCopyLogs
     property alias copyingLogsPopup: copyingLogsPopup
 
@@ -103,14 +106,15 @@ Item {
         WifiPage,               // 3
         AuthorizeAccountsPage,  // 4
         FirmwareUpdatePage,     // 5
-        ShareAnalyticsPage,     // 6
-        ChangePrinterNamePage,  // 7
-        TimePage,               // 8
-        ChangeLanguagePage,     // 9
-        SpoolInfoPage,          // 10
-        ColorSwatchPage,        // 11
-        TouchTestPage,          // 12
-        KoreaDFSSecretPage      // 13
+        SetupProceduresPage,    // 6
+        ShareAnalyticsPage,     // 7
+        ChangePrinterNamePage,  // 8
+        TimePage,               // 9
+        ChangeLanguagePage,     // 10
+        SpoolInfoPage,          // 11
+        ColorSwatchPage,        // 12
+        TouchTestPage,          // 13
+        KoreaDFSSecretPage      // 14
     }
 
     LoggingSwipeView {
@@ -183,6 +187,14 @@ Item {
                         buttonImage.source: "qrc:/img/icon_software_update.png"
                         buttonText.text: qsTr("FIRMWARE UPDATE")
                         buttonAlertImage.visible: isfirmwareUpdateAvailable
+                    }
+
+                    MenuButton {
+                        id: buttonSetupProcedures
+                        buttonImage.source: "qrc:/img/icon_setup_procedures.png"
+                        buttonText.text: qsTr("SETUP PROCEDURES")
+                        openMenuItemArrow.visible: true
+                        visible: bot.machineType == MachineType.Magma
                     }
 
                     MenuButton {
@@ -386,6 +398,26 @@ Item {
 
             FirmwareUpdatePage {
                 id: firmwareUpdatePage
+            }
+        }
+
+        // SystemSettingsPage.SetupProceduresPage
+        Item {
+            id: setupProceduresItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Setup Procedures")
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.BasePage)
+            }
+
+            SetupProceduresPage {
+                id: setupProceduresPage
+
             }
         }
 

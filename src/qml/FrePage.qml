@@ -106,8 +106,9 @@ FrePageForm {
             } else if(state == "material_case_setup") {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.MaterialCaseSetup)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetupProceduresPage)
+                settingsPage.systemSettingsPage.setupProceduresPage.setupProceduresSwipeView.swipeToItem(SetupProceduresPage.MaterialCaseSetup)
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad(0)

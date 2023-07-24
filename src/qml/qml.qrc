@@ -264,5 +264,7 @@
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>SetupProceduresPageForm.qml</file>
+        <file>SetupProceduresPage.qml</file>
     </qresource>
 </RCC>

@@ -230,5 +230,6 @@
         <file alias="method_remove_build_plate.gif">images/assisted_level/method/remove_build_plate.gif</file>
         <file alias="ethernet_connected_large.png">images/ethernet_connected_large.png</file>
         <file alias="qr_230_general_help.png">images/qr_230_general_help.png</file>
+        <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
     </qresource>
 </RCC>
