@@ -404,9 +404,10 @@ LoggingItem {
             PropertyChanges {
                 target: sub_status_text
                 text: {
-                    qsTr("CURRENT FIRMWARE: %1<br><br>Visit <b>%2</b> to download the latest "
-                         + "firmware. Drag the file onto a usb stick and insert it into the "
-                         + "front of the printer.").arg(bot.version).arg(getUrlForMethod())
+                    qsTr("CURRENT FIRMWARE: %1").arg(bot.version) + "<br><br>" +
+                         qsTr("Visit %1 to download the latest firmware. "
+                         + "Drag the file onto a usb stick and insert it into the "
+                         + "front of the printer.").arg("<b>"+getUrlForMethod()+"</b>")
                 }
                 font.weight: Font.Normal
                 visible: true
@@ -615,8 +616,8 @@ LoggingItem {
                 horizontalAlignment: Text.AlignHCenter
                 color: "#ffffff"
                 text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
-                            "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                            "CODE: %1").arg(bot.process.errorCode)
+                            "support through %1 to identify your issue.").arg("<b>makerbot.com</b>") + "<br><br>" +
+                            qsTr("CODE: %1").arg(bot.process.errorCode)
             }
         }
     }

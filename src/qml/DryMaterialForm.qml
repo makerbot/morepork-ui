@@ -131,7 +131,7 @@ LoggingItem {
             font.family: defaultFont.name
             font.pixelSize: 18
             font.weight: Font.Light
-            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.\nThis procedure will allow you to dry\nmaterials for improved print quality,\nusing METHOD’s built-in heaters\nPlease sure the build plate is empty.")
+            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament. This procedure will allow you to dry materials for improved print quality, using METHOD’s built-in heaters Please sure the build plate is empty.")
             lineHeight: 1.2
             opacity: 1.0
         }
@@ -290,7 +290,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: subtitle
-                text: qsTr("SPOOL TYPE A\nRemove cap and insert one 70g bag\nRe-attach cap to spool\n\nSPOOL TYPE B\nRemove puck from spool\nRemove cap and insert one 30g bag\nRe-attach cap and puck to spool")
+                text: qsTr("SPOOL TYPE A") + "\n" +
+                      qsTr("Remove cap and insert one 70g bag") + "\n" +
+                      qsTr("Re-attach cap to spool") + "\n\n" +
+                      qsTr("SPOOL TYPE B") + "\n" +
+                      qsTr("Remove puck from spool") + "\n" +
+                      qsTr("Remove cap and insert one 30g bag") + "\n" +
+                      qsTr("Re-attach cap and puck to spool")
             }
 
             PropertyChanges {
@@ -319,7 +325,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: subtitle
-                text: qsTr("Confirm your re-usable Mylar storage\nbag has no holes.\n\nPlace spool in bag and add additional\nfresh bags of desiccant before sealing.")
+                text: qsTr("Confirm your re-usable Mylar storage bag has no holes.") + "\n\n" +
+                      qsTr("Place spool in bag and add additional fresh bags of desiccant before sealing.")
             }
 
             PropertyChanges {
