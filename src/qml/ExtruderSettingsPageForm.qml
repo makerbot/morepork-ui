@@ -19,11 +19,17 @@ Item {
     property alias buttonCleanExtruders: buttonCleanExtruders
     property alias toolheadCalibration: toolheadCalibration
 
+    property alias buttonManualZCalibration: buttonManualZCalibration
+    property alias manualZCalibration: manualZCalibration
+    // Is this the best place for this?
+    property bool returnToManualCal: false
+
     enum SwipeIndex {
         BasePage,               //0
         CalibrateExtrudersPage, //1
         CleanExtrudersPage,     //2
-        MaterialCaseSetup       //3
+        ManualZCalibrationPage, //3
+        MaterialCaseSetup       //4
     }
 
     LoggingSwipeView {
@@ -90,6 +96,13 @@ Item {
                                 bot.ignoreError(0,[81],true)
                             }
                         }
+                    }
+
+                    MenuButton {
+                        id: buttonManualZCalibration
+                        buttonImage.source: "qrc:/img/icon_manual_zcal.png"
+                        buttonText.text: qsTr("MANUAL CALIBRATION - Z")
+                        enabled: !isProcessRunning()
                     }
                 }
             }
@@ -184,6 +197,25 @@ Item {
                     state = "base state"
                     extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                 }
+            }
+        }
+
+        // ExtruderSettingsPage.ManualZCalibrationPage
+        Item {
+            id: manualZCalibrationItem
+            property var backSwiper: extruderSettingsSwipeView
+            property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Manual Z-Calibration")
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                manualZCalibration.back()
+            }
+
+            ManualZCalibration {
+                id: manualZCalibration
             }
         }
 

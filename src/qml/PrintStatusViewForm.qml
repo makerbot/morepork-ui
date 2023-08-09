@@ -317,6 +317,8 @@ LoggingItem {
                              bot.process.stateType == ProcessStateType.Cancelled
                 }
 
+                // TODO ERICA Need to add a button for Manual Z-cal only and hide acknowledge
+
 
                // Re-styled incase we want to use this in the future
                // currently hidden because it was removed from the design

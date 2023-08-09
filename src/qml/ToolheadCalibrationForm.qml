@@ -483,4 +483,42 @@ LoggingItem {
             }
         }
     }
+
+    CustomPopup {
+        popupName: "ResumeManualCalibration"
+        id: resumeManualCalibrationPopup
+        popupWidth: 720
+        popupHeight: 250
+        showTwoButtons: true
+        left_button_text: qsTr("CANCEL CALIBRATION")
+        left_button.onClicked: {
+            state = "cancelling"
+            bot.cancel()
+            cancelCalibrationPopup.close()
+        }
+
+        right_button_text: qsTr("CONTINUE CALIBRATION")
+        right_button.onClicked: {
+            cancelCalibrationPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout2
+            width: 590
+            height: 100
+            anchors.top: parent.top
+            anchors.topMargin: 145
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            TextHeadline {
+                text: qsTr("CANCEL CALIBRATION")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextBody {
+                text: qsTr("Are you sure you want to cancel the calibration process?")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+    }
 }

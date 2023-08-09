@@ -264,5 +264,9 @@
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>ManualZCalibration.qml</file>
+        <file>ManualZCalibrationForm.qml</file>
+        <file>NumberAddSubtractItem.qml</file>
+        <file>NumberAddSubtractItemForm.qml</file>
     </qresource>
 </RCC>

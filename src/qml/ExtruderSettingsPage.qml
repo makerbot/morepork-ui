@@ -12,5 +12,9 @@ ExtruderSettingsPageForm {
     buttonCleanExtruders.onClicked: {
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CleanExtrudersPage)
     }
+
+    buttonManualZCalibration.onClicked: {
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+    }
 }
 
