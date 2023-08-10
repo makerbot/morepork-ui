@@ -228,6 +228,7 @@ LoggingItem {
                         Layout.preferredWidth: parent.width - 40
                         horizontalAlignment: Text.AlignTop
                         elide: Text.ElideRight
+                        wrapMode: Text.NoWrap
                     }
 
                     // Miscellaneous subheader that is only used to display additional information

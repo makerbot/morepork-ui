@@ -69,8 +69,6 @@
         <file alias="icon_sombrero.png">images/icon_sombrero.png</file>
         <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
-        <file alias="method_insert_build_plate.png">images/assisted_level/method/insert_build_plate.png</file>
-        <file alias="method_remove_build_plate.png">images/assisted_level/method/remove_build_plate.png</file>
         <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
         <file alias="method_leveler_scale.png">images/assisted_level/method/leveler_scale.png</file>
         <file alias="method_adjust_left_to_move_up_plate.png">images/assisted_level/method/adjust_left_to_move_up_plate.png</file>
@@ -79,8 +77,6 @@
         <file alias="method_adjust_right_to_move_down_plate.png">images/assisted_level/method/adjust_right_to_move_down_plate.png</file>
         <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
         <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
-        <file alias="methodxl_insert_build_plate.png">images/assisted_level/methodxl/insert_build_plate.png</file>
-        <file alias="methodxl_remove_build_plate.png">images/assisted_level/methodxl/remove_build_plate.png</file>
         <file alias="methodxl_locate_screws.png">images/assisted_level/methodxl/locate_screws.png</file>
         <file alias="methodxl_leveler_scale.png">images/assisted_level/methodxl/leveler_scale.png</file>
         <file alias="methodxl_adjust_left_to_move_up_plate.png">images/assisted_level/methodxl/adjust_left_to_move_up_plate.png</file>
@@ -235,5 +231,12 @@
         <file alias="icon_manual_zcal.png">images/icon_manual_zcal.png</file>
         <file alias="plus_circle.png">images/plus_circle.png</file>
         <file alias="minus_circle.png">images/minus_circle.png</file>
+        <file alias="methodxl_insert_build_plate.gif">images/assisted_level/methodxl/insert_build_plate.gif</file>
+        <file alias="methodxl_remove_build_plate.gif">images/assisted_level/methodxl/remove_build_plate.gif</file>
+        <file alias="method_insert_build_plate.gif">images/assisted_level/method/insert_build_plate.gif</file>
+        <file alias="method_remove_build_plate.gif">images/assisted_level/method/remove_build_plate.gif</file>
+        <file alias="ethernet_connected_large.png">images/ethernet_connected_large.png</file>
+        <file alias="qr_230_general_help.png">images/qr_230_general_help.png</file>
+        <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
     </qresource>
 </RCC>

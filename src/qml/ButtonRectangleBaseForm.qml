@@ -151,7 +151,10 @@ Button {
 
     TextBody {
         id: disabledCountdown
-        text: ":" + delayedEnableCountdown
+        text: {
+            ":" + (delayedEnableCountdown.toString().length == 1 ?
+                  "0" + delayedEnableCountdown : delayedEnableCountdown)
+        }
         style: TextBody.Large
         font.weight: Font.Bold
         anchors.left: parent.right

@@ -11,6 +11,7 @@ Item {
     property alias imageItem: imageItem
     property alias image: image
     property alias textIconDesc: textIconDesc
+    property alias alertVisible: alert_image.visible
     property bool imageVisible: true
     property bool isDisabled: false
 
@@ -71,5 +72,17 @@ Item {
                 baseRectangle.border.color = "#00000000"
             }
         }
+    }
+
+    Image {
+        id: alert_image
+        width: 30
+        height: 30
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 75
+        anchors.right: parent.right
+        anchors.rightMargin: 35
+        source: "qrc:/img/extruder_material_error.png"
+        visible: false
     }
 }
