@@ -62,7 +62,6 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("EXTRUDER TEMP.")
             dataText: extruder_temp.replace("+","|")
-
         }
 
         InfoItem {
@@ -73,5 +72,6 @@ Item {
             // Info not available from cloudprint at the moment TODO: BW-5817
             visible: false // (startPrintSource == PrintPage.FromPrintQueue)
         }
+
     }
 }
