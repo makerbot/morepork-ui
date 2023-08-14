@@ -4,9 +4,6 @@ import QtQuick.Layouts 1.3
 
 ManualZCalibrationForm {
 
-
-    //property variant calValues: []
-
     Timer {
         id: waitForConfigs
         interval: 2500
@@ -34,15 +31,22 @@ ManualZCalibrationForm {
         for (var i = 0; i < calValues.length; i++) {
             num += calValues[i]
         }
-        var avg = (num/calValues.length)
+        var t_before = (num/calValues.length)
 
-        console.log("Average" + avg)
+        console.info("Average = " + t_before)
+
+        // Get Bz before value from sensor
+        var bz_before = bot.infoToolheadBHESValue
+        console.info("HES VAlue: " + bz_before)
+        var t_after = 0.20
+        var s = -0.515
 
         // Find offset
-
+        var bz_after = ((t_after - t_before) / s) + bz_before
+        console.info("Bz After = " + bz_after)
 
         // Set configs
-
+        bot.setManualCalibrationOffset(bz_after)
         waitForConfigs.start()
     }
 
@@ -58,6 +62,13 @@ ManualZCalibrationForm {
         return false
     }
 
+    function resetManualCalValues() {
+        calValueItem1.value = 0.20
+        calValueItem2.value = 0.20
+        calValueItem3.value = 0.20
+        calValueItem4.value = 0.20
+    }
+
     function back() {
         if (state == "measure") {
                 state = "remove_support"
@@ -70,6 +81,7 @@ ManualZCalibrationForm {
             state = "z_calibration"
         } else {
             state = "z_cal_start"
+            resetManualCalValues()
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         }
     }
@@ -96,6 +108,7 @@ ManualZCalibrationForm {
         } else if (state == "success") {
             // exit
             state = "z_cal_start"
+            resetManualCalValues()
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         } else {
             state = "remove_support"

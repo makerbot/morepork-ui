@@ -407,6 +407,15 @@ Item {
         }
         right_button.onClicked: {
             // Start Auto Cal/Clean extruders
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            returnToManualCal = true
+            state = "z_cal_start"
+            resetManualCalValues()
+
+            // Button action in 'base state'
+            bot.calibrateToolheads(["x","y"])
+            manual_calibration_issue_popup.close()
         }
 
         ColumnLayout {

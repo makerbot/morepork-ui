@@ -15,6 +15,7 @@ ToolheadCalibrationForm {
                 } else if(state == "calibration_finished") {
                     toolheadCalibration.processDone()
                     if(returnToManualCal) {
+                        returnToManualCal=false
                         resumeManualCalibrationPopup.open()
                     }
                     if(inFreStep) {

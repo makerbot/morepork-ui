@@ -63,7 +63,6 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
@@ -86,6 +85,13 @@ Item {
                     }
 
                     MenuButton {
+                        id: buttonManualZCalibration
+                        buttonImage.source: "qrc:/img/icon_manual_zcal.png"
+                        buttonText.text: qsTr("MANUAL CALIBRATION - Z")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
                         id: buttonJamDetectionExpExtruder
                         buttonImage.source: "qrc:/img/icon_clean_extruders.png"
                         buttonText.text: "LABS " + qsTr("EXTRUDER JAM DETECTION")
@@ -104,13 +110,6 @@ Item {
                                 bot.ignoreError(0,[81],true)
                             }
                         }
-                    }
-
-                    MenuButton {
-                        id: buttonManualZCalibration
-                        buttonImage.source: "qrc:/img/icon_manual_zcal.png"
-                        buttonText.text: qsTr("MANUAL CALIBRATION - Z")
-                        enabled: !isProcessRunning()
                     }
                 }
             }
