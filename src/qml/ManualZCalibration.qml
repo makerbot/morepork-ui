@@ -74,11 +74,14 @@ ManualZCalibrationForm {
                 state = "remove_support"
         } else if(state == "remove_support") {
             // Error going back will exit the process?
+            cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
             state = "measure"
         } else if (state == "updating_information") {
+            // Do nothing?
+            //cancelManualZCalPopup.open()
             // would this work
-            state = "z_calibration"
+            //state = "z_calibration"
         } else {
             state = "z_cal_start"
             resetManualCalValues()

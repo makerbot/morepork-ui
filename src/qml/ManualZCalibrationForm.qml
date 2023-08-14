@@ -8,6 +8,7 @@ Item {
 
     property alias z_cal_button: contentRightSide.buttonPrimary
     property alias manual_calibration_issue_popup: manual_calibration_issue_popup
+    property alias cancelManualZCalPopup: cancelManualZCalPopup
     property alias calValueItem1: calValueItem1
     property alias calValueItem2: calValueItem2
     property alias calValueItem3: calValueItem3
@@ -108,6 +109,11 @@ Item {
                 target: contentLeftSide.image
                 source: ("qrc:/img/manual_z_cal_start.png")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                visible: false
             }
 
             PropertyChanges {
@@ -445,6 +451,43 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "CancelManualZCalibration"
+        id: cancelManualZCalPopup
+        popupWidth: 720
+        popupHeight: 250
+
+        showTwoButtons: true
+        left_button_text: qsTr("STOP PROCESS")
+        left_button.onClicked: {
+            state = "z_cal_start"
+            cancelManualZCalPopup.close()
+        }
+        right_button_text: qsTr("CONTINUE")
+        right_button.onClicked: {
+            cancelManualZCalPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout
+            width: 590
+            height: 100
+            anchors.top: parent.top
+            anchors.topMargin: 145
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            TextHeadline {
+                text: qsTr("CANCEL MANUAL Z-CALIBRATION")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextBody {
+                text: qsTr("Are you sure you want to exit or start over manual z-calibration?")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
         }
     }
