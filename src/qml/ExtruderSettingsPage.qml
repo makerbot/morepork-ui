@@ -19,8 +19,6 @@ ExtruderSettingsPageForm {
     }
 
     buttonManualZCalibration.onClicked: {
-        // Query status
-        bot.query_status()
         bot.get_calibration_offsets()
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
     }

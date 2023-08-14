@@ -283,7 +283,7 @@ void BotModel::get_calibration_offsets() {
     qDebug() << FL_STRM << "called";
 }
 
-void BotModel::setManualCalibrationOffset(const int tb_offset) {
+void BotModel::setManualCalibrationOffset(const float tb_offset) {
     qDebug() << FL_STRM << "called with parameters: " << tb_offset;
 }
 

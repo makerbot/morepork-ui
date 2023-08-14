@@ -134,6 +134,13 @@ Item {
                        bot.process.isProcessCancellable) {
                         toolheadCalibration.cancelCalibrationPopup.open()
                     } else if(bot.process.type == ProcessType.None) {
+                        // If we are in the manual cal process
+                        // we want to prompt the user to resume
+                        // manual calibration
+                        if(returnToManualCal) {
+                            returnToManualCal = false
+                            toolheadCalibration.resumeManualCalibrationPopup.open()
+                        }
                         toolheadCalibration.state = "base state"
                         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                     }

@@ -36,8 +36,8 @@ ManualZCalibrationForm {
         console.info("Average = " + t_before)
 
         // Get Bz before value from sensor
-        var bz_before = bot.infoToolheadBHESValue
-        console.info("HES VAlue: " + bz_before)
+        var bz_before = bot.offsetBZ
+        console.info("BZ offset: " + bz_before)
         var t_after = 0.20
         var s = -0.515
 
