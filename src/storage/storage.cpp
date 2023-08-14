@@ -277,7 +277,6 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
                   meta_data->extruder_temperature[1],
                   meta_data->chamber_temperature,
                   meta_data->buildplane_target_temperature,
-                  meta_data->platform_temperature,
                   meta_data->shells,
                   meta_data->layer_height,
                   meta_data->infill_density,

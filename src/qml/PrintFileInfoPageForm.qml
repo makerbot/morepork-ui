@@ -1,7 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import MachineTypeEnum 1.0
 
 Item {
     anchors.fill: parent.fill
@@ -62,22 +61,8 @@ Item {
             id: extruder_temp_info
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("EXTRUDER TEMP.")
-            dataText: extruder_temp
-        }
+            dataText: extruder_temp.replace("+","|")
 
-        InfoItem {
-            id: chamber_temp_info
-            Layout.preferredHeight: dataElement.height
-            labelText: qsTr("BUILD PLANE TEMP.")
-            dataText: buildplane_temp
-        }
-
-        InfoItem {
-            id: heated_build_platform_temp_info
-            Layout.preferredHeight: dataElement.height
-            labelText: qsTr("BUILD PLATFORM TEMP.")
-            dataText: buildplatform_temp
-            visible: bot.machineType == MachineType.Magma
         }
 
         InfoItem {
