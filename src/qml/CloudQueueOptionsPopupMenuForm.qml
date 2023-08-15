@@ -8,8 +8,6 @@ import StorageFileTypeEnum 1.0
 // fail.
 PopupMenu {
     id: optionsMenu
-    menuHeight: children.height
-    menuWidth: parent.width
 
     onOpened: {
         itemAt(count - 1).isLastItem = true
