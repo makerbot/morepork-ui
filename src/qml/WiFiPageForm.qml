@@ -7,13 +7,14 @@ import FreStepEnum 1.0
 
 Item {
     id: wifiPage
-    width: 800
-    height: 440
+    width: parent.width
+    height: parent.height
     smooth: false
     antialiasing: false
     property alias wifiSwipeView: wifiSwipeView
     property int wifiError: bot.net.wifiError
     property bool isWifiConnected: bot.net.interface == "wifi"
+    property bool isEthernetConnected: bot.net.interface == "ethernet"
     property string currentWifiName: bot.net.name
     property string selectedWifiPath: ""
     property string selectedWifiName: ""
@@ -42,6 +43,13 @@ Item {
     onWifiErrorChanged: {
         if(bot.net.wifiError != WifiError.NoError) {
             bot.net.setWifiState(WifiState.NotConnected)
+        }
+    }
+
+    onIsEthernetConnectedChanged: {
+        if(inFreStep && isEthernetConnected) {
+            ethernetPopup.state = "detection_step"
+            ethernetPopup.open()
         }
     }
 
@@ -95,7 +103,7 @@ Item {
                 id: ethernetInfoId
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.top: parent.top
-                anchors.topMargin: 10
+                anchors.topMargin: 15
                 spacing: 15
 
                 Image {
@@ -104,7 +112,7 @@ Item {
                     Layout.preferredHeight: 30
                     Layout.alignment: Qt.AlignHCenter
                     source: {
-                        if(bot.net.interface == "ethernet") {
+                        if(wifiPage.isEthernetConnected) {
                             "qrc:/img/process_complete_small.png"
                         } else {
                             "qrc:/img/ethernet_connected.png"
@@ -120,8 +128,8 @@ Item {
 
                     Layout.preferredWidth: 400
                     text: {
-                        if(bot.net.interface == "ethernet") {
-                            qsTr("You’re connected to the internet through the ethernet port.")
+                        if(wifiPage.isEthernetConnected) {
+                            "You’re connected to the internet through the ethernet port."
                         } else {
                             qsTr("Plug an ethernet cable into the rear of the machine to use a wired connection.")
                         }
@@ -385,10 +393,60 @@ Item {
     }
 
     CustomPopup {
-        popupName: "Wifi"
+        popupName: "EthernetConnection"
+        id: ethernetPopup
+        popupHeight: ethernetColumnLayout.height + 120
+
+        property string state: "detection_step"
+
+        showOneButton: true
+        full_button_text: state == "detection_step" ?
+                              qsTr("CONFIRM") : qsTr("CLOSE")
+        full_button.onClicked: {
+            if(state == "detection_step") {
+                state = "success_step"
+            } else {
+                wifiFreStepComplete.start()
+                bot.firmwareUpdateCheck(false)
+                ethernetPopup.close()
+            }
+        }
+
+        ColumnLayout {
+            id: ethernetColumnLayout
+            height: children.height
+            visible: true
+            anchors.top: ethernetPopup.popupContainer.top
+            anchors.topMargin: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 30
+
+            Image {
+                id: ethernetErrorImage
+                width: sourceSize.width
+                height: sourceSize.height
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                source: ethernetPopup.state == "detection_step" ?
+                            "qrc:/img/ethernet_connected_large.png" :
+                            "qrc:/img/popup_complete.png"
+            }
+
+            TextHeadline {
+                id: ethernetHeader
+                text: ethernetPopup.state == "detection_step" ?
+                          qsTr("ETHERNET DETECTED") :
+                          qsTr("CONNECTED SUCCESSFULLY")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                visible: true
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "WifiConnection"
         id: wifiPopup
         closePolicy: Popup.CloseOnPressOutside
-        popupHeight: columnLayout.height + 100
+        popupHeight: wifiColumnLayout.height + 100
 
         // Full Button Bar
         showOneButton: !(isForgetEnabled ||
@@ -472,7 +530,7 @@ Item {
         }
 
         ColumnLayout {
-            id: columnLayout
+            id: wifiColumnLayout
             width: 590
             height: 150
             anchors.top: parent.top
@@ -488,7 +546,7 @@ Item {
             }
 
             Image {
-                id: error_image
+                id: wifiErrorImage
                 width: 80
                 height: 80
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -497,7 +555,7 @@ Item {
             }
 
             TextHeadline {
-                id: header_text
+                id: wifiHeader
                 text: qsTr("CONNECTING")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
@@ -508,7 +566,7 @@ Item {
                     when: !isForgetEnabled && bot.net.wifiState == WifiState.Connecting
 
                     PropertyChanges {
-                        target: error_image
+                        target: wifiErrorImage
                         visible: false
                     }
 
@@ -518,12 +576,12 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: header_text
+                        target: wifiHeader
                         text: qsTr("CONNECTING")
                     }
 
                     PropertyChanges {
-                        target: columnLayout
+                        target: wifiColumnLayout
                         height: 150
                         anchors.topMargin: 110
                         spacing: 15
@@ -536,7 +594,7 @@ Item {
                             && bot.net.wifiError == WifiError.NoError
 
                     PropertyChanges {
-                        target: error_image
+                        target: wifiErrorImage
                         visible: true
                         source:  "qrc:/img/popup_complete.png"
                     }
@@ -547,12 +605,12 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: header_text
+                        target: wifiHeader
                         text: qsTr("CONNECTED SUCCESSFULLY")
                     }
 
                     PropertyChanges {
-                        target: columnLayout
+                        target: wifiColumnLayout
                         height: 100
                         anchors.topMargin: 160
                         spacing: 25
@@ -563,7 +621,7 @@ Item {
                     when: isForgetEnabled
 
                     PropertyChanges {
-                        target: error_image
+                        target: wifiErrorImage
                         visible: false
                     }
 
@@ -573,12 +631,12 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: header_text
+                        target: wifiHeader
                         text: qsTr("FORGET %1?").arg(selectedWifiName)
                     }
 
                     PropertyChanges {
-                        target: columnLayout
+                        target: wifiColumnLayout
                         height: 100
                         anchors.topMargin: 150
                     }
@@ -588,7 +646,7 @@ Item {
                     when: !isForgetEnabled && bot.net.wifiState == WifiState.Disconnecting
 
                     PropertyChanges {
-                        target: error_image
+                        target: wifiErrorImage
                         visible: false
                     }
 
@@ -598,12 +656,12 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: header_text
+                        target: wifiHeader
                         text: qsTr("DISCONNECT FROM %1?").arg(selectedWifiName)
                     }
 
                     PropertyChanges {
-                        target: columnLayout
+                        target: wifiColumnLayout
                         height: 100
                         anchors.topMargin: 150
                     }
@@ -615,7 +673,7 @@ Item {
                           bot.net.wifiError !== WifiError.InvalidPassword
 
                     PropertyChanges {
-                        target: error_image
+                        target: wifiErrorImage
                         visible: true
                         source: "qrc:/img/popup_error.png"
                     }
@@ -626,12 +684,12 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: header_text
+                        target: wifiHeader
                         text: qsTr("FAILED TO CONNECT")
                     }
 
                     PropertyChanges {
-                        target: columnLayout
+                        target: wifiColumnLayout
                         height: 140
                         anchors.topMargin: 115
                         spacing: 10
@@ -644,7 +702,7 @@ Item {
                           bot.net.wifiError == WifiError.InvalidPassword
 
                     PropertyChanges {
-                        target: error_image
+                        target: wifiErrorImage
                         visible: true
                         source: "qrc:/img/popup_error.png"
                     }
@@ -655,12 +713,12 @@ Item {
                     }
 
                     PropertyChanges {
-                        target: header_text
+                        target: wifiHeader
                         text: qsTr("INVALID PASSWORD")
                     }
 
                     PropertyChanges {
-                        target: columnLayout
+                        target: wifiColumnLayout
                         height: 140
                         anchors.topMargin: 115
                         spacing: 10

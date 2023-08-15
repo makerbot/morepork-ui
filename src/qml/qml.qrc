@@ -262,9 +262,10 @@
         <file>SunflowerUnpacking.qml</file>
         <file>FreChooseLanguagePage.qml</file>
         <file>FreChooseLanguagePageForm.qml</file>
-        <file>MaterialCaseSetupForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
+        <file>SetupProceduresPage.qml</file>
+        <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
     </qresource>

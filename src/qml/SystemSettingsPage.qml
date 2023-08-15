@@ -59,6 +59,11 @@ SystemSettingsPageForm {
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
     }
 
+    buttonSetupProcedures.onClicked: {
+
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetupProceduresPage)
+    }
+
     buttonCopyLogs.onClicked: {
         if(storage.usbStorageConnected) {
             var now = new Date();
@@ -183,6 +188,7 @@ SystemSettingsPageForm {
     }
 
     buttonResetToFactory.onClicked: {
+        isFactoryResetDone = false
         resetToFactoryPopup.open()
     }
 }

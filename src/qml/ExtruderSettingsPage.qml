@@ -9,6 +9,11 @@ ExtruderSettingsPageForm {
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
     }
 
+    buttonCalibrateZAxisOnly.onClicked: {
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+        bot.calibrateToolheads(["z"])
+    }
+
     buttonCleanExtruders.onClicked: {
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CleanExtrudersPage)
     }
