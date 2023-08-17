@@ -11,8 +11,9 @@ LoggingItem {
     height: 420
     smooth: false
     antialiasing: false
+    property alias contentLeftSide: contentLeftSide
+    property alias contentRightSide: contentRightSide
     property alias cancelDryingCyclePopup: cancelDryingCyclePopup
-    property alias actionButton: actionButton
     property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
     property alias left_button: dryConfirmBuildPlateClearPopup.left_button
     property real timeLeftHours: bot.process.timeRemaining/3600
@@ -76,160 +77,33 @@ LoggingItem {
         {label: "pla || tough", temperature : 45, time : 24}
     ]
 
-    Image {
-        id: image
-        width: sourceSize.width
-        height: sourceSize.height
-        anchors.verticalCenterOffset: -20
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/dry_material.png"
-        opacity: 1.0
-    }
-
-    Item {
-        id: mainItem
-        width: 400
-        height: 250
+    ContentLeftSide {
+        id: contentLeftSide
+        image {
+            source: "qrc:/img/dry_material.png"
+            visible: true
+        }
+        loadingIcon {
+            visible: false
+        }
         visible: true
-        anchors.left: parent.left
-        anchors.leftMargin: image.width
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -15
-        opacity: 1.0
-
-        Text {
-            id: title
-            width: 350
-            text: qsTr("DRY MATERIAL")
-            antialiasing: false
-            smooth: false
-            font.letterSpacing: 3
-            wrapMode: Text.WordWrap
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 22
-            font.weight: Font.Bold
-            lineHeight: 1.2
-            opacity: 1.0
-        }
-
-        Text {
-            id: subtitle
-            width: 350
-            wrapMode: Text.WordWrap
-            anchors.top: title.bottom
-            anchors.topMargin: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 18
-            font.weight: Font.Light
-            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.\nThis procedure will allow you to dry\nmaterials for improved print quality,\nusing METHOD’s built-in heaters\nPlease sure the build plate is empty.")
-            lineHeight: 1.2
-            opacity: 1.0
-        }
-
-        RoundedButton {
-            id: actionButton
-            label: qsTr("START")
-            buttonWidth: 310
-            buttonHeight: 50
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            anchors.top: subtitle.bottom
-            anchors.topMargin: 25
-            opacity: 1.0
-            button_mouseArea.onClicked: {
-                if (bot.process.type != ProcessType.DryingCycleProcess) {
-                    if (!hasFinished) {
-                        dryConfirmBuildPlateClearPopup.open()
-                    } else {
-                        processDone()
-                        hasFinished = false
-                    }
-                } else {
-                    if(currentStep == ProcessStateType.WaitingForSpool) {
-                        if(dryMaterialPage.state == "dry_kit_instructions_1") {
-                            dryMaterialPage.state = "dry_kit_instructions_2"
-                        }
-                        else if(dryMaterialPage.state == "dry_kit_instructions_2") {
-                            dryMaterialPage.state = "waiting_for_spool"
-                        }
-                        else if(dryMaterialPage.state == "waiting_for_spool") {
-                            doChooseMaterial = true
-                        }
-                    } else if(currentStep == ProcessStateType.Done) {
-                        processDone()
-                        hasFinished = false
-                    }
-                }
-            }
-        }
-
-        Text {
-            id: under_button_text
-            width: 350
-            wrapMode: Text.WordWrap
-            anchors.top: actionButton.bottom
-            anchors.topMargin: 20
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            color: "#e6e6e6"
-            font.family: defaultFont.name
-            font.pixelSize: 18
-            font.weight: Font.Light
-            text: ""
-            lineHeight: 1.2
-            opacity: 1.0
-        }
-
-        ColumnLayout {
-            id: status
-            anchors.top: title.bottom
-            anchors.topMargin: 10
-            width: children.width
-            height: 50
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            spacing: 10
-            opacity: 0
-
-            Text {
-                id: time_remaining_text
-                text: "999"
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-
-            Text {
-                id: chamber_temperature_text
-                text: "999"
-                font.family: defaultFont.name
-                color: "#ffffff"
-                font.letterSpacing: 3
-                font.weight: Font.Light
-                font.pixelSize: 20
-            }
-        }
     }
 
-    LoadingIcon {
-        id: loadingIcon
-        anchors.verticalCenterOffset: -30
-        anchors.left: parent.left
-        anchors.leftMargin: 80
-        anchors.verticalCenter: parent.verticalCenter
-        visible: false
+    ContentRightSide {
+        id: contentRightSide
+        textHeader {
+            text: qsTr("DRY MATERIAL")
+            visible: true
+        }
+        textBody {
+            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament. This procedure will allow you to dry materials for improved print quality, using METHOD’s built-in heaters Please sure the build plate is empty.")
+            visible: true
+        }
+        buttonPrimary {
+            text: qsTr("START")
+            visible: true
+        }
+        visible: true
     }
 
     DryMaterialSelector {
@@ -244,29 +118,32 @@ LoggingItem {
                   bot.process.stateType == ProcessStateType.PositioningBuildPlate
 
             PropertyChanges {
-                target: image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("BUILD PLATE MOVING INTO PLACE")
-                anchors.topMargin: 40
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("The build plate is moving into position so the material can be placed closer to the heaters.")
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
+                target: contentLeftSide
                 visible: true
+                image {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: true
+                    icon_image: LoadingIcon.Loading
+                    loadingProgress: 0
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("BUILD PLATE MOVING INTO PLACE")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("The build plate is moving into position so the material can be placed closer to the heaters.")
+                    visible: true
+                }
+                buttonPrimary {
+                    visible: false
+                }
             }
 
             PropertyChanges {
@@ -278,24 +155,38 @@ LoggingItem {
             name: "dry_kit_instructions_1"
 
             PropertyChanges {
-                target: image
-                source: "qrc:/img/replace_desiccant.png"
-                opacity: 1
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: true
+                    source: "qrc:/img/replace_desiccant.png"
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
-                target: title
-                text: qsTr("REPLACE DESICCANT")
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("SPOOL TYPE A\nRemove cap and insert one 70g bag\nRe-attach cap to spool\n\nSPOOL TYPE B\nRemove puck from spool\nRemove cap and insert one 30g bag\nRe-attach cap and puck to spool")
-            }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("NEXT")
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("REPLACE DESICCANT")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("SPOOL TYPE A") + "\n" +
+                          qsTr("Remove cap and insert one 70g bag") + "\n" +
+                          qsTr("Re-attach cap to spool") + "\n\n" +
+                          qsTr("SPOOL TYPE B") + "\n" +
+                          qsTr("Remove puck from spool") + "\n" +
+                          qsTr("Remove cap and insert one 30g bag") + "\n" +
+                          qsTr("Re-attach cap and puck to spool")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("NEXT")
+                    visible: true
+                }
             }
 
             PropertyChanges {
@@ -307,29 +198,34 @@ LoggingItem {
             name: "dry_kit_instructions_2"
 
             PropertyChanges {
-                target: image
-                source: "qrc:/img/spool_bag.png"
-                opacity: 1
+                target: contentLeftSide
+                visible: true
+                image {
+                    source: "qrc:/img/spool_bag.png"
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
-                target: title
-                text: qsTr("PLACE SPOOL IN BAG")
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Confirm your re-usable Mylar storage\nbag has no holes.\n\nPlace spool in bag and add additional\nfresh bags of desiccant before sealing.")
-            }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("NEXT")
-            }
-
-            PropertyChanges {
-                target: under_button_text
-                text: qsTr("For additional mylar bags and desiccant, purchase the MATERIAL DRY KIT at store.makerbot.com")
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("PLACE SPOOL IN BAG")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Confirm your re-usable Mylar storage bag has no holes.") + "\n\n" +
+                          qsTr("Place spool in bag and add additional fresh bags of desiccant before sealing.") + "\n\n" +
+                          qsTr("For additional mylar bags and desiccant, purchase the MATERIAL DRY KIT at store.makerbot.com")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("NEXT")
+                    visible: true
+                }
             }
 
             PropertyChanges {
@@ -341,24 +237,32 @@ LoggingItem {
             name: "waiting_for_spool"
 
             PropertyChanges {
-                target: image
-                source: "qrc:/img/dry_material_spool.png"
-                opacity: 1
+                target: contentLeftSide
+                visible: true
+                image {
+                    source: "qrc:/img/dry_material_spool.png"
+                    visible: true
+                }
+                loadingIcon {
+                    visible: false
+                }
             }
 
             PropertyChanges {
-                target: title
-                text: qsTr("PLACE THE SEALED BAG ON BUILD PLATE")
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Position the material in the center of the build plate and close the build chamber door.")
-            }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("SELECT MATERIAL")
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("PLACE THE SEALED BAG ON BUILD PLATE")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Position the material in the center of the build plate and close the build chamber door.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("SELECT MATERIAL")
+                    visible: true
+                }
             }
 
             PropertyChanges {
@@ -371,17 +275,12 @@ LoggingItem {
             when: doChooseMaterial
 
             PropertyChanges {
-                target: image
-                opacity: 0
+                target: contentLeftSide
+                visible: false
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
+                target: contentRightSide
                 visible: false
             }
 
@@ -394,71 +293,49 @@ LoggingItem {
             name: "drying_spool"
 
             PropertyChanges {
-                target: image
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: mainItem
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: {
-                    if(bot.process.stateType == ProcessStateType.Loading) {
-                        qsTr("HEATING CHAMBER")
-
-                    } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
-                        qsTr("DRYING MATERIAL")
-                    } else {
-                        defaultString
-                    }
-                }
-                anchors.topMargin: 60
-            }
-
-            PropertyChanges {
-                target: status
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: time_remaining_text
-                visible: {
-                    if(bot.process.stateType == ProcessStateType.DryingSpool) {
-                        true
-                    } else { // All other cases including ProcessStateType.Loading
-                        false
-                    }
-                }
-                text: {
-                    (timeLeftHours < 1 ?
-                         Math.round(timeLeftHours * 60) + "M " :
-                         Math.round(timeLeftHours*10)/10 + "H ") +
-                    qsTr("REMAINING")
-                }
-            }
-
-            PropertyChanges {
-                target: chamber_temperature_text
-                text: bot.chamberCurrentTemp + "°C" + " | " + bot.chamberTargetTemp + "°C"
-            }
-
-            PropertyChanges {
-                target: subtitle
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
+                target: contentLeftSide
                 visible: true
-                loadingProgress: bot.process.printPercentage
+                image {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: true
+                    icon_image: LoadingIcon.Loading
+                    loadingProgress: bot.process.printPercentage
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: {
+                        if(bot.process.stateType == ProcessStateType.Loading) {
+                            qsTr("HEATING CHAMBER")
+                        } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
+                            qsTr("DRYING MATERIAL")
+                        } else {
+                            defaultString
+                        }
+                    }
+                    visible: true
+                }
+                textBody {
+                    visible: bot.process.stateType == ProcessStateType.DryingSpool
+                    text: {
+                        (timeLeftHours < 1 ?
+                             Math.round(timeLeftHours * 60) + "M " :
+                             Math.round(timeLeftHours*10)/10 + "H ") +
+                        qsTr("REMAINING")
+                    }
+                }
+                buttonPrimary {
+                    visible: false
+                }
+                temperatureStatus {
+                    visible: true
+                    showComponent: TemperatureStatus.Chamber
+                }
             }
 
             PropertyChanges {
@@ -470,134 +347,105 @@ LoggingItem {
             name: "drying_complete"
 
             PropertyChanges {
-                target: image
-                source: "qrc:/img/process_successful.png"
-                anchors.leftMargin: 80
-                opacity: 1
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: true
+                    icon_image: LoadingIcon.Success
+                }
             }
 
             PropertyChanges {
-                target: mainItem
-                anchors.leftMargin: 420
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("DRYING COMPLETE")
-                opacity: 1
-                anchors.topMargin: 40
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("The material is now dry and ready to use.")
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                visible: false
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("DRYING COMPLETE")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("The material is now dry and ready to use.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("DONE")
+                    visible: true
+                }
             }
 
             PropertyChanges {
                 target: materialSelector
                 visible: false
-            }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("DONE")
             }
         },
         State {
             name: "drying_failed"
+
             PropertyChanges {
-                target: image
-                source: "qrc:/img/error.png"
-                opacity: 1
-                anchors.leftMargin: 80
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: true
+                    icon_image: LoadingIcon.Failure
+                }
             }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
-                anchors.leftMargin: 420
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("DRYING FAILED")
-                opacity: 1
-                anchors.topMargin: 40
-            }
-
-            PropertyChanges {
-                target: subtitle
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: actionButton
-                anchors.topMargin: -75
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                visible: false
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("DRYING FAILED")
+                    visible: true
+                }
+                textBody {
+                    visible: false
+                }
+                buttonPrimary {
+                    text: qsTr("DONE")
+                    visible: true
+                }
             }
 
             PropertyChanges {
                 target: materialSelector
                 visible: false
             }
-
-            PropertyChanges {
-                target: actionButton
-                button_text.text: qsTr("DONE")
-            }
         },
         State {
             name: "cancelling"
-            PropertyChanges {
-                target: image
-                opacity: 0
-            }
 
             PropertyChanges {
-                target: mainItem
-                opacity: 1
-                anchors.leftMargin: 420
-            }
-
-            PropertyChanges {
-                target: title
-                text: qsTr("CANCELLING")
-                opacity: 1
-                anchors.topMargin: 40
-            }
-
-            PropertyChanges {
-                target: subtitle
-                text: qsTr("Please wait.")
-                opacity: 1
-            }
-
-            PropertyChanges {
-                target: actionButton
-                opacity: 0
-            }
-
-            PropertyChanges {
-                target: loadingIcon
-                loadingProgress: 0
+                target: contentLeftSide
                 visible: true
+                image {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: true
+                    icon_image: LoadingIcon.Loading
+                    loadingProgress: 0
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("CANCELLING")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Please wait.")
+                    visible: true
+                }
+                buttonPrimary {
+                    visible: false
+                }
             }
 
             PropertyChanges {

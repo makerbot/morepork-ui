@@ -135,7 +135,7 @@ Item {
     Text {
         id: disclaimer_text
         color: "#ffffff"
-        text: qsTr("Filter lifetime is dependent upon multiple factors, including but not limited to<br>materials being printed, temperatures used, and airflow.")
+        text: qsTr("Filter lifetime is dependent upon multiple factors, including but not limited to materials being printed, temperatures used, and airflow.")
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
         anchors.horizontalCenter: parent.horizontalCenter

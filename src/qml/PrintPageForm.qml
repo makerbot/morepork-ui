@@ -935,8 +935,8 @@ Item {
 
                     PropertyChanges {
                         target: description_text_copy_file_popup
-                        text: qsTr("The following file has been added to internal storage:"
-                                   +"<br><br><br><b>%1</b>").arg(file_name)
+                        text: qsTr("The following file has been added to internal storage:") +
+                                  ("<br><br><br><b>%1</b>").arg(file_name)
                     }
                 },
                 State {
