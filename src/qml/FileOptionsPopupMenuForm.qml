@@ -17,7 +17,7 @@ PopupMenu {
         id: addRemoveFileButton
         label: browsingUsbStorage ?
                    qsTr("ADD TO PRINTER STORAGE") :
-                   qsTr("REMOVE FROM PRINTER\nSTORAGE")
+                   qsTr("REMOVE FROM PRINTER STORAGE")
         onClicked: {
             if(browsingUsbStorage) {
                 if(buttonInternalStorage.storageUsed < 95) {

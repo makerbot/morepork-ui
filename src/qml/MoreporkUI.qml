@@ -2391,8 +2391,8 @@ ApplicationWindow {
                                         qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
                                                     printPage.print_model_material_name).arg(printPage.print_support_material_name) :
                                         qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
-                                                    printPage.print_model_material_name))) +
-                                qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
+                                                    printPage.print_model_material_name))) + "\n"
+                                qsTr("Load the correct materials to start the print or export the file again with these material settings.")
                             }
                         }
 
@@ -2487,12 +2487,12 @@ ApplicationWindow {
                     id: description_text_exp_ext_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
-                             "partners and recommended print settings. Material should\n" +
-                             "be loaded through the AUX port under the removable cover\n" +
-                             "on the top left of the printer. Make sure that the extruders\n" +
-                             "are calibrated before printing. The Experimental Extruder is\n" +
-                             "an experimental product and is not covered under warranty\n" +
+                        qsTr("Visit MakerBot.com/Labs to learn about our material " +
+                             "partners and recommended print settings. Material should " +
+                             "be loaded through the AUX port under the removable cover " +
+                             "on the top left of the printer. Make sure that the extruders " +
+                             "are calibrated before printing. The Experimental Extruder is " +
+                             "an experimental product and is not covered under warranty " +
                              "or MakerCare."
                             )
                     }
@@ -2555,7 +2555,7 @@ ApplicationWindow {
                     id: description_text_hepa_error_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("There seems to be something wrong with the filter. Error Code %1\n" +
+                        qsTr("There seems to be something wrong with the filter. Error Code %1. " +
                              "Visit support.makerbot.com to learn more.").arg(bot.hepaErrorCode)
                     }
                     horizontalAlignment: Text.AlignHCenter
