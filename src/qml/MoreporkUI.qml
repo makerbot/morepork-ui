@@ -549,7 +549,10 @@ ApplicationWindow {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
-                    property string topBarTitle: qsTr("Select Source")
+                    property string topBarTitle: bot.process.type == ProcessType.Print ?
+                                                     qsTr("PRINT") :
+                                                     qsTr("Select Source")
+
                     smooth: false
                     visible: false
 

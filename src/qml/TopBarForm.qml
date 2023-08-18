@@ -25,6 +25,45 @@ Item {
         color: "#000000"
     }
 
+    property string printerStatus: {
+        switch(bot.process.type) {
+            case ProcessType.Print:
+                switch (bot.process.stateType) {
+                case ProcessStateType.Loading:
+                    qsTr("LOADING")
+                    break;
+                case ProcessStateType.Printing:
+                    qsTr("PRINTING %1\%").arg(bot.process.printPercentage)
+                    break;
+                case ProcessStateType.Pausing:
+                    qsTr("PAUSING")
+                    break;
+                case ProcessStateType.Resuming:
+                    qsTr("RESUMING")
+                    break;
+                case ProcessStateType.Paused:
+                    qsTr("PAUSED")
+                    break;
+                case ProcessStateType.Failed:
+                    qsTr("FAILED")
+                    break;
+                case ProcessStateType.Completed:
+                    qsTr("PRINT COMPLETE")
+                    break;
+                case ProcessStateType.Cancelled:
+                    qsTr("PRINT CANCELLED")
+                    break;
+                }
+                break;
+            case ProcessType.None:
+                qsTr("IDLE")
+                break;
+            default:
+                qsTr("BUSY")
+                break;
+            }
+    }
+
     Timer {
         id: secondsUpdater
         interval: 100 // 10x per second hides time interval misses better than exactly 1x per second
@@ -160,63 +199,28 @@ Item {
             z: 1
             anchors.fill: parent
 
-            TextHeadline {
-                id: textNameStatusTitle
-                style: TextHeadline.Base
-                text: {
-                    var status_text = qsTr("IDLE")
-                    var processed_title = currentItem.topBarTitle
-                    switch(bot.process.type) {
-                    case ProcessType.Print:
-                        switch(bot.process.stateType) {
-                        case ProcessStateType.Loading:
-                            status_text = qsTr("LOADING")
-                            break;
-                        case ProcessStateType.Printing:
-                            status_text = qsTr("PRINTING")
-                            break;
-                        case ProcessStateType.Pausing:
-                            status_text = qsTr("PAUSING")
-                            break;
-                        case ProcessStateType.Resuming:
-                            status_text = qsTr("RESUMING")
-                            break;
-                        case ProcessStateType.Paused:
-                            status_text = qsTr("PAUSED")
-                            break;
-                        case ProcessStateType.Failed:
-                            status_text = qsTr("FAILED")
-                            break;
-                        case ProcessStateType.Completed:
-                            status_text = qsTr("PRINT COMPLETE")
-                            break;
-                        case ProcessStateType.Cancelled:
-                            status_text = qsTr("PRINT CANCELLED")
-                            break;
-                        }
-                        break;
-                    default:
-                        status_text = qsTr("IDLE")
-                        break;
-                    }
-                    if ((currentItem.topBarTitle == qsTr("Select Source")) &&
-                        (bot.process.type == ProcessType.Print)) {
-                        processed_title = qsTr("Print")
-                    }
-                    else {
-                        processed_title = currentItem.topBarTitle
-                    }
-                    if (status_text == qsTr("IDLE")) {
-                        ("%1 - %2").arg(bot.name).arg(processed_title)
-                    } else {
-                        ("%1 - %2").arg(bot.name).arg(status_text)
-                    }
-                }
-                antialiasing: false
-                smooth: false
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.horizontalCenterOffset: -20
+            ColumnLayout {
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 2
+
+                TextSubheader {
+                    id: textNameStatusTitle
+                    style: TextSubheader.TopBar
+                    text: ("%1 - %2").arg(bot.name).arg(printerStatus)
+                    horizontalAlignment: Text.AlignHCenter
+                    antialiasing: false
+                    smooth: false
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextHeadline {
+                    id: pageTitle
+                    style: TextHeadline.TopBar
+                    text: currentItem.topBarTitle
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
             }
 
             Image {

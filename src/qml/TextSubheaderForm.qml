@@ -4,13 +4,23 @@ import QtQuick.Layouts 1.12
 Text {
     enum Style {
         Base,
-        Bold
+        Bold,
+        TopBar
     }
     property int style: TextSubheader.Base
     id: textSubheader
     text: "Subheader"
     font.family: "Antenna"
-    font.pixelSize: 16
+    font.pixelSize: {
+        switch(style) {
+        case TextSubheader.TopBar:
+            17
+            break;
+        default:
+            16
+            break;
+        }
+    }
     font.letterSpacing: {
         switch(style) {
         case TextSubheader.Base:
@@ -18,6 +28,9 @@ Text {
             break;
         case TextSubheader.Bold:
             0.8
+            break;
+        case TextSubheader.TopBar:
+            3
             break;
         default:
             3.2
@@ -31,6 +44,9 @@ Text {
         case TextSubheader.Bold:
             Font.Bold
             break;
+        case TextSubheader.TopBar:
+            Font.Light
+            break;
         default:
             Font.Normal
         }
@@ -43,12 +59,24 @@ Text {
         case TextSubheader.Bold:
             Font.MixedCase
             break;
+        case TextSubheader.TopBar:
+            Font.AllUppercase
+            break;
         default:
             Font.AllUppercase
         }
     }
     horizontalAlignment: Text.AlignHCenter
     lineHeightMode: Text.FixedHeight
-    lineHeight: 19.2
+    lineHeight: {
+        switch(style) {
+        case TextSubheader.TopBar:
+            22
+            break;
+        default:
+            19.2
+            break;
+        }
+    }
     color: Qt.rgba(255, 255, 255, 0.9)
 }
