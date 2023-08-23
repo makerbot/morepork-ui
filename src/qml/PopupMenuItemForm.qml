@@ -18,10 +18,8 @@ MenuItem {
 
     TextSubheader {
         id: menuItemLabel
-        width: parent.width
         text: "Menu Item"
         horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
         color: parent.enabled ? pressed ? "#000000" : "#ffffff" : "#4d4d4d"
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
