@@ -6,9 +6,6 @@ import ErrorTypeEnum 1.0
 
 PrintPageForm {
     property bool startPrintMaterialMismatch: false
-    property bool startPrintWithInsufficientModelMaterial: false
-    property bool startPrintWithInsufficientSupportMaterial: false
-    property bool startPrintWithUnknownMaterials: false
     property bool startPrintTopLidOpen: false
     property bool startPrintBuildDoorOpen: false
     property bool startPrintNoFilament: false
@@ -36,11 +33,6 @@ PrintPageForm {
             } else if(materialPage.bay1.filamentMaterial != print_model_material) {
                 startPrintMaterialMismatch = true
             }
-             // Disable material quantity check before print for now
-             // until the spool quantity reading becomes reliable
-//            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
-//                startPrintWithInsufficientModelMaterial = true
-//            }
         }
 
         // Dual extruder prints
@@ -65,22 +57,9 @@ PrintPageForm {
                  (materialPage.bay2.filamentMaterial != print_support_material))) {
                 startPrintMaterialMismatch = true
             }
-            // Disable material quantity check before print for now
-            // until the spool quantity reading becomes reliable
-//            else if(materialPage.bay1.filamentQuantity < modelMaterialRequired ||
-//                    materialPage.bay2.filamentQuantity < supportMaterialRequired) {
-//                if(materialPage.bay1.filamentQuantity < modelMaterialRequired) {
-//                    startPrintWithInsufficientModelMaterial = true
-//                }
-//                if(materialPage.bay2.filamentQuantity < supportMaterialRequired) {
-//                    startPrintWithInsufficientSupportMaterial = true
-//                }
-//            }
         }
 
         if(startPrintUnknownSliceGenuineMaterial ||
-           startPrintWithInsufficientModelMaterial ||
-           startPrintWithInsufficientSupportMaterial ||
            startPrintGenuineSliceUnknownMaterial ||
            startPrintMaterialMismatch
         ) {

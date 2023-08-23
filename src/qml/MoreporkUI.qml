@@ -1769,15 +1769,15 @@ ApplicationWindow {
                 height: 150
 
                 TextHeadline {
-                    text: "CARRIAGE COMMUNICATION ERROR"
+                    text: qsTr("CARRIAGE COMMUNICATION ERROR")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
                 TextBody {
-                    text: {
+                    text: qsTr(
                         "The printer’s carriage is reporting communication drop-outs. " +
                         "Try restarting the printer. If this happens again, please " +
                         "contact MakerBot support."
-                    }
+                    )
                     style: TextBody.Large
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true
@@ -1862,7 +1862,7 @@ ApplicationWindow {
                 }
 
                 TextBody {
-                    text: "Please wait until the printer is idle."
+                    text: qsTr("Please wait until the printer is idle.")
                     Layout.alignment: Qt.AlignHCenter
                     Layout.bottomMargin: 30
                 }
@@ -1903,7 +1903,7 @@ ApplicationWindow {
                 }
 
                 TextBody {
-                    text: "Calibration enables precise 3D printing. The printer must calibrate new extruders to ensure print quality"
+                    text: qsTr("Calibration enables precise 3D printing. The printer must calibrate new extruders to ensure print quality")
                     Layout.alignment: Qt.AlignHCenter
                     Layout.bottomMargin: 30
                     wrapMode: Text.WordWrap
@@ -2201,9 +2201,6 @@ ApplicationWindow {
             onClosed: {
                 printPage.startPrintBuildDoorOpen = false
                 printPage.startPrintTopLidOpen = false
-                printPage.startPrintWithUnknownMaterials = false
-                printPage.startPrintWithInsufficientModelMaterial = false
-                printPage.startPrintWithInsufficientSupportMaterial = false
                 printPage.startPrintNoFilament = false
                 printPage.startPrintUnknownSliceGenuineMaterial = false
                 printPage.startPrintGenuineSliceUnknownMaterial = false
@@ -2227,25 +2224,15 @@ ApplicationWindow {
                         printPage.startPrintGenuineSliceUnknownMaterial) {
                     qsTr("BACK")
                 }
-                else if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                        printPage.startPrintWithUnknownMaterials) {
+                else if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     qsTr("START ANYWAY")
-                }
-                else if(printPage.startPrintWithInsufficientModelMaterial ||
-                        printPage.startPrintWithInsufficientSupportMaterial) {
-                    qsTr("START PRINT")
                 } else {
                     emptyString
                 }
             }
             left_button.onClicked: {
                 startPrintErrorsPopup.close()
-                if(printPage.startPrintUnknownSliceGenuineMaterial ||
-                        printPage.startPrintWithUnknownMaterials ||
-                        printPage.startPrintWithInsufficientModelMaterial ||
-                        printPage.startPrintWithInsufficientSupportMaterial) {
-
-
+                if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     if(printPage.startPrintDoorLidCheck()) {
                         printPage.confirm_build_plate_popup.open()
                     }
@@ -2266,10 +2253,7 @@ ApplicationWindow {
                 }
                 else if(printPage.startPrintMaterialMismatch ||
                         printPage.startPrintGenuineSliceUnknownMaterial ||
-                        printPage.startPrintUnknownSliceGenuineMaterial ||
-                        printPage.startPrintWithUnknownMaterials ||
-                        printPage.startPrintWithInsufficientModelMaterial ||
-                        printPage.startPrintWithInsufficientSupportMaterial) {
+                        printPage.startPrintUnknownSliceGenuineMaterial) {
                     qsTr("CHANGE MATERIAL")
                 }
                 else {
@@ -2307,7 +2291,7 @@ ApplicationWindow {
                 TextBody {
                     id: sub_text_start_print_errors_popup
                     Layout.preferredWidth: parent.width
-                    text: qsTr("Error message")
+                    text: "Error message"
                     horizontalAlignment: Text.AlignHCenter
                     Layout.alignment: Qt.AlignHCenter
                     wrapMode: Text.WordWrap
@@ -2315,7 +2299,7 @@ ApplicationWindow {
 
                 TextBody {
                     id: mb_compatibility_link_error_popup
-                    text: qsTr("<br><b>makerbot.com/compatibility</b>")
+                    text: "<br><b>makerbot.com/compatibility</b>"
                     Layout.alignment: Qt.AlignHCenter
                     visible: false
                 }
@@ -2402,13 +2386,12 @@ ApplicationWindow {
                                 (materialPage.bay1.usingExperimentalExtruder ?
                                         qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
                                                     printPage.print_support_material_name) :
-                                        qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>").arg(
-                                                    printPage.print_model_material_name) +
-                                                (!printPage.support_extruder_used ?
-                                                    "." :
-                                                    (" and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_support_material_name))) +
-                                qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
+                                  (printPage.support_extruder_used?
+                                        qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
+                                                    printPage.print_model_material_name).arg(printPage.print_support_material_name) :
+                                        qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
+                                                    printPage.print_model_material_name))) + "\n"
+                                qsTr("Load the correct materials to start the print or export the file again with these material settings.")
                             }
                         }
 
@@ -2459,67 +2442,6 @@ ApplicationWindow {
                             target: mb_compatibility_link_error_popup
                             visible: false
                         }
-                    },
-                    State {
-                        name: "unknown_material_detected"
-                        when: printPage.startPrintWithUnknownMaterials
-
-
-                        PropertyChanges {
-                            target: main_text_start_print_errors_popup
-                            text: qsTr("UNKNOWN MATERIAL DETECTED")
-                        }
-
-                        PropertyChanges {
-                            target: sub_text_start_print_errors_popup
-                            text: qsTr("Be sure <b>%1</b> is in <b>Model Extruder 1</b>").arg(
-                                 printPage.print_model_material_name) +
-                             (printPage.support_extruder_used ?
-                                        qsTr(" and <b>%1</b> is in <b>Support Extruder 2</b>.").arg(
-                                             printPage.print_support_material_name) :
-                                        qsTr(".")) +
-                              qsTr("\nThis printer is optimized for genuine MakerBot materials.")
-                        }
-
-                        PropertyChanges {
-                            target: mb_compatibility_link_error_popup
-                            visible: false
-                        }
-                    },
-                    State {
-                        name: "low_material"
-                        when: (printPage.startPrintWithInsufficientModelMaterial ||
-                                printPage.startPrintWithInsufficientSupportMaterial)
-
-
-                        PropertyChanges {
-                            target: main_text_start_print_errors_popup
-                            text: qsTr("LOW MATERIAL")
-                        }
-
-                        PropertyChanges {
-                            target: sub_text_start_print_errors_popup
-                            text: {
-                                var insufficientModel = printPage.startPrintWithInsufficientModelMaterial
-                                var insufficientSupport = printPage.startPrintWithInsufficientSupportMaterial
-                                var modelMatStr = printPage.print_model_material_name
-                                var supportMatStr = printPage.print_support_material_name
-                                qsTr("There may not be enough <b>%1").arg(
-                                     (insufficientModel && insufficientSupport) ?
-                                         qsTr("%1</b> and <b>%2</b>").arg(modelMatStr).arg(supportMatStr) :
-                                         (insufficientModel ?
-                                                qsTr("%1</b>").arg(modelMatStr) :
-                                                (insufficientSupport ?
-                                                    qsTr("%1</b>").arg(supportMatStr) :
-                                                    qsTr("</b>")))) +
-                                qsTr(" to complete this print. The print will pause when the material runs out and a new spool can be loaded. Or change the material now.")
-                            }
-                        }
-
-                        PropertyChanges {
-                            target: mb_compatibility_link_error_popup
-                            visible: false
-                        }
                     }
                 ]
             }
@@ -2564,12 +2486,12 @@ ApplicationWindow {
                     id: description_text_exp_ext_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
-                             "partners and recommended print settings. Material should\n" +
-                             "be loaded through the AUX port under the removable cover\n" +
-                             "on the top left of the printer. Make sure that the extruders\n" +
-                             "are calibrated before printing. The Experimental Extruder is\n" +
-                             "an experimental product and is not covered under warranty\n" +
+                        qsTr("Visit MakerBot.com/Labs to learn about our material " +
+                             "partners and recommended print settings. Material should " +
+                             "be loaded through the AUX port under the removable cover " +
+                             "on the top left of the printer. Make sure that the extruders " +
+                             "are calibrated before printing. The Experimental Extruder is " +
+                             "an experimental product and is not covered under warranty " +
                              "or MakerCare."
                             )
                     }
@@ -2632,7 +2554,7 @@ ApplicationWindow {
                     id: description_text_hepa_error_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("There seems to be something wrong with the filter. Error Code %1\n" +
+                        qsTr("There seems to be something wrong with the filter. Error Code %1. " +
                              "Visit support.makerbot.com to learn more.").arg(bot.hepaErrorCode)
                     }
                     horizontalAlignment: Text.AlignHCenter

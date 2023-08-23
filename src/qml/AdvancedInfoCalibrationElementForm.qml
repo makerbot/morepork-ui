@@ -19,7 +19,7 @@ Item {
         TextHeadline {
             style: TextHeadline.Base
             id: calibrationLabelProperty
-            text: qsTr("CALIBRATION LABEL")
+            text: "CALIBRATION LABEL"
         }
 
         AdvancedInfoElement {

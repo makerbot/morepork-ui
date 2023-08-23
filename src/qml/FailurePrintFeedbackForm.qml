@@ -11,19 +11,19 @@ Item {
         // the key here corresponds to the key there, so if more options need to be added
         // make sure to add the key in both places.
         id: options
-        ListElement { name: "WARPING FROM BUILDPLATE"
+        ListElement { name: qsTr("WARPING FROM BUILDPLATE")
                       key: "warping_from_buildplate"}
-        ListElement { name: "STRINGINESS"
+        ListElement { name: qsTr("STRINGINESS")
                       key: "stringiness"}
-        ListElement { name: "GAPS IN WALLS"
+        ListElement { name: qsTr("GAPS IN WALLS")
                       key: "gaps_in_walls"}
-        ListElement { name: "BAD LAYER ALIGNMENT"
+        ListElement { name: qsTr("BAD LAYER ALIGNMENT")
                       key: "bad_layer_alignment"}
-        ListElement { name: "SMALL FEATURE DEFECTS"
+        ListElement { name: qsTr("SMALL FEATURE DEFECTS")
                       key: "small_feature_defects"}
-        ListElement { name: "FREQUENT EXTRUDER JAMS"
+        ListElement { name: qsTr("FREQUENT EXTRUDER JAMS")
                       key: "frequent_extruder_jams"}
-        ListElement { name: "OTHER"
+        ListElement { name: qsTr("OTHER")
                       key: "other"}
     }
     Rectangle {
@@ -43,7 +43,7 @@ Item {
         TextBody {
             id: instructionText
             color: "#cbcbcb"
-            text: "Select any noticeable print defects."
+            text: qsTr("Select any noticeable print defects.")
             Layout.alignment: Qt.AlignHCenter
         }
 

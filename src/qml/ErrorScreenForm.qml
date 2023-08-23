@@ -157,7 +157,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PROCESS FAILED.\n\nCLOSE BUILD\nCHAMBER DOOR.")
+                    text: qsTr("PROCESS FAILED.") + "\n\n" + qsTr("CLOSE BUILD CHAMBER DOOR.")
                     visible: true
                 }
                 textBody {
@@ -186,7 +186,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PROCESS FAILED.\n\nCLOSE THE\nTOP LID.")
+                    text: qsTr("PROCESS FAILED.") + "\n\n" + qsTr("CLOSE THE TOP LID.")
                     visible: true
                 }
                 textBody {
@@ -211,9 +211,9 @@ LoggingItem {
                     text: {
                         if(bot.process.stateType == ProcessStateType.Pausing ||
                            bot.process.stateType == ProcessStateType.Paused) {
-                            qsTr("PRINT PAUSED\n\nCLOSE PRINTER DOOR")
+                            qsTr("PRINT PAUSED") + "\n\n" + qsTr("CLOSE PRINTER DOOR")
                         } else if(bot.process.stateType == ProcessStateType.Failed) {
-                            qsTr("PRINT FAILED\n\nCLOSE PRINTER DOOR")
+                            qsTr("PRINT FAILED") + "\n\n" + qsTr("CLOSE PRINTER DOOR")
                         } else {
                             emptyString
                         }
@@ -260,9 +260,9 @@ LoggingItem {
                     text: {
                         if(bot.process.stateType == ProcessStateType.Pausing ||
                            bot.process.stateType == ProcessStateType.Paused) {
-                            qsTr("PRINT PAUSED\n\nCLOSE TOP LID")
+                            qsTr("PRINT PAUSED") + "\n\n" + qsTr("CLOSE TOP LID")
                         } else if(bot.process.stateType == ProcessStateType.Failed) {
-                            qsTr("PRINT FAILED\n\nCLOSE TOP LID")
+                            qsTr("PRINT FAILED") + "\n\n" + qsTr("CLOSE TOP LID")
                         } else {
                             emptyString
                         }
@@ -306,7 +306,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("CALIBRATION FAILED\n\nCLOSE THE TOP LID")
+                    text: qsTr("CALIBRATION FAILED") + "\n\n" + qsTr("CLOSE THE TOP LID")
                     visible: true
                 }
                 textBody {
@@ -339,7 +339,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PRINT PAUSED\n\nEXTRUDER %1 JAM\nDETECTED").arg(
+                    text: qsTr("PRINT PAUSED") + "\n\n" + qsTr("EXTRUDER %1 JAM DETECTED").arg(
                               (bot.process.extruderAJammed ? qsTr("1") : qsTr("2")))
                     visible: true
                 }
@@ -378,8 +378,8 @@ LoggingItem {
 
                 textHeader {
                     text: {
-                        qsTr("PRINT PAUSED<br><br>") +
-                        qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
+                        qsTr("PRINT PAUSED") + "<br><br>" +
+                        qsTr("MATERIAL %1 OUT OF FILAMENT").arg(
                                            (bot.process.filamentBayAOOF ?
                                              qsTr("1") : qsTr("2")))
                     }
@@ -424,8 +424,8 @@ LoggingItem {
 
                 textHeader {
                     text: {
-                        qsTr("PRINT PAUSED<br><br>") +
-                        qsTr("MATERIAL %1<br>OUT OF FILAMENT").arg(
+                        qsTr("PRINT PAUSED") + "<br><br>" +
+                        qsTr("MATERIAL %1 OUT OF FILAMENT").arg(
                                            (bot.process.extruderAOOF ?
                                              qsTr("1") : qsTr("2")))
                     }
@@ -467,7 +467,7 @@ LoggingItem {
 
                 textHeader {
                     text: {
-                        qsTr("PRINT PAUSED\n\nEXTRUDER %1\nDISCONNECTED").arg(
+                        qsTr("PRINT PAUSED") + "\n\n" + qsTr("EXTRUDER %1 DISCONNECTED").arg(
                             bot.process.errorSource + 1);
                     }
                     visible: true
@@ -499,7 +499,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PROCESS FAILED\n\nERROR %1").arg(lastReportedErrorCode)
+                    text: qsTr("PROCESS FAILED") + "\n\n" + qsTr("ERROR %1").arg(lastReportedErrorCode)
                     visible: true
                 }
                 textBody {
@@ -526,7 +526,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("CALIBRATION\nERROR")
+                    text: qsTr("CALIBRATION ERROR")
                     visible: true
                 }
                 textBody {
@@ -554,8 +554,9 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("There seems to be a problem with the heaters. If this happens " +
-                               "again, please contact MakerBot support. Error %1").arg(lastReportedErrorCode)
+                    text: qsTr("There seems to be a problem with the heaters. Please make sure that " +
+                               "the top lid is securely seated. If this happens again, please " +
+                               "contact MakerBot support. Error %1").arg(lastReportedErrorCode)
                     visible: true
                 }
                 buttonPrimary {
@@ -573,7 +574,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("HEATER\nTEMPERATURE\nERROR")
+                    text: qsTr("HEATER TEMPERATURE ERROR")
                     visible: true
                 }
                 textBody {
@@ -596,7 +597,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PROCESS FAILED\n\nCARRIAGE COMMUNICATION ERROR")
+                    text: qsTr("PROCESS FAILED") + "\n\n" + qsTr("CARRIAGE COMMUNICATION ERROR")
                     visible: true
                 }
                 textBody {
@@ -623,7 +624,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PRINT FAILED\n\nFAN ERROR")
+                    text: qsTr("PRINT FAILED") + "\n\n" + qsTr("FAN ERROR")
                     visible: true
                 }
                 textBody {
@@ -646,7 +647,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("INCOMPATIBLE\nPRINT FILE")
+                    text: qsTr("INCOMPATIBLE PRINT FILE")
                     visible: true
                 }
                 textBody {
@@ -673,12 +674,13 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("This .Makerbot was prepared for a different set of extruders.\n\n" +
-                               "Extruders Attached -\n%1\nExtruders Required -\n%2\n\nPlease " +
-                               "export it again for the attached extruders. (Error %3)").
-                                    arg(formatExtruderNames(bot.process.currentTools)).
-                                    arg(formatExtruderNames(bot.process.fileTools)).
-                                    arg(lastReportedErrorCode)
+                    text: qsTr("This .Makerbot was prepared for a different set of extruders.") + "\n\n" +
+                          qsTr("Extruders Attached -") +
+                          "\n%1\n".arg(formatExtruderNames(bot.process.currentTools)) +
+                          qsTr("Extruders Required -") +
+                          "\n%1\n\n".arg(formatExtruderNames(bot.process.fileTools)) +
+                          qsTr("Please export it again for the attached extruders. (Error %1)")
+                              .arg(lastReportedErrorCode)
                     visible: true
                 }
                 buttonPrimary {
@@ -695,7 +697,7 @@ LoggingItem {
                 target: contentRightSide
 
                 textHeader {
-                    text: qsTr("PRINT FAILED\n\nHOMING ERROR")
+                    text: qsTr("PRINT FAILED") + "\n\n" + qsTr("HOMING ERROR")
                     visible: true
                 }
                 textBody {

@@ -745,8 +745,8 @@ Item {
                         target: description
                         visible: true
                         text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
-                                    "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                                    "CODE: %1").arg(copyingLogsPopup.errorcode)
+                                   "support through %1 to identify your issue.").arg("<b>makerbot.com</b>") + "<br><br>" +
+                              qsTr("CODE: %1").arg(copyingLogsPopup.errorcode)
                     }
                 }
             ]
@@ -979,8 +979,8 @@ Item {
                         target: timelapse_description
                         visible: true
                         text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
-                                    "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                                    "CODE: %1").arg(copyingTimelapseImagesPopup.errorcode)
+                                   "support through %1 to identify your issue.").arg("<b>makerbot.com</b>") + "<br><br>" +
+                              qsTr("CODE: %1").arg(copyingTimelapseImagesPopup.errorcode)
                     }
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images
@@ -1000,8 +1000,8 @@ Item {
         visible: false
         showTwoButtons: true
         defaultButton: LoggingPopup.Right
-        left_button_text: "BACK"
-        right_button_text: "CONFIRM"
+        left_button_text: qsTr("BACK")
+        right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
             right_button.enabled = false
             left_button.enabled = false
