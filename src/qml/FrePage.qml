@@ -127,8 +127,6 @@ FrePageForm {
                 // For all screens not listed above, the default behavior
                 // is to go to the next step
                 fre.gotoNextStep(currentFreStep)
-
-
             }
         }
 
