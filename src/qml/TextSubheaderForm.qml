@@ -78,5 +78,16 @@ Text {
             break;
         }
     }
-    color: Qt.rgba(255, 255, 255, 0.9)
+    color: {
+        switch(style) {
+        case TextSubheader.TopBar:
+            "#979797"
+            break;
+        case TextSubheader.Base:
+        case TextSubheader.Bold:
+        default:
+            Qt.rgba(255, 255, 255, 0.9)
+            break;
+        }
+    }
 }

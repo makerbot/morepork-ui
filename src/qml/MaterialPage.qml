@@ -410,10 +410,6 @@ MaterialPageForm {
         }
     }
 
-    materialPageDrawer.buttonResume.onClicked: {
-        materialPageDrawer.close()
-    }
-
     attach_extruder.buttonPrimary.onClicked: {
         switch(itemAttachExtruder.state) {
         case "base state":

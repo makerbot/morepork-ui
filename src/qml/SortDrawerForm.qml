@@ -1,135 +1,55 @@
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Controls 2.3
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.9
 
-Drawer {
+CustomDrawer {
     objectName: "sortDrawer"
-    edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
-    width: parent.width
-    height: column.height
-    dim: false
-    interactive: false
-    background:
-        Rectangle {
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.9
-            smooth: false
-            gradient: Gradient {
-                      GradientStop { position: 0.0; color: "#00000000" }
-                      GradientStop { position: 0.08; color: "#00000000" }
-                      GradientStop { position: 0.09; color: "#000000" }
-                      GradientStop { position: 0.78; color: "#000000" }
-                      GradientStop { position: 0.79; color: "#00000000" }
-                  }
-            }
-
-    onPositionChanged: {
-        if(position > 0.9) {
-            topBar.backButton.visible = false
-            topBar.imageDrawerArrow.rotation = 90
-            topBar.textNameStatusTitle.color = "#ffffff"
-        }
-        else {
-            if(mainSwipeView.currentIndex != 0) {
-                topBar.backButton.visible = true
-            }
-            topBar.imageDrawerArrow.rotation = -90
-            topBar.textNameStatusTitle.color = "#a0a0a0"
-        }
-    }
-
+    property string topBarTitle: qsTr("Sort By")
     property alias buttonSortAZ: buttonSortAZ
     property alias buttonSortDateAdded: buttonSortDateAdded
     property alias buttonSortPrintTime: buttonSortPrintTime
-    property alias buttonClose: buttonClose
 
-    Flickable {
-        id: flickable
+    Column {
+        id: column
+        width: parent.width
+        height: children.height
         smooth: false
-        anchors.fill: parent
+        spacing: 0
         rotation: rootItem.rotation
 
-        Column {
-            id: column
+        Item {
+            id: empty
+            height: topBar.height
             smooth: false
-            spacing: 1
-            anchors.top: parent.top
             anchors.right: parent.right
+            anchors.rightMargin: 0
             anchors.left: parent.left
+            anchors.leftMargin: 0
+        }
 
-            Item {
-                id: empty
-                height: 40
-                smooth: false
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-            }
+        DrawerButton {
+            id: buttonSortAZ
+            buttonText: qsTr("A-Z")
+            buttonImage: ""
+        }
 
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
+        DrawerButton {
+            id: buttonSortDateAdded
+            buttonText: qsTr("DATE ADDED")
+            buttonImage: "qrc:/img/drawer_current_selection.png"
+        }
 
-            MoreporkButton {
-                id: buttonSortAZ
-                buttonText.text: qsTr("A-Z")
-                buttonImage.source: ""
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-            }
+        DrawerButton {
+            id: buttonSortPrintTime
+            buttonText: qsTr("PRINT TIME")
+            buttonImage: ""
+        }
 
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            MoreporkButton {
-                id: buttonSortDateAdded
-                buttonText.text: qsTr("DATE ADDED")
-                buttonImage.source: "qrc:/img/check_circle_small.png"
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-            }
-
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            MoreporkButton {
-                id: buttonSortPrintTime
-                buttonText.text: qsTr("PRINT TIME")
-                buttonImage.source: ""
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-            }
-
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            MoreporkButton {
-                id: buttonClose
-                buttonText.text: qsTr("CLOSE")
-                buttonImage.source: ""
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-            }
-
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            Rectangle {
-                id: emptyItem
-                width: parent.width
-                height: 105
-                color: "#000000"
-                opacity: position/2
-            }
+        Rectangle {
+            id: emptyItem
+            width: parent.width
+            height: 120
+            color: "#000000"
         }
     }
 }

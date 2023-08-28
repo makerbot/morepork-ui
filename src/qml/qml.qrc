@@ -2,7 +2,6 @@
     <qresource prefix="/qml">
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>MoreporkButton.qml</file>
         <file>TopBar.qml</file>
         <file>TopBarForm.qml</file>
         <file>MainMenu.qml</file>
@@ -26,8 +25,6 @@
         <file>PrintIconForm.qml</file>
         <file>NotificationIcons.qml</file>
         <file>NotificationIconsForm.qml</file>
-        <file>FilamentIcon.qml</file>
-        <file>FilamentIconForm.qml</file>
         <file>PrintStatusView.qml</file>
         <file>PrintStatusViewForm.qml</file>
         <file>FilamentBay.qml</file>
@@ -266,5 +263,7 @@
         <file>MaterialCaseSetup.qml</file>
         <file>SetupProceduresPageForm.qml</file>
         <file>SetupProceduresPage.qml</file>
+        <file>CustomDrawer.qml</file>
+        <file>DrawerButton.qml</file>
     </qresource>
 </RCC>

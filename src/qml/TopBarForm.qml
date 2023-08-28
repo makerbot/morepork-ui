@@ -11,10 +11,8 @@ Item {
     height: 72
     smooth: false
     property alias textDateTime: textDateTime
-    property alias imageDrawerArrow: imageDrawerArrow
     property alias backButton: backButton
     property alias notificationIcons: notificationIcons
-    property alias textNameStatusTitle: textNameStatusTitle
     property string timeSeconds: "00"
     property string oldSeparatorString: " "
     signal backClicked()
@@ -23,6 +21,26 @@ Item {
     Rectangle {
         anchors.fill: parent
         color: "#000000"
+    }
+
+    LinearGradient {
+        id: fade
+        height: 30
+        width: parent.width
+        smooth: false
+        z: 1
+        anchors.top: parent.bottom
+        gradient: Gradient {
+            GradientStop {
+                position: 0
+                color: "#FF000000"
+            }
+            GradientStop {
+                position: 1.0
+                color: "#00000000"
+            }
+        }
+        cached: true
     }
 
     property string printerStatus: {
@@ -61,7 +79,7 @@ Item {
             default:
                 qsTr("BUSY")
                 break;
-            }
+        }
     }
 
     Timer {
@@ -79,34 +97,6 @@ Item {
                 textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
             }
         }
-    }
-
-    NotificationIcons {
-        id: notificationIcons
-        z: 2
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.verticalCenter: parent.verticalCenter
-    }
-
-    LinearGradient {
-        id: fade
-        height: 30
-        width: parent.width
-        smooth: false
-        z: 1
-        anchors.top: parent.bottom
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#FF000000"
-            }
-            GradientStop {
-                position: 1.0
-                color: "#00000000"
-            }
-        }
-        cached: true
     }
 
     Item {
@@ -179,10 +169,9 @@ Item {
         id: drawerDownSwipeHandler
         z: 4
         height: parent.height
-        anchors.top: parent.top
-        anchors.left: backButton.right
-        anchors.right: notificationIcons.left
-        anchors.bottom: parent.bottom
+        width: 600
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
         flickableDirection: Flickable.VerticalFlick
         onFlickStarted: {
             if (verticalVelocity < 0) drawerDownClicked()
@@ -205,7 +194,7 @@ Item {
                 spacing: 2
 
                 TextSubheader {
-                    id: textNameStatusTitle
+                    id: nameStatusTitle
                     style: TextSubheader.TopBar
                     text: ("%1 - %2").arg(bot.name).arg(printerStatus)
                     horizontalAlignment: Text.AlignHCenter
@@ -217,33 +206,33 @@ Item {
                 TextHeadline {
                     id: pageTitle
                     style: TextHeadline.TopBar
-                    text: currentItem.topBarTitle
+                    text: {
+                        if(activeDrawer && activeDrawer.opened) {
+                            activeDrawer.topBarTitle
+                        } else {
+                            currentItem.topBarTitle
+                        }
+                    }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
 
-            Image {
-                id: imageDrawerArrow
-                height: 25
-                smooth: false
-                anchors.left: textNameStatusTitle.right
-                anchors.leftMargin: 10
-                anchors.verticalCenter: textNameStatusTitle.verticalCenter
-                rotation: -90
-                z: 1
-                source: "qrc:/img/arrow_19pix.png"
-                fillMode: Image.PreserveAspectFit
-            }
-
             LoggingMouseArea {
                 logText: "[^TopDrawerDown^]"
-                id: mouseAreaTopDrawerDown
                 smooth: false
                 anchors.fill: parent
                 z: 2
                 onClicked: drawerDownClicked()
             }
         }
+    }
+
+    NotificationIcons {
+        id: notificationIcons
+        z: 2
+        anchors.right: parent.right
+        anchors.rightMargin: 22
+        anchors.verticalCenter: parent.verticalCenter
     }
 }

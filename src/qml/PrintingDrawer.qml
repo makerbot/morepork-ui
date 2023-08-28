@@ -1,154 +1,85 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.3
+import QtQuick 2.12
+import QtQuick.Controls 2.3
+import QtQuick.Layouts 1.9
 import ProcessStateTypeEnum 1.0
 
-Drawer {
+CustomDrawer {
     objectName: "printingDrawer"
-    edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
-    width: parent.width
-    height: column.height
-    dim: false
-    interactive: false
-    background:
-        Rectangle {
-            rotation: rootItem.rotation == 180 ? 180 : 0
-            opacity: 0.9
-            smooth: false
-            gradient: Gradient {
-                      GradientStop { position: 0.0; color: "#00000000" }
-                      GradientStop { position: 0.08; color: "#00000000" }
-                      GradientStop { position: 0.09; color: "#000000" }
-                      GradientStop { position: 0.79; color: "#000000" }
-                      GradientStop { position: 0.80; color: "#00000000" }
-                  }
-            }
-
-    onPositionChanged: {
-        if(position > 0.9) {
-            topBar.backButton.visible = false
-            topBar.imageDrawerArrow.rotation = 90
-            topBar.textNameStatusTitle.color = "#ffffff"
-        }
-        else {
-            if(mainSwipeView.currentIndex != 0) {
-                topBar.backButton.visible = true
-            }
-            topBar.imageDrawerArrow.rotation = -90
-            topBar.textNameStatusTitle.color = "#a0a0a0"
-        }
-    }
-
+    property string topBarTitle: qsTr("Manage Print")
     property alias buttonCancelPrint: buttonCancelPrint
     property alias buttonPausePrint: buttonPausePrint
     property alias buttonChangeFilament: buttonChangeFilament
-    property alias buttonClose: buttonClose
 
-    Flickable {
-        id: flickable
+    Column {
+        id: column
+        width: parent.width
+        height: children.height
         smooth: false
-        anchors.fill: parent
+        spacing: 0
         rotation: rootItem.rotation
 
-        Column {
-            id: column
+        Item {
+            id: empty
+            height: 70
             smooth: false
-            spacing: 1
-            anchors.top: parent.top
             anchors.right: parent.right
+            anchors.rightMargin: 0
             anchors.left: parent.left
+            anchors.leftMargin: 0
+        }
 
-            Item {
-                id: empty
-                height: 70
-                smooth: false
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-            }
-
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            MoreporkButton {
-                id: buttonPausePrint
-                buttonText.text: {
-                    switch(bot.process.stateType) {
-                    case ProcessStateType.Printing:
-                        qsTr("PAUSE PRINT")
-                        break;
-                    case ProcessStateType.Paused:
-                        qsTr("RESUME PRINT")
-                        break;
-                    default:
-                        qsTr("PAUSE PRINT")
-                        break;
-                    }
+        DrawerButton {
+            id: buttonPausePrint
+            buttonText: {
+                switch(bot.process.stateType) {
+                case ProcessStateType.Printing:
+                    qsTr("PAUSE PRINT")
+                    break;
+                case ProcessStateType.Paused:
+                    qsTr("RESUME PRINT")
+                    break;
+                default:
+                    qsTr("PAUSE PRINT")
+                    break;
                 }
-                buttonImage.source: "qrc:/img/pause.png"
-                disableButton:
-                    !(bot.process.stateType == ProcessStateType.Paused ||
-                     bot.process.stateType == ProcessStateType.Printing)
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
             }
+            buttonImage: {
+                switch(bot.process.stateType) {
+                case ProcessStateType.Printing:
+                    "qrc:/img/drawer_pause.png"
+                    break;
+                case ProcessStateType.Paused:
+                    "qrc:/img/drawer_resume.png"
+                    break;
+                default:
+                    "qrc:/img/drwer_pause.png"
+                    break;
+                }
+            }
+            enabled: (bot.process.stateType == ProcessStateType.Paused ||
+                      bot.process.stateType == ProcessStateType.Printing)
+        }
 
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
+        DrawerButton {
+            id: buttonCancelPrint
+            buttonText: qsTr("CANCEL PRINT")
+            buttonImage: "qrc:/img/drawer_cancel.png"
+        }
 
-            MoreporkButton {
-                id: buttonCancelPrint
-                buttonText.text: qsTr("CANCEL PRINT")
-                buttonImage.source: "qrc:/img/cancel.png"
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-            }
+        DrawerButton {
+            id: buttonChangeFilament
+            buttonText: qsTr("CHANGE MATERIAL")
+            buttonImage: "qrc:/img/drawer_change_material.png"
+            enabled: (bot.process.stateType == ProcessStateType.Printing ||
+                      bot.process.stateType == ProcessStateType.Paused) &&
+                      !inFreStep
+        }
 
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            MoreporkButton {
-                id: buttonChangeFilament
-                buttonText.text: qsTr("CHANGE MATERIAL")
-                buttonImage.source: "qrc:/img/change_filament.png"
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-                disableButton: !(bot.process.stateType == ProcessStateType.Printing ||
-                                 bot.process.stateType == ProcessStateType.Paused) ||
-                               inFreStep
-            }
-
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            MoreporkButton {
-                id: buttonClose
-                buttonText.text: qsTr("CLOSE")
-                buttonImage.source: "qrc:/img/close.png"
-                buttonColor: "#000000"
-                buttonPressColor: "#0a0a0a"
-                height: 80
-            }
-
-            Rectangle {
-                width: parent.width; height: 1; color: "#4d4d4d"
-            }
-
-            Rectangle {
-                id: emptyItem
-                width: parent.width
-                height: 100
-                color: "#000000"
-                opacity: position/2
-            }
+        Rectangle {
+            id: emptyItem
+            width: parent.width
+            height: 120
+            color: "#000000"
         }
     }
 }

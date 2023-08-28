@@ -3,89 +3,96 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import FreStepEnum 1.0
 
-Item {
-    width: 125
-    height: 40
-    smooth: false
+Row {
+    height: 72
+    spacing: 20
 
-    property alias hepa_filter_image: hepa_filter_image
-
-    Item {
-        id: hepaFilter_item
-        width: 26
-        height: 26
-        anchors.right: filamentIconItem.left
-        anchors.rightMargin: 7
-        anchors.verticalCenter: parent.verticalCenter
+    AnimatedImage {
+        id: hepaFilterStatus
         smooth: false
+        height: sourceSize.height
+        width: sourceSize.width
+        visible: bot.hepaFilterConnected
+        source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/white_hepa_no_blink.gif"
+        cache: false
+        anchors.verticalCenter: parent.verticalCenter
+    }
 
-        AnimatedImage {
-            id: hepa_filter_image
-            smooth: false
-            anchors.fill: parent
-            opacity: 1
-            visible: bot.hepaFilterConnected
-            source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/white_hepa_no_blink.gif"
-            cache: false
+    Image {
+        id: networkConnectionStatus
+        height: sourceSize.height
+        width: sourceSize.width
+        anchors.verticalCenter: parent.verticalCenter
+        source: {
+            switch(bot.net.interface) {
+            case "wifi":
+                "qrc:/img/wifi_connected.png"
+                break;
+            case "ethernet":
+                "qrc:/img/ethernet_connected.png"
+                break;
+            default:
+                "qrc:/img/no_ethernet.png"
+                break;
+            }
         }
     }
 
     Item {
-        id: filamentIconItem
-        width: 35
-        height: 26
-        anchors.right: connectionType_item.left
-        anchors.rightMargin: 7
+        id: notificationsAndDrawerStatusItem
+        width: 32
+        height: topBar.height
         anchors.verticalCenter: parent.verticalCenter
-        smooth: false
-        opacity: isFreComplete || currentFreStep >= FreStep.AttachExtruders
 
-        FilamentIcon {
-            id: filament1_icon
-            z: 1
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: -8
-            filamentBayID: 1
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        FilamentIcon {
-            id: filament2_icon
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.horizontalCenterOffset: 8
-            filamentBayID: 2
-            anchors.verticalCenter: parent.verticalCenter
-        }
-    }
-
-    Item {
-        id: connectionType_item
-        width: 26
-        height: 26
-        anchors.right: parent.right
-        anchors.rightMargin: 10
-        anchors.verticalCenter: parent.verticalCenter
-        smooth: false
-
-        Image {
-            id: connection_type_image
-            antialiasing: true
-            smooth: true
-            anchors.fill: parent
-            visible: true
-            source: {
-                switch(bot.net.interface) {
-                case "wifi":
-                    "qrc:/img/wifi_connected.png"
+        Rectangle {
+            width: 28
+            height: 28
+            radius: 14
+            border.width: 2
+            border.color: "#ffffff"
+            color: {
+                switch(drawerState) {
+                case MoreporkUI.DrawerState.NotAvailable:
+                    "#000000"
                     break;
-                case "ethernet":
-                    "qrc:/img/ethernet_connected.png"
+                case MoreporkUI.DrawerState.Closed:
+                case MoreporkUI.DrawerState.Open:
+                    "#ffffff"
                     break;
                 default:
-                    "qrc:/img/no_ethernet.png"
+                    "#00000000"
                     break;
                 }
             }
+            anchors.verticalCenter: parent.verticalCenter
+
+            Image {
+                smooth: false
+                z: 1
+                source: {
+                    switch(drawerState) {
+                    case MoreporkUI.DrawerState.Closed:
+                        "qrc:/img/drawer_down.png"
+                        break;
+                    case MoreporkUI.DrawerState.Open:
+                        "qrc:/img/drawer_up.png"
+                        break;
+                    case MoreporkUI.DrawerState.NotAvailable:
+                    default:
+                        break;
+                    }
+                }
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+        }
+
+        LoggingMouseArea {
+            logText: "[^TopDrawerDown^]"
+            smooth: false
+            anchors.fill: parent
+            z: 2
+            onClicked: drawerDownClicked()
         }
     }
 }
