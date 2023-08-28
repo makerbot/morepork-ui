@@ -122,6 +122,50 @@ LoggingItem {
         }
     }
 
+    ColumnLayout {
+        id: buttonContainerManualCalibration
+        anchors.top: parent.top
+        anchors.topMargin: 2
+        spacing: 10
+
+        ButtonRectanglePrimary {
+            text: qsTr("NEXT")
+            logKey: text
+            onClicked: {
+                // GO BACK TO MANUAL CALIBRATION
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
+            }
+
+        }
+
+        ButtonRectangleSecondary {
+            text: qsTr("PRINT FAILED")
+            logKey: text
+            onClicked: {
+               // failureFeedbackSelected = true
+               // defects = JSON.parse(JSON.stringify(print_defects_template))
+                // OPEN ISSUES POPUP
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                settingsPage.extruderSettingsPage.manualZCalibration.state = "cal_issue"
+            }
+        }
+
+        /*ButtonRectangleSecondary {
+            text: qsTr("OTHER")
+            logKey: text
+            onClicked: {
+                defects = JSON.parse(JSON.stringify(print_defects_template))
+                updateFeedbackDict("non_failure_other", true)
+                submitFeedbackAndAcknowledge(false)
+            }
+        }*/
+    }
+
     RoundedButton {
         id: done_button
         buttonHeight: 50
@@ -145,7 +189,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: titleText
-                visible: true
+                visible: !isInManualCalibration
                 text: qsTr("DID THE PRINT SUCCEED?")
             }
 
@@ -153,7 +197,7 @@ LoggingItem {
                 target: buttonContainerPrintCompleted
                 anchors.top: titleText.bottom
                 anchors.topMargin: 20
-                visible: true
+                visible: !isInManualCalibration
             }
 
             PropertyChanges {
@@ -162,11 +206,16 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: buttonContainerManualCalibration
+                visible: isInManualCalibration
+            }
+
+            PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("SKIP")
                 anchors.bottomMargin: 0
                 anchors.rightMargin: 170
-                visible: true
+                visible: !isInManualCalibration
             }
         },
         State {
@@ -195,12 +244,17 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: buttonContainerManualCalibration
+                visible: isInManualCalibration
+            }
+
+            PropertyChanges {
                 target: done_button
                 button_text.text: qsTr("DONE")
                 border.width: 2
                 anchors.rightMargin: 295
                 anchors.bottomMargin: 115
-                visible: true
+                visible: !isInManualCalibration
             }
         },
         State {
@@ -209,7 +263,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: titleText
-                visible: true
+                visible: !isInManualCalibration
                 text: qsTr("WHY WAS THIS PRINT CANCELLED?")
                 font.pixelSize: 16
             }
@@ -221,7 +275,12 @@ LoggingItem {
 
             PropertyChanges {
                 target: buttonContainerPrintCancelled
-                visible: true
+                visible: !isInManualCalibration
+            }
+
+            PropertyChanges {
+                target: buttonContainerManualCalibration
+                visible: isInManualCalibration
             }
 
             PropertyChanges {
@@ -229,7 +288,7 @@ LoggingItem {
                 button_text.text: qsTr("SKIP")
                 anchors.rightMargin: 170
                 anchors.bottomMargin: -75
-                visible: true
+                visible: !isInManualCalibration
             }
         }
     ]

@@ -37,6 +37,7 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+    property bool isInManualCalibration: false
 
 
     property bool isNetworkConnectionAvailable: (bot.net.interface == "ethernet" ||

@@ -251,6 +251,21 @@ void MoreporkStorage::getTestPrint(const QString test_print_dir,
     }
 }
 
+void MoreporkStorage::getCalibrationPrint(const QString test_print_dir,
+                                          const QString test_print_name) {
+    const QString test_print = CAL_PRINT_FILE_PREFIX + test_print_name + ".makerbot";
+    const QString path = TEST_PRINT_PATH + test_print_dir + test_print;
+    const QFileInfo kFileInfo = QFileInfo(path);
+
+    PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
+
+    if (current_thing != nullptr) {
+        currentThingSet(current_thing);
+    } else {
+        currentThingReset();
+    }
+}
+
 PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo) {
 #ifdef HAVE_LIBTINYTHING
     MakerbotFileMetaReader file_meta_reader(kFileInfo);

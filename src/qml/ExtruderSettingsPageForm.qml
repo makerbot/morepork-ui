@@ -221,8 +221,9 @@ Item {
             property string topBarTitle: qsTr("Manual Z-Calibration")
             property bool hasAltBack: true
             property bool backIsCancel: (manualZCalibration.state == "remove_support" ||
-                                        manualZCalibration.state == "updating_information" ||
-                                        manualZCalibration.state == "success")
+                                         manualZCalibration.state == "updating_information" ||
+                                         manualZCalibration.state == "success" ||
+                                         manualZCalibration.state == "cal_issue")
 
             smooth: false
             visible: false

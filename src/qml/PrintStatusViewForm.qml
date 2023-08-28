@@ -313,9 +313,9 @@ LoggingItem {
 
                 AcknowledgePrintFinished {
                     id: acknowledgePrintFinished
-                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                    visible: (bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed ||
-                             bot.process.stateType == ProcessStateType.Cancelled
+                             bot.process.stateType == ProcessStateType.Cancelled)
                 }
 
                 // TODO ERICA Need to add a button for Manual Z-cal only and hide acknowledge

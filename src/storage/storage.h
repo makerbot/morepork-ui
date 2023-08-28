@@ -14,6 +14,7 @@
 
 #define DEFAULT_FW_FILE_NAME QString("firmware.zip")
 #define TEST_PRINT_FILE_PREFIX QString("test_print_")
+#define CAL_PRINT_FILE_PREFIX QString("cal_print_")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
@@ -348,6 +349,8 @@ class MoreporkStorage : public QObject {
 
     Q_INVOKABLE void getTestPrint(const QString test_print_dir,
                                   const QString test_print_name);
+    Q_INVOKABLE void getCalibrationPrint(const QString test_print_dir,
+                                         const QString test_print_name);
 
   private:
     QFileSystemWatcher *storage_watcher_;

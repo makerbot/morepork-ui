@@ -7,6 +7,7 @@ Item {
     anchors.fill: parent
 
     property alias z_cal_button: contentRightSide.buttonPrimary
+    property alias retry_button: contentRightSide.buttonSecondary1
     property alias manual_calibration_issue_popup: manual_calibration_issue_popup
     property alias cancelManualZCalPopup: cancelManualZCalPopup
     property alias calValueItem1: calValueItem1
@@ -81,7 +82,6 @@ Item {
             text: qsTr("Tools Required: Calipers, Sharp Tool")
             visible: true
         }
-
         buttonPrimary {
             text: qsTr("START")
             enabled: true
@@ -92,6 +92,10 @@ Item {
                 helpPopup.state = "method_calibration"
                 helpPopup.open()
             }
+        }
+        buttonSecondary1 {
+            text: qsTr("RETRY")
+            visible: false
         }
         visible: true
     }
@@ -147,6 +151,11 @@ Item {
                 visible: true
                 style: ButtonRectangleBaseForm.ButtonWithHelp
             }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
         },
 
         State {
@@ -196,6 +205,11 @@ Item {
                 text: qsTr("NEXT")
                 visible: true
                 style: ButtonRectangleBaseForm.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
         },
 
@@ -248,6 +262,11 @@ Item {
                 visible: true
                 style: ButtonRectangleBaseForm.ButtonWithHelp
             }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
         },
         State {
             name: "z_calibration"
@@ -290,6 +309,11 @@ Item {
                 text: qsTr("NEXT")
                 visible: true
                 style: ButtonRectangleBaseForm.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
         },
         State {
@@ -341,6 +365,65 @@ Item {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+        },
+        State {
+            name: "adjustments_complete"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: ("qrc:/img/manual_z_cal_start.png")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("COURSE ADJUSTMENTS COMPLETE")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("The printer has made adjustments based on your inputs. The printer will re-run this procedure to " +
+                           "make additional improvements and do a final check.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+                visible: true
+                style: ButtonRectangleBaseForm.Button
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
         },
@@ -397,7 +480,74 @@ Item {
                 visible: true
                 style: ButtonRectangleBaseForm.Button
             }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+        },
+        State {
+            name: "cal_issue"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                icon_image: LoadingIcon.Failure
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("PROCEDURE FAILED")
+                style: TextHeadline.Base
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("If you are experiencing issues with the calibration print we recommend "+
+                           "running the clean + auto-calibrate procedure.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("CLEAN + AUTO-CALIBRATE")
+                visible: true
+                style: ButtonRectangleBaseForm.Button
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                text: qsTr("RETRY")
+                visible: true
+            }
         }
+
     ]
 
     CustomPopup {
