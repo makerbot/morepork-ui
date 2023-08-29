@@ -42,7 +42,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: caseSetupContentRightSide.textBody
-                text: qsTr("The material case is contained in Box 1.\n\nThis package contains the material case and guide tubes.\n\nLift on the rear of the latch to release the lid and access the guide tubes.")
+                text: qsTr("The material case is contained in Box 1.") + "\n\n" +
+                      qsTr("This package contains the material case and guide tubes.") + "\n\n" +
+                      qsTr("Lift on the rear of the latch to release the lid and access the guide tubes.")
                 visible: true
             }
 
@@ -62,7 +64,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: caseSetupContentRightSide.textBody
-                text: qsTr("Set up the Material Case 30-100mm from the right side of the printer.\n\nPositioning as shown is important to material routing. Failure to follow this guidance may result in print issues.\n\nClick the help icon for additional info.")
+                text: qsTr("Set up the Material Case 30-100mm from the right side of the printer.") + "\n\n" +
+                      qsTr("Positioning as shown is important to material routing. Failure to follow this guidance may result in print issues.") + "\n\n" +
+                      qsTr("Click the help icon for additional info.")
                 visible: true
             }
 
@@ -83,7 +87,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: caseSetupContentRightSide.textBody
-                text: qsTr("Connect the guide tube for the model material by inserting the tube into the Port 1 gasket.\n\nEnsure the tube is completely in to prevent issues during material loading.")
+                text: qsTr("Connect the guide tube for the model material by inserting the tube into the Port 1 gasket.") + "\n\n" +
+                      qsTr("Ensure the tube is completely in to prevent issues during material loading.")
                 visible: true
             }
 
@@ -104,7 +109,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: caseSetupContentRightSide.textBody
-                text: qsTr("This guide tube will connect to Port 1 on the printer side.\n\nWhen viewing from the rear, Port 1 is on the right side.")
+                text: qsTr("This guide tube will connect to Port 1 on the printer side.") + "\n\n" +
+                      qsTr("When viewing from the rear, Port 1 is on the right side.")
                 visible: true
             }
 
@@ -125,7 +131,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: caseSetupContentRightSide.textBody
-                text: qsTr("Follow the same procedure to connect the tube to Port 2 on the material case and printer.\n\nWhen viewing from rear, Port 2 is on the left side.")
+                text: qsTr("Follow the same procedure to connect the tube to Port 2 on the material case and printer.") + "\n\n" +
+                      qsTr("When viewing from rear, Port 2 is on the left side.")
                 visible: true
             }
 

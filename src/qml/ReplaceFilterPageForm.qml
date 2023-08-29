@@ -54,12 +54,14 @@ Item {
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
+                wrapMode: Text.WordWrap
+                width: 320
             }
 
             Text {
                 id: instruction_text
                 color: "#ffffff"
-                text: qsTr("This procedure will allow you to\nreplace your filter.")
+                text: qsTr("This procedure will allow you to replace your filter.")
                 anchors.top: main_text.bottom
                 anchors.topMargin: 20
                 anchors.left: step_image.right
@@ -70,6 +72,8 @@ Item {
                 lineHeight: 1.2
                 smooth: false
                 antialiasing: false
+                wrapMode: Text.WordWrap
+                width: 320
             }
 
             RoundedButton {
@@ -119,7 +123,7 @@ Item {
                 }
                 PropertyChanges {
                     target: instruction_text
-                    text: qsTr("Disconnect all cables from the printer\nand turn the power switch off.")
+                    text: qsTr("Disconnect all cables from the printer and turn the power switch off.")
                 }
                 PropertyChanges {
                     target: replace_filter_next_button
@@ -134,11 +138,11 @@ Item {
                 }
                 PropertyChanges {
                     target: main_text
-                    text: qsTr("REMOVE ELECTRONIC\nHOUSING")
+                    text: qsTr("REMOVE ELECTRONIC HOUSING")
                 }
                 PropertyChanges {
                     target: instruction_text
-                    text: qsTr("Remove the electronics housing and\nset it aside to expose the filter.")
+                    text: qsTr("Remove the electronics housing and set it aside to expose the filter.")
                 }
                 PropertyChanges {
                     target: replace_filter_next_button
@@ -153,11 +157,11 @@ Item {
                 }
                 PropertyChanges {
                     target: main_text
-                    text: qsTr("REPLACE HEPA +\nCARBON FILTER")
+                    text: qsTr("REPLACE HEPA + CARBON FILTER")
                 }
                 PropertyChanges {
                     target: instruction_text
-                    text: qsTr("Remove both filters and replace with\nthe new set of filters.")
+                    text: qsTr("Remove both filters and replace with the new set of filters.")
                 }
                 PropertyChanges {
                     target: replace_filter_next_button
@@ -172,11 +176,11 @@ Item {
                 }
                 PropertyChanges {
                     target: main_text
-                    text: qsTr("INSTALL ELECTRONIC\nHOUSING")
+                    text: qsTr("INSTALL ELECTRONIC HOUSING")
                 }
                 PropertyChanges {
                     target: instruction_text
-                    text: qsTr("Install the electronic housing, power unit\nback on, and plug in the USB to complete\nprocedure.")
+                    text: qsTr("Install the electronic housing, power unit back on, and plug in the USB to complete procedure.")
                 }
                 PropertyChanges {
                     target: replace_filter_next_button

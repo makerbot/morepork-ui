@@ -89,7 +89,7 @@ LoggingItem {
         }
         textBody1 {
             text: {
-                qsTr("Tools Required: %1mm Hex Key<br>(included)").arg(
+                qsTr("Tools Required: %1mm Hex Key (included)").arg(
                       bot.machineType == MachineType.Magma ? "3" : "2.5")
             }
             visible: true
@@ -287,8 +287,10 @@ LoggingItem {
                 target: contentRightSide.textBody
                 visible: true
                 text: bot.machineType == MachineType.Magma ?
-                      qsTr("3mm Hex Key (included in Box 2)\n\nConfirm you have the correct key to prevent damage to screws.") :
-                      qsTr("2.5mm Hex Key (included)\n\nConfirm you have the correct key to prevent damage to screws.")
+                      qsTr("3mm Hex Key (included in Box 2)") + "\n\n" +
+                      qsTr("Confirm you have the correct key to prevent damage to screws.") :
+                      qsTr("2.5mm Hex Key (included)") + "\n\n" +
+                      qsTr("Confirm you have the correct key to prevent damage to screws.")
             }
 
             PropertyChanges {

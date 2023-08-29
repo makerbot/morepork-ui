@@ -8,8 +8,6 @@ import StorageFileTypeEnum 1.0
 // fail.
 PopupMenu {
     id: optionsMenu
-    menuHeight: children.height
-    menuWidth: parent.width
 
     onOpened: {
         itemAt(count - 1).isLastItem = true
@@ -19,7 +17,7 @@ PopupMenu {
         id: addRemoveFileButton
         label: browsingUsbStorage ?
                    qsTr("ADD TO PRINTER STORAGE") :
-                   qsTr("REMOVE FROM PRINTER\nSTORAGE")
+                   qsTr("REMOVE FROM PRINTER STORAGE")
         onClicked: {
             if(browsingUsbStorage) {
                 if(buttonInternalStorage.storageUsed < 95) {

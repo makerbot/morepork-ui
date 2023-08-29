@@ -110,7 +110,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: unpackingContentRightSide.textBody
-                text: qsTr("The build plate will lift in the following step.\n\nConfirm BOX 1 and packaging is removed and close the door before proceeding.\n\nBOX 1 contains your material case and guide tubes.")
+                text: qsTr("The build plate will lift in the following step.") + "\n\n" +
+                      qsTr("Confirm BOX 1 and packaging is removed and close the door before proceeding.") + "\n\n" +
+                      qsTr("BOX 1 contains your material case and guide tubes.")
                 visible: true
             }
 
@@ -223,7 +225,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: unpackingContentRightSide.textHeader
-                text: qsTr("PROCEDURE PAUSED\n\nCLOSE PRINTER DOOR")
+                text: qsTr("PROCEDURE PAUSED") + "\n\n" + qsTr("CLOSE PRINTER DOOR")
                 visible: true
             }
 
@@ -276,7 +278,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: unpackingContentRightSide.textBody
-                text: qsTr("Remove BOX 2 from underneath the build plate, as well as any excess packaging and close the chamber.\n\nBOX 2 contains your extruders and additional accessories.")
+                text: qsTr("Remove BOX 2 from underneath the build plate, as well as any excess packaging and close the chamber.") + "\n\n" +
+                      qsTr("BOX 2 contains your extruders and additional accessories.")
                 visible: true
             }
 

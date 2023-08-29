@@ -599,7 +599,8 @@ Item {
                                              qsTr("RELEASE GUIDE TUBES") :
                                              qsTr("REMOVE PROTECTIVE PACKAGING AND TAPE")
                         textBody.text: (bot.machineType == MachineType.Magma) ?
-                                           qsTr("Remove all tape to release the guide tubes so they can be attached to the extruders in the next step.\n\nNOTE: Ensure the guide tubes are curved to the right like in the image.") :
+                                           qsTr("Remove all tape to release the guide tubes so they can be attached to the extruders in the next step.") +
+                                           "\n\n" + qsTr("NOTE: Ensure the guide tubes are curved to the right like in the image.") :
                                            qsTr("Please confirm all tape and protective packaging is removed from the top chamber before proceeding.")
                         numberedSteps.visible: false
                         buttonPrimary.text: qsTr("NEXT")
@@ -634,8 +635,10 @@ Item {
                                              qsTr("ENSURE THE MATERIAL CLIPS ARE ATTACHED")
                         textBody.visible: true
                         textBody.text: (bot.machineType == MachineType.Magma) ?
-                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:\n\nClip 1 to Extruder 1\nClip 2 to Extruder 2") :
-                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.\n\nThe material clips guide the material into the correct extruders.")
+                                            qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:") +
+                                            "\n\n" + qsTr("Clip 1 to Extruder 1") + "\n" + qstr("Clip 2 to Extruder 2") :
+                                            qsTr("Please do a final check to ensure the material clips are engaged with extruders.") +
+                                            "\n\n" + qsTr("The material clips guide the material into the correct extruders.")
                         numberedSteps.visible: false
                         buttonPrimary.text: qsTr("NEXT")
                         buttonPrimary.enabled: true
@@ -725,15 +728,18 @@ Item {
                     if(isMaterialMismatch) {
                         // User puts an unsupported spool on the bay
                         if(loadUnloadFilamentProcess.currentActiveTool == 1) {
-                            qsTr("Only <b>%1</b> model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.").arg(materialPage.bay1.supportedMaterials.map(bot.getMaterialName).join(", "))
+                            qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                                .arg("<b>"+materialPage.bay1.supportedMaterials.map(bot.getMaterialName).join(", ")+"</b>")
                         } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
-                            qsTr("Only <b>%1</b> model materials are compatible in material bay 2. Insert MakerBot model material in material bay 2 to continue.").arg(materialPage.bay2.supportedMaterials.map(bot.getMaterialName).join(", "))
+                            qsTr("Only %1 model materials are compatible in material bay 2. Insert MakerBot model material in material bay 2 to continue.")
+                                .arg("<b>"+materialPage.bay2.supportedMaterials.map(bot.getMaterialName).join(", ")+"</b>")
                         } else {
                             defaultString
                         }
                     } else {
                         // User attempts top loading without labs extruder installed
-                        qsTr("This material is incompatible with the extruder and/or printer. Visit the following site for information:<br><br><b>makerbot.com/compatibility</b>")
+                        qsTr("This material is incompatible with the extruder and/or printer. Visit the following site for information:") +
+                        "<br><br><b>makerbot.com/compatibility</b>"
                     }
                 }
                 Layout.preferredWidth: parent.width
@@ -854,8 +860,8 @@ Item {
             TextBody {
                 text: {
                     qsTr("This material is prone to absorbing moisture from the air. Always " +
-                         "keep the material sealed in the bay or an air tight bag.<br><br>" +
-                         "If exposed for more than 15 minutes, you can use the material drying " +
+                         "keep the material sealed in the bay or an air tight bag.") + "<br><br>" +
+                    qsTr("If exposed for more than 15 minutes, you can use the material drying " +
                          "feature located in the printer settings.")
                 }
                 Layout.preferredWidth: parent.width
@@ -948,10 +954,12 @@ Item {
             TextBody {
                 id: description
                 text: qsTr("<b>1C Extruder</b> requires a nozzle cap for " +
-                           "<b>ABS-R</b>. Have you installed the nozzle cap?" +
-                           "<br><br>\"CONFIRM\" will reprogram the extruder. " +
-                           "You will need to restart the printer afterwards." +
-                           "<br><br>Please call our Customer Support team to " +
+                           "<b>ABS-R</b>. Have you installed the nozzle cap?") +
+                           "<br><br>" +
+                      qsTr("\"CONFIRM\" will reprogram the extruder. " +
+                           "You will need to restart the printer afterwards.") +
+                           "<br><br>" +
+                      qsTr("Please call our Customer Support team to " +
                            "have a cap shipped for you to upgrade.")
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignHCenter

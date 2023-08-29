@@ -175,7 +175,7 @@ LoggingItem {
                                 qsTr("COMPLETED")
                                 break;
                             case ProcessStateType.Failed:
-                                qsTr("PRINT<br>FAILED")
+                                qsTr("PRINT FAILED")
                                 break;
                             case ProcessStateType.Cancelled:
                                 qsTr("CANCELLED")

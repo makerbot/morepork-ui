@@ -222,6 +222,7 @@ Item {
         ColumnLayout {
             height: children.height
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            width: 650
             anchors.verticalCenter: authorizeAccountPopup.popupContainer.verticalCenter
             anchors.verticalCenterOffset: -30
             anchors.horizontalCenter: authorizeAccountPopup.popupContainer.horizontalCenter
@@ -247,6 +248,8 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                Layout.preferredWidth: parent.width
+                wrapMode: Text.WordWrap
             }
 
             TextBody {
@@ -255,6 +258,8 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                Layout.preferredWidth: parent.width
+                wrapMode: Text.WordWrap
             }
 
             states: [
@@ -262,7 +267,7 @@ Item {
                     name: "no_account"
                     PropertyChanges {
                         target: titleText
-                        text: qsTr("PLEASE VISIT MAKERBOT.COM TO<br>CREATE AN ACCOUNT")
+                        text: qsTr("PLEASE VISIT MAKERBOT.COM TO CREATE AN ACCOUNT")
                         visible: true
                     }
 
@@ -285,7 +290,7 @@ Item {
                     name: "reset_password"
                     PropertyChanges {
                         target: titleText
-                        text: qsTr("PLEASE VISIT MAKERBOT.COM TO<br>RESET YOUR PASSWORD")
+                        text: qsTr("PLEASE VISIT MAKERBOT.COM TO RESET YOUR PASSWORD")
                         visible: true
                     }
 
@@ -362,7 +367,7 @@ Item {
 
                     PropertyChanges {
                         target: subtitleText
-                        text: qsTr("<b>%1</b> is now authorized to this printer.").arg(username)
+                        text: qsTr("%1 is now authorized to this printer.").arg("<b>"+username+"</b>")
                         visible: true
                     }
 
@@ -435,7 +440,7 @@ Item {
 
                     PropertyChanges {
                         target: subtitleText
-                        text: qsTr("You will have to reauthorize any account you wish to connect to<br>" +
+                        text: qsTr("You will have to reauthorize any account you wish to connect to " +
                                    "this printer in the future.")
                         visible: true
                     }
@@ -462,8 +467,8 @@ Item {
                     PropertyChanges {
                         target: subtitleText
                         visible: true
-                        text: qsTr("You need to connect to a network to use this feature<br>" +
-                                   "<b>Settings > System Settings > Wifi and Network</b>")
+                        text: qsTr("You need to connect to a network to use this feature") +
+                                   "<br><b>" + qsTr("Settings > System Settings > Wifi and Network") + "</b>"
                     }
 
                     PropertyChanges {
