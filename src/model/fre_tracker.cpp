@@ -26,14 +26,14 @@ FreTracker::FreTracker() :
 
 void FreTracker::initialize() {
     if (!fre_status_.isMember("fre_status")) {
-        currentFreStepSet(FreStep::Welcome);
+        currentFreStepSet(FreStep::StartSetLanguage);
         fre_status_["fre_status"] = Json::Value();
         Json::Value &fre_status = fre_status_["fre_status"];
         if (!fre_status.isMember("fre_complete")) {
             fre_status["fre_complete"] = Json::Value(false);
         }
         if (!fre_status.isMember("current_step")) {
-            next_step_ = "welcome";
+            next_step_ = "start_set_language";
             fre_status["current_step"] = Json::Value(next_step_);
         }
         logFreStatus();
