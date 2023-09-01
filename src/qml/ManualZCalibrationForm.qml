@@ -401,7 +401,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: qsTr("COURSE ADJUSTMENTS COMPLETE")
+                text: qsTr("COARSE ADJUSTMENTS COMPLETE")
                 visible: true
             }
 

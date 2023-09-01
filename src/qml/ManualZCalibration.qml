@@ -15,7 +15,7 @@ ManualZCalibrationForm {
     }
 
     Timer {
-        id: waitForCourseAdjustment
+        id: waitForCoarseAdjustment
         interval: 2500
         onTriggered: {
             state = "adjustments_complete"
@@ -81,19 +81,19 @@ ManualZCalibrationForm {
         waitForConfigs.start()
     }
 
-    function setCourseAdjustements() {
+    function setCoarseAdjustements() {
         // Get Bz before value from sensor
         var bz_before = bot.offsetBZ
         console.info("BZ offset: " + bz_before)
 
-        // Set Course Adjustements
+        // Set Coarse Adjustements
         var bz_new = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
         console.info("BZ adjustment: " + bz_new)
 
 
         // Set configs
         bot.setManualCalibrationOffset(bz_new)
-        waitForCourseAdjustment.start()
+        waitForCoarseAdjustment.start()
     }
 
     function checkForIssues() {
@@ -131,9 +131,7 @@ ManualZCalibrationForm {
             state = "measure"
         } else if (state == "updating_information") {
             // Do nothing?
-            //cancelManualZCalPopup.open()
             // would this work
-            //state = "z_calibration"
         } else {
             state = "z_cal_start"
             resetManualCalValues()
@@ -147,9 +145,6 @@ ManualZCalibrationForm {
         if(state == "z_cal_start" || state == "adjustments_complete") {
             // Do print here
             startTestPrint()
-            // Todo erica remove testing
-            //state = "remove_support"
-            //^^^
         } else if (state == "remove_support") {
             state = "measure"
         } else if (state == "measure") {
@@ -162,8 +157,8 @@ ManualZCalibrationForm {
                 }
                 else {
                     state = "updating_information"
-                    // do course adjustments
-                    setCourseAdjustements()
+                    // do coarse adjustments
+                    setCoarseAdjustements()
                     resetManualCalValues()
                     secondPass = true
                 }
@@ -193,7 +188,6 @@ ManualZCalibrationForm {
         } else {
 
             startTestPrint()
-            //state = "remove_support"
         }
 
     }
