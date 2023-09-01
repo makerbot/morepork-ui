@@ -6,7 +6,14 @@ Item {
     width: parent.width
     height: 314
 
+    property alias calibration_rowLayout: calibration_rowLayout
+    property alias heading: heading
+    property alias toolheadA: toolheadA
+    property alias toolheadB: toolheadB
+    property alias topColumn: topColumn
+
     ColumnLayout {
+        id: topColumn
         width: parent.width
         spacing: 40
 

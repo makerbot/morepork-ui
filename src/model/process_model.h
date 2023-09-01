@@ -67,6 +67,7 @@ class ProcessModel : public BaseModel {
         CalibratingToolheads,
         InstallBuildPlate,
         RemoveBuildPlate,
+        ColdCalDone,
         PositioningBuildPlate, // Drying Cycle Process states
         WaitingForSpool,
         DryingSpool,

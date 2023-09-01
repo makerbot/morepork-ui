@@ -120,6 +120,7 @@ class KaitenBotModel : public BotModel {
     QString getNPSSurveyDueDate();
     QString m_npsFilePath;
     void moveBuildPlate(const int distance, const int speed);
+    void doHotCal(bool do_cal, QList<int> temperature);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -860,6 +861,37 @@ void KaitenBotModel::doNozzleCleaning(bool do_clean, QList<int> temperature){
     }
 }
 
+void KaitenBotModel::doHotCal(bool do_cal, QList<int> temperature) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("do_hot_cal");
+        Json::Value json_args(Json::objectValue);
+        json_args["do_cal"] = Json::Value(do_cal);
+        Json::Value temperature_list(Json::arrayValue);
+
+        if (do_cal) {
+            // Json::Value json_args(Json::objectValue);
+            for(int temp : temperature) {
+                if(temp > 0) {
+                    for(int i = 0; i < temperature.size(); i++) {
+                        temperature_list[i] = temperature.value(i);
+                    }
+                    json_args["temperature"] = Json::Value(temperature_list);
+                    break;
+                }
+            }
+            // json_params["params"] = Json::Value(json_args);
+        }
+
+        json_params["params"] = Json::Value(json_args);
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
 
 void KaitenBotModel::acknowledgeNozzleCleaned(){
     try{

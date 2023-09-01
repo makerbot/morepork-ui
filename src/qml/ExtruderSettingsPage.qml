@@ -4,7 +4,6 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 
 ExtruderSettingsPageForm {
-
     buttonCalibrateToolhead.onClicked: {
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
     }

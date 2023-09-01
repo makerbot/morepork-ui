@@ -25,16 +25,19 @@ Item {
         AdvancedInfoElement {
             id: xOffset
             label: qsTr("X OFFSET")
+            value_element.anchors.rightMargin: 125
         }
 
         AdvancedInfoElement {
             id: yOffset
             label: qsTr("Y OFFSET")
+            value_element.anchors.rightMargin: 125
         }
 
         AdvancedInfoElement {
             id: zOffset
             label: qsTr("Z OFFSET")
+            value_element.anchors.rightMargin: 125
         }
     }
 }

@@ -161,6 +161,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::RemoveBuildPlate);
         else if (kStepStr == "install_build_plate")
             stateTypeSet(ProcessStateType::InstallBuildPlate);
+        else if(kStepStr == "cold_cal_done")
+            stateTypeSet(ProcessStateType::ColdCalDone);
         // Drying Cycle States
         // see morepork-kaiten/kaiten/src/kaiten/processes/dryngcycleprocess.py
         else if (kStepStr == "positioning_build_plate")
