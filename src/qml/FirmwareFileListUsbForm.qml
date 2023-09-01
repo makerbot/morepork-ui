@@ -37,9 +37,9 @@ Item {
         TextBody {
             font.weight: Font.Light
             text: {
-                qsTr("Choose another folder or visit <b>%1</b> to download the " +
+                qsTr("Choose another folder or visit %1 to download the " +
                      "latest firmware. Drag the file onto a usb stick and insert it into " +
-                     "the front of the printer.").arg(getUrlForMethod())
+                     "the front of the printer.").arg("<b>"+getUrlForMethod()+"</b>")
             }
             style: TextBody.Large
             anchors.top: parent.bottom

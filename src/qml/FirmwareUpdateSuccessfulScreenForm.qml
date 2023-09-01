@@ -31,7 +31,7 @@ Item {
         Text {
             id: title_text
             color: "#ffffff"
-            text: qsTr("FIRMWARE %1\nSUCCESSFULLY\nINSTALLED").arg(bot.version)
+            text: qsTr("FIRMWARE %1 SUCCESSFULLY INSTALLED").arg(bot.version)
             font.letterSpacing: 2
             anchors.top: parent.top
             anchors.topMargin: 35
@@ -39,6 +39,8 @@ Item {
             font.weight: Font.Bold
             font.pixelSize: 22
             lineHeight: 1.3
+            wrapMode: Text.WordWrap
+            width: 360
         }
 
         RoundedButton {

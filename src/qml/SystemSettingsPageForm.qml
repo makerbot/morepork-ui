@@ -3,7 +3,6 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
-import MachineTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
@@ -71,7 +70,7 @@ Item {
         interval: 2500
         onTriggered: {
             // Reset all screen positions
-            fre.setFreStep(FreStep.Welcome)
+            fre.setFreStep(FreStep.StartSetLanguage)
             settings.resetPreferences()
             isFinalResetProceduresDone = true
         }
@@ -234,7 +233,6 @@ Item {
                         id: buttonChangeLanguage
                         buttonImage.source: "qrc:/img/icon_choose_language.png"
                         buttonText.text: qsTr("CHOOSE LANGUAGE")
-                        visible: (bot.machineType != MachineType.Magma) //BW-5871
                     }
 
                     MenuButton {
@@ -789,8 +787,8 @@ Item {
                         target: description
                         visible: true
                         text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
-                                    "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                                    "CODE: %1").arg(copyingLogsPopup.errorcode)
+                                   "support through %1 to identify your issue.").arg("<b>makerbot.com</b>") + "<br><br>" +
+                              qsTr("CODE: %1").arg(copyingLogsPopup.errorcode)
                     }
                 }
             ]
@@ -1023,8 +1021,8 @@ Item {
                         target: timelapse_description
                         visible: true
                         text: qsTr("There was an error during this procedure. If this reoccurs, Please contact our "+
-                                    "support through <b>makerbot.com</b> to identify your issue.<br><br>"+
-                                    "CODE: %1").arg(copyingTimelapseImagesPopup.errorcode)
+                                   "support through %1 to identify your issue.").arg("<b>makerbot.com</b>") + "<br><br>" +
+                              qsTr("CODE: %1").arg(copyingTimelapseImagesPopup.errorcode)
                     }
                     PropertyChanges {
                         target: columnLayout_copy_timelapse_images

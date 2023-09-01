@@ -119,8 +119,8 @@ LoggingItem {
         Text {
             id: element1
             color: "#ffffff"
-            text: qsTr("Warning: LABS 1 HT Experimental Extruder recognized.\n\n" +
-                       "Make sure the heat shield is installed before using this extruder.")
+            text: qsTr("Warning: LABS 1 HT Experimental Extruder recognized.") + "\n\n" +
+                  qsTr("Make sure the heat shield is installed before using this extruder.")
             wrapMode: Text.WordWrap
             font.letterSpacing: 1
             font.family: defaultFont.name
@@ -167,8 +167,8 @@ LoggingItem {
                 target: element1
                 text: {
                     (bot.extruderACurrentTemp > 50 ?
-                        qsTr("Please wait <b>%1</b> minutes for the heat shield to cool down.<br><br>").arg(timeRemaining) :
-                        "") +
+                        qsTr("Please wait %1 minutes for the heat shield to cool down.")
+                            .arg("<b>"+timeRemaining+"</b>") + "<br><br>" : "") +
                      qsTr("Make sure to remove the heat shield before using a different " +
                           "extruder. Flex the tabs to remove.")
                 }
