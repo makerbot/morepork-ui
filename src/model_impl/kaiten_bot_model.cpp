@@ -1299,12 +1299,16 @@ void KaitenBotModel::setManualCalibrationOffset(float tb_offset) {
     try{
         qDebug() << FL_STRM << "manual cal offset value: " << tb_offset;
         auto conn = m_conn.data();
+
+        Json::Value json_args2(Json::objectValue);
+        json_args2["z"] = Json::Value(tb_offset);
+        Json::Value json_args1(Json::objectValue);
+        json_args1["b"] = Json::Value(json_args2);
+        Json::Value json_args(Json::objectValue);
+        json_args["toolhead_offsets"] = Json::Value(json_args1);
         Json::Value json_params(Json::objectValue);
-        Json::Value json_z(Json::objectValue);
-        json_z["z"] = Json::Value(tb_offset);
-        Json::Value json_b(Json::objectValue);
-        json_b["b"] = Json::Value(json_z);
-        json_params["toolhead_offsets"] = Json::Value(json_b);
+        json_params["config"] = Json::Value(json_args);
+
         LOG(info) << "Toolhead offset " << json_params;
         conn->jsonrpc.invoke("set_config", json_params, std::weak_ptr<JsonRpcCallback>());
     }

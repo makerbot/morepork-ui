@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 ManualZCalibrationForm {
     property bool secondPass: false
+    property int adjustment: 0
 
     Timer {
         id: waitForConfigs
@@ -18,22 +19,25 @@ ManualZCalibrationForm {
         interval: 2500
         onTriggered: {
             state = "adjustments_complete"
+            adjustment = 0
         }
     }
 
     function getTestPrint() {
         // We could use the spool journal to determine the loaded material
         // but sticking with this way that we use everywhere else currently.
-        var model_mat = materialPage.bay1.filamentMaterial
+        /*var model_mat = materialPage.bay1.filamentMaterial
         var support_mat = materialPage.bay2.filamentMaterial
         var test_print_name_string = model_mat + "_" + support_mat
         var test_print_dir_string = bot.extruderATypeStr + "/" +
-                                    bot.extruderBTypeStr + "/"
+                                    bot.extruderBTypeStr + "/"*/
+        var test_print_dir_string = "test"
+        var test_print_name_string = "abs-wss1_wss1"
         /*var test_print_name_string = "abs-wss1_wss1"
         var test_print_dir_string = bot.extruderATypeStr + "/" +
                 bot.extruderBTypeStr + "/"*/
        // storage.getCalibrationPrint
-        storage.getTestPrint(test_print_dir_string, test_print_name_string)
+        storage.getCalibrationPrint(test_print_dir_string, test_print_name_string)
     }
 
     function startTestPrint() {
@@ -41,6 +45,7 @@ ManualZCalibrationForm {
         printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
         printPage.getPrintFileDetails(storage.currentThing)
+        resetSettingsSwipeViewPages()
         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
@@ -77,6 +82,17 @@ ManualZCalibrationForm {
     }
 
     function setCourseAdjustements() {
+        // Get Bz before value from sensor
+        var bz_before = bot.offsetBZ
+        console.info("BZ offset: " + bz_before)
+
+        // Set Course Adjustements
+        var bz_new = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
+        console.info("BZ adjustment: " + bz_new)
+
+
+        // Set configs
+        bot.setManualCalibrationOffset(bz_new)
         waitForCourseAdjustment.start()
     }
 
@@ -85,7 +101,12 @@ ManualZCalibrationForm {
         var high_range_val = 0.26
         var calValues = getValues()
         for (var i = 0; i < calValues.length; i++) {
-            if(calValues[i] < low_range_val || calValues[i]  > high_range_val) {
+            if(calValues[i] < low_range_val) {
+                adjustment = -1
+                return true
+            }
+            else if(calValues[i]  > high_range_val) {
+                adjustment = 1
                 return true
             }
         }

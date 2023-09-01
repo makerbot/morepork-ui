@@ -21,6 +21,7 @@
 #define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/usb_storage"
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
+#define CAL_PRINT_PATH QString("/home/")+qgetenv("USER")+"/cal_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define USB_STORAGE_DEV_BY_PATH_FRNT_PNL QString()
 #define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2 QString()
@@ -36,6 +37,7 @@
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define TEST_PRINT_PATH QString("/usr/test_prints/")
+#define CAL_PRINT_PATH QString("/usr/cal_prints/")
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define USB_STORAGE_DEV_BY_PATH_FRNT_PNL \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")

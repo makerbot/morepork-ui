@@ -132,6 +132,7 @@ LoggingItem {
             text: qsTr("NEXT")
             logKey: text
             onClicked: {
+                acknowledgePrint()
                 // GO BACK TO MANUAL CALIBRATION
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
@@ -145,6 +146,7 @@ LoggingItem {
             text: qsTr("PRINT FAILED")
             logKey: text
             onClicked: {
+                acknowledgePrint()
                // failureFeedbackSelected = true
                // defects = JSON.parse(JSON.stringify(print_defects_template))
                 // OPEN ISSUES POPUP

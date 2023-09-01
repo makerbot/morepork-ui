@@ -2,7 +2,8 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
-Item {
+LoggingItem {
+    itemName: "ManualZCalibration"
     id: manualZCalibrationPage
     anchors.fill: parent
 
@@ -14,6 +15,7 @@ Item {
     property alias calValueItem2: calValueItem2
     property alias calValueItem3: calValueItem3
     property alias calValueItem4: calValueItem4
+    property real testOffset: 7.79143907258212
 
 
     ContentLeftSide {
@@ -245,8 +247,8 @@ Item {
 
             PropertyChanges {
                 target: contentRightSide.textBody
-                text: qsTr("Use the flats of the clipers to take a measure from the center of each side of the square.<br><br>" +
-                           "The thickness of your printed line will determine how much of your calibration needs to be adjust3ed.<br><br>" +
+                text: qsTr("Use the flats of the calipers to take a measurement from the center of each side of the square.<br><br>" +
+                           "The thickness of your printed line will determine how much of your calibration needs to be adjusted.<br><br>" +
                            "Values are measured in millimeters (mm)")
                 visible: true
             }
@@ -615,6 +617,7 @@ Item {
         left_button_text: qsTr("STOP PROCESS")
         left_button.onClicked: {
             state = "z_cal_start"
+            isInManualCalibration = false
             cancelManualZCalPopup.close()
         }
         right_button_text: qsTr("CONTINUE")

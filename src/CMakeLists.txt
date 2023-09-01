@@ -233,4 +233,17 @@ if(NOT ${QT_CREATOR_BUILD})
         DIRECTORY "${MoreporkUI_SOURCE_DIR}/test_prints/magma/"
 	    DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/test_prints")
+
+    install(
+        DIRECTORY "${MoreporkUI_SOURCE_DIR}/cal_prints/fire/"
+        DESTINATION
+            "${CMAKE_INSTALL_PREFIX}/per_machine/fire/rootfs/usr/cal_prints")
+    install(
+        DIRECTORY "${MoreporkUI_SOURCE_DIR}/cal_prints/lava/"
+        DESTINATION
+            "${CMAKE_INSTALL_PREFIX}/per_machine/lava/rootfs/usr/cal_prints")
+    install(
+        DIRECTORY "${MoreporkUI_SOURCE_DIR}/cal_prints/magma/"
+        DESTINATION
+            "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/cal_prints")
 endif()
