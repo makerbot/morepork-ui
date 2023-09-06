@@ -102,12 +102,12 @@ LoggingItem {
         ContentRightSide {
             id: timeContentRightSide
             textHeader {
-                text: qsTr("BUILD PLATE\nNEEDS TO COOL")
+                text: qsTr("BUILD PLATE NEEDS TO COOL")
                 visible: true
             }
             textBody {
-                text: qsTr("The build plane temperature is<br>at <b>%1 C.</b>").arg(bot.buildplaneCurrentTemp) +
-                      qsTr(" Please wait <b>%2</b><br>minutes before removing the build<br>plate from the chamber.").arg(time.text)
+                text: qsTr("The build plane temperature is at %1.").arg("<b>"+bot.buildplaneCurrentTemp+" C</b>") +
+                      qsTr(" Please wait %1 minutes before removing the build plate from the chamber.").arg("<b>"+time.text+"</b>")
                 visible: true
             }
             buttonPrimary {

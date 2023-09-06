@@ -192,8 +192,8 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                text: qsTr("< BACK")
-                visible: false // BW-5871
+                text: "< " + qsTr("BACK")
+                visible: true
             }
 
             PropertyChanges {
@@ -268,7 +268,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 text: qsTr("OFFLINE SET UP")
-                visible: true
                 enabled: !isNetworkConnectionAvailable
             }
 
@@ -889,7 +888,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textHeader
-                text: qsTr("PRINTER NAME:\n\n") + bot.name
+                text: qsTr("PRINTER NAME:") + "\n\n" + bot.name
             }
 
             PropertyChanges {
@@ -988,7 +987,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                text: qsTr("< BACK")
+                text: "< " + qsTr("BACK")
                 visible: true
             }
 
@@ -1034,7 +1033,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                text: qsTr("< BACK")
+                text: "< " + qsTr("BACK")
                 visible: true
             }
 
@@ -1066,12 +1065,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("CloudPrint is a browser-based app that enables you to prepare & send files directly to your printer.\n\nCreate a MakerBot account and connect your printer to CloudPrint at:")
+                text: qsTr("CloudPrint is a browser-based app that enables you to prepare & send files directly to your printer.") +
+                      "\n\n" + qsTr("Create a MakerBot account and connect your printer to CloudPrint at:")
             }
 
             PropertyChanges {
                 target: freContentRight.textBody1
-                text: qsTr("cloudprint.makerbot.com")
+                text: "cloudprint.makerbot.com"
 
             }
 

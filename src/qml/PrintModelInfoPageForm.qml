@@ -104,17 +104,30 @@ Item {
                     id: moreOptionsButton
                     Layout.preferredWidth: width
                     visible: !inFreStep
-                    enabled: !(startPrintSource == PrintPage.FromPrintQueue)
                     onClicked: {
                         startPrintButton.enabled = false
                         was_pressed = true
-                        optionsMenu.open()
+                        if (startPrintSource == PrintPage.FromPrintQueue) {
+                            queueOptionsMenu.open()
+                        } else {
+                            optionsMenu.open()
+                        }
                     }
                 }
             }
             // The File Options Pop up for this page
             FileOptionsPopupMenu {
                 id: optionsMenu
+                width: details_item.width
+                y: startPrintButtonRow.y-height-8
+
+                onClosed: {
+                    startPrintButton.enabled = true
+                    moreOptionsButton.was_pressed = false
+                }
+            }
+            CloudQueueOptionsPopupMenu {
+                id: queueOptionsMenu
                 width: details_item.width
                 y: startPrintButtonRow.y-height-8
 
