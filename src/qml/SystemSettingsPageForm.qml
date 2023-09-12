@@ -71,7 +71,7 @@ Item {
         interval: 2500
         onTriggered: {
             // Reset all screen positions
-            fre.setFreStep(FreStep.StartSetLanguage)
+            fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
             isFinalResetProceduresDone = true
         }
@@ -234,6 +234,7 @@ Item {
                         id: buttonChangeLanguage
                         buttonImage.source: "qrc:/img/icon_choose_language.png"
                         buttonText.text: qsTr("CHOOSE LANGUAGE")
+                        visible: (bot.machineType != MachineType.Magma) //BW-5871
                     }
 
                     MenuButton {
