@@ -79,7 +79,21 @@ Item {
             smooth: false
             image.source: "qrc:/img/material_icon.png"
             textIconDesc.text: qsTr("MATERIAL")
-            alertVisible: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
+
+            property bool extruderMaterialAlert: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
+            alertVisible: extruderMaterialAlert
+            onExtruderMaterialAlertChanged: {
+                if(extruderMaterialAlert) {
+                    addToNotificationsList("Extruder/Material not detected",
+                                           MoreporkUI.Error,
+                                           function() {
+                                               resetSettingsSwipeViewPages()
+                                               mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                                           })
+                } else {
+                    removeFromNotificationsList("Extruder/Material not detected")
+                }
+            }
         }
 
         MainMenuIcon {

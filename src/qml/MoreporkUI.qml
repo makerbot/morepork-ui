@@ -2029,6 +2029,9 @@ ApplicationWindow {
             left_button_text: qsTr("SKIP")
             left_button.onClicked: {
                 extNotCalibratedPopup.close()
+                addToNotificationsList("Extruders not calibrated",
+                                       MoreporkUI.Informational,
+                                       () => {extNotCalibratedPopup.open()})
             }
             right_button_text: qsTr("GO TO PAGE")
             right_button.onClicked: {
