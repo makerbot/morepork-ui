@@ -1,4 +1,5 @@
 // Copyright MakerBot, Inc. 2022
+#include <QtDebug>
 #ifndef SRC_LOGGING_HH_
 #define SRC_LOGGING_HH_
 
