@@ -99,8 +99,8 @@
         <file>BuildPlateSettingsPageForm.qml</file>
         <file>SlidingSwitch.qml</file>
         <file>SlidingSwitchForm.qml</file>
-        <file>RaiseLowerBuildPlate.qml</file>
-        <file>RaiseLowerBuildPlateForm.qml</file>
+        <file>CustomMoveBuildPlate.qml</file>
+        <file>CustomMoveBuildPlateForm.qml</file>
         <file>AdvancedInfoElement.qml</file>
         <file>AdvancedInfoElementForm.qml</file>
         <file>AdvancedInfoToolheadElement.qml</file>
@@ -269,6 +269,9 @@
         <file>NumberAddSubtractItemForm.qml</file>
         <file>SetupProceduresPageForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
+        <file>DirectionArrowsComponent.qml</file>
+        <file>MoveBuildPlatePageForm.qml</file>
+        <file>MoveBuildPlatePage.qml</file>
         <file>SetupProceduresPage.qml</file>
         <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>

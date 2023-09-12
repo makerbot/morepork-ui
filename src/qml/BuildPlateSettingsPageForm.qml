@@ -13,13 +13,11 @@ Item {
 
     property alias buildPlateSettingsSwipeView: buildPlateSettingsSwipeView
 
+    property alias assistedLevel: assistedLevel
     property alias buttonAssistedLeveling: buttonAssistedLeveling
 
-    property alias buttonRaiseLowerBuildPlate: buttonRaiseLowerBuildPlate
-
-    property alias assistedLevel: assistedLevel
-    property alias raiseLowerBuildPlate: raiseLowerBuildPlate
-    property alias doorOpenRaiseLowerBuildPlatePopup: doorOpenRaiseLowerBuildPlatePopup
+    property alias moveBuildPlatePage: moveBuildPlatePage
+    property alias buttonMoveBuildPlatePage: buttonMoveBuildPlatePage
 
     enum SwipeIndex {
         BasePage,                   //0
@@ -38,7 +36,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
-            property string topBarTitle: qsTr("Buildplate Settings")
+            property string topBarTitle: qsTr("Build Plate Settings")
 
             smooth: false
 
@@ -66,7 +64,7 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonRaiseLowerBuildPlate
+                        id: buttonMoveBuildPlatePage
                         buttonImage.source: "qrc:/img/icon_raise_lower_bp.png"
                         buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
                         enabled: !isProcessRunning()
@@ -122,44 +120,17 @@ Item {
             }
         }
 
-        // BuildPlateSettingsPage.RaiseLowerBuildPlatePage
+        // BuildPlateSettingsPage.MoveBuildPlatePage
         Item {
-            id: raiseLowerBuildPlateItem
+            id: moveBuildPlatePageItem
             property var backSwiper: buildPlateSettingsSwipeView
             property int backSwipeIndex: BuildPlateSettingsPage.BasePage
-            property string topBarTitle: qsTr("Raise/Lower Buildplate")
+            property string topBarTitle: qsTr("Raise/Lower Build Plate")
             smooth: false
             visible: false
 
-            RaiseLowerBuildPlate {
-                id: raiseLowerBuildPlate
-            }
-        }
-    }
-
-    CustomPopup {
-        popupName: "DoorOpenRaiseLowerBuildPlate"
-        id: doorOpenRaiseLowerBuildPlatePopup
-        showOneButton: true
-        full_button.onClicked: doorOpenRaiseLowerBuildPlatePopup.close()
-        full_button_text: qsTr("CONFIRM")
-
-        ColumnLayout {
-            spacing: 10
-            anchors.top: parent.top
-            anchors.topMargin: 125
-            anchors.horizontalCenter: parent.horizontalCenter
-            Image {
-                source: "qrc:/img/process_error_small.png"
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TextHeadline {
-                text: qsTr("FRONT DOOR OPEN")
-                Layout.alignment: Qt.AlignHCenter
-            }
-            TextBody {
-                text: qsTr("Close the front door to proceed.")
-                Layout.alignment: Qt.AlignHCenter
+            MoveBuildPlatePage {
+                id: moveBuildPlatePage
             }
         }
     }
