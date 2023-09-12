@@ -6,6 +6,8 @@ Item {
     id: arrowsComponent
     property bool upEnabled: false
     property bool downEnabled: false
+    property int arrowWidth: parent.width
+    property int arrowHeight: parent.height/2
 
     function direction() {
         if(upEnabled) {
@@ -37,8 +39,8 @@ Item {
 
             MouseArea {
                 anchors.centerIn: parent
-                width: 60
-                height: 60
+                width: arrowWidth
+                height: arrowHeight
                 onClicked: {
                     downEnabled= false
                     upEnabled= true
@@ -59,8 +61,8 @@ Item {
 
             MouseArea {
                 anchors.centerIn: parent
-                width: 60
-                height: 60
+                width: arrowWidth
+                height: arrowHeight
                 onClicked: {
                     upEnabled = false
                     downEnabled = true

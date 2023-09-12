@@ -102,31 +102,32 @@ Item {
                 id: directionArrows
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.preferredHeight: 200
-                Layout.preferredWidth: 100
+                Layout.preferredWidth: directionText.width
 
             }
         }
-            ButtonRectanglePrimary {
-                id: moveUpButton
-                Layout.preferredWidth: 135
-                text: qsTr("MOVE")
 
-                // Move button top margin due to
-                // headings and spacing from column layout
-                Layout.topMargin: 74
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        ButtonRectanglePrimary {
+            id: moveUpButton
+            Layout.preferredWidth: 135
+            text: qsTr("MOVE")
 
-                onClicked: {
-                    var value = (directionArrows.direction()*
-                                 distanceTumbler.model[distanceTumbler.currentIndex])
-                    if(value === 0) {
-                        customMoveAttentionPopup.open()
-                        return
-                    }
-                    bot.moveBuildPlate(value, 20)
+            // Move button top margin due to
+            // headings and spacing from column layout
+            Layout.topMargin: 74
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            onClicked: {
+                var value = (directionArrows.direction()*
+                             distanceTumbler.model[distanceTumbler.currentIndex])
+                if(value === 0) {
+                    customMoveAttentionPopup.open()
+                    return
                 }
-                enabled: !isProcessRunning() && !chamberDoorOpen
+                bot.moveBuildPlate(value, 20)
             }
+            enabled: !isProcessRunning() && !chamberDoorOpen
+        }
     }
 
     CustomPopup {

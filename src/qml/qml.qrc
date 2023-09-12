@@ -263,6 +263,7 @@
         <file>FreChooseLanguagePage.qml</file>
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>MaterialCaseSetupForm.qml</file>
         <file>DirectionArrowsComponent.qml</file>
         <file>MoveBuildPlatePageForm.qml</file>
         <file>MoveBuildPlatePage.qml</file>
