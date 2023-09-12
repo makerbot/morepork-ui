@@ -253,9 +253,11 @@ void MoreporkStorage::getTestPrint(const QString test_print_dir,
 
 void MoreporkStorage::getCalibrationPrint(const QString test_print_dir,
                                           const QString test_print_name) {
-    //const QString test_print = CAL_PRINT_FILE_PREFIX + test_print_name + ".makerbot";
-    //const QString path = CAL_PRINT_PATH + test_print_dir + test_print;
-    const QString path = QString("/usr/cal_prints/test/cal_print_abs-wss1_wss1.makerbot");
+    const QString test_print = CAL_PRINT_FILE_PREFIX + test_print_name + ".makerbot";
+    const QString path = CAL_PRINT_PATH + test_print_dir + test_print;
+    //const QString path = QString("/usr/cal_prints/test/cal_print_abs-wss1_wss1.makerbot");
+
+    //LOG(info) << "Test Path " << QString(path);
     const QFileInfo kFileInfo = QFileInfo(path);
 
     PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);

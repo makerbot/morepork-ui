@@ -31,12 +31,8 @@ ManualZCalibrationForm {
         var test_print_name_string = model_mat + "_" + support_mat
         var test_print_dir_string = bot.extruderATypeStr + "/" +
                                     bot.extruderBTypeStr + "/"*/
-        var test_print_dir_string = "test"
+        var test_print_dir_string = bot.extruderATypeStr + "/"
         var test_print_name_string = "abs-wss1_wss1"
-        /*var test_print_name_string = "abs-wss1_wss1"
-        var test_print_dir_string = bot.extruderATypeStr + "/" +
-                bot.extruderBTypeStr + "/"*/
-       // storage.getCalibrationPrint
         storage.getCalibrationPrint(test_print_dir_string, test_print_name_string)
     }
 
