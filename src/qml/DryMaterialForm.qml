@@ -7,8 +7,8 @@ import ProcessStateTypeEnum 1.0
 LoggingItem {
     itemName: "DryMaterial"
     id: dryMaterialPage
-    width: 800
-    height: 420
+    width: parent.width
+    height: parent.height
     smooth: false
     antialiasing: false
     property alias contentLeftSide: contentLeftSide
@@ -77,6 +77,16 @@ LoggingItem {
         {label: "pla || tough", temperature : 45, time : 24}
     ]
 
+    property variant dryingMaterialsListMethodXL : [
+        {label: "custom", temperature: 0, time: 0},
+        {label: "abs-r", temperature: 60, time: 16},
+        {label: "abs-cf", temperature: 60, time: 16},
+        {label: "nylon cf", temperature: 70, time: 16},
+        {label: "pva", temperature: 50, time: 16},
+        {label: "rapidrinse", temperature: 70, time: 16},
+        {label: "sr-30", temperature: 0, time: 0}
+    ]
+
     ContentLeftSide {
         id: contentLeftSide
         image {
@@ -108,6 +118,8 @@ LoggingItem {
 
     DryMaterialSelector {
         id: materialSelector
+        height: parent.height
+        width: parent.height
         visible: false
     }
 

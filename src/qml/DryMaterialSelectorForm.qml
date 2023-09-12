@@ -7,8 +7,10 @@ ListView {
     id: materialsList
     smooth: false
     anchors.fill: parent
+    anchors.topMargin: 5
     boundsBehavior: Flickable.DragOverBounds
     spacing: 1
+    //clip: true
     orientation: ListView.Vertical
     flickableDirection: Flickable.VerticalFlick
     ScrollBar.vertical: ScrollBar {}
@@ -19,7 +21,7 @@ ListView {
         } else if(bot.machineType == MachineType.Lava) {
             dryingMaterialsListMethodX
         } else if(bot.machineType == MachineType.Magma) {
-            dryingMaterialsListMethodX
+            dryingMaterialsListMethodXL
         } else {
             []
         }

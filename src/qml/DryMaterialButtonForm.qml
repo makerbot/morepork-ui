@@ -1,6 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.3
+import QtQuick.Layouts 1.9
 
 Button {
     id: selectMaterialButton
@@ -29,35 +29,33 @@ Button {
         smooth: false
     }
 
-    Text {
-        id: materialNameText
-        text: "MATERIAL NAME"
+    ColumnLayout {
         anchors.left: parent.left
         anchors.leftMargin: 40
         anchors.verticalCenter: parent.verticalCenter
-        font.family: defaultFont.name
-        font.letterSpacing: 2
-        font.weight: Font.Bold
-        font.pointSize: 14
-        font.capitalization: Font.AllUppercase
-        color: "#ffffff"
-        smooth: false
-        antialiasing: false
+        spacing: 5
+
+        TextHeadline {
+            id: materialNameText
+            text: "MATERIAL NAME"
+            //anchors.verticalCenterOffset: -5
+        }
+
+        TextSubheader {
+            id: temperatureAndTimeText
+            text: "999 C | 999 HR"
+            //anchors.top: materialNameText.bottom
+            //anchors.topMargin: 5
+            //anchors.left: parent.left
+            //anchors.leftMargin: 40
+            //anchors.verticalCenter: parent.verticalCenter
+            font.capitalization: Font.MixedCase
+        }
     }
 
-    Text {
-        id: temperatureAndTimeText
-        text: "999 C | 999 HR"
-        anchors.top: materialNameText.bottom
-        anchors.topMargin: 5
-        anchors.left: parent.left
-        anchors.leftMargin: 40
-        anchors.verticalCenter: parent.verticalCenter
-        font.family: defaultFont.name
-        font.letterSpacing: 3
-        font.pointSize: 8
-        color: "#ffffff"
-        smooth: false
-        antialiasing: false
+    Image {
+        id: startImage
+        anchors.right: parent.right
+        anchors.rightMargin: 40
     }
 }
