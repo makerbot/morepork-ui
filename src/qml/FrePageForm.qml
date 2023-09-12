@@ -193,7 +193,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 text: "< " + qsTr("BACK")
-                visible: true
+                visible: false // BW-5871
             }
 
             PropertyChanges {
@@ -268,6 +268,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
                 text: qsTr("OFFLINE SET UP")
+                visible: true
                 enabled: !isNetworkConnectionAvailable
             }
 
