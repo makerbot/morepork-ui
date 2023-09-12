@@ -17,6 +17,7 @@
         <file alias="wifi_connected.png">images/top_bar/wifi_connected.png</file>
         <file alias="ethernet_connected.png">images/top_bar/ethernet_connected.png</file>
         <file alias="no_ethernet.png">images/top_bar/no_ethernet.png</file>
+        <file alias="no_wifi.png">images/top_bar/no_wifi.png</file>
         <file alias="sombrero.png">images/sombrero.png</file>
         <file alias="front_build_volume.png">images/front_build_volume.png</file>
         <file alias="back_build_volume.png">images/back_build_volume.png</file>
@@ -229,5 +230,9 @@
 	<file alias="drawer_current_selection.png">images/drawer/current_selection.png</file>
 	<file alias="drawer_pause.png">images/drawer/pause.png</file>
 	<file alias="drawer_resume.png">images/drawer/resume.png</file>
+	<file alias="open_notification.png">images/drawer/open_notification.png</file>
+	<file alias="dismiss_notification.png">images/drawer/dismiss_notification.png</file>
+	<file alias="informational_notification.png">images/drawer/informational_notification.png</file>
+	<file alias="error_notification.png">images/drawer/error_notification.png</file>
     </qresource>
 </RCC>

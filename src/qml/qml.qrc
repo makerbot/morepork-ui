@@ -265,5 +265,7 @@
         <file>SetupProceduresPage.qml</file>
         <file>CustomDrawer.qml</file>
         <file>DrawerButton.qml</file>
+        <file>NotificationsDrawer.qml</file>
+        <file>NotificationButton.qml</file>
     </qresource>
 </RCC>

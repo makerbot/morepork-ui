@@ -20,7 +20,6 @@ ApplicationWindow {
     property alias mainSwipeView: mainSwipeView
     property alias topBar: topBar
     property var currentItem: mainMenu
-    property var activeDrawer
     property bool authRequest: bot.isAuthRequestPending
     property bool installUnsignedFwRequest: bot.isInstallUnsignedFwRequestPending
     property bool updatingExtruderFirmware: bot.updatingExtruderFirmware
@@ -257,27 +256,155 @@ ApplicationWindow {
         }
     }
 
-    property int drawerState: MoreporkUI.DrawerState.NotAvailable
+    // This holds the actual drawer object. The Notifications Drawer is
+    // the default one when the UI starts up.
+    property var activeDrawer: notificationsDrawer
 
+    // Enum used to set the notifications icons state i.e to show the
+    // notifications count or to show the drawer open/close arrow icon
+    // depending on which drawer is the active one. Currently we only
+    // differentiate between the notification drawer and other drawers.
+    enum ActiveDrawer {
+        NotificationsDrawer,
+        OtherDrawers
+    }
+    property int currentActiveDrawer: MoreporkUI.ActiveDrawer.NotificationsDrawer
+
+    // All drawers can be in open or closed state and the top bar
+    // notifications/drawer state icon looks different based on the current active
+    // drawer and whether that drawer is open or closed. e.g. when the notifications
+    // drawer is active and in the closed state the notifications icon shows the
+    // notifications count but when opened it shows the close arrow. Other drawers
+    // just show the open/close icon when they are closed/open respectively.
     enum DrawerState {
-        NotAvailable,
         Closed,
         Open
     }
+    property int drawerState: MoreporkUI.DrawerState.Closed
 
-    function setDrawerState(state) {
-        if(activeDrawer == printPage.printingDrawer ||
-           activeDrawer == materialPage.materialPageDrawer ||
-           activeDrawer == printPage.sortingDrawer) {
-            if(state) {
-                drawerState = MoreporkUI.DrawerState.Closed
-                topBar.drawerDownClicked.connect(activeDrawer.open)
+    // Error notifications (button) are styled differently from informational
+    // notifications and should appear above informational notifications in the
+    // notifications drawer. Persistent notifications are the highest in priority
+    // and should be top most in the list.
+    enum NotificationPriority {
+        Informational,
+        Error,
+        Persistent
+    }
+
+    // An array holding the individual notification objects.
+    property var notificationsList: ([])
+
+    // Call this function to post a notiification.
+    // Notification names must to be unique.
+    //
+    // e.g.
+    // addToNotificationsList("test_persistent",
+    //         MoreporkUI.NotificationPriority.Persistent,
+    //         test_func)
+    // addToNotificationsList("test_error",
+    //         MoreporkUI.NotificationPriority.Error,
+    //         test_func)
+    // addToNotificationsList("test_info",
+    //         MoreporkUI.NotificationPriority.Informational,
+    //         test_func)
+
+    function addToNotificationsList(name, priority, func) {
+        notificationsList.push(
+            {
+                name: name,
+                priority: priority,
+                func: func
             }
-            else {
-                drawerState = MoreporkUI.DrawerState.NotAvailable
+        )
+
+        // Notifications should appear in the order of their priority in the list
+        // so they are sorted in this order -- Persistent, Error, Informational.
+        notificationsList.sort(function(a, b){return b["priority"] - a["priority"]})
+        notificationsListChanged()
+    }
+
+    // Call this function to remove a notiification
+    //
+    // e.g.
+    // removeFromNotificationsList("test_persistent")
+    // removeFromNotificationsList("test_error")
+    // removeFromNotificationsList("test_info")
+    function removeFromNotificationsList(name) {
+        function rem(value, index, arr) {
+            if (value["name"] === name) {
+                arr.splice(index, 1);
+                return true;
+            }
+            return false;
+        }
+
+        notificationsList.filter(rem)
+        notificationsListChanged()
+    }
+
+    function test_func() {
+        console.log("test_func")
+    }
+
+    // The notifications icon in the top bar looks different if there are
+    // not notifications and when there are notifications and when there
+    // is alest one error notifications. The notificationsState enum is
+    // used to keep track of this.
+    enum NotificationsState {
+        NoNotifications,
+        NotificationsAvailable,
+        ErrorNotificationsAvailable
+    }
+    property int notificationsState: MoreporkUI.NotificationsState.NoNotifications
+    onNotificationsListChanged: {
+        if(notificationsList.length) {
+            notificationsState = MoreporkUI.NotificationsState.NotificationsAvailable
+            // Since the persistent notifications are located before the error notifications
+            // in the list we cannot just check the first element for error notifications
+            // which would've been very convenient.
+            for(var notif of notificationsList) {
+                if(notif["priority"] == MoreporkUI.NotificationPriority.Error) {
+                    notificationsState = MoreporkUI.NotificationsState.ErrorNotificationsAvailable
+                    break;
+                }
+            }
+        } else {
+            notificationsState = MoreporkUI.NotificationsState.NoNotifications
+        }
+    }
+
+    // This is the only function for controlling the drawer. By default the UI
+    // starts with the NotificationsDrawer as the active one. Anytime a new
+    // drawer is set as the active one it replaces the previous drawer but
+    // when the active drawer is set to null the notifications drawer becomes
+    // the active drawer. The current usage for this mechanism is anytime we
+    // enter a page that has a drawer e.g. the sorting drawer we set it as the
+    // current drawer and when we move out of the page we set the active drawer
+    // to null.
+    // This function will break if you try to pass in the notifications drawer
+    // object to set it as the active drawer.
+    function setActiveDrawer(drawer) {
+        if(drawer) {
+            if(activeDrawer != drawer) {
+                if(activeDrawer) {
+                    activeDrawer.close()
+                    topBar.drawerDownClicked.disconnect(activeDrawer.open)
+                }
+                activeDrawer = drawer
+                topBar.drawerDownClicked.connect(activeDrawer.open)
+                currentActiveDrawer = MoreporkUI.OtherDrawers
+                drawerState = MoreporkUI.DrawerState.Closed
+            }
+        } else {
+            if(activeDrawer) {
                 activeDrawer.close()
                 topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
+            activeDrawer = notificationsDrawer
+            topBar.drawerDownClicked.connect(activeDrawer.open)
+            currentActiveDrawer = MoreporkUI.NotificationsDrawer
+            drawerState = MoreporkUI.DrawerState.Closed
         }
     }
 
@@ -298,13 +425,12 @@ ApplicationWindow {
         }
     }
 
-    function disableDrawer() {
-        drawerState = MoreporkUI.DrawerState.NotAvailable
+    function disableOtherDrawer() {
+        drawerState = MoreporkUI.DrawerState.Closed
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
-            activeDrawer.interactive = false
-            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+            setActiveDrawer(null)
         }
     }
 
@@ -483,6 +609,11 @@ ApplicationWindow {
             }
         }
 
+        NotificationsDrawer {
+            id: notificationsDrawer
+            drawerStyle: CustomDrawer.DrawerStyle.NotificationsDrawer
+        }
+
         TopBarForm {
             id: topBar
             z: 1
@@ -519,13 +650,26 @@ ApplicationWindow {
                          !freScreen.visible
 
                 function customEntryCheck(swipeToIndex) {
+                    // Since the notifications drawer is the default drawer
+                    // when moving to the home page we disable all other drawers
+                    // which sets the notifications drawer as the active one.
+                    // See disableOtherDrawer() and setActiveDrawer() for more info.
                     if(swipeToIndex === MoreporkUI.BasePage) {
                         topBar.backButton.visible = false
-                        if(!printPage.isPrintProcess) disableDrawer()
+                        disableOtherDrawer()
                     } else {
                         topBar.backButton.visible = true
                     }
+
+                    // When moving to the print page we set the printing drawer
+                    // as the active one if a print process is running.
+                    if(swipeToIndex == MoreporkUI.PrintPage) {
+                        if(printPage.isPrintProcess) {
+                            setActiveDrawer(printPage.printingDrawer)
+                        }
+                    }
                 }
+
                 // MoreporkUI.BasePage
                 Item {
                     property string topBarTitle: qsTr("Home")
@@ -595,6 +739,7 @@ ApplicationWindow {
                         anchors.fill: parent
                     }
                 }
+
                 // MoreporkUI.SettingsPage
                 Item {
                     property var backSwiper: mainSwipeView
@@ -2941,5 +3086,12 @@ ApplicationWindow {
         fre.setStepEnable(FreStep.SetupWifi, !isNetworkConnectionAvailable)
         fre.setStepEnable(FreStep.LoginMbAccount, isNetworkConnectionAvailable)
         fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
+
+        // When starting up the UI we set the notifications drawer as the
+        // active drawer.
+        activeDrawer = notificationsDrawer
+        topBar.drawerDownClicked.connect(activeDrawer.open)
+        currentActiveDrawer = MoreporkUI.NotificationsDrawer
+        drawerState = MoreporkUI.DrawerState.Closed
     }
 }

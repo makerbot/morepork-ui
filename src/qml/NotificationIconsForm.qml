@@ -49,18 +49,41 @@ Row {
             height: 28
             radius: 14
             border.width: 2
-            border.color: "#ffffff"
-            color: {
-                switch(drawerState) {
-                case MoreporkUI.DrawerState.NotAvailable:
-                    "#000000"
+            border.color: {
+                switch(currentActiveDrawer) {
+                case MoreporkUI.NotificationsDrawer:
+                    switch(notificationsState) {
+                    case MoreporkUI.NotificationsState.NoNotifications:
+                    case MoreporkUI.NotificationsState.NotificationsAvailable:
+                        "#ffffff"
+                        break;
+                    case MoreporkUI.NotificationsState.ErrorNotificationsAvailable:
+                        "#fca833"
+                        break;
+                    }
                     break;
-                case MoreporkUI.DrawerState.Closed:
-                case MoreporkUI.DrawerState.Open:
+                case MoreporkUI.OtherDrawers:
                     "#ffffff"
                     break;
-                default:
-                    "#00000000"
+                }
+            }
+            color: {
+                switch(currentActiveDrawer) {
+                case MoreporkUI.NotificationsDrawer:
+                    switch(notificationsState) {
+                    case MoreporkUI.NotificationsState.NoNotifications:
+                        "#00000000"
+                        break;
+                    case MoreporkUI.NotificationsState.ErrorNotificationsAvailable:
+                        "#fca833"
+                        break;
+                    case MoreporkUI.NotificationsState.NotificationsAvailable:
+                        "#ffffff"
+                        break;
+                    }
+                    break;
+                case MoreporkUI.OtherDrawers:
+                    "#ffffff"
                     break;
                 }
             }
@@ -72,18 +95,39 @@ Row {
                 source: {
                     switch(drawerState) {
                     case MoreporkUI.DrawerState.Closed:
-                        "qrc:/img/drawer_down.png"
+                        switch(currentActiveDrawer) {
+                        case MoreporkUI.NotificationsDrawer:
+                            ""
+                            break;
+                        case MoreporkUI.OtherDrawers:
+                            "qrc:/img/drawer_down.png"
+                            break;
+                        }
                         break;
                     case MoreporkUI.DrawerState.Open:
                         "qrc:/img/drawer_up.png"
                         break;
-                    case MoreporkUI.DrawerState.NotAvailable:
                     default:
                         break;
                     }
                 }
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            TextBody {
+                text: notificationsList.length
+                color: "#000000"
+                visible: {
+                    currentActiveDrawer == MoreporkUI.NotificationsDrawer &&
+                    notificationsState != MoreporkUI.NotificationsState.NoNotifications &&
+                    drawerState == MoreporkUI.DrawerState.Closed
+                }
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 1
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: 1
+                font.weight: Font.Bold
             }
         }
 

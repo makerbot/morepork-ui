@@ -72,8 +72,8 @@ Item {
     onUsbStorageConnectedChanged: {
         if(!storage.usbStorageConnected) {
             if(printSwipeView.currentIndex != PrintPage.BasePage &&
-                    browsingUsbStorage) {
-                setDrawerState(false)
+               browsingUsbStorage) {
+                setActiveDrawer(null)
                 printSwipeView.swipeToItem(PrintPage.BasePage)
             }
             if(safeToRemoveUsbPopup.opened) {
@@ -94,9 +94,7 @@ Item {
             resetSettingsSwipeViewPages()
             mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
             printSwipeView.swipeToItem(PrintPage.BasePage)
-            setDrawerState(false)
-            activeDrawer = printPage.printingDrawer
-            setDrawerState(true)
+            setActiveDrawer(printPage.printingDrawer)
             if(printFromQueueState == PrintPage.WaitingToStartPrint) {
                 checkStartQueuedPrintTimeout.stop()
                 printQueuePopup.close()
@@ -118,7 +116,7 @@ Item {
         }
         else {
             printStatusView.printStatusSwipeView.setCurrentIndex(PrintStatusView.Page0)
-            setDrawerState(false)
+            setActiveDrawer(null)
             // Only reset at end of 'Print Process'
             // if 'Print Again' option isn't used
             if(!printAgain) {
@@ -431,8 +429,7 @@ Item {
                                 browsingUsbStorage = true
                                 storage.setStorageFileType(StorageFileType.Print)
                                 storage.updatePrintFileList("?root_usb?")
-                                activeDrawer = printPage.sortingDrawer
-                                setDrawerState(true)
+                                setActiveDrawer(printPage.sortingDrawer)
                                 printSwipeView.swipeToItem(PrintPage.FileBrowser)
                             }
                         }
@@ -451,8 +448,7 @@ Item {
                             browsingUsbStorage = false
                             storage.setStorageFileType(StorageFileType.Print)
                             storage.updatePrintFileList("?root_internal?")
-                            activeDrawer = printPage.sortingDrawer
-                            setDrawerState(true)
+                            setActiveDrawer(printPage.sortingDrawer)
                             printSwipeView.swipeToItem(PrintPage.FileBrowser)
                         }
                     }
@@ -518,7 +514,7 @@ Item {
                     storage.updatePrintFileList(backDir)
                 }
                 else {
-                    setDrawerState(false)
+                    setActiveDrawer(null)
                     printSwipeView.swipeToItem(PrintPage.BasePage)
                 }
             }
@@ -606,7 +602,7 @@ Item {
                         else if(model.modelData.fileBaseName !== "No Items Present") { // Ignore default fileBaseName object
                             getPrintFileDetails(model.modelData)
                             startPrintSource = PrintPage.FromLocal
-                            setDrawerState(false)
+                            setActiveDrawer(null)
                             startPrintInstructionsItem.acknowledged = false
                             printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
 
@@ -811,7 +807,7 @@ Item {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()
-                        setDrawerState(true)
+                        setActiveDrawer(printPage.sortingDrawer)
                     }
                     currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
                     startPrintSource = PrintPage.None
@@ -824,7 +820,7 @@ Item {
             function skipFreStepAction() {
                 startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                 resetPrintFileDetails()
-                setDrawerState(false)
+                setActiveDrawer(null)
                 printSwipeView.swipeToItem(PrintPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
@@ -859,8 +855,7 @@ Item {
             browsingUsbStorage = false
             storage.setStorageFileType(StorageFileType.Print)
             storage.updatePrintFileList("?root_internal?")
-            activeDrawer = printPage.sortingDrawer
-            setDrawerState(true)
+            setActiveDrawer(printPage.sortingDrawer)
             printSwipeView.swipeToItem(PrintPage.FileBrowser)
             copyingFilePopup.close()
         }
