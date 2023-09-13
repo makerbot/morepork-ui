@@ -128,7 +128,7 @@ qt5_add_translation(QM_FILES ${TS_SOURCES})
 if(${QT_CREATOR_BUILD})
     list(GET QM_FILES 0 QM_FILE)
     get_filename_component(TRANSLATIONS_DIR ${QM_FILE} DIRECTORY)
-    add_definitions(-DTRANSLATIONS_DIR="${TRANSLATIONS_DIR}")
+    add_definitions(-DTRANSLATIONS_DIR="${TRANSLATIONS_DIR}/")
 endif()
 
 # Only precompile for toolchain release builds. Precompiling for qt creator
