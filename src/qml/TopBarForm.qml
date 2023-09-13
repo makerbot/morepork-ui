@@ -27,18 +27,12 @@ Item {
 
     Timer {
         id: secondsUpdater
-        interval: 100 // 10x per second hides time interval misses better than exactly 1x per second
+        interval: 60000
         repeat: true
-        running: true
+        running: textDateTime.visible
+        triggeredOnStart: true
         onTriggered: {
-            timeSeconds = new Date().toLocaleString(Qt.locale(), "ss")
-            // 2-on, 2-off hides time interval misses better than 1-on, 1-off
-            var newSeparatorString = (((timeSeconds % 4) < 2) ? ":" : " ")
-            if (newSeparatorString != oldSeparatorString) {
-                oldSeparatorString =  newSeparatorString
-                var formatString = "M/d  H" + oldSeparatorString + "mm"
-                textDateTime.text = new Date().toLocaleString(Qt.locale(), formatString)
-            }
+            textDateTime.text = new Date().toLocaleString(Qt.locale(), "M/d  H:mm")
         }
     }
 
