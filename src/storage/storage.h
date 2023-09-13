@@ -14,14 +14,14 @@
 
 #define DEFAULT_FW_FILE_NAME QString("firmware.zip")
 #define TEST_PRINT_FILE_PREFIX QString("test_print_")
-#define CAL_PRINT_FILE_PREFIX QString("cal_print_")
+#define CAL_PRINT_FILE_PREFIX QString("calibration_")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/usb_storage"
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
-#define CAL_PRINT_PATH QString("/home/")+qgetenv("USER")+"/cal_prints/"
+#define CAL_PRINT_PATH QString("/home/")+qgetenv("USER")+"/calibration_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define USB_STORAGE_DEV_BY_PATH_FRNT_PNL QString()
 #define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2 QString()
@@ -37,7 +37,7 @@
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define TEST_PRINT_PATH QString("/usr/test_prints/")
-#define CAL_PRINT_PATH QString("/usr/cal_prints/")
+#define CAL_PRINT_PATH QString("/usr/calibration_prints/")
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define USB_STORAGE_DEV_BY_PATH_FRNT_PNL \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
@@ -72,6 +72,7 @@ class PrintFileInfo : public QObject {
   Q_PROPERTY(int extruderTempCelciusB READ extruderTempCelciusB NOTIFY fileInfoChanged)
   Q_PROPERTY(int chamberTempCelcius READ chamberTempCelcius NOTIFY fileInfoChanged)
   Q_PROPERTY(int buildplaneTempCelcius READ buildplaneTempCelcius NOTIFY fileInfoChanged)
+  Q_PROPERTY(int buildplatformTempCelcius READ buildplatformTempCelcius NOTIFY fileInfoChanged)
   Q_PROPERTY(int numShells READ numShells NOTIFY fileInfoChanged)
   Q_PROPERTY(float layerHeightMM READ layerHeightMM NOTIFY fileInfoChanged)
   Q_PROPERTY(float infillDensity READ infillDensity NOTIFY fileInfoChanged)
@@ -88,7 +89,8 @@ class PrintFileInfo : public QObject {
   bool extruder_used_a_, extruder_used_b_;
   float extrusion_mass_grams_a_, extrusion_mass_grams_b_;
   int extruder_temp_celcius_a_, extruder_temp_celcius_b_,
-      chamber_temp_celcius_, buildplane_temp_celcius_, num_shells_;
+      chamber_temp_celcius_, buildplane_temp_celcius_,
+      buildplatform_temp_celcius_, num_shells_;
   float layer_height_mm_, infill_density_, time_estimate_sec_;
   bool uses_support_, uses_raft_;
   QString material_a_, material_b_, slicer_name_;
@@ -116,6 +118,7 @@ class PrintFileInfo : public QObject {
                   const int extruder_temp_celcius_b = 0,
                   const int chamber_temp_celcius = 0,
                   const int buildplane_temp_celcius = 0,
+                  const int buildplatform_temp_celcius = 0,
                   const int num_shells = 0,
                   const float layer_height_mm = 0.0f,
                   const float infill_density = 0.0f,
@@ -140,6 +143,7 @@ class PrintFileInfo : public QObject {
                   extruder_temp_celcius_b_(extruder_temp_celcius_b),
                   chamber_temp_celcius_(chamber_temp_celcius),
                   buildplane_temp_celcius_(buildplane_temp_celcius),
+                  buildplatform_temp_celcius_(buildplatform_temp_celcius),
                   num_shells_(num_shells),
                   layer_height_mm_(layer_height_mm),
                   infill_density_(infill_density),
@@ -164,6 +168,7 @@ class PrintFileInfo : public QObject {
         extruder_temp_celcius_b_ = rvalue.extruder_temp_celcius_b_;
         chamber_temp_celcius_ = rvalue.chamber_temp_celcius_;
         buildplane_temp_celcius_ = rvalue.buildplane_temp_celcius_;
+        buildplatform_temp_celcius_ = rvalue.buildplatform_temp_celcius_;
         num_shells_ = rvalue.num_shells_;
         layer_height_mm_ = rvalue.layer_height_mm_;
         infill_density_ = rvalue.infill_density_;
@@ -190,6 +195,7 @@ class PrintFileInfo : public QObject {
                 rvalue.extruder_temp_celcius_b_,
                 rvalue.chamber_temp_celcius_,
                 rvalue.buildplane_temp_celcius_,
+                rvalue.buildplatform_temp_celcius_,
                 rvalue.num_shells_,
                 rvalue.layer_height_mm_,
                 rvalue.infill_density_,
@@ -240,6 +246,9 @@ class PrintFileInfo : public QObject {
     }
     int buildplaneTempCelcius() const {
         return buildplane_temp_celcius_;
+    }
+    int buildplatformTempCelcius() const {
+        return buildplatform_temp_celcius_;
     }
     int numShells() const {
         return num_shells_;

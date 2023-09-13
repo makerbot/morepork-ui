@@ -276,5 +276,7 @@
         <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
+        <file>ManualCalibrationPrintFinishedForm.qml</file>
+        <file>ManualCalibrationPrintFinished.qml</file>
     </qresource>
 </RCC>

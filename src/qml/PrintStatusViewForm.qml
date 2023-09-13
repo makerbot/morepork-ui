@@ -315,11 +315,19 @@ LoggingItem {
                     id: acknowledgePrintFinished
                     visible: (bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed ||
-                             bot.process.stateType == ProcessStateType.Cancelled)
+                             bot.process.stateType == ProcessStateType.Cancelled) &&
+                             !isInManualCalibration
                 }
 
                 // TODO ERICA Need to add a button for Manual Z-cal only and hide acknowledge
+                ManualCalibrationPrintFinished {
+                    id: manualCalibrationPrintFinished
+                    visible: (bot.process.stateType == ProcessStateType.Completed ||
+                              bot.process.stateType == ProcessStateType.Failed ||
+                              bot.process.stateType == ProcessStateType.Cancelled) &&
+                             isInManualCalibration
 
+                }
 
                // Re-styled incase we want to use this in the future
                // currently hidden because it was removed from the design

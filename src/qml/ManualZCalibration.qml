@@ -26,11 +26,6 @@ ManualZCalibrationForm {
     function getTestPrint() {
         // We could use the spool journal to determine the loaded material
         // but sticking with this way that we use everywhere else currently.
-        /*var model_mat = materialPage.bay1.filamentMaterial
-        var support_mat = materialPage.bay2.filamentMaterial
-        var test_print_name_string = model_mat + "_" + support_mat
-        var test_print_dir_string = bot.extruderATypeStr + "/" +
-                                    bot.extruderBTypeStr + "/"*/
         var test_print_dir_string = bot.extruderATypeStr + "/"
         var test_print_name_string = "abs-wss1_wss1"
         storage.getCalibrationPrint(test_print_dir_string, test_print_name_string)
@@ -46,27 +41,26 @@ ManualZCalibrationForm {
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
 
-    function getValues() {
-        return [calValueItem1.value, calValueItem2.value,
+    function getAverage() {
+        var num = 0
+        var values = [calValueItem1.value, calValueItem2.value,
                 calValueItem3.value, calValueItem4.value]
+        // Average the values
+        for (var i = 0; i < values.length; i++) {
+            num += values[i]
+        }
+        return (num/values.length)
     }
 
     function setNewToolheadConfigurations() {
-        var num = 0
-        var calValues = getValues()
-        // Average the values
-        for (var i = 0; i < calValues.length; i++) {
-            num += calValues[i]
-        }
-        var t_before = (num/calValues.length)
-
-        console.info("Average = " + t_before)
-
+        var t_after = 0.20
+        var s = -0.515
         // Get Bz before value from sensor
         var bz_before = bot.offsetBZ
         console.info("BZ offset: " + bz_before)
-        var t_after = 0.20
-        var s = -0.515
+        // Get Average
+        var t_before = getAverage()
+        console.info("Average = " + t_before)
 
         // Find offset
         var bz_after = ((t_after - t_before) / s) + bz_before
@@ -83,29 +77,32 @@ ManualZCalibrationForm {
         console.info("BZ offset: " + bz_before)
 
         // Set Coarse Adjustements
-        var bz_new = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
-        console.info("BZ adjustment: " + bz_new)
-
+        var bz_new_offset = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
+        console.info("BZ adjustment: " + bz_new_offset)
 
         // Set configs
-        bot.setManualCalibrationOffset(bz_new)
+        bot.setManualCalibrationOffset(bz_new_offset)
         waitForCoarseAdjustment.start()
     }
 
     function checkForIssues() {
-        var low_range_val = 0.14
+        var low_range_val = 0.16
         var high_range_val = 0.26
-        var calValues = getValues()
-        for (var i = 0; i < calValues.length; i++) {
-            if(calValues[i] < low_range_val) {
-                adjustment = -1
-                return true
-            }
-            else if(calValues[i]  > high_range_val) {
-                adjustment = 1
-                return true
-            }
+
+        // Get Average
+        var avg = getAverage()
+
+        // Check
+        if(avg < low_range_val) {
+            adjustment = -1
+            return true
         }
+        else if(avg > high_range_val) {
+            adjustment = 1
+            return true
+        }
+
+        // Return False if good
         return false
     }
 
