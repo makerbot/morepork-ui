@@ -552,11 +552,15 @@ ApplicationWindow {
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
                     property string topBarTitle: qsTr("Select Source")
+                    property bool backIsCancel: isInManualCalibration
                     smooth: false
                     visible: false
 
                     function altBack() {
-                        if(!inFreStep) {
+                        if(isInManualCalibration) {
+                            settingsPage.extruderSettingsPage.manualZCalibration.cancelManualZCalPopup.open()
+                        }
+                        else if(!inFreStep) {
                             if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
                                 printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
                                 return

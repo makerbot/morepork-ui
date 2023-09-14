@@ -824,7 +824,19 @@ Item {
             visible: false
 
             function altBack() {
-                if(!inFreStep) {
+
+                if(isInManualCalibration) {
+                    // Due to special calibration printing manual
+                    // calibration is required on the print page.
+                    // We don't want the user to be able to do normal back out
+                    // Return to Manual Calibration process where we left off...
+                    startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
+                    printSwipeView.swipeToItem(PrintPage.BasePage)
+                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                    settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                }
+                else if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()

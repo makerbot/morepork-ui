@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
 
 LoggingItem {
     itemName: "ManualZCalibration"
@@ -15,8 +16,6 @@ LoggingItem {
     property alias calValueItem2: calValueItem2
     property alias calValueItem3: calValueItem3
     property alias calValueItem4: calValueItem4
-    property real testOffset: 7.79143907258212
-
 
     ContentLeftSide {
         id: contentLeftSide
@@ -616,12 +615,23 @@ LoggingItem {
         showTwoButtons: true
         left_button_text: qsTr("STOP PROCESS")
         left_button.onClicked: {
+            // Return to Start Page
             state = "z_cal_start"
             isInManualCalibration = false
+            if(bot.process.type == ProcessType.Print) {
+                // Cancel Print
+                bot.cancel()
+                printPage.clearErrors()
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+            }
+
             cancelManualZCalPopup.close()
         }
         right_button_text: qsTr("CONTINUE")
         right_button.onClicked: {
+            // Continue
             cancelManualZCalPopup.close()
         }
 
