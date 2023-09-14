@@ -20,8 +20,8 @@ class UiTranslator : public QObject {
 
         Q_INVOKABLE void selectLanguage(QString localeStr){
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
-            // desktop linux path (.qm files are placed in the executables directory)
-            QString kFilePath(MOREPORK_ROOT_DIR"/src/translations/");
+            // Path to build qm files provided by the build system
+            QString kFilePath(TRANSLATIONS_DIR);
 #else
             // embedded linux path
             QString kFilePath("/usr/share/morepork_ui/translations/");
