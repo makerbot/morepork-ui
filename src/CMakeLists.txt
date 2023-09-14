@@ -122,11 +122,14 @@ qt5_wrap_cpp(MOREPORK_UI_HEADERS_MOC
     ${MOREPORK_UI_HEADERS}
     ${PARSED_ENUM_FILE_NAME})
 
-# Run the following to generate/update .ts files:
-# $ cd src/translations
-# $ ./morepork_ts_update.sh
+# Autogenerate qm files from ts files
 file(GLOB TS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/translations/*.ts")
 qt5_add_translation(QM_FILES ${TS_SOURCES})
+if(${QT_CREATOR_BUILD})
+    list(GET QM_FILES 0 QM_FILE)
+    get_filename_component(TRANSLATIONS_DIR ${QM_FILE} DIRECTORY)
+    add_definitions(-DTRANSLATIONS_DIR="${TRANSLATIONS_DIR}/")
+endif()
 
 # Only precompile for toolchain release builds. Precompiling for qt creator
 # builds breaks a few convenient Qt creator features. (compilation happens at
