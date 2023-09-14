@@ -267,7 +267,6 @@
         <file>ManualZCalibrationForm.qml</file>
         <file>NumberAddSubtractItem.qml</file>
         <file>NumberAddSubtractItemForm.qml</file>
-        <file>SetupProceduresPageForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
         <file>DirectionArrowsComponent.qml</file>
         <file>MoveBuildPlatePageForm.qml</file>

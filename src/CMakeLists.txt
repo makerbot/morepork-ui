@@ -236,14 +236,14 @@ if(NOT ${QT_CREATOR_BUILD})
 
     install(
         DIRECTORY "${MoreporkUI_SOURCE_DIR}/calibration_prints/fire/"
-        DESTINATION
+            DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/fire/rootfs/usr/calibration_prints")
     install(
         DIRECTORY "${MoreporkUI_SOURCE_DIR}/calibration_prints/lava/"
-        DESTINATION
+            DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/lava/rootfs/usr/calibration_prints")
     install(
         DIRECTORY "${MoreporkUI_SOURCE_DIR}/calibration_prints/magma/"
-        DESTINATION
+            DESTINATION
             "${CMAKE_INSTALL_PREFIX}/per_machine/magma/rootfs/usr/calibration_prints")
 endif()

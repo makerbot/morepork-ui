@@ -242,8 +242,4 @@
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
     </qresource>
-    <qresource prefix="/">
-        <file>ManualCalibrationPrintFinished.qml</file>
-        <file>ManualCalibrationPrintFinishedForm.qml</file>
-    </qresource>
 </RCC>
