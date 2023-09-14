@@ -22,7 +22,6 @@ Item {
 
     property alias buttonManualZCalibration: buttonManualZCalibration
     property alias manualZCalibration: manualZCalibration
-    // Is this the best place for this?
     property bool returnToManualCal: false
 
     enum SwipeIndex {

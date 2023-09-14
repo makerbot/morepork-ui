@@ -617,7 +617,8 @@ LoggingItem {
         left_button.onClicked: {
             // Return to Start Page
             state = "z_cal_start"
-            isInManualCalibration = false
+            resetManualCalValues()
+            secondPass = false
             if(bot.process.type == ProcessType.Print) {
                 // Cancel Print
                 bot.cancel()

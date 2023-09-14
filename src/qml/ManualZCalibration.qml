@@ -57,14 +57,12 @@ ManualZCalibrationForm {
         var s = -0.515
         // Get Bz before value from sensor
         var bz_before = bot.offsetBZ
-        console.info("BZ offset: " + bz_before)
+
         // Get Average
         var t_before = getAverage()
-        console.info("Average = " + t_before)
 
-        // Find offset
+        // Find Offset
         var bz_after = ((t_after - t_before) / s) + bz_before
-        console.info("Bz After = " + bz_after)
 
         // Set configs
         bot.setManualCalibrationOffset(bz_after)
@@ -74,13 +72,11 @@ ManualZCalibrationForm {
     function setCoarseAdjustements() {
         // Get Bz before value from sensor
         var bz_before = bot.offsetBZ
-        console.info("BZ offset: " + bz_before)
 
         // Set Coarse Adjustements
         var bz_new_offset = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
-        console.info("BZ adjustment: " + bz_new_offset)
 
-        // Set configs
+        // Set Adjustment
         bot.setManualCalibrationOffset(bz_new_offset)
         waitForCoarseAdjustment.start()
     }
@@ -122,10 +118,7 @@ ManualZCalibrationForm {
             cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
             state = "measure"
-        } else if (state == "updating_information") {
-            // Do nothing?
-            // would this work
-        } else {
+        } else if(state !== "updating_information") {
             state = "z_cal_start"
             resetManualCalValues()
             isInManualCalibration = false
@@ -136,7 +129,7 @@ ManualZCalibrationForm {
 
     z_cal_button.onClicked: {
         if(state == "z_cal_start" || state == "adjustments_complete") {
-            // Do print here
+            // Print
             startTestPrint()
         } else if (state == "remove_support") {
             state = "measure"
@@ -145,12 +138,11 @@ ManualZCalibrationForm {
         } else if (state == "z_calibration") {
             if(checkForIssues()) {
                 if(secondPass) {
-                    // have a bad value do not pass go
                     state = "cal_issue"
                 }
                 else {
                     state = "updating_information"
-                    // do coarse adjustments
+                    // Do coarse adjustments
                     setCoarseAdjustements()
                     resetManualCalValues()
                     secondPass = true
@@ -179,7 +171,6 @@ ManualZCalibrationForm {
             secondPass = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         } else {
-
             startTestPrint()
         }
 

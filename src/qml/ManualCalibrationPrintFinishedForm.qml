@@ -35,8 +35,7 @@ LoggingItem {
             logKey: text
             onClicked: {
                 acknowledgePrint()
-
-                // OPEN ISSUES POPUP
+                // PROMPT USER TO REDO AUTOCAL
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)

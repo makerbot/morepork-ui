@@ -528,7 +528,6 @@ LoggingItem {
         id: resumeManualCalibrationPopup
         popupHeight: manualCalColumnLayout.height+145
         showTwoButtons: true
-       // visible: true
         left_button_text: qsTr("EXIT")
         left_button.onClicked: {
             resumeManualCalibrationPopup.close()

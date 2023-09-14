@@ -311,6 +311,7 @@ LoggingItem {
                     }
                 }
 
+                // Acknowledge Print Regular Process
                 AcknowledgePrintFinished {
                     id: acknowledgePrintFinished
                     visible: (bot.process.stateType == ProcessStateType.Completed ||
@@ -319,7 +320,7 @@ LoggingItem {
                              !isInManualCalibration
                 }
 
-                // TODO ERICA Need to add a button for Manual Z-cal only and hide acknowledge
+                // Acknowledge Print From Manual Calibration/Special Case
                 ManualCalibrationPrintFinished {
                     id: manualCalibrationPrintFinished
                     visible: (bot.process.stateType == ProcessStateType.Completed ||
