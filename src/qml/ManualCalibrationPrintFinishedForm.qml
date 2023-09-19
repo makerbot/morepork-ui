@@ -25,9 +25,13 @@ LoggingItem {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
-                settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
+                if(bot.process.stateType == ProcessStateType.Cancelled ||
+                        bot.process.stateType == ProcessStateType.Failed) {
+                    settingsPage.extruderSettingsPage.manualZCalibration.state = "z_cal_start"
+                } else {
+                    settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
+                }
             }
-
         }
 
         ButtonRectangleSecondary {
