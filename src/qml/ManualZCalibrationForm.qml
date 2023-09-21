@@ -619,11 +619,16 @@ LoggingItem {
             state = "z_cal_start"
             resetManualCalValues()
             secondPass = false
+
+            // If the print process has ended
+            // you may be on the print page but
+            // not printing anything
             if(onPrintPage) {
                 if(bot.process.type == ProcessType.Print) {
                     // Cancel Print
                     bot.cancel()
                 }
+                onPrintPage = false
                 printPage.acknowledgePrint()
                 printPage.clearErrors()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
