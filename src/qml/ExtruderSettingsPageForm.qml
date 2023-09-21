@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.12
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
@@ -86,6 +87,7 @@ Item {
                         id: buttonManualZCalibration
                         buttonImage.source: "qrc:/img/icon_manual_zcal.png"
                         buttonText.text: qsTr("MANUAL CALIBRATION - Z")
+                        visible: bot.machineType !=  MachineType.Fire
                         enabled: !isProcessRunning()
                     }
 

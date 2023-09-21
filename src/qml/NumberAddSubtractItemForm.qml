@@ -8,7 +8,7 @@ Item {
 
     RowLayout {
         width: children.width
-        spacing: 55
+        spacing: 48
 
         Image {
             id: minusImage
@@ -28,12 +28,13 @@ Item {
         }
         TextBody {
             id: numberValue
-            width: 100
+            width: 114
             Layout.preferredWidth: width
 
             horizontalAlignment: Text.AlignHCenter
             text: qsTr("%1").arg(value)
             font.pixelSize: 42
+            //font.family: "Antenna"
             lineHeight: 49.22
         }
 

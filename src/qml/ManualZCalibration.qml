@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 
 ManualZCalibrationForm {
     property bool secondPass: false
+    property bool onPrintPage: false
     property int adjustment: 0
 
     Timer {
@@ -32,6 +33,7 @@ ManualZCalibrationForm {
     }
 
     function startTestPrint() {
+        onPrintPage = true
         printPage.printFromUI = true
         printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
@@ -123,6 +125,7 @@ ManualZCalibrationForm {
             resetManualCalValues()
             isInManualCalibration = false
             secondPass = false
+            onPrintPage = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         }
     }

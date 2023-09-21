@@ -619,9 +619,12 @@ LoggingItem {
             state = "z_cal_start"
             resetManualCalValues()
             secondPass = false
-            if(bot.process.type == ProcessType.Print) {
-                // Cancel Print
-                bot.cancel()
+            if(onPrintPage) {
+                if(bot.process.type == ProcessType.Print) {
+                    // Cancel Print
+                    bot.cancel()
+                }
+                printPage.acknowledgePrint()
                 printPage.clearErrors()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)

@@ -558,7 +558,7 @@ ApplicationWindow {
 
                     function altBack() {
                         if(isInManualCalibration) {
-                            printPage.acknowledgePrint()
+                            //printPage.acknowledgePrint()
                             settingsPage.extruderSettingsPage.manualZCalibration.cancelManualZCalPopup.open()
                         }
                         else if(!inFreStep) {
