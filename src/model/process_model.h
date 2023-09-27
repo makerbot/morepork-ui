@@ -33,6 +33,7 @@ class ProcessModel : public BaseModel {
         Pausing,
         Resuming,
         Paused,
+        PreprintPaused,
         Completed,
         Failed,
         Cancelled,
