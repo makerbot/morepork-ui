@@ -33,29 +33,31 @@ Button {
         anchors.left: parent.left
         anchors.leftMargin: 40
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 5
+        spacing: 6
 
         TextHeadline {
             id: materialNameText
             text: "MATERIAL NAME"
-            //anchors.verticalCenterOffset: -5
         }
 
         TextSubheader {
             id: temperatureAndTimeText
             text: "999 C | 999 HR"
-            //anchors.top: materialNameText.bottom
-            //anchors.topMargin: 5
-            //anchors.left: parent.left
-            //anchors.leftMargin: 40
-            //anchors.verticalCenter: parent.verticalCenter
             font.capitalization: Font.MixedCase
+            opacity: 0.8
         }
     }
 
     Image {
         id: startImage
+        width: sourceSize.width
+        height: sourceSize.height
         anchors.right: parent.right
         anchors.rightMargin: 40
+        smooth: false
+        antialiasing: false
+        source: "qrc:/img/icon_start.png"
+        anchors.verticalCenter: parent.verticalCenter
+        visible: true
     }
 }

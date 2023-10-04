@@ -153,7 +153,8 @@ Rectangle {
 
             PropertyChanges {
                 target: outer_image
-                visible: parent.visible
+                visible: parent.visible &&
+                         loadingProgress == 0
             }
 
             PropertyChanges {
@@ -165,7 +166,6 @@ Rectangle {
         State {
             name: "success"
             when: icon_image === LoadingIcon.Success
-
 
             PropertyChanges {
                 target: inner_image

@@ -143,8 +143,6 @@
         <file alias="error_filament_jam_1.png">images/errors/filament_jam_1.png</file>
         <file alias="error_filament_jam_2.png">images/errors/filament_jam_2.png</file>
         <file alias="calib_verification.png">images/calib_verification.png</file>
-        <file alias="dry_material.png">images/dry_material.png</file>
-        <file alias="dry_material_spool.png">images/dry_material_spool.png</file>
         <file alias="anneal_print.png">images/anneal_print.png</file>
         <file alias="apply_glue_build_plate.png">images/apply_glue_build_plate.png</file>
         <file alias="install_heat_shield.gif">images/install_heat_shield.gif</file>
@@ -234,5 +232,8 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="method_dry_material.png">images/dry_material/method/dry_material.png</file>
+        <file alias="methodxl_dry_material.png">images/dry_material/methodxl/dry_material.png</file>
+        <file alias="icon_start.png">images/icon_start.png</file>
     </qresource>
 </RCC>

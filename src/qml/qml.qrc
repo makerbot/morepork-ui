@@ -271,5 +271,7 @@
         <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
+        <file>DryMaterialCustomTemperatureForm.qml</file>
+        <file>DryMaterialCustomTemperature.qml</file>
     </qresource>
 </RCC>

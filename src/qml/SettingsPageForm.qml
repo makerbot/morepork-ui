@@ -134,7 +134,6 @@ Item {
                         buttonImage.source: "qrc:/img/icon_material.png"
                         buttonText.text: qsTr("DRY MATERIAL")
                         enabled: !isProcessRunning()
-                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {
@@ -233,6 +232,7 @@ Item {
             property bool hasAltBack: true
             property bool backIsCancel: bot.process.type == ProcessType.DryingCycleProcess &&
                                         dryMaterial.state != "choose_material" &&
+                                        dryMaterial.state != "custom_material" &&
                                         dryMaterial.state != "waiting_for_spool" &&
                                         dryMaterial.state != "dry_kit_instructions_2"
             smooth: false
@@ -244,6 +244,8 @@ Item {
                         dryMaterial.state = "waiting_for_spool"
                         dryMaterial.doChooseMaterial = false
                     }
+                    else if(dryMaterial.state == "custom_material")
+                        dryMaterial.state = "choose_material"
                     else if(dryMaterial.state == "waiting_for_spool")
                         dryMaterial.state = "dry_kit_instructions_2"
                     else if(dryMaterial.state == "dry_kit_instructions_2")
