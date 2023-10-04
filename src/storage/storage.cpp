@@ -257,6 +257,14 @@ void MoreporkStorage::getCalibrationPrint(const QString test_print_dir,
     const QString path = CAL_PRINT_PATH + test_print_dir + test_print;
     const QFileInfo kFileInfo = QFileInfo(path);
 
+    // Force this function to find a real slice, compatible or not.  For now
+    // we just assume that the test_print_name is hard coded to the one combo
+    // that we actually have support for.
+    if (!kFileInfo.exists() && test_print_dir != "mk14_c/") {
+        getCalibrationPrint("mk14_c/", test_print_name);
+        return;
+    }
+
     PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
 
     if (current_thing != nullptr) {
