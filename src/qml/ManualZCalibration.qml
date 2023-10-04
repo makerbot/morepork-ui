@@ -19,7 +19,12 @@ ManualZCalibrationForm {
         id: waitForCoarseAdjustment
         interval: 2500
         onTriggered: {
-            state = "adjustments_complete"
+            if(secondPass) {
+                state = "cal_issue"
+            } else {
+                state = "adjustments_complete"
+                secondPass = true
+            }
             adjustment = 0
         }
     }
@@ -140,16 +145,10 @@ ManualZCalibrationForm {
             state = "z_calibration"
         } else if (state == "z_calibration") {
             if(checkForIssues()) {
-                if(secondPass) {
-                    state = "cal_issue"
-                }
-                else {
-                    state = "updating_information"
-                    // Do coarse adjustments
-                    setCoarseAdjustements()
-                    resetManualCalValues()
-                    secondPass = true
-                }
+                state = "updating_information"
+                // Do coarse adjustments
+                setCoarseAdjustements()
+                resetManualCalValues()
             } else {
                 state = "updating_information"
                 setNewToolheadConfigurations()
