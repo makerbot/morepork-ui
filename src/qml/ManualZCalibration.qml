@@ -6,6 +6,7 @@ ManualZCalibrationForm {
     property bool secondPass: false
     property bool onPrintPage: false
     property int adjustment: 0
+    property bool noBack: false
 
     Timer {
         id: waitForConfigs
@@ -76,11 +77,11 @@ ManualZCalibrationForm {
         waitForConfigs.start()
     }
 
-    function setCoarseAdjustements() {
+    function setCoarseAdjustments() {
         // Get Bz before value from sensor
         var bz_before = bot.offsetBZ
 
-        // Set Coarse Adjustements
+        // Set Coarse Adjustments
         var bz_new_offset = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
 
         // Set Adjustment
@@ -119,8 +120,18 @@ ManualZCalibrationForm {
     function back() {
         if (state == "measure") {
                 state = "remove_support"
-        } else if(state == "remove_support" ||
-                  state == "cal_issue") {
+        } else if(state == "remove_support") {
+            state = "end_print"
+        } else if( state == "cal_issue") {
+            // if we were just on the print page we want to go back to the print process
+            // but if we are in the normal process we want to cancel
+            if(noBack) {
+                cancelManualZCalPopup.open()
+            }
+            else {
+                state = "end_print"
+            }
+        } else if(state == "end_print") {
             // Error going back will exit the process?
             cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
@@ -130,6 +141,7 @@ ManualZCalibrationForm {
             resetManualCalValues()
             isInManualCalibration = false
             secondPass = false
+            noBack = false
             onPrintPage = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         }
@@ -137,6 +149,7 @@ ManualZCalibrationForm {
 
     z_cal_button.onClicked: {
         if(state == "z_cal_start" || state == "adjustments_complete") {
+            noBack = false
             // Print
             startTestPrint()
         } else if (state == "remove_support") {
@@ -144,13 +157,14 @@ ManualZCalibrationForm {
         } else if (state == "measure") {
             state = "z_calibration"
         } else if (state == "z_calibration") {
+            state = "updating_information"
+            noBack = true
             if(checkForIssues()) {
-                state = "updating_information"
-                // Do coarse adjustments
-                setCoarseAdjustements()
+                // Do Coarse Adjustments
+                setCoarseAdjustments()
                 resetManualCalValues()
             } else {
-                state = "updating_information"
+                // Configure Toolheads
                 setNewToolheadConfigurations()
             }
 
@@ -165,13 +179,22 @@ ManualZCalibrationForm {
             state = "z_cal_start"
             resetManualCalValues()
             secondPass = false
+            noBack = false
         } else if (state == "success") {
             // exit
             state = "z_cal_start"
             resetManualCalValues()
             isInManualCalibration = false
             secondPass = false
+            noBack = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+        } else if(state == "end_print") {
+            if(printPageStatus) {
+                state = "remove_support"
+            } else {
+                state = "z_cal_start"
+                secondPass = false
+            }
         } else {
             startTestPrint()
         }
@@ -182,7 +205,10 @@ ManualZCalibrationForm {
         if(state == "cal_issue") {
             state = "z_cal_start"
             resetManualCalValues()
+            noBack = false
             secondPass = false
+        } else if(state == "end_print") {
+            state = "cal_issue"
         }
     }
 
