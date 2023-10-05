@@ -194,7 +194,7 @@ Item {
     function getPrintFileDetails(file) {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
-        file_name = inFreStep ? qsTr("TEST PRINT") : file.fileBaseName
+        file_name = inFreStep ? qsTr("TEST PRINT") : (isInManualCalibration ? qsTr("Z-Calibration Print") : file.fileBaseName)
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
         print_model_material = file.materialA
@@ -824,7 +824,19 @@ Item {
             visible: false
 
             function altBack() {
-                if(!inFreStep) {
+
+                if(isInManualCalibration) {
+                    // Due to special calibration printing manual
+                    // calibration is required on the print page.
+                    // We don't want the user to be able to do normal back out
+                    // Return to Manual Calibration process where we left off...
+                    startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
+                    printSwipeView.swipeToItem(PrintPage.BasePage)
+                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                    settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                }
+                else if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()

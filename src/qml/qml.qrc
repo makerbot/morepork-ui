@@ -263,6 +263,10 @@
         <file>FreChooseLanguagePage.qml</file>
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>ManualZCalibration.qml</file>
+        <file>ManualZCalibrationForm.qml</file>
+        <file>NumberAddSubtractItem.qml</file>
+        <file>NumberAddSubtractItemForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
         <file>DirectionArrowsComponent.qml</file>
         <file>MoveBuildPlatePageForm.qml</file>
@@ -271,5 +275,7 @@
         <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
+        <file>ManualCalibrationPrintFinishedForm.qml</file>
+        <file>ManualCalibrationPrintFinished.qml</file>
     </qresource>
 </RCC>

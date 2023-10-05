@@ -100,6 +100,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void drySpool();
     Q_INVOKABLE virtual void startDrying(const int temperature, const float time);
     Q_INVOKABLE virtual void get_calibration_offsets();
+    Q_INVOKABLE virtual void setManualCalibrationOffset(const float tb_offset);
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void submitPrintFeedback(bool success, const QVariantMap failure_map);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);

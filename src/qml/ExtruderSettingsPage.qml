@@ -17,5 +17,11 @@ ExtruderSettingsPageForm {
     buttonCleanExtruders.onClicked: {
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CleanExtrudersPage)
     }
+
+    buttonManualZCalibration.onClicked: {
+        bot.get_calibration_offsets()
+        isInManualCalibration = true
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+    }
 }
 

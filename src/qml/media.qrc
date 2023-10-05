@@ -224,6 +224,13 @@
         <file alias="qr_230_compatibility.png">images/qr_230_compatibility.png</file>
         <file alias="qr_230_fw_download.png">images/qr_230_fw_download.png</file>
         <file alias="qr_230_xlsetup.png">images/qr_230_xlsetup.png</file>
+        <file alias="manual_z_cal_measure.png">images/calibration/manual_z_cal_measure.png</file>
+        <file alias="manual_z_cal_remove_support.png">images/calibration/manual_z_cal_remove_support.png</file>
+        <file alias="manual_z_cal_start.png">images/calibration/manual_z_cal_start.png</file>
+        <file alias="qr_method_calibration.png">images/qr_method_calibration.png</file>
+        <file alias="icon_manual_zcal.png">images/icon_manual_zcal.png</file>
+        <file alias="plus_circle.png">images/plus_circle.png</file>
+        <file alias="minus_circle.png">images/minus_circle.png</file>
         <file alias="methodxl_insert_build_plate.gif">images/assisted_level/methodxl/insert_build_plate.gif</file>
         <file alias="methodxl_remove_build_plate.gif">images/assisted_level/methodxl/remove_build_plate.gif</file>
         <file alias="method_insert_build_plate.gif">images/assisted_level/method/insert_build_plate.gif</file>

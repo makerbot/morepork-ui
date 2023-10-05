@@ -128,7 +128,7 @@ ErrorScreenForm {
                 if(bot.process.stateType == ProcessStateType.Paused) {
                     bot.pauseResumePrint("resume")
                 } else if(bot.process.stateType == ProcessStateType.Failed) {
-                    if(!inFreStep) {
+                    if(!inFreStep && !isInManualCalibration) {
                         bot.done("acknowledge_failure")
                     }
                 }
