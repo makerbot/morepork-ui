@@ -1,11 +1,32 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
+import ProcessTypeEnum 1.0
+import ProcessStateTypeEnum 1.0
 
 ManualZCalibrationForm {
     property bool secondPass: false
-    property bool onPrintPage: false
     property int adjustment: 0
+
+    // If we are printing and we cancel the print, we wait for the print
+    // to fully cancel 
+    property bool waitingForCancel: false
+    property bool cancelWaitDone: waitingForCancel && (
+        bot.process.type != ProcessType.Print ||
+        bot.process.stateType == ProcessStateType.Cancelled ||
+        bot.process.stateType == ProcessStateType.Complete ||
+        bot.process.stateType == ProcessStateType.Failed)
+    onCancelWaitDoneChanged: {
+        if (cancelWaitDone) completeCancelWait();
+    }
+    function completeCancelWait() {
+        waitingForCancel = false;
+        printPage.acknowledgePrint()
+        printPage.clearErrors()
+        mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+        settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+    }
 
     Timer {
         id: waitForConfigs
@@ -38,7 +59,6 @@ ManualZCalibrationForm {
     }
 
     function startTestPrint() {
-        onPrintPage = true
         printPage.printFromUI = true
         printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
@@ -130,7 +150,6 @@ ManualZCalibrationForm {
             resetManualCalValues()
             isInManualCalibration = false
             secondPass = false
-            onPrintPage = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         }
     }
