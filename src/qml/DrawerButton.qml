@@ -57,6 +57,7 @@ Button {
                 anchors.left: parent.left
                 anchors.leftMargin: 120
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: -6
             }
         }
 

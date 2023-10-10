@@ -15,15 +15,7 @@ CustomDrawer {
         spacing: 0
         rotation: rootItem.rotation
 
-        Item {
-            id: empty
-            height: 70
-            smooth: false
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-        }
+        CloseDrawerItem {}
 
         DrawerButton {
             id: buttonCancelMaterialChange

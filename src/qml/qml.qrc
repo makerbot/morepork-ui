@@ -267,5 +267,6 @@
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
         <file>CustomDrawer.qml</file>
         <file>DrawerButton.qml</file>
+        <file>CloseDrawerItem.qml</file>
     </qresource>
 </RCC>
