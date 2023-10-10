@@ -33,7 +33,8 @@ ManualZCalibrationForm {
         // We could use the spool journal to determine the loaded material
         // but sticking with this way that we use everywhere else currently.
         var test_print_dir_string = bot.extruderATypeStr + "/"
-        var test_print_name_string = "abs-wss1_wss1"
+        //var test_print_name_string = "abs-wss1_wss1"
+        var test_print_name_string = model_mat + "_" + support_mat
         storage.getCalibrationPrint(test_print_dir_string, test_print_name_string)
     }
 
