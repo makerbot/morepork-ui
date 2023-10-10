@@ -258,14 +258,14 @@ void MoreporkStorage::getCalibrationPrint(const QString test_print_dir,
     const QFileInfo kFileInfo = QFileInfo(path);
 
     // Force this function to find a real slice, compatible or not.
-    // Force based on material type first and then based on
-    // extruder type if the material is second.
-    if(!kFileInfo.exists() && test_print_name !=  "abs-wss1_wss1") {
-        getCalibrationPrint(test_print_dir, "abs-wss1_wss1");
-        return;
-    }
+    // Force based on extruder type first and then based on
+    // material type second.
     if (!kFileInfo.exists() && test_print_dir != "mk14_c/") {
         getCalibrationPrint("mk14_c/", test_print_name);
+        return;
+    }
+    if(!kFileInfo.exists() && test_print_name !=  "abs-wss1_wss1") {
+        getCalibrationPrint(test_print_dir, "abs-wss1_wss1");
         return;
     }
 
