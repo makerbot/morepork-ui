@@ -9,6 +9,8 @@ CustomDrawer {
     objectName: "notificationsDrawer"
     property string topBarTitle: qsTr("Notifications")
 
+    CloseDrawerItem {}
+
     NotificationButton {
         id: buttonOngoingPrint
         anchors.top: parent.top
