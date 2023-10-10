@@ -58,7 +58,7 @@ Item {
 
             TextBody {
                 style: TextBody.Large
-                text: qsTr("<b>cloudprint.makerbot.com</b>  |  <b>Add Printer > Method Series</b>")
+                text: "<b>cloudprint.makerbot.com</b>  |  <b>" + qsTr("Add Printer > Method Series") + "</b>"
                 font.weight: Font.Bold
             }
         }

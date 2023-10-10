@@ -195,16 +195,22 @@ Item {
 
                 TextSubheader {
                     id: nameStatusTitle
-                    style: TextSubheader.TopBar
+                    font.pixelSize: 17
+                    font.letterSpacing: 3
+                    font.weight: Font.Light
+                    font.capitalization: Font.AllUppercase
+                    lineHeight: 22
+                    color: "#979797"
                     text: ("%1 - %2").arg(bot.name).arg(printerStatus)
                     horizontalAlignment: Text.AlignHCenter
-                    antialiasing: false
-                    smooth: false
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
                 TextHeadline {
                     id: pageTitle
+                    font.pixelSize: 17
+                    font.letterSpacing: 3
+                    lineHeight: 22
                     style: TextHeadline.TopBar
                     text: {
                         if(activeDrawer && activeDrawer.opened) {

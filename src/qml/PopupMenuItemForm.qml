@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 MenuItem {
     id: menuItem
     width: parent.width
-    height: 50
+    height: 60
 
     property alias label: menuItemLabel.text
     property bool isLastItem: false
@@ -23,6 +23,8 @@ MenuItem {
         color: parent.enabled ? pressed ? "#000000" : "#ffffff" : "#4d4d4d"
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
+        wrapMode: Text.WordWrap
+        width: parent.width - 40
     }
 
     Rectangle {

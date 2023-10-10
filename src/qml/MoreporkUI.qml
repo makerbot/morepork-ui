@@ -36,6 +36,8 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+    property bool isInManualCalibration: false
+
 
     property bool isNetworkConnectionAvailable: (bot.net.interface == "ethernet" ||
                                                  bot.net.interface == "wifi")
@@ -46,7 +48,7 @@ ApplicationWindow {
 
     property bool safeToRemoveUsb: bot.safeToRemoveUsb
     onSafeToRemoveUsbChanged: {
-        if(safeToRemoveUsb && isFreComplete) {
+        if(safeToRemoveUsb && isFreComplete && !isInManualCalibration) {
             safeToRemoveUsbPopup.open()
         }
     }
@@ -700,12 +702,17 @@ ApplicationWindow {
                     property string topBarTitle: bot.process.type == ProcessType.Print ?
                                                      qsTr("PRINT") :
                                                      qsTr("Select Source")
+                    property bool backIsCancel: isInManualCalibration
 
                     smooth: false
                     visible: false
 
                     function altBack() {
-                        if(!inFreStep) {
+                        if(isInManualCalibration) {
+                            //printPage.acknowledgePrint()
+                            settingsPage.extruderSettingsPage.manualZCalibration.cancelManualZCalPopup.open()
+                        }
+                        else if(!inFreStep) {
                             if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
                                 printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
                                 return
@@ -2546,8 +2553,8 @@ ApplicationWindow {
                                         qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
                                                     printPage.print_model_material_name).arg(printPage.print_support_material_name) :
                                         qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
-                                                    printPage.print_model_material_name))) +
-                                qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
+                                                    printPage.print_model_material_name))) + "\n"
+                                qsTr("Load the correct materials to start the print or export the file again with these material settings.")
                             }
                         }
 
@@ -2642,12 +2649,12 @@ ApplicationWindow {
                     id: description_text_exp_ext_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("Visit MakerBot.com/Labs to learn about our material\n" +
-                             "partners and recommended print settings. Material should\n" +
-                             "be loaded through the AUX port under the removable cover\n" +
-                             "on the top left of the printer. Make sure that the extruders\n" +
-                             "are calibrated before printing. The Experimental Extruder is\n" +
-                             "an experimental product and is not covered under warranty\n" +
+                        qsTr("Visit MakerBot.com/Labs to learn about our material " +
+                             "partners and recommended print settings. Material should " +
+                             "be loaded through the AUX port under the removable cover " +
+                             "on the top left of the printer. Make sure that the extruders " +
+                             "are calibrated before printing. The Experimental Extruder is " +
+                             "an experimental product and is not covered under warranty " +
                              "or MakerCare."
                             )
                     }
@@ -2710,7 +2717,7 @@ ApplicationWindow {
                     id: description_text_hepa_error_popup
                     color: "#cbcbcb"
                     text: {
-                        qsTr("There seems to be something wrong with the filter. Error Code %1\n" +
+                        qsTr("There seems to be something wrong with the filter. Error Code %1. " +
                              "Visit support.makerbot.com to learn more.").arg(bot.hepaErrorCode)
                     }
                     horizontalAlignment: Text.AlignHCenter
@@ -2949,6 +2956,14 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignLeft
                             visible: true
                         }
+
+                        TextBody {
+                            id: url
+                            font.weight: Font.Bold
+                            Layout.preferredWidth: parent.width
+                            Layout.alignment: Qt.AlignLeft
+                            visible: false
+                        }
                     }
                 }
 
@@ -3010,6 +3025,11 @@ ApplicationWindow {
                             target: help_description
                             text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
 
                     State {
@@ -3023,6 +3043,11 @@ ApplicationWindow {
                         PropertyChanges {
                             target: help_title
                             text: qsTr("CUT FILAMENT TIP HELP")
+                        }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
                         }
                     },
 
@@ -3038,6 +3063,11 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("PLACE DESICCANT HELP")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
 
                     State {
@@ -3052,6 +3082,11 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("PLACE MATERIAL HELP")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
                     State {
                         name: "methodxl_feed_filament_help"
@@ -3065,6 +3100,11 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("FEED MATERIAL HELP")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
                     State {
                         name: "methodxl_locate_desiccant_help"
@@ -3077,6 +3117,30 @@ ApplicationWindow {
                         PropertyChanges {
                             target: help_title
                             text: qsTr("LOCATE DESICCANT HELP")
+                        }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "method_calibration"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/qr_method_calibration.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("HELP")
+                        }
+
+                        PropertyChanges {
+                            target: url
+                            text: "ultimaker.com/method-calibration"
+                            visible: true
                         }
                     }
 

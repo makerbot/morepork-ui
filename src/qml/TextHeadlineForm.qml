@@ -5,8 +5,7 @@ Text {
     enum Style {
         Base,
         Large,
-        ExtraLarge,
-        TopBar
+        ExtraLarge
     }
     property int style: TextHeadline.Base
     id: textHeadline
@@ -22,9 +21,6 @@ Text {
             break;
         case TextHeadline.ExtraLarge:
             48
-            break;
-        case TextSubheader.TopBar:
-            17
             break;
         default:
             20
@@ -42,21 +38,11 @@ Text {
         case TextHeadline.ExtraLarge:
             7.2
             break;
-        case TextSubheader.TopBar:
-            3
-            break;
         default:
             2
         }
     }
-    font.weight: {
-        switch(style) {
-        case TextHeadline.TopBar:
-        default:
-            Font.DemiBold
-            break;
-        }
-    }
+    font.weight: Font.DemiBold
     font.capitalization: Font.AllUppercase
     wrapMode: Text.WordWrap
     lineHeightMode: Text.FixedHeight
@@ -70,9 +56,6 @@ Text {
             break;
         case TextHeadline.ExtraLarge:
             52
-            break;
-        case TextSubheader.TopBar:
-            22
             break;
         default:
             24

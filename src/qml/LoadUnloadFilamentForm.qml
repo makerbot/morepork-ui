@@ -322,10 +322,10 @@ LoggingItem {
                 }
                 textBody {
                     text: qsTr("Cut the filament below the point at which " +
-                               "any material has been bent or damaged.<br><br>" +
-                               "Cleanly cut any bent material at a 45 degree " +
-                               "angle before inserting into the guide tube.<br><br>" +
-                               "Click the help icon for additional guidance on " +
+                               "any material has been bent or damaged.") + "<br><br>" +
+                          qsTr("Cleanly cut any bent material at a 45 degree " +
+                               "angle before inserting into the guide tube.") + "<br><br>" +
+                          qsTr("Click the help icon for additional guidance on " +
                                "best practices for cutting material.")
                     visible: true
                 }
@@ -366,10 +366,11 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Insert the two desiccant bags into the slots on the " +
-                               "%1 side of the material case.<br><br>Click the help " +
-                               "icon for additional considerations around desiccant.").arg(
-                              bayID == 1 ? qsTr("left") : qsTr("right"))
+                    text: qsTr("Insert the two desiccant bags into the slots " +
+                                  "on the %1 side of the material case.")
+                              .arg(bayID == 1 ? qsTr("left") : qsTr("right")) +
+                              "<br><br>" + qsTr("Click the help icon for " +
+                                  "additional considerations around desiccant.")
                     visible: true
                 }
                 buttonPrimary {
@@ -490,8 +491,10 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Feed material through the funnel until you feel it engage with the extruder.<br><br>" +
-                               "If you encounter any issues, click the help icon for additional guidance.")
+                    text: qsTr("Feed material through the funnel until you " +
+                          "feel it engage with the extruder.") + "<br><br>" +
+                          qsTr("If you encounter any issues, click the help " +
+                          "icon for additional guidance.")
                     visible: true
                 }
                 numberedSteps {
@@ -537,7 +540,8 @@ LoggingItem {
                 target: contentRightSide
                 textHeader {
                     style: TextHeadline.Base
-                    text: qsTr("%1 DETECTED<br><br>LOAD MATERIAL INTO BAY %2").arg(materialName).arg(bayID)
+                    text: qsTr("%1 DETECTED").arg(materialName) + "<br><br>" +
+                          qsTr("LOAD MATERIAL INTO BAY %1").arg(bayID)
                     visible: true
                 }
                 textBody {
@@ -598,7 +602,8 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Motors are pushing the material up to the extruder.<br><br>This can take up to 30 seconds.")
+                    text: qsTr("Motors are pushing the material up to the extruder.") +
+                          "<br><br>" + qsTr("This can take up to 30 seconds.")
                     visible: true
                 }
                 numberedSteps {
@@ -700,8 +705,8 @@ LoggingItem {
                 textBody {
                     text: {
                         qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
-                               ((shouldUserAssistPurging(bayID) ?
-                                 qsTr("\n\n%1 may require assistance to extrude. ").arg(materialName) +
+                               ((shouldUserAssistPurging(bayID) ? "\n\n" + 
+                                 qsTr("%1 may require assistance to extrude. ").arg(materialName) +
                                  qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
                                     ""))
                     }
@@ -1047,9 +1052,10 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Carefully rewind and secure the tip onto the edge of " +
-                               "the spool.<br><br>Seal the latch of the material case " +
-                               "and store the spool in the bag to prevent moisture intake.")
+                    text: qsTr("Carefully rewind and secure the tip onto the " +
+                               "edge of the spool.") + "<br><br>" +
+                          qsTr("Seal the latch of the material case and store " +
+                               "the spool in the bag to prevent moisture intake.")
                     visible: true
                 }
                 buttonPrimary {

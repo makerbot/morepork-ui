@@ -28,6 +28,7 @@ Item {
     property real layer_height_mm
     property string extruder_temp
     property string buildplane_temp
+    property string buildplatform_temp
     property string slicer_name
     property string print_job_id
     property string print_token
@@ -50,6 +51,8 @@ Item {
     readonly property int waitToCoolBuildplaneTemperature: 70
     readonly property int waitToCoolHBPTemperature: 50
     property bool isFileCopying: storage.fileIsCopying
+    property bool isFileDownloading: print_queue.downloading
+    property bool fileDownloadFailed: print_queue.downloadingFailed
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
 
     onIsFileCopyingChanged: {
@@ -65,7 +68,7 @@ Item {
         (model_extruder_used? print_model_material_name : "") +
         (support_extruder_used? "+" + print_support_material_name : "")
 
-    property bool isFileCopySuccessful: storage.fileCopySucceeded
+    property bool isFileCopySuccessful: storage.fileCopySucceeded || print_queue.downloadingSucceeded
     property bool internalStorageFull: false
 
     property bool usbStorageConnected: storage.usbStorageConnected
@@ -189,7 +192,7 @@ Item {
     function getPrintFileDetails(file) {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
-        file_name = inFreStep ? qsTr("TEST PRINT") : file.fileBaseName
+        file_name = inFreStep ? qsTr("TEST PRINT") : (isInManualCalibration ? qsTr("Z-Calibration Print") : file.fileBaseName)
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
         print_model_material = file.materialA
@@ -204,9 +207,10 @@ Item {
         supportMaterialRequired = (file.extrusionMassGramsB/1000).toFixed(3)
         layer_height_mm = file.layerHeightMM.toFixed(2)
         num_shells = file.numShells
-        extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + "C" :
-                                              file.extruderTempCelciusA + "C" + " + " + file.extruderTempCelciusB + "C"
-        buildplane_temp = file.buildplaneTempCelcius + "C"
+        extruder_temp = !file.extruderUsedB ? file.extruderTempCelciusA + " °C" :
+                                              file.extruderTempCelciusA + " °C" + " | " + file.extruderTempCelciusB + " °C"
+        buildplane_temp = file.buildplaneTempCelcius + " °C"
+        buildplatform_temp = file.buildplatformTempCelcius + " °C"
         slicer_name = file.slicerName
         getPrintTimes(printTimeSec)
     }
@@ -235,8 +239,8 @@ Item {
         modelMaterialRequired = (meta['extrusion_masses_g'][0]/1000).toFixed(3)
         supportMaterialRequired = (meta['extrusion_masses_g'][1]/1000).toFixed(3)
         extruder_temp = !support_extruder_used ?
-                            meta['extruder_temperatures'][0] + "C" :
-                            meta['extruder_temperatures'][0] + "C" + " + " + meta['extruder_temperatures'][1] + "C"
+                            meta['extruder_temperatures'][0] + " °C" :
+                            meta['extruder_temperatures'][0] + " °C" + " | " + meta['extruder_temperatures'][1] + " °C"
         if("build_plane_temperature" in meta) {
             meta["buildplane_target_temperature"] = meta["build_plane_temperature"]
             delete meta["build_plane_temperature"]
@@ -248,7 +252,10 @@ Item {
                         Math.round((meta["chamber_temperature"] * 1.333) - 13) :
                         meta["chamber_temperature"]
         }
-        buildplane_temp = Math.round(meta['buildplane_target_temperature']) + "C"
+        buildplane_temp = Math.round(meta['buildplane_target_temperature']) + " °C"
+        if("platform_temperature" in meta) {
+            buildplatform_temp = meta['platform_temperature'] + " °C"
+        }
         getPrintTimes(printTimeSec)
         printQueuePopup.close()
         startPrintSource = PrintPage.FromPrintQueue
@@ -623,7 +630,6 @@ Item {
 
                 FileOptionsPopupMenu {
                     id: optionsMenu
-
                 }
             }
         }
@@ -741,6 +747,15 @@ Item {
                         }
                     }
 
+                    onPressAndHold: {
+                        file_name = model.modelData.fileName
+                        print_job_id = model.modelData.jobId
+                        print_token = model.modelData.token
+                        print_url_prefix = model.modelData.urlPrefix
+                        queueOptionsMenu.popup(queuedPrintFilebutton.x + 700,
+                            queuedPrintFilebutton.y - printQueueList.contentY + 25)
+                    }
+
                     Component.onCompleted: {
                         // Since components are dynamically created and destroyed based
                         // on whether they are currently visible in the viewport, we dont
@@ -784,6 +799,10 @@ Item {
                         }
                     }
                 }
+
+                CloudQueueOptionsPopupMenu {
+                    id: queueOptionsMenu
+                }
             }
         }
 
@@ -803,7 +822,19 @@ Item {
             visible: false
 
             function altBack() {
-                if(!inFreStep) {
+
+                if(isInManualCalibration) {
+                    // Due to special calibration printing manual
+                    // calibration is required on the print page.
+                    // We don't want the user to be able to do normal back out
+                    // Return to Manual Calibration process where we left off...
+                    startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
+                    printSwipeView.swipeToItem(PrintPage.BasePage)
+                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                    settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                }
+                else if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()
@@ -860,10 +891,11 @@ Item {
             copyingFilePopup.close()
         }
 
-        showOneButton: isFileCopySuccessful || isFileCopying
-        full_button_text: isFileCopySuccessful ? qsTr("CLOSE") : qsTr("CANCEL")
+        showOneButton: !showTwoButtons
+        full_button_text: (isFileCopySuccessful || fileDownloadFailed)? qsTr("CLOSE") : qsTr("CANCEL")
         full_button.onClicked: {
             storage.cancelCopy()
+            print_queue.cancelDownload()
             copyingFilePopup.close()
         }
 
@@ -927,8 +959,8 @@ Item {
 
                     PropertyChanges {
                         target: description_text_copy_file_popup
-                        text: qsTr("The following file has been added to internal storage:"
-                                   +"<br><br><br><b>%1</b>").arg(file_name)
+                        text: qsTr("The following file has been added to internal storage:") +
+                                  ("<br><br><br><b>%1</b>").arg(file_name)
                     }
                 },
                 State {
@@ -953,6 +985,56 @@ Item {
                     PropertyChanges {
                         target: description_text_copy_file_popup
                         text: ("%1").arg(storage.fileCopyProgress*100) + "%"
+                    }
+                },
+                State {
+                    name: "downloading"
+                    when: isFileDownloading
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("DOWNLOADING")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: print_queue.downloadTotalBytes > 0 ?
+                            (print_queue.downloadProgressBytes*100/print_queue.downloadTotalBytes).toFixed(1) + "%" :
+                            qsTr("%1 bytes").arg(print_queue.downloadProgressBytes)
+                    }
+                },
+                State {
+                    name: "download_failed"
+                    when: fileDownloadFailed
+
+                    PropertyChanges {
+                        target: error_image
+                        visible: true
+                    }
+
+                    PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: alert_text_copy_file_popup
+                        text: qsTr("DOWNLOAD FAILED")
+                    }
+
+                    PropertyChanges {
+                        target: description_text_copy_file_popup
+                        text: qsTr("Failed to download file -- please check network connectivity")
                     }
                 },
                 State {

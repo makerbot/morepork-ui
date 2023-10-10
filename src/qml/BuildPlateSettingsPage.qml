@@ -8,12 +8,7 @@ BuildPlateSettingsPageForm {
         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.AssistedLevelingPage)
     }
 
-    buttonRaiseLowerBuildPlate.onClicked: {
-        if(raiseLowerBuildPlate.chamberDoorOpen) {
-            doorOpenRaiseLowerBuildPlatePopup.open()
-            return
-        }
-
+    buttonMoveBuildPlatePage.onClicked: {
         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.RaiseLowerBuildPlatePage)
     }
 }

@@ -16,8 +16,8 @@ CustomDrawer {
         smooth: false
         spacing: 0
         rotation: rootItem.rotation
-        anchors.top: parent.top
-        anchors.topMargin: 70
+
+        CloseDrawerItem {}
 
         DrawerButton {
             id: buttonSortAZ

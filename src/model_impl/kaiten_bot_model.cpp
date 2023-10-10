@@ -104,6 +104,7 @@ class KaitenBotModel : public BotModel {
     void drySpool();
     void startDrying(const int temperature, const float time);
     void get_calibration_offsets();
+    void setManualCalibrationOffset(const float tb_offset);
     void cleanNozzles(const QList<int> temperature = {0,0});
     void submitPrintFeedback(bool success, const QVariantMap failure_map);
     void ignoreError(const int index, const QList<int> error, const bool ignored);
@@ -1288,6 +1289,28 @@ void KaitenBotModel::get_calibration_offsets(){
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         conn->jsonrpc.invoke("get_calibration_offsets", json_params, m_getCalibrationOffsetsCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::setManualCalibrationOffset(float tb_offset) {
+    try{
+        qDebug() << FL_STRM << "manual cal offset value: " << tb_offset;
+        auto conn = m_conn.data();
+
+        Json::Value json_args2(Json::objectValue);
+        json_args2["z"] = Json::Value(tb_offset);
+        Json::Value json_args1(Json::objectValue);
+        json_args1["b"] = Json::Value(json_args2);
+        Json::Value json_args(Json::objectValue);
+        json_args["toolhead_offsets"] = Json::Value(json_args1);
+        Json::Value json_params(Json::objectValue);
+        json_params["config"] = Json::Value(json_args);
+
+        LOG(info) << "Toolhead offset " << json_params;
+        conn->jsonrpc.invoke("set_config", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();

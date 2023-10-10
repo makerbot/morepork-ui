@@ -44,22 +44,11 @@ Drawer {
                   }
             }
 
-    onPositionChanged: {
-        if(position > 0.9) {
-            topBar.backButton.visible = false
-            drawerState = MoreporkUI.DrawerState.Open
-        }
-        else {
-            drawerState = MoreporkUI.DrawerState.Closed
-            if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
-                topBar.backButton.visible = true
-            }
-        }
-    }
-
     onOpened: {
         // Drawer can be closed by swiping when in the open state.
         interactive = true
+        topBar.backButton.visible = false
+        drawerState = MoreporkUI.DrawerState.Open
     }
 
     onClosed: {
@@ -67,5 +56,9 @@ Drawer {
         // edge of the screen when in the closed state. We instaed repurpose
         // a flickable to open the drawer on swiping from the edge.
         interactive = false
+        drawerState = MoreporkUI.DrawerState.Closed
+        if(mainSwipeView.currentIndex != MoreporkUI.BasePage) {
+            topBar.backButton.visible = true
+        }
     }
 }

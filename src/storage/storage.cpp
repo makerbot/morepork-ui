@@ -251,6 +251,29 @@ void MoreporkStorage::getTestPrint(const QString test_print_dir,
     }
 }
 
+void MoreporkStorage::getCalibrationPrint(const QString test_print_dir,
+                                          const QString test_print_name) {
+    const QString test_print = CAL_PRINT_FILE_PREFIX + test_print_name + ".makerbot";
+    const QString path = CAL_PRINT_PATH + test_print_dir + test_print;
+    const QFileInfo kFileInfo = QFileInfo(path);
+
+    // Force this function to find a real slice, compatible or not.  For now
+    // we just assume that the test_print_name is hard coded to the one combo
+    // that we actually have support for.
+    if (!kFileInfo.exists() && test_print_dir != "mk14_c/") {
+        getCalibrationPrint("mk14_c/", test_print_name);
+        return;
+    }
+
+    PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
+
+    if (current_thing != nullptr) {
+        currentThingSet(current_thing);
+    } else {
+        currentThingReset();
+    }
+}
+
 PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo) {
 #ifdef HAVE_LIBTINYTHING
     MakerbotFileMetaReader file_meta_reader(kFileInfo);
@@ -277,6 +300,7 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
                   meta_data->extruder_temperature[1],
                   meta_data->chamber_temperature,
                   meta_data->buildplane_target_temperature,
+                  meta_data->platform_temperature,
                   meta_data->shells,
                   meta_data->layer_height,
                   meta_data->infill_density,
