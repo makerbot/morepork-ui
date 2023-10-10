@@ -179,7 +179,6 @@ ManualZCalibrationForm {
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         } else {
             state = "z_cal_qr_code"
-            //startTestPrint()
         }
 
     }
