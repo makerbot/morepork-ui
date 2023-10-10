@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 import FreStepEnum 1.0
 
 Item {
@@ -70,7 +71,7 @@ Item {
         interval: 2500
         onTriggered: {
             // Reset all screen positions
-            fre.setFreStep(FreStep.StartSetLanguage)
+            fre.setFreStep(FreStep.Welcome)
             settings.resetPreferences()
             isFinalResetProceduresDone = true
         }
@@ -233,6 +234,7 @@ Item {
                         id: buttonChangeLanguage
                         buttonImage.source: "qrc:/img/icon_choose_language.png"
                         buttonText.text: qsTr("CHOOSE LANGUAGE")
+                        visible: (bot.machineType != MachineType.Magma) //BW-5871
                     }
 
                     MenuButton {

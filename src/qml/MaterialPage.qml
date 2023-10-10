@@ -77,6 +77,11 @@ MaterialPageForm {
         } else if(!printPage.isPrintProcess || bot.process.stateType != ProcessStateType.Paused) {
             // During a paused print is the only non-idle state that allows filament change
             return false
+        } else if(bot.process.stepStr == "preprint_suspended") {
+            // If a print is paused during the initial start print sequence the printer is
+            // paused in a state where we only allow the user to either resume or cancel the
+            // print and not allow material loading/unloading.
+            return false
         } else if(isExtruderFilamentPresent(extruderID)) {
             // Always allow purge and unload while paused
             return true

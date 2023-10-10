@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.12
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
+import MachineTypeEnum 1.0
 import FreStepEnum 1.0
 import ErrorTypeEnum 1.0
 
@@ -20,10 +21,15 @@ Item {
     property alias buttonCleanExtruders: buttonCleanExtruders
     property alias toolheadCalibration: toolheadCalibration
 
+    property alias buttonManualZCalibration: buttonManualZCalibration
+    property alias manualZCalibration: manualZCalibration
+    property bool returnToManualCal: false
+
     enum SwipeIndex {
         BasePage,               //0
         CalibrateExtrudersPage, //1
-        CleanExtrudersPage      //2
+        CleanExtrudersPage,     //2
+        ManualZCalibrationPage  //3
     }
 
     LoggingSwipeView {
@@ -56,7 +62,6 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
@@ -75,6 +80,14 @@ Item {
                         id: buttonCleanExtruders
                         buttonImage.source: "qrc:/img/icon_clean_extruders.png"
                         buttonText.text: qsTr("CLEAN EXTRUDERS")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonManualZCalibration
+                        buttonImage.source: "qrc:/img/icon_manual_zcal.png"
+                        buttonText.text: qsTr("MANUAL CALIBRATION - Z")
+                        visible: bot.machineType !=  MachineType.Fire
                         enabled: !isProcessRunning()
                     }
 
@@ -122,6 +135,13 @@ Item {
                        bot.process.isProcessCancellable) {
                         toolheadCalibration.cancelCalibrationPopup.open()
                     } else if(bot.process.type == ProcessType.None) {
+                        // If we are in the manual cal process
+                        // we want to prompt the user to resume
+                        // manual calibration
+                        if(returnToManualCal) {
+                            returnToManualCal = false
+                            toolheadCalibration.resumeManualCalibrationPopup.open()
+                        }
                         toolheadCalibration.state = "base state"
                         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                     }
@@ -191,6 +211,30 @@ Item {
                     state = "base state"
                     extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                 }
+            }
+        }
+
+        // ExtruderSettingsPage.ManualZCalibrationPage
+        Item {
+            id: manualZCalibrationItem
+            property var backSwiper: extruderSettingsSwipeView
+            property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Manual Z-Calibration")
+            property bool hasAltBack: true
+            property bool backIsCancel: (manualZCalibration.state == "remove_support" ||
+                                         manualZCalibration.state == "updating_information" ||
+                                         manualZCalibration.state == "success" ||
+                                         manualZCalibration.state == "cal_issue")
+
+            smooth: false
+            visible: false
+
+            function altBack() {
+                manualZCalibration.back()
+            }
+
+            ManualZCalibration {
+                id: manualZCalibration
             }
         }
     }

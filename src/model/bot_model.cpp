@@ -283,6 +283,10 @@ void BotModel::get_calibration_offsets() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::setManualCalibrationOffset(const float tb_offset) {
+    qDebug() << FL_STRM << "called with parameters: " << tb_offset;
+}
+
 void BotModel::cleanNozzles(const QList<int> temperature) {
     qDebug() << FL_STRM << "called";
     qDebug() << "Temperatures";

@@ -103,7 +103,7 @@ Item {
                 ButtonOptions {
                     id: moreOptionsButton
                     Layout.preferredWidth: width
-                    visible: !inFreStep
+                    visible: !inFreStep && !isInManualCalibration
                     onClicked: {
                         startPrintButton.enabled = false
                         was_pressed = true

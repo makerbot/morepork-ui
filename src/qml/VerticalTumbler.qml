@@ -5,6 +5,8 @@ Tumbler {
     property alias tumblerName: tumblerName.text
     id: tumbler
     width: 120
+    property int upperOffset: 65
+    property int lowerOffset: 50
 
     Rectangle {
         id: topline
@@ -12,7 +14,8 @@ Tumbler {
         height: 1
         color: "#ffffff"
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: -65
+        anchors.verticalCenterOffset: (-1)*upperOffset
+        anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Rectangle {
@@ -21,7 +24,8 @@ Tumbler {
         height: 1
         color: "#ffffff"
         anchors.verticalCenter: parent.verticalCenter
-        anchors.verticalCenterOffset: 50
+        anchors.verticalCenterOffset: lowerOffset
+        anchors.horizontalCenter: parent.horizontalCenter
 
         TextSubheader {
             id: tumblerName

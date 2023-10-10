@@ -14,12 +14,14 @@
 
 #define DEFAULT_FW_FILE_NAME QString("firmware.zip")
 #define TEST_PRINT_FILE_PREFIX QString("test_print_")
+#define CAL_PRINT_FILE_PREFIX QString("calibration_")
 #ifdef MOREPORK_UI_QT_CREATOR_BUILD
 // desktop linux path
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/usb_storage"
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
+#define CAL_PRINT_PATH QString("/home/")+qgetenv("USER")+"/calibration_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
 #define USB_STORAGE_DEV_BY_PATH_FRNT_PNL QString()
 #define USB_STORAGE_DEV_BY_PATH_MOBO_PORT_2 QString()
@@ -35,6 +37,7 @@
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define TEST_PRINT_PATH QString("/usr/test_prints/")
+#define CAL_PRINT_PATH QString("/usr/calibration_prints/")
 #define FIRMWARE_FOLDER_PATH QString("/home/firmware")
 #define USB_STORAGE_DEV_BY_PATH_FRNT_PNL \
 QString("/dev/disk/by-path/platform-xhci-hcd.1.auto-usb-0:1.1:1.0-scsi-0:0:0:0")
@@ -357,6 +360,8 @@ class MoreporkStorage : public QObject {
 
     Q_INVOKABLE void getTestPrint(const QString test_print_dir,
                                   const QString test_print_name);
+    Q_INVOKABLE void getCalibrationPrint(const QString test_print_dir,
+                                         const QString test_print_name);
 
   private:
     QFileSystemWatcher *storage_watcher_;

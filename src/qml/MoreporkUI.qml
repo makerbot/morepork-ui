@@ -37,6 +37,8 @@ ApplicationWindow {
     property bool isBuildPlateClear: bot.process.isBuildPlateClear
     property bool updatedExtruderFirmwareA: false
     property bool updatedExtruderFirmwareB: false
+    property bool isInManualCalibration: false
+
 
     property bool isNetworkConnectionAvailable: (bot.net.interface == "ethernet" ||
                                                  bot.net.interface == "wifi")
@@ -47,7 +49,7 @@ ApplicationWindow {
 
     property bool safeToRemoveUsb: bot.safeToRemoveUsb
     onSafeToRemoveUsbChanged: {
-        if(safeToRemoveUsb && isFreComplete) {
+        if(safeToRemoveUsb && isFreComplete && !isInManualCalibration) {
             safeToRemoveUsbPopup.open()
         }
     }
@@ -556,12 +558,17 @@ ApplicationWindow {
                     property string topBarTitle: bot.process.type == ProcessType.Print ?
                                                      qsTr("PRINT") :
                                                      qsTr("Select Source")
+                    property bool backIsCancel: isInManualCalibration
 
                     smooth: false
                     visible: false
 
                     function altBack() {
-                        if(!inFreStep) {
+                        if(isInManualCalibration) {
+                            //printPage.acknowledgePrint()
+                            settingsPage.extruderSettingsPage.manualZCalibration.cancelManualZCalPopup.open()
+                        }
+                        else if(!inFreStep) {
                             if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
                                 printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
                                 return
@@ -2801,6 +2808,14 @@ ApplicationWindow {
                             Layout.alignment: Qt.AlignLeft
                             visible: true
                         }
+
+                        TextBody {
+                            id: url
+                            font.weight: Font.Bold
+                            Layout.preferredWidth: parent.width
+                            Layout.alignment: Qt.AlignLeft
+                            visible: false
+                        }
                     }
                 }
 
@@ -2862,6 +2877,11 @@ ApplicationWindow {
                             target: help_description
                             text: qsTr("Scan the QR code for more information on compatibility of extruders and materials.")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
 
                     State {
@@ -2875,6 +2895,11 @@ ApplicationWindow {
                         PropertyChanges {
                             target: help_title
                             text: qsTr("CUT FILAMENT TIP HELP")
+                        }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
                         }
                     },
 
@@ -2890,6 +2915,11 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("PLACE DESICCANT HELP")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
 
                     State {
@@ -2904,6 +2934,11 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("PLACE MATERIAL HELP")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
                     State {
                         name: "methodxl_feed_filament_help"
@@ -2917,6 +2952,11 @@ ApplicationWindow {
                             target: help_title
                             text: qsTr("FEED MATERIAL HELP")
                         }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
                     },
                     State {
                         name: "methodxl_locate_desiccant_help"
@@ -2929,6 +2969,30 @@ ApplicationWindow {
                         PropertyChanges {
                             target: help_title
                             text: qsTr("LOCATE DESICCANT HELP")
+                        }
+
+                        PropertyChanges {
+                            target: url
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "method_calibration"
+
+                        PropertyChanges {
+                            target: help_qr_code
+                            source: "qrc:/img/qr_method_calibration.png"
+                        }
+
+                        PropertyChanges {
+                            target: help_title
+                            text: qsTr("HELP")
+                        }
+
+                        PropertyChanges {
+                            target: url
+                            text: "ultimaker.com/method-calibration"
+                            visible: true
                         }
                     }
 
