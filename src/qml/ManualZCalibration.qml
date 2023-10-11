@@ -32,6 +32,8 @@ ManualZCalibrationForm {
     function getTestPrint() {
         // We could use the spool journal to determine the loaded material
         // but sticking with this way that we use everywhere else currently.
+        var model_mat = materialPage.bay1.filamentMaterial
+        var support_mat = materialPage.bay2.filamentMaterial
         var test_print_dir_string = bot.extruderATypeStr + "/"
         var test_print_name_string = model_mat + "_" + support_mat
         storage.getCalibrationPrint(test_print_dir_string, test_print_name_string)
