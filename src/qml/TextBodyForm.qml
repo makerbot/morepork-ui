@@ -10,11 +10,11 @@ Text {
     property int style: TextBody.Base
     id: textBody
     text: "text-base"
-    font.family: "Roboto"
+    font.family: "Antenna"
     font.pixelSize: {
         switch(style) {
         case TextBody.Base:
-            16
+            15
             break;
         case TextBody.Large:
             18
@@ -23,7 +23,7 @@ Text {
             22
             break;
         default:
-            16
+            15
         }
     }
 
