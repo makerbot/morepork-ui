@@ -121,7 +121,9 @@ ManualZCalibrationForm {
     function back() {
         if (state == "measure") {
                 state = "remove_support"
-        } else if(state == "remove_support" ||
+        } else if(state == "z_cal_qr_code") {
+            state = "z_cal_start"
+        }else if(state == "remove_support" ||
                   state == "cal_issue") {
             // Error going back will exit the process?
             cancelManualZCalPopup.open()
@@ -138,7 +140,10 @@ ManualZCalibrationForm {
     }
 
     z_cal_button.onClicked: {
-        if(state == "z_cal_start" || state == "adjustments_complete") {
+        if(state == "z_cal_start") {
+            state = "z_cal_qr_code"
+        }
+        else if(state == "z_cal_qr_code" || state == "adjustments_complete") {
             // Print
             startTestPrint()
         } else if (state == "remove_support") {
@@ -175,7 +180,7 @@ ManualZCalibrationForm {
             secondPass = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         } else {
-            startTestPrint()
+            state = "z_cal_qr_code"
         }
 
     }

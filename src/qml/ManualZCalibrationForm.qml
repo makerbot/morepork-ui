@@ -147,10 +147,77 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightSide.textBody1
+                text: qsTr("Tools Required: Calipers, Sharp Tool")
+            }
+
+            PropertyChanges {
                 target: contentRightSide.buttonPrimary
                 text: qsTr("START")
                 visible: true
                 style: ButtonRectangleBaseForm.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+        },
+        State {
+            name: "z_cal_qr_code"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: ("qrc:/img/qr_method_calibration.png")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("Refer To Support Page During Following Steps")
+                style: TextHeadline.Base
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("We highly recommend having the video content on this page accessible " +
+                           "for additional help and troubleshooting tips as you are running the " +
+                           "calibration procedure.")
+                visible: true
+            }
+
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                text: qsTr("ultimaker.com/method-calibration")
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+                visible: true
+                style: ButtonRectangleBaseForm.Button
             }
 
             PropertyChanges {
