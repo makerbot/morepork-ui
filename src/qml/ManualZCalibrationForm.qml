@@ -16,7 +16,7 @@ LoggingItem {
     property alias calValueItem2: calValueItem2
     property alias calValueItem3: calValueItem3
     property alias calValueItem4: calValueItem4
-    property bool printPageStatus: false
+    property bool printSuccess: false
 
     ContentLeftSide {
         id: contentLeftSide
@@ -641,13 +641,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.loadingIcon
-                icon_image: printPageStatus ? LoadingIcon.Success : LoadingIcon.Failure
+                icon_image: printSuccess ? LoadingIcon.Success : LoadingIcon.Failure
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: printPageStatus ? qsTr("PRINT COMPLETE") : qsTr("PRINT FAILED")
+                text: printSuccess ? qsTr("PRINT COMPLETE") : qsTr("PRINT FAILED")
                 style: TextHeadline.Base
                 visible: true
             }
@@ -666,7 +666,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                text: printPageStatus ? qsTr("NEXT") : qsTr("RETRY")
+                text: printSuccess ? qsTr("NEXT") : qsTr("RETRY")
                 visible: true
                 style: ButtonRectangleBaseForm.Button
             }
@@ -698,7 +698,6 @@ LoggingItem {
             returnToManualCal = true
             state = "z_cal_start"
             resetManualCalValues()
-            noBack = false
 
             // Button action in 'base state'
             bot.calibrateToolheads(["x","y"])
@@ -749,7 +748,6 @@ LoggingItem {
             state = "z_cal_start"
             resetManualCalValues()
             secondPass = false
-            noBack = false
 
             // If the print process has ended
             // you may be on the print page but

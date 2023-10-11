@@ -225,7 +225,7 @@ Item {
                                          manualZCalibration.state == "updating_information" ||
                                          manualZCalibration.state == "success" ||
                                          (manualZCalibration.state == "cal_issue" &&
-                                          manualZCalibration.noBack))
+                                          !manualZCalibration.allowReturn))
 
             smooth: false
             visible: false

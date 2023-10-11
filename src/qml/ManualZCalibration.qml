@@ -6,7 +6,7 @@ ManualZCalibrationForm {
     property bool secondPass: false
     property bool onPrintPage: false
     property int adjustment: 0
-    property bool noBack: false
+    property bool allowReturn: false
 
     Timer {
         id: waitForConfigs
@@ -129,14 +129,14 @@ ManualZCalibrationForm {
         } else if( state == "cal_issue") {
             // if we were just on the print page we want to go back to the print process
             // but if we are in the normal process we want to cancel
-            if(noBack) {
-                cancelManualZCalPopup.open()
-            }
-            else {
+            if(allowReturn) {
                 state = "end_print"
             }
+            else {
+                cancelManualZCalPopup.open()
+            }
         } else if(state == "end_print") {
-            // Error going back will exit the process?
+            // Going back will Exit the Process
             cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
             state = "measure"
@@ -145,7 +145,6 @@ ManualZCalibrationForm {
             resetManualCalValues()
             isInManualCalibration = false
             secondPass = false
-            noBack = false
             onPrintPage = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         }
@@ -156,7 +155,7 @@ ManualZCalibrationForm {
             state = "z_cal_qr_code"
         }
         else if(state == "z_cal_qr_code" || state == "adjustments_complete") {
-            noBack = false
+            allowReturn = true
             // Print
             startTestPrint()
         } else if (state == "remove_support") {
@@ -165,7 +164,7 @@ ManualZCalibrationForm {
             state = "z_calibration"
         } else if (state == "z_calibration") {
             state = "updating_information"
-            noBack = true
+            allowReturn = false
             if(checkForIssues()) {
                 // Do Coarse Adjustments
                 setCoarseAdjustments()
@@ -186,17 +185,15 @@ ManualZCalibrationForm {
             state = "z_cal_start"
             resetManualCalValues()
             secondPass = false
-            noBack = false
         } else if (state == "success") {
             // exit
             state = "z_cal_start"
             resetManualCalValues()
             isInManualCalibration = false
             secondPass = false
-            noBack = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         } else if(state == "end_print") {
-            if(printPageStatus) {
+            if(printSuccess) {
                 state = "remove_support"
             } else {
                 state = "z_cal_start"
@@ -212,7 +209,6 @@ ManualZCalibrationForm {
         if(state == "cal_issue") {
             state = "z_cal_start"
             resetManualCalValues()
-            noBack = false
             secondPass = false
         } else if(state == "end_print") {
             state = "cal_issue"

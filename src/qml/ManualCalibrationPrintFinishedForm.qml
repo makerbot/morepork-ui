@@ -36,11 +36,11 @@ LoggingItem {
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printPageStatus = false
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
                     settingsPage.extruderSettingsPage.manualZCalibration.state = "z_cal_start"
                     settingsPage.extruderSettingsPage.manualZCalibration.secondPass = false
                 } else {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printPageStatus = true
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
                     settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
                 }
             }
@@ -53,9 +53,9 @@ LoggingItem {
                 acknowledgePrint()
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printPageStatus = false
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
                 } else {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printPageStatus = true
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
 
                 }
                 settingsPage.extruderSettingsPage.manualZCalibration.onPrintPage = false
