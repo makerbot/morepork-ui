@@ -161,7 +161,7 @@ PrintPageForm {
             printStatusView.testPrintComplete = true
         }
         resetPrintFileDetails()
-        if (isNPSSurveyDue()) { npsSurveyPopup.open() }
+        if (!isInManualCalibration && isNPSSurveyDue()) { npsSurveyPopup.open() }
     }
 
     function isNPSSurveyDue() {
