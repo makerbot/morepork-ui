@@ -687,20 +687,13 @@ LoggingItem {
             resetManualCalValues()
             secondPass = false
 
-            // If the print process has ended
-            // you may be on the print page but
-            // not printing anything
-            if(onPrintPage) {
-                if(bot.process.type == ProcessType.Print) {
-                    // Cancel Print
-                    bot.cancel()
-                }
-                onPrintPage = false
-                printPage.acknowledgePrint()
-                printPage.clearErrors()
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+            // If we are cancelling calibration in the middle of a print, we need
+            // to make sure we exit out of the print process, which means waiting
+            // for the print to reach a terminal state, then acknowleging that state
+            if (bot.process.type == ProcessType.Print) {
+                bot.cancel();
+                waitingForCancel = true;
+                if (cancelWaitDone) completeCancelWait();
             }
 
             cancelManualZCalPopup.close()
