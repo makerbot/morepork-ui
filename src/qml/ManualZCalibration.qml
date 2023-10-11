@@ -32,8 +32,10 @@ ManualZCalibrationForm {
     function getTestPrint() {
         // We could use the spool journal to determine the loaded material
         // but sticking with this way that we use everywhere else currently.
+        var model_mat = materialPage.bay1.filamentMaterial
+        var support_mat = materialPage.bay2.filamentMaterial
         var test_print_dir_string = bot.extruderATypeStr + "/"
-        var test_print_name_string = "abs-wss1_wss1"
+        var test_print_name_string = model_mat + "_" + support_mat
         storage.getCalibrationPrint(test_print_dir_string, test_print_name_string)
     }
 
@@ -119,7 +121,9 @@ ManualZCalibrationForm {
     function back() {
         if (state == "measure") {
                 state = "remove_support"
-        } else if(state == "remove_support" ||
+        } else if(state == "z_cal_qr_code") {
+            state = "z_cal_start"
+        }else if(state == "remove_support" ||
                   state == "cal_issue") {
             // Error going back will exit the process?
             cancelManualZCalPopup.open()
@@ -136,7 +140,10 @@ ManualZCalibrationForm {
     }
 
     z_cal_button.onClicked: {
-        if(state == "z_cal_start" || state == "adjustments_complete") {
+        if(state == "z_cal_start") {
+            state = "z_cal_qr_code"
+        }
+        else if(state == "z_cal_qr_code" || state == "adjustments_complete") {
             // Print
             startTestPrint()
         } else if (state == "remove_support") {
@@ -173,7 +180,7 @@ ManualZCalibrationForm {
             secondPass = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
         } else {
-            startTestPrint()
+            state = "z_cal_qr_code"
         }
 
     }
