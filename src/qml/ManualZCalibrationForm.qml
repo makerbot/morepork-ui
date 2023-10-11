@@ -617,7 +617,7 @@ LoggingItem {
             }
         },
         State {
-            name: "end_print"
+            name: "return_print_page"
 
             PropertyChanges {
                 target: contentLeftSide

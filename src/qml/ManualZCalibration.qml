@@ -125,18 +125,19 @@ ManualZCalibrationForm {
         } else if(state == "z_cal_qr_code") {
             state = "z_cal_start"
         } else if(state == "remove_support") {
-            state = "end_print"
+            state = "return_print_page"
         } else if( state == "cal_issue") {
-            // if we were just on the print page we want to go back to the print process
+            // If we were just on the print page we want to go back to the print process
             // but if we are in the normal process we want to cancel
             if(allowReturn) {
-                state = "end_print"
+                state = "return_print_page"
             }
             else {
                 cancelManualZCalPopup.open()
             }
-        } else if(state == "end_print") {
-            // Going back will Exit the Process
+        } else if(state == "return_print_page" ||
+                  state == "adjustments_complete") {
+            // Going back will prompt to Exit the Process
             cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
             state = "measure"
@@ -154,7 +155,8 @@ ManualZCalibrationForm {
         if(state == "z_cal_start") {
             state = "z_cal_qr_code"
         }
-        else if(state == "z_cal_qr_code" || state == "adjustments_complete") {
+        else if(state == "z_cal_qr_code" ||
+                state == "adjustments_complete") {
             allowReturn = true
             // Print
             startTestPrint()
@@ -192,7 +194,7 @@ ManualZCalibrationForm {
             isInManualCalibration = false
             secondPass = false
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-        } else if(state == "end_print") {
+        } else if(state == "return_print_page") {
             if(printSuccess) {
                 state = "remove_support"
             } else {
@@ -210,7 +212,7 @@ ManualZCalibrationForm {
             state = "z_cal_start"
             resetManualCalValues()
             secondPass = false
-        } else if(state == "end_print") {
+        } else if(state == "return_print_page") {
             state = "cal_issue"
         }
     }

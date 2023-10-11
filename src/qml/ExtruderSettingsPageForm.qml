@@ -221,9 +221,10 @@ Item {
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
             property string topBarTitle: qsTr("Manual Z-Calibration")
             property bool hasAltBack: true
-            property bool backIsCancel: (manualZCalibration.state == "end_print" ||
+            property bool backIsCancel: (manualZCalibration.state == "return_print_page" ||
                                          manualZCalibration.state == "updating_information" ||
                                          manualZCalibration.state == "success" ||
+                                         manualZCalibration.state == "adjustments_complete" ||
                                          (manualZCalibration.state == "cal_issue" &&
                                           !manualZCalibration.allowReturn))
 
