@@ -15,7 +15,6 @@ LoggingItem {
     property alias contentRightSide: contentRightSide
     property alias cancelDryingCyclePopup: cancelDryingCyclePopup
     property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
-    property alias left_button: dryConfirmBuildPlateClearPopup.left_button
     property real timeLeftHours: bot.process.timeRemaining/3600
     property int currentStep: bot.process.stateType
     signal processDone
