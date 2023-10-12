@@ -241,5 +241,6 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="coarse_adj_step.png">images/calibration/coarse_adj_step.png</file>
     </qresource>
 </RCC>
