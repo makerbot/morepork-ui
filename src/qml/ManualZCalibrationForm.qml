@@ -632,7 +632,7 @@ LoggingItem {
         right_button.onClicked: {
             // Start Auto Cal/Clean extruders
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
             returnToManualCal = true
             state = "z_cal_start"
             resetManualCalValues()
