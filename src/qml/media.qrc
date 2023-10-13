@@ -241,5 +241,8 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="icon_z_offset.png">images/icon_z_offset.png</file>
+        <file alias="z_offset_scale.png">images/manual_z_offset/z_offset_scale.png</file>
+        <file alias="current_z_offset_indicator.png">images/manual_z_offset/current_z_offset_indicator.png</file>
     </qresource>
 </RCC>

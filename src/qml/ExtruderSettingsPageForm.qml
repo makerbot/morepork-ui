@@ -25,11 +25,16 @@ Item {
     property alias manualZCalibration: manualZCalibration
     property bool returnToManualCal: false
 
+    property alias buttonAdjustZOffset: buttonAdjustZOffset
+    property alias adjustZOffset: adjustZOffset
+
+
     enum SwipeIndex {
-        BasePage,               //0
-        CalibrateExtrudersPage, //1
-        CleanExtrudersPage,     //2
-        ManualZCalibrationPage  //3
+        BasePage,                 // 0
+        CalibrateExtrudersPage,   // 1
+        CleanExtrudersPage,       // 2
+        ManualZCalibrationPage,   // 3
+        AdjustZOffsetPage         // 4
     }
 
     LoggingSwipeView {
@@ -88,6 +93,13 @@ Item {
                         buttonImage.source: "qrc:/img/icon_manual_zcal.png"
                         buttonText.text: qsTr("MANUAL CALIBRATION - Z")
                         visible: bot.machineType !=  MachineType.Fire
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonAdjustZOffset
+                        buttonImage.source: "qrc:/img/icon_z_offset.png"
+                        buttonText.text: qsTr("Z-OFFSET")
                         enabled: !isProcessRunning()
                     }
 
@@ -235,6 +247,21 @@ Item {
 
             ManualZCalibration {
                 id: manualZCalibration
+            }
+        }
+
+        // ExtruderSettingsPage.AdjustZOffset
+        Item {
+            id: adjustZOffsetItem
+            property var backSwiper: extruderSettingsSwipeView
+            property int backSwipeIndex: ExtruderSettingsPage.BasePage
+            property string topBarTitle: qsTr("Adjust Z-Offset")
+
+            smooth: false
+            visible: false
+
+            AdjustZOffset {
+                id: adjustZOffset
             }
         }
     }

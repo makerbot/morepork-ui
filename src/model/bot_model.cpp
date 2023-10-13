@@ -358,6 +358,22 @@ void BotModel::moveBuildPlate(const int distance, const int speed) {
                            " speed" << speed;
 }
 
+void BotModel::getCalibrationOffsetsCompensation() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::setCalibrationOffsetsCompensation(float x, float y, float z) {
+    qDebug() << FL_STRM << "called with params:" << " x: " << x << " y: " << y << " z: " << z;
+}
+
+void BotModel::resetCalibrationOffsetsCompensation() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset) {
+    qDebug() << FL_STRM << "called with params:" << " tool_a_z_offset: " << tool_a_z_offset << " tool_b_z_offset: " << tool_b_z_offset;
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {
