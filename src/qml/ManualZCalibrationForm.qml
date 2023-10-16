@@ -461,13 +461,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
-                source: ("qrc:/img/manual_z_cal_start.png")
+                source: ("qrc:/img/coarse_adj_step.png")
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: qsTr("COARSE ADJUSTMENTS COMPLETE")
+                text: qsTr("STEP 1 COMPLETE")
                 visible: true
             }
 
@@ -475,6 +475,59 @@ LoggingItem {
                 target: contentRightSide.textBody
                 text: qsTr("The printer has made adjustments based on your inputs. The printer will re-run this procedure to " +
                            "make additional improvements and do a final check.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+                visible: true
+                style: ButtonRectangleBaseForm.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+        },
+        State {
+            name: "insert_build_plate"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: ("qrc:/img/%1.gif").arg(getImageForPrinter("insert_build_plate"))
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("REMOVE PRINT + INSERT BUILD PLATE")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Insert the build plate by first placing the rear edge down and sliding it back until it fits snug and looks aligned.")
                 visible: true
             }
 

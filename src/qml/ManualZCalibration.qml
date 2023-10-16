@@ -149,6 +149,8 @@ ManualZCalibrationForm {
             cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
             state = "measure"
+        } else if(state == "insert_build_plate") {
+            state = "adjustments_complete"
         } else if(state !== "updating_information") {
             state = "z_cal_start"
             resetManualCalValues()
@@ -162,7 +164,11 @@ ManualZCalibrationForm {
         if(state == "z_cal_start") {
             state = "z_cal_qr_code"
         }
-        else if(state == "z_cal_qr_code" || state == "adjustments_complete") {
+        else if(state == "adjustments_complete") {
+            state = "insert_build_plate"
+        }
+        else if(state == "z_cal_qr_code" ||
+                state == "insert_build_plate") {
             // Print
             startTestPrint()
         } else if (state == "remove_support") {
