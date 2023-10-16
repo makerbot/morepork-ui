@@ -26,10 +26,10 @@ Item {
     property bool returnToManualCal: false
 
     enum SwipeIndex {
-        BasePage,               //0
-        AutomaticCalibrationPage, //1
-        CleanExtrudersPage,     //2
-        ManualZCalibrationPage  //3
+        BasePage,                   //0
+        AutomaticCalibrationPage,   //1
+        CleanExtrudersPage,         //2
+        ManualZCalibrationPage      //3
     }
 
     LoggingSwipeView {
