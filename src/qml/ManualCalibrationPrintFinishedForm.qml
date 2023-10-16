@@ -54,7 +54,6 @@ LoggingItem {
                     settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
                 } else {
                     settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
-
                 }
 
                 // PROMPT USER TO REDO AUTOCAL
