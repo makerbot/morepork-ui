@@ -7,6 +7,7 @@ import ProcessStateTypeEnum 1.0
 ManualZCalibrationForm {
     property bool secondPass: false
     property int adjustment: 0
+    property bool allowReturn: false
 
     // If we are printing and we cancel the print, we wait for the print
     // to fully cancel 
@@ -98,11 +99,11 @@ ManualZCalibrationForm {
         waitForConfigs.start()
     }
 
-    function setCoarseAdjustements() {
+    function setCoarseAdjustments() {
         // Get Bz before value from sensor
         var bz_before = bot.offsetBZ
 
-        // Set Coarse Adjustements
+        // Set Coarse Adjustments
         var bz_new_offset = bz_before + (adjustment == -1 ? (-0.1) : (0.1))
 
         // Set Adjustment
@@ -156,9 +157,20 @@ ManualZCalibrationForm {
                 state = "remove_support"
         } else if(state == "z_cal_qr_code") {
             state = "z_cal_start"
-        }else if(state == "remove_support" ||
-                  state == "cal_issue") {
-            // Error going back will exit the process?
+        } else if(state == "remove_support") {
+            state = "return_print_page"
+        } else if( state == "cal_issue") {
+            // If we were just on the print page we want to go back to the print process
+            // but if we are in the normal process we want to cancel
+            if(allowReturn) {
+                state = "return_print_page"
+            }
+            else {
+                cancelManualZCalPopup.open()
+            }
+        } else if(state == "return_print_page" ||
+                  state == "adjustments_complete") {
+            // Going back will prompt to Exit the Process
             cancelManualZCalPopup.open()
         } else if (state == "z_calibration") {
             state = "measure"
@@ -178,6 +190,7 @@ ManualZCalibrationForm {
         }
         else if(state == "z_cal_qr_code" ||
                 state == "insert_build_plate") {
+            allowReturn = true
             // Print
             startTestPrint()
         } else if (state == "remove_support") {
@@ -185,13 +198,14 @@ ManualZCalibrationForm {
         } else if (state == "measure") {
             state = "z_calibration"
         } else if (state == "z_calibration") {
+            state = "updating_information"
+            allowReturn = false
             if(checkForIssues()) {
-                state = "updating_information"
-                // Do coarse adjustments
-                setCoarseAdjustements()
+                // Do Coarse Adjustments
+                setCoarseAdjustments()
                 resetManualCalValues()
             } else {
-                state = "updating_information"
+                // Configure Toolheads
                 setNewToolheadConfigurations()
             }
 
@@ -207,6 +221,12 @@ ManualZCalibrationForm {
         } else if (state == "success") {
             // Exit
             resetProcess(true)
+        } else if(state == "return_print_page") {
+            if(printSuccess) {
+                state = "remove_support"
+            } else {
+                resetProcess(false)
+            }
         } else {
             state = "z_cal_qr_code"
         }
@@ -215,6 +235,8 @@ ManualZCalibrationForm {
     retry_button.onClicked: {
         if(state == "cal_issue") {
             resetProcess(false)
+        } else if(state == "return_print_page") {
+            state = "cal_issue"
         }
     }
 }

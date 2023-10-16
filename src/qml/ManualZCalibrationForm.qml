@@ -16,6 +16,7 @@ LoggingItem {
     property alias calValueItem2: calValueItem2
     property alias calValueItem3: calValueItem3
     property alias calValueItem4: calValueItem4
+    property bool printSuccess: false
 
     ContentLeftSide {
         id: contentLeftSide
@@ -665,6 +666,67 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide.buttonSecondary1
                 text: qsTr("RETRY")
+                visible: true
+            }
+        },
+        State {
+            name: "return_print_page"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                icon_image: printSuccess ? LoadingIcon.Success : LoadingIcon.Failure
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: printSuccess ? qsTr("PRINT COMPLETE") : qsTr("PRINT FAILED")
+                style: TextHeadline.Base
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Z-CALIBRATION PRINT")
+                opacity: 0.5
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: printSuccess ? qsTr("NEXT") : qsTr("RETRY")
+                visible: true
+                style: ButtonRectangleBaseForm.Button
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                text: qsTr("PRINT FAILED")
                 visible: true
             }
         }
