@@ -29,7 +29,6 @@ LoggingItem {
             logKey: text
             onClicked: {
                 acknowledgePrint()
-                settingsPage.extruderSettingsPage.manualZCalibration.onPrintPage = false
                 // GO BACK TO MANUAL CALIBRATION
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
@@ -58,7 +57,7 @@ LoggingItem {
                     settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
 
                 }
-                settingsPage.extruderSettingsPage.manualZCalibration.onPrintPage = false
+
                 // PROMPT USER TO REDO AUTOCAL
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
