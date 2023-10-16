@@ -687,11 +687,10 @@ LoggingItem {
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
             returnToManualCal = true
-            state = "z_cal_start"
-            resetManualCalValues()
 
             // Button action in 'base state'
             bot.calibrateToolheads(["x","y"])
+            resetProcess(false)
             manual_calibration_issue_popup.close()
         }
 
@@ -736,9 +735,7 @@ LoggingItem {
         left_button_text: qsTr("STOP PROCESS")
         left_button.onClicked: {
             // Return to Start Page
-            state = "z_cal_start"
-            resetManualCalValues()
-            secondPass = false
+            resetProcess(false)
 
             // If we are cancelling calibration in the middle of a print, we need
             // to make sure we exit out of the print process, which means waiting

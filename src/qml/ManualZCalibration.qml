@@ -138,6 +138,19 @@ ManualZCalibrationForm {
         calValueItem4.value = 0.20
     }
 
+    // Reset or Restart the Manual Z Cal Process
+    // bool exit determines if we are leaving
+    // the process entirely
+    function resetProcess(exit) {
+        state = "z_cal_start"
+        resetManualCalValues()
+        secondPass = false
+        if(exit) {
+            isInManualCalibration = false
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+        }
+    }
+
     function back() {
         if (state == "measure") {
                 state = "remove_support"
@@ -152,11 +165,7 @@ ManualZCalibrationForm {
         } else if(state == "insert_build_plate") {
             state = "adjustments_complete"
         } else if(state !== "updating_information") {
-            state = "z_cal_start"
-            resetManualCalValues()
-            isInManualCalibration = false
-            secondPass = false
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            resetProcess(true)
         }
     }
 
@@ -194,28 +203,18 @@ ManualZCalibrationForm {
 
             // Button action in 'base state'
             bot.calibrateToolheads(["x","y"])
-            state = "z_cal_start"
-            resetManualCalValues()
-            secondPass = false
+            resetProcess(false)
         } else if (state == "success") {
-            // exit
-            state = "z_cal_start"
-            resetManualCalValues()
-            isInManualCalibration = false
-            secondPass = false
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            // Exit
+            resetProcess(true)
         } else {
             state = "z_cal_qr_code"
         }
-
     }
 
     retry_button.onClicked: {
         if(state == "cal_issue") {
-            state = "z_cal_start"
-            resetManualCalValues()
-            secondPass = false
+            resetProcess(false)
         }
     }
-
 }
