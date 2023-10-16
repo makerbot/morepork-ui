@@ -36,8 +36,7 @@ LoggingItem {
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
                     settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
-                    settingsPage.extruderSettingsPage.manualZCalibration.state = "z_cal_start"
-                    settingsPage.extruderSettingsPage.manualZCalibration.secondPass = false
+                    settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(false)
                 } else {
                     settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
                     settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
