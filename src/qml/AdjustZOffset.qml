@@ -3,15 +3,20 @@ import QtQuick.Layouts 1.12
 
 LoggingItem {
     property bool valueChanged: false
-    property double currentOffsetCompensation: bot.offsetCompensationZ
-    property double adjustedOffsetCompensation: currentOffsetCompensation
-    property double offsetCompDiff: 0.0
-    property double compensatedOffsetAZ: 0.0
-    property double compensatedOffsetBZ: 0.0
+    property double lastAutoCalAZOffset: bot.lastAutoCalOffsetAZ
+    property double lastAutoCalBZOffset: bot.lastAutoCalOffsetBZ
+    property double currentAZOffset: bot.offsetAZ
+    property double currentBZOffset: bot.offsetBZ
+    property double adjustedAZOffset: currentAZOffset
+    property double adjustedBZOffset: currentBZOffset
+    property double offsetDiff: valueChanged ?
+                                    lastAutoCalAZOffset - adjustedAZOffset :
+                                    lastAutoCalAZOffset - currentAZOffset
 
     onValueChangedChanged: {
         if(valueChanged) {
-            adjustedOffsetCompensation = currentOffsetCompensation
+            adjustedAZOffset = currentAZOffset
+            adjustedBZOffset = currentBZOffset
         }
     }
 
@@ -52,7 +57,7 @@ LoggingItem {
                     anchors.horizontalCenter: baseScale.horizontalCenter
                     anchors.verticalCenter: baseScale.verticalCenter
                     anchors.verticalCenterOffset: {
-                        -Math.min(Math.max(parseInt((valueChanged ? adjustedOffsetCompensation.toFixed(2) : currentOffsetCompensation.toFixed(2)) * 100 * 3), -baseScale.height/2), baseScale.height/2)
+                        -Math.min(Math.max(parseInt(offsetDiff.toFixed(2) * 100 * 3), -baseScale.height/2), baseScale.height/2)
                     }
                 }
             }
@@ -64,7 +69,7 @@ LoggingItem {
                 spacing: 30
 
                 Image {
-                    id: increaseOffset
+                    id: increasExtruderToBPDistance
                     source: "qrc:/img/vector_image.png"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.preferredWidth: sourceSize.width
@@ -74,31 +79,26 @@ LoggingItem {
                         anchors.fill: parent
                         onClicked: {
                             valueChanged = true
-                            adjustedOffsetCompensation += 0.01
+                            adjustedAZOffset -= 0.01
+                            adjustedBZOffset -= 0.01
                         }
                     }
-                    enabled: adjustedOffsetCompensation < 0.5
+                    enabled: offsetDiff.toFixed(2) < 0.5
                     opacity: enabled ? 1 : 0.3
                 }
 
                 TextHeadline {
                     style: TextHeadline.Large
                     text: {
-                        if(valueChanged) {
-                            adjustedOffsetCompensation.toFixed(2) > 0 ?
-                                  "+" + adjustedOffsetCompensation.toFixed(2) :
-                                  adjustedOffsetCompensation.toFixed(2)
-                        } else {
-                            currentOffsetCompensation.toFixed(2) > 0 ?
-                                  "+" + currentOffsetCompensation.toFixed(2) :
-                                  currentOffsetCompensation.toFixed(2)
-                        }
+                        offsetDiff > 0 ?
+                            "+" + offsetDiff.toFixed(2) :
+                            offsetDiff.toFixed(2)
                     }
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
                 Image {
-                    id: decreaseOffset
+                    id: decreaseExtruderToBPDistance
                     source: "qrc:/img/vector_image.png"
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.preferredWidth: sourceSize.width
@@ -109,11 +109,12 @@ LoggingItem {
                         anchors.fill: parent
                         onClicked: {
                             valueChanged = true
-                            adjustedOffsetCompensation -= 0.01
+                            adjustedAZOffset += 0.01
+                            adjustedBZOffset += 0.01
                         }
                     }
 
-                    enabled: adjustedOffsetCompensation > -0.5
+                    enabled: offsetDiff.toFixed(2) > -0.5
                     opacity: enabled ? 1 : 0.3
                 }
             }
@@ -152,13 +153,8 @@ LoggingItem {
             text: qsTr("ENTER")
             visible: true
             onClicked: {
-                offsetCompDiff = adjustedOffsetCompensation - currentOffsetCompensation
-                compensatedOffsetAZ = parseFloat(bot.offsetAZ) + parseFloat(offsetCompDiff.toFixed(2))
-                compensatedOffsetBZ = parseFloat(bot.offsetBZ) + parseFloat(offsetCompDiff.toFixed(2))
-                bot.setBuildPlateZeroZOffset(compensatedOffsetAZ, compensatedOffsetBZ)
-                bot.setCalibrationOffsetsCompensation(0,0,adjustedOffsetCompensation.toFixed(2))
+                bot.setBuildPlateZeroZOffset(adjustedAZOffset, adjustedBZOffset)
                 bot.get_calibration_offsets()
-                bot.getCalibrationOffsetsCompensation()
                 delayedResetValueChanged.start()
             }
             enabled: valueChanged
@@ -176,12 +172,15 @@ LoggingItem {
     }
 
     // I hate to do this. The valueChanged flag is used to determine whether the
-    // indicator needle shows the last compensation value or the value the user is
-    // currently changing to. When we set the modified value as the saved value we
-    // immediately reset this flag to show the saved value but there is a delay where
-    // the needle jumps to the last saved value before finally going to the most recent
-    // saved value. This timer delays going back to the saved value by enough time that
-    // it has the most recent value.
+    // indicator needle shows the last compensation value (difference of the current
+    // from the last auto cal attempt) or the value the user is currently changing to
+    // (difference between the adjusted from the last auto cal attempt). When we set
+    // the adjusted value as the current value we immediately reset this flag to show
+    // the compensation from the just updated current to the last auto cal attempt value
+    // but there is a delay where the needle jumps to the previous compensation value
+    // before finally going to the most recent compensation value. This timer delays
+    // ensure that the current offsets are updated with the updated offsets that the
+    // user just set before showing the compensation value.
     Timer {
         id: delayedResetValueChanged
         interval: 1000
@@ -202,11 +201,8 @@ LoggingItem {
         leftButtonText: qsTr("BACK")
 
         rightButton.onClicked: {
-            // This is called reset but we actually only reset to the last saved
-            // compensation value and dont actaully reset the values to zero.
-            bot.getCalibrationOffsetsCompensation()
-            resetOffsetCompensationChangesPopup.close()
             valueChanged = false
+            resetOffsetCompensationChangesPopup.close()
         }
         rightButtonText: qsTr("CONFIRM")
 

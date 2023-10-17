@@ -116,9 +116,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void setNPSSurveyDueDate(QString time);
     Q_INVOKABLE virtual QString getNPSSurveyDueDate();
     Q_INVOKABLE virtual void moveBuildPlate(const int distance, const int speed);
-    Q_INVOKABLE virtual void getCalibrationOffsetsCompensation();
-    Q_INVOKABLE virtual void setCalibrationOffsetsCompensation(float x=0, float y=0, float z=0);
-    Q_INVOKABLE virtual void resetCalibrationOffsetsCompensation();
+    Q_INVOKABLE virtual void getLastAutoCalOffsets();
     Q_INVOKABLE virtual void setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset);
 
     QStringList firmwareReleaseNotesList();
@@ -385,10 +383,13 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, offsetBY, -999.999)
     MODEL_PROP(float, offsetBZ, -999.999)
 
-    // Calibration Offsets Compensation
-    MODEL_PROP(float, offsetCompensationX, -999.999)
-    MODEL_PROP(float, offsetCompensationY, -999.999)
-    MODEL_PROP(float, offsetCompensationZ, -999.999)
+    // Offsets from last Auto Calibration attempt
+    MODEL_PROP(float, lastAutoCalOffsetAX, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetAY, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetAZ, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetBX, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetBY, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetBZ, -999.999)
 
     // Accessories
     // Oyster - HEPA Filter Lid

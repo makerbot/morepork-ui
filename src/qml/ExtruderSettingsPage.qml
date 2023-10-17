@@ -26,7 +26,7 @@ ExtruderSettingsPageForm {
     buttonAdjustZOffset.onClicked: {
         adjustZOffset.valueChanged = false
         bot.get_calibration_offsets()
-        bot.getCalibrationOffsetsCompensation()
+        bot.getLastAutoCalOffsets()
         extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AdjustZOffsetPage)
     }
 }
