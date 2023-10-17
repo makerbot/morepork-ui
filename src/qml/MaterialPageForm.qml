@@ -649,6 +649,7 @@ Item {
                                 emptyString
                             }
                         }
+
                         visible: true
                     }
 
@@ -678,6 +679,7 @@ Item {
                                 emptyString
                             }
                         }
+
                         buttonPrimary.text: (bot.process.type == ProcessType.Print) ? qsTr("RESUME PRINT") : qsTr("DONE")
                         buttonPrimary.enabled: {
                             (bot.chamberErrorCode != 45 && bot.chamberErrorCode != 48)

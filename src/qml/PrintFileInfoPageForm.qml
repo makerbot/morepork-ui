@@ -88,5 +88,6 @@ Item {
             // Info not available from cloudprint at the moment TODO: BW-5817
             visible: false // (startPrintSource == PrintPage.FromPrintQueue)
         }
+
     }
 }

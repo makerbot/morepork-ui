@@ -15,6 +15,7 @@ LoggingItem {
     property alias contentRightSide: contentRightSide
     property alias cleanExtrudersSequence: cleanExtrudersSequence
     property alias cancelCalibrationPopup: cancelCalibrationPopup
+    property alias resumeManualCalibrationPopup: resumeManualCalibrationPopup
     signal processDone
 
     property int currentState: bot.process.stateType
@@ -518,6 +519,55 @@ LoggingItem {
             TextBody {
                 text: qsTr("Are you sure you want to cancel the calibration process?")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "ResumeManualCalibration"
+        id: resumeManualCalibrationPopup
+        popupHeight: manualCalColumnLayout.height+145
+        showTwoButtons: true
+        left_button_text: qsTr("EXIT")
+        left_button.onClicked: {
+            resumeManualCalibrationPopup.close()
+        }
+
+        right_button_text: qsTr("START")
+        right_button.onClicked: {
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+            resumeManualCalibrationPopup.close()
+        }
+
+        ColumnLayout {
+            id: manualCalColumnLayout
+            height: children.height
+            width: parent.width-80
+            anchors.top: resumeManualCalibrationPopup.popupContainer.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            Image {
+                id: error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_error_small.png"
+            }
+
+            TextHeadline {
+                text: qsTr("RESUME MANUAL Z-CALIBRATION")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextBody {
+                text: qsTr("Would you like to restart the Manual Z-Calibration process? "+
+                           "It is highly recommended for optimum print quality.")
+                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
             }
         }
     }
