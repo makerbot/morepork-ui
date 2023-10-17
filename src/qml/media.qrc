@@ -231,6 +231,7 @@
         <file alias="icon_manual_zcal.png">images/icon_manual_zcal.png</file>
         <file alias="plus_circle.png">images/plus_circle.png</file>
         <file alias="minus_circle.png">images/minus_circle.png</file>
+        <file alias="coarse_adj_step.png">images/calibration/coarse_adj_step.png</file>
         <file alias="methodxl_insert_build_plate.gif">images/assisted_level/methodxl/insert_build_plate.gif</file>
         <file alias="methodxl_remove_build_plate.gif">images/assisted_level/methodxl/remove_build_plate.gif</file>
         <file alias="method_insert_build_plate.gif">images/assisted_level/method/insert_build_plate.gif</file>
