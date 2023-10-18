@@ -81,6 +81,13 @@ LoggingItem {
                             valueChanged = true
                             adjustedAZOffset -= 0.01
                             adjustedBZOffset -= 0.01
+                            // Mark that no adjustment has been made which will disable
+                            // the reset button if the user adjusts the compensation
+                            // slider to the existing value
+                            if(adjustedAZOffset.toFixed(3) == currentAZOffset.toFixed(3) &&
+                               adjustedBZOffset.toFixed(3) == currentBZOffset.toFixed(3)) {
+                               valueChanged = false
+                            }
                         }
                     }
                     enabled: offsetDiff.toFixed(2) < 0.5
@@ -111,6 +118,13 @@ LoggingItem {
                             valueChanged = true
                             adjustedAZOffset += 0.01
                             adjustedBZOffset += 0.01
+                            // Mark that no adjustment has been made which will disable
+                            // the reset button if the user adjusts the compensation
+                            // slider to the existing value
+                            if(adjustedAZOffset.toFixed(3) == currentAZOffset.toFixed(3) &&
+                               adjustedBZOffset.toFixed(3) == currentBZOffset.toFixed(3)) {
+                               valueChanged = false
+                            }
                         }
                     }
 
