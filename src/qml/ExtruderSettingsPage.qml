@@ -6,11 +6,11 @@ import ProcessStateTypeEnum 1.0
 ExtruderSettingsPageForm {
 
     buttonCalibrateToolhead.onClicked: {
-        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
     }
 
     buttonCalibrateZAxisOnly.onClicked: {
-        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
         bot.calibrateToolheads(["z"])
     }
 

@@ -212,7 +212,7 @@ ManualZCalibrationForm {
         } else if (state == "cal_issue") {
             // Start Auto Cal/Clean extruders
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
             returnToManualCal = true
 
             // Button action in 'base state'

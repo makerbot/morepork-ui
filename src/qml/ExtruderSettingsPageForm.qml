@@ -26,10 +26,10 @@ Item {
     property bool returnToManualCal: false
 
     enum SwipeIndex {
-        BasePage,               //0
-        CalibrateExtrudersPage, //1
-        CleanExtrudersPage,     //2
-        ManualZCalibrationPage  //3
+        BasePage,                   //0
+        AutomaticCalibrationPage,   //1
+        CleanExtrudersPage,         //2
+        ManualZCalibrationPage      //3
     }
 
     LoggingSwipeView {
@@ -65,14 +65,14 @@ Item {
                     MenuButton {
                         id: buttonCalibrateToolhead
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
-                        buttonText.text: qsTr("AUTOMATIC CALIBRATION")
+                        buttonText.text: qsTr("AUTOMATIC CALIBRATION - X Y Z")
                         enabled: !isProcessRunning()
                     }
 
                     MenuButton {
                         id: buttonCalibrateZAxisOnly
                         buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
-                        buttonText.text: qsTr("Z-ONLY CALIBRATION")
+                        buttonText.text: qsTr("AUTOMATIC CALIBRATION - Z")
                         enabled: !isProcessRunning()
                     }
 
@@ -115,12 +115,12 @@ Item {
             }
         }
 
-        // ExtruderSettingsPage.CalibrateExtrudersPage
+        // ExtruderSettingsPage.AutomaticCalibrationPage
         Item {
             id: calibrateToolheadsItem
             property var backSwiper: extruderSettingsSwipeView
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
-            property string topBarTitle: qsTr("Calibrate Extruders")
+            property string topBarTitle: qsTr("Automatic Calibration")
             property bool hasAltBack: true
             smooth: false
             visible: false
