@@ -68,14 +68,12 @@ LoggingItem {
     }
 
     property variant dryingMaterialsListMethod : [
-        {label: "enter custom temperature", temperature: 0, time: 24, custom: true},
         {label: "pva", temperature : 60, time : 24, custom: false},
         {label: "nylon || nylon cf || nylon 12 cf || petg", temperature : 60, time : 24, custom: false},
         {label: "pla || tough", temperature : 45, time : 24, custom: false}
     ]
 
     property variant dryingMaterialsListMethodX : [
-        {label: "enter custom temperature", temperature: 0, time: 24, custom: true},
         {label: "pva", temperature : 70, time : 24, custom: false},
         {label: "rapidrinse", temperature : 70, time : 24, custom: false},
         {label: "nylon || nylon cf || nylon 12 cf", temperature : 70, time : 24, custom: false},
@@ -84,7 +82,6 @@ LoggingItem {
     ]
 
     property variant dryingMaterialsListMethodXL : [
-        {label: "enter custom temperature", temperature: 0, time: 16, custom: true},
         {label: "abs-r", temperature: 60, time: 16, custom: false},
         {label: "abs-cf", temperature: 60, time: 16, custom: false},
         {label: "nylon cf", temperature: 70, time: 16, custom: false},
@@ -592,7 +589,7 @@ LoggingItem {
             state = "cancelling"
             cancelDryingCyclePopup.close()
         }
-        left_button_text: qsTr("CONTINUE")
+        left_button_text: qsTr("BACK")
         left_button.onClicked: {
             cancelDryingCyclePopup.close()
         }

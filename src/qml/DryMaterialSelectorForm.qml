@@ -27,31 +27,40 @@ ListView {
         }
     }
 
+    header:
+        DryMaterialButton {
+            id: customMaterialButton
+            property int time: bot.machineType == MachineType.Magma ? 16 : 24
+            materialNameText: qsTr("ENTER CUSTOM TEMPERATURE")
+            temperatureAndTimeText: qsTr("Chamber will heat for %1 hours").arg(time)
+            enabled: true
+            opacity: 1
+            onClicked: {
+                customMaterialTemperature.customTime = time
+                dryMaterial.state = "custom_material"
+            }
+            smooth: false
+            antialiasing: false
+        }
+
     delegate:
         DryMaterialButton {
         id: materialButton
-        enabled: model.modelData["temperature"] != 0 || model.modelData["custom"]
-        opacity: model.modelData["temperature"] != 0 ? 1 : (model.modelData["custom"] ? 1 : 0.3)
+        enabled: model.modelData["temperature"] != 0
+        opacity: model.modelData["temperature"] != 0 ? 1 : 0.3
         materialNameText: model.modelData["label"]
         temperatureAndTimeText: {
-            if (model.modelData["temperature"] != 0)
+            if (model.modelData["temperature"] != 0) {
                 qsTr("%1°C for %2 hours").arg(model.modelData["temperature"]).arg(model.modelData["time"])
-            else if(model.modelData["custom"]) {
-                qsTr("Chamber will heat for %1 hours").arg(model.modelData["time"])
-            }
-            else
+            } else {
                qsTr("Not available, this material can be damaged by drying.")
+            }
         }
         smooth: false
         antialiasing: false
         onClicked: {
-            if(model.modelData["custom"]) {
-                customMaterialTemperature.customTime = model.modelData["time"]
-                dryMaterial.state = "custom_material"
-            }
-            else {
-                bot.startDrying(parseInt(model.modelData["temperature"], 10), model.modelData["time"])
-            }
+            bot.startDrying(parseInt(model.modelData["temperature"], 10), model.modelData["time"])
         }
     }
 }
+
