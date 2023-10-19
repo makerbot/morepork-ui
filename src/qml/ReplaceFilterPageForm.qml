@@ -58,9 +58,6 @@ Item {
                     else if (itemReplaceFilter.state == "step_3") {
                         itemReplaceFilter.state = "step_4"
                     }
-                    /*else if (itemReplaceFilter.state == "step_4") {
-                        itemReplaceFilter.state = "step_5"
-                    }*/
                     else if (itemReplaceFilter.state == "step_4") {
                         bot.resetFilterHours()
                         bot.hepaFilterPrintHours = 0
