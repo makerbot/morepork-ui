@@ -229,8 +229,6 @@ Item {
                     replaceFilterPage.itemReplaceFilter.state = "step_2"
                 else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
                     replaceFilterPage.itemReplaceFilter.state = "step_3"
-                //else if (replaceFilterPage.itemReplaceFilter.state == "step_5")
-                //    replaceFilterPage.itemReplaceFilter.state = "step_4"
                 else
                     settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
             }

@@ -16,7 +16,7 @@ LoggingItem {
     ContentLeftSide {
         visible: true
         loadingIcon {
-            loadingProgress: alert ? (hepaPrintHours *100)/ hepaMaxHours : 0
+            loadingProgress: alert ? 0 : (hepaPrintHours *100)/ hepaMaxHours
             icon_image: {
                 if(alert) {
                     LoadingIcon.Failure

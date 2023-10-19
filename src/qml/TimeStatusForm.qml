@@ -18,12 +18,12 @@ RowLayout {
         TextBody {
             id: currentValue
             font.weight: Font.Bold
-            color: exceedLifetimeValue ? "#FCA833" : "#FFFFFF"
+            color: exceededLifetimeValue ? "#FCA833" : "#FFFFFF"
         }
         TextBody {
             text: "Current"
             font.weight: Font.Bold
-            color: exceedLifetimeValue ? "#FCA833" : "#FFFFFF"
+            color: exceededLifetimeValue ? "#FCA833" : "#FFFFFF"
         }
     }
     ColumnLayout {
