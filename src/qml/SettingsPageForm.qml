@@ -49,7 +49,6 @@ Item {
         PreheatPage,            // 6
         DryMaterialPage,        // 7
         AnnealPrintPage         // 8
-
     }
 
     LoggingSwipeView {
