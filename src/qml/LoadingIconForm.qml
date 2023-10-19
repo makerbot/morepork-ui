@@ -153,7 +153,8 @@ Rectangle {
 
             PropertyChanges {
                 target: outer_image
-                visible: parent.visible
+                visible: parent.visible &&
+                         loadingProgress == 0
             }
 
             PropertyChanges {

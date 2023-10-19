@@ -1,118 +1,63 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import ProcessTypeEnum 1.0
-import ProcessStateTypeEnum 1.0
 
-Item {
-    id: cleanAirSettingsPage
+LoggingItem {
+    itemName: "FilterStatus"
+    id: filterStatusPage
     width: 800
-    height: 440
+    height: 408
     smooth: false
+    anchors.fill: parent.fill
+    property int hepaPrintHours: (bot.hepaFilterPrintHours).toFixed(2)
+    property int hepaMaxHours: (bot.hepaFilterMaxHours).toFixed(2)
+    property bool alert: bot.hepaFilterChangeRequired || !isFilterConnected()
 
-    property alias cleanAirSettingsSwipeView: cleanAirSettingsSwipeView
-
-    property alias buttonFilterStatus: buttonFilterStatus
-    property alias buttonReplaceFilter: buttonReplaceFilter
-
-    enum SwipeIndex {
-        BasePage,                   // 0
-        FilterStatusPage,           // 1
-        ReplaceFilterPage           // 2
-    }
-    
-    LoggingSwipeView {
-        id: cleanAirSettingsSwipeView
-        logName: "cleanAirSettingsSwipeView"
-        currentIndex: CleanAirSettingsPage.BasePage
-
-        // CleanAirSettingsPage.BasePage
-        Item {
-            id: itemCleanAirSettings
-            // backSwiper and backSwipeIndex are used by backClicked
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.BasePage
-
-            smooth: false
-            visible: true
-
-            Flickable {
-                id: flickableCleanAirSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
-                contentHeight: columnCleanAirSettings.height
-
-                Column {
-                    id: columnCleanAirSettings
-                    smooth: false
-                    anchors.right: parent.right
-                    anchors.left: parent.left
-                    anchors.top: parent.top
-                    spacing: 0
-
-                    MenuButton {
-                        id: buttonFilterStatus
-                        buttonText.text: qsTr("FILTER STATUS")
-                        enabled: isFilterConnected()
-                        onClicked: {
-                            bot.getFilterHours()
-                            cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.FilterStatusPage)
-                        }
-                    }
-
-                    MenuButton {
-                        id: buttonReplaceFilter
-                        buttonText.text: qsTr("REPLACE FILTER")
-                        onClicked: {
-                            cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.ReplaceFilterPage)
-                        }
-                    }
+    ContentLeftSide {
+        visible: true
+        loadingIcon {
+            loadingProgress: alert ? (hepaPrintHours *100)/ hepaMaxHours : 0
+            icon_image: {
+                if(alert) {
+                    LoadingIcon.Failure
+                } else {
+                    LoadingIcon.Loading
                 }
             }
+            visible: true
         }
+    }
 
-        // CleanAirSettingsPage.FilterStatusPage
-        Item {
-            id: filterStatusItem
-            property var backSwiper: cleanAirSettingsSwipeView
-            property int backSwipeIndex: CleanAirSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            FilterStatusPage {
-
+    ContentRightSide {
+        visible: true
+        textHeader {
+            text: isFilterConnected() ? qsTr("Filter Status") :
+                                        qsTr("Clean Air Not Detected")
+            visible: true
+        }
+        textBody {
+            text: qsTr("Lifetime is dependent on multiple factors.")
+            visible: isFilterConnected()
+        }
+        timeStatus {
+            currentValue: hepaPrintHours
+            lifetimeValue: hepaMaxHours
+            exceededLifetimeValue: bot.hepaFilterChangeRequired
+            visible: isFilterConnected()
+        }
+        buttonSecondary1 {
+            text: qsTr("REPLACE FILTER")
+            visible: true
+            onClicked: {
+                settingsSwipeView.swipeToItem(SettingsPage.ReplaceFilterPage)
             }
         }
-
-        // CleanAirSettingsPage.ReplaceFilterPage
-        Item {
-            id: replaceFilterItem
-            property var backSwiper: cleanAirSettingsSwipeView
-            property int backSwipeIndex: CleanAirSettingsPage.BasePage
-            smooth: false
-            visible: false
-
-            property bool hasAltBack: true
-
-            function altBack() {
-                if (replaceFilterPage.itemReplaceFilter.state == "done")
-                    cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
-                    replaceFilterPage.itemReplaceFilter.state = "done"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
-                    replaceFilterPage.itemReplaceFilter.state = "step_2"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
-                    replaceFilterPage.itemReplaceFilter.state = "step_3"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_5")
-                    replaceFilterPage.itemReplaceFilter.state = "step_4"
-                else
-                    cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
-            }
-
-            ReplaceFilterPage {
-                id: replaceFilterPage
+        buttonSecondary2 {
+            text: qsTr("RESET FILTER")
+            enabled: isFilterConnected()
+            visible: true
+            onClicked: {
+                hepaFilterResetPopup.open()
             }
         }
     }

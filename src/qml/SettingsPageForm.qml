@@ -45,9 +45,11 @@ Item {
         ExtruderSettingsPage,   // 2
         BuildPlateSettingsPage, // 3
         CleanAirSettingsPage,   // 4
-        PreheatPage,            // 5
-        DryMaterialPage,        // 6
-        AnnealPrintPage         // 7
+        ReplaceFilterPage,      // 5
+        PreheatPage,            // 6
+        DryMaterialPage,        // 7
+        AnnealPrintPage         // 8
+
     }
 
     LoggingSwipeView {
@@ -114,9 +116,7 @@ Item {
                     MenuButton {
                         id: buttonCleanAirSettings
                         buttonImage.source: "qrc:/img/hepa_filter.png"
-                        buttonImage.anchors.leftMargin: 30
                         buttonText.text: qsTr("CLEAN AIR SETTINGS")
-                        buttonText.anchors.leftMargin: 38
                         buttonAlertImage.visible: bot.hepaFilterChangeRequired
                         visible: bot.machineType != MachineType.Magma
                     }
@@ -207,6 +207,37 @@ Item {
 
             CleanAirSettingsPage {
                 id: cleanAirSettingsPage
+            }
+        }
+
+        // SettingsPage.ReplaceFilterPage
+        Item {
+            id: replaceFilterItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: SettingsPage.CleanAirSettingsPage
+            property string topBarTitle: qsTr("Replace Filter")
+            smooth: false
+            visible: false
+
+            property bool hasAltBack: true
+
+            function altBack() {
+                if (replaceFilterPage.itemReplaceFilter.state == "done")
+                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
+                    replaceFilterPage.itemReplaceFilter.state = "done"
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
+                    replaceFilterPage.itemReplaceFilter.state = "step_2"
+                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
+                    replaceFilterPage.itemReplaceFilter.state = "step_3"
+                //else if (replaceFilterPage.itemReplaceFilter.state == "step_5")
+                //    replaceFilterPage.itemReplaceFilter.state = "step_4"
+                else
+                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+            }
+
+            ReplaceFilterPage {
+                id: replaceFilterPage
             }
         }
 

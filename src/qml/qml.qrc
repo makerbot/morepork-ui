@@ -204,8 +204,6 @@
         <file>HeatShieldInstructionsForm.qml</file>
         <file>CleanAirSettingsPage.qml</file>
         <file>CleanAirSettingsPageForm.qml</file>
-        <file>FilterStatusPage.qml</file>
-        <file>FilterStatusPageForm.qml</file>
         <file>ReplaceFilterPage.qml</file>
         <file>ReplaceFilterPageForm.qml</file>
         <file>ImageWithFeedback.qml</file>
@@ -277,5 +275,7 @@
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
         <file>ManualCalibrationPrintFinishedForm.qml</file>
         <file>ManualCalibrationPrintFinished.qml</file>
+        <file>TimeStatus.qml</file>
+        <file>TimeStatusForm.qml</file>
     </qresource>
 </RCC>
