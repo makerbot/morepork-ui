@@ -3,8 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 LoggingItem {
-    itemName: "FilterStatus"
-    id: filterStatusPage
+    itemName: "CleanAirSettings"
+    id: cleanAirSettingsPage
     width: 800
     height: 408
     smooth: false
