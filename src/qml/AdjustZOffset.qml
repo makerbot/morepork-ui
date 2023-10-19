@@ -175,9 +175,8 @@ LoggingItem {
             text: qsTr("ENTER")
             visible: true
             onClicked: {
-                bot.setBuildPlateZeroZOffset(adjustedAZOffset, adjustedBZOffset)
-                bot.get_calibration_offsets()
-                delayedResetValueChanged.start()
+                zOffsetCompensationPopup.popupState = "confirm_offset"
+                zOffsetCompensationPopup.open()
             }
             enabled: valueChanged
         }
@@ -186,7 +185,8 @@ LoggingItem {
             text: qsTr("RESET")
             visible: true
             onClicked: {
-                resetOffsetCompensationChangesPopup.open()
+                zOffsetCompensationPopup.popupState = "discard_changes"
+                zOffsetCompensationPopup.open()
             }
             enabled: valueChanged
         }
@@ -212,36 +212,82 @@ LoggingItem {
     }
 
     CustomPopup {
-        popupName: "ResetOffsetCompensationChangesPopup"
-        id: resetOffsetCompensationChangesPopup
-        popupHeight: 250
+        popupName: "zOffsetCompensationPopup"
+        id: zOffsetCompensationPopup
+
+        property string popupState
+
+        popupHeight: {
+            if(popupState == "discard_changes") {
+                250
+            } else {
+                275
+            }
+        }
+
         showTwoButtons: true
 
         leftButton.onClicked: {
-            resetOffsetCompensationChangesPopup.close()
+            zOffsetCompensationPopup.close()
         }
         leftButtonText: qsTr("BACK")
 
         rightButton.onClicked: {
-            valueChanged = false
-            resetOffsetCompensationChangesPopup.close()
+            if(popupState == "confirm_offset") {
+                bot.setBuildPlateZeroZOffset(adjustedAZOffset, adjustedBZOffset)
+                bot.get_calibration_offsets()
+                delayedResetValueChanged.start()
+            } else if (popupState == "discard_changes") {
+                valueChanged = false
+            }
+            zOffsetCompensationPopup.close()
         }
         rightButtonText: qsTr("CONFIRM")
 
         ColumnLayout {
+            width: 625
             spacing: 20
             anchors.top: parent.top
             anchors.topMargin: 140
             anchors.horizontalCenter: parent.horizontalCenter
+            state: zOffsetCompensationPopup.popupState
             Image {
                 source: "qrc:/img/process_error_small.png"
                 Layout.alignment: Qt.AlignHCenter
             }
 
             TextBody {
+                id: descriptionText
                 text: qsTr("Discard Changes?")
+                lineHeight: 22
+                horizontalAlignment: Text.AlignHCenter
                 Layout.alignment: Qt.AlignHCenter
+                Layout.preferredWidth: parent.width
             }
+
+            states: [
+                State {
+                    name: "confirm_offset"
+                    PropertyChanges {
+                        target: descriptionText
+                        text: {
+                            if(offsetDiff.toFixed(2) == 0) {
+                                qsTr("This will make the nozzle print at the default height from the build plate. Do you want to continue?")
+                            } else {
+                                qsTr("This will make the nozzle print <b>%1mm %2 the build plate</b>. Do you want to continue?").
+                                    arg(Math.abs(offsetDiff).toFixed(2)).arg((offsetDiff > 0) ? qsTr("farther from") : qsTr("closer to"))
+                            }
+                        }
+                    }
+                },
+                State {
+                    name: "discard_changes"
+                    PropertyChanges {
+                        target: descriptionText
+                        text: qsTr("Discard Changes?")
+                    }
+                }
+            ]
         }
     }
 }
