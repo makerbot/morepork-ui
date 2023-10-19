@@ -7,8 +7,8 @@ LoggingItem {
     property double lastAutoCalBZOffset: bot.lastAutoCalOffsetBZ
     property double currentAZOffset: bot.offsetAZ
     property double currentBZOffset: bot.offsetBZ
-    property double adjustedAZOffset: currentAZOffset
-    property double adjustedBZOffset: currentBZOffset
+    property double adjustedAZOffset: 0.0
+    property double adjustedBZOffset: 0.0
     property double offsetDiff: valueChanged ?
                                     lastAutoCalAZOffset - adjustedAZOffset :
                                     lastAutoCalAZOffset - currentAZOffset
@@ -33,36 +33,39 @@ LoggingItem {
             height: children.height
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 30
+            spacing: -20
 
             Item {
-                Layout.preferredWidth: 100
+                id: offsetAdjusterImageItem
+                Layout.preferredWidth: 200
                 Layout.preferredHeight: 300
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                 Image {
-                    id: baseScale
+                    id: nozzleImage
+                    z: 2
                     height: sourceSize.height
                     width: sourceSize.width
-                    source: "qrc:/img/z_offset_scale.png"
-                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/img/z_offset_nozzle.png"
                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: buildPlateImage.top
+                    anchors.bottomMargin: 10 + (offsetDiff.toFixed(2) * 100 * 1.5)
                 }
 
                 Image {
-                    id: indicatorNeedle
+                    id: buildPlateImage
+                    z: 1
                     height: sourceSize.height
                     width: sourceSize.width
-                    source: "qrc:/img/current_z_offset_indicator.png"
-                    anchors.horizontalCenter: baseScale.horizontalCenter
-                    anchors.verticalCenter: baseScale.verticalCenter
-                    anchors.verticalCenterOffset: {
-                        -Math.min(Math.max(parseInt(offsetDiff.toFixed(2) * 100 * 3), -baseScale.height/2), baseScale.height/2)
-                    }
+                    source: "qrc:/img/z_offset_build_plate.png"
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottomMargin: 80
+                    anchors.bottom: parent.bottom
                 }
             }
 
             ColumnLayout {
+                id: offsetAdjusterNumberItem
                 Layout.preferredWidth: 200
                 Layout.preferredHeight: 300
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -76,7 +79,10 @@ LoggingItem {
                     Layout.preferredHeight: sourceSize.height
 
                     MouseArea {
-                        anchors.fill: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width + 100
+                        height: parent.height + 100
                         onClicked: {
                             valueChanged = true
                             adjustedAZOffset -= 0.01
@@ -113,7 +119,10 @@ LoggingItem {
                     rotation: 180
 
                     MouseArea {
-                        anchors.fill: parent
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: parent.width + 100
+                        height: parent.height + 100
                         onClicked: {
                             valueChanged = true
                             adjustedAZOffset += 0.01
@@ -157,9 +166,8 @@ LoggingItem {
         }
 
         textBody {
-            text: qsTr("Adjust the offset of your extruders relative to the build plate." +
-                       "Please note that these values are reset whenever calibration or " +
-                       "new extruders are added.")
+            text: qsTr("Adjust the offset of your extruders relative to the build plate. Please " +
+                       "note that these values are reset whenever automatic calibration is run.")
             visible: true
         }
 
