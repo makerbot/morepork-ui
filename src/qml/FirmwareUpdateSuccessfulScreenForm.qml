@@ -3,6 +3,14 @@ import QtQuick 2.10
 Item {
     id: item1
     anchors.fill: parent
+
+    // Make this overlay screen opaque to touches.
+    MouseArea {
+        id: emptyMouseArea
+        z: -1
+        anchors.fill: parent
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "#000000"

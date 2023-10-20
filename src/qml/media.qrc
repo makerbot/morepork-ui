@@ -231,6 +231,7 @@
         <file alias="icon_manual_zcal.png">images/icon_manual_zcal.png</file>
         <file alias="plus_circle.png">images/plus_circle.png</file>
         <file alias="minus_circle.png">images/minus_circle.png</file>
+        <file alias="coarse_adj_step.png">images/calibration/coarse_adj_step.png</file>
         <file alias="methodxl_insert_build_plate.gif">images/assisted_level/methodxl/insert_build_plate.gif</file>
         <file alias="methodxl_remove_build_plate.gif">images/assisted_level/methodxl/remove_build_plate.gif</file>
         <file alias="method_insert_build_plate.gif">images/assisted_level/method/insert_build_plate.gif</file>
@@ -241,5 +242,8 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="icon_z_offset.png">images/icon_z_offset.png</file>
+        <file alias="z_offset_build_plate.png">images/manual_z_offset/build_plate.png</file>
+        <file alias="z_offset_nozzle.png">images/manual_z_offset/nozzle.png</file>
     </qresource>
 </RCC>
