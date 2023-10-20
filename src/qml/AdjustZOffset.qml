@@ -271,12 +271,9 @@ LoggingItem {
                     PropertyChanges {
                         target: descriptionText
                         text: {
-                            if(offsetDiff.toFixed(2) == 0) {
-                                qsTr("This will make the nozzle print at the default height from the build plate. Do you want to continue?")
-                            } else {
-                                qsTr("This will make the nozzle print <b>%1mm %2 the build plate</b>. Do you want to continue?").
-                                    arg(Math.abs(offsetDiff).toFixed(2)).arg((offsetDiff > 0) ? qsTr("farther from") : qsTr("closer to"))
-                            }
+                            qsTr("This will make the nozzle print <b>%1mm %2 the build plate</b>. Do you want to continue?").
+                            arg(Math.abs(currentAZOffset - adjustedAZOffset).toFixed(2)).
+                            arg(((currentAZOffset - adjustedAZOffset) > 0) ? qsTr("farther from") : qsTr("closer to"))
                         }
                     }
                 },
