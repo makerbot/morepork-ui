@@ -2212,6 +2212,7 @@ ApplicationWindow {
                 printPage.startPrintUnknownSliceGenuineMaterial = false
                 printPage.startPrintGenuineSliceUnknownMaterial = false
                 printPage.startPrintMaterialMismatch = false
+                printPage.startPrintWithLabsExtruder = false
             }
 
             showOneButton: (printPage.startPrintBuildDoorOpen ||
@@ -2223,27 +2224,26 @@ ApplicationWindow {
             full_button.onClicked: {
                 startPrintErrorsPopup.close()
             }
+
             left_button_text: {
-                if(printPage.startPrintNoFilament) {
-                    qsTr("CANCEL")
-                }
-                else if(printPage.startPrintMaterialMismatch ||
-                        printPage.startPrintGenuineSliceUnknownMaterial) {
+                if(printPage.startPrintNoFilament ||
+                   printPage.startPrintMaterialMismatch ||
+                   printPage.startPrintGenuineSliceUnknownMaterial ||
+                   printPage.startPrintWithLabsExtruder) {
                     qsTr("BACK")
-                }
-                else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                } else if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     qsTr("START ANYWAY")
                 } else {
                     emptyString
                 }
             }
+
             left_button.onClicked: {
                 startPrintErrorsPopup.close()
                 if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     if(printPage.startPrintDoorLidCheck()) {
                         printPage.confirm_build_plate_popup.open()
-                    }
-                    else {
+                    } else {
                         startPrintErrorsPopup.open()
                     }
                 }
@@ -2254,27 +2254,39 @@ ApplicationWindow {
                 printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }
+
             right_button_text: {
                 if(printPage.startPrintNoFilament) {
                     qsTr("LOAD MATERIAL")
-                }
-                else if(printPage.startPrintMaterialMismatch ||
+                } else if(printPage.startPrintMaterialMismatch ||
                         printPage.startPrintGenuineSliceUnknownMaterial ||
                         printPage.startPrintUnknownSliceGenuineMaterial) {
                     qsTr("CHANGE MATERIAL")
-                }
-                else {
+                } else if(printPage.startPrintWithLabsExtruder) {
+                    qsTr("CONTINUE")
+                } else {
                     emptyString
                 }
             }
+
             right_button.onClicked: {
                 startPrintErrorsPopup.close()
-                if(isInManualCalibration) {
-                    // Reset Manual Z Cal
-                    settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(true)
+                if(printPage.startPrintNoFilament ||
+                   printPage.startPrintMaterialMismatch ||
+                   printPage.startPrintGenuineSliceUnknownMaterial ||
+                   printPage.startPrintUnknownSliceGenuineMaterial) {
+                    resetDetailsAndGoToMaterialsPage()
+                    if(isInManualCalibration) {
+                        // Reset Manual Z Cal
+                        settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(true)
+                    }
+                } else if(printPage.startPrintWithLabsExtruder) {
+                    if(printPage.startPrintDoorLidCheck()) {
+                        printPage.confirm_build_plate_popup.open()
+                    } else {
+                        startPrintErrorsPopup.open()
+                    }
                 }
-
-                resetDetailsAndGoToMaterialsPage()
             }
 
             ColumnLayout {
@@ -2325,6 +2337,7 @@ ApplicationWindow {
                             target: main_text_start_print_errors_popup
                             text: qsTr("CLOSE THE TOP LID")
                         }
+
                         PropertyChanges {
                             target: sub_text_start_print_errors_popup
                             text: qsTr("Put the top lid back on the printer to start the print.")
@@ -2367,7 +2380,6 @@ ApplicationWindow {
                         PropertyChanges {
                             target: sub_text_start_print_errors_popup
                             text: {
-
                                 if (printPage.model_extruder_used && printPage.support_extruder_used) {
                                     qsTr("There is no material detected in at least one of the extruders." +
                                          " Please load material to start a print.")
@@ -2452,6 +2464,29 @@ ApplicationWindow {
                             target: sub_text_start_print_errors_popup
                             text: qsTr("This .MakerBot is exported for unknown materials. It is recommended" +
                              " to re-export this file for the correct materials for best results.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "start_print_with_labs_extruder"
+                        when: printPage.startPrintWithLabsExtruder
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("LABS EXTRUDER ALERT")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("This Manual Z Calibration print is designed for optimizing calibration for " +
+                                       "printing with <b>ABS-R/ABS-CF</b> as the model material and <b>RapidRinse</b> as the support " +
+                                       "material. Printing with other materials is not recommended and could negatively " +
+                                       "impact print quality. If you experience worse results with other materials " +
+                                       "running automatic calibration might help.")
                         }
 
                         PropertyChanges {
