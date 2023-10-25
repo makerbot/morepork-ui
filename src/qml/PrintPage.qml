@@ -11,6 +11,7 @@ PrintPageForm {
     property bool startPrintNoFilament: false
     property bool startPrintGenuineSliceUnknownMaterial: false
     property bool startPrintUnknownSliceGenuineMaterial: false
+    property bool startPrintWithLabsExtruder: false
 
     function startPrintMaterialCheck() {
         // This function checks for and saves all possible failures
@@ -61,11 +62,9 @@ PrintPageForm {
 
         if(startPrintUnknownSliceGenuineMaterial ||
            startPrintGenuineSliceUnknownMaterial ||
-           startPrintMaterialMismatch
-        ) {
+           startPrintMaterialMismatch) {
             return false
-        }
-        else {
+        } else {
             return true
         }
     }
@@ -91,8 +90,7 @@ PrintPageForm {
     function startPrintFilamentCheck() {
         if(bot.noFilamentErrorDisabled) {
             return true
-        }
-        else if (model_extruder_used && support_extruder_used &&
+        } else if (model_extruder_used && support_extruder_used &&
             (!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent)) {
             startPrintNoFilament = true
         } else if (model_extruder_used && !support_extruder_used &&
@@ -108,10 +106,21 @@ PrintPageForm {
         return true
     }
 
+    function startPrintExtruderCheck() {
+        if((bot.extruderATypeStr == "mk14_e" ||
+            bot.extruderATypeStr == "mk14_hot_e") &&
+            isInManualCalibration) {
+            startPrintWithLabsExtruder = true
+            return false
+        }
+        return true
+    }
+
     function startPrintCheck() {
         if(startPrintDoorLidCheck() &&
            startPrintFilamentCheck() &&
-           startPrintMaterialCheck()) {
+           startPrintMaterialCheck() &&
+           startPrintExtruderCheck()) {
             return true
         }
         return false

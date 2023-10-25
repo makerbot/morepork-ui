@@ -54,6 +54,7 @@ Item {
     property bool isFileDownloading: print_queue.downloading
     property bool fileDownloadFailed: print_queue.downloadingFailed
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
+    property alias confirm_build_plate_popup: confirm_build_plate_popup
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
