@@ -381,7 +381,7 @@ LoggingItem {
                 }
                 loadingIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
+                    icon_image: LoadingIcon.Progress
                     loadingProgress: bot.process.printPercentage
                 }
             }

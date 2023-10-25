@@ -335,8 +335,6 @@ LoggingItem {
                ButtonRectangleSecondary {
                     id: print_again_button
                     text: qsTr("RETRY TEST PRINT")
-                    anchors.top: acknowledgePrintFinished.bottom
-                    anchors.topMargin: bot.process.stateType == ProcessStateType.Failed ? -80 : 5
                     visible: false
                     onClicked: {
                         if(print_again_button.enabled) {

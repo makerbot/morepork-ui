@@ -40,7 +40,7 @@ Item {
             if(swipeToIndex == CleanExtruderSettings.MaterialSelector) {
                 if(bot.process.type == ProcessType.CalibrationProcess) {
                     // Use back button action specific to calibration process UI
-                    setCurrentItem(extruderSettingsSwipeView.itemAt(ExtruderSettingsPage.CalibrateExtrudersPage))
+                    setCurrentItem(extruderSettingsSwipeView.itemAt(ExtruderSettingsPage.AutomaticCalibrationPage))
                 } else {
                     // Use back button action specific to Nozzle cleaning process UI
                     setCurrentItem(extruderSettingsSwipeView.itemAt(ExtruderSettingsPage.CleanExtrudersPage))

@@ -14,6 +14,7 @@ Rectangle {
 
     enum Icon {
         Loading,
+        Progress,
         Success,
         Failure
     }
@@ -30,7 +31,6 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/loading_gears.png"
-        visible: parent.visible && loadingProgress == 0
 
         RotationAnimator {
             id: rotate_inner_image
@@ -40,7 +40,6 @@ Rectangle {
             duration: 10000
             loops: Animation.Infinite
             running: icon_image === LoadingIcon.Loading
-
         }
     }
 
@@ -52,7 +51,7 @@ Rectangle {
         source: "qrc:/img/loading_rings.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: parent.visible && loadingProgress == 0
+        visible: icon_image === LoadingIcon.Loading
 
         RotationAnimator {
             target: outer_image
@@ -60,7 +59,7 @@ Rectangle {
             to: 360
             duration: 10000
             loops: Animation.Infinite
-            running: parent.visible
+            running: icon_image === LoadingIcon.Loading
         }
     }
 
@@ -90,7 +89,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        visible: loadingProgress > 0
+        visible: icon_image === LoadingIcon.Progress
         font.family: defaultFont.name
         font.weight: Font.Light
         font.pixelSize: 75
@@ -116,7 +115,7 @@ Rectangle {
     onLoadingProgressChanged: canvas.requestPaint()
     Canvas {
         id: canvas
-        visible: loadingProgress > 0
+        visible: icon_image === LoadingIcon.Progress
         antialiasing: false
         smooth: false
         rotation : -90
@@ -139,6 +138,7 @@ Rectangle {
         }
     }
     states: [
+
         State {
             name: "loading"
             when: icon_image === LoadingIcon.Loading
@@ -147,14 +147,35 @@ Rectangle {
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/loading_gears.png"
+                visible: true
                 width: 68
                 height: 68
             }
 
             PropertyChanges {
                 target: outer_image
-                visible: parent.visible &&
-                         loadingProgress == 0
+                visible: true
+            }
+
+            PropertyChanges {
+                target: progress_circle
+                visible: false
+            }
+
+        },
+        State {
+            name: "progress"
+            when: icon_image === LoadingIcon.Progress
+
+
+            PropertyChanges {
+                target: inner_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: outer_image
+                visible: false
             }
 
             PropertyChanges {
@@ -167,9 +188,11 @@ Rectangle {
             name: "success"
             when: icon_image === LoadingIcon.Success
 
+
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/check_mark.png"
+                visible: true
                 rotation: 0
                 width: 79
                 height: 59
@@ -195,6 +218,7 @@ Rectangle {
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/exc_mark.png"
+                visible: true
                 rotation: 0
                 width: 16
                 height: 89
