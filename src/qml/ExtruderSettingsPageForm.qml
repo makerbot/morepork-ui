@@ -82,13 +82,6 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonCleanExtruders
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: qsTr("CLEAN EXTRUDERS")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
                         id: buttonManualZCalibration
                         buttonImage.source: "qrc:/img/icon_manual_zcal.png"
                         buttonText.text: qsTr("MANUAL CALIBRATION - Z")
@@ -100,6 +93,13 @@ Item {
                         id: buttonAdjustZOffset
                         buttonImage.source: "qrc:/img/icon_z_offset.png"
                         buttonText.text: qsTr("Z-OFFSET")
+                        enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonCleanExtruders
+                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
+                        buttonText.text: qsTr("CLEAN EXTRUDERS")
                         enabled: !isProcessRunning()
                     }
 

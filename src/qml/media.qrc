@@ -65,7 +65,6 @@
         <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
         <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
-        <file alias="method_leveler_scale.png">images/assisted_level/method/leveler_scale.png</file>
         <file alias="method_adjust_left_to_move_up_plate.png">images/assisted_level/method/adjust_left_to_move_up_plate.png</file>
         <file alias="method_adjust_left_to_move_down_plate.png">images/assisted_level/method/adjust_left_to_move_down_plate.png</file>
         <file alias="method_adjust_right_to_move_up_plate.png">images/assisted_level/method/adjust_right_to_move_up_plate.png</file>
@@ -73,14 +72,16 @@
         <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
         <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
         <file alias="methodxl_locate_screws.png">images/assisted_level/methodxl/locate_screws.png</file>
-        <file alias="methodxl_leveler_scale.png">images/assisted_level/methodxl/leveler_scale.png</file>
         <file alias="methodxl_adjust_left_to_move_up_plate.png">images/assisted_level/methodxl/adjust_left_to_move_up_plate.png</file>
         <file alias="methodxl_adjust_left_to_move_down_plate.png">images/assisted_level/methodxl/adjust_left_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_right_to_move_up_plate.png">images/assisted_level/methodxl/adjust_right_to_move_up_plate.png</file>
         <file alias="methodxl_adjust_right_to_move_down_plate.png">images/assisted_level/methodxl/adjust_right_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_done.png">images/assisted_level/methodxl/adjust_done.png</file>
+        <file alias="leveler_scale.png">images/assisted_level/leveler_scale.png</file>
         <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
         <file alias="leveler_indicator_orange.png">images/assisted_level/leveler_indicator_orange.png</file>
+        <file alias="leveler_indicator_white.png">images/assisted_level/leveler_indicator_white.png</file>
+        <file alias="leveler_indicator_out_of_screen.png">images/assisted_level/leveler_indicator_out_of_screen.png</file>
         <file alias="leveling_good.png">images/assisted_level/leveling_good.png</file>
         <file alias="hex_key_guide.png">images/assisted_level/hex_key_guide.png</file>
         <file alias="calibrate_extruders.png">images/calibration/calibrate_extruders.png</file>
