@@ -2484,7 +2484,7 @@ ApplicationWindow {
                             target: sub_text_start_print_errors_popup
                             text: qsTr("This Manual Z Calibration print is designed for optimizing calibration for " +
                                        "printing with <b>ABS-R/ABS-CF</b> as the model material and <b>RapidRinse</b> as the support " +
-                                       "material. Printing with other materials is not reommended and could negatively " +
+                                       "material. Printing with other materials is not recommended and could negatively " +
                                        "impact print quality. If you experience worse results with other materials " +
                                        "running automatic calibration might help.")
                         }
