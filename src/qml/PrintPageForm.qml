@@ -387,7 +387,9 @@ Item {
             id: itemPrintStorageOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
-            property string topBarTitle: qsTr("Select Source")
+            property string topBarTitle: bot.process.type == ProcessType.Print ?
+                                             qsTr("PRINT") :
+                                             qsTr("Select Source")
 
             property int backSwipeIndex: 0
             smooth: false
@@ -511,7 +513,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: PrintPage.BasePage
-            property string topBarTitle: qsTr("Storage - Select File")
+            property string topBarTitle: qsTr("Internal Storage - Select File")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -642,7 +644,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: PrintPage.BasePage
-            property string topBarTitle: qsTr("Queue - Select File")
+            property string topBarTitle: qsTr("Cloud Queue - Select File")
             smooth: false
             visible: false
 
@@ -818,7 +820,7 @@ Item {
                                              startPrintSource == PrintPage.FromPrintQueue ?
                                                  PrintPage.PrintQueueBrowser :
                                                  PrintPage.FileBrowser
-            property string topBarTitle: qsTr("File Preview")
+            property string topBarTitle: qsTr("Start Print")
             property bool hasAltBack: true
             smooth: false
             visible: false

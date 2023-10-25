@@ -10,6 +10,13 @@ Item {
     property alias continueButton: reviewPrintRightSide.buttonPrimary
     property alias calibrateButton: reviewPrintRightSide.buttonSecondary1
 
+    // Make this overlay screen opaque to touches.
+    MouseArea {
+        id: emptyMouseArea
+        z: -1
+        anchors.fill: parent
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "#000000"

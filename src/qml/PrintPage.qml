@@ -216,35 +216,27 @@ PrintPageForm {
         }
     }
 
-    printingDrawer.buttonClose.onClicked: {
-        printingDrawer.close()
-    }
-
     sortingDrawer.buttonSortAZ.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = "qrc:/img/check_circle_small.png"
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
+        sortingDrawer.buttonSortAZ.buttonImage = "qrc:/img/drawer_current_selection.png"
+        sortingDrawer.buttonSortDateAdded.buttonImage = ""
+        sortingDrawer.buttonSortPrintTime.buttonImage = ""
         storage.sortType = StorageSortType.Alphabetic
         sortingDrawer.close()
     }
 
     sortingDrawer.buttonSortDateAdded.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = ""
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = "qrc:/img/check_circle_small.png"
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
+        sortingDrawer.buttonSortAZ.buttonImage = ""
+        sortingDrawer.buttonSortDateAdded.buttonImage = "qrc:/img/drawer_current_selection.png"
+        sortingDrawer.buttonSortPrintTime.buttonImage = ""
         storage.sortType = StorageSortType.DateAdded
         sortingDrawer.close()
     }
 
     sortingDrawer.buttonSortPrintTime.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = ""
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = "qrc:/img/check_circle_small.png"
+        sortingDrawer.buttonSortAZ.buttonImage = ""
+        sortingDrawer.buttonSortDateAdded.buttonImage = ""
+        sortingDrawer.buttonSortPrintTime.buttonImage = "qrc:/img/drawer_current_selection.png"
         storage.sortType = StorageSortType.PrintTime
-        sortingDrawer.close()
-    }
-
-    sortingDrawer.buttonClose.onClicked: {
         sortingDrawer.close()
     }
 

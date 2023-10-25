@@ -21,9 +21,11 @@ LoggingItem {
         }
     }
 
-    Rectangle {
+    // Make this overlay screen opaque to touches.
+    MouseArea {
+        id: emptyMouseArea
+        z: -1
         anchors.fill: parent
-        color: "#000000"
     }
 
     LoggingItem {
