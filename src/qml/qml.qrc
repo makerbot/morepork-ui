@@ -279,5 +279,6 @@
         <file>CloseDrawerItem.qml</file>
         <file>ManualCalibrationPrintFinishedForm.qml</file>
         <file>ManualCalibrationPrintFinished.qml</file>
+        <file>AdjustZOffset.qml</file>
     </qresource>
 </RCC>
