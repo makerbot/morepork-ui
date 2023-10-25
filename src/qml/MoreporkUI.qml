@@ -259,19 +259,24 @@ ApplicationWindow {
         }
     }
 
+    property int drawerState: MoreporkUI.DrawerState.NotAvailable
+
+    enum DrawerState {
+        NotAvailable,
+        Closed,
+        Open
+    }
+
     function setDrawerState(state) {
-        topBar.imageDrawerArrow.visible = state
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
-            // Patch to disable swiping of the drawer, which appears
-            // to eliminate glitchy back button issues that present
-            // themselves on some units.
-            // activeDrawer.interactive = state
             if(state) {
+                drawerState = MoreporkUI.DrawerState.Closed
                 topBar.drawerDownClicked.connect(activeDrawer.open)
             }
             else {
+                drawerState = MoreporkUI.DrawerState.NotAvailable
                 activeDrawer.close()
                 topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
@@ -296,7 +301,7 @@ ApplicationWindow {
     }
 
     function disableDrawer() {
-        topBar.imageDrawerArrow.visible = false
+        drawerState = MoreporkUI.DrawerState.NotAvailable
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
@@ -484,7 +489,6 @@ ApplicationWindow {
             id: topBar
             z: 1
             backButton.visible: false
-            imageDrawerArrow.visible: false
             visible: mainSwipeView.visible
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
@@ -551,8 +555,11 @@ ApplicationWindow {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
-                    property string topBarTitle: qsTr("Select Source")
+                    property string topBarTitle: bot.process.type == ProcessType.Print ?
+                                                     qsTr("PRINT") :
+                                                     qsTr("Select Source")
                     property bool backIsCancel: isInManualCalibration
+
                     smooth: false
                     visible: false
 
