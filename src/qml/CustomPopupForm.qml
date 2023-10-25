@@ -129,6 +129,8 @@ LoggingPopup {
                     anchors.centerIn: parent
                     width: popupContainer.width
                     height: popupContainer.height
+                    border.width: 2
+                    border.color: "#ffffff"
                     radius: 10
                 }
              }
@@ -180,6 +182,17 @@ LoggingPopup {
                         logText: "CPFB [_" + full_button_text + "_]"
                         id: full_button
                         anchors.fill: parent
+                        onEnabledChanged: {
+                            if(enabled) {
+                                full_button_rectangle.color = "#00000000"
+                                full_text.color = "#ffffff"
+                            }
+                            else {
+                                full_button_rectangle.color = "#00000000"
+                                full_text.color = "#666666"
+                            }
+                        }
+
                         onPressed: {
                             full_button_rectangle.color = "#ffffff"
                             full_text.color = "#000000"
@@ -249,8 +262,10 @@ LoggingPopup {
 
                 Rectangle {
                     id: right_rectangle
-                    width: parent.width/2
-                    height: parent.height
+                    property int calcWidth: parent.width/2
+                    property int calcHeight: parent.height
+                    width: calcWidth
+                    height: calcHeight
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     color: (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
@@ -273,6 +288,22 @@ LoggingPopup {
                         logText:"CPRB [|" + right_button_text + "_]"
                         id: right_button
                         anchors.fill: parent
+                        onEnabledChanged: {
+                            if(enabled) {
+                                right_rectangle.width= right_rectangle.calcWidth
+                                right_rectangle.height= right_rectangle.calcHeight
+                                right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#ffffff")
+                                right_rectangle.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
+                            }
+                            else {
+
+                                right_rectangle.width= right_rectangle.calcWidth-4
+                                right_rectangle.height= right_rectangle.calcHeight-4
+                                right_rectangle.anchors.rightMargin = 2
+                                right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#666666")
+                                right_rectangle.color = (defaultButton === CustomPopup.Right ? "#666666" : "#00000000")
+                            }
+                        }
                         onPressed: {
                             right_text.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#000000")
                             right_rectangle.color = (defaultButton === CustomPopup.Right ? "#00000000" : "#ffffff")

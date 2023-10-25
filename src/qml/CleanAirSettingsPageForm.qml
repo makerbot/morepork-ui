@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import MachineTypeEnum 1.0
 
 LoggingItem {
     itemName: "CleanAirSettings"
@@ -11,7 +12,8 @@ LoggingItem {
     anchors.fill: parent.fill
     property int hepaPrintHours: (bot.hepaFilterPrintHours).toFixed(2)
     property int hepaMaxHours: (bot.hepaFilterMaxHours).toFixed(2)
-    property bool alert: bot.hepaFilterChangeRequired || !isFilterConnected()
+    property bool alert: bot.hepaFilterChangeRequired ||
+                         (!isFilterConnected() && bot.machineType != MachineType.Magma)
 
     ContentLeftSide {
         visible: true
@@ -31,30 +33,35 @@ LoggingItem {
     ContentRightSide {
         visible: true
         textHeader {
-            text: isFilterConnected() ? qsTr("Filter Status") :
-                                        qsTr("Clean Air Not Detected")
+            text: (isFilterConnected() || bot.machineType == MachineType.Magma) ?
+                      qsTr("Filter Status") :
+                      qsTr("Clean Air Not Detected")
             visible: true
         }
         textBody {
             text: qsTr("Lifetime is dependent on multiple factors.")
-            visible: isFilterConnected()
+            visible: (isFilterConnected() || bot.machineType == MachineType.Magma)
         }
         timeStatus {
             currentValue: hepaPrintHours
             lifetimeValue: hepaMaxHours
             exceededLifetimeValue: bot.hepaFilterChangeRequired
-            visible: isFilterConnected()
+            visible: (isFilterConnected() || bot.machineType == MachineType.Magma)
         }
         buttonSecondary1 {
             text: qsTr("REPLACE FILTER")
             visible: true
             onClicked: {
-                settingsSwipeView.swipeToItem(SettingsPage.ReplaceFilterPage)
+                if(bot.machineType == MachineType.Magma) {
+                    settingsSwipeView.swipeToItem(SettingsPage.ReplaceFilterXLPage)
+                } else {
+                    settingsSwipeView.swipeToItem(SettingsPage.ReplaceFilterPage)
+                }
             }
         }
         buttonSecondary2 {
             text: qsTr("RESET FILTER")
-            enabled: isFilterConnected()
+            enabled: (isFilterConnected() || bot.machineType == MachineType.Magma)
             visible: true
             onClicked: {
                 hepaFilterResetPopup.open()
