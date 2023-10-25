@@ -33,7 +33,7 @@ DryMaterialForm {
         }
     }
 
-    left_button.onClicked: {
+    right_button.onClicked: {
         buildPlateClearPopup.close()
         bot.drySpool()
     }
