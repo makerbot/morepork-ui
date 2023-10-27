@@ -47,6 +47,8 @@ void Network::authenticateWithCredentials(QString username, QString password) {
 }
 
 void Network::handleRespAuthWithCredentials() {
+    if (!m_reply) return;
+
     if (m_reply->error()) {
         LOG(info) << "Network error " << m_reply->error() << ": "
                   << m_reply->errorString().toStdString().c_str();
@@ -100,6 +102,8 @@ void Network::initiateAuthWithCode(QString printer_id,
 }
 
 void Network::handleRespInitiateAuthWithCode() {
+    if (!m_reply) return;
+
     if (m_reply->error() != QNetworkReply::NoError) {
         emit InitiateAuthWithCodeFailed();
         qWarning() << "Error No: " << m_reply->error() << "for url: " << m_reply->url().toString();
@@ -139,6 +143,8 @@ void Network::checkAuthWithCode(QString otp, QString polling_token) {
 }
 
 void Network::handleRespCheckAuthWithCode() {
+    if (!m_reply) return;
+
     if (m_reply->error() != QNetworkReply::NoError ) {
         qWarning() << "Error No: " << m_reply->error() << "for url: " << m_reply->url().toString();
         qWarning() << "Request failed, " << m_reply->errorString();
