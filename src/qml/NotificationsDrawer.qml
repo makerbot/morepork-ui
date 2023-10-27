@@ -103,7 +103,9 @@ CustomDrawer {
                     notificationsDrawer.close()
                     // model.modelData.func() does not work for some reason
                     notificationsList[index]["func"]()
-                    removeFromNotificationsList(model.modelData.name)
+                    if(notificationPriority != MoreporkUI.NotificationPriority.Persistent) {
+                        removeFromNotificationsList(model.modelData.name)
+                    }
                 }
 
                 openOrDismissButton.onClicked: {
