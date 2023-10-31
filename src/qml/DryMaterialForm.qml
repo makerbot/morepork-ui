@@ -381,7 +381,13 @@ LoggingItem {
                 }
                 loadingIcon {
                     visible: true
-                    icon_image: LoadingIcon.Progress
+                    icon_image: {
+                        if(bot.process.stateType == ProcessStateType.DryingSpool) {
+                            LoadingIcon.Progress
+                        } else {
+                            LoadingIcon.Loading
+                        }
+                    }
                     loadingProgress: bot.process.printPercentage
                 }
             }
