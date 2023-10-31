@@ -32,9 +32,4 @@ DryMaterialForm {
             }
         }
     }
-
-    right_button.onClicked: {
-        buildPlateClearPopup.close()
-        bot.drySpool()
-    }
 }

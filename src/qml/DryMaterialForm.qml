@@ -15,7 +15,6 @@ LoggingItem {
     property alias contentRightSide: contentRightSide
     property alias cancelDryingCyclePopup: cancelDryingCyclePopup
     property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
-    property alias right_button: dryConfirmBuildPlateClearPopup.right_button
     property real timeLeftMinutes: bot.process.timeRemaining/60
     property int currentStep: bot.process.stateType
     signal processDone
@@ -68,26 +67,26 @@ LoggingItem {
     }
 
     property variant dryingMaterialsListMethod : [
-        {label: "pva", temperature : 60, time : 24, custom: false},
-        {label: "nylon || nylon cf || nylon 12 cf || petg", temperature : 60, time : 24, custom: false},
-        {label: "pla || tough", temperature : 45, time : 24, custom: false}
+        {label: "pva", temperature : 60, time : 24},
+        {label: "nylon || nylon cf || nylon 12 cf || petg", temperature : 60, time : 24},
+        {label: "pla || tough", temperature : 45, time : 24}
     ]
 
     property variant dryingMaterialsListMethodX : [
-        {label: "pva", temperature : 70, time : 24, custom: false},
-        {label: "rapidrinse", temperature : 70, time : 24, custom: false},
-        {label: "nylon || nylon cf || nylon 12 cf", temperature : 70, time : 24, custom: false},
-        {label: "abs || asa || pc-abs || petg", temperature : 60, time : 24, custom: false},
-        {label: "pla || tough", temperature : 45, time : 24, custom: false}
+        {label: "pva", temperature : 70, time : 24},
+        {label: "rapidrinse", temperature : 70, time : 24},
+        {label: "nylon || nylon cf || nylon 12 cf", temperature : 70, time : 24},
+        {label: "abs || asa || pc-abs || petg", temperature : 60, time : 24},
+        {label: "pla || tough", temperature : 45, time : 24}
     ]
 
     property variant dryingMaterialsListMethodXL : [
-        {label: "abs-r", temperature: 60, time: 16, custom: false},
-        {label: "abs-cf", temperature: 60, time: 16, custom: false},
-        {label: "nylon cf", temperature: 70, time: 16, custom: false},
-        {label: "pva", temperature: 50, time: 16, custom: false},
-        {label: "rapidrinse", temperature: 70, time: 16, custom: false},
-        {label: "sr-30", temperature: 0, time: 0, custom: false}
+        {label: "abs-r", temperature: 60, time: 16},
+        {label: "abs-cf", temperature: 60, time: 16},
+        {label: "nylon cf", temperature: 70, time: 16},
+        {label: "pva", temperature: 50, time: 16},
+        {label: "rapidrinse", temperature: 70, time: 16},
+        {label: "sr-30", temperature: 0, time: 0}
     ]
 
     ContentLeftSide {
@@ -143,6 +142,55 @@ LoggingItem {
 
     states: [
         State {
+            name: "base state"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: true
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("DRY MATERIAL")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
+                          qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
+                               "built-in heaters.") + "\n\n" + qsTr("Please sure the build plate is empty.")
+                    font.weight: Font.Normal
+                    visible: true
+                    opacity: 1
+                }
+                textBody1 {
+                    visible:false
+                }
+                buttonPrimary {
+                    text: qsTr("START")
+                    visible: true
+                }
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: false
+            }
+        },
+        State {
             name: "positioning_build_plate"
             when: bot.process.type == ProcessType.DryingCycleProcess &&
                   bot.process.stateType == ProcessStateType.PositioningBuildPlate
@@ -183,6 +231,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -233,6 +286,11 @@ LoggingItem {
                 target: materialSelector
                 visible: false
             }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: false
+            }
         },
         State {
             name: "dry_kit_instructions_2"
@@ -274,6 +332,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -348,27 +411,27 @@ LoggingItem {
             }
         },
         State {
-          name: "custom_material"
+            name: "custom_material"
 
-          PropertyChanges {
-              target: contentLeftSide
-              visible: false
-          }
+            PropertyChanges {
+                target: contentLeftSide
+                visible: false
+            }
 
-          PropertyChanges {
-              target: contentRightSide
-              visible: false
-          }
+            PropertyChanges {
+                target: contentRightSide
+                visible: false
+            }
 
-          PropertyChanges {
-              target: materialSelector
-              visible: false
-          }
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
 
-          PropertyChanges {
-              target: customMaterialTemperature
-              visible: true
-          }
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: true
+            }
         },
         State {
             name: "drying_spool"
@@ -634,6 +697,7 @@ LoggingItem {
         right_button.onClicked: {
             bot.buildPlateCleared()
             dryConfirmBuildPlateClearPopup.close()
+            bot.drySpool()
         }
         left_button_text: qsTr("BACK")
         left_button.onClicked: {
