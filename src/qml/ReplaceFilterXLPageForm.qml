@@ -297,15 +297,17 @@ Item {
             TextHeadline {
                 id: replaceFilterPopupHeader
                 style: TextHeadline.Base
-                text: replaceFilterPopup.state == "close_door" ? qsTr("Front Door Open") :
-                                                                 qsTr("Clear Build Plate + Close Door")
+                text: replaceFilterPopup.popupState == "close_door" ?
+                          qsTr("Front Door Open") :
+                          qsTr("Clear Build Plate + Close Door")
                 Layout.alignment: Qt.AlignHCenter
             }
 
             TextBody {
                 id: replaceFilterPopupBody
-                text: replaceFilterPopup.state == "close_door" ? qsTr("Close the front door to proceed.") :
-                                                                 qsTr("Confirm the build plate is clear and the door is closed to proceed.")
+                text: replaceFilterPopup.popupState == "close_door" ?
+                          qsTr("Close the front door to proceed.") :
+                          qsTr("Confirm the build plate is clear and the door is closed to proceed.")
                 Layout.alignment: Qt.AlignHCenter
             }
         }
