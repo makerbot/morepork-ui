@@ -3,7 +3,6 @@ import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.9
 import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
-import QtGraphicalEffects 1.12
 
 CustomDrawer {
     objectName: "notificationsDrawer"
@@ -11,88 +10,42 @@ CustomDrawer {
 
     CloseDrawerItem {}
 
-    NotificationButton {
-        id: buttonOngoingPrint
+    ListSelector {
+        id: notificationsListView
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 70
-        notificationPriority: MoreporkUI.NotificationPriority.Persistent
-        buttonText: {
-            switch(bot.process.stateType) {
-            case ProcessStateType.Printing:
-                qsTr("PRINTING: %1").arg(printPage.file_name)
-                break;
-            case ProcessStateType.Paused:
-                qsTr("PAUSED: %1").arg(printPage.file_name)
-                break;
-            case ProcessStateType.Pausing:
-                qsTr("PAUSING: %1").arg(printPage.file_name)
-                break;
-            case ProcessStateType.Resuming:
-                qsTr("RESUMING: %1").arg(printPage.file_name)
-                break;
-            default:
-                qsTr("PRINTING: %1").arg(printPage.file_name)
-                break;
-            }
-        }
-
-        PrintIcon {
-            id: printIconInNotificationButton
-            smooth: false
-            scale: 0.2
-            showActionButtons: false
-            anchors.left: parent.left
-            anchors.leftMargin: -44
-            anchors.verticalCenter: parent.verticalCenter
-        }
-
-        ColorOverlay {
-            anchors.fill: printIconInNotificationButton
-            source: printIconInNotificationButton
-            color: buttonOngoingPrint.down ? "#ffffff" : "#000000"
-            scale: printIconInNotificationButton.scale
-        }
-
-        buttonImage: ""
-        enabled: bot.process.type == ProcessType.Print
-        visible: enabled
-
-        onClicked: {
-            goToPrintPage()
-        }
-
-        openOrDismissButton.onClicked: {
-            goToPrintPage()
-        }
-
-        function goToPrintPage() {
-            resetSettingsSwipeViewPages()
-            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-        }
-    }
-
-    ListSelector {
-        id: printQueueList
+        anchors.bottom: parent.bottom
         visible: true
+        clip: true
+        ScrollBar.vertical: ScrollBar {
+            interactive: false
+        }
         boundsBehavior: Flickable.StopAtBounds
+        boundsMovement: Flickable.StopAtBounds
         model: notificationsList
-        anchors.top: parent.top
-        anchors.topMargin: buttonOngoingPrint.visible ? 170 : 70
 
-        populate: Transition {
-            NumberAnimation { properties: "x,y"; duration: 500 }
-        }
+        snapMode: ListView.SnapToItem
 
-        remove: Transition {
-            ParallelAnimation {
-                NumberAnimation { property: "opacity"; to: 0; duration: 500 }
-                NumberAnimation { properties: "x,y"; to: 100; duration: 500 }
-            }
-         }
+        // The notifications list view cannot be scrolled by dragging but
+        // only by using the scroll buttons. Dragging anywhere within the
+        // list view will drag the entire notifications drawer.
+        interactive: false
 
-        displaced: Transition {
-            NumberAnimation { properties: "x,y"; duration: 500 }
-        }
+        // We want the printing notification button in the notifications drawer
+        // when the bot is printing. Since it has a different design from other
+        // notifications the easiest approach is to conditionally assign it to
+        // the header when printing and not have any header component at other
+        // times, but headers cannot be assigned conditionally in QML so we make
+        // the printing notification button as the header and have logic in this
+        // button to just shrink itself and disappear when not printing. There
+        // seems to be some bugs in the way headers are handled in ListViews in
+        // QML and this approach is the only one that worked to get the desired
+        // behavior. All the other aproaches hid the actual header component but
+        // still rendered the header area as an empty block the size of assigned
+        // header component.
+        header: PrintingNotificationButton {}
 
         delegate:
             NotificationButton {
@@ -104,7 +57,7 @@ CustomDrawer {
                     // model.modelData.func() does not work for some reason
                     notificationsList[index]["func"]()
                     if(notificationPriority != MoreporkUI.NotificationPriority.Persistent) {
-                        removeFromNotificationsList(model.modelData.name)
+                        removeFromNotificationsList(model.modelData.id)
                     }
                 }
 
@@ -112,7 +65,7 @@ CustomDrawer {
                     if(notificationPriority != MoreporkUI.NotificationPriority.Persistent) {
                         // Remove the notification from the notifiations list for informational
                         // and error notifications
-                        removeFromNotificationsList(model.modelData.name)
+                        removeFromNotificationsList(model.modelData.id)
                     } else {
                         notificationsDrawer.close()
                         // Just execute the callback if it is a persistent notification.
@@ -123,9 +76,11 @@ CustomDrawer {
             }
 
         footer:
-            Item {
-                height: 100
+            Rectangle {
+                z: 2
+                height: 80
                 width: parent.width
+                color: "#000000"
 
                 TextSubheader {
                     text: notificationsState == MoreporkUI.NotificationsState.NoNotifications ?
@@ -137,8 +92,81 @@ CustomDrawer {
                     anchors.leftMargin: 32
                     anchors.verticalCenter: parent.verticalCenter
                 }
+
+                // Buttons to scroll through the notifications list
+                RowLayout {
+                    id: scrollButtonsLayout
+                    anchors.right: parent.right
+                    anchors.rightMargin: 40
+                    anchors.verticalCenter: parent.verticalCenter
+                    z: 3
+                    spacing: 30
+
+                    Rectangle {
+                        height: 50
+                        width: 50
+                        radius: 25
+                        color: "#00000000"
+                        border.width: 2
+                        border.color: "#ffffff"
+                        opacity: notificationsListView.atYBeginning ? 0.3 : 1
+
+                        Image {
+                            source: "qrc:/img/icon_raise.png"
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            id: listUp
+                            onPressed: {
+                                if(!notificationsListView.atYBeginning) {
+                                    notificationsListView.flick(0, 500)
+                                }
+                            }
+                        }
+                    }
+
+                    Rectangle {
+                        height: 50
+                        width: 50
+                        radius: 25
+                        color: "#000000"
+                        border.width: 2
+                        border.color: "#ffffff"
+                        opacity: notificationsListView.atYEnd ? 0.3 : 1
+
+                        Image {
+                            source: "qrc:/img/icon_lower.png"
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.horizontalCenter: parent.horizontalCenter
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            id: listDown
+                            onPressed: {
+                                if(!notificationsListView.atYEnd) {
+                                    notificationsListView.flick(0, -500)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                MouseArea {
+                    // To prevent clicking through the footer into the
+                    // notification underneath
+                    z: 2
+                    anchors.fill: parent
+                }
             }
 
         footerPositioning: ListView.OverlayFooter
+    }
+
+    onOpened: {
+        notificationsListView.positionViewAtBeginning()
     }
 }

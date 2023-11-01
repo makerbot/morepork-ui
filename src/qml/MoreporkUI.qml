@@ -190,6 +190,7 @@ ApplicationWindow {
 
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
+            removeFromNotificationsList("extruders_not_calibrated")
         }
         // Do not open popup in FRE and both extruders must
         // be present for this popup to open
@@ -301,19 +302,20 @@ ApplicationWindow {
     // Notification names must to be unique.
     //
     // e.g.
-    // addToNotificationsList("test_persistent",
+    // addToNotificationsList("notification_id_string", "display_name",
     //         MoreporkUI.NotificationPriority.Persistent,
     //         test_func)
-    // addToNotificationsList("test_error",
+    // addToNotificationsList("notification_id_string", "display_name",
     //         MoreporkUI.NotificationPriority.Error,
     //         test_func)
-    // addToNotificationsList("test_info",
+    // addToNotificationsList("notification_id_string", "display_name",
     //         MoreporkUI.NotificationPriority.Informational,
     //         test_func)
 
-    function addToNotificationsList(name, priority, func) {
+    function addToNotificationsList(id, name, priority, func) {
         notificationsList.push(
             {
+                id: id,
                 name: name,
                 priority: priority,
                 func: func
@@ -324,35 +326,27 @@ ApplicationWindow {
         // so they are sorted in this order -- Persistent, Error, Informational.
         notificationsList.sort(function(a, b){return b["priority"] - a["priority"]})
         notificationsListChanged()
+        console.info("Posted notification " + id)
     }
 
     // Call this function to remove a notiification
     //
     // e.g.
-    // removeFromNotificationsList("test_persistent")
-    // removeFromNotificationsList("test_error")
-    // removeFromNotificationsList("test_info")
-    function removeFromNotificationsList(name) {
-        function rem(value, index, arr) {
-            if (value["name"] === name) {
-                arr.splice(index, 1);
-                return true;
-            }
-            return false;
-        }
-
-        notificationsList.filter(rem)
+    // removeFromNotificationsList("notification_id_string")
+    function removeFromNotificationsList(id) {
+        notificationsList = notificationsList.filter(v => v.id !== id)
         notificationsListChanged()
+        console.info("Removed notification " + id)
     }
 
     function test_func() {
         console.log("test_func")
     }
 
-    // The notifications icon in the top bar looks different if there are
-    // not notifications and when there are notifications and when there
-    // is alest one error notifications. The notificationsState enum is
-    // used to keep track of this.
+    // The notifications icon in the top bar looks different when there
+    // are no notifications and when there are notifications and when
+    // there is aleast one error notification. The notificationsState enum
+    // is used to keep track of this.
     enum NotificationsState {
         NoNotifications,
         NotificationsAvailable,
@@ -2035,9 +2029,16 @@ ApplicationWindow {
             left_button_text: qsTr("SKIP")
             left_button.onClicked: {
                 extNotCalibratedPopup.close()
-                addToNotificationsList("Extruders not calibrated",
-                                       MoreporkUI.Informational,
-                                       () => {extNotCalibratedPopup.open()})
+                addToNotificationsList("extruders_not_calibrated",
+                                       qsTr("Extruders not calibrated"),
+                                       MoreporkUI.NotificationPriority.Persistent,
+                                       () => {
+                                           if(isProcessRunning()) {
+                                               printerNotIdlePopup.open()
+                                               return
+                                           }
+                                           extNotCalibratedPopup.open()
+                                       })
             }
             right_button_text: qsTr("GO TO PAGE")
             right_button.onClicked: {

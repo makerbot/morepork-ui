@@ -280,5 +280,6 @@
         <file>ManualCalibrationPrintFinishedForm.qml</file>
         <file>ManualCalibrationPrintFinished.qml</file>
         <file>AdjustZOffset.qml</file>
+        <file>PrintingNotificationButton.qml</file>
     </qresource>
 </RCC>

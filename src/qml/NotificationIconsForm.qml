@@ -124,7 +124,7 @@ Row {
                     drawerState == MoreporkUI.DrawerState.Closed
                 }
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 1
+                anchors.verticalCenterOffset: 3
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.horizontalCenterOffset: 1
                 font.weight: Font.Bold

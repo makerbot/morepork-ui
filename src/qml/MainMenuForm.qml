@@ -84,14 +84,19 @@ Item {
             alertVisible: extruderMaterialAlert
             onExtruderMaterialAlertChanged: {
                 if(extruderMaterialAlert) {
-                    addToNotificationsList("Extruder/Material not detected",
+                    addToNotificationsList("extruder_or_material_not_detected",
+                                           qsTr("Extruder/Material not detected"),
                                            MoreporkUI.Error,
                                            function() {
+                                               if(isProcessRunning()) {
+                                                   printerNotIdlePopup.open()
+                                                   return
+                                               }
                                                resetSettingsSwipeViewPages()
                                                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                                            })
                 } else {
-                    removeFromNotificationsList("Extruder/Material not detected")
+                    removeFromNotificationsList("extruder_or_material_not_detected")
                 }
             }
         }
