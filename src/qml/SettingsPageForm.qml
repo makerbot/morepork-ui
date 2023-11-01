@@ -118,7 +118,6 @@ Item {
                         buttonImage.source: "qrc:/img/hepa_filter.png"
                         buttonText.text: qsTr("CLEAN AIR SETTINGS")
                         buttonAlertImage.visible: bot.hepaFilterChangeRequired
-                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {
@@ -252,19 +251,30 @@ Item {
             property bool hasAltBack: true
 
             function altBack() {
-                if (replaceFilterXLPage.itemReplaceFilterXL.state == "done")
+                if (replaceFilterXLPage.itemReplaceFilterXL.state == "done") {
                     settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "raising_build_plate") {
-                    // Cancel?
+                    replaceFilterXLPage.replaceFilterProcess = false
                 }
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_2")
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "done"
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_3")
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "step_2"
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_4")
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "step_3"
-                else
+                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "raising_build_plate") {
+                    // cancel
+                    bot.cancel()
                     settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                    replaceFilterXLPage.replaceFilterProcess = false
+                    replaceFilterXLPage.itemReplaceFilterXL.state = "done"
+                }
+                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_2") {
+                    replaceFilterXLPage.itemReplaceFilterXL.state = "done"
+                }
+                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_3") {
+                    replaceFilterXLPage.itemReplaceFilterXL.state = "step_2"
+                }
+                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_4") {
+                    replaceFilterXLPage.itemReplaceFilterXL.state = "step_3"
+                }
+                else {
+                    replaceFilterXLPage.replaceFilterProcess = false
+                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                }
             }
 
             ReplaceFilterXLPage {

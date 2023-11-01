@@ -8,21 +8,24 @@ import MachineTypeEnum 1.0
 
 Item {
     id: replaceFilterXLPage
+    width: parent.width
+    height: parent.height
     smooth: false
 
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
     property alias itemReplaceFilterXL: itemReplaceFilter
     property alias replace_filter_next_button: contentRightSide.buttonPrimary
+    property bool replaceFilterProcess: false
 
     LoggingItem {
         itemName: "ReplaceFilterXL"
         id: itemReplaceFilter
+        width: parent.width
+        height: parent.height
+        anchors.fill: parent.fill
         smooth: false
         visible: true
-        width: 800
-        height: 408
-        anchors.fill: parent.fill
 
         ContentLeftSide {
             id: contentLeftSide
@@ -39,7 +42,9 @@ Item {
 
         property int currentState: bot.process.stateType
         onCurrentStateChanged: {
-            if (bot.process.type == ProcessType.MoveBuildPlateProcess) {
+
+            if (replaceFilterProcess &&
+                    bot.process.type == ProcessType.MoveBuildPlateProcess) {
                 switch(currentState) {
                 case ProcessStateType.Cancelling:
                     replaceFilterPopup.popupState = "close_door"
@@ -90,9 +95,11 @@ Item {
                         bot.hepaFilterPrintHours = 0
                         bot.hepaFilterChangeRequired = false
                         settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                        replaceFilterProcess = false
                         itemReplaceFilter.state = "done"
                     }
                     else {
+                        replaceFilterProcess = true
                         replaceFilterPopup.open()
                     }
                 }
