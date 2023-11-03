@@ -124,7 +124,7 @@ class KaitenBotModel : public BotModel {
     QString getNPSSurveyDueDate();
     QString m_npsFilePath;
     void moveBuildPlate(const int distance, const int speed);
-    void doHotCal(bool do_cal, QList<int> temperature);
+    void doHotCal(bool do_cal, QList<int> temperature, int dwell_time_mins);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -876,7 +876,7 @@ void KaitenBotModel::doNozzleCleaning(bool do_clean, QList<int> temperature){
     }
 }
 
-void KaitenBotModel::doHotCal(bool do_cal, QList<int> temperature) {
+void KaitenBotModel::doHotCal(bool do_cal, QList<int> temperature, int dwell_time_mins) {
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
@@ -899,6 +899,7 @@ void KaitenBotModel::doHotCal(bool do_cal, QList<int> temperature) {
             }
             // json_params["params"] = Json::Value(json_args);
         }
+        json_args["dwell_time_mins"] = Json::Value(dwell_time_mins);
 
         json_params["params"] = Json::Value(json_args);
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());

@@ -24,6 +24,7 @@ LoggingItem {
     property string bx
     property string by
     property string bz
+    property var t: new Date(bot.process.timeRemaining * 1000)
 
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
@@ -136,6 +137,7 @@ LoggingItem {
 
         ColumnLayout {
             id: heatingStatus
+            width: 750
             visible: bot.extruderATargetTemp > 0 ||
                      bot.extruderBTargetTemp > 0 ||
                      bot.chamberTargetTemp > 0 ||
@@ -171,6 +173,11 @@ LoggingItem {
             TemperatureStatus {
                 showComponent: TemperatureStatus.HeatedBuildPlate
                 visible: bot.machineType == MachineType.Magma
+            }
+
+            TextHeadline {
+                text: "DWELLING AT TEMP. TIME REMAINING %1 h %2 m %3 s".arg(t.getUTCHours()).arg(t.getUTCMinutes()).arg(t.getUTCSeconds())
+                visible: bot.process.timeRemaining > 0
             }
         }
 
@@ -217,19 +224,20 @@ LoggingItem {
                 heading.text: "HOT CALIBRATION"
                 topColumn.spacing: 5
                 calibration_rowLayout.spacing: -50
+                visible: calibrationPage.state == "calibration_finished"
             }
         }
 
         ColumnLayout {
             visible: !heatingStatus.visible
-            id: setTempcolumnLayout
+            id: setTempAndDwellTimeColumnLayout
             width: 240
             height: children.height
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: -46
             anchors.horizontalCenterOffset: 218
             anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 12
+            spacing: 5
 
             Row {
                 id: row
@@ -366,20 +374,55 @@ LoggingItem {
                     value: hbbSpinBox.value
                 }
             }
+
+            Row {
+                id: row4
+                height: 100
+                spacing: 5
+
+                TextBody {
+                    text: "MINS"
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                SpinBox {
+                    id: dwellTimeSpinBox
+                    width: 120
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pointSize: 10
+                    font.family: "Tahoma"
+                    font.bold: true
+                    value: dwellTimeSlider.value
+                    to: 180
+                    stepSize: 1
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Slider {
+                    id: dwellTimeSlider
+                    width: 100
+                    anchors.verticalCenter: parent.verticalCenter
+                    to: 180
+                    stepSize: 5
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    value: dwellTimeSpinBox.value
+                }
+            }
         }
 
         ButtonRectanglePrimary {
             id: doHotCalButton
             visible: !heatingStatus.visible
             x: 554
-            y: 279
+            y: 280
             text: "DO HOT CAL"
             width: 200
             onClicked: {
                 bot.doHotCal(true, [modelExtSpinBox.value,
                                     supportExtSpinBox.value,
                                     chamberSpinBox.value,
-                                    hbbSpinBox.value])
+                                    hbbSpinBox.value],
+                             dwellTimeSpinBox.value)
             }
             enabled: bot.process.stateType == ProcessStateType.ColdCalDone &&
                      (modelExtSpinBox.value > 0 ||
@@ -402,7 +445,7 @@ LoggingItem {
             }
             onClicked: {
                 if(bot.process.stateType == ProcessStateType.ColdCalDone) {
-                    bot.doHotCal(false, [])
+                    bot.doHotCal(false, [], 0)
                 } else {
                     toolheadCalibration.processDone()
                     if(inFreStep) {

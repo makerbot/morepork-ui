@@ -358,7 +358,7 @@ void BotModel::moveBuildPlate(const int distance, const int speed) {
                            " speed" << speed;
 }
 
-void BotModel::doHotCal(bool do_cal, QList<int> temperature) {
+void BotModel::doHotCal(bool do_cal, QList<int> temperature, int dwell_time_mins) {
 }
 
 void BotModel::getLastAutoCalOffsets() {
