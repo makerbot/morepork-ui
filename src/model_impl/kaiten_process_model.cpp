@@ -69,7 +69,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             stateTypeSet(ProcessStateType::Pausing);
         else if (kStepStr == "unsuspending")
             stateTypeSet(ProcessStateType::Resuming);
-        else if (kStepStr == "suspended")
+        else if (kStepStr == "suspended" ||
+                 kStepStr == "preprint_suspended")
             stateTypeSet(ProcessStateType::Paused);
         else if (kStepStr == "printing")
             stateTypeSet(ProcessStateType::Printing);

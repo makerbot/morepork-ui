@@ -100,6 +100,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void drySpool();
     Q_INVOKABLE virtual void startDrying(const int temperature, const float time);
     Q_INVOKABLE virtual void get_calibration_offsets();
+    Q_INVOKABLE virtual void setManualCalibrationOffset(const float tb_offset);
     Q_INVOKABLE virtual void cleanNozzles(const QList<int> temperature = {0,0});
     Q_INVOKABLE virtual void submitPrintFeedback(bool success, const QVariantMap failure_map);
     Q_INVOKABLE virtual void ignoreError(const int index, const QList<int> error, const bool ignored);
@@ -116,6 +117,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual QString getNPSSurveyDueDate();
     Q_INVOKABLE virtual void moveBuildPlate(const int distance, const int speed);
     Q_INVOKABLE virtual void doHotCal(bool do_cal, QList<int> temperature);
+    Q_INVOKABLE virtual void getLastAutoCalOffsets();
+    Q_INVOKABLE virtual void setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset);
 
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
@@ -380,6 +383,14 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, offsetBX, -999.999)
     MODEL_PROP(float, offsetBY, -999.999)
     MODEL_PROP(float, offsetBZ, -999.999)
+
+    // Offsets from last Auto Calibration attempt
+    MODEL_PROP(float, lastAutoCalOffsetAX, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetAY, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetAZ, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetBX, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetBY, -999.999)
+    MODEL_PROP(float, lastAutoCalOffsetBZ, -999.999)
 
     // Accessories
     // Oyster - HEPA Filter Lid

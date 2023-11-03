@@ -54,6 +54,7 @@ Item {
     property bool isFileDownloading: print_queue.downloading
     property bool fileDownloadFailed: print_queue.downloadingFailed
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
+    property alias confirm_build_plate_popup: confirm_build_plate_popup
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
@@ -194,7 +195,7 @@ Item {
     function getPrintFileDetails(file) {
         var printTimeSec = file.timeEstimateSec
         fileName = file.filePath + "/" + file.fileName
-        file_name = inFreStep ? qsTr("TEST PRINT") : file.fileBaseName
+        file_name = inFreStep ? qsTr("TEST PRINT") : (isInManualCalibration ? qsTr("Z-Calibration Print") : file.fileBaseName)
         model_extruder_used = file.extruderUsedA
         support_extruder_used = file.extruderUsedB
         print_model_material = file.materialA
@@ -387,7 +388,9 @@ Item {
             id: itemPrintStorageOpt
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: mainSwipeView
-            property string topBarTitle: qsTr("Select Source")
+            property string topBarTitle: bot.process.type == ProcessType.Print ?
+                                             qsTr("PRINT") :
+                                             qsTr("Select Source")
 
             property int backSwipeIndex: 0
             smooth: false
@@ -511,7 +514,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: PrintPage.BasePage
-            property string topBarTitle: qsTr("Storage - Select File")
+            property string topBarTitle: qsTr("Internal Storage - Select File")
             property bool hasAltBack: true
             smooth: false
             visible: false
@@ -642,7 +645,7 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: PrintPage.BasePage
-            property string topBarTitle: qsTr("Queue - Select File")
+            property string topBarTitle: qsTr("Cloud Queue - Select File")
             smooth: false
             visible: false
 
@@ -818,13 +821,25 @@ Item {
                                              startPrintSource == PrintPage.FromPrintQueue ?
                                                  PrintPage.PrintQueueBrowser :
                                                  PrintPage.FileBrowser
-            property string topBarTitle: qsTr("File Preview")
+            property string topBarTitle: qsTr("Start Print")
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
-                if(!inFreStep) {
+
+                if(isInManualCalibration) {
+                    // Due to special calibration printing manual
+                    // calibration is required on the print page.
+                    // We don't want the user to be able to do normal back out
+                    // Return to Manual Calibration process where we left off...
+                    startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
+                    printSwipeView.swipeToItem(PrintPage.BasePage)
+                    mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                    settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
+                    settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                }
+                else if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
                         resetPrintFileDetails()

@@ -311,21 +311,30 @@ LoggingItem {
                     }
                 }
 
+                // Acknowledge Print Regular Process
                 AcknowledgePrintFinished {
                     id: acknowledgePrintFinished
-                    visible: bot.process.stateType == ProcessStateType.Completed ||
+                    visible: (bot.process.stateType == ProcessStateType.Completed ||
                              bot.process.stateType == ProcessStateType.Failed ||
-                             bot.process.stateType == ProcessStateType.Cancelled
+                             bot.process.stateType == ProcessStateType.Cancelled) &&
+                             !isInManualCalibration
                 }
 
+                // Acknowledge Print From Manual Calibration/Special Case
+                ManualCalibrationPrintFinished {
+                    id: manualCalibrationPrintFinished
+                    visible: (bot.process.stateType == ProcessStateType.Completed ||
+                              bot.process.stateType == ProcessStateType.Failed ||
+                              bot.process.stateType == ProcessStateType.Cancelled) &&
+                             isInManualCalibration
+
+                }
 
                // Re-styled incase we want to use this in the future
                // currently hidden because it was removed from the design
                ButtonRectangleSecondary {
                     id: print_again_button
                     text: qsTr("RETRY TEST PRINT")
-                    anchors.top: acknowledgePrintFinished.bottom
-                    anchors.topMargin: bot.process.stateType == ProcessStateType.Failed ? -80 : 5
                     visible: false
                     onClicked: {
                         if(print_again_button.enabled) {

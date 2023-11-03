@@ -43,6 +43,7 @@ class KaitenBotModel : public BotModel {
     void filterHoursUpdate(const Json::Value & result);
     void cloudServicesInfoUpdate(const Json::Value &result);
     void getCalibrationOffsetsUpdate(const Json::Value & result);
+    void getLastAutoCalOffsetsUpdate(const Json::Value & result);
     void handshakeUpdate(const Json::Value &result);
     void accessoriesStatusUpdate(const Json::Value &result);
     void printQueueUpdate(const Json::Value &queue);
@@ -104,6 +105,9 @@ class KaitenBotModel : public BotModel {
     void drySpool();
     void startDrying(const int temperature, const float time);
     void get_calibration_offsets();
+    void getLastAutoCalOffsets();
+    void setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset);
+    void setManualCalibrationOffset(const float tb_offset);
     void cleanNozzles(const QList<int> temperature = {0,0});
     void submitPrintFeedback(bool success, const QVariantMap failure_map);
     void ignoreError(const int index, const QList<int> error, const bool ignored);
@@ -437,6 +441,17 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<GetCalibrationOffsetsCallback> m_getCalibrationOffsetsCb;
+
+    class GetLastAutoCalOffsetsCallback : public JsonRpcCallback {
+      public:
+        GetLastAutoCalOffsetsCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value & resp) override {
+            m_bot->getLastAutoCalOffsetsUpdate(MakerBot::SafeJson::get_obj(resp, "result"));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<GetLastAutoCalOffsetsCallback> m_getLastAutoCalOffsetsCb;
 
     class HandshakeCallback : public JsonRpcCallback {
       public:
@@ -1326,6 +1341,66 @@ void KaitenBotModel::get_calibration_offsets(){
     }
 }
 
+void KaitenBotModel::setManualCalibrationOffset(float tb_offset) {
+    try{
+        qDebug() << FL_STRM << "manual cal offset value: " << tb_offset;
+        auto conn = m_conn.data();
+
+        Json::Value json_args2(Json::objectValue);
+        json_args2["z"] = Json::Value(tb_offset);
+        Json::Value json_args1(Json::objectValue);
+        json_args1["b"] = Json::Value(json_args2);
+        Json::Value json_args(Json::objectValue);
+        json_args["toolhead_offsets"] = Json::Value(json_args1);
+        Json::Value json_params(Json::objectValue);
+        json_params["config"] = Json::Value(json_args);
+
+        LOG(info) << "Toolhead offset " << json_params;
+        conn->jsonrpc.invoke("set_config", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::getLastAutoCalOffsets() {
+    try {
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        conn->jsonrpc.invoke("get_last_auto_cal_offsets", Json::Value(), m_getLastAutoCalOffsetsCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset) {
+    try{
+        auto conn = m_conn.data();
+
+        Json::Value json_arg_a_z(Json::objectValue);
+        json_arg_a_z["z"] = Json::Value(tool_a_z_offset);
+
+        Json::Value json_arg_b_z(Json::objectValue);
+        json_arg_b_z["z"] = Json::Value(tool_b_z_offset);
+
+        Json::Value json_args(Json::objectValue);
+        json_args["a"] = Json::Value(json_arg_a_z);
+        json_args["b"] = Json::Value(json_arg_b_z);
+
+        Json::Value json_args_offsets(Json::objectValue);
+        json_args_offsets["toolhead_offsets"] = Json::Value(json_args);
+
+        Json::Value json_params(Json::objectValue);
+        json_params["config"] = Json::Value(json_args_offsets);
+
+        conn->jsonrpc.invoke("set_config", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 void KaitenBotModel::cleanNozzles(const QList<int> temperature) {
     try {
         qDebug() << FL_STRM << "called";
@@ -1590,6 +1665,7 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_cloudServicesInfoCb(new CloudServicesInfoCallback(this)),
         m_setAnalyticsCb(new SetAnalyticsCallback(this)),
         m_getCalibrationOffsetsCb(new GetCalibrationOffsetsCallback(this)),
+        m_getLastAutoCalOffsetsCb(new GetLastAutoCalOffsetsCallback(this)),
         m_handshakeUpdateCb(new HandshakeCallback(this)),
         m_cameraState(new CameraStateNotification(this)),
         m_printQueueNot(new PrintQueueNotificatiion(this)),
@@ -2273,6 +2349,17 @@ void KaitenBotModel::getCalibrationOffsetsUpdate(const Json::Value &result) {
         UPDATE_FLOAT_PROP(offsetBX, result["b"]["x"]);
         UPDATE_FLOAT_PROP(offsetBY, result["b"]["y"]);
         UPDATE_FLOAT_PROP(offsetBZ, result["b"]["z"]);
+    }
+}
+
+void KaitenBotModel::getLastAutoCalOffsetsUpdate(const Json::Value &result) {
+    if (result.isObject()) {
+        UPDATE_FLOAT_PROP(lastAutoCalOffsetAX, result["a"]["x"]);
+        UPDATE_FLOAT_PROP(lastAutoCalOffsetAY, result["a"]["y"]);
+        UPDATE_FLOAT_PROP(lastAutoCalOffsetAZ, result["a"]["z"]);
+        UPDATE_FLOAT_PROP(lastAutoCalOffsetBX, result["b"]["x"]);
+        UPDATE_FLOAT_PROP(lastAutoCalOffsetBY, result["b"]["y"]);
+        UPDATE_FLOAT_PROP(lastAutoCalOffsetBZ, result["b"]["z"]);
     }
 }
 

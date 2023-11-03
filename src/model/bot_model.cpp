@@ -283,6 +283,10 @@ void BotModel::get_calibration_offsets() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::setManualCalibrationOffset(const float tb_offset) {
+    qDebug() << FL_STRM << "called with parameters: " << tb_offset;
+}
+
 void BotModel::cleanNozzles(const QList<int> temperature) {
     qDebug() << FL_STRM << "called";
     qDebug() << "Temperatures";
@@ -355,7 +359,14 @@ void BotModel::moveBuildPlate(const int distance, const int speed) {
 }
 
 void BotModel::doHotCal(bool do_cal, QList<int> temperature) {
+}
 
+void BotModel::getLastAutoCalOffsets() {
+    qDebug() << FL_STRM << "called";
+}
+
+void BotModel::setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset) {
+    qDebug() << FL_STRM << "called with params:" << " tool_a_z_offset: " << tool_a_z_offset << " tool_b_z_offset: " << tool_b_z_offset;
 }
 
 class DummyBotModel : public BotModel {

@@ -2,7 +2,6 @@
     <qresource prefix="/qml">
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>MoreporkButton.qml</file>
         <file>TopBar.qml</file>
         <file>TopBarForm.qml</file>
         <file>MainMenu.qml</file>
@@ -26,8 +25,6 @@
         <file>PrintIconForm.qml</file>
         <file>NotificationIcons.qml</file>
         <file>NotificationIconsForm.qml</file>
-        <file>FilamentIcon.qml</file>
-        <file>FilamentIconForm.qml</file>
         <file>PrintStatusView.qml</file>
         <file>PrintStatusViewForm.qml</file>
         <file>FilamentBay.qml</file>
@@ -99,8 +96,8 @@
         <file>BuildPlateSettingsPageForm.qml</file>
         <file>SlidingSwitch.qml</file>
         <file>SlidingSwitchForm.qml</file>
-        <file>RaiseLowerBuildPlate.qml</file>
-        <file>RaiseLowerBuildPlateForm.qml</file>
+        <file>CustomMoveBuildPlate.qml</file>
+        <file>CustomMoveBuildPlateForm.qml</file>
         <file>AdvancedInfoElement.qml</file>
         <file>AdvancedInfoElementForm.qml</file>
         <file>AdvancedInfoToolheadElement.qml</file>
@@ -263,10 +260,23 @@
         <file>FreChooseLanguagePage.qml</file>
         <file>FreChooseLanguagePageForm.qml</file>
         <file>MaterialCaseSetup.qml</file>
+        <file>ManualZCalibration.qml</file>
+        <file>ManualZCalibrationForm.qml</file>
+        <file>NumberAddSubtractItem.qml</file>
+        <file>NumberAddSubtractItemForm.qml</file>
         <file>MaterialCaseSetupForm.qml</file>
+        <file>DirectionArrowsComponent.qml</file>
+        <file>MoveBuildPlatePageForm.qml</file>
+        <file>MoveBuildPlatePage.qml</file>
         <file>SetupProceduresPage.qml</file>
         <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
+        <file>CustomDrawer.qml</file>
+        <file>DrawerButton.qml</file>
+        <file>CloseDrawerItem.qml</file>
+        <file>ManualCalibrationPrintFinishedForm.qml</file>
+        <file>ManualCalibrationPrintFinished.qml</file>
+        <file>AdjustZOffset.qml</file>
     </qresource>
 </RCC>

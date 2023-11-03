@@ -14,6 +14,13 @@ ToolheadCalibrationForm {
                     state = "calibrating"
                 } else if(state == "calibration_finished") {
                     toolheadCalibration.processDone()
+                    // If we are in the manual cal process
+                    // we want to prompt the user to resume
+                    // manual calibration
+                    if(returnToManualCal) {
+                        returnToManualCal=false
+                        resumeManualCalibrationPopup.open()
+                    }
                     if(inFreStep) {
                         settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)

@@ -129,7 +129,7 @@ Item {
                     Layout.preferredWidth: 400
                     text: {
                         if(wifiPage.isEthernetConnected) {
-                            "You’re connected to the internet through the ethernet port."
+                            qsTr("You’re connected to the internet through the ethernet port.")
                         } else {
                             qsTr("Plug an ethernet cable into the rear of the machine to use a wired connection.")
                         }
