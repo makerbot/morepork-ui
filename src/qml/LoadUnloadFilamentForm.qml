@@ -31,7 +31,11 @@ LoggingItem {
             // fetched.
             isMaterialMismatch = false
             isMaterialValid = false
-            if(bot.process.type == ProcessType.Load) {
+            // The materialValidityCheck updates a flag (isMaterialValid)
+            // that is used in the loading flow so it should be called when
+            // standalone loading and also when mid-print loading.
+            if(bot.process.type == ProcessType.Load ||
+               bot.process.type == ProcessType.Print) {
                 if(materialValidityCheck()) {
                     if(materialWarningPopup.opened) {
                         materialWarningPopup.close()
@@ -125,6 +129,13 @@ LoggingItem {
     property int currentState: bot.process.stateType
     property int errorType: bot.process.errorType
     property bool notExtruding: false
+    // Flag to take the user through the new spool setup screens on XL (place
+    // desiccant, cut filament tip, place material) when loading filament mid-print
+    // where kaiten starts right away with the preheating step but we need the user
+    // to go through the new spool setup screens. This flag is used only for XL and
+    // on M/MX the presence of NFC tag flag moves the loading flow to the preheating
+    // screen.
+    property bool completedNewSpoolSetup: false
 
     onErrorTypeChanged: {
         if (errorType === ErrorType.DrawerOutOfFilament &&
@@ -146,6 +157,30 @@ LoggingItem {
                 state = "cut_filament_tip"
             } else {
                 state = "place_desiccant"
+            }
+            break;
+        case ProcessStateType.Preheating:
+            // For mid-print loading kaiten starts with the preheating step
+            // so moving the user deliberately through the initial stpes
+            // instaed of dumping them to the preheating screen immediately.
+            // This is only valid when in the preheating screen and the the
+            // filament switches (bay for M/MX and extruder for XL) are not
+            // triggered. When/If they are triggered other states will take
+            // over based on their when condition.
+            if(bot.process.type == ProcessType.Print) {
+                if(bot.hasFilamentBay) {
+                    state = "cut_filament_tip"
+                } else {
+                    // At the beginning of a mid-print loading unconditonally mark
+                    // that the new spool setup process hasn't been completed. This
+                    // flag will be set as the user follows the screens and gets to
+                    // to the place material screen or when the printer gets to the
+                    // "preheating" UI state screen which can only happen when the
+                    // the extruder switch is triggered and kaiten gets to the
+                    // 'preheating' step.
+                    completedNewSpoolSetup = false
+                    state = "place_desiccant"
+                }
             }
             break;
         case ProcessStateType.Stopping:
@@ -453,14 +488,19 @@ LoggingItem {
         State {
             name: "no_nfc_reader_feed_filament"
 
-            // We can only get into this state manually or when a user triggers the extruder switch
-            // but due to shaky hands untriggers it. The printer would have begun preheating once
-            // the switch was triggered and the UI moved to the "preheating" state, but as the switch
-            // was untriggered the UI now doesnt have a state to go back to prompt inserting filament
-            // which is what this when condition handles. Note that this is only for Method XL.
+            // Screen for mid-print loading before the extruder switch is triggered. Note that
+            // we only get to this after the flag completedNewSpoolSetup becomes true which happens
+            // after following the new spool setup screens (place desiccant, cut tip, place material)
+
+            // Another way to get into this state is during normal loading or mid-print loading when the
+            // user triggers the extruder switch but due to shaky hands untriggers it. At this point Kaiten
+            // would have begun preheating once the extruder switch was triggered and the UI moved to the
+            // "preheating" state, but as the switch is untriggered the UI now doesn't have a state to go
+            // back to prompt re-inserting filament which is what this when condition handles. Note that
+            // this is only relevant for Method XL.
             when: !bot.hasFilamentBay &&
-                  bot.process.type == ProcessType.Load &&
-                  bot.process.type == ProcessType.Print &&
+                  (bot.process.type == ProcessType.Load ||
+                   (bot.process.type == ProcessType.Print && completedNewSpoolSetup)) &&
                   bot.process.stateType == ProcessStateType.Preheating &&
                   !extruderFilamentSwitch
 
@@ -515,9 +555,10 @@ LoggingItem {
             name: "nfc_detected_feed_filament"
             when: bot.hasFilamentBay &&
                   isMaterialValid && !usingExpExtruder && !bayFilamentSwitch &&
-                  bot.process.stateType == ProcessStateType.WaitingForFilament &&
-                  (bot.process.type == ProcessType.Load ||
-                   bot.process.type == ProcessType.Print)
+                  ((bot.process.stateType == ProcessStateType.WaitingForFilament && // For normal loading
+                    bot.process.type == ProcessType.Load) ||
+                   (bot.process.stateType == ProcessStateType.Preheating && // For mid-print loading
+                    bot.process.type == ProcessType.Print))
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
@@ -625,6 +666,17 @@ LoggingItem {
                   (bot.process.type == ProcessType.Load ||
                    bot.process.type == ProcessType.Unload ||
                    bot.process.type == ProcessType.Print)
+
+            PropertyChanges {
+                target: loadUnloadForm
+                // If kaiten reports preheating step and the extruder switch is
+                // triggered then mark that the new spool setup process has been
+                // completed. This is required because if the user untriggers the
+                // filament at this point the UI will go back to the feed filament
+                // screen and not the new spool setup screen. This is only relevant
+                // for XL.
+                completedNewSpoolSetup: true
+            }
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
