@@ -15,7 +15,9 @@ Item {
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
     property alias itemReplaceFilterXL: itemReplaceFilter
+    property alias replaceFilterXLPopup : replaceFilterPopup
     property alias replace_filter_next_button: contentRightSide.buttonPrimary
+    property bool isBuildPlateRaised: false
     property bool replaceFilterProcess: false
 
     LoggingItem {
@@ -54,7 +56,16 @@ Item {
                     break;
                 case ProcessStateType.CleaningUp:
                    if (!bot.process.cancelled) {
-                        state = "step_2"
+                        if(isBuildPlateRaised) {
+                            settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                            replaceFilterProcess = false
+                            isBuildPlateRaised = false
+                            state = "done"
+                        }
+                        else {
+                            isBuildPlateRaised = true
+                            state = "step_2"
+                        }
                    }
                    break;
                 default:
@@ -91,16 +102,20 @@ Item {
                         itemReplaceFilter.state = "step_4"
                     }
                     else if (itemReplaceFilter.state == "step_4") {
-                        bot.resetFilterHours()
+                        /*bot.resetFilterHours()
                         bot.hepaFilterPrintHours = 0
-                        bot.hepaFilterChangeRequired = false
-                        settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                        replaceFilterProcess = false
-                        itemReplaceFilter.state = "done"
+                        bot.hepaFilterChangeRequired = false*/
+                        replaceFilterPopup.popupState = "end_process"
+                        replaceFilterPopup.open()
                     }
                     else {
-                        replaceFilterProcess = true
-                        replaceFilterPopup.open()
+                        if(!isBuildPlateRaised) {
+                            replaceFilterProcess = true
+                            replaceFilterPopup.popupState = "start"
+                            replaceFilterPopup.open()
+                        } else {
+                            itemReplaceFilter.state = "step_2"
+                        }
                     }
                 }
             }
@@ -108,7 +123,7 @@ Item {
 
         states: [
             State {
-                name: "raising_build_plate"
+                name: "moving_build_plate"
 
                 PropertyChanges {
                     target: contentLeftSide.image
@@ -122,7 +137,8 @@ Item {
 
                 PropertyChanges {
                     target: contentRightSide.textHeader
-                    text: qsTr("Raising Build Plate")
+                    text: isBuildPlateRaised ? qsTr("Lowering Build Plate") :
+                                     qsTr("Raising Build Plate")
                 }
 
                 PropertyChanges {
@@ -255,7 +271,8 @@ Item {
         popupName: "replaceFilterPopup"
         popupHeight: replaceFilterPopupColumnLayout.height + 145
         showOneButton: popupState == "close_door"
-        showTwoButtons: popupState == "start"
+        showTwoButtons: popupState == "start" ||
+                        popupState == "end_process"
         full_button_text: qsTr("CONFIRM")
         left_button_text: qsTr("BACK")
         right_button_text: qsTr("CONFIRM")
@@ -266,7 +283,7 @@ Item {
         full_button.enabled: bot.chamberErrorCode != 48
         right_button.onClicked: {
             if (bot.chamberErrorCode != 48 || bot.doorErrorDisabled) {
-                itemReplaceFilter.state = "raising_build_plate"
+                itemReplaceFilter.state = "moving_build_plate"
                 doMove()
                 close()
             } else {
@@ -278,7 +295,7 @@ Item {
         }
         full_button.onClicked: {
             if (bot.chamberErrorCode != 48 || bot.doorErrorDisabled) {
-                itemReplaceFilter.state = "raising_build_plate"
+                itemReplaceFilter.state = "moving_build_plate"
                 doMove()
                 close()
             } else {
@@ -304,19 +321,58 @@ Item {
             TextHeadline {
                 id: replaceFilterPopupHeader
                 style: TextHeadline.Base
-                text: replaceFilterPopup.popupState == "close_door" ?
-                          qsTr("Front Door Open") :
-                          qsTr("Clear Build Plate + Close Door")
+                text: qsTr("Clear Build Plate + Close Door")
                 Layout.alignment: Qt.AlignHCenter
             }
 
             TextBody {
                 id: replaceFilterPopupBody
-                text: replaceFilterPopup.popupState == "close_door" ?
-                          qsTr("Close the front door to proceed.") :
-                          qsTr("Confirm the build plate is clear and the door is closed to proceed.")
+                text: qsTr("Confirm the build plate is clear and the door is closed to proceed.")
                 Layout.alignment: Qt.AlignHCenter
             }
+
+            states: [
+                State {
+                    when: replaceFilterPopup.popupState == "start"
+
+                    PropertyChanges {
+                        target: replaceFilterPopupHeader
+                        text: qsTr("Clear Build Plate + Close Door")
+                    }
+
+                    PropertyChanges {
+                        target: replaceFilterPopupBody
+                        text: qsTr("Confirm the build plate is clear and the door is closed to proceed.")
+                    }
+                },
+                State {
+                    when: replaceFilterPopup.popupState == "close_door"
+
+                    PropertyChanges {
+                        target: replaceFilterPopupHeader
+                        text: qsTr("Front Door Open")
+                    }
+
+                    PropertyChanges {
+                        target: replaceFilterPopupBody
+                        text: qqsTr("Close the front door to proceed.")
+                    }
+                },
+                State {
+                    when: replaceFilterPopup.popupState == "end_process"
+
+                    PropertyChanges {
+                        target: replaceFilterPopupHeader
+                        text: qsTr("End Process + Close Door")
+                    }
+
+                    PropertyChanges {
+                        target: replaceFilterPopupBody
+                        text: qsTr("Confirm you are done with the process and the door is closed to proceed.")
+                    }
+                }
+
+            ]
         }
     }
 }

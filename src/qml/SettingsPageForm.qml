@@ -244,37 +244,17 @@ Item {
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.CleanAirSettingsPage
             property string topBarTitle: qsTr("Replace Filter")
-            property bool backIsCancel: (replaceFilterXLPage.itemReplaceFilterXL.state == "raising_build_plate")
+            property bool backIsCancel: (replaceFilterXLPage.itemReplaceFilterXL.state == "moving_build_plate") ||
+                                        (replaceFilterXLPage.itemReplaceFilterXL.state == "done" &&
+                                         replaceFilterXLPage.isBuildPlateRaised)
             smooth: false
             visible: false
 
             property bool hasAltBack: true
 
             function altBack() {
-                if (replaceFilterXLPage.itemReplaceFilterXL.state == "done") {
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                    replaceFilterXLPage.replaceFilterProcess = false
-                }
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "raising_build_plate") {
-                    // cancel
-                    bot.cancel()
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                    replaceFilterXLPage.replaceFilterProcess = false
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "done"
-                }
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_2") {
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "done"
-                }
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_3") {
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "step_2"
-                }
-                else if (replaceFilterXLPage.itemReplaceFilterXL.state == "step_4") {
-                    replaceFilterXLPage.itemReplaceFilterXL.state = "step_3"
-                }
-                else {
-                    replaceFilterXLPage.replaceFilterProcess = false
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                }
+                replaceFilterXLPage.goBack()
+
             }
 
             ReplaceFilterXLPage {
