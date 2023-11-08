@@ -200,7 +200,7 @@ LoggingItem {
                 target: contentRightSide
                 visible: true
                 textHeader {
-                    text: qsTr("RAISING BUILD PLATE")
+                    text: qsTr("POSITIONING BUILD PLATE")
                     visible: true
                 }
                 textBody {
