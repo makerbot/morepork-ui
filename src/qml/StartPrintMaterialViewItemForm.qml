@@ -140,9 +140,7 @@ Item {
 
         TextSubheader {
             id: materialNameOrBayIDText
-            text: isLabsMaterial ?
-                     qsTr("LABS MATERIAL") :
-                     materialRequiredName
+            text: materialRequiredName
             font.capitalization: Font.AllUppercase
             font.weight: Font.Bold
         }
@@ -154,7 +152,7 @@ Item {
             font.weight: Font.Light
             opacity: 0.7
             visible: {
-                if(isLabsMaterial || materialMismatchCheck) {
+                if(materialMismatchCheck) {
                     false
                 } else {
                     isSpoolPresent
