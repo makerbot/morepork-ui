@@ -626,7 +626,7 @@ Item {
                         textBody.visible: true
                         textBody.text: (bot.machineType == MachineType.Magma) ?
                                             qsTr("The material clips guide the material into the extruders. The clips should be engaged with the extruders with corresponding numbers:") +
-                                            "\n\n" + qsTr("Clip 1 to Extruder 1") + "\n" + qstr("Clip 2 to Extruder 2") :
+                                            "\n\n" + qsTr("Clip 1 to Extruder 1") + "\n" + qsTr("Clip 2 to Extruder 2") :
                                             qsTr("Please do a final check to ensure the material clips are engaged with extruders.") +
                                             "\n\n" + qsTr("The material clips guide the material into the correct extruders.")
                         numberedSteps.visible: false

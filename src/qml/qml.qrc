@@ -2,7 +2,6 @@
     <qresource prefix="/qml">
         <file>MoreporkUI.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>MoreporkButton.qml</file>
         <file>TopBar.qml</file>
         <file>TopBarForm.qml</file>
         <file>MainMenu.qml</file>
@@ -26,8 +25,6 @@
         <file>PrintIconForm.qml</file>
         <file>NotificationIcons.qml</file>
         <file>NotificationIconsForm.qml</file>
-        <file>FilamentIcon.qml</file>
-        <file>FilamentIconForm.qml</file>
         <file>PrintStatusView.qml</file>
         <file>PrintStatusViewForm.qml</file>
         <file>FilamentBay.qml</file>
@@ -277,6 +274,9 @@
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
         <file>DryMaterialCustomTemperatureForm.qml</file>
         <file>DryMaterialCustomTemperature.qml</file>
+        <file>CustomDrawer.qml</file>
+        <file>DrawerButton.qml</file>
+        <file>CloseDrawerItem.qml</file>
         <file>ManualCalibrationPrintFinishedForm.qml</file>
         <file>ManualCalibrationPrintFinished.qml</file>
         <file>AdjustZOffset.qml</file>

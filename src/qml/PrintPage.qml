@@ -11,6 +11,7 @@ PrintPageForm {
     property bool startPrintNoFilament: false
     property bool startPrintGenuineSliceUnknownMaterial: false
     property bool startPrintUnknownSliceGenuineMaterial: false
+    property bool startPrintWithLabsExtruder: false
 
     function startPrintMaterialCheck() {
         // This function checks for and saves all possible failures
@@ -61,11 +62,9 @@ PrintPageForm {
 
         if(startPrintUnknownSliceGenuineMaterial ||
            startPrintGenuineSliceUnknownMaterial ||
-           startPrintMaterialMismatch
-        ) {
+           startPrintMaterialMismatch) {
             return false
-        }
-        else {
+        } else {
             return true
         }
     }
@@ -91,8 +90,7 @@ PrintPageForm {
     function startPrintFilamentCheck() {
         if(bot.noFilamentErrorDisabled) {
             return true
-        }
-        else if (model_extruder_used && support_extruder_used &&
+        } else if (model_extruder_used && support_extruder_used &&
             (!bot.extruderAFilamentPresent || !bot.extruderBFilamentPresent)) {
             startPrintNoFilament = true
         } else if (model_extruder_used && !support_extruder_used &&
@@ -108,10 +106,21 @@ PrintPageForm {
         return true
     }
 
+    function startPrintExtruderCheck() {
+        if((bot.extruderATypeStr == "mk14_e" ||
+            bot.extruderATypeStr == "mk14_hot_e") &&
+            isInManualCalibration) {
+            startPrintWithLabsExtruder = true
+            return false
+        }
+        return true
+    }
+
     function startPrintCheck() {
         if(startPrintDoorLidCheck() &&
            startPrintFilamentCheck() &&
-           startPrintMaterialCheck()) {
+           startPrintMaterialCheck() &&
+           startPrintExtruderCheck()) {
             return true
         }
         return false
@@ -216,35 +225,27 @@ PrintPageForm {
         }
     }
 
-    printingDrawer.buttonClose.onClicked: {
-        printingDrawer.close()
-    }
-
     sortingDrawer.buttonSortAZ.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = "qrc:/img/check_circle_small.png"
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
+        sortingDrawer.buttonSortAZ.buttonImage = "qrc:/img/drawer_current_selection.png"
+        sortingDrawer.buttonSortDateAdded.buttonImage = ""
+        sortingDrawer.buttonSortPrintTime.buttonImage = ""
         storage.sortType = StorageSortType.Alphabetic
         sortingDrawer.close()
     }
 
     sortingDrawer.buttonSortDateAdded.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = ""
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = "qrc:/img/check_circle_small.png"
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = ""
+        sortingDrawer.buttonSortAZ.buttonImage = ""
+        sortingDrawer.buttonSortDateAdded.buttonImage = "qrc:/img/drawer_current_selection.png"
+        sortingDrawer.buttonSortPrintTime.buttonImage = ""
         storage.sortType = StorageSortType.DateAdded
         sortingDrawer.close()
     }
 
     sortingDrawer.buttonSortPrintTime.onClicked: {
-        sortingDrawer.buttonSortAZ.buttonImage.source = ""
-        sortingDrawer.buttonSortDateAdded.buttonImage.source = ""
-        sortingDrawer.buttonSortPrintTime.buttonImage.source = "qrc:/img/check_circle_small.png"
+        sortingDrawer.buttonSortAZ.buttonImage = ""
+        sortingDrawer.buttonSortDateAdded.buttonImage = ""
+        sortingDrawer.buttonSortPrintTime.buttonImage = "qrc:/img/drawer_current_selection.png"
         storage.sortType = StorageSortType.PrintTime
-        sortingDrawer.close()
-    }
-
-    sortingDrawer.buttonClose.onClicked: {
         sortingDrawer.close()
     }
 
