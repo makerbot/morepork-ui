@@ -7,8 +7,6 @@ import ProcessStateTypeEnum 1.0
 LoggingItem {
     itemName: "DryMaterial"
     id: dryMaterialPage
-    width: parent.width
-    height: parent.height
     smooth: false
     antialiasing: false
     property alias contentLeftSide: contentLeftSide
@@ -21,11 +19,6 @@ LoggingItem {
     property bool hasFailed: bot.process.errorCode !== 0
     property bool doChooseMaterial: false
     property bool hasFinished: false
-
-    onDoChooseMaterialChanged: {
-        if(doChooseMaterial)
-            state = "choose_material"
-    }
 
     onCurrentStepChanged: {
         if(bot.process.type == ProcessType.DryingCycleProcess) {
@@ -113,7 +106,7 @@ LoggingItem {
                        "built-in heaters.") + "\n\n" + qsTr("Please sure the build plate is empty.")
             font.weight: Font.Normal
             visible: true
-            opacity: 1
+            opacity: 0.7
         }
         textBody1 {
             style: TextBody.ExtraLarge
@@ -128,15 +121,11 @@ LoggingItem {
 
     DryMaterialSelector {
         id: materialSelector
-        height: parent.height
-        width: parent.width
         visible: false
     }
 
     DryMaterialCustomTemperature {
         id: customMaterialTemperature
-        height: parent.height
-        width: parent.width
         visible: false
     }
 
@@ -169,7 +158,6 @@ LoggingItem {
                                "built-in heaters.") + "\n\n" + qsTr("Please sure the build plate is empty.")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false
@@ -219,7 +207,6 @@ LoggingItem {
                     text: qsTr("For proximity to heated chamber.")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false
@@ -271,7 +258,6 @@ LoggingItem {
                           qsTr("Re-attach cap and puck to spool")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false
@@ -319,7 +305,6 @@ LoggingItem {
                           qsTr("Place spool in bag and add additional fresh bags of desiccant before sealing.")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false
@@ -366,7 +351,6 @@ LoggingItem {
                     text: qsTr("Position the material in the center of the build plate and close the build chamber door.")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false
@@ -389,6 +373,7 @@ LoggingItem {
         },
         State {
             name: "choose_material"
+            when: doChooseMaterial
 
             PropertyChanges {
                 target: contentLeftSide
@@ -476,7 +461,6 @@ LoggingItem {
                         qsTr("Your material is drying. We will let you know once completed.")
                     }
                     font.weight: Font.Bold
-                    opacity: 0.5
                 }
                 textBody1 {
                     visible: bot.process.stateType == ProcessStateType.DryingSpool
@@ -532,7 +516,6 @@ LoggingItem {
                     text: qsTr("The material is now dry and ready to use.")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false
@@ -624,7 +607,6 @@ LoggingItem {
                     text: qsTr("Please wait.")
                     font.weight: Font.Normal
                     visible: true
-                    opacity: 1
                 }
                 textBody1 {
                     visible:false

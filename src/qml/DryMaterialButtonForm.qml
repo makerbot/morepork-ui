@@ -56,7 +56,7 @@ Button {
         anchors.rightMargin: 40
         smooth: false
         antialiasing: false
-        source: "qrc:/img/icon_start.png"
+        source: "qrc:/img/start_circle.png"
         anchors.verticalCenter: parent.verticalCenter
         visible: true
     }

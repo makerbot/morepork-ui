@@ -232,7 +232,6 @@
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
         <file alias="method_dry_material.png">images/dry_material/method/dry_material.png</file>
         <file alias="methodxl_dry_material.png">images/dry_material/methodxl/dry_material.png</file>
-        <file alias="icon_start.png">images/icon_start.png</file>
         <file alias="spool_bag.png">images/dry_material/spool_bag.png</file>
         <file alias="replace_desiccant.png">images/dry_material/replace_desiccant.png</file>
         <file alias="drawer_down.png">images/top_bar/drawer_down.png</file>
@@ -245,5 +244,6 @@
         <file alias="icon_z_offset.png">images/icon_z_offset.png</file>
         <file alias="z_offset_build_plate.png">images/manual_z_offset/build_plate.png</file>
         <file alias="z_offset_nozzle.png">images/manual_z_offset/nozzle.png</file>
+        <file alias="start_circle.png">images/dry_material/start_circle.png</file>
     </qresource>
 </RCC>
