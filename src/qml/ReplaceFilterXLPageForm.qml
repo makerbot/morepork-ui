@@ -19,6 +19,7 @@ Item {
     property alias replace_filter_next_button: contentRightSide.buttonPrimary
     property bool isBuildPlateRaised: false
     property bool replaceFilterProcess: false
+    property bool flagCancel: false
 
     LoggingItem {
         itemName: "ReplaceFilterXL"
@@ -49,10 +50,8 @@ Item {
                     bot.process.type == ProcessType.MoveBuildPlateProcess) {
                 switch(currentState) {
                 case ProcessStateType.Cancelling:
-                    replaceFilterPopup.popupState = "close_door"
+                    replaceFilterPopup.popupState = "end_process"
                     replaceFilterPopup.open()
-
-                    state = "move_paused"
                     break;
                 case ProcessStateType.CleaningUp:
                    if (!bot.process.cancelled) {
@@ -282,6 +281,12 @@ Item {
         right_button.enabled: bot.chamberErrorCode != 48
         full_button.enabled: bot.chamberErrorCode != 48
         right_button.onClicked: {
+            if(flagCancel) {
+                // Cancel
+                bot.cancel()
+                flagCancel = false
+            }
+
             if (bot.chamberErrorCode != 48 || bot.doorErrorDisabled) {
                 itemReplaceFilter.state = "moving_build_plate"
                 doMove()

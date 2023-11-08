@@ -22,11 +22,11 @@ ReplaceFilterXLPageForm {
             }
         }
         else if (itemReplaceFilterXL.state == "moving_build_plate") {
-            // Cancel
-            bot.cancel()
+            flagCancel = true
             if(!isBuildPlateRaised) isBuildPlateRaised = true
             replaceFilterXLPopup.popupState = "end_process"
             replaceFilterXLPopup.open()
+            //if(flagCancel) {
         }
         else if (itemReplaceFilterXL.state == "step_2") {
             itemReplaceFilterXL.state = "done"
