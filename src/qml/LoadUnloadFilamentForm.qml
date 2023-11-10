@@ -567,6 +567,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
@@ -625,6 +626,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
@@ -685,6 +687,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
@@ -738,6 +741,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     source: ("qrc:/img/extrusion_%1.png").arg(bayID)
                     visible: true
@@ -802,6 +806,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
@@ -863,6 +868,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("clear_excess_material"))
                     visible: true
@@ -933,6 +939,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
@@ -1016,6 +1023,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
@@ -1086,6 +1094,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     source: "qrc:/img/methodxl_store_material.png"
                     visible: true
@@ -1144,6 +1153,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide
+                visible: true
                 image {
                     visible: false
                 }
