@@ -90,7 +90,7 @@ Item {
                                           "qrc:/img/icon_sombrero.png"
                 fileThumbnail.width: model.modelData.isDir ? 47 : 70
                 fileThumbnail.height: model.modelData.isDir ? 45 : 53
-                fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 70 : 60
+                fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 73 : 60
                 filenameText.text: model.modelData.fileBaseName
                 fileDesc_rowLayout.visible: false
                 onClicked: {
