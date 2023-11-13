@@ -8,8 +8,6 @@ import MachineTypeEnum 1.0
 LoggingItem {
     itemName: "FirmwareUpdatePage"
     id: firmwareUpdatePage
-    width: 800
-    height: 440
     smooth: false
     antialiasing: false
     property alias button1: button1
