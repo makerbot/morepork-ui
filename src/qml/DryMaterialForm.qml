@@ -7,16 +7,13 @@ import ProcessStateTypeEnum 1.0
 LoggingItem {
     itemName: "DryMaterial"
     id: dryMaterialPage
-    width: 800
-    height: 420
     smooth: false
     antialiasing: false
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
     property alias cancelDryingCyclePopup: cancelDryingCyclePopup
     property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
-    property alias left_button: dryConfirmBuildPlateClearPopup.left_button
-    property real timeLeftHours: bot.process.timeRemaining/3600
+    property real timeLeftMinutes: bot.process.timeRemaining/60
     property int currentStep: bot.process.stateType
     signal processDone
     property bool hasFailed: bot.process.errorCode !== 0
@@ -69,7 +66,6 @@ LoggingItem {
     ]
 
     property variant dryingMaterialsListMethodX : [
-        {label: "sr30", temperature : 0, time : 0},
         {label: "pva", temperature : 70, time : 24},
         {label: "rapidrinse", temperature : 70, time : 24},
         {label: "nylon || nylon cf || nylon 12 cf", temperature : 70, time : 24},
@@ -77,10 +73,19 @@ LoggingItem {
         {label: "pla || tough", temperature : 45, time : 24}
     ]
 
+    property variant dryingMaterialsListMethodXL : [
+        {label: "abs-r", temperature: 60, time: 16},
+        {label: "abs-cf", temperature: 60, time: 16},
+        {label: "nylon cf", temperature: 70, time: 16},
+        {label: "pva", temperature: 50, time: 16},
+        {label: "rapidrinse", temperature: 70, time: 16},
+        {label: "sr-30", temperature: 0, time: 0}
+    ]
+
     ContentLeftSide {
         id: contentLeftSide
         image {
-            source: "qrc:/img/dry_material.png"
+            source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
             visible: true
         }
         loadingIcon {
@@ -96,8 +101,16 @@ LoggingItem {
             visible: true
         }
         textBody {
-            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament. This procedure will allow you to dry materials for improved print quality, using METHOD’s built-in heaters Please sure the build plate is empty.")
+            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
+                  qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
+                       "built-in heaters.") + "\n\n" + qsTr("Please make sure the build plate is empty.")
+            font.weight: Font.Normal
             visible: true
+            opacity: 0.7
+        }
+        textBody1 {
+            style: TextBody.ExtraLarge
+            visible:false
         }
         buttonPrimary {
             text: qsTr("START")
@@ -111,7 +124,60 @@ LoggingItem {
         visible: false
     }
 
+    DryMaterialCustomTemperature {
+        id: customMaterialTemperature
+        visible: false
+    }
+
     states: [
+        State {
+            name: "base state"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    visible: true
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+                textHeader {
+                    text: qsTr("DRY MATERIAL")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
+                          qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
+                               "built-in heaters.") + "\n\n" + qsTr("Please sure the build plate is empty.")
+                    font.weight: Font.Normal
+                    visible: true
+                }
+                textBody1 {
+                    visible:false
+                }
+                buttonPrimary {
+                    text: qsTr("START")
+                    visible: true
+                }
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: false
+            }
+        },
         State {
             name: "positioning_build_plate"
             when: bot.process.type == ProcessType.DryingCycleProcess &&
@@ -134,12 +200,16 @@ LoggingItem {
                 target: contentRightSide
                 visible: true
                 textHeader {
-                    text: qsTr("BUILD PLATE MOVING INTO PLACE")
+                    text: qsTr("POSITIONING BUILD PLATE")
                     visible: true
                 }
                 textBody {
-                    text: qsTr("The build plate is moving into position so the material can be placed closer to the heaters.")
+                    text: qsTr("For proximity to heated chamber.")
+                    font.weight: Font.Normal
                     visible: true
+                }
+                textBody1 {
+                    visible:false
                 }
                 buttonPrimary {
                     visible: false
@@ -148,6 +218,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -181,7 +256,11 @@ LoggingItem {
                           qsTr("Remove puck from spool") + "\n" +
                           qsTr("Remove cap and insert one 30g bag") + "\n" +
                           qsTr("Re-attach cap and puck to spool")
+                    font.weight: Font.Normal
                     visible: true
+                }
+                textBody1 {
+                    visible:false
                 }
                 buttonPrimary {
                     text: qsTr("NEXT")
@@ -191,6 +270,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -218,9 +302,12 @@ LoggingItem {
                 }
                 textBody {
                     text: qsTr("Confirm your re-usable Mylar storage bag has no holes.") + "\n\n" +
-                          qsTr("Place spool in bag and add additional fresh bags of desiccant before sealing.") + "\n\n" +
-                          qsTr("For additional mylar bags and desiccant, purchase the MATERIAL DRY KIT at store.makerbot.com")
+                          qsTr("Place spool in bag and add additional fresh bags of desiccant before sealing.")
+                    font.weight: Font.Normal
                     visible: true
+                }
+                textBody1 {
+                    visible:false
                 }
                 buttonPrimary {
                     text: qsTr("NEXT")
@@ -232,6 +319,11 @@ LoggingItem {
                 target: materialSelector
                 visible: false
             }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: false
+            }
         },
         State {
             name: "waiting_for_spool"
@@ -240,7 +332,7 @@ LoggingItem {
                 target: contentLeftSide
                 visible: true
                 image {
-                    source: "qrc:/img/dry_material_spool.png"
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                     visible: true
                 }
                 loadingIcon {
@@ -257,16 +349,25 @@ LoggingItem {
                 }
                 textBody {
                     text: qsTr("Position the material in the center of the build plate and close the build chamber door.")
+                    font.weight: Font.Normal
                     visible: true
                 }
+                textBody1 {
+                    visible:false
+                }
                 buttonPrimary {
-                    text: qsTr("SELECT MATERIAL")
+                    text: qsTr("NEXT")
                     visible: true
                 }
             }
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -288,6 +389,34 @@ LoggingItem {
                 target: materialSelector
                 visible: true
             }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: false
+            }
+        },
+        State {
+            name: "custom_material"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: false
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: true
+            }
         },
         State {
             name: "drying_spool"
@@ -300,7 +429,13 @@ LoggingItem {
                 }
                 loadingIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
+                    icon_image: {
+                        if(bot.process.stateType == ProcessStateType.DryingSpool) {
+                            LoadingIcon.Progress
+                        } else {
+                            LoadingIcon.Loading
+                        }
+                    }
                     loadingProgress: bot.process.printPercentage
                 }
             }
@@ -311,7 +446,7 @@ LoggingItem {
                 textHeader {
                     text: {
                         if(bot.process.stateType == ProcessStateType.Loading) {
-                            qsTr("HEATING CHAMBER")
+                            qsTr("PREPARING")
                         } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
                             qsTr("DRYING MATERIAL")
                         } else {
@@ -323,23 +458,35 @@ LoggingItem {
                 textBody {
                     visible: bot.process.stateType == ProcessStateType.DryingSpool
                     text: {
-                        (timeLeftHours < 1 ?
-                             Math.round(timeLeftHours * 60) + "M " :
-                             Math.round(timeLeftHours*10)/10 + "H ") +
-                        qsTr("REMAINING")
+                        qsTr("Your material is drying. We will let you know once completed.")
+                    }
+                    font.weight: Font.Bold
+                }
+                textBody1 {
+                    visible: bot.process.stateType == ProcessStateType.DryingSpool
+                    text: {
+                        var timeRemaining = timeLeftMinutes % 60
+                        var timeLeftHours = (timeLeftMinutes - timeRemaining)/60
+                        qsTr("%1 REMAINING").arg(Math.round(timeLeftHours) + "H " +
+                                                 Math.round(timeRemaining) + "M")
                     }
                 }
                 buttonPrimary {
                     visible: false
                 }
                 temperatureStatus {
-                    visible: true
+                    visible: (bot.process.stateType == ProcessStateType.Loading)
                     showComponent: TemperatureStatus.Chamber
                 }
             }
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -362,12 +509,16 @@ LoggingItem {
                 target: contentRightSide
                 visible: true
                 textHeader {
-                    text: qsTr("DRYING COMPLETE")
+                    text: qsTr("COMPLETED")
                     visible: true
                 }
                 textBody {
                     text: qsTr("The material is now dry and ready to use.")
+                    font.weight: Font.Normal
                     visible: true
+                }
+                textBody1 {
+                    visible:false
                 }
                 buttonPrimary {
                     text: qsTr("DONE")
@@ -377,6 +528,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -405,6 +561,9 @@ LoggingItem {
                 textBody {
                     visible: false
                 }
+                textBody1 {
+                    visible:false
+                }
                 buttonPrimary {
                     text: qsTr("DONE")
                     visible: true
@@ -413,6 +572,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: materialSelector
+                visible: false
+            }
+
+            PropertyChanges {
+                target: customMaterialTemperature
                 visible: false
             }
         },
@@ -441,7 +605,11 @@ LoggingItem {
                 }
                 textBody {
                     text: qsTr("Please wait.")
+                    font.weight: Font.Normal
                     visible: true
+                }
+                textBody1 {
+                    visible:false
                 }
                 buttonPrimary {
                     visible: false
@@ -452,6 +620,11 @@ LoggingItem {
                 target: materialSelector
                 visible: false
             }
+
+            PropertyChanges {
+                target: customMaterialTemperature
+                visible: false
+            }
         }
     ]
 
@@ -459,53 +632,40 @@ LoggingItem {
         popupName: "CancelDryingCycle"
         id: cancelDryingCyclePopup
         popupWidth: 720
-        popupHeight: 265
-
+        popupHeight: columnLayout_cancel_process_popup.height+145
         showTwoButtons: true
-        left_button_text: qsTr("STOP DRYING")
-        left_button.onClicked: {
+        right_button_text: qsTr("STOP PROCESS")
+        right_button.onClicked: {
             bot.cancel()
             state = "cancelling"
             cancelDryingCyclePopup.close()
         }
-        right_button_text: qsTr("CONTINUE")
-        right_button.onClicked: {
+        left_button_text: qsTr("BACK")
+        left_button.onClicked: {
             cancelDryingCyclePopup.close()
         }
 
         ColumnLayout {
-            id: columnLayout_copy_file_popup
+            id: columnLayout_cancel_process_popup
             width: 590
             height: children.height
-            spacing: 20
-            anchors.top: parent.top
-            anchors.topMargin: 150
+            anchors.top: cancelDryingCyclePopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
 
-            Text {
+            TextHeadline {
                 id: alert_text_copy_file_popup
-                color: "#cbcbcb"
                 text: qsTr("EXIT PROCEDURE")
-                font.letterSpacing: 3
                 Layout.alignment: Qt.AlignHCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
             }
 
-            Text {
+            TextBody {
                 id: description_text_copy_file_popup
-                color: "#cbcbcb"
                 text: qsTr("Are you sure you want to cancel and exit the procedure?")
                 horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                font.letterSpacing: 1
-                lineHeight: 1.3
             }
         }
     }
@@ -513,51 +673,39 @@ LoggingItem {
     CustomPopup {
         popupName: "DryingCycleClearBuildPlate"
         id: dryConfirmBuildPlateClearPopup
-        popupWidth: 720
-        popupHeight: 220
-
+        popupHeight: columnLayout_clear_build_plate_popup.height+145
         showTwoButtons: true
-        left_button_text: qsTr("CONFIRM")
-        left_button.onClicked: {
-            bot.buildPlateCleared()
-            dryConfirmBuildPlateClearPopup.close()
-        }
-        right_button_text: qsTr("BACK")
+        right_button_text: qsTr("CONFIRM")
         right_button.onClicked: {
+            dryConfirmBuildPlateClearPopup.close()
+            bot.drySpool()
+        }
+        left_button_text: qsTr("BACK")
+        left_button.onClicked: {
             dryConfirmBuildPlateClearPopup.close()
         }
 
         ColumnLayout {
             id: columnLayout_clear_build_plate_popup
             width: 590
-            height: 100
-            anchors.top: parent.top
-            anchors.topMargin: 135
+            height: children.height
+            anchors.top: dryConfirmBuildPlateClearPopup.popupContainer.top
+            anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
 
-            Text {
-                id: clear_build_plate_text
-                color: "#cbcbcb"
-                text: qsTr("CLEAR BUILD PLATE")
-                font.letterSpacing: 3
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
+            Image {
+                id: build_plate_error_image
+                width: sourceSize.width - 10
+                height: sourceSize.height -10
+                Layout.alignment: Qt.AlignHCenter
+                source: "qrc:/img/process_error_small.png"
             }
 
-            Text {
-                id: clear_build_plate_desc_text
-                color: "#cbcbcb"
-                text: qsTr("Check to make sure the printer build plate is empty.")
-                horizontalAlignment: Text.AlignHCenter
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-                wrapMode: Text.WordWrap
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                lineHeight: 1.3
+            TextHeadline {
+                id: title
+                text: qsTr("CONFIRM BUILD PLATE IS CLEAR")
+                Layout.alignment: Qt.AlignHCenter
             }
         }
     }

@@ -14,6 +14,7 @@ Rectangle {
 
     enum Icon {
         Loading,
+        Progress,
         Success,
         Failure
     }
@@ -30,7 +31,6 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         source: "qrc:/img/loading_gears.png"
-        visible: parent.visible && loadingProgress == 0
 
         RotationAnimator {
             id: rotate_inner_image
@@ -39,8 +39,7 @@ Rectangle {
             to: 0
             duration: 10000
             loops: Animation.Infinite
-            running: icon_image === LoadingIcon.Loading
-
+            running: icon_image == LoadingIcon.Loading
         }
     }
 
@@ -52,7 +51,6 @@ Rectangle {
         source: "qrc:/img/loading_rings.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: parent.visible && loadingProgress == 0
 
         RotationAnimator {
             target: outer_image
@@ -60,7 +58,7 @@ Rectangle {
             to: 360
             duration: 10000
             loops: Animation.Infinite
-            running: parent.visible
+            running: true
         }
     }
 
@@ -76,7 +74,6 @@ Rectangle {
         border.color: "#FFFFFF"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: parent.visible
     }
 
     Text {
@@ -90,7 +87,6 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        visible: loadingProgress > 0
         font.family: defaultFont.name
         font.weight: Font.Light
         font.pixelSize: 75
@@ -116,7 +112,6 @@ Rectangle {
     onLoadingProgressChanged: canvas.requestPaint()
     Canvas {
         id: canvas
-        visible: loadingProgress > 0
         antialiasing: false
         smooth: false
         rotation : -90
@@ -139,26 +134,67 @@ Rectangle {
         }
     }
     states: [
+
         State {
             name: "loading"
             when: icon_image === LoadingIcon.Loading
 
-
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/loading_gears.png"
+                visible: true
                 width: 68
                 height: 68
             }
 
             PropertyChanges {
                 target: outer_image
-                visible: parent.visible
+                visible: true
             }
 
             PropertyChanges {
                 target: progress_circle
                 visible: false
+            }
+
+            PropertyChanges {
+                target: progress_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: false
+            }
+
+        },
+        State {
+            name: "progress"
+            when: icon_image === LoadingIcon.Progress
+
+            PropertyChanges {
+                target: inner_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: outer_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: progress_circle
+                visible: false
+            }
+
+            PropertyChanges {
+                target: progress_text
+                visible: true
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: true
             }
 
         },
@@ -170,6 +206,7 @@ Rectangle {
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/check_mark.png"
+                visible: true
                 rotation: 0
                 width: 79
                 height: 59
@@ -186,6 +223,16 @@ Rectangle {
                 visible: parent.visible
             }
 
+            PropertyChanges {
+                target: progress_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: false
+            }
+
         },
         State {
             name: "failure"
@@ -195,6 +242,7 @@ Rectangle {
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/exc_mark.png"
+                visible: true
                 rotation: 0
                 width: 16
                 height: 89
@@ -209,6 +257,16 @@ Rectangle {
                 target: progress_circle
                 border.color: "#F79125"
                 visible: parent.visible
+            }
+
+            PropertyChanges {
+                target: progress_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: false
             }
         }
     ]

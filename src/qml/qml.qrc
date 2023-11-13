@@ -272,6 +272,8 @@
         <file>SetupProceduresPageForm.qml</file>
         <file>CloudQueueOptionsPopupMenu.qml</file>
         <file>CloudQueueOptionsPopupMenuForm.qml</file>
+        <file>DryMaterialCustomTemperatureForm.qml</file>
+        <file>DryMaterialCustomTemperature.qml</file>
         <file>CustomDrawer.qml</file>
         <file>DrawerButton.qml</file>
         <file>CloseDrawerItem.qml</file>

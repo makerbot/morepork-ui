@@ -7,8 +7,10 @@ ListView {
     id: materialsList
     smooth: false
     anchors.fill: parent
+    anchors.topMargin: 10
     boundsBehavior: Flickable.DragOverBounds
     spacing: 1
+    clip: true
     orientation: ListView.Vertical
     flickableDirection: Flickable.VerticalFlick
     ScrollBar.vertical: ScrollBar {}
@@ -19,11 +21,27 @@ ListView {
         } else if(bot.machineType == MachineType.Lava) {
             dryingMaterialsListMethodX
         } else if(bot.machineType == MachineType.Magma) {
-            dryingMaterialsListMethodX
+            dryingMaterialsListMethodXL
         } else {
             []
         }
     }
+
+    header:
+        DryMaterialButton {
+            id: customMaterialButton
+            property int time: bot.machineType == MachineType.Magma ? 16 : 24
+            materialNameText: qsTr("ENTER CUSTOM TEMPERATURE")
+            temperatureAndTimeText: qsTr("Chamber will heat for %1 hours").arg(time)
+            enabled: true
+            opacity: 1
+            onClicked: {
+                customMaterialTemperature.customTime = time
+                dryMaterial.state = "custom_material"
+            }
+            smooth: false
+            antialiasing: false
+        }
 
     delegate:
         DryMaterialButton {
@@ -32,10 +50,11 @@ ListView {
         opacity: model.modelData["temperature"] != 0 ? 1 : 0.3
         materialNameText: model.modelData["label"]
         temperatureAndTimeText: {
-            if (model.modelData["temperature"] != 0)
+            if (model.modelData["temperature"] != 0) {
                 qsTr("%1°C for %2 hours").arg(model.modelData["temperature"]).arg(model.modelData["time"])
-            else
+            } else {
                qsTr("Not available, this material can be damaged by drying.")
+            }
         }
         smooth: false
         antialiasing: false
@@ -44,3 +63,4 @@ ListView {
         }
     }
 }
+
