@@ -105,9 +105,9 @@ LoggingItem {
                 fileThumbnail.source: model.modelData.isDir ?
                                           "qrc:/img/icon_directory.png" :
                                           "qrc:/img/icon_sombrero.png"
-                fileThumbnail.width: model.modelData.isDir ? 140 : 70
-                fileThumbnail.height: model.modelData.isDir ? 106 : 53
-                fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 25 : 60
+                fileThumbnail.width: model.modelData.isDir ? 47 : 34
+                fileThumbnail.height: model.modelData.isDir ? 43 : 45
+                fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 71 : 77
                 filenameText.text: model.modelData.fileBaseName
                 fileDesc_rowLayout.visible: false
                 onClicked: {
