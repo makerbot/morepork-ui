@@ -29,15 +29,16 @@ LoggingItem {
             logKey: text
             onClicked: {
                 acknowledgePrint()
-                settingsPage.extruderSettingsPage.manualZCalibration.onPrintPage = false
                 // GO BACK TO MANUAL CALIBRATION
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                 settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
-                    settingsPage.extruderSettingsPage.manualZCalibration.state = "z_cal_start"
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
+                    settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(false)
                 } else {
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
                     settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
                 }
             }
@@ -48,7 +49,13 @@ LoggingItem {
             logKey: text
             onClicked: {
                 acknowledgePrint()
-                settingsPage.extruderSettingsPage.manualZCalibration.onPrintPage = false
+                if(bot.process.stateType == ProcessStateType.Cancelled ||
+                        bot.process.stateType == ProcessStateType.Failed) {
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
+                } else {
+                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
+                }
+
                 // PROMPT USER TO REDO AUTOCAL
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)

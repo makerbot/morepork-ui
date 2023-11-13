@@ -63,6 +63,10 @@ else()
         NAME test_prints_check
         COMMAND "${PYTHON_EXECUTABLE}"
             "${CMAKE_SOURCE_DIR}/test_prints/check_prints.py")
+    add_test(
+        NAME cal_prints_check
+        COMMAND "${PYTHON_EXECUTABLE}"
+            "${CMAKE_SOURCE_DIR}/calibration_prints/check_prints.py")
 endif()
 
 if(NOT ${QT_CREATOR_BUILD})

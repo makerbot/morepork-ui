@@ -133,6 +133,7 @@ LoggingItem {
             anchors.top: image.bottom
             anchors.horizontalCenter: image.horizontalCenter
 
+            property alias baseScale: baseScale
             property alias indicatorNeedle: indicatorNeedle
             property alias levelingGoodCheckmark: levelingGoodCheckmark
 
@@ -140,7 +141,44 @@ LoggingItem {
                 id: baseScale
                 height: sourceSize.height
                 width: sourceSize.width
-                source: ("qrc:/img/%1.png").arg(getImageForPrinter("leveler_scale"))
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                source: "qrc:/img/leveler_scale.png"
+
+                Image {
+                    id: leftOutOScreenArrow
+                    height: sourceSize.height
+                    width: sourceSize.width
+                    anchors.right: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    source: "qrc:/img/leveler_indicator_out_of_screen.png"
+                }
+
+                Image {
+                    id: rightOutOfScreenArrow
+                    height: sourceSize.height
+                    width: sourceSize.width
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    rotation: 180
+                    source: "qrc:/img/leveler_indicator_out_of_screen.png"
+                }
+
+                Rectangle {
+                    id: levelingTargetWindowLeftBounds
+                    width: 1
+                    height: parent.height
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                Rectangle {
+                    id: levelingTargetWindowRightBounds
+                    width: 1
+                    height: parent.height
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
 
             Image {
@@ -148,7 +186,7 @@ LoggingItem {
                 height: sourceSize.height
                 width: sourceSize.width
                 anchors.horizontalCenter: baseScale.horizontalCenter
-                source: "qrc:/img/leveler_indicator_orange.png"
+                source: "qrc:/img/leveler_indicator_white.png"
             }
 
             Image {
@@ -580,16 +618,45 @@ LoggingItem {
             PropertyChanges {
                 target: leveler.levelerScale.indicatorNeedle
                 anchors.horizontalCenterOffset:
-                    (targetHESLower + targetHESUpper)*0.5 - currentHES
+                    Math.min(Math.max((targetHESLower + targetHESUpper)*0.5 - currentHES, -leveler.levelerScale.baseScale.width/2), leveler.levelerScale.baseScale.width/2)
                 source: {
-                    if(currentHES <= targetHESUpper && currentHES >= targetHESLower) {
+                    // Indicator goes beyond the scale on either end - Turns orange and is capped at the ends
+                    if((((targetHESLower + targetHESUpper)*0.5 - currentHES) > leveler.levelerScale.baseScale.width/2) ||
+                       (((targetHESLower + targetHESUpper)*0.5 - currentHES) < -leveler.levelerScale.baseScale.width/2)) {
+                        "qrc:/img/leveler_indicator_orange.png"
+                    }
+                    // Indicator within the target window - Turns blue
+                    else if(currentHES <= targetHESUpper && currentHES >= targetHESLower) {
                         "qrc:/img/leveler_indicator_blue.png"
                     }
+                    // Indicator is white on other locations on the scale
                     else {
-                        "qrc:/img/leveler_indicator_orange.png"
+                        "qrc:/img/leveler_indicator_white.png"
                     }
                 }
                 visible: true
+            }
+
+            PropertyChanges {
+                target: leftOutOScreenArrow
+                visible: ((targetHESLower + targetHESUpper)*0.5 - currentHES) < -leveler.levelerScale.baseScale.width/2
+                opacity: 1 - (leveler.levelerScale.baseScale.width/2)/Math.abs((targetHESLower + targetHESUpper)*0.5 - currentHES)
+            }
+
+            PropertyChanges {
+                target: rightOutOfScreenArrow
+                visible: ((targetHESLower + targetHESUpper)*0.5 - currentHES) > leveler.levelerScale.baseScale.width/2
+                opacity: 1 - (leveler.levelerScale.baseScale.width/2)/Math.abs((targetHESLower + targetHESUpper)*0.5 - currentHES)
+            }
+
+            PropertyChanges {
+                target: levelingTargetWindowLeftBounds
+                anchors.horizontalCenterOffset: targetHESLower - ((targetHESLower + targetHESUpper)*0.5)
+            }
+
+            PropertyChanges {
+                target: levelingTargetWindowRightBounds
+                anchors.horizontalCenterOffset: targetHESUpper - ((targetHESLower + targetHESUpper)*0.5)
             }
 
             PropertyChanges {

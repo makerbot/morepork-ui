@@ -259,19 +259,24 @@ ApplicationWindow {
         }
     }
 
+    property int drawerState: MoreporkUI.DrawerState.NotAvailable
+
+    enum DrawerState {
+        NotAvailable,
+        Closed,
+        Open
+    }
+
     function setDrawerState(state) {
-        topBar.imageDrawerArrow.visible = state
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
-            // Patch to disable swiping of the drawer, which appears
-            // to eliminate glitchy back button issues that present
-            // themselves on some units.
-            // activeDrawer.interactive = state
             if(state) {
+                drawerState = MoreporkUI.DrawerState.Closed
                 topBar.drawerDownClicked.connect(activeDrawer.open)
             }
             else {
+                drawerState = MoreporkUI.DrawerState.NotAvailable
                 activeDrawer.close()
                 topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
@@ -296,7 +301,7 @@ ApplicationWindow {
     }
 
     function disableDrawer() {
-        topBar.imageDrawerArrow.visible = false
+        drawerState = MoreporkUI.DrawerState.NotAvailable
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
@@ -484,7 +489,6 @@ ApplicationWindow {
             id: topBar
             z: 1
             backButton.visible: false
-            imageDrawerArrow.visible: false
             visible: mainSwipeView.visible
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
@@ -551,8 +555,11 @@ ApplicationWindow {
                     property var backSwiper: mainSwipeView
                     property int backSwipeIndex: MoreporkUI.BasePage
                     property bool hasAltBack: true
-                    property string topBarTitle: qsTr("Select Source")
+                    property string topBarTitle: bot.process.type == ProcessType.Print ?
+                                                     qsTr("PRINT") :
+                                                     qsTr("Select Source")
                     property bool backIsCancel: isInManualCalibration
+
                     smooth: false
                     visible: false
 
@@ -1890,7 +1897,7 @@ ApplicationWindow {
                 resetSettingsSwipeViewPages()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
             }
 
             ColumnLayout {
@@ -2212,6 +2219,7 @@ ApplicationWindow {
                 printPage.startPrintUnknownSliceGenuineMaterial = false
                 printPage.startPrintGenuineSliceUnknownMaterial = false
                 printPage.startPrintMaterialMismatch = false
+                printPage.startPrintWithLabsExtruder = false
             }
 
             showOneButton: (printPage.startPrintBuildDoorOpen ||
@@ -2223,27 +2231,26 @@ ApplicationWindow {
             full_button.onClicked: {
                 startPrintErrorsPopup.close()
             }
+
             left_button_text: {
-                if(printPage.startPrintNoFilament) {
-                    qsTr("CANCEL")
-                }
-                else if(printPage.startPrintMaterialMismatch ||
-                        printPage.startPrintGenuineSliceUnknownMaterial) {
+                if(printPage.startPrintNoFilament ||
+                   printPage.startPrintMaterialMismatch ||
+                   printPage.startPrintGenuineSliceUnknownMaterial ||
+                   printPage.startPrintWithLabsExtruder) {
                     qsTr("BACK")
-                }
-                else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                } else if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     qsTr("START ANYWAY")
                 } else {
                     emptyString
                 }
             }
+
             left_button.onClicked: {
                 startPrintErrorsPopup.close()
                 if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     if(printPage.startPrintDoorLidCheck()) {
                         printPage.confirm_build_plate_popup.open()
-                    }
-                    else {
+                    } else {
                         startPrintErrorsPopup.open()
                     }
                 }
@@ -2254,22 +2261,39 @@ ApplicationWindow {
                 printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }
+
             right_button_text: {
                 if(printPage.startPrintNoFilament) {
                     qsTr("LOAD MATERIAL")
-                }
-                else if(printPage.startPrintMaterialMismatch ||
+                } else if(printPage.startPrintMaterialMismatch ||
                         printPage.startPrintGenuineSliceUnknownMaterial ||
                         printPage.startPrintUnknownSliceGenuineMaterial) {
                     qsTr("CHANGE MATERIAL")
-                }
-                else {
+                } else if(printPage.startPrintWithLabsExtruder) {
+                    qsTr("CONTINUE")
+                } else {
                     emptyString
                 }
             }
+
             right_button.onClicked: {
                 startPrintErrorsPopup.close()
-                resetDetailsAndGoToMaterialsPage()
+                if(printPage.startPrintNoFilament ||
+                   printPage.startPrintMaterialMismatch ||
+                   printPage.startPrintGenuineSliceUnknownMaterial ||
+                   printPage.startPrintUnknownSliceGenuineMaterial) {
+                    resetDetailsAndGoToMaterialsPage()
+                    if(isInManualCalibration) {
+                        // Reset Manual Z Cal
+                        settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(true)
+                    }
+                } else if(printPage.startPrintWithLabsExtruder) {
+                    if(printPage.startPrintDoorLidCheck()) {
+                        printPage.confirm_build_plate_popup.open()
+                    } else {
+                        startPrintErrorsPopup.open()
+                    }
+                }
             }
 
             ColumnLayout {
@@ -2320,6 +2344,7 @@ ApplicationWindow {
                             target: main_text_start_print_errors_popup
                             text: qsTr("CLOSE THE TOP LID")
                         }
+
                         PropertyChanges {
                             target: sub_text_start_print_errors_popup
                             text: qsTr("Put the top lid back on the printer to start the print.")
@@ -2362,7 +2387,6 @@ ApplicationWindow {
                         PropertyChanges {
                             target: sub_text_start_print_errors_popup
                             text: {
-
                                 if (printPage.model_extruder_used && printPage.support_extruder_used) {
                                     qsTr("There is no material detected in at least one of the extruders." +
                                          " Please load material to start a print.")
@@ -2390,15 +2414,19 @@ ApplicationWindow {
                         PropertyChanges {
                             target: sub_text_start_print_errors_popup
                             text: {
-                                (materialPage.bay1.usingExperimentalExtruder ?
-                                        qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_support_material_name) :
-                                  (printPage.support_extruder_used?
-                                        qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                                    printPage.print_model_material_name).arg(printPage.print_support_material_name) :
-                                        qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
-                                                    printPage.print_model_material_name))) + "\n"
-                                qsTr("Load the correct materials to start the print or export the file again with these material settings.")
+                                if(isInManualCalibration) {
+                                    qsTr("Manual Z-Calibration print is only supported for ABS-R, ABS-CF, and RapidRinse.")
+                                } else {
+                                    (materialPage.bay1.usingExperimentalExtruder ?
+                                            qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
+                                                        printPage.print_support_material_name) :
+                                      (printPage.support_extruder_used?
+                                            qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
+                                                        printPage.print_model_material_name).arg(printPage.print_support_material_name) :
+                                            qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
+                                                        printPage.print_model_material_name))) + "\n"
+                                    qsTr("Load the correct materials to start the print or export the file again with these material settings.")
+                                }
                             }
                         }
 
@@ -2443,6 +2471,29 @@ ApplicationWindow {
                             target: sub_text_start_print_errors_popup
                             text: qsTr("This .MakerBot is exported for unknown materials. It is recommended" +
                              " to re-export this file for the correct materials for best results.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "start_print_with_labs_extruder"
+                        when: printPage.startPrintWithLabsExtruder
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("LABS EXTRUDER ALERT")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: qsTr("This Manual Z Calibration print is designed for optimizing calibration for " +
+                                       "printing with <b>ABS-R/ABS-CF</b> as the model material and <b>RapidRinse</b> as the support " +
+                                       "material. Printing with other materials is not recommended and could negatively " +
+                                       "impact print quality. If you experience worse results with other materials " +
+                                       "running automatic calibration might help.")
                         }
 
                         PropertyChanges {

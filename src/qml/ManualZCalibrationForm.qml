@@ -16,6 +16,7 @@ LoggingItem {
     property alias calValueItem2: calValueItem2
     property alias calValueItem3: calValueItem3
     property alias calValueItem4: calValueItem4
+    property bool printSuccess: false
 
     ContentLeftSide {
         id: contentLeftSide
@@ -461,13 +462,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.image
-                source: ("qrc:/img/manual_z_cal_start.png")
+                source: ("qrc:/img/coarse_adj_step.png")
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: qsTr("COARSE ADJUSTMENTS COMPLETE")
+                text: qsTr("STEP 1 COMPLETE")
                 visible: true
             }
 
@@ -475,6 +476,59 @@ LoggingItem {
                 target: contentRightSide.textBody
                 text: qsTr("The printer has made adjustments based on your inputs. The printer will re-run this procedure to " +
                            "make additional improvements and do a final check.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+                visible: true
+                style: ButtonRectangleBaseForm.ButtonWithHelp
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+        },
+        State {
+            name: "insert_build_plate"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: ("qrc:/img/%1.gif").arg(getImageForPrinter("insert_build_plate"))
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("REMOVE PRINT + INSERT BUILD PLATE")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Insert the build plate by first placing the rear edge down and sliding it back until it fits snug and looks aligned.")
                 visible: true
             }
 
@@ -614,6 +668,67 @@ LoggingItem {
                 text: qsTr("RETRY")
                 visible: true
             }
+        },
+        State {
+            name: "return_print_page"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: numberValueCollectorItem
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                icon_image: printSuccess ? LoadingIcon.Success : LoadingIcon.Failure
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: printSuccess ? qsTr("PRINT COMPLETE") : qsTr("PRINT FAILED")
+                style: TextHeadline.Base
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Z-CALIBRATION PRINT")
+                opacity: 0.5
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: printSuccess ? qsTr("NEXT") : qsTr("RETRY")
+                visible: true
+                style: ButtonRectangleBaseForm.Button
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                text: qsTr("PRINT FAILED")
+                visible: true
+            }
         }
 
     ]
@@ -632,13 +747,12 @@ LoggingItem {
         right_button.onClicked: {
             // Start Auto Cal/Clean extruders
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrateExtrudersPage)
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
             returnToManualCal = true
-            state = "z_cal_start"
-            resetManualCalValues()
 
             // Button action in 'base state'
             bot.calibrateToolheads(["x","y"])
+            resetProcess(false)
             manual_calibration_issue_popup.close()
         }
 
@@ -683,24 +797,15 @@ LoggingItem {
         left_button_text: qsTr("STOP PROCESS")
         left_button.onClicked: {
             // Return to Start Page
-            state = "z_cal_start"
-            resetManualCalValues()
-            secondPass = false
+            resetProcess(false)
 
-            // If the print process has ended
-            // you may be on the print page but
-            // not printing anything
-            if(onPrintPage) {
-                if(bot.process.type == ProcessType.Print) {
-                    // Cancel Print
-                    bot.cancel()
-                }
-                onPrintPage = false
-                printPage.acknowledgePrint()
-                printPage.clearErrors()
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+            // If we are cancelling calibration in the middle of a print, we need
+            // to make sure we exit out of the print process, which means waiting
+            // for the print to reach a terminal state, then acknowleging that state
+            if (bot.process.type == ProcessType.Print) {
+                bot.cancel();
+                waitingForCancel = true;
+                if (cancelWaitDone) completeCancelWait();
             }
 
             cancelManualZCalPopup.close()
