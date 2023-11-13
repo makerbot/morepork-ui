@@ -5,11 +5,9 @@ import ProcessTypeEnum 1.0
 import ProcessStateTypeEnum 1.0
 import MachineTypeEnum 1.0
 
-Item {
+LoggingItem {
     id: element
     smooth: false
-    width: 800
-    height: 440
     property string fileName: "unknown.zip"
     property string fileBaseName
 
@@ -51,25 +49,42 @@ Item {
         }
     }
 
-    TextSubheader {
-        id: itemUsbCurrentFwText
-        text: qsTr("CURRENT FIRMWARE: %1").arg(bot.version)
-        horizontalAlignment: Text.AlignHCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-        visible: !storage.storageIsEmpty && !storage.fileIsCopying
+    Component {
+         id: currentFirmwareHeader
+         Item {
+            width: parent.width
+            height: 40
+            anchors.horizontalCenter: parent.horizontalCenter
+            z: 2
+
+            Rectangle {
+                anchors.fill: parent
+                color: "#000000"
+            }
+
+            TextSubheader {
+                 text: qsTr("CURRENT FIRMWARE: %1").arg(bot.version)
+                 horizontalAlignment: Text.AlignHCenter
+                 anchors.horizontalCenter: parent.horizontalCenter
+                 anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Rectangle {
+                anchors.bottom: parent.bottom
+                color: "#4d4d4d"
+                width: parent.width
+                height: 1
+            }
+        }
     }
 
     Item {
         id: itemUsbFwUpdateStorage
+        anchors.fill: parent
+        anchors.topMargin: 8
+        opacity: storage.fileIsCopying ? 0.1 : 1.0
         smooth: false
         visible: true
-        anchors.top: itemUsbCurrentFwText.bottom
-        anchors.topMargin: 10
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        opacity: storage.fileIsCopying ? 0.1 : 1.0
-
 
         ListView {
             smooth: false
@@ -78,9 +93,11 @@ Item {
             spacing: 1
             orientation: ListView.Vertical
             flickableDirection: Flickable.VerticalFlick
-            visible: !storage.storageIsEmpty && !storage.fileIsCopying
+            visible:!storage.storageIsEmpty && !storage.fileIsCopying
             model: storage.printFileList
             clip: true
+            headerPositioning: ListView.OverlayHeader
+            header: currentFirmwareHeader
             delegate:
                 FileButton {
                 smooth: false
