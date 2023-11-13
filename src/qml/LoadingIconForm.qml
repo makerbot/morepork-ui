@@ -39,7 +39,7 @@ Rectangle {
             to: 0
             duration: 10000
             loops: Animation.Infinite
-            running: icon_image === LoadingIcon.Loading
+            running: icon_image == LoadingIcon.Loading
         }
     }
 
@@ -51,7 +51,6 @@ Rectangle {
         source: "qrc:/img/loading_rings.png"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: icon_image === LoadingIcon.Loading
 
         RotationAnimator {
             target: outer_image
@@ -59,7 +58,7 @@ Rectangle {
             to: 360
             duration: 10000
             loops: Animation.Infinite
-            running: icon_image === LoadingIcon.Loading
+            running: true
         }
     }
 
@@ -75,7 +74,6 @@ Rectangle {
         border.color: "#FFFFFF"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        visible: parent.visible
     }
 
     Text {
@@ -89,7 +87,6 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        visible: icon_image === LoadingIcon.Progress
         font.family: defaultFont.name
         font.weight: Font.Light
         font.pixelSize: 75
@@ -115,7 +112,6 @@ Rectangle {
     onLoadingProgressChanged: canvas.requestPaint()
     Canvas {
         id: canvas
-        visible: icon_image === LoadingIcon.Progress
         antialiasing: false
         smooth: false
         rotation : -90
@@ -143,7 +139,6 @@ Rectangle {
             name: "loading"
             when: icon_image === LoadingIcon.Loading
 
-
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/loading_gears.png"
@@ -162,11 +157,20 @@ Rectangle {
                 visible: false
             }
 
+            PropertyChanges {
+                target: progress_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: false
+            }
+
         },
         State {
             name: "progress"
             when: icon_image === LoadingIcon.Progress
-
 
             PropertyChanges {
                 target: inner_image
@@ -183,11 +187,20 @@ Rectangle {
                 visible: false
             }
 
+            PropertyChanges {
+                target: progress_text
+                visible: true
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: true
+            }
+
         },
         State {
             name: "success"
             when: icon_image === LoadingIcon.Success
-
 
             PropertyChanges {
                 target: inner_image
@@ -209,11 +222,20 @@ Rectangle {
                 visible: parent.visible
             }
 
+            PropertyChanges {
+                target: progress_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: false
+            }
+
         },
         State {
             name: "failure"
             when: icon_image === LoadingIcon.Failure
-
 
             PropertyChanges {
                 target: inner_image
@@ -233,6 +255,16 @@ Rectangle {
                 target: progress_circle
                 border.color: "#F79125"
                 visible: parent.visible
+            }
+
+            PropertyChanges {
+                target: progress_text
+                visible: false
+            }
+
+            PropertyChanges {
+                target: canvas
+                visible: false
             }
         }
     ]

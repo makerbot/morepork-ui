@@ -65,7 +65,6 @@
         <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
         <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
-        <file alias="method_leveler_scale.png">images/assisted_level/method/leveler_scale.png</file>
         <file alias="method_adjust_left_to_move_up_plate.png">images/assisted_level/method/adjust_left_to_move_up_plate.png</file>
         <file alias="method_adjust_left_to_move_down_plate.png">images/assisted_level/method/adjust_left_to_move_down_plate.png</file>
         <file alias="method_adjust_right_to_move_up_plate.png">images/assisted_level/method/adjust_right_to_move_up_plate.png</file>
@@ -73,14 +72,16 @@
         <file alias="method_adjust_done.png">images/assisted_level/method/adjust_done.png</file>
         <file alias="methodxl_assisted_level.png">images/assisted_level/methodxl/assisted_level.png</file>
         <file alias="methodxl_locate_screws.png">images/assisted_level/methodxl/locate_screws.png</file>
-        <file alias="methodxl_leveler_scale.png">images/assisted_level/methodxl/leveler_scale.png</file>
         <file alias="methodxl_adjust_left_to_move_up_plate.png">images/assisted_level/methodxl/adjust_left_to_move_up_plate.png</file>
         <file alias="methodxl_adjust_left_to_move_down_plate.png">images/assisted_level/methodxl/adjust_left_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_right_to_move_up_plate.png">images/assisted_level/methodxl/adjust_right_to_move_up_plate.png</file>
         <file alias="methodxl_adjust_right_to_move_down_plate.png">images/assisted_level/methodxl/adjust_right_to_move_down_plate.png</file>
         <file alias="methodxl_adjust_done.png">images/assisted_level/methodxl/adjust_done.png</file>
+        <file alias="leveler_scale.png">images/assisted_level/leveler_scale.png</file>
         <file alias="leveler_indicator_blue.png">images/assisted_level/leveler_indicator_blue.png</file>
         <file alias="leveler_indicator_orange.png">images/assisted_level/leveler_indicator_orange.png</file>
+        <file alias="leveler_indicator_white.png">images/assisted_level/leveler_indicator_white.png</file>
+        <file alias="leveler_indicator_out_of_screen.png">images/assisted_level/leveler_indicator_out_of_screen.png</file>
         <file alias="leveling_good.png">images/assisted_level/leveling_good.png</file>
         <file alias="hex_key_guide.png">images/assisted_level/hex_key_guide.png</file>
         <file alias="calibrate_extruders.png">images/calibration/calibrate_extruders.png</file>
@@ -134,8 +135,6 @@
         <file alias="error_filament_jam_1.png">images/errors/filament_jam_1.png</file>
         <file alias="error_filament_jam_2.png">images/errors/filament_jam_2.png</file>
         <file alias="calib_verification.png">images/calib_verification.png</file>
-        <file alias="dry_material.png">images/dry_material.png</file>
-        <file alias="dry_material_spool.png">images/dry_material_spool.png</file>
         <file alias="anneal_print.png">images/anneal_print.png</file>
         <file alias="apply_glue_build_plate.png">images/apply_glue_build_plate.png</file>
         <file alias="install_heat_shield.gif">images/install_heat_shield.gif</file>
@@ -149,8 +148,6 @@
         <file alias="yellow_hepa_blink.gif">images/top_bar/yellow_hepa_blink.gif</file>
         <file alias="white_hepa_no_blink.gif">images/top_bar/white_hepa_no_blink.gif</file>
         <file alias="refresh_otp.png">images/refresh_otp.png</file>
-        <file alias="replace_desiccant.png">images/replace_desiccant.png</file>
-        <file alias="spool_bag.png">images/spool_bag.png</file>
         <file alias="material_outline.png">images/material_outline.png</file>
         <file alias="extruder_1a.png">images/extruder_id/extruder_1A.png</file>
         <file alias="extruder_2a.png">images/extruder_id/extruder_2A.png</file>
@@ -233,6 +230,10 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="method_dry_material.png">images/dry_material/method/dry_material.png</file>
+        <file alias="methodxl_dry_material.png">images/dry_material/methodxl/dry_material.png</file>
+        <file alias="spool_bag.png">images/dry_material/spool_bag.png</file>
+        <file alias="replace_desiccant.png">images/dry_material/replace_desiccant.png</file>
         <file alias="drawer_down.png">images/top_bar/drawer_down.png</file>
         <file alias="drawer_up.png">images/top_bar/drawer_up.png</file>
         <file alias="drawer_cancel.png">images/drawer/cancel.png</file>
@@ -243,5 +244,6 @@
         <file alias="icon_z_offset.png">images/icon_z_offset.png</file>
         <file alias="z_offset_build_plate.png">images/manual_z_offset/build_plate.png</file>
         <file alias="z_offset_nozzle.png">images/manual_z_offset/nozzle.png</file>
+        <file alias="start_circle.png">images/dry_material/start_circle.png</file>
     </qresource>
 </RCC>
