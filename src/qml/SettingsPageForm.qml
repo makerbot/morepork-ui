@@ -46,10 +46,10 @@ Item {
         BuildPlateSettingsPage, // 3
         CleanAirSettingsPage,   // 4
         ReplaceFilterPage,      // 5
-        ReplaceFilterXLPage,
-        PreheatPage,            // 6
-        DryMaterialPage,        // 7
-        AnnealPrintPage         // 8
+        ReplaceFilterXLPage,    // 6
+        PreheatPage,            // 7
+        DryMaterialPage,        // 8
+        AnnealPrintPage         // 9
     }
 
     LoggingSwipeView {
