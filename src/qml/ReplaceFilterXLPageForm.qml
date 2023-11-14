@@ -19,7 +19,6 @@ Item {
     property alias replace_filter_next_button: contentRightSide.buttonPrimary
     property bool isBuildPlateRaised: false
     property bool replaceFilterProcess: false
-    property bool flagCancel: false
 
     LoggingItem {
         itemName: "ReplaceFilterXL"
@@ -50,8 +49,12 @@ Item {
                     bot.process.type == ProcessType.MoveBuildPlateProcess) {
                 switch(currentState) {
                 case ProcessStateType.Cancelling:
-                    replaceFilterPopup.popupState = "end_process"
-                    replaceFilterPopup.open()
+                    if(bot.chamberErrorCode == 48 && !bot.doorErrorDisabled) {
+                        replaceFilterPopup.popupState = "close_door"
+                        replaceFilterPopup.open()
+                    } else {
+                        doMove()
+                    }
                     break;
                 case ProcessStateType.CleaningUp:
                    if (!bot.process.cancelled) {
@@ -101,9 +104,9 @@ Item {
                         itemReplaceFilter.state = "step_4"
                     }
                     else if (itemReplaceFilter.state == "step_4") {
-                        /*bot.resetFilterHours()
+                        bot.resetFilterHours()
                         bot.hepaFilterPrintHours = 0
-                        bot.hepaFilterChangeRequired = false*/
+                        bot.hepaFilterChangeRequired = false
                         replaceFilterPopup.popupState = "end_process"
                         replaceFilterPopup.open()
                     }
@@ -271,20 +274,23 @@ Item {
         popupHeight: replaceFilterPopupColumnLayout.height + 145
         showOneButton: popupState == "close_door"
         showTwoButtons: popupState == "start" ||
+                        popupState == "cancel" ||
                         popupState == "end_process"
         full_button_text: qsTr("CONFIRM")
         left_button_text: qsTr("BACK")
-        right_button_text: qsTr("CONFIRM")
+        right_button_text: popupState == "cancel" ?
+                               qsTr("STOP PROCESS") :
+                               qsTr("CONFIRM")
 
         property string popupState: "start"
 
         right_button.enabled: bot.chamberErrorCode != 48
         full_button.enabled: bot.chamberErrorCode != 48
         right_button.onClicked: {
-            if(flagCancel) {
+            if(popupState == "cancel" &&
+                    bot.process.type == ProcessType.MoveBuildPlateProcess) {
                 // Cancel
                 bot.cancel()
-                flagCancel = false
             }
 
             if (bot.chamberErrorCode != 48 || bot.doorErrorDisabled) {
@@ -303,8 +309,6 @@ Item {
                 itemReplaceFilter.state = "moving_build_plate"
                 doMove()
                 close()
-            } else {
-                popupState = "close_door"
             }
         }
 
@@ -341,6 +345,11 @@ Item {
                     when: replaceFilterPopup.popupState == "start"
 
                     PropertyChanges {
+                        target: replaceFilterPopupImage
+                        visible: true
+                    }
+
+                    PropertyChanges {
                         target: replaceFilterPopupHeader
                         text: qsTr("Clear Build Plate + Close Door")
                     }
@@ -352,6 +361,11 @@ Item {
                 },
                 State {
                     when: replaceFilterPopup.popupState == "close_door"
+
+                    PropertyChanges {
+                        target: replaceFilterPopupImage
+                        visible: true
+                    }
 
                     PropertyChanges {
                         target: replaceFilterPopupHeader
@@ -367,6 +381,11 @@ Item {
                     when: replaceFilterPopup.popupState == "end_process"
 
                     PropertyChanges {
+                        target: replaceFilterPopupImage
+                        visible: true
+                    }
+
+                    PropertyChanges {
                         target: replaceFilterPopupHeader
                         text: qsTr("End Process + Close Door")
                     }
@@ -375,6 +394,25 @@ Item {
                         target: replaceFilterPopupBody
                         text: qsTr("Confirm you are done with the process and the door is closed to proceed.")
                     }
+                },
+                State {
+                    when: replaceFilterPopup.popupState == "cancel"
+
+                    PropertyChanges {
+                        target: replaceFilterPopupImage
+                        visible: false
+                    }
+
+                    PropertyChanges {
+                        target: replaceFilterPopupHeader
+                        text: qsTr("Exit Procedure")
+                    }
+
+                    PropertyChanges {
+                        target: replaceFilterPopupBody
+                        text: qsTr("Are you sure you want to cancel and exit the procedure?")
+                    }
+
                 }
 
             ]

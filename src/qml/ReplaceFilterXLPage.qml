@@ -14,7 +14,7 @@ ReplaceFilterXLPageForm {
     function goBack() {
         if (itemReplaceFilterXL.state == "done") {
             if(isBuildPlateRaised) {
-                replaceFilterXLPopup.popupState = "end_process"
+                replaceFilterXLPopup.popupState = "cancel"
                 replaceFilterXLPopup.open()
             } else {
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
@@ -22,11 +22,9 @@ ReplaceFilterXLPageForm {
             }
         }
         else if (itemReplaceFilterXL.state == "moving_build_plate") {
-            flagCancel = true
             if(!isBuildPlateRaised) isBuildPlateRaised = true
-            replaceFilterXLPopup.popupState = "end_process"
+            replaceFilterXLPopup.popupState = "cancel"
             replaceFilterXLPopup.open()
-            //if(flagCancel) {
         }
         else if (itemReplaceFilterXL.state == "step_2") {
             itemReplaceFilterXL.state = "done"
@@ -39,7 +37,7 @@ ReplaceFilterXLPageForm {
         }
         else {
             if(isBuildPlateRaised) {
-                replaceFilterXLPopup.popupState = "end_process"
+                replaceFilterXLPopup.popupState = "cancel"
                 replaceFilterXLPopup.open()
             } else {
                 replaceFilterProcess = false
