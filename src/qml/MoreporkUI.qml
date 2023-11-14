@@ -245,11 +245,6 @@ ApplicationWindow {
     property bool skipFirmwareUpdate: false
     property bool viewReleaseNotes: false
 
-    onSkipFirmwareUpdateChanged: {
-        update_rectangle.color = "#ffffff"
-        update_text.color = "#000000"
-    }
-
     onIsBuildPlateClearChanged: {
         if(isBuildPlateClear) {
             buildPlateClearPopup.open()
@@ -1014,477 +1009,146 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "InstallUnsignedFirmware"
             id: installUnsignedFwPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
             closePolicy: Popup.CloseOnPressOutside
-            parent: overlay
-            background: Rectangle {
-                id: installUnsignedFwPopupBackgroundDim
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            popupHeight: installUnsignedFwBasePopupLayout.height + 140
+
+            showTwoButtons: true
+            right_button_text: qsTr("INSTALL")
+            right_button.onClicked: {
+                bot.respondInstallUnsignedFwRequest("allow")
+                installUnsignedFwPopup.close()
             }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                cancel_rectangle.color = "#ffffff"
-                cancel_text.color = "#000000"
-            }
-            onClosed: {
+            left_button_text: qsTr("CANCEL")
+            left_button.onClicked: {
+                bot.respondInstallUnsignedFwRequest("rejected")
+                installUnsignedFwPopup.close()
             }
 
-            Rectangle {
-                id: installUnsignedFwBasePopupItem
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 740
-                height: 250
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: installUnsignedFwBasePopupLayout
+                height: children.height
+                anchors.top: installUnsignedFwPopup.popupContainer.top
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-                Item {
-                    id: installUnsignedFwColumnLayout
+                TextHeadline {
+                    id: install_unsigned_fw_header
+                    text: qsTr("UNKNOWN FIRMWARE")
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                TextBody {
+                    id: install_unsigned_fw_description
                     width: 600
-                    height: 300
-                    anchors.top: parent.top
-                    anchors.topMargin: 35
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    // Title of Popup
-                    Text {
-                        id: install_unsigned_fw_header_text
-                        color: "#cbcbcb"
-                        text: qsTr("UNKNOWN FIRMWARE")
-                        anchors.top: parent.top
-                        anchors.topMargin: 0
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.letterSpacing: 5
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 22
-                    }
-                    // Main question that appears in the popup
-                    Text {
-                        id: install_unsigned_fw_description_text1
-                        color: "#cbcbcb"
-                        text: qsTr("You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?")
-                        // To specify a WordWrap property, the width must be defined
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.topMargin: 17
-                        anchors.top: install_unsigned_fw_header_text.bottom
-                        horizontalAlignment: Text.AlignHCenter
-                        font.weight: Font.Light
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        font.letterSpacing: 3
-                        font.capitalization: Font.MixedCase
-                    }
-                }
-
-                Rectangle {
-                    id: install_unsigned_fw_horizontal_divider
-                    width: parent.width
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                    visible: true
-                }
-
-                Rectangle {
-                    id: install_unsigned_fw_vertical_divider
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: true
-                }
-
-                Item {
-                    id: install_unsigned_fw_item1
-                    width: parent.width
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    visible: true
-
-                    Rectangle {
-                        id: install_rectangle
-                        x: 0
-                        y: 0
-                        width: parent.width * 0.5
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: install_text
-                            color: "#ffffff"
-                            text: qsTr("INSTALL")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "installUnsignedFwBasePopupItem: [_" + install_text.text + "|]"
-                            id: install_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                install_text.color = "#000000"
-                                install_rectangle.color = "#ffffff"
-                                cancel_text.color = "#ffffff"
-                                cancel_rectangle.color = "#00000000"
-                            }
-                            onReleased: {
-                                install_text.color = "#ffffff"
-                                install_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.respondInstallUnsignedFwRequest("allow")
-                                installUnsignedFwPopup.close()
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: cancel_rectangle
-                        x: parent.width * 0.5
-                        y: 0
-                        width: parent.width * 0.5
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_text
-                            color: "#ffffff"
-                            text: qsTr("CANCEL")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "installUnsignedFwBasePopupItem: [|" + cancel_text.text + "_]"
-                            id: cancel_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                cancel_text.color = "#000000"
-                                cancel_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_text.color = "#ffffff"
-                                cancel_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.respondInstallUnsignedFwRequest("rejected")
-                                installUnsignedFwPopup.close()
-                            }
-                        }
-                    }
+                    Layout.preferredWidth: width
+                    text: qsTr("You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?")
+                    Layout.alignment: Qt.AlignHCenter
                 }
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "FirmwareUpdateNotification"
             id: firmwareUpdatePopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
+            popupHeight: firmwareUpdatePopupColumnLayout.height +140
             closePolicy: Popup.CloseOnPressOutside
-            parent: overlay
-            background: Rectangle {
-                id: popupBackgroundDim1
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+
+            showTwoButtons: true
+            right_button_text: qsTr("UPDATE")
+            right_button.onClicked: {
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
+                firmwareUpdatePopup.close()
             }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                update_rectangle.color = "#ffffff"
-                update_text.color = "#000000"
+            left_button_text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
+            left_button.onClicked: {
+                if(skipFirmwareUpdate) {
+                    firmwareUpdatePopup.close()
+                }
+                else {
+                    skipFirmwareUpdate = true
+                    viewReleaseNotes = false
+                }
             }
             onClosed: {
                 viewReleaseNotes = false
                 skipFirmwareUpdate = false
             }
 
-            Rectangle {
-                id: basePopupItem1
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: skipFirmwareUpdate ? 220 : 275
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: firmwareUpdatePopupColumnLayout
+                height: children.height
+                anchors.top: firmwareUpdatePopup.popupContainer.top
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-                Rectangle {
-                    id: horizontal_divider1
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
+                TextHeadline {
+                    id: firmware_header_text
+                    text: viewReleaseNotes ? qsTr("FIRMWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP FIRMWARE UPDATE?") : qsTr("FIRMWARE UPDATE AVAILABLE")
+                    Layout.alignment: Qt.AlignHCenter
                 }
 
-                Rectangle {
-                    id: vertical_divider1
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
+                TextBody {
+                    id: firmware_description_text
+                    width: 500
+                    text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date firmware for your printer.") : qsTr("A new version of firmware is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: width
+                    visible: !viewReleaseNotes
+                }
+
+                ListView {
+                    width: 600
+                    height: 120
+                    clip: true
+                    spacing: 1
+                    orientation: ListView.Vertical
+                    boundsBehavior: Flickable.DragOverBounds
+                    flickableDirection: Flickable.VerticalFlick
+                    model: bot.firmwareReleaseNotesList
+                    visible: viewReleaseNotes
+                    smooth: false
+                    delegate:
+                        TextBody {
+                            id: firmware_release_notes_text
+                            width: 600
+                            text: model.modelData
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            Layout.preferredWidth: width
+                        }
+                    ScrollBar.vertical: ScrollBar {
+                        orientation: Qt.Vertical
+                        policy: ScrollBar.AsNeeded
+                    }
+                }
+
+                TextBody {
+                    id: firmware_show_release_notes_text
+                    text: qsTr("Tap to see Release Notes")
+                    font.underline: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+                    horizontalAlignment: Text.AlignHCenter
+                    visible: !skipFirmwareUpdate &&
+                             !viewReleaseNotes
 
-                Item {
-                    id: buttonBar
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: dismiss_rectangle1
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: dismiss_text1
-                            color: "#ffffff"
-                            text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "firmwareUpdatePopup [_" + dismiss_text1.text + "|]"
-                            id: notnow_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                dismiss_text1.color = "#000000"
-                                dismiss_rectangle1.color = "#ffffff"
-                                update_text.color = "#ffffff"
-                                update_rectangle.color = "#00000000"
-                            }
-                            onReleased: {
-                                dismiss_text1.color = "#ffffff"
-                                dismiss_rectangle1.color = "#00000000"
-                            }
-                            onClicked: {
-                                if(skipFirmwareUpdate) {
-                                    firmwareUpdatePopup.close()
-                                }
-                                else {
-                                    skipFirmwareUpdate = true
-                                    viewReleaseNotes = false
-                                }
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: update_rectangle
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: update_text
-                            color: "#ffffff"
-                            text: qsTr("UPDATE")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "firmwareUpdatePopup [|" + update_text.text + "_]"
-                            id: update_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                update_text.color = "#000000"
-                                update_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                update_text.color = "#ffffff"
-                                update_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
-                                firmwareUpdatePopup.close()
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout1
-                    x: 130
-                    width: 550
-                    height: 150
-                    anchors.top: parent.top
-                    anchors.topMargin: 26
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: firmware_header_text
-                        color: "#cbcbcb"
-                        text: viewReleaseNotes ? qsTr("FIRMWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP FIRMWARE UPDATE?") : qsTr("FIRMWARE UPDATE AVAILABLE")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 5
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 18
-                    }
-
-                    Item {
-                        id: emptyItem
-                        width: 200
-                        height: 10
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        visible: skipFirmwareUpdate ? false : true
-                    }
-
-                    Text {
-                        id: firmware_description_text1
-                        width: 500
-                        color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date firmware for your printer.") : qsTr("A new version of firmware is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.35
-                        visible: !viewReleaseNotes
-                    }
-
-                    ListView {
-                        width: 600
-                        height: 120
-                        clip: true
-                        spacing: 1
-                        orientation: ListView.Vertical
-                        boundsBehavior: Flickable.DragOverBounds
-                        flickableDirection: Flickable.VerticalFlick
-                        model: bot.firmwareReleaseNotesList
-                        visible: viewReleaseNotes
-                        smooth: false
-                        delegate:
-                            Text {
-                                id: firmware_release_notes_text
-                                width: 600
-                                color: "#ffffff"
-                                text: model.modelData
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                Layout.fillWidth: true
-                                font.weight: Font.Light
-                                wrapMode: Text.WordWrap
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                lineHeight: 1.35
-                            }
-                        ScrollBar.vertical: ScrollBar {
-                            orientation: Qt.Vertical
-                            policy: ScrollBar.AsNeeded
-                        }
-                    }
-
-                    Text {
-                        id: firmware_description_text2
-                        color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? "" : qsTr("Tap to see Release Notes")
-                        font.underline: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        visible: viewReleaseNotes ? false : true
-
-                        LoggingMouseArea {
-                            logText: "firmwareUpdatePopup [" + firmware_description_text2.text + "]"
-                            anchors.fill: parent
-                            visible: skipFirmwareUpdate ? false : true
-                            onClicked: {
-                                viewReleaseNotes = true
-                            }
+                    LoggingMouseArea {
+                        logText: "firmwareUpdatePopup [" + firmware_show_release_notes_text.text + "]"
+                        anchors.fill: parent
+                        visible: !skipFirmwareUpdate
+                        onClicked: {
+                            viewReleaseNotes = true
                         }
                     }
                 }
             }
+
         }
 
         LoggingPopup {
