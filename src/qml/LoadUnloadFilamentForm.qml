@@ -35,7 +35,8 @@ LoggingItem {
             // that is used in the loading flow so it should be called when
             // standalone loading and also when mid-print loading.
             if(bot.process.type == ProcessType.Load ||
-               bot.process.type == ProcessType.Print) {
+               (bot.process.type == ProcessType.Print &&
+                bot.process.stepStr == "preheating_loading")) {
                 if(materialValidityCheck()) {
                     if(materialWarningPopup.opened) {
                         materialWarningPopup.close()
