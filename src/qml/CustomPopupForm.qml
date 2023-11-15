@@ -129,8 +129,8 @@ LoggingPopup {
                     anchors.centerIn: parent
                     width: popupContainer.width
                     height: popupContainer.height
-                    border.width: 2
-                    border.color: "#ffffff"
+                    //border.width: 2
+                    //border.color: "#ffffff"
                     radius: 10
                 }
              }
@@ -262,10 +262,8 @@ LoggingPopup {
 
                 Rectangle {
                     id: right_rectangle
-                    property int calcWidth: parent.width/2
-                    property int calcHeight: parent.height
-                    width: calcWidth
-                    height: calcHeight
+                    width: parent.width/2
+                    height: parent.height
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     color: (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
@@ -290,16 +288,10 @@ LoggingPopup {
                         anchors.fill: parent
                         onEnabledChanged: {
                             if(enabled) {
-                                right_rectangle.width= right_rectangle.calcWidth
-                                right_rectangle.height= right_rectangle.calcHeight
                                 right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#ffffff")
                                 right_rectangle.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
                             }
                             else {
-
-                                right_rectangle.width= right_rectangle.calcWidth-4
-                                right_rectangle.height= right_rectangle.calcHeight-4
-                                right_rectangle.anchors.rightMargin = 2
                                 right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#666666")
                                 right_rectangle.color = (defaultButton === CustomPopup.Right ? "#666666" : "#00000000")
                             }
