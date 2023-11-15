@@ -448,7 +448,7 @@ void MoreporkStorage::updateUsbStorageConnected(){
       QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_1).exists() ||
       QFileInfo(USB_STORAGE_DEV_BY_PATH_WITH_ACCESSORY_PORT_2).exists();
   usbStorageConnectedSet(kUsbStorConnected);
-  if (!kUsbStorConnected) {
+  if (!kUsbStorConnected && fileIsCopying()) {
       prog_copy_->cancel(); // cancel copy if one is ongoing
       printFileListReset();
   }
