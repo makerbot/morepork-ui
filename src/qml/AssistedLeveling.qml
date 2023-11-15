@@ -17,7 +17,7 @@ AssistedLevelingForm {
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                         fre.gotoNextStep(currentFreStep)
                     }
-                    else {
+                    else if(zCalFlag){
                         settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                         settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
                         bot.calibrateToolheads(["z"])

@@ -18,7 +18,16 @@ LoggingItem {
     property int currentHES
     property int targetHESUpper
     property int targetHESLower
+    property bool needsZCal
+    property bool zCalFlag: false
     signal processDone
+
+    onNeedsZCalChanged: {
+        console.log("Z Cal: " + needsZCal )
+        if(needsZCal) {
+            zCalFlag = true
+        }
+    }
 
     property bool hasFailed: bot.process.errorCode !== 0
     property int currentState: bot.process.stateType
@@ -829,7 +838,9 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textBody
-                text: qsTr("Sensors indicate the build platform is level. The extruders will need to be re-calibrated.")
+                text: qsTr("Sensors indicate the build platform is level.") +
+                      ((!inFreStep && zCalFlag) ? qsTr(" The extruders will need to be re-calibrated.") :
+                                 emptyString)
                 visible: true
             }
 
@@ -840,7 +851,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                text: inFreStep ? qsTr("DONE") : qsTr("BEGIN Z CALIBRATION")
+                text: (inFreStep || !zCalFlag) ? qsTr("DONE") : qsTr("BEGIN Z CALIBRATION")
                 visible: true
             }
 
