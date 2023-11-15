@@ -129,8 +129,6 @@ LoggingPopup {
                     anchors.centerIn: parent
                     width: popupContainer.width
                     height: popupContainer.height
-                    //border.width: 2
-                    //border.color: "#ffffff"
                     radius: 10
                 }
              }
