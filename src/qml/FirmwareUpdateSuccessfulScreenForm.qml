@@ -17,6 +17,7 @@ Item {
     }
 
     ContentLeftSide {
+        anchors.verticalCenter: parent.verticalCenter
         visible: true
         loadingIcon {
             id: update_successful_image
@@ -26,6 +27,7 @@ Item {
     }
 
     ContentRightSide {
+        anchors.verticalCenter: parent.verticalCenter
         visible: true
         textHeader {
             text: qsTr("FIRMWARE %1 SUCCESSFULLY INSTALLED").arg(bot.version)
