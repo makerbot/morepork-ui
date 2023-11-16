@@ -313,6 +313,12 @@ ApplicationWindow {
     //         test_func)
 
     function addToNotificationsList(id, name, priority, func) {
+        // Don't add duplicate notifications.
+        if(notificationsList.find(v => v.id === id)) {
+            console.log("Attempting to post duplicate notification " + id)
+            return
+        }
+
         notificationsList.push(
             {
                 id: id,
