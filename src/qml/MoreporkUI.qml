@@ -196,6 +196,16 @@ ApplicationWindow {
         // be present for this popup to open
         if (!extrudersCalibrated && isFreComplete && extrudersPresent) {
             extNotCalibratedPopup.open()
+            addToNotificationsList("extruders_not_calibrated",
+                                   qsTr("Extruders not calibrated"),
+                                   MoreporkUI.NotificationPriority.Persistent,
+                                   () => {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+                                       extNotCalibratedPopup.open()
+                                   })
         }
     }
 
@@ -2035,16 +2045,6 @@ ApplicationWindow {
             left_button_text: qsTr("SKIP")
             left_button.onClicked: {
                 extNotCalibratedPopup.close()
-                addToNotificationsList("extruders_not_calibrated",
-                                       qsTr("Extruders not calibrated"),
-                                       MoreporkUI.NotificationPriority.Persistent,
-                                       () => {
-                                           if(isProcessRunning()) {
-                                               printerNotIdlePopup.open()
-                                               return
-                                           }
-                                           extNotCalibratedPopup.open()
-                                       })
             }
             right_button_text: qsTr("GO TO PAGE")
             right_button.onClicked: {
