@@ -11,6 +11,15 @@ LoadUnloadFilamentForm {
             } else if(state == "place_desiccant") {
                 state = "cut_filament_tip"
             } else if(state == "place_material") {
+                // For mid-print loading since kaiten starts with the preheating
+                // step this flag is used to deliberately take the user through the
+                // new spool setup (place desiccant, cut tip etc.) for XL and then
+                // get to the preheating state screen. For printers with filament bay
+                // the material setup screen (only cut filament tip) can be automatically
+                // forwarded through with the condition of being in the print process and
+                // preheating step and the presence of nfc tag to get to the
+                // 'nfc_detected_feed_filament' screen.
+                completedNewSpoolSetup = true
                 state = "no_nfc_reader_feed_filament"
             } else if(state == "no_nfc_reader_feed_filament") {
                 // Do nothing. The button is disabled with the button style
