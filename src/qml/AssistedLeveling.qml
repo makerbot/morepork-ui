@@ -22,6 +22,7 @@ AssistedLevelingForm {
                         settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
                         bot.calibrateToolheads(["z"])
                     }
+                    zCalFlag = false
                 }
                 else if(state == "leveling_failed") {
                     state = "base state"

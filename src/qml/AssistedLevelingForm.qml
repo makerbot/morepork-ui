@@ -18,13 +18,11 @@ LoggingItem {
     property int currentHES
     property int targetHESUpper
     property int targetHESLower
-    property bool needsZCal: bot.needsZCal
+    property bool needsZCal: bot.process.needsZCal
     property bool zCalFlag: false
     signal processDone
 
     onNeedsZCalChanged: {
-        console.info("Z Cal: " + needsZCal)
-        console.log("Z Cal: " + needsZCal)
         if(needsZCal) {
             zCalFlag = true
         }
@@ -64,6 +62,7 @@ LoggingItem {
         else if(bot.process.type == ProcessType.None) {
             if(state == "cancelling") {
                 processDone()
+                zCalFlag = false
             }
         }
     }

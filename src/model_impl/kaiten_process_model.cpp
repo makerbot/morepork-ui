@@ -3,7 +3,6 @@
 #include "kaiten_process_model.h"
 #include "impl_util.h"
 #include "gui_helpers.h"
-#include "logging.h"
 
 void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     if (!proc.isObject()) {
@@ -344,12 +343,7 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     activeSet(true);
 
     const Json::Value &needsZCal = proc["needs_z_cal"];
-    //LOG(info) << "Value, Input, Empty: ";
-    //LOG(info) << needsZCal;
-    //LOG(info) << proc["needs_z_cal"].asBool();
-    //LOG(info) << (needsZCal.empty());
     if(!needsZCal.empty()) {
-        LOG(info) << "Set Z Cal";
         needsZCalSet(proc["needs_z_cal"].asBool());
     }
     else {

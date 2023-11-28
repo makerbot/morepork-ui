@@ -112,11 +112,9 @@ Item {
                 currentHES: bot.process.currentHes
                 targetHESLower: bot.process.targetHesLower
                 targetHESUpper: bot.process.targetHesUpper
-                //needsZCal: bot.needsZCal
 
                 onProcessDone: {
                     state = "base state"
-                    zCalFlag = false
                     buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
                 }
             }
