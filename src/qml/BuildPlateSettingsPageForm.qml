@@ -112,7 +112,7 @@ Item {
                 currentHES: bot.process.currentHes
                 targetHESLower: bot.process.targetHesLower
                 targetHESUpper: bot.process.targetHesUpper
-                needsZCal: bot.needsZCal
+                //needsZCal: bot.needsZCal
 
                 onProcessDone: {
                     state = "base state"
