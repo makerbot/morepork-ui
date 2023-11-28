@@ -45,7 +45,6 @@ Item {
         ExtruderSettingsPage,   // 2
         BuildPlateSettingsPage, // 3
         CleanAirSettingsPage,   // 4
-        ReplaceFilterPage,      // 5
         PreheatPage,            // 6
         DryMaterialPage,        // 7
         AnnealPrintPage         // 8
@@ -205,35 +204,6 @@ Item {
 
             CleanAirSettingsPage {
                 id: cleanAirSettingsPage
-            }
-        }
-
-        // SettingsPage.ReplaceFilterPage
-        Item {
-            id: replaceFilterItem
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.CleanAirSettingsPage
-            property string topBarTitle: qsTr("Replace Filter")
-            smooth: false
-            visible: false
-
-            property bool hasAltBack: true
-
-            function altBack() {
-                if (replaceFilterPage.itemReplaceFilter.state == "done")
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
-                    replaceFilterPage.itemReplaceFilter.state = "done"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
-                    replaceFilterPage.itemReplaceFilter.state = "step_2"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
-                    replaceFilterPage.itemReplaceFilter.state = "step_3"
-                else
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-            }
-
-            ReplaceFilterPage {
-                id: replaceFilterPage
             }
         }
 
