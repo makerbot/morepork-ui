@@ -1493,7 +1493,7 @@ void KaitenBotModel::getFilterHours() {
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        conn->jsonrpc.invoke("get_oyster_print_hours", json_params, m_filterHoursCb);
+        conn->jsonrpc.invoke("get_filter_hours", json_params, m_filterHoursCb);
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -1517,7 +1517,7 @@ void KaitenBotModel::resetFilterHours() {
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["machine_func"] = Json::Value("reset_oyster_print_hours");
+        json_params["machine_func"] = Json::Value("reset_filter_hours");
         json_params["params"] = Json::Value();
         json_params["ignore_tool_errors"] = Json::Value(true);
         conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
