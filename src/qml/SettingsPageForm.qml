@@ -45,11 +45,9 @@ Item {
         ExtruderSettingsPage,   // 2
         BuildPlateSettingsPage, // 3
         CleanAirSettingsPage,   // 4
-        ReplaceFilterPage,      // 5
-        ReplaceFilterXLPage,    // 6
-        PreheatPage,            // 7
-        DryMaterialPage,        // 8
-        AnnealPrintPage         // 9
+        PreheatPage,            // 5
+        DryMaterialPage,        // 6
+        AnnealPrintPage         // 7
     }
 
     LoggingSwipeView {
@@ -205,59 +203,6 @@ Item {
 
             CleanAirSettingsPage {
                 id: cleanAirSettingsPage
-            }
-        }
-
-        // SettingsPage.ReplaceFilterPage
-        Item {
-            id: replaceFilterItem
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.CleanAirSettingsPage
-            property string topBarTitle: qsTr("Replace Filter")
-            smooth: false
-            visible: false
-
-            property bool hasAltBack: true
-
-            function altBack() {
-                if (replaceFilterPage.itemReplaceFilter.state == "done")
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
-                    replaceFilterPage.itemReplaceFilter.state = "done"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
-                    replaceFilterPage.itemReplaceFilter.state = "step_2"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
-                    replaceFilterPage.itemReplaceFilter.state = "step_3"
-                else
-                    settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
-            }
-
-            ReplaceFilterPage {
-                id: replaceFilterPage
-            }
-        }
-
-        // SettingsPage.ReplaceFilterXLPage
-        Item {
-            id: replaceFilterXLItem
-            property var backSwiper: settingsSwipeView
-            property int backSwipeIndex: SettingsPage.CleanAirSettingsPage
-            property string topBarTitle: qsTr("Replace Filter")
-            property bool backIsCancel: (replaceFilterXLPage.itemReplaceFilterXL.state == "moving_build_plate") ||
-                                        (replaceFilterXLPage.itemReplaceFilterXL.state == "done" &&
-                                         replaceFilterXLPage.isBuildPlateRaised)
-            smooth: false
-            visible: false
-
-            property bool hasAltBack: true
-
-            function altBack() {
-                replaceFilterXLPage.goBack()
-
-            }
-
-            ReplaceFilterXLPage {
-                id: replaceFilterXLPage
             }
         }
 

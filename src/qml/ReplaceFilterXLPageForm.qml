@@ -44,7 +44,6 @@ Item {
 
         property int currentState: bot.process.stateType
         onCurrentStateChanged: {
-
             if (replaceFilterProcess &&
                     bot.process.type == ProcessType.MoveBuildPlateProcess) {
                 switch(currentState) {
@@ -59,7 +58,7 @@ Item {
                 case ProcessStateType.CleaningUp:
                    if (!bot.process.cancelled) {
                         if(isBuildPlateRaised) {
-                            settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                            cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
                             replaceFilterProcess = false
                             isBuildPlateRaised = false
                             state = "done"

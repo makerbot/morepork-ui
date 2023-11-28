@@ -8,6 +8,7 @@ import MachineTypeEnum 1.0
 Item {
     id: replaceFilterPage
     smooth: false
+    anchors.fill: parent
 
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
@@ -19,9 +20,6 @@ Item {
         id: itemReplaceFilter
         smooth: false
         visible: true
-        width: 800
-        height: 408
-        anchors.fill: parent.fill
 
         ContentLeftSide {
             id: contentLeftSide
@@ -62,7 +60,7 @@ Item {
                         bot.resetFilterHours()
                         bot.hepaFilterPrintHours = 0
                         bot.hepaFilterChangeRequired = false
-                        settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                        cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
                         itemReplaceFilter.state = "done"
                     }
                     else {

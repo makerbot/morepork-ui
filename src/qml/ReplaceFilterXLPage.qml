@@ -17,7 +17,7 @@ ReplaceFilterXLPageForm {
                 replaceFilterXLPopup.popupState = "cancel"
                 replaceFilterXLPopup.open()
             } else {
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
                 replaceFilterProcess = false
             }
         }
@@ -41,7 +41,7 @@ ReplaceFilterXLPageForm {
                 replaceFilterXLPopup.open()
             } else {
                 replaceFilterProcess = false
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
+                cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
             }
         }
     }

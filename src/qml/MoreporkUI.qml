@@ -2654,6 +2654,9 @@ ApplicationWindow {
             full_button.onClicked: {
                 hepaFilterResetPopup.close()
             }
+            onClosed: {
+                state = "reset_filter"
+            }
 
             ColumnLayout {
                 id: columnLayout_hepa_reset_popup
