@@ -76,7 +76,6 @@ LoggingItem {
                     enabled: isFilterConnected()
                     visible: true
                     onClicked: {
-                        //hepaFilterResetPopup.state= "reset_filter"
                         hepaFilterResetPopup.open()
                     }
                 }

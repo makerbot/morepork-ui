@@ -45,9 +45,9 @@ Item {
         ExtruderSettingsPage,   // 2
         BuildPlateSettingsPage, // 3
         CleanAirSettingsPage,   // 4
-        PreheatPage,            // 6
-        DryMaterialPage,        // 7
-        AnnealPrintPage         // 8
+        PreheatPage,            // 5
+        DryMaterialPage,        // 6
+        AnnealPrintPage         // 7
     }
 
     LoggingSwipeView {
