@@ -1780,6 +1780,10 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             machineTypeSet(MachineType::Lava);
         } else if (kMachineTypeStr == "magma") {
             machineTypeSet(MachineType::Magma);
+            // Magma has a HEPA filter always so no need
+            // to set the connection later. This boolean
+            // used in the UI.
+            hepaFilterConnectedSet(true);
         } else {
             machineTypeReset();
         }

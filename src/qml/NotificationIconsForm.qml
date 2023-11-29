@@ -2,6 +2,7 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 import FreStepEnum 1.0
+import MachineTypeEnum 1.0
 
 Row {
     height: 72
@@ -12,7 +13,8 @@ Row {
         smooth: false
         height: sourceSize.height
         width: sourceSize.width
-        visible: bot.hepaFilterConnected
+        visible: (bot.hepaFilterConnected && !(bot.machineType != MachineType.Magma)) ||
+                  bot.hepaFilterChangeRequired
         source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/white_hepa_no_blink.gif"
         cache: false
         anchors.verticalCenter: parent.verticalCenter

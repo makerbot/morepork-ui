@@ -160,6 +160,7 @@ LoggingPopup {
                     id: full_button_rectangle
                     anchors.fill: parent
                     color: "#00000000"
+                    opacity: full_button.enabled ? 1 : 0.2
 
                     Text {
                         id: full_text
@@ -180,17 +181,6 @@ LoggingPopup {
                         logText: "CPFB [_" + full_button_text + "_]"
                         id: full_button
                         anchors.fill: parent
-                        onEnabledChanged: {
-                            if(enabled) {
-                                full_button_rectangle.color = "#00000000"
-                                full_text.color = "#ffffff"
-                            }
-                            else {
-                                full_button_rectangle.color = "#00000000"
-                                full_text.color = "#666666"
-                            }
-                        }
-
                         onPressed: {
                             full_button_rectangle.color = "#ffffff"
                             full_text.color = "#000000"
@@ -226,6 +216,7 @@ LoggingPopup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     color: (defaultButton === CustomPopup.Left ? "#ffffff" : "#00000000")
+                    opacity: left_button.enabled ? 1 : 0.2
                     visible: true
 
                     Text {
@@ -265,6 +256,7 @@ LoggingPopup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     color: (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
+                    opacity: right_button.enabled ? 1 : 0.2
                     visible: true
 
                     Text {
@@ -284,16 +276,6 @@ LoggingPopup {
                         logText:"CPRB [|" + right_button_text + "_]"
                         id: right_button
                         anchors.fill: parent
-                        onEnabledChanged: {
-                            if(enabled) {
-                                right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#ffffff")
-                                right_rectangle.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
-                            }
-                            else {
-                                right_text.color = (defaultButton === CustomPopup.Right ? "#000000" : "#666666")
-                                right_rectangle.color = (defaultButton === CustomPopup.Right ? "#666666" : "#00000000")
-                            }
-                        }
                         onPressed: {
                             right_text.color = (defaultButton === CustomPopup.Right ? "#ffffff" : "#000000")
                             right_rectangle.color = (defaultButton === CustomPopup.Right ? "#00000000" : "#ffffff")

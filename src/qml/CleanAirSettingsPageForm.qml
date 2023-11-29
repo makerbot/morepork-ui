@@ -10,8 +10,7 @@ LoggingItem {
     anchors.fill: parent
     property int hepaPrintHours: (bot.hepaFilterPrintHours).toFixed(2)
     property int hepaMaxHours: (bot.hepaFilterMaxHours).toFixed(2)
-    property bool alert: bot.hepaFilterChangeRequired ||
-                         (!isFilterConnected() && bot.machineType != MachineType.Magma)
+    property bool alert: bot.hepaFilterChangeRequired || (!isFilterConnected())
 
     property alias cleanAirSettingsSwipeView: cleanAirSettingsSwipeView
 
@@ -25,8 +24,6 @@ LoggingItem {
         id: cleanAirSettingsSwipeView
         logName: "cleanAirSettingsSwipeView"
         currentIndex: CleanAirSettingsPage.BasePage
-        smooth: false
-        visible: true
 
         // CleanAirSettingsPage.BasePage
         Item {
@@ -34,6 +31,8 @@ LoggingItem {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: qsTr("Clean Air Settings")
+            smooth: false
 
             ContentLeftSide {
                 visible: true
@@ -53,20 +52,20 @@ LoggingItem {
             ContentRightSide {
                 visible: true
                 textHeader {
-                    text: (isFilterConnected() || bot.machineType == MachineType.Magma) ?
+                    text: (isFilterConnected()) ?
                               qsTr("Filter Status") :
                               qsTr("Clean Air Not Detected")
                     visible: true
                 }
                 textBody {
                     text: qsTr("Lifetime is dependent on multiple factors.")
-                    visible: (isFilterConnected() || bot.machineType == MachineType.Magma)
+                    visible: (isFilterConnected())
                 }
                 timeStatus {
                     currentValue: hepaPrintHours
                     lifetimeValue: hepaMaxHours
                     exceededLifetimeValue: bot.hepaFilterChangeRequired
-                    visible: (isFilterConnected() || bot.machineType == MachineType.Magma)
+                    visible: (isFilterConnected())
                 }
                 buttonSecondary1 {
                     text: qsTr("REPLACE FILTER")
@@ -81,7 +80,7 @@ LoggingItem {
                 }
                 buttonSecondary2 {
                     text: qsTr("RESET FILTER")
-                    enabled: (isFilterConnected() || bot.machineType == MachineType.Magma)
+                    enabled: (isFilterConnected())
                     visible: true
                     onClicked: {
                         hepaFilterResetPopup.open()
@@ -102,14 +101,14 @@ LoggingItem {
             property bool hasAltBack: true
 
             function altBack() {
-                if (replaceFilterPage.itemReplaceFilter.state == "done")
+                if (replaceFilterPage.state == "done")
                     cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
-                    replaceFilterPage.itemReplaceFilter.state = "done"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
-                    replaceFilterPage.itemReplaceFilter.state = "step_2"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
-                    replaceFilterPage.itemReplaceFilter.state = "step_3"
+                else if (replaceFilterPage.state == "step_2")
+                    replaceFilterPage.state = "done"
+                else if (replaceFilterPage.state == "step_3")
+                    replaceFilterPage.state = "step_2"
+                else if (replaceFilterPage.state == "step_4")
+                    replaceFilterPage.state = "step_3"
                 else
                     cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
             }
@@ -125,8 +124,8 @@ LoggingItem {
             property var backSwiper: cleanAirSettingsSwipeView
             property int backSwipeIndex: CleanAirSettingsPage.BasePage
             property string topBarTitle: qsTr("Replace Filter")
-            property bool backIsCancel: (replaceFilterXLPage.itemReplaceFilterXL.state == "moving_build_plate") ||
-                                        (replaceFilterXLPage.itemReplaceFilterXL.state == "done" &&
+            property bool backIsCancel: (replaceFilterXLPage.state == "moving_build_plate") ||
+                                        (replaceFilterXLPage.state == "done" &&
                                          replaceFilterXLPage.isBuildPlateRaised)
             smooth: false
             visible: false

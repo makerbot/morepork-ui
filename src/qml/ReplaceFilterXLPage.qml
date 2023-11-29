@@ -12,7 +12,7 @@ ReplaceFilterXLPageForm {
     }
 
     function goBack() {
-        if (itemReplaceFilterXL.state == "done") {
+        if (replaceFilterXLPage.state == "done") {
             if(isBuildPlateRaised) {
                 replaceFilterXLPopup.popupState = "cancel"
                 replaceFilterXLPopup.open()
@@ -21,19 +21,19 @@ ReplaceFilterXLPageForm {
                 replaceFilterProcess = false
             }
         }
-        else if (itemReplaceFilterXL.state == "moving_build_plate") {
+        else if (replaceFilterXLPage.state == "moving_build_plate") {
             if(!isBuildPlateRaised) isBuildPlateRaised = true
             replaceFilterXLPopup.popupState = "cancel"
             replaceFilterXLPopup.open()
         }
-        else if (itemReplaceFilterXL.state == "step_2") {
-            itemReplaceFilterXL.state = "done"
+        else if (replaceFilterXLPage.state == "step_2") {
+            replaceFilterXLPage.state = "done"
         }
-        else if (itemReplaceFilterXL.state == "step_3") {
-            itemReplaceFilterXL.state = "step_2"
+        else if (replaceFilterXLPage.state == "step_3") {
+            replaceFilterXLPage.state = "step_2"
         }
-        else if (itemReplaceFilterXL.state == "step_4") {
-            itemReplaceFilterXL.state = "step_3"
+        else if (replaceFilterXLPage.state == "step_4") {
+            replaceFilterXLPage.state = "step_3"
         }
         else {
             if(isBuildPlateRaised) {
