@@ -22,6 +22,8 @@ Item {
         {label: "tough", temperature : 190},
         {label: "petg", temperature : 190},
         {label: "abs", temperature : 240},
+        {label: "abs-r", temperature : 260},
+        {label: "abs-cf", temperature : 270},
         {label: "asa", temperature : 240},
         {label: "nylon", temperature : 190}
     ]
