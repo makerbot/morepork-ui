@@ -22,8 +22,6 @@ LoggingItem {
         id: cleanAirSettingsSwipeView
         logName: "cleanAirSettingsSwipeView"
         currentIndex: CleanAirSettingsPage.BasePage
-        smooth: false
-        visible: true
 
         // CleanAirSettingsPage.BasePage
         Item {
@@ -31,6 +29,8 @@ LoggingItem {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: qsTr("Clean Air Settings")
+            smooth: false
 
             ContentLeftSide {
                 visible: true
@@ -94,14 +94,14 @@ LoggingItem {
             property bool hasAltBack: true
 
             function altBack() {
-                if (replaceFilterPage.itemReplaceFilter.state == "done")
+                if (replaceFilterPage.state == "done")
                     cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_2")
-                    replaceFilterPage.itemReplaceFilter.state = "done"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_3")
-                    replaceFilterPage.itemReplaceFilter.state = "step_2"
-                else if (replaceFilterPage.itemReplaceFilter.state == "step_4")
-                    replaceFilterPage.itemReplaceFilter.state = "step_3"
+                else if (replaceFilterPage.state == "step_2")
+                    replaceFilterPage.state = "done"
+                else if (replaceFilterPage.state == "step_3")
+                    replaceFilterPage.state = "step_2"
+                else if (replaceFilterPage.state == "step_4")
+                    replaceFilterPage.state = "step_3"
                 else
                     cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
             }
