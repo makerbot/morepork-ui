@@ -2631,57 +2631,63 @@ ApplicationWindow {
         CustomPopup {
             popupName: "HepaFilterReset"
             id: hepaFilterResetPopup
-            popupWidth: 720
-            popupHeight: 280
             visible: false
-            showTwoButtons: true
-            left_button_text: qsTr("CANCEL PROCEDURE")
-            right_button_text: qsTr("CONTINUE PROCEDURE")
+
+            property string state: "reset_filter"
+            showTwoButtons: state === "reset_filter"
+            showOneButton: state === "complete"
+
+            left_button_text: qsTr("BACK")
+            right_button_text: qsTr("CONFIRM")
+            full_button_text: qsTr("CLOSE")
+
+
             right_button.onClicked: {
                 bot.resetFilterHours()
                 bot.hepaFilterPrintHours = 0
                 bot.hepaFilterChangeRequired = false
-                hepaFilterResetPopup.close()
+                state = "complete"
             }
             left_button.onClicked: {
                 hepaFilterResetPopup.close()
             }
+            full_button.onClicked: {
+                hepaFilterResetPopup.close()
+            }
+            onClosed: {
+                state = "reset_filter"
+            }
 
             ColumnLayout {
                 id: columnLayout_hepa_reset_popup
-                width: 650
                 height: children.height
-                spacing: 20
-                anchors.top: parent.top
-                anchors.topMargin: 160
+                anchors.top: hepaFilterResetPopup.popupContainer.top
+                anchors.topMargin: hepaFilterResetPopup.state === "complete" ?
+                                       30 : 60
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 25
 
-                Text {
-                    id: alert_text_hepa_reset_popup
-                    color: "#cbcbcb"
-                    text: qsTr("RESET FILTER?")
-                    font.letterSpacing: 3
-                    Layout.alignment: Qt.AlignHCenter
-                    font.family: defaultFont.name
-                    font.weight: Font.Bold
-                    font.pixelSize: 20
+                Image {
+                    source: "qrc:/img/popup_complete.png"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    visible: hepaFilterResetPopup.state === "complete"
                 }
 
-                Text {
+                TextHeadline {
+                    id: alert_text_hepa_reset_popup
+                    text: hepaFilterResetPopup.state === "complete" ? qsTr("Complete") : qsTr("RESET FILTER")
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                TextBody {
                     id: description_text_hepa_reset_popup
-                    color: "#cbcbcb"
                     text: {
-                        qsTr("Doing this assumes a new filter has been installed.")
+                        qsTr("This procedure will assume a new filter has been installed.")
                     }
                     horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    font.weight: Font.Light
-                    wrapMode: Text.WordWrap
-                    font.family: defaultFont.name
-                    font.pixelSize: 18
-                    font.letterSpacing: 1
-                    lineHeight: 1.3
+                    visible: hepaFilterResetPopup.state !== "complete"
                 }
             }
         }

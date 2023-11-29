@@ -21,6 +21,7 @@ Item {
     property alias textBody: textBody
     property alias textBody1: textBody1
     property alias temperatureStatus: temperatureStatus
+    property alias timeStatus: timeStatus
     property alias buttonPrimary: buttonPrimary
     property alias buttonSecondary1: buttonSecondary1
     property alias buttonSecondary2: buttonSecondary2
@@ -86,6 +87,11 @@ Item {
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do ",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"]
                 activeSteps: [true, true, true]
+                visible: false || showAllElements
+            }
+
+            TimeStatus {
+                id: timeStatus
                 visible: false || showAllElements
             }
 

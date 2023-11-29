@@ -202,7 +202,6 @@ Rectangle {
             name: "success"
             when: icon_image === LoadingIcon.Success
 
-
             PropertyChanges {
                 target: inner_image
                 source: "qrc:/img/check_mark.png"
@@ -237,7 +236,6 @@ Rectangle {
         State {
             name: "failure"
             when: icon_image === LoadingIcon.Failure
-
 
             PropertyChanges {
                 target: inner_image
