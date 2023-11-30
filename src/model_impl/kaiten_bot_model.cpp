@@ -1780,10 +1780,6 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             machineTypeSet(MachineType::Lava);
         } else if (kMachineTypeStr == "magma") {
             machineTypeSet(MachineType::Magma);
-            // Magma has a HEPA filter always so no need
-            // to set the connection later. This boolean
-            // used in the UI.
-            hepaFilterConnectedSet(true);
         } else {
             machineTypeReset();
         }
@@ -1960,8 +1956,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             extruderAJamDetectionDisabledReset();
         }
 
-      const Json::Value &accessories = info["accessories"];
-      accessoriesStatusUpdate(accessories);
+        const Json::Value &accessories = info["accessories"];
+        if(machineType() == MachineType::Magma) {
+            // Magma has a HEPA filter always so no need
+            // to set the connection later. This boolean
+            // used in the UI.
+            hepaFilterConnectedSet(true);
+            const Json::Value &oyster = accessories["oyster"];
+            if(oyster.isObject()) {
+                // This is the only accessory item we are using for Magma
+                hepaFilterChangeRequiredSet(oyster["filter_change_required"].asBool());
+            }
+        } else {
+            accessoriesStatusUpdate(accessories);
+        }
 
       const Json::Value &loaded_filaments = info["loaded_filaments"];
       if (loaded_filaments.isArray()) {
