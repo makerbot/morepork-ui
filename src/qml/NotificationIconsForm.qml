@@ -13,7 +13,7 @@ Row {
         smooth: false
         height: sourceSize.height
         width: sourceSize.width
-        visible: (bot.hepaFilterConnected && !(bot.machineType != MachineType.Magma)) ||
+        visible: (bot.hepaFilterConnected && (bot.machineType != MachineType.Magma)) ||
                   bot.hepaFilterChangeRequired
         source: bot.hepaFilterChangeRequired ? "qrc:/img/yellow_hepa_blink.gif" : "qrc:/img/white_hepa_no_blink.gif"
         cache: false

@@ -9,14 +9,13 @@ import MachineTypeEnum 1.0
 LoggingItem {
     itemName: "ReplaceFilterXL"
     id: replaceFilterXLPage
-    width: parent.width
-    height: parent.height
-    anchors.fill: parent.fill
+   // width: parent.width
+    //height: parent.height
+    //anchors.fill: parent.fill
     smooth: false
 
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
-    //property alias itemReplaceFilterXL: itemReplaceFilter
     property alias replaceFilterXLPopup : replaceFilterPopup
     property alias replace_filter_next_button: contentRightSide.buttonPrimary
     property bool isBuildPlateRaised: false
