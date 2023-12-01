@@ -140,10 +140,6 @@
         <file alias="install_heat_shield.gif">images/install_heat_shield.gif</file>
         <file alias="remove_heat_shield.gif">images/remove_heat_shield.gif</file>
         <file alias="hepa_filter.png">images/hepa_filter.png</file>
-        <file alias="step_1_replace_filter.png">images/step_1_replace_filter.png</file>
-        <file alias="step_2_remove_cables.png">images/step_2_remove_cables.png</file>
-        <file alias="step_3_remove_electronics.png">images/step_3_remove_electronics.png</file>
-        <file alias="step_4_remove_filter.png">images/step_4_remove_filter.png</file>
         <file alias="filter.png">images/filter.png</file>
         <file alias="yellow_hepa_blink.gif">images/top_bar/yellow_hepa_blink.gif</file>
         <file alias="white_hepa_no_blink.gif">images/top_bar/white_hepa_no_blink.gif</file>
@@ -230,6 +226,13 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="step_1_replace_filter.png">images/replace_filter/step_1_replace_filter.png</file>
+        <file alias="step_4_remove_filter.png">images/replace_filter/step_4_remove_filter.png</file>
+        <file alias="step_3_remove_electronics.png">images/replace_filter/step_3_remove_electronics.png</file>
+        <file alias="step_2_remove_cables.png">images/replace_filter/step_2_remove_cables.png</file>
+        <file alias="clean_air_replace.png">images/replace_filter/methodxl/clean_air_replace.png</file>
+        <file alias="clean_air_open.png">images/replace_filter/methodxl/clean_air_open.png</file>
+        <file alias="clean_air_start.png">images/replace_filter/methodxl/clean_air_start.png</file>
         <file alias="method_dry_material.png">images/dry_material/method/dry_material.png</file>
         <file alias="methodxl_dry_material.png">images/dry_material/methodxl/dry_material.png</file>
         <file alias="spool_bag.png">images/dry_material/spool_bag.png</file>

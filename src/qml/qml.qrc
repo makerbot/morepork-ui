@@ -279,6 +279,8 @@
         <file>ManualCalibrationPrintFinished.qml</file>
         <file>TimeStatus.qml</file>
         <file>TimeStatusForm.qml</file>
+        <file>ReplaceFilterXLPageForm.qml</file>
+        <file>ReplaceFilterXLPage.qml</file>
         <file>AdjustZOffset.qml</file>
     </qresource>
 </RCC>

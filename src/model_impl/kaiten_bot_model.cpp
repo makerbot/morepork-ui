@@ -1493,7 +1493,7 @@ void KaitenBotModel::getFilterHours() {
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        conn->jsonrpc.invoke("get_oyster_print_hours", json_params, m_filterHoursCb);
+        conn->jsonrpc.invoke("get_filter_hours", json_params, m_filterHoursCb);
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -1517,10 +1517,7 @@ void KaitenBotModel::resetFilterHours() {
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["machine_func"] = Json::Value("reset_oyster_print_hours");
-        json_params["params"] = Json::Value();
-        json_params["ignore_tool_errors"] = Json::Value(true);
-        conn->jsonrpc.invoke("machine_action_command", json_params, std::weak_ptr<JsonRpcCallback>());
+        conn->jsonrpc.invoke("reset_filter_hours", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -1763,8 +1760,8 @@ void KaitenBotModel::printQueueUpdate(const Json::Value &queue) {
 
 void KaitenBotModel::filterHoursUpdate(const Json::Value &result) {
     if (result.isObject()) {
-        UPDATE_FLOAT_PROP(hepaFilterPrintHours, result["current_print_hours"].asFloat());
-        UPDATE_FLOAT_PROP(hepaFilterMaxHours, result["max_print_hours"].asFloat());
+        UPDATE_FLOAT_PROP(hepaFilterPrintHours, result["current_filter_hours"].asFloat());
+        UPDATE_FLOAT_PROP(hepaFilterMaxHours, result["max_filter_hours"].asFloat());
     }
 }
 
@@ -1959,8 +1956,20 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             extruderAJamDetectionDisabledReset();
         }
 
-      const Json::Value &accessories = info["accessories"];
-      accessoriesStatusUpdate(accessories);
+        const Json::Value &accessories = info["accessories"];
+        if(machineType() == MachineType::Magma) {
+            // Magma has a HEPA filter always so no need
+            // to set the connection later. This boolean
+            // used in the UI.
+            hepaFilterConnectedSet(true);
+            const Json::Value &oyster = accessories["oyster"];
+            if(oyster.isObject()) {
+                // This is the only accessory item we are using for Magma
+                hepaFilterChangeRequiredSet(oyster["filter_change_required"].asBool());
+            }
+        } else {
+            accessoriesStatusUpdate(accessories);
+        }
 
       const Json::Value &loaded_filaments = info["loaded_filaments"];
       if (loaded_filaments.isArray()) {

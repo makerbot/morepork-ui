@@ -160,6 +160,7 @@ LoggingPopup {
                     id: full_button_rectangle
                     anchors.fill: parent
                     color: "#00000000"
+                    opacity: full_button.enabled ? 1 : 0.2
 
                     Text {
                         id: full_text
@@ -215,6 +216,7 @@ LoggingPopup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     color: (defaultButton === CustomPopup.Left ? "#ffffff" : "#00000000")
+                    opacity: left_button.enabled ? 1 : 0.2
                     visible: true
 
                     Text {
@@ -254,6 +256,7 @@ LoggingPopup {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     color: (defaultButton === CustomPopup.Right ? "#ffffff" : "#00000000")
+                    opacity: right_button.enabled ? 1 : 0.2
                     visible: true
 
                     Text {
