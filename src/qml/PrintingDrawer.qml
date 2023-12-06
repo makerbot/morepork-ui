@@ -44,7 +44,7 @@ CustomDrawer {
                     "qrc:/img/drawer_resume.png"
                     break;
                 default:
-                    "qrc:/img/drwer_pause.png"
+                    "qrc:/img/drawer_pause.png"
                     break;
                 }
             }

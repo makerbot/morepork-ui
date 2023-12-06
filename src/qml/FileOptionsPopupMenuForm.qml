@@ -31,7 +31,7 @@ PopupMenu {
                 storage.deletePrintFile(fileName)
                 if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
                     printSwipeView.swipeToItem(PrintPage.FileBrowser)
-                    setDrawerState(true)
+                    setActiveDrawer(printPage.sortingDrawer)
                 }
             }
         }
@@ -44,7 +44,7 @@ PopupMenu {
             storage.deletePrintFile(fileName)
             if(printSwipeView.currentIndex != PrintPage.FileBrowser) {
                 printSwipeView.swipeToItem(PrintPage.FileBrowser)
-                setDrawerState(true)
+                setActiveDrawer(printPage.sortingDrawer)
             }
         }
         enabled: browsingUsbStorage

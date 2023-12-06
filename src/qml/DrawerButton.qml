@@ -1,16 +1,21 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.3
+import QtGraphicalEffects 1.12
 
 Button {
     id: drawerButton
     width: parent.width
     height: 100
     smooth: false
+    antialiasing: false
 
     property alias buttonText: buttonText.text
     property alias buttonImage: buttonImage.source
-    property color buttonColor: "#333333"
-    property color buttonPressColor: "#ffffff"
+    property color buttonBackgroundColor: "#333333"
+    property color buttonPressBackgroundColor: "#ffffff"
+    property color buttonContentColor: "#ffffff"
+    property color buttonPressContentColor: "#000000"
+
     opacity: enabled ? 1 : 0.25
 
     background:
@@ -25,7 +30,7 @@ Button {
                 width: drawerButton.width - 65
                 height: 75
                 radius: 8
-                color: drawerButton.down ? buttonPressColor : buttonColor
+                color: drawerButton.down ? buttonPressBackgroundColor : buttonBackgroundColor
                 smooth: false
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -51,15 +56,21 @@ Button {
                 id: buttonText
                 style: TextBody.ExtraLarge
                 text: qsTr("Drawer Button Text")
-                color: drawerButton.down ? "#000000" : "#ffffff"
+                color: drawerButton.down ? buttonPressContentColor : buttonContentColor
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignHCenter
                 anchors.left: parent.left
                 anchors.leftMargin: 120
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -6
+                anchors.verticalCenterOffset: 2
             }
         }
+
+    ColorOverlay {
+       anchors.fill: contentItem
+       source: contentItem
+       color: drawerButton.down ? buttonPressContentColor : "#00000000"
+   }
 
     Component.onCompleted: {
         this.onReleased.connect(logClick)

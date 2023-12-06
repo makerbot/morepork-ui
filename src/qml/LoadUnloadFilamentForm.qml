@@ -236,9 +236,7 @@ LoggingItem {
                     materialSwipeView.swipeToItem(MaterialPage.BasePage)
                     // If cancelled out of load/unload while in print process
                     // enable print drawer to set UI back to printing state.
-                    setDrawerState(false)
-                    activeDrawer = printPage.printingDrawer
-                    setDrawerState(true)
+                    setActiveDrawer(printPage.printingDrawer)
                     if(inFreStep &&
                        bot.process.type == ProcessType.Print) {
                         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)

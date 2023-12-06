@@ -23,9 +23,7 @@ MaterialPageForm {
     property bool materialChangeCancelled: false
 
     function enableMaterialDrawer() {
-        setDrawerState(false)
-        activeDrawer = materialPage.materialPageDrawer
-        setDrawerState(true)
+        setActiveDrawer(materialPage.materialPageDrawer)
     }
 
     function isExtruderPresent(extruderID) {
@@ -106,9 +104,7 @@ MaterialPageForm {
         materialSwipeView.swipeToItem(MaterialPage.BasePage)
         // If cancelled out of load/unload while in print process
         // enable print drawer to set UI back to printing state.
-        setDrawerState(false)
-        activeDrawer = printPage.printingDrawer
-        setDrawerState(true)
+        setActiveDrawer(printPage.printingDrawer)
     }
 
     function maybeShowMoistureWarningPopup(bayID) {
@@ -357,7 +353,7 @@ MaterialPageForm {
             bot.cancel()
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setDrawerState(false)
+            setActiveDrawer(null)
         }
         else if(bot.process.type == ProcessType.Unload) {
             if(bot.process.isProcessCancellable) {
@@ -365,7 +361,7 @@ MaterialPageForm {
                 bot.cancel()
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                setDrawerState(false)
+                setActiveDrawer(null)
             }
             else {
                 waitUntilUnloadedPopup.open()
@@ -375,7 +371,7 @@ MaterialPageForm {
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setDrawerState(false)
+            setActiveDrawer(null)
         }
     }
 
@@ -389,7 +385,7 @@ MaterialPageForm {
         bot.cancel()
         loadUnloadFilamentProcess.state = "base state"
         materialSwipeView.swipeToItem(MaterialPage.BasePage)
-        setDrawerState(false)
+        setActiveDrawer(null)
         if(inFreStep) {
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             inFreStep = false
