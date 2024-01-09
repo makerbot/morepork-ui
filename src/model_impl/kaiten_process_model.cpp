@@ -10,194 +10,28 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         return;
     }
 
-    const Json::Value &kName = proc["name"];
-    if (kName.isString()) {
-        const QString kNameStr = kName.asString().c_str();
-        nameStrSet(kNameStr);
-        if (kNameStr == "PrintProcess")
-            typeSet(ProcessType::Print);
-        else if (kNameStr == "LoadFilamentProcess")
-            typeSet(ProcessType::Load);
-        else if (kNameStr == "UnloadFilamentProcess")
-            typeSet(ProcessType::Unload);
-        else if (kNameStr == "SombreroAssistedLevelingProcess")
-            typeSet(ProcessType::AssistedLeveling);
-        else if (kNameStr == "FirmwareBurningProcess")
-            typeSet(ProcessType::FirmwareUpdate);
-        else if (kNameStr == "NozzleCalibrationProcess")
-            typeSet(ProcessType::CalibrationProcess);
-        else if (kNameStr == "ResetToFactoryProcess")
-            typeSet(ProcessType::FactoryResetProcess);
-        else if (kNameStr == "ZipLogsProcess")
-            typeSet(ProcessType::ZipLogsProcess);
-        else if (kNameStr == "DryingCycleProcess")
-            typeSet(ProcessType::DryingCycleProcess);
-        else if (kNameStr == "NozzleCleaningProcess")
-            typeSet(ProcessType::NozzleCleaningProcess);
-        else if (kNameStr == "AnnealPrintProcess")
-            typeSet(ProcessType::AnnealPrintProcess);
-        else if (kNameStr == "MoveBuildPlateProcess")
-            typeSet(ProcessType::MoveBuildPlateProcess);
-        else
-            typeSet(ProcessType::None);
-    }
-    else {
-        typeSet(ProcessType::None);
-    }
-
     const Json::Value &kStep = proc["step"];
+    QString kStepStr;
     if (kStep.isString()) {
-        const QString kStepStr = kStep.asString().c_str();
-        stepStrSet(kStepStr);
-        // 'Print' states (steps)
-        // see morepork-kaiten/kaiten/src/kaiten/processes/printprocess.py
-        if (kStepStr == "initializing" ||
-            kStepStr == "initial_heating" ||
-            kStepStr == "heating_chamber" ||
-            kStepStr == "heating_build_platform" ||
-            kStepStr == "final_heating" ||
-            kStepStr == "cooling" ||
-            kStepStr == "cooling_resuming" ||
-            kStepStr == "homing" ||
-            kStepStr == "position_found" ||
-            kStepStr == "preheating_resuming" ||
-            kStepStr == "waiting_for_file" ||
-            kStepStr == "transfer" ||
-            kStepStr == "downloadingext")
-            stateTypeSet(ProcessStateType::Loading);
-        else if (kStepStr == "suspending")
-            stateTypeSet(ProcessStateType::Pausing);
-        else if (kStepStr == "unsuspending")
-            stateTypeSet(ProcessStateType::Resuming);
-        else if (kStepStr == "suspended" ||
-                 kStepStr == "preprint_suspended")
-            stateTypeSet(ProcessStateType::Paused);
-        else if (kStepStr == "printing")
-            stateTypeSet(ProcessStateType::Printing);
-        else if (kStepStr == "failed")
-            stateTypeSet(ProcessStateType::Failed);
-        else if (kStepStr == "completed")
-            stateTypeSet(ProcessStateType::Completed);
-        else if (kStepStr == "cancelled")
-            stateTypeSet(ProcessStateType::Cancelled);
-        // 'Load' and 'Unload' states (steps)
-        // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
-        else if (kStepStr == "waiting_for_filament")
-            stateTypeSet(ProcessStateType::WaitingForFilament);
-        else if (kStepStr == "preheating" ||
-                 kStepStr == "preheating_loading" ||
-                 kStepStr == "preheating_unloading") //preheating while load/unload durng Print Process
-            stateTypeSet(ProcessStateType::Preheating);
-        else if (kStepStr == "extrusion" ||
-                 kStepStr == "loading_filament") //extrusion while load/unload during Print Process
-            stateTypeSet(ProcessStateType::Extrusion);
-        else if (kStepStr == "stopping" ||
-                 kStepStr == "stopping_filament") //stopping while load/unload during Print Process
-            stateTypeSet(ProcessStateType::Stopping);
-        else if (kStepStr == "unloading_filament") //regular unloading & also during Print Process
-            stateTypeSet(ProcessStateType::UnloadingFilament);
-        // Base class 'Process' states (steps)
-        // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
-        else if (kStepStr == "running")
-            stateTypeSet(ProcessStateType::Running);
-        else if (kStepStr == "done")
-            stateTypeSet(ProcessStateType::Done);
-        else if (kStepStr == "cancelling")
-            stateTypeSet(ProcessStateType::Cancelling);
-        else if(kStepStr == "cleaning_up")
-            stateTypeSet(ProcessStateType::CleaningUp);
-        // Firmware Updating States
-        // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
-        else if (kStepStr == "downloading")
-            stateTypeSet(ProcessStateType::DownloadingFirmware);
-        else if (kStepStr == "transfer_firmware")
-            stateTypeSet(ProcessStateType::TransferringFirmware);
-        else if (kStepStr == "verify_firmware")
-            stateTypeSet(ProcessStateType::VerifyingFirmware);
-        else if (kStepStr == "writing")
-            stateTypeSet(ProcessStateType::InstallingFirmware);
-        // Assisted Leveling States
-        // see morepork-kaiten/kaiten/src/kaiten/processes/sombreroassistedlevelingprocess.py
-        else if (kStepStr == "buildplate_instructions")
-            stateTypeSet(ProcessStateType::BuildPlateInstructions);
-        else if (kStepStr == "leveling_instructions")
-            stateTypeSet(ProcessStateType::LevelingInstructions);
-        else if (kStepStr == "checking_left_level")
-            stateTypeSet(ProcessStateType::CheckLeftLevel);
-        else if (kStepStr == "checking_right_level")
-            stateTypeSet(ProcessStateType::CheckRightLevel);
-        else if (kStepStr == "checking_levelness")
-            stateTypeSet(ProcessStateType::CheckingLevelness);
-        else if (kStepStr == "leveling_left_standard_low" ||
-                 kStepStr == "leveling_left_standard_ok"  ||
-                 kStepStr == "leveling_left_standard_high")
-            stateTypeSet(ProcessStateType::LevelingLeft);
-        else if (kStepStr == "leveling_right_standard_low" ||
-                 kStepStr == "leveling_right_standard_ok"  ||
-                 kStepStr == "leveling_right_standard_high")
-            stateTypeSet(ProcessStateType::LevelingRight);
-        else if (kStepStr == "finishing_level")
-            stateTypeSet(ProcessStateType::LevelingComplete);
-        else if (kStepStr == "finishing_level_fail")
-            stateTypeSet(ProcessStateType::LevelingFailed);
-        // Toolhead Calibration States
-        // see morepork-kaiten/kaiten/src/kaiten/processes/nozzlecalibrationprocess.py
-        else if (kStepStr == "check_if_nozzle_clean")
-            stateTypeSet(ProcessStateType::CheckNozzleClean);
-        else if (kStepStr == "heating_nozzle")
-            stateTypeSet(ProcessStateType::HeatingNozzle);
-        else if (kStepStr == "clean_nozzle")
-            stateTypeSet(ProcessStateType::CleanNozzle);
-        else if (kStepStr == "finish_cleaning")
-            stateTypeSet(ProcessStateType::FinishCleaning);
-        else if (kStepStr == "cooling_nozzle")
-            stateTypeSet(ProcessStateType::CoolingNozzle);
-        else if (kStepStr == "homing_xy" ||
-                 kStepStr == "homing_z"  ||
-                 kStepStr == "nozzle_offset_cal" ||
-                 kStepStr == "calibrating_xy" ||
-                 kStepStr == "build_plate_zero_cal")
-            stateTypeSet(ProcessStateType::CalibratingToolheads);
-        else if (kStepStr == "remove_build_plate")
-            stateTypeSet(ProcessStateType::RemoveBuildPlate);
-        else if (kStepStr == "install_build_plate")
-            stateTypeSet(ProcessStateType::InstallBuildPlate);
-        // Drying Cycle States
-        // see morepork-kaiten/kaiten/src/kaiten/processes/dryngcycleprocess.py
-        else if (kStepStr == "positioning_build_plate")
-            stateTypeSet(ProcessStateType::PositioningBuildPlate);
-        else if (kStepStr == "waiting_for_spool")
-            stateTypeSet(ProcessStateType::WaitingForSpool);
-        // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
-        else if (kStepStr == "drying_spool")
-            stateTypeSet(ProcessStateType::DryingSpool);
-        // Anneal Print States
-        // see morepork-kaiten/kaiten/src/kaiten/processes/annealprintprocess.py
-        else if (kStepStr == "waiting_for_part")
-            stateTypeSet(ProcessStateType::WaitingForPart);
-        // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
-        else if (kStepStr == "annealing_print")
-            stateTypeSet(ProcessStateType::AnnealingPrint);
-        else
-            stateTypeReset();
+        kStepStr = kStep.asString().c_str();
     }
 
-    const QString kStepStr = kStep.asString().c_str();
     if(kStepStr == "clear_build_plate") {
         isBuildPlateClearSet(true);
     } else {
         isBuildPlateClearReset();
     }
 
-    if(kStepStr == "preheating_loading" ||
-       kStepStr == "preheating_unloading") {
+    // We assume that load/unload always start with a preheating step and
+    // always end back in the paused step (or by ending the entire process)
+    if (kStepStr == "preheating_loading" ||
+            kStepStr == "preheating_unloading") {
         isLoadUnloadWhilePausedSet(true);
 
         kStepStr == "preheating_loading" ?
                 isLoadSet(true) :
                 isLoadSet(false);
-    }
-    else {
+    } else if (kStepStr == "suspended") {
         isLoadUnloadWhilePausedReset();
     }
 
@@ -341,6 +175,182 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         printFeedbackReportedReset();
     }
     activeSet(true);
+
+    // Set the stateType after everything other that the process type, so that
+    // step change listeners will see up to date properties within the same
+    // process.
+    stepStrSet(kStepStr);
+    // 'Print' states (steps)
+    // see morepork-kaiten/kaiten/src/kaiten/processes/printprocess.py
+    if (kStepStr == "initializing" ||
+        kStepStr == "initial_heating" ||
+        kStepStr == "heating_chamber" ||
+        kStepStr == "heating_build_platform" ||
+        kStepStr == "final_heating" ||
+        kStepStr == "cooling" ||
+        kStepStr == "cooling_resuming" ||
+        kStepStr == "homing" ||
+        kStepStr == "position_found" ||
+        kStepStr == "preheating_resuming" ||
+        kStepStr == "waiting_for_file" ||
+        kStepStr == "transfer" ||
+        kStepStr == "downloadingext")
+        stateTypeSet(ProcessStateType::Loading);
+    else if (kStepStr == "suspending")
+        stateTypeSet(ProcessStateType::Pausing);
+    else if (kStepStr == "unsuspending")
+        stateTypeSet(ProcessStateType::Resuming);
+    else if (kStepStr == "suspended" ||
+             kStepStr == "preprint_suspended")
+        stateTypeSet(ProcessStateType::Paused);
+    else if (kStepStr == "printing")
+        stateTypeSet(ProcessStateType::Printing);
+    else if (kStepStr == "failed")
+        stateTypeSet(ProcessStateType::Failed);
+    else if (kStepStr == "completed")
+        stateTypeSet(ProcessStateType::Completed);
+    else if (kStepStr == "cancelled")
+        stateTypeSet(ProcessStateType::Cancelled);
+    // 'Load' and 'Unload' states (steps)
+    // see morepork-kaiten/kaiten/src/kaiten/processes/loadfilamentprocess.py
+    else if (kStepStr == "waiting_for_filament")
+        stateTypeSet(ProcessStateType::WaitingForFilament);
+    else if (kStepStr == "preheating" ||
+             kStepStr == "preheating_loading" ||
+             kStepStr == "preheating_unloading") //preheating while load/unload durng Print Process
+        stateTypeSet(ProcessStateType::Preheating);
+    else if (kStepStr == "awaiting_engagement")
+        stateTypeSet(ProcessStateType::AwaitingEngagement);
+    else if (kStepStr == "extrusion" ||
+             kStepStr == "loading_filament") //extrusion while load/unload during Print Process
+        stateTypeSet(ProcessStateType::Extrusion);
+    else if (kStepStr == "stopping" ||
+             kStepStr == "stopping_filament") //stopping while load/unload during Print Process
+        stateTypeSet(ProcessStateType::Stopping);
+    else if (kStepStr == "unloading_filament") //regular unloading & also during Print Process
+        stateTypeSet(ProcessStateType::UnloadingFilament);
+    // Base class 'Process' states (steps)
+    // see morepork-kaiten/kaiten/src/kaiten/processes/process.py
+    else if (kStepStr == "running")
+        stateTypeSet(ProcessStateType::Running);
+    else if (kStepStr == "done")
+        stateTypeSet(ProcessStateType::Done);
+    else if (kStepStr == "cancelling")
+        stateTypeSet(ProcessStateType::Cancelling);
+    else if(kStepStr == "cleaning_up")
+        stateTypeSet(ProcessStateType::CleaningUp);
+    // Firmware Updating States
+    // see morepork-kaiten/kaiten/src/kaiten/processes/firmwareburningprocess.py
+    else if (kStepStr == "downloading")
+        stateTypeSet(ProcessStateType::DownloadingFirmware);
+    else if (kStepStr == "transfer_firmware")
+        stateTypeSet(ProcessStateType::TransferringFirmware);
+    else if (kStepStr == "verify_firmware")
+        stateTypeSet(ProcessStateType::VerifyingFirmware);
+    else if (kStepStr == "writing")
+        stateTypeSet(ProcessStateType::InstallingFirmware);
+    // Assisted Leveling States
+    // see morepork-kaiten/kaiten/src/kaiten/processes/sombreroassistedlevelingprocess.py
+    else if (kStepStr == "buildplate_instructions")
+        stateTypeSet(ProcessStateType::BuildPlateInstructions);
+    else if (kStepStr == "leveling_instructions")
+        stateTypeSet(ProcessStateType::LevelingInstructions);
+    else if (kStepStr == "checking_left_level")
+        stateTypeSet(ProcessStateType::CheckLeftLevel);
+    else if (kStepStr == "checking_right_level")
+        stateTypeSet(ProcessStateType::CheckRightLevel);
+    else if (kStepStr == "checking_levelness")
+        stateTypeSet(ProcessStateType::CheckingLevelness);
+    else if (kStepStr == "leveling_left_standard_low" ||
+             kStepStr == "leveling_left_standard_ok"  ||
+             kStepStr == "leveling_left_standard_high")
+        stateTypeSet(ProcessStateType::LevelingLeft);
+    else if (kStepStr == "leveling_right_standard_low" ||
+             kStepStr == "leveling_right_standard_ok"  ||
+             kStepStr == "leveling_right_standard_high")
+        stateTypeSet(ProcessStateType::LevelingRight);
+    else if (kStepStr == "finishing_level")
+        stateTypeSet(ProcessStateType::LevelingComplete);
+    else if (kStepStr == "finishing_level_fail")
+        stateTypeSet(ProcessStateType::LevelingFailed);
+    // Toolhead Calibration States
+    // see morepork-kaiten/kaiten/src/kaiten/processes/nozzlecalibrationprocess.py
+    else if (kStepStr == "check_if_nozzle_clean")
+        stateTypeSet(ProcessStateType::CheckNozzleClean);
+    else if (kStepStr == "heating_nozzle")
+        stateTypeSet(ProcessStateType::HeatingNozzle);
+    else if (kStepStr == "clean_nozzle")
+        stateTypeSet(ProcessStateType::CleanNozzle);
+    else if (kStepStr == "finish_cleaning")
+        stateTypeSet(ProcessStateType::FinishCleaning);
+    else if (kStepStr == "cooling_nozzle")
+        stateTypeSet(ProcessStateType::CoolingNozzle);
+    else if (kStepStr == "homing_xy" ||
+             kStepStr == "homing_z"  ||
+             kStepStr == "nozzle_offset_cal" ||
+             kStepStr == "calibrating_xy" ||
+             kStepStr == "build_plate_zero_cal")
+        stateTypeSet(ProcessStateType::CalibratingToolheads);
+    else if (kStepStr == "remove_build_plate")
+        stateTypeSet(ProcessStateType::RemoveBuildPlate);
+    else if (kStepStr == "install_build_plate")
+        stateTypeSet(ProcessStateType::InstallBuildPlate);
+    // Drying Cycle States
+    // see morepork-kaiten/kaiten/src/kaiten/processes/dryngcycleprocess.py
+    else if (kStepStr == "positioning_build_plate")
+        stateTypeSet(ProcessStateType::PositioningBuildPlate);
+    else if (kStepStr == "waiting_for_spool")
+        stateTypeSet(ProcessStateType::WaitingForSpool);
+    // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
+    else if (kStepStr == "drying_spool")
+        stateTypeSet(ProcessStateType::DryingSpool);
+    // Anneal Print States
+    // see morepork-kaiten/kaiten/src/kaiten/processes/annealprintprocess.py
+    else if (kStepStr == "waiting_for_part")
+        stateTypeSet(ProcessStateType::WaitingForPart);
+    // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
+    else if (kStepStr == "annealing_print")
+        stateTypeSet(ProcessStateType::AnnealingPrint);
+    else
+        stateTypeReset();
+
+    // Set the process type last so that any listeners on this property
+    // that are waiting for a new process to start will see up to date
+    // properties for that process when they fire.
+    const Json::Value &kName = proc["name"];
+    if (kName.isString()) {
+        const QString kNameStr = kName.asString().c_str();
+        nameStrSet(kNameStr);
+        if (kNameStr == "PrintProcess")
+            typeSet(ProcessType::Print);
+        else if (kNameStr == "LoadFilamentProcess")
+            typeSet(ProcessType::Load);
+        else if (kNameStr == "UnloadFilamentProcess")
+            typeSet(ProcessType::Unload);
+        else if (kNameStr == "SombreroAssistedLevelingProcess")
+            typeSet(ProcessType::AssistedLeveling);
+        else if (kNameStr == "FirmwareBurningProcess")
+            typeSet(ProcessType::FirmwareUpdate);
+        else if (kNameStr == "NozzleCalibrationProcess")
+            typeSet(ProcessType::CalibrationProcess);
+        else if (kNameStr == "ResetToFactoryProcess")
+            typeSet(ProcessType::FactoryResetProcess);
+        else if (kNameStr == "ZipLogsProcess")
+            typeSet(ProcessType::ZipLogsProcess);
+        else if (kNameStr == "DryingCycleProcess")
+            typeSet(ProcessType::DryingCycleProcess);
+        else if (kNameStr == "NozzleCleaningProcess")
+            typeSet(ProcessType::NozzleCleaningProcess);
+        else if (kNameStr == "AnnealPrintProcess")
+            typeSet(ProcessType::AnnealPrintProcess);
+        else if (kNameStr == "MoveBuildPlateProcess")
+            typeSet(ProcessType::MoveBuildPlateProcess);
+        else
+            typeSet(ProcessType::None);
+    }
+    else {
+        typeSet(ProcessType::None);
+    }
 }
 
 void KaitenProcessModel::printFileUpdate(const Json::Value &printFileDetails) {

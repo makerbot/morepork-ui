@@ -16,8 +16,11 @@ LoggingItem {
     property alias retryButton: contentRightSide.buttonSecondary1
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
+    property bool feedFromTop: false
+    property bool feedFromAux: false
     property int retryTemperature: 0
     property string retryMaterial: "None"
+    property bool retryExternal: false
     property int bayID: 0
     property int currentActiveTool: bot.process.currentToolIndex + 1
     // Hold onto the current bay ID even after the process completes
@@ -54,6 +57,9 @@ LoggingItem {
                 maybeShowMoistureWarningPopup(bayID)
             }
             notExtruding = false
+            notEngaging = false
+        } else {
+            feedFromTop = false
         }
     }
 
@@ -130,6 +136,7 @@ LoggingItem {
     property int currentState: bot.process.stateType
     property int errorType: bot.process.errorType
     property bool notExtruding: false
+    property bool notEngaging: false
     // Flag to take the user through the new spool setup screens on XL (place
     // desiccant, cut filament tip, place material) when loading filament mid-print
     // where kaiten starts right away with the preheating step but we need the user
@@ -145,6 +152,7 @@ LoggingItem {
         }
     }
     onCurrentStateChanged: {
+        if (!materialChangeActive) return;
         if (currentState != ProcessStateType.UnloadingFilament) {
             doingAutoUnload = false
         }
@@ -184,88 +192,45 @@ LoggingItem {
                 }
             }
             break;
-        case ProcessStateType.Stopping:
+        case ProcessStateType.AwaitingEngagement:
+        case ProcessStateType.Extrusion:
+            if (!bot.hasFilamentBay) {
+                feedFromAux = false
+                state = "awaiting_engagement"
+            } else if (!bayFilamentSwitch) {
+                feedFromAux = true
+                state = "awaiting_engagement"
+            } else if (shouldUserAssistPurging(bayID)) {
+                // User assisted purging currently asks the user to load from
+                // the top on the first pass
+                feedFromTop = true
+                feedFromAux = false
+                state = "awaiting_engagement"
+            } else {
+                state = "extrusion"
+            }
+            break;
+        case ProcessStateType.Paused:
         case ProcessStateType.Done:
-            if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
+            if (bot.process.errorCode > 0 && bot.process.errorCode != 83) {
                 errorCode = bot.process.errorCode
                 state = "error"
-            }
-            else if(bot.process.type == ProcessType.Load) {
-                if(notExtruding) {
+            } else if (isLoadFilament) {
+                if (notExtruding) {
                     state = "error_not_extruding"
-                }
-                // Cancelling Load/Unload ends with 'done' step
-                // but the UI shouldn't go into load/unload
-                // successful state, but to the default state.
-                else if(!materialChangeCancelled) {
+                } else if (notEngaging) {
+                    state = "error_not_engaging"
+                } else if (!bot.materialLoaded[bayID - 1]) {
+                    // We _should_ only get here if the user let the loading
+                    // time out but we never detected engagement.
+                    state = "error_not_engaging"
+                } else {
                     state = "loaded_filament"
                 }
-                else {
-                    // Moving to default state is handled in cancel
-                    // button onClicked action, we just reset the
-                    // cancelled flag here.
-                    materialChangeCancelled = false
-                }
+            } else {
+                state = "unloaded_filament"
             }
-            else if(bot.process.type == ProcessType.Unload) {
-                // Cancelling Load/Unload ends with 'done' step
-                // but the UI shouldn't go into load/unload
-                // successful state, but to the default state.
-                if(!materialChangeCancelled) {
-                    state = "unloaded_filament"
-                }
-                else {
-                    // Moving to default state is handled in cancel
-                    // button onClicked action, we just reset the
-                    // cancelled flag here.
-                    materialChangeCancelled = false
-                }
-            }
-            //The case when loading/unloading is stopped by user
-            //in the middle of print process. Then the bot goes to
-            //'Stopping' step and then to 'Paused' step, but to
-            // differentiate successful stopping (i.e. stopping
-            // extrusion) and cancelling, we monitor the
-            // materialChangeCancelled flag. Since the bot goes to
-            // paused state afterwards we also need to monitor
-            // the flag there.
-            else if(printPage.isPrintProcess) {
-                delayedEnableRetryButton()
-                if(materialChangeCancelled) {
-                    state = "base state"
-                    materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                    // If cancelled out of load/unload while in print process
-                    // enable print drawer to set UI back to printing state.
-                    setDrawerState(false)
-                    activeDrawer = printPage.printingDrawer
-                    setDrawerState(true)
-                    if(inFreStep &&
-                       bot.process.type == ProcessType.Print) {
-                        mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                    }
-                }
-                else {
-                    isLoadFilament ? state = "loaded_filament" :
-                                     state = "unloaded_filament"
-                }
-                if(bot.process.errorCode > 0 && bot.process.errorCode != 83) {
-                    errorCode = bot.process.errorCode
-                    state = "error"
-                }
-            }
-            delayedEnableRetryButton()
-            break;
-            //The case when loading/unloading completes normally by
-            //itself, in the middle of print process. Then the bot doesn't
-            //go to 'Stopping' step, but directly to 'Paused' step.
-        case ProcessStateType.Paused:
-            if(materialChangeCancelled) {
-                materialChangeCancelled = false
-            }
-            else {
-                isLoadFilament ? state = "loaded_filament" :
-                                 state = "unloaded_filament"
-            }
+            delayedEnableRetryButton();
             break;
         default:
             break;
@@ -728,12 +693,67 @@ LoggingItem {
             }
         },
 
+        // MOSTLY COMMON STEP - awaiting_engagement
+        // (Included whenever we are not assisting filament)
+        State {
+            name: "awaiting_engagement"
+
+            PropertyChanges {
+                target: userAssistedLoadInstructions
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    source: feedFromTop? "qrc:/img/feed_from_top.png" :
+                        "qrc:/img/labs_extruder_instructions.png"
+                    visible: feedFromTop || feedFromAux
+                }
+                animatedImage {
+                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
+                    visible: !feedFromTop && !feedFromAux
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    text: qsTr("LOAD MATERIAL")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Feed the material into the extruder until you feel the motor engage.")
+                    visible: true
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: qsTr("NEXT")
+                    visible: true
+                    enabled: bot.process.stateType == ProcessStateType.Extrusion
+                }
+                buttonSecondary1 {
+                    delayedEnableTimeSec: 30
+                    style: ButtonRectanglePrimary.DelayedEnable
+                    text: qsTr("NOT ENGAGING")
+                    visible: true
+                }
+                temperatureStatus {
+                    visible: false
+                }
+                numberedSteps {
+                    visible: false
+                }
+            }
+        },
+
         // COMMON STEP - extrusion
         State {
             name: "extrusion"
-            when: bot.process.stateType == ProcessStateType.Extrusion &&
-                  (bot.process.type == ProcessType.Load ||
-                   bot.process.type == ProcessType.Print)
 
             PropertyChanges {
                 target: userAssistedLoadInstructions
@@ -762,13 +782,7 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: {
-                        qsTr("Look inside of the printer and wait until you see material begin to extrude.") +
-                               ((shouldUserAssistPurging(bayID) ? "\n\n" + 
-                                 qsTr("%1 may require assistance to extrude. ").arg(materialName) +
-                                 qsTr("If you don't see the filament extruding, gently push it in at the filament bay slot.") :
-                                    ""))
-                    }
+                    text: qsTr("Look inside of the printer and wait until you see material begin to extrude.")
                     visible: true
                 }
                 buttonPrimary {
@@ -1220,6 +1234,69 @@ LoggingItem {
                 }
                 buttonPrimary {
                     text: qsTr("RETRY EXTRUDING")
+                    visible: true
+                }
+            }
+        },
+
+        // COMMON STEP - error_not_engaging
+        State {
+            name: "error_not_engaging"
+            extend: "error"
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    text: qsTr("Troubleshoot")
+                }
+                textBody {
+                    text: qsTr("Please run the manual feed procedure below to heat the extruder and push material through at the top chamber.")
+                }
+                buttonPrimary {
+                    text: qsTr("MANUAL FEED")
+                }
+                buttonSecondary1 {
+                    text: qsTr("EXIT")
+                }
+            }
+        },
+
+        // COMMON STEP - top_assist_load
+        State {
+            name: "top_assist_load"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+                image {
+                    source: ("qrc:/img/%1.png").arg(getImageForPrinter("remove_top_lid"))
+                    visible: true
+                }
+                animatedImage {
+                    visible: false
+                }
+                loadingIcon {
+                    visible: false
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+
+                textHeader {
+                    style: TextHeadline.Base
+                    text: qsTr("REMOVE TOP LID")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Remove the top lid so that material can be manually inserted directly into the extruder.")
+                    visible: true
+                }
+                numberedSteps {
+                    visible: false
+                }
+                buttonPrimary {
+                    style: ButtonRectanglePrimary.Button
+                    text: qsTr("NEXT")
                     visible: true
                 }
             }
