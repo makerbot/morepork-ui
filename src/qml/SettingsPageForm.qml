@@ -114,7 +114,8 @@ Item {
                     MenuButton {
                         id: buttonCleanAirSettings
                         buttonImage.source: "qrc:/img/hepa_filter.png"
-                        buttonText.text: qsTr("CLEAN AIR SETTINGS")
+                        buttonText.text: bot.machineType == MachineType.Magma ? qsTr("FILTER SETTINGS")
+                                                                              : qsTr("CLEAN AIR SETTINGS")
                         buttonAlertImage.visible: bot.hepaFilterChangeRequired
                     }
 
