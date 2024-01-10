@@ -64,6 +64,7 @@ class ProcessModel : public BaseModel {
         CleanNozzle,
         FinishCleaning,
         CoolingNozzle,
+        HeatingForHotCal,
         CalibratingToolheads,
         InstallBuildPlate,
         RemoveBuildPlate,

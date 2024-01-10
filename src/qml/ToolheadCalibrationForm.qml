@@ -338,6 +338,42 @@ LoggingItem {
                 visible: false
             }
         },
+
+        State {
+            name: "heating_for_hot_cal"
+            when: bot.process.type == ProcessType.CalibrationProcess &&
+                  bot.process.stateType == ProcessStateType.HeatingForHotCal
+
+            PropertyChanges {
+                target: contentLeftSide
+                image {
+                    visible: false
+                }
+                loadingIcon {
+                    icon_image: LoadingIcon.Loading
+                    visible: true
+                }
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                textHeader {
+                    text: qsTr("HEATING FOR HOT CALIBRATION")
+                    visible: true
+                }
+                temperatureStatus {
+                    showComponent: TemperatureStatus.ChamberAndHeatedBuildPlate
+                    visible: true
+                }
+                textBody {
+                    visible: false
+                }
+                buttonPrimary {
+                    visible: false
+                }
+            }
+        },
+
         State {
             name: "calibrating"
             when: bot.process.type == ProcessType.CalibrationProcess &&
@@ -386,6 +422,7 @@ LoggingItem {
                 visible: false
             }
         },
+
         State {
             name: "calibration_finished"
 
