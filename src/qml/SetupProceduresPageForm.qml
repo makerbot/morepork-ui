@@ -77,9 +77,7 @@ Item {
             visible: false
 
             function altBack() {
-                if (materialCaseSetup.state == "remove_divider") {
-                    materialCaseSetup.state = "tube_2"
-                } else if (materialCaseSetup.state == "tube_2") {
+                if (materialCaseSetup.state == "tube_2") {
                     materialCaseSetup.state = "tube_1_printer"
                 } else if (materialCaseSetup.state == "tube_1_printer") {
                     materialCaseSetup.state = "tube_1_case"

@@ -204,7 +204,6 @@
         <file alias="case_tube_1_case.png">images/case_tube_1_case.png</file>
         <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
-        <file alias="case_divider.png">images/case_divider.png</file>
         <file alias="methodxl_locate_desiccant.png">images/load_unload/methodxl/methodxl_locate_desiccant.png</file>
         <file alias="qr_230_compatibility.png">images/qr_230_compatibility.png</file>
         <file alias="qr_230_fw_download.png">images/qr_230_fw_download.png</file>
