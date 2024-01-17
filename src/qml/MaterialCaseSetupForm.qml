@@ -53,6 +53,11 @@ LoggingItem {
                 source: "qrc:/img/case_intro_1.gif"
                 visible: true
             }
+
+            PropertyChanges {
+                target: caseSetupContentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+            }
         },
         State {
             name: "intro_2"
@@ -74,6 +79,11 @@ LoggingItem {
                 target: caseSetupContentLeftSide.image
                 source: "qrc:/img/case_intro_2.png"
                 visible: true
+            }
+
+            PropertyChanges {
+                target: caseSetupContentRightSide.buttonPrimary
+                text: qsTr("NEXT")
             }
         },
         State {
@@ -97,6 +107,11 @@ LoggingItem {
                 source: "qrc:/img/case_tube_1_case.png"
                 visible: true
             }
+
+            PropertyChanges {
+                target: caseSetupContentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+            }
         },
         State {
             name: "tube_1_printer"
@@ -119,6 +134,11 @@ LoggingItem {
                 source: "qrc:/img/case_tube_1_printer.png"
                 visible: true
             }
+
+            PropertyChanges {
+                target: caseSetupContentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+            }
         },
         State {
             name: "tube_2"
@@ -140,6 +160,11 @@ LoggingItem {
                 target: caseSetupContentLeftSide.image
                 source: "qrc:/img/case_tube_2.png"
                 visible: true
+            }
+
+            PropertyChanges {
+                target: caseSetupContentRightSide.buttonPrimary
+                text: qsTr("DONE")
             }
         }
     ]
