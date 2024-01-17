@@ -248,9 +248,10 @@ ApplicationWindow {
         fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
         if(isfirmwareUpdateAvailable && isFreComplete) {
 
-                // Here
-                //firmwareUpdatePopup.open()
+                // Open FW Update popup
+                firmwareUpdatePopup.open()
 
+                // Add firmware item to notifications
                 addToNotificationsList("firmware_update_available",
                                        qsTr("Firmware Update Available"),
                                        MoreporkUI.Persistent,
@@ -262,7 +263,9 @@ ApplicationWindow {
 
                                            if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != 5) {
                                                resetSettingsSwipeViewPages()
-                                               firmwareUpdatePopup.open()
+                                               mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                               settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                               settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
                                            }
                                        })
 
