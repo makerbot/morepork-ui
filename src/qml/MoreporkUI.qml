@@ -248,26 +248,27 @@ ApplicationWindow {
         fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
         if(isfirmwareUpdateAvailable && isFreComplete) {
 
-                // Open FW Update popup
+            // Open FW Update popup
+            if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != 5) {
                 firmwareUpdatePopup.open()
+            }
 
-                // Add firmware item to notifications
-                addToNotificationsList("firmware_update_available",
-                                       qsTr("Firmware Update Available"),
-                                       MoreporkUI.Persistent,
-                                       function() {
-                                           if(isProcessRunning()) {
-                                               printerNotIdlePopup.open()
-                                               return
-                                           }
-
-                                           if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != 5) {
-                                               resetSettingsSwipeViewPages()
-                                               mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                               settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                                               settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
-                                           }
-                                       })
+            // Add firmware item to notifications
+            addToNotificationsList("firmware_update_available",
+                                   qsTr("Firmware Update Available"),
+                                   MoreporkUI.Persistent,
+                                   function() {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+                                       if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != 5) {
+                                           resetSettingsSwipeViewPages()
+                                           mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                           settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                           settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
+                                       }
+                                   })
 
         } else if(!isfirmwareUpdateAvailable && isFreComplete){
             removeFromNotificationsList("firmware_update_available")
