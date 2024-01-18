@@ -7,7 +7,7 @@ ListView {
     smooth: false
     anchors.fill: parent
     boundsBehavior: Flickable.DragOverBounds
-    spacing: 1
+    spacing: 0
     orientation: ListView.Vertical
     flickableDirection: Flickable.VerticalFlick
     ScrollBar.vertical: ScrollBar {}

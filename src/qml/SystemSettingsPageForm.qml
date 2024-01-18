@@ -1042,7 +1042,6 @@ Item {
         property bool hideButton: false
         popupHeight: factoryResetColumnLayout.height
                      + ((isResetting || hideButton) ? 90 : 145)
-        popupWidth: popupContainer.width
         visible: false
         showTwoButtons: !isResetting && !isFactoryResetDone
         showOneButton: !isResetting && isFactoryResetDone && !hideButton
@@ -1073,7 +1072,7 @@ Item {
 
         ColumnLayout {
             id: factoryResetColumnLayout
-            width: parent.width
+            width: resetToFactoryPopup.popupContainer.width
             height: children.height
             anchors.top: resetToFactoryPopup.popupContainer.top
             anchors.horizontalCenter: parent.horizontalCenter

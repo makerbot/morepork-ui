@@ -38,6 +38,10 @@ ErrorScreenForm {
 
     function loadPurgeFromErrorScreen() {
         if(isExtruderAError() && (materialPage.bay1.usingExperimentalExtruder || settings.getSkipFilamentNags())) {
+            // The material selector page uses the toolIdx to show which extruder
+            // and what are the supported materials so set to the model extruder
+            // idx as that is the only labs extruder option currently.
+            materialPage.toolIdx = 0
             materialPage.isLoadFilament = true
             materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
             return;
@@ -58,6 +62,10 @@ ErrorScreenForm {
 
     function unloadFromErrorScreen() {
         if(isExtruderAError() && materialPage.bay1.usingExperimentalExtruder) {
+            // The material selector page uses the toolIdx to show which extruder
+            // and what are the supported materials so set to the model extruder
+            // idx as that is the only labs extruder option currently.
+            materialPage.toolIdx = 0
             materialPage.isLoadFilament = false
             materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
             return;

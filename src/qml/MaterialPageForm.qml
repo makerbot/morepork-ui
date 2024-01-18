@@ -184,9 +184,7 @@ Item {
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
                 // If cancelled out of load/unload while in print process
                 // enable print drawer to set UI back to printing state.
-                setDrawerState(false)
-                activeDrawer = printPage.printingDrawer
-                setDrawerState(true)
+                setActiveDrawer(printPage.printingDrawer)
             }
             else {
                 cancelLoadUnloadPopup.open()
@@ -198,7 +196,7 @@ Item {
         else if(bot.process.type == ProcessType.None) {
             loadUnloadFilamentProcess.state = "base state"
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setDrawerState(false)
+            setActiveDrawer(null)
         }
     }
 
@@ -360,7 +358,7 @@ Item {
                 bot.cancel()
                 loadUnloadFilamentProcess.state = "base state"
                 materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                setDrawerState(false)
+                setActiveDrawer(null)
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
@@ -389,13 +387,12 @@ Item {
                 onProcessDone: {
                     state = "base state"
                     materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                    setDrawerState(false)
+                    setActiveDrawer(null)
                     // If load/unload process completes successfully while,
                     // in print process enable print drawer to set UI back,
                     // to printing state.
                     if(printPage.isPrintProcess) {
-                        activeDrawer = printPage.printingDrawer
-                        setDrawerState(true)
+                        setActiveDrawer(printPage.printingDrawer)
                         // Go to print page directly after loading
                         // but if unloading stay on material page
                         if(isLoadFilament) {

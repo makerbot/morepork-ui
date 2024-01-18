@@ -201,8 +201,6 @@
         <file>HeatShieldInstructionsForm.qml</file>
         <file>CleanAirSettingsPage.qml</file>
         <file>CleanAirSettingsPageForm.qml</file>
-        <file>FilterStatusPage.qml</file>
-        <file>FilterStatusPageForm.qml</file>
         <file>ReplaceFilterPage.qml</file>
         <file>ReplaceFilterPageForm.qml</file>
         <file>ImageWithFeedback.qml</file>
@@ -276,9 +274,16 @@
         <file>DryMaterialCustomTemperature.qml</file>
         <file>CustomDrawer.qml</file>
         <file>DrawerButton.qml</file>
+        <file>NotificationsDrawer.qml</file>
+        <file>NotificationButton.qml</file>
         <file>CloseDrawerItem.qml</file>
         <file>ManualCalibrationPrintFinishedForm.qml</file>
         <file>ManualCalibrationPrintFinished.qml</file>
+        <file>TimeStatus.qml</file>
+        <file>TimeStatusForm.qml</file>
+        <file>ReplaceFilterXLPageForm.qml</file>
+        <file>ReplaceFilterXLPage.qml</file>
         <file>AdjustZOffset.qml</file>
+        <file>PrintingNotificationButton.qml</file>
     </qresource>
 </RCC>

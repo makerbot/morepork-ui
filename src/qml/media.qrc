@@ -17,6 +17,7 @@
         <file alias="wifi_connected.png">images/top_bar/wifi_connected.png</file>
         <file alias="ethernet_connected.png">images/top_bar/ethernet_connected.png</file>
         <file alias="no_ethernet.png">images/top_bar/no_ethernet.png</file>
+        <file alias="no_wifi.png">images/top_bar/no_wifi.png</file>
         <file alias="sombrero.png">images/sombrero.png</file>
         <file alias="front_build_volume.png">images/front_build_volume.png</file>
         <file alias="back_build_volume.png">images/back_build_volume.png</file>
@@ -140,10 +141,6 @@
         <file alias="install_heat_shield.gif">images/install_heat_shield.gif</file>
         <file alias="remove_heat_shield.gif">images/remove_heat_shield.gif</file>
         <file alias="hepa_filter.png">images/hepa_filter.png</file>
-        <file alias="step_1_replace_filter.png">images/step_1_replace_filter.png</file>
-        <file alias="step_2_remove_cables.png">images/step_2_remove_cables.png</file>
-        <file alias="step_3_remove_electronics.png">images/step_3_remove_electronics.png</file>
-        <file alias="step_4_remove_filter.png">images/step_4_remove_filter.png</file>
         <file alias="filter.png">images/filter.png</file>
         <file alias="yellow_hepa_blink.gif">images/top_bar/yellow_hepa_blink.gif</file>
         <file alias="white_hepa_no_blink.gif">images/top_bar/white_hepa_no_blink.gif</file>
@@ -207,7 +204,6 @@
         <file alias="case_tube_1_case.png">images/case_tube_1_case.png</file>
         <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
-        <file alias="case_divider.png">images/case_divider.png</file>
         <file alias="methodxl_locate_desiccant.png">images/load_unload/methodxl/methodxl_locate_desiccant.png</file>
         <file alias="qr_230_compatibility.png">images/qr_230_compatibility.png</file>
         <file alias="qr_230_fw_download.png">images/qr_230_fw_download.png</file>
@@ -230,6 +226,13 @@
         <file alias="icon_lower.png">images/icon_lower.png</file>
         <file alias="icon_raise.png">images/icon_raise.png</file>
         <file alias="icon_setup_procedures.png">images/icon_setup_procedures.png</file>
+        <file alias="step_1_replace_filter.png">images/replace_filter/step_1_replace_filter.png</file>
+        <file alias="step_4_remove_filter.png">images/replace_filter/step_4_remove_filter.png</file>
+        <file alias="step_3_remove_electronics.png">images/replace_filter/step_3_remove_electronics.png</file>
+        <file alias="step_2_remove_cables.png">images/replace_filter/step_2_remove_cables.png</file>
+        <file alias="clean_air_replace.png">images/replace_filter/methodxl/clean_air_replace.png</file>
+        <file alias="clean_air_open.png">images/replace_filter/methodxl/clean_air_open.png</file>
+        <file alias="clean_air_start.png">images/replace_filter/methodxl/clean_air_start.png</file>
         <file alias="method_dry_material.png">images/dry_material/method/dry_material.png</file>
         <file alias="methodxl_dry_material.png">images/dry_material/methodxl/dry_material.png</file>
         <file alias="spool_bag.png">images/dry_material/spool_bag.png</file>
@@ -237,6 +240,10 @@
         <file alias="drawer_down.png">images/top_bar/drawer_down.png</file>
         <file alias="drawer_up.png">images/top_bar/drawer_up.png</file>
         <file alias="drawer_cancel.png">images/drawer/cancel.png</file>
+        <file alias="open_notification.png">images/drawer/open_notification.png</file>
+        <file alias="dismiss_notification.png">images/drawer/dismiss_notification.png</file>
+        <file alias="informational_notification.png">images/drawer/informational_notification.png</file>
+        <file alias="error_notification.png">images/drawer/error_notification.png</file>
         <file alias="drawer_change_material.png">images/drawer/change_material.png</file>
         <file alias="drawer_current_selection.png">images/drawer/current_selection.png</file>
         <file alias="drawer_pause.png">images/drawer/pause.png</file>

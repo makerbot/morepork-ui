@@ -5,191 +5,158 @@ import ProcessTypeEnum 1.0
 import ExtruderTypeEnum 1.0
 import MachineTypeEnum 1.0
 
-Item {
+LoggingItem {
+    itemName: "ReplaceFilter"
     id: replaceFilterPage
     smooth: false
+    anchors.fill: parent
 
-    property alias itemReplaceFilter: itemReplaceFilter
-    property alias replace_filter_next_button: replace_filter_next_button
+    property alias contentLeftSide: contentLeftSide
+    property alias contentRightSide: contentRightSide
+    property alias replace_filter_next_button: contentRightSide.buttonPrimary
+    visible: true
 
-    LoggingItem {
-        itemName: "ReplaceFilterPage.itemReplaceFilter"
-        id: itemReplaceFilter
-        smooth: false
+    ContentLeftSide {
+        id: contentLeftSide
         visible: true
-        width: 400
-        height: 420
+        image {
+            source: "qrc:/img/step_1_replace_filter.png"
+            visible: true
+        }
+    }
 
-        Rectangle {
-            id: handle_top_lid_messaging
-            anchors.fill: parent
-            color: "#000000"
-            opacity: 1
+    ContentRightSide {
+        id: contentRightSide
+        visible: true
+        textHeader {
+            text: qsTr("Replace Filter")
+            visible: true
+        }
+        textBody {
+            text: qsTr("This procedure allows you to install new filters.")
+            visible: true
+        }
+        numberedSteps {
+            visible: false
 
-            Image {
-                id: step_image
-                width: sourceSize.width
-                height: sourceSize.height
-                anchors.left: parent.left
-                anchors.leftMargin: 0
-                anchors.verticalCenter: parent.verticalCenter
-                source: "qrc:/img/step_1_replace_filter.png"
-                visible: true
-                cache: false
-                smooth: false
-            }
+        }
 
-            Text {
-                id: main_text
-                color: "#ffffff"
-                text: qsTr("REPLACE FILTER")
-                anchors.top: parent.top
-                anchors.topMargin: 80
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
-                font.letterSpacing: 2
-                font.family: defaultFont.name
-                font.weight: Font.Bold
-                font.pixelSize: 20
-                lineHeight: 1.2
-                smooth: false
-                antialiasing: false
-                wrapMode: Text.WordWrap
-                width: 320
-            }
-
-            Text {
-                id: instruction_text
-                color: "#ffffff"
-                text: qsTr("This procedure will allow you to replace your filter.")
-                anchors.top: main_text.bottom
-                anchors.topMargin: 20
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
-                font.family: defaultFont.name
-                font.pixelSize: 18
-                font.weight: Font.Light
-                lineHeight: 1.2
-                smooth: false
-                antialiasing: false
-                wrapMode: Text.WordWrap
-                width: 320
-            }
-
-            RoundedButton {
-                id: replace_filter_next_button
-                buttonWidth: 125
-                buttonHeight: 45
-                anchors.top: instruction_text.bottom
-                anchors.topMargin: 20
-                anchors.left: step_image.right
-                anchors.leftMargin: 30
-                label_size: 18
-                label: qsTr("START")
-                button_mouseArea.onClicked: {
-                    if (itemReplaceFilter.state == "step_2") {
-                        itemReplaceFilter.state = "step_3"
-                    }
-                    else if (itemReplaceFilter.state == "step_3") {
-                        itemReplaceFilter.state = "step_4"
-                    }
-                    else if (itemReplaceFilter.state == "step_4") {
-                        itemReplaceFilter.state = "step_5"
-                    }
-                    else if (itemReplaceFilter.state == "step_5") {
-                        bot.resetFilterHours()
-                        bot.hepaFilterPrintHours = 0
-                        bot.hepaFilterChangeRequired = false
-                        cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
-                        itemReplaceFilter.state = "done"
-                    }
-                    else {
-                        itemReplaceFilter.state = "step_2"
-                    }
+        buttonPrimary {
+            text: qsTr("START")
+            visible: true
+            onClicked: {
+                if (replaceFilterPage.state == "step_2") {
+                    replaceFilterPage.state = "step_3"
+                }
+                else if (replaceFilterPage.state == "step_3") {
+                    replaceFilterPage.state = "step_4"
+                }
+                else if (replaceFilterPage.state == "step_4") {
+                    bot.resetFilterHours()
+                    bot.hepaFilterPrintHours = 0
+                    bot.hepaFilterChangeRequired = false
+                    cleanAirSettingsSwipeView.swipeToItem(CleanAirSettingsPage.BasePage)
+                    replaceFilterPage.state = "done"
+                }
+                else {
+                    replaceFilterPage.state = "step_2"
                 }
             }
         }
 
-        states: [
-            State {
-                name: "step_2"
-                PropertyChanges {
-                    target: step_image
-                    source: "qrc:/img/step_2_remove_cables.png"
-                }
-                PropertyChanges {
-                    target: main_text
-                    text: qsTr("DISCONNECT SYSTEM")
-                }
-                PropertyChanges {
-                    target: instruction_text
-                    text: qsTr("Disconnect all cables from the printer and turn the power switch off.")
-                }
-                PropertyChanges {
-                    target: replace_filter_next_button
-                    label: qsTr("CONFIRM")
-                }
-            },
-            State {
-                name: "step_3"
-                PropertyChanges {
-                    target: step_image
-                    source: "qrc:/img/step_3_remove_electronics.png"
-                }
-                PropertyChanges {
-                    target: main_text
-                    text: qsTr("REMOVE ELECTRONIC HOUSING")
-                }
-                PropertyChanges {
-                    target: instruction_text
-                    text: qsTr("Remove the electronics housing and set it aside to expose the filter.")
-                }
-                PropertyChanges {
-                    target: replace_filter_next_button
-                    label: qsTr("CONFIRM")
-                }
-            },
-            State {
-                name: "step_4"
-                PropertyChanges {
-                    target: step_image
-                    source: "qrc:/img/step_4_remove_filter.png"
-                }
-                PropertyChanges {
-                    target: main_text
-                    text: qsTr("REPLACE HEPA + CARBON FILTER")
-                }
-                PropertyChanges {
-                    target: instruction_text
-                    text: qsTr("Remove both filters and replace with the new set of filters.")
-                }
-                PropertyChanges {
-                    target: replace_filter_next_button
-                    label: qsTr("CONFIRM")
-                }
-            },
-            State {
-                name: "step_5"
-                PropertyChanges {
-                    target: step_image
-                    source: "qrc:/img/step_2_remove_cables.png"
-                }
-                PropertyChanges {
-                    target: main_text
-                    text: qsTr("INSTALL ELECTRONIC HOUSING")
-                }
-                PropertyChanges {
-                    target: instruction_text
-                    text: qsTr("Install the electronic housing, power unit back on, and plug in the USB to complete procedure.")
-                }
-                PropertyChanges {
-                    target: replace_filter_next_button
-                    label: qsTr("CONFIRM + RESET")
-                    enabled: isFilterConnected()
-                    opacity: isFilterConnected() ? 1:0.3
-                }
-            }
-        ]
     }
 
+    states: [
+        State {
+            name: "step_2"
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: "qrc:/img/step_2_remove_cables.png"
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("Disconnect System")
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Disconnect all cables from the printer and turn the power switch off.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("CONFIRM")
+            }
+        },
+        State {
+            name: "step_3"
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: "qrc:/img/step_3_remove_electronics.png"
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("Remove Current Filters")
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.numberedSteps
+                steps: [qsTr("Remove the electronics housing to expose the filter."),
+                    qsTr("Remove both filters and replace with the new set of filters")]
+                activeSteps: [true, true]
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+            }
+        },
+        State {
+            name: "step_4"
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: "qrc:/img/step_2_remove_cables.png"
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("Install Electronics Housing")
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Install the electronics housing, power unit back on, and plug in the USB to complete procedure.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.numberedSteps
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("CONFIRM + RESET")
+                enabled: isFilterConnected()
+                opacity: isFilterConnected() ? 1:0.5
+            }
+        }
+    ]
 }

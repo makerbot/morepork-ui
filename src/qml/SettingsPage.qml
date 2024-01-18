@@ -18,6 +18,7 @@ SettingsPageForm {
     }
 
     buttonCleanAirSettings.onClicked: {
+        bot.getFilterHours()
         settingsSwipeView.swipeToItem(SettingsPage.CleanAirSettingsPage)
     }
 

@@ -13,6 +13,7 @@ ColumnLayout {
         height: 250
         smooth: false
         Layout.alignment: Qt.AlignHCenter
+        backgroundColor: "#00000000"
 
         Rectangle {
             id: base_circle
