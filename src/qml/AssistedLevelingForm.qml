@@ -19,12 +19,12 @@ LoggingItem {
     property int targetHESUpper
     property int targetHESLower
     property bool needsZCal: bot.process.needsZCal
-    property bool zCalFlag: false
+    property bool needsZCalFlag: false
     signal processDone
 
     onNeedsZCalChanged: {
         if(needsZCal) {
-            zCalFlag = true
+            needsZCalFlag = true
         }
     }
 
@@ -62,7 +62,7 @@ LoggingItem {
         else if(bot.process.type == ProcessType.None) {
             if(state == "cancelling") {
                 processDone()
-                zCalFlag = false
+                needsZCalFlag = false
             }
         }
     }
@@ -839,7 +839,7 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide.textBody
                 text: qsTr("Sensors indicate the build platform is level.") +
-                      ((!inFreStep && zCalFlag) ? qsTr(" The extruders will need to be re-calibrated.") :
+                      ((!inFreStep && needsZCalFlag) ? qsTr(" The extruders will need to be re-calibrated.") :
                                                   emptyString)
                 visible: true
             }
@@ -851,7 +851,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                text: (inFreStep || !zCalFlag) ? qsTr("DONE") : qsTr("BEGIN Z CALIBRATION")
+                text: (inFreStep || !needsZCalFlag) ? qsTr("DONE") : qsTr("BEGIN Z CALIBRATION")
                 visible: true
             }
 
