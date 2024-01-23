@@ -19,7 +19,8 @@ AssistedLevelingForm {
                     }
                     else {
                         settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
+                        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+                        settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
                         bot.calibrateToolheads(["z"])
                     }
                 }
