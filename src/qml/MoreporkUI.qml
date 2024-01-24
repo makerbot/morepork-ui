@@ -243,13 +243,37 @@ ApplicationWindow {
 
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
 
+
     onIsfirmwareUpdateAvailableChanged: {
         fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
         if(isfirmwareUpdateAvailable && isFreComplete) {
-            if(settingsPage.settingsSwipeView.currentIndex != 3) {
+
+            // Open FW Update popup
+            if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
                 firmwareUpdatePopup.open()
             }
+
+            // Add firmware item to notifications
+            addToNotificationsList("firmware_update_available",
+                                   qsTr("Firmware Update Available"),
+                                   MoreporkUI.Persistent,
+                                   function() {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+                                       if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
+                                           resetSettingsSwipeViewPages()
+                                           mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                           settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                           settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
+                                       }
+                                   })
+
+        } else if(!isfirmwareUpdateAvailable){
+            removeFromNotificationsList("firmware_update_available")
         }
+
     }
 
     property bool skipFirmwareUpdate: false
