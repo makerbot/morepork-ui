@@ -92,6 +92,7 @@ Item {
                     else {
                         assistedLevel.state = "base state"
                         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                        assistedLevel.needsZCalFlag = false
                     }
                 }
                 else {

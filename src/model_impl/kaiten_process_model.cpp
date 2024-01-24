@@ -341,6 +341,14 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         printFeedbackReportedReset();
     }
     activeSet(true);
+
+    const Json::Value &needsZCal = proc["needs_z_cal"];
+    if(!needsZCal.empty()) {
+        needsZCalSet(proc["needs_z_cal"].asBool());
+    }
+    else {
+        needsZCalReset();
+    }
 }
 
 void KaitenProcessModel::printFileUpdate(const Json::Value &printFileDetails) {
