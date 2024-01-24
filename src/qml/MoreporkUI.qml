@@ -249,7 +249,7 @@ ApplicationWindow {
         if(isfirmwareUpdateAvailable && isFreComplete) {
 
             // Open FW Update popup
-            if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != 5) {
+            if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
                 firmwareUpdatePopup.open()
             }
 
@@ -262,7 +262,7 @@ ApplicationWindow {
                                            printerNotIdlePopup.open()
                                            return
                                        }
-                                       if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != 5) {
+                                       if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
                                            resetSettingsSwipeViewPages()
                                            mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                                            settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
@@ -270,7 +270,7 @@ ApplicationWindow {
                                        }
                                    })
 
-        } else if(!isfirmwareUpdateAvailable && isFreComplete){
+        } else if(!isfirmwareUpdateAvailable){
             removeFromNotificationsList("firmware_update_available")
         }
 
