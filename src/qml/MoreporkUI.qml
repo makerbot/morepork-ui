@@ -788,13 +788,22 @@ ApplicationWindow {
                 }
             }
         }
+        Timer {
+            id: waitToSkipFreStep
+            interval: 200
+            onTriggered: {
+
+                if (inFreStep) {
+                    currentItem.skipFreStepAction()
+                }
+                fre.gotoNextStep(currentFreStep)
+            }
+        }
 
         CustomPopup {
             popupName: "SkipFreStep"
             id: skipFreStepPopup
-            popupHeight: 285
-            popupWidth: 720
-
+            popupHeight: skipFreStepColumnLayout.height + 140
             showTwoButtons: true
             left_button_text: qsTr("BACK")
             right_button_text: qsTr("CONFIRM")
@@ -804,27 +813,17 @@ ApplicationWindow {
             }
             right_button.onClicked: {
                 skipFreStepPopup.close()
-                if (inFreStep) {
-                    currentItem.skipFreStepAction()
-                }
-                if(currentFreStep == FreStep.AttachExtruders ||
-                   currentFreStep == FreStep.LevelBuildPlate ||
-                   currentFreStep == FreStep.CalibrateExtruders ||
-                   currentFreStep == FreStep.MaterialCaseSetup ||
-                   currentFreStep == FreStep.LoadMaterial ||
-                   currentFreStep == FreStep.TestPrint) {
-                    fre.setFreStep(FreStep.FreComplete)
-                }
-                else {
-                    fre.gotoNextStep(currentFreStep)
-                }
+                waitToSkipFreStep.start()
             }
 
             ColumnLayout {
-                width: 720
+                id: skipFreStepColumnLayout
+                height: children.height
+                width: 680
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -40
+                anchors.top: skipFreStepPopup.popupContainer.top
+                anchors.topMargin: 35
+                spacing: 20
 
                 Image {
                     source: "qrc:/img/popup_error.png"
