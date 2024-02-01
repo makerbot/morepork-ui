@@ -231,11 +231,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.image
-                visible: false
-            }
-
-            PropertyChanges {
                 target: contentLeftSide.animatedImage
                 source: ("qrc:/img/%1.gif").arg(getImageForPrinter("remove_build_plate"))
                 visible: true
@@ -297,11 +292,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentLeftSide.animatedImage
-                visible: false
-            }
-
-            PropertyChanges {
-                target: contentLeftSide.animatedImage
                 source: ("qrc:/img/%1.gif").arg(getImageForPrinter("insert_build_plate"))
                 visible: true
             }
@@ -313,13 +303,73 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textHeader
-                text: qsTr("INSERT BUILD PLATE AND CLOSE DOOR")
+                text: qsTr("INSERT BUILD PLATE")
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightSide.textBody
+                text: qsTr("Insert the build plate by first placing the rear edge down and sliding it back until it fits snug and looks aligned.")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonPrimary
+                text: qsTr("NEXT")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: cleanExtrudersSequence
                 visible: false
+            }
+
+            PropertyChanges {
+                target: materialSelector
+                visible: false
+            }
+        },
+        State {
+            name: "secure_build_plate"
+
+            PropertyChanges {
+                target: contentLeftSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.image
+                source: "qrc:/img/secure_build_plate.png"
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.animatedImage
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentLeftSide.loadingIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textHeader
+                text: qsTr("CONFIRM AND CLOSE DOOR")
+                visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.textBody
+                text: qsTr("Check the corners of your build plate to ensure it is secured properly.\n\n"+
+                           "The build plate should be flush.")
+
+                visible: true
             }
 
             PropertyChanges {
