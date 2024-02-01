@@ -231,6 +231,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target:contentLeftSide.image
+                visible:false
+            }
+
+            PropertyChanges {
                 target: contentLeftSide.animatedImage
                 source: ("qrc:/img/%1.gif").arg(getImageForPrinter("remove_build_plate"))
                 visible: true
