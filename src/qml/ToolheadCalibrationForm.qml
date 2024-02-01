@@ -231,8 +231,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target:contentLeftSide.image
-                visible:false
+                target: contentLeftSide.image
+                visible: false
             }
 
             PropertyChanges {
