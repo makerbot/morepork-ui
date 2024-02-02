@@ -99,6 +99,26 @@ Item {
                     removeFromNotificationsList("extruder_or_material_not_detected")
                 }
             }
+            property bool materialNotPresent: !bot["extruderAFilamentPresent"] || !bot["extruderBFilamentPresent"]
+            onMaterialNotPresentChanged: {
+                if(materialNotPresent) {
+                    addToNotificationsList("material_not_detected",
+                                           qsTr("Material Not Detected"),
+                                           MoreporkUI.NotificationPriority.Persistent,
+                                           function() {
+                                               if(isProcessRunning()) {
+                                                   printerNotIdlePopup.open()
+                                                   return
+                                               }
+                                               resetSettingsSwipeViewPages()
+                                               mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                                           })
+                }
+                else {
+                    removeFromNotificationsList("material_not_detected")
+                }
+            }
+
         }
 
         MainMenuIcon {
