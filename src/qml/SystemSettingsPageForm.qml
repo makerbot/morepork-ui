@@ -163,6 +163,7 @@ Item {
                         id: buttonWiFi
                         buttonImage.source: "qrc:/img/icon_wifi.png"
                         buttonText.text: qsTr("WIFI AND NETWORK")
+                        buttonAlertImage.visible: isOffline
                         slidingSwitch.checked: bot.net.wifiEnabled
                         slidingSwitch.visible: true
 
