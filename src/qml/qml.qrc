@@ -148,8 +148,6 @@
         <file>FileOptionsPopupMenuForm.qml</file>
         <file>AnalyticsScreen.qml</file>
         <file>AnalyticsScreenForm.qml</file>
-        <file>WaitToCoolChamberScreen.qml</file>
-        <file>WaitToCoolChamberScreenForm.qml</file>
         <file>KoreaDFSScreen.qml</file>
         <file>KoreaDFSScreenForm.qml</file>
         <file>LoadMaterialSettings.qml</file>
@@ -285,5 +283,6 @@
         <file>ReplaceFilterXLPage.qml</file>
         <file>AdjustZOffset.qml</file>
         <file>PrintingNotificationButton.qml</file>
+        <file>HotChamberWarningScreen.qml</file>
     </qresource>
 </RCC>

@@ -358,11 +358,13 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide
                 textHeader {
-                    text: qsTr("HEATING FOR HOT CALIBRATION")
+                    text: qsTr("PREPARING")
                     visible: true
                 }
                 temperatureStatus {
                     showComponent: TemperatureStatus.ChamberAndHeatedBuildPlate
+                    component1.componentName: qsTr("HEATING CHAMBER")
+                    component2.componentName: qsTr("HEATING BUILD PLATE")
                     visible: true
                 }
                 textBody {

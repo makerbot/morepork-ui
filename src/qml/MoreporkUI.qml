@@ -645,6 +645,11 @@ ApplicationWindow {
                      !isFreComplete && !inFreStep
         }
 
+        HotChamberWarningScreen {
+            id: hotChamberWarning
+            z: 1
+        }
+
         Item {
             id: contentContainer
             width: 800
