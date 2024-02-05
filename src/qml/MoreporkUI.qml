@@ -127,7 +127,7 @@ ApplicationWindow {
         if(isOffline) {
             addToNotificationsList("printer_offline",
                                    qsTr("Printer Is Offline"),
-                                   MoreporkUI.NotificationPriority.Error,
+                                   MoreporkUI.NotificationPriority.Persistent,
                                    function() {
                                        if(isProcessRunning()) {
                                            printerNotIdlePopup.open()
