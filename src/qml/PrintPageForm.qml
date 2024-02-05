@@ -417,7 +417,7 @@ Item {
                         storageThumbnailSourceSize.height: 43
                         storageThumbnail.anchors.leftMargin: 71
                         storageName: qsTr("QUEUE")
-                        storageDescription: qsTr("FROM CLOUDPRINT")
+                        storageDescription: qsTr("FROM DIGITAL FACTORY")
                         onClicked: {
                             printSwipeView.swipeToItem(PrintPage.PrintQueueBrowser)
                         }
@@ -658,7 +658,7 @@ Item {
                 TextBody {
                     style: TextBody.Large
                     font.weight: Font.Light
-                    text: qsTr("Use MakerBot CloudPrint to add to your printer's queue.")
+                    text: qsTr("Use UltiMaker Digital Factory to add to your printer's queue.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
@@ -1383,7 +1383,7 @@ Item {
 
             TextBody {
                 id: support_link
-                text: "support.makerbot.com"
+                text: "support.ultimaker.com"
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
