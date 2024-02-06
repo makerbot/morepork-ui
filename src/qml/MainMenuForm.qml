@@ -79,9 +79,9 @@ Item {
             smooth: false
             image.source: "qrc:/img/material_icon.png"
             textIconDesc.text: qsTr("MATERIAL")
+            alertVisible: extruderMaterialAlert || materialNotPresent
 
             property bool extruderMaterialAlert: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
-            alertVisible: extruderMaterialAlert
             onExtruderMaterialAlertChanged: {
                 if(extruderMaterialAlert) {
                     addToNotificationsList("extruder_or_material_not_detected",
@@ -99,7 +99,8 @@ Item {
                     removeFromNotificationsList("extruder_or_material_not_detected")
                 }
             }
-            property bool materialNotPresent: !bot["extruderAFilamentPresent"] || !bot["extruderBFilamentPresent"]
+            property bool materialNotPresent: bot.loadedMaterials[0] == "unknown" ||
+                                              bot.loadedMaterials[1] == "unknown"
             onMaterialNotPresentChanged: {
                 if(materialNotPresent) {
                     addToNotificationsList("material_not_detected",
