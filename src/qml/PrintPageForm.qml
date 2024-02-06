@@ -540,7 +540,7 @@ Item {
                 TextBody {
                     style: TextBody.Large
                     font.weight: Font.Light
-                    text: qsTr("Choose another folder or export a .MakerBot file from the MakerBot Print app.")
+                    text: qsTr("Choose another folder or export a .MakerBot file from Digital Factory.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
