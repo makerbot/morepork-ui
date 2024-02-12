@@ -37,7 +37,7 @@ Item {
         AdjustZOffsetPage         // 4
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: extruderSettingsSwipeView
         logName: "extruderSettingsSwipeView"
         currentIndex: ExtruderSettingsPage.BasePage

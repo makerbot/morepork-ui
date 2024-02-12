@@ -209,7 +209,7 @@
         <file>ThumbnailImageForm.qml</file>
         <file>LoggingItem.qml</file>
         <file>LoggingPopup.qml</file>
-        <file>LoggingSwipeView.qml</file>
+        <file>LoggingStackLayout.qml</file>
         <file>LoggingMouseArea.qml</file>
         <file>LoggingMouseAreaForm.qml</file>
         <file>TextHuge.qml</file>

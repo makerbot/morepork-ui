@@ -20,7 +20,7 @@ Item {
         MaterialCaseSetup       //1
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: setupProceduresSwipeView
         logName: "setupProceduresSwipeView"
         currentIndex: SetupProceduresPage.BasePage

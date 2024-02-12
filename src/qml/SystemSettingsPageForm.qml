@@ -117,7 +117,7 @@ Item {
         KoreaDFSSecretPage      // 14
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: systemSettingsSwipeView
         logName: "systemSettingsSwipeView"
         currentIndex: SystemSettingsPage.BasePage

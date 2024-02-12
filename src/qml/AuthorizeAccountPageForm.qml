@@ -26,7 +26,7 @@ Item {
         AuthorizeWithCredentials
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: authorizeAccountSwipeView
         logName: "authorizeAccountSwipeView"
         currentIndex: AuthorizeAccountPage.ChooseAuthMethod

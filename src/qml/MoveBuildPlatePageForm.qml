@@ -26,7 +26,7 @@ Item {
         CustomMoveBuildPlatePage    //1
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: moveBuildPlatePageSwipeView
         logName: "moveBuildPlatePageSwipeView"
         currentIndex: MoveBuildPlatePage.BasePage

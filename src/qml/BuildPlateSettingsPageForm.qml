@@ -25,7 +25,7 @@ Item {
         RaiseLowerBuildPlatePage    //2
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: buildPlateSettingsSwipeView
         logName: "buildPlateSettingsSwipeView"
         currentIndex: BuildPlateSettingsPage.BasePage

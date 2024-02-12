@@ -16,7 +16,7 @@ Item {
         ChangeDFSSettingPage
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: koreaDFScreenSwipeView
         logName: "koreaDFScreenSwipeView"
         currentIndex: 0 // Should never be non zero

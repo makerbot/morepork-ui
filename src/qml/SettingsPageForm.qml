@@ -50,7 +50,7 @@ Item {
         AnnealPrintPage         // 7
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: settingsSwipeView
         logName: "settingsSwipeView"
         currentIndex: SettingsPage.BasePage

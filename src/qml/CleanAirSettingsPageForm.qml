@@ -20,7 +20,7 @@ LoggingItem {
         ReplaceFilterXLPage         // 2
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: cleanAirSettingsSwipeView
         logName: "cleanAirSettingsSwipeView"
         currentIndex: CleanAirSettingsPage.BasePage
