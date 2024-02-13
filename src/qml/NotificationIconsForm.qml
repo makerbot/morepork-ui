@@ -34,7 +34,8 @@ Row {
                 "qrc:/img/ethernet_connected.png"
                 break;
             default:
-                "qrc:/img/no_ethernet.png"
+                bot.net.wifiEnabled ? "qrc:/img/no_wifi.png"
+                                    : "qrc:/img/no_ethernet.png"
                 break;
             }
         }
