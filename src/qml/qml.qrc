@@ -285,5 +285,6 @@
         <file>ReplaceFilterXLPage.qml</file>
         <file>AdjustZOffset.qml</file>
         <file>PrintingNotificationButton.qml</file>
+        <file>FlickableMenu.qml</file>
     </qresource>
 </RCC>

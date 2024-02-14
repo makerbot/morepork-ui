@@ -40,12 +40,8 @@ Item {
             property string topBarTitle: qsTr("Raise/Lower Build Plate")
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableMoveBuildPlate
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnMoveBuildPlate.height
 
                 Column {

@@ -64,12 +64,8 @@ Item {
             property string topBarTitle: qsTr("Settings")
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnSettings.height
 
                 Column {

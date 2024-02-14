@@ -40,12 +40,8 @@ Item {
 
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableBuildPlateSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnBuildPlateSettings.height
 
                 Column {

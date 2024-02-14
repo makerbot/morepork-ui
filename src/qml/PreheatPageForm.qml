@@ -7,12 +7,8 @@ Item {
     anchors.fill: parent
     property alias buttonStartStopPreheat: buttonStartStopPreheat
 
-    Flickable {
+    FlickableMenu {
         id: flickablePreheat
-        smooth: false
-        flickableDirection: Flickable.VerticalFlick
-        interactive: true
-        anchors.fill: parent
         contentHeight: columnPreheat.height
 
         Column {

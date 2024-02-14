@@ -393,12 +393,8 @@ Item {
             property int backSwipeIndex: 0
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableStorageOpt
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnStorageOpt.height
                 visible: !isPrintProcess
 
