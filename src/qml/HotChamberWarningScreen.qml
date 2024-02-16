@@ -49,9 +49,11 @@ LoggingItem {
         if(isProcessDone) {
             if(waitType == HotChamberWarningScreen.WaitType.TemperatureCheck) {
                 temperatureCheckOverridden = false
-            } else {
-                timedCheckComplete = false
-                startTimedCheck()
+            } else if(waitType == HotChamberWarningScreen.WaitType.TimedCheck) {
+                if(bot.buildplaneCurrentTemp > buildplaneTemperatureThreshold) {
+                    timedCheckComplete = false
+                    startTimedCheck()
+                }
             }
         } else {
             if(!visible) {
@@ -66,7 +68,7 @@ LoggingItem {
         if(waitType == HotChamberWarningScreen.WaitType.TemperatureCheck) {
             (bot.hbpCurrentTemp > hbpTemperatureThreshold) && !temperatureCheckOverridden
         } else {
-            (bot.buildplaneCurrentTemp > buildplaneTemperatureThreshold) && !timedCheckComplete
+            !timedCheckComplete
         }
     }
 
