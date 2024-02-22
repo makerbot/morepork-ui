@@ -67,7 +67,7 @@ class KaitenBotModel : public BotModel {
     void installFirmwareFromPath(const QString file_path);
     void calibrateToolheads(QList<QString> axes);
     void doNozzleCleaning(bool do_clean, QList<int> temperature = {0,0});
-    void acknowledgeNozzleCleaned();
+    void acknowledgeNozzleCleaned(bool cleaned);
     void buildPlateState(bool state);
     void query_status();
     void resetToFactory(bool clearCalibration);
@@ -876,12 +876,12 @@ void KaitenBotModel::doNozzleCleaning(bool do_clean, QList<int> temperature){
 }
 
 
-void KaitenBotModel::acknowledgeNozzleCleaned(){
+void KaitenBotModel::acknowledgeNozzleCleaned(bool cleaned){
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["method"] = Json::Value("nozzle_cleaned");
+        json_params["method"] = cleaned ? Json::Value("nozzle_cleaned"): Json::Value("redo_nozzle_clean");
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){

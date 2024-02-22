@@ -142,7 +142,7 @@ void BotModel::doNozzleCleaning(bool do_clean, QList<int> temperature) {
     }
 }
 
-void BotModel::acknowledgeNozzleCleaned() {
+void BotModel::acknowledgeNozzleCleaned(bool cleaned) {
     qDebug() << FL_STRM << "called";
 }
 

@@ -47,7 +47,7 @@ ToolheadCalibrationForm {
                         }
                     } else if(toolheadCalibration.state == "clean_nozzles" &&
                               bot.process.stateType == ProcessStateType.FinishCleaning) {
-                        bot.acknowledgeNozzleCleaned()
+                        bot.acknowledgeNozzleCleaned(true)
                     }
                 }
             }
@@ -56,6 +56,9 @@ ToolheadCalibrationForm {
                 onClicked: {
                     if(toolheadCalibration.state == "clean_nozzles") {
                         bot.doNozzleCleaning(false)
+                    } else if(toolheadCalibration.state == "clean_nozzles" &&
+                              bot.process.stateType == ProcessStateType.FinishCleaning) {
+                        bot.acknowledgeNozzleCleaned(false)
                     }
                 }
             }

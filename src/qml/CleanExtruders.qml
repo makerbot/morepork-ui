@@ -26,7 +26,15 @@ CleanExtrudersForm {
             buttonPrimary {
                 onClicked: {
                     if(cleanExtrudersSequence.state == "finish_cleaning") {
-                        bot.acknowledgeNozzleCleaned()
+                        bot.acknowledgeNozzleCleaned(true)
+                    }
+                }
+            }
+            buttonSecondary1 {
+                onClicked: {
+                    if(cleanExtrudersSequence.state == "finish_cleaning") {
+                        //cleanExtrudersSequence.state = "clean_nozzle"
+                        bot.acknowledgeNozzleCleaned(false)
                     }
                 }
             }

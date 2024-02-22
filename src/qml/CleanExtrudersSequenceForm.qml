@@ -205,6 +205,12 @@ LoggingItem {
                 text: qsTr("NEXT")
                 visible: true
             }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                text: qsTr("RETRY CLEANING")
+                visible: true
+            }
         },
 
         State {
