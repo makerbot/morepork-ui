@@ -134,6 +134,8 @@ Item {
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
             property string topBarTitle: qsTr("Automatic Calibration")
             property bool hasAltBack: true
+            property bool backIsCancel: (bot.process.type === ProcessType.CalibrationProcess &&
+                                         bot.process.isProcessCancellable)
             smooth: false
             visible: false
 
