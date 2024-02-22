@@ -185,15 +185,17 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                visible: false
+                text: qsTr("NEXT")
+                enabled: false
+                delayedEnableTimeSec: 30
+                style: ButtonRectanglePrimary.DelayedEnable
+                visible: true
             }
 
             PropertyChanges {
                 target: contentRightSide.buttonSecondary1
                 visible: false
             }
-
-
         },
 
         State {
@@ -203,6 +205,8 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
                 text: qsTr("NEXT")
+                style: ButtonRectanglePrimary.Button
+                enabled: true
                 visible: true
             }
 
