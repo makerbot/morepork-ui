@@ -53,6 +53,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external,
             bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void loadFilamentStop();
+    Q_INVOKABLE virtual void loadFilamentCancel();
     Q_INVOKABLE virtual void unloadFilament(const int kToolIndex, bool external,
             bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void assistedLevel();
@@ -203,6 +204,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(bool, hasFilamentBay, false)
     MODEL_PROP(QStringList, loadedMaterials, {"unknown", "unknown"})
     MODEL_PROP(QStringList, loadedMaterialNames, {"UNKNOWN", "UNKNOWN"})
+    MODEL_PROP(QList<bool>, materialLoaded, {false, false})
     MODEL_PROP(int, filamentBayATemp, -999)
     MODEL_PROP(int, filamentBayBTemp, -999)
     MODEL_PROP(int, filamentBayAHumidity, -999)

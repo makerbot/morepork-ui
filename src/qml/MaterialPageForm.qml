@@ -37,6 +37,8 @@ Item {
     property bool isSpoolValidityCheckPending: bot.spoolValidityCheckPending
     property bool isMaterialMismatch: false
 
+    property bool materialChangeActive: false
+
     // Extruder
     property bool isTopLidOpen: bot.chamberErrorCode == 45
     property alias itemAttachExtruder: itemAttachExtruder
@@ -57,6 +59,7 @@ Item {
 
             mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             enableMaterialDrawer()
+            materialChangeActive = true
             materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
 
             switch(bot.process.type) {
@@ -163,40 +166,40 @@ Item {
         }
     }
 
-    function exitMaterialChange() {
-        if(bot.process.type == ProcessType.Load) {
-            cancelLoadUnloadPopup.open()
-        }
-        else if(bot.process.type == ProcessType.Unload) {
-            if(bot.process.isProcessCancellable) {
-                cancelLoadUnloadPopup.open()
-            }
-            else {
-                waitUntilUnloadedPopup.open()
-            }
-        }
-        else if(printPage.isPrintProcess) {
-            // If load/unload completed successfully and the user wants
-            // to go back don't show any popup, just reset the page state
-            // and go back.
-            if(bot.process.stateType == ProcessStateType.Paused) {
-                loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                // If cancelled out of load/unload while in print process
-                // enable print drawer to set UI back to printing state.
-                setActiveDrawer(printPage.printingDrawer)
-            }
-            else {
-                cancelLoadUnloadPopup.open()
-            }
-        }
-        // If load/unload completed successfully and the user wants
-        // to go back don't show any popup, just reset the page state
-        // and go back.
-        else if(bot.process.type == ProcessType.None) {
-            loadUnloadFilamentProcess.state = "base state"
-            materialSwipeView.swipeToItem(MaterialPage.BasePage)
+    // Actually leave the loading/unloading flow
+    function leaveMaterialChange() {
+        materialChangeActive = false;
+        loadUnloadFilamentProcess.state = "base state"
+        materialSwipeView.swipeToItem(MaterialPage.BasePage)
+        if (printPage.isPrintProcess) {
+            // If we are printing we need to restore the print drawer
+            setActiveDrawer(printPage.printingDrawer)
+            mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+        } else {
             setActiveDrawer(null)
+        }
+    }
+
+    // Called when the user requests that we leave the (un)loading flow.
+    // If we are still in the middle of that flow according to kaiten
+    // then we need to show a popup, otherwise we just leave.
+    function exitMaterialChange() {
+        if (bot.process.type == ProcessType.Load) {
+            cancelLoadUnloadPopup.open();
+        } else if (bot.process.type == ProcessType.Unload) {
+            if (bot.process.isProcessCancellable) {
+                cancelLoadUnloadPopup.open();
+            } else {
+                waitUntilUnloadedPopup.open();
+            }
+        } else if (printPage.isPrintProcess) {
+            if (bot.process.stateType == ProcessStateType.Paused) {
+                leaveMaterialChange();
+            } else {
+                cancelLoadUnloadPopup.open();
+            }
+        } else {
+            leaveMaterialChange();
         }
     }
 
@@ -354,11 +357,8 @@ Item {
             }
 
             function skipFreStepAction() {
-                materialChangeCancelled = true
                 bot.cancel()
-                loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                setActiveDrawer(null)
+                leaveMaterialChange()
                 mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             }
 
