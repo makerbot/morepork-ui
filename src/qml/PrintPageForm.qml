@@ -48,8 +48,6 @@ Item {
     property alias printStatusView: printStatusView
     property alias reviewTestPrint: reviewTestPrint
     property alias printErrorScreen: errorScreen
-    readonly property int waitToCoolBuildplaneTemperature: 70
-    readonly property int waitToCoolHBPTemperature: 50
     property bool isFileCopying: storage.fileIsCopying
     property bool isFileDownloading: print_queue.downloading
     property bool fileDownloadFailed: print_queue.downloadingFailed
@@ -154,32 +152,6 @@ Item {
     onIsPrintFinishedChanged: {
         if(isPrintFinished) {
             print_time = getTimeInDaysHoursMins(bot.process.elapsedTime)
-        }
-    }
-
-    WaitToCoolChamberScreen {
-        id: waitToCoolScreen
-        z: 1
-        anchors.verticalCenterOffset: -20
-        visible: waitToCoolScreenVisible
-    }
-
-    property bool isPrintDone: bot.process.stateType == ProcessStateType.Completed ||
-                               bot.process.stateType == ProcessStateType.Failed ||
-                               bot.process.stateType == ProcessStateType.Cancelling
-    onIsPrintDoneChanged: {
-        if (bot.machineType != MachineType.Magma) {
-            if (isPrintDone && (bot.buildplaneCurrentTemp > waitToCoolBuildplaneTemperature)) {
-                waitToCoolScreen.waitToCoolScreenVisible = true
-                waitToCoolScreen.waitToCoolBuildplaneScreenVisible = true
-                waitToCoolScreen.initMon()
-            }
-        } else { // MachineType.Magma
-            if (isPrintDone && (bot.hbpCurrentTemp > waitToCoolHBPTemperature)) {
-                waitToCoolScreen.waitToCoolScreenVisible = true
-                waitToCoolScreen.waitToCoolHBPScreenVisible = true
-                waitToCoolScreen.initMon()
-            }
         }
     }
 

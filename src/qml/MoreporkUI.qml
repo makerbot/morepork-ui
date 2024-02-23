@@ -119,6 +119,33 @@ ApplicationWindow {
         }
     }
 
+
+    property bool isOffline: bot.net.interface != "wifi" &&
+                             bot.net.interface != "ethernet"
+
+    onIsOfflineChanged: {
+        if(isOffline) {
+            addToNotificationsList("printer_offline",
+                                   qsTr("Printer Is Offline"),
+                                   MoreporkUI.NotificationPriority.Persistent,
+                                   function() {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+
+                                       // Navigate to System Settings Page
+                                       if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.SystemSettingsPage) {
+                                           resetSettingsSwipeViewPages()
+                                           mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                           settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                       }
+                                   })
+        } else {
+            removeFromNotificationsList("printer_offline")
+        }
+    }
+
     Timer {
         id: authTimeOut
         onTriggered: {
@@ -256,7 +283,7 @@ ApplicationWindow {
             // Add firmware item to notifications
             addToNotificationsList("firmware_update_available",
                                    qsTr("Firmware Update Available"),
-                                   MoreporkUI.Persistent,
+                                   MoreporkUI.NotificationPriority.Persistent,
                                    function() {
                                        if(isProcessRunning()) {
                                            printerNotIdlePopup.open()
@@ -662,6 +689,11 @@ ApplicationWindow {
             id: freScreen
             visible: connectionState == ConnectionState.Connected &&
                      !isFreComplete && !inFreStep
+        }
+
+        HotChamberWarningScreen {
+            id: hotChamberWarning
+            z: 1
         }
 
         Item {
