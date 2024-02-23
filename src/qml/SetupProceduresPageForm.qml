@@ -20,7 +20,7 @@ Item {
         MaterialCaseSetup       //1
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: setupProceduresSwipeView
         logName: "setupProceduresSwipeView"
         currentIndex: SetupProceduresPage.BasePage
@@ -34,12 +34,8 @@ Item {
             property string topBarTitle: qsTr("Setup Procedures")
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableSetupProcedures
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnSetupProcedures.height
 
                 Column {

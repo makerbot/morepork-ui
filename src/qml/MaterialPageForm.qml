@@ -212,7 +212,7 @@ Item {
         AttachExtruderPage
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: materialSwipeView
         logName: "materialSwipeView"
         currentIndex: MaterialPage.BasePage

@@ -703,7 +703,7 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
-            LoggingSwipeView {
+            LoggingStackLayout {
                 id: mainSwipeView
                 itemWithEnum: rootAppWindow
                 logName: "mainSwipeView"
