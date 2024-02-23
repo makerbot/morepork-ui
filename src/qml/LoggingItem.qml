@@ -11,7 +11,9 @@ Item {
         console.info("Item", itemName, "changed state to", state)
     }
 
+    property alias backgroundColor: background.color
     Rectangle {
+        id: background
         anchors.fill: parent
         color: "#000000"
     }

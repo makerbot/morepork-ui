@@ -148,8 +148,6 @@
         <file>FileOptionsPopupMenuForm.qml</file>
         <file>AnalyticsScreen.qml</file>
         <file>AnalyticsScreenForm.qml</file>
-        <file>WaitToCoolChamberScreen.qml</file>
-        <file>WaitToCoolChamberScreenForm.qml</file>
         <file>KoreaDFSScreen.qml</file>
         <file>KoreaDFSScreenForm.qml</file>
         <file>LoadMaterialSettings.qml</file>
@@ -209,7 +207,7 @@
         <file>ThumbnailImageForm.qml</file>
         <file>LoggingItem.qml</file>
         <file>LoggingPopup.qml</file>
-        <file>LoggingSwipeView.qml</file>
+        <file>LoggingStackLayout.qml</file>
         <file>LoggingMouseArea.qml</file>
         <file>LoggingMouseAreaForm.qml</file>
         <file>TextHuge.qml</file>
@@ -274,6 +272,8 @@
         <file>DryMaterialCustomTemperature.qml</file>
         <file>CustomDrawer.qml</file>
         <file>DrawerButton.qml</file>
+        <file>NotificationsDrawer.qml</file>
+        <file>NotificationButton.qml</file>
         <file>CloseDrawerItem.qml</file>
         <file>ManualCalibrationPrintFinishedForm.qml</file>
         <file>ManualCalibrationPrintFinished.qml</file>
@@ -282,5 +282,8 @@
         <file>ReplaceFilterXLPageForm.qml</file>
         <file>ReplaceFilterXLPage.qml</file>
         <file>AdjustZOffset.qml</file>
+        <file>PrintingNotificationButton.qml</file>
+        <file>FlickableMenu.qml</file>
+        <file>HotChamberWarningScreen.qml</file>
     </qresource>
 </RCC>

@@ -176,6 +176,14 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     }
     activeSet(true);
 
+    const Json::Value &needsZCal = proc["needs_z_cal"];
+    if(!needsZCal.empty()) {
+        needsZCalSet(proc["needs_z_cal"].asBool());
+    }
+    else {
+        needsZCalReset();
+    }
+
     // Set the stateType after everything other that the process type, so that
     // step change listeners will see up to date properties within the same
     // process.
@@ -285,6 +293,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         stateTypeSet(ProcessStateType::FinishCleaning);
     else if (kStepStr == "cooling_nozzle")
         stateTypeSet(ProcessStateType::CoolingNozzle);
+    else if (kStepStr == "heating_for_hot_cal")
+        stateTypeSet(ProcessStateType::HeatingForHotCal);
     else if (kStepStr == "homing_xy" ||
              kStepStr == "homing_z"  ||
              kStepStr == "nozzle_offset_cal" ||

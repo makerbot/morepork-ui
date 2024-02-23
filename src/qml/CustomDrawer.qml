@@ -4,10 +4,31 @@ import QtQuick.Layouts 1.9
 
 Drawer {
     width: rootAppWindow.width
-    height: rootAppWindow.height - topBar.height
+    height: rootAppWindow.height
     edge: rootItem.rotation == 180 ? Qt.BottomEdge : Qt.TopEdge
     dim: false
     interactive: false
+
+    property int drawerStyle: CustomDrawer.DrawerStyle.BaseDrawer
+
+    enum DrawerStyle {
+        BaseDrawer,
+        NotificationsDrawer
+    }
+
+    property color backgroundColor: {
+        switch(drawerStyle) {
+        case CustomDrawer.DrawerStyle.BaseDrawer:
+            "#000000"
+            break;
+        case CustomDrawer.DrawerStyle.NotificationsDrawer:
+            "#d9000000"
+            break;
+        default:
+            "#000000"
+            break;
+        }
+    }
 
     property string topBarTitle: ""
 
@@ -18,8 +39,8 @@ Drawer {
             gradient: Gradient {
                       GradientStop { position: 0.0; color: "#00000000" }
                       GradientStop { position: 0.166; color: "#00000000" }
-                      GradientStop { position: 0.167; color: "#000000" }
-                      GradientStop { position: 1; color: "#000000" }
+                      GradientStop { position: 0.167; color: backgroundColor }
+                      GradientStop { position: 1; color: backgroundColor }
                   }
             }
 

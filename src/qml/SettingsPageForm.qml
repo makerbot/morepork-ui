@@ -50,7 +50,7 @@ Item {
         AnnealPrintPage         // 7
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: settingsSwipeView
         logName: "settingsSwipeView"
         currentIndex: SettingsPage.BasePage
@@ -64,12 +64,8 @@ Item {
             property string topBarTitle: qsTr("Settings")
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnSettings.height
 
                 Column {
@@ -114,7 +110,8 @@ Item {
                     MenuButton {
                         id: buttonCleanAirSettings
                         buttonImage.source: "qrc:/img/hepa_filter.png"
-                        buttonText.text: qsTr("CLEAN AIR SETTINGS")
+                        buttonText.text: bot.machineType == MachineType.Magma ? qsTr("FILTER SETTINGS")
+                                                                              : qsTr("CLEAN AIR SETTINGS")
                         buttonAlertImage.visible: bot.hepaFilterChangeRequired
                     }
 

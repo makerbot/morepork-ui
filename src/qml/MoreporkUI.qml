@@ -20,7 +20,6 @@ ApplicationWindow {
     property alias mainSwipeView: mainSwipeView
     property alias topBar: topBar
     property var currentItem: mainMenu
-    property var activeDrawer
     property bool authRequest: bot.isAuthRequestPending
     property bool installUnsignedFwRequest: bot.isInstallUnsignedFwRequestPending
     property bool updatingExtruderFirmware: bot.updatingExtruderFirmware
@@ -120,6 +119,33 @@ ApplicationWindow {
         }
     }
 
+
+    property bool isOffline: bot.net.interface != "wifi" &&
+                             bot.net.interface != "ethernet"
+
+    onIsOfflineChanged: {
+        if(isOffline) {
+            addToNotificationsList("printer_offline",
+                                   qsTr("Printer Is Offline"),
+                                   MoreporkUI.NotificationPriority.Persistent,
+                                   function() {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+
+                                       // Navigate to System Settings Page
+                                       if(settingsPage.settingsSwipeView.currentIndex != SettingsPage.SystemSettingsPage) {
+                                           resetSettingsSwipeViewPages()
+                                           mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                           settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                       }
+                                   })
+        } else {
+            removeFromNotificationsList("printer_offline")
+        }
+    }
+
     Timer {
         id: authTimeOut
         onTriggered: {
@@ -191,11 +217,22 @@ ApplicationWindow {
 
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
+            removeFromNotificationsList("extruders_not_calibrated")
         }
         // Do not open popup in FRE and both extruders must
         // be present for this popup to open
         if (!extrudersCalibrated && isFreComplete && extrudersPresent) {
             extNotCalibratedPopup.open()
+            addToNotificationsList("extruders_not_calibrated",
+                                   qsTr("Extruders not calibrated"),
+                                   MoreporkUI.NotificationPriority.Persistent,
+                                   () => {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+                                       extNotCalibratedPopup.open()
+                                   })
         }
     }
 
@@ -233,22 +270,41 @@ ApplicationWindow {
 
     property bool isfirmwareUpdateAvailable: bot.firmwareUpdateAvailable
 
+
     onIsfirmwareUpdateAvailableChanged: {
         fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
         if(isfirmwareUpdateAvailable && isFreComplete) {
-            if(settingsPage.settingsSwipeView.currentIndex != 3) {
+
+            // Open FW Update popup
+            if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
                 firmwareUpdatePopup.open()
             }
+
+            // Add firmware item to notifications
+            addToNotificationsList("firmware_update_available",
+                                   qsTr("Firmware Update Available"),
+                                   MoreporkUI.NotificationPriority.Persistent,
+                                   function() {
+                                       if(isProcessRunning()) {
+                                           printerNotIdlePopup.open()
+                                           return
+                                       }
+                                       if(settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex != SystemSettingsPage.FirmwareUpdatePage) {
+                                           resetSettingsSwipeViewPages()
+                                           mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                                           settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                                           settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
+                                       }
+                                   })
+
+        } else if(!isfirmwareUpdateAvailable){
+            removeFromNotificationsList("firmware_update_available")
         }
+
     }
 
     property bool skipFirmwareUpdate: false
     property bool viewReleaseNotes: false
-
-    onSkipFirmwareUpdateChanged: {
-        update_rectangle.color = "#ffffff"
-        update_text.color = "#000000"
-    }
 
     onIsBuildPlateClearChanged: {
         if(isBuildPlateClear) {
@@ -259,27 +315,154 @@ ApplicationWindow {
         }
     }
 
-    property int drawerState: MoreporkUI.DrawerState.NotAvailable
+    // This holds the actual drawer object. The Notifications Drawer is
+    // the default one when the UI starts up.
+    property var activeDrawer: notificationsDrawer
 
+    // Enum used to set the notifications icons state i.e to show the
+    // notifications count or to show the drawer open/close arrow icon
+    // depending on which drawer is the active one. Currently we only
+    // differentiate between the notification drawer and other drawers.
+    enum ActiveDrawer {
+        NotificationsDrawer,
+        OtherDrawers
+    }
+    property int currentActiveDrawer: MoreporkUI.ActiveDrawer.NotificationsDrawer
+
+    // All drawers can be in open or closed state and the top bar
+    // notifications/drawer state icon looks different based on the current active
+    // drawer and whether that drawer is open or closed. e.g. when the notifications
+    // drawer is active and in the closed state the notifications icon shows the
+    // notifications count but when opened it shows the close arrow. Other drawers
+    // just show the open/close icon when they are closed/open respectively.
     enum DrawerState {
-        NotAvailable,
         Closed,
         Open
     }
+    property int drawerState: MoreporkUI.DrawerState.Closed
 
-    function setDrawerState(state) {
-        if(activeDrawer == printPage.printingDrawer ||
-           activeDrawer == materialPage.materialPageDrawer ||
-           activeDrawer == printPage.sortingDrawer) {
-            if(state) {
-                drawerState = MoreporkUI.DrawerState.Closed
-                topBar.drawerDownClicked.connect(activeDrawer.open)
+    // Error notifications (button) are styled differently from informational
+    // notifications and should appear above informational notifications in the
+    // notifications drawer. Persistent notifications are the highest in priority
+    // and should be top most in the list.
+    enum NotificationPriority {
+        Informational,
+        Error,
+        Persistent
+    }
+
+    // An array holding the individual notification objects.
+    property var notificationsList: ([])
+
+    // Call this function to post a notiification.
+    // Notification names must to be unique.
+    //
+    // e.g.
+    // addToNotificationsList("notification_id_string", "display_name",
+    //         MoreporkUI.NotificationPriority.Persistent,
+    //         test_func)
+    // addToNotificationsList("notification_id_string", "display_name",
+    //         MoreporkUI.NotificationPriority.Error,
+    //         test_func)
+    // addToNotificationsList("notification_id_string", "display_name",
+    //         MoreporkUI.NotificationPriority.Informational,
+    //         test_func)
+
+    function addToNotificationsList(id, name, priority, func) {
+        // Don't add duplicate notifications.
+        if(notificationsList.find(v => v.id === id)) {
+            console.log("Attempting to post duplicate notification " + id)
+            return
+        }
+
+        notificationsList.push(
+            {
+                id: id,
+                name: name,
+                priority: priority,
+                func: func
             }
-            else {
-                drawerState = MoreporkUI.DrawerState.NotAvailable
+        )
+
+        // Notifications should appear in the order of their priority in the list
+        // so they are sorted in this order -- Persistent, Error, Informational.
+        notificationsList.sort(function(a, b){return b["priority"] - a["priority"]})
+        notificationsListChanged()
+        console.info("Posted notification " + id)
+    }
+
+    // Call this function to remove a notiification
+    //
+    // e.g.
+    // removeFromNotificationsList("notification_id_string")
+    function removeFromNotificationsList(id) {
+        notificationsList = notificationsList.filter(v => v.id !== id)
+        notificationsListChanged()
+        console.info("Removed notification " + id)
+    }
+
+    function test_func() {
+        console.log("test_func")
+    }
+
+    // The notifications icon in the top bar looks different when there
+    // are no notifications and when there are notifications and when
+    // there is aleast one error notification. The notificationsState enum
+    // is used to keep track of this.
+    enum NotificationsState {
+        NoNotifications,
+        NotificationsAvailable,
+        ErrorNotificationsAvailable
+    }
+    property int notificationsState: MoreporkUI.NotificationsState.NoNotifications
+    onNotificationsListChanged: {
+        if(notificationsList.length) {
+            notificationsState = MoreporkUI.NotificationsState.NotificationsAvailable
+            // Since the persistent notifications are located before the error notifications
+            // in the list we cannot just check the first element for error notifications
+            // which would've been very convenient.
+            for(var notif of notificationsList) {
+                if(notif["priority"] == MoreporkUI.NotificationPriority.Error) {
+                    notificationsState = MoreporkUI.NotificationsState.ErrorNotificationsAvailable
+                    break;
+                }
+            }
+        } else {
+            notificationsState = MoreporkUI.NotificationsState.NoNotifications
+        }
+    }
+
+    // This is the only function for controlling the drawer. By default the UI
+    // starts with the NotificationsDrawer as the active one. Anytime a new
+    // drawer is set as the active one it replaces the previous drawer but
+    // when the active drawer is set to null the notifications drawer becomes
+    // the active drawer. The current usage for this mechanism is anytime we
+    // enter a page that has a drawer e.g. the sorting drawer we set it as the
+    // current drawer and when we move out of the page we set the active drawer
+    // to null.
+    // This function will break if you try to pass in the notifications drawer
+    // object to set it as the active drawer.
+    function setActiveDrawer(drawer) {
+        if(drawer) {
+            if(activeDrawer != drawer) {
+                if(activeDrawer) {
+                    activeDrawer.close()
+                    topBar.drawerDownClicked.disconnect(activeDrawer.open)
+                }
+                activeDrawer = drawer
+                topBar.drawerDownClicked.connect(activeDrawer.open)
+                currentActiveDrawer = MoreporkUI.OtherDrawers
+                drawerState = MoreporkUI.DrawerState.Closed
+            }
+        } else {
+            if(activeDrawer) {
                 activeDrawer.close()
                 topBar.drawerDownClicked.disconnect(activeDrawer.open)
             }
+            activeDrawer = notificationsDrawer
+            topBar.drawerDownClicked.connect(activeDrawer.open)
+            currentActiveDrawer = MoreporkUI.NotificationsDrawer
+            drawerState = MoreporkUI.DrawerState.Closed
         }
     }
 
@@ -300,13 +483,12 @@ ApplicationWindow {
         }
     }
 
-    function disableDrawer() {
-        drawerState = MoreporkUI.DrawerState.NotAvailable
+    function disableOtherDrawer() {
+        drawerState = MoreporkUI.DrawerState.Closed
         if(activeDrawer == printPage.printingDrawer ||
            activeDrawer == materialPage.materialPageDrawer ||
            activeDrawer == printPage.sortingDrawer) {
-            activeDrawer.interactive = false
-            topBar.drawerDownClicked.disconnect(activeDrawer.open)
+            setActiveDrawer(null)
         }
     }
 
@@ -485,6 +667,11 @@ ApplicationWindow {
             }
         }
 
+        NotificationsDrawer {
+            id: notificationsDrawer
+            drawerStyle: CustomDrawer.DrawerStyle.NotificationsDrawer
+        }
+
         TopBarForm {
             id: topBar
             z: 1
@@ -504,6 +691,11 @@ ApplicationWindow {
                      !isFreComplete && !inFreStep
         }
 
+        HotChamberWarningScreen {
+            id: hotChamberWarning
+            z: 1
+        }
+
         Item {
             id: contentContainer
             width: 800
@@ -511,7 +703,7 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
 
-            LoggingSwipeView {
+            LoggingStackLayout {
                 id: mainSwipeView
                 itemWithEnum: rootAppWindow
                 logName: "mainSwipeView"
@@ -521,13 +713,26 @@ ApplicationWindow {
                          !freScreen.visible
 
                 function customEntryCheck(swipeToIndex) {
+                    // Since the notifications drawer is the default drawer
+                    // when moving to the home page we disable all other drawers
+                    // which sets the notifications drawer as the active one.
+                    // See disableOtherDrawer() and setActiveDrawer() for more info.
                     if(swipeToIndex === MoreporkUI.BasePage) {
                         topBar.backButton.visible = false
-                        if(!printPage.isPrintProcess) disableDrawer()
+                        disableOtherDrawer()
                     } else {
                         topBar.backButton.visible = true
                     }
+
+                    // When moving to the print page we set the printing drawer
+                    // as the active one if a print process is running.
+                    if(swipeToIndex == MoreporkUI.PrintPage) {
+                        if(printPage.isPrintProcess) {
+                            setActiveDrawer(printPage.printingDrawer)
+                        }
+                    }
                 }
+
                 // MoreporkUI.BasePage
                 Item {
                     property string topBarTitle: qsTr("Home")
@@ -601,6 +806,7 @@ ApplicationWindow {
                         anchors.fill: parent
                     }
                 }
+
                 // MoreporkUI.SettingsPage
                 Item {
                     property var backSwiper: mainSwipeView
@@ -1014,477 +1220,146 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "InstallUnsignedFirmware"
             id: installUnsignedFwPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
             closePolicy: Popup.CloseOnPressOutside
-            parent: overlay
-            background: Rectangle {
-                id: installUnsignedFwPopupBackgroundDim
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            popupHeight: installUnsignedFwBasePopupLayout.height + 140
+
+            showTwoButtons: true
+            right_button_text: qsTr("INSTALL")
+            right_button.onClicked: {
+                bot.respondInstallUnsignedFwRequest("allow")
+                installUnsignedFwPopup.close()
             }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                cancel_rectangle.color = "#ffffff"
-                cancel_text.color = "#000000"
-            }
-            onClosed: {
+            left_button_text: qsTr("CANCEL")
+            left_button.onClicked: {
+                bot.respondInstallUnsignedFwRequest("rejected")
+                installUnsignedFwPopup.close()
             }
 
-            Rectangle {
-                id: installUnsignedFwBasePopupItem
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 740
-                height: 250
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: installUnsignedFwBasePopupLayout
+                height: children.height
+                anchors.top: installUnsignedFwPopup.popupContainer.top
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-                Item {
-                    id: installUnsignedFwColumnLayout
+                TextHeadline {
+                    id: install_unsigned_fw_header
+                    text: qsTr("UNKNOWN FIRMWARE")
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                TextBody {
+                    id: install_unsigned_fw_description
                     width: 600
-                    height: 300
-                    anchors.top: parent.top
-                    anchors.topMargin: 35
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    // Title of Popup
-                    Text {
-                        id: install_unsigned_fw_header_text
-                        color: "#cbcbcb"
-                        text: qsTr("UNKNOWN FIRMWARE")
-                        anchors.top: parent.top
-                        anchors.topMargin: 0
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        font.letterSpacing: 5
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 22
-                    }
-                    // Main question that appears in the popup
-                    Text {
-                        id: install_unsigned_fw_description_text1
-                        color: "#cbcbcb"
-                        text: qsTr("You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?")
-                        // To specify a WordWrap property, the width must be defined
-                        width: parent.width
-                        wrapMode: Text.WordWrap
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.topMargin: 17
-                        anchors.top: install_unsigned_fw_header_text.bottom
-                        horizontalAlignment: Text.AlignHCenter
-                        font.weight: Font.Light
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        font.letterSpacing: 3
-                        font.capitalization: Font.MixedCase
-                    }
-                }
-
-                Rectangle {
-                    id: install_unsigned_fw_horizontal_divider
-                    width: parent.width
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                    visible: true
-                }
-
-                Rectangle {
-                    id: install_unsigned_fw_vertical_divider
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    visible: true
-                }
-
-                Item {
-                    id: install_unsigned_fw_item1
-                    width: parent.width
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    visible: true
-
-                    Rectangle {
-                        id: install_rectangle
-                        x: 0
-                        y: 0
-                        width: parent.width * 0.5
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: install_text
-                            color: "#ffffff"
-                            text: qsTr("INSTALL")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "installUnsignedFwBasePopupItem: [_" + install_text.text + "|]"
-                            id: install_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                install_text.color = "#000000"
-                                install_rectangle.color = "#ffffff"
-                                cancel_text.color = "#ffffff"
-                                cancel_rectangle.color = "#00000000"
-                            }
-                            onReleased: {
-                                install_text.color = "#ffffff"
-                                install_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.respondInstallUnsignedFwRequest("allow")
-                                installUnsignedFwPopup.close()
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: cancel_rectangle
-                        x: parent.width * 0.5
-                        y: 0
-                        width: parent.width * 0.5
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_text
-                            color: "#ffffff"
-                            text: qsTr("CANCEL")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "installUnsignedFwBasePopupItem: [|" + cancel_text.text + "_]"
-                            id: cancel_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                cancel_text.color = "#000000"
-                                cancel_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_text.color = "#ffffff"
-                                cancel_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.respondInstallUnsignedFwRequest("rejected")
-                                installUnsignedFwPopup.close()
-                            }
-                        }
-                    }
+                    Layout.preferredWidth: width
+                    text: qsTr("You are installing an unknown firmware, this can damage your printer and void your warranty. Are you sure you want to proceed?")
+                    Layout.alignment: Qt.AlignHCenter
                 }
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "FirmwareUpdateNotification"
             id: firmwareUpdatePopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
+            popupHeight: firmwareUpdatePopupColumnLayout.height +140
             closePolicy: Popup.CloseOnPressOutside
-            parent: overlay
-            background: Rectangle {
-                id: popupBackgroundDim1
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+
+            showTwoButtons: true
+            right_button_text: qsTr("UPDATE")
+            right_button.onClicked: {
+                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
+                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
+                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
+                firmwareUpdatePopup.close()
             }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                update_rectangle.color = "#ffffff"
-                update_text.color = "#000000"
+            left_button_text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
+            left_button.onClicked: {
+                if(skipFirmwareUpdate) {
+                    firmwareUpdatePopup.close()
+                }
+                else {
+                    skipFirmwareUpdate = true
+                    viewReleaseNotes = false
+                }
             }
             onClosed: {
                 viewReleaseNotes = false
                 skipFirmwareUpdate = false
             }
 
-            Rectangle {
-                id: basePopupItem1
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: skipFirmwareUpdate ? 220 : 275
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: firmwareUpdatePopupColumnLayout
+                height: children.height
+                anchors.top: firmwareUpdatePopup.popupContainer.top
+                anchors.topMargin: 35
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-                Rectangle {
-                    id: horizontal_divider1
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
+                TextHeadline {
+                    id: firmware_header_text
+                    text: viewReleaseNotes ? qsTr("FIRMWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP FIRMWARE UPDATE?") : qsTr("FIRMWARE UPDATE AVAILABLE")
+                    Layout.alignment: Qt.AlignHCenter
                 }
 
-                Rectangle {
-                    id: vertical_divider1
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
+                TextBody {
+                    id: firmware_description_text
+                    width: 500
+                    text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date firmware for your printer.") : qsTr("A new version of firmware is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: width
+                    visible: !viewReleaseNotes
+                }
+
+                ListView {
+                    width: 600
+                    height: 120
+                    clip: true
+                    spacing: 1
+                    orientation: ListView.Vertical
+                    boundsBehavior: Flickable.DragOverBounds
+                    flickableDirection: Flickable.VerticalFlick
+                    model: bot.firmwareReleaseNotesList
+                    visible: viewReleaseNotes
+                    smooth: false
+                    delegate:
+                        TextBody {
+                            id: firmware_release_notes_text
+                            width: 600
+                            text: model.modelData
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            Layout.preferredWidth: width
+                        }
+                    ScrollBar.vertical: ScrollBar {
+                        orientation: Qt.Vertical
+                        policy: ScrollBar.AsNeeded
+                    }
+                }
+
+                TextBody {
+                    id: firmware_show_release_notes_text
+                    text: qsTr("Tap to see Release Notes")
+                    font.underline: true
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+                    horizontalAlignment: Text.AlignHCenter
+                    visible: !skipFirmwareUpdate &&
+                             !viewReleaseNotes
 
-                Item {
-                    id: buttonBar
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: dismiss_rectangle1
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: dismiss_text1
-                            color: "#ffffff"
-                            text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "firmwareUpdatePopup [_" + dismiss_text1.text + "|]"
-                            id: notnow_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                dismiss_text1.color = "#000000"
-                                dismiss_rectangle1.color = "#ffffff"
-                                update_text.color = "#ffffff"
-                                update_rectangle.color = "#00000000"
-                            }
-                            onReleased: {
-                                dismiss_text1.color = "#ffffff"
-                                dismiss_rectangle1.color = "#00000000"
-                            }
-                            onClicked: {
-                                if(skipFirmwareUpdate) {
-                                    firmwareUpdatePopup.close()
-                                }
-                                else {
-                                    skipFirmwareUpdate = true
-                                    viewReleaseNotes = false
-                                }
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: update_rectangle
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: update_text
-                            color: "#ffffff"
-                            text: qsTr("UPDATE")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "firmwareUpdatePopup [|" + update_text.text + "_]"
-                            id: update_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                update_text.color = "#000000"
-                                update_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                update_text.color = "#ffffff"
-                                update_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
-                                firmwareUpdatePopup.close()
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout1
-                    x: 130
-                    width: 550
-                    height: 150
-                    anchors.top: parent.top
-                    anchors.topMargin: 26
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: firmware_header_text
-                        color: "#cbcbcb"
-                        text: viewReleaseNotes ? qsTr("FIRMWARE %1 RELEASE NOTES").arg(bot.firmwareUpdateVersion) : skipFirmwareUpdate ? qsTr("SKIP FIRMWARE UPDATE?") : qsTr("FIRMWARE UPDATE AVAILABLE")
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.letterSpacing: 5
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 18
-                    }
-
-                    Item {
-                        id: emptyItem
-                        width: 200
-                        height: 10
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        visible: skipFirmwareUpdate ? false : true
-                    }
-
-                    Text {
-                        id: firmware_description_text1
-                        width: 500
-                        color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? qsTr("We recommend using the most up to date firmware for your printer.") : qsTr("A new version of firmware is available. Do you want to update to the most recent version %1?").arg(bot.firmwareUpdateVersion)
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.35
-                        visible: !viewReleaseNotes
-                    }
-
-                    ListView {
-                        width: 600
-                        height: 120
-                        clip: true
-                        spacing: 1
-                        orientation: ListView.Vertical
-                        boundsBehavior: Flickable.DragOverBounds
-                        flickableDirection: Flickable.VerticalFlick
-                        model: bot.firmwareReleaseNotesList
-                        visible: viewReleaseNotes
-                        smooth: false
-                        delegate:
-                            Text {
-                                id: firmware_release_notes_text
-                                width: 600
-                                color: "#ffffff"
-                                text: model.modelData
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                Layout.fillWidth: true
-                                font.weight: Font.Light
-                                wrapMode: Text.WordWrap
-                                font.family: defaultFont.name
-                                font.pixelSize: 18
-                                lineHeight: 1.35
-                            }
-                        ScrollBar.vertical: ScrollBar {
-                            orientation: Qt.Vertical
-                            policy: ScrollBar.AsNeeded
-                        }
-                    }
-
-                    Text {
-                        id: firmware_description_text2
-                        color: "#cbcbcb"
-                        text: skipFirmwareUpdate ? "" : qsTr("Tap to see Release Notes")
-                        font.underline: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        visible: viewReleaseNotes ? false : true
-
-                        LoggingMouseArea {
-                            logText: "firmwareUpdatePopup [" + firmware_description_text2.text + "]"
-                            anchors.fill: parent
-                            visible: skipFirmwareUpdate ? false : true
-                            onClicked: {
-                                viewReleaseNotes = true
-                            }
+                    LoggingMouseArea {
+                        logText: "firmwareUpdatePopup [" + firmware_show_release_notes_text.text + "]"
+                        anchors.fill: parent
+                        visible: !skipFirmwareUpdate
+                        onClicked: {
+                            viewReleaseNotes = true
                         }
                     }
                 }
             }
+
         }
 
         LoggingPopup {
@@ -3054,5 +2929,12 @@ ApplicationWindow {
         fre.setStepEnable(FreStep.SetupWifi, !isNetworkConnectionAvailable)
         fre.setStepEnable(FreStep.LoginMbAccount, isNetworkConnectionAvailable)
         fre.setStepEnable(FreStep.SoftwareUpdate, isfirmwareUpdateAvailable)
+
+        // When starting up the UI we set the notifications drawer as the
+        // active drawer.
+        activeDrawer = notificationsDrawer
+        topBar.drawerDownClicked.connect(activeDrawer.open)
+        currentActiveDrawer = MoreporkUI.NotificationsDrawer
+        drawerState = MoreporkUI.DrawerState.Closed
     }
 }

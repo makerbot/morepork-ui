@@ -17,6 +17,7 @@
         <file alias="wifi_connected.png">images/top_bar/wifi_connected.png</file>
         <file alias="ethernet_connected.png">images/top_bar/ethernet_connected.png</file>
         <file alias="no_ethernet.png">images/top_bar/no_ethernet.png</file>
+        <file alias="no_wifi.png">images/top_bar/no_wifi.png</file>
         <file alias="sombrero.png">images/sombrero.png</file>
         <file alias="front_build_volume.png">images/front_build_volume.png</file>
         <file alias="back_build_volume.png">images/back_build_volume.png</file>
@@ -203,7 +204,6 @@
         <file alias="case_tube_1_case.png">images/case_tube_1_case.png</file>
         <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
-        <file alias="case_divider.png">images/case_divider.png</file>
         <file alias="methodxl_locate_desiccant.png">images/load_unload/methodxl/methodxl_locate_desiccant.png</file>
         <file alias="qr_230_compatibility.png">images/qr_230_compatibility.png</file>
         <file alias="qr_230_fw_download.png">images/qr_230_fw_download.png</file>
@@ -240,6 +240,10 @@
         <file alias="drawer_down.png">images/top_bar/drawer_down.png</file>
         <file alias="drawer_up.png">images/top_bar/drawer_up.png</file>
         <file alias="drawer_cancel.png">images/drawer/cancel.png</file>
+        <file alias="open_notification.png">images/drawer/open_notification.png</file>
+        <file alias="dismiss_notification.png">images/drawer/dismiss_notification.png</file>
+        <file alias="informational_notification.png">images/drawer/informational_notification.png</file>
+        <file alias="error_notification.png">images/drawer/error_notification.png</file>
         <file alias="drawer_change_material.png">images/drawer/change_material.png</file>
         <file alias="drawer_current_selection.png">images/drawer/current_selection.png</file>
         <file alias="drawer_pause.png">images/drawer/pause.png</file>
@@ -248,6 +252,7 @@
         <file alias="z_offset_build_plate.png">images/manual_z_offset/build_plate.png</file>
         <file alias="z_offset_nozzle.png">images/manual_z_offset/nozzle.png</file>
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
+        <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
         <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
     </qresource>
 </RCC>

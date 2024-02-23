@@ -171,12 +171,12 @@ Item {
         materialChangeActive = false;
         loadUnloadFilamentProcess.state = "base state"
         materialSwipeView.swipeToItem(MaterialPage.BasePage)
-        setDrawerState(false)
         if (printPage.isPrintProcess) {
             // If we are printing we need to restore the print drawer
-            activeDrawer = printPage.printingDrawer
-            setDrawerState(true)
+            setActiveDrawer(printPage.printingDrawer)
             mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+        } else {
+            setActiveDrawer(null)
         }
     }
 
@@ -215,7 +215,7 @@ Item {
         AttachExtruderPage
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: materialSwipeView
         logName: "materialSwipeView"
         currentIndex: MaterialPage.BasePage
@@ -387,13 +387,12 @@ Item {
                 onProcessDone: {
                     state = "base state"
                     materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                    setDrawerState(false)
+                    setActiveDrawer(null)
                     // If load/unload process completes successfully while,
                     // in print process enable print drawer to set UI back,
                     // to printing state.
                     if(printPage.isPrintProcess) {
-                        activeDrawer = printPage.printingDrawer
-                        setDrawerState(true)
+                        setActiveDrawer(printPage.printingDrawer)
                         // Go to print page directly after loading
                         // but if unloading stay on material page
                         if(isLoadFilament) {

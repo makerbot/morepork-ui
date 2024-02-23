@@ -7,9 +7,7 @@ import MachineTypeEnum 1.0
 MaterialPageForm {
 
     function enableMaterialDrawer() {
-        setDrawerState(false)
-        activeDrawer = materialPage.materialPageDrawer
-        setDrawerState(true)
+        setActiveDrawer(materialPage.materialPageDrawer)
     }
 
     function isExtruderPresent(extruderID) {

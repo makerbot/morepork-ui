@@ -16,8 +16,6 @@ MaterialCaseSetupForm {
             } else if (state == "tube_1_printer") {
                 state = "tube_2"
             } else if (state == "tube_2") {
-                state = "remove_divider"
-            } else if (state == "remove_divider") {
                 state = "intro_1"
                 setupProceduresSwipeView.swipeToItem(SetupProceduresPage.BasePage)
                 if(inFreStep){

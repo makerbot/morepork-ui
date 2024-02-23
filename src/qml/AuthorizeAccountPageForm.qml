@@ -26,7 +26,7 @@ Item {
         AuthorizeWithCredentials
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: authorizeAccountSwipeView
         logName: "authorizeAccountSwipeView"
         currentIndex: AuthorizeAccountPage.ChooseAuthMethod
@@ -52,12 +52,8 @@ Item {
             smooth: false
             visible: true
 
-            Flickable {
+            FlickableMenu {
                 id: flickableAuthorizeMethod
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: false
-                anchors.fill: parent
                 contentHeight: columnAuthorizeMethod.height
 
                 Column {

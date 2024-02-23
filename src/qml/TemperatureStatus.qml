@@ -17,6 +17,7 @@ ColumnLayout {
         Chamber,
         ChamberBuildPlane,
         HeatedBuildPlate,
+        ChamberAndHeatedBuildPlate,
         Generic
     }
 
@@ -37,6 +38,8 @@ ColumnLayout {
                 qsTr("CHAMBER")
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 qsTr("BUILD PLATE")
+            } else if(showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate) {
+                qsTr("CHAMBER")
             } else if(showComponent == TemperatureStatus.Generic) {
                 "GENERIC HEATER"
             }
@@ -53,6 +56,8 @@ ColumnLayout {
                 bot.buildplaneCurrentTemp
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 bot.hbpCurrentTemp
+            } else if(showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate) {
+                bot.buildplaneCurrentTemp
             } else if(showComponent == TemperatureStatus.Generic) {
                 -999
             }
@@ -69,6 +74,8 @@ ColumnLayout {
                 bot.buildplaneTargetTemp
             } else if(showComponent == TemperatureStatus.HeatedBuildPlate) {
                 bot.hbpTargetTemp
+            } else if(showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate) {
+                bot.buildplaneTargetTemp
             } else if(showComponent == TemperatureStatus.Generic) {
                 -999
             }
@@ -77,9 +84,28 @@ ColumnLayout {
 
     TemperatureStatusElement {
         id: component2
-        componentName: qsTr("EXTRUDER 2")
-        customCurrentTemperature: bot.extruderBCurrentTemp
-        customTargetTemperature: bot.extruderBTargetTemp
-        visible: showComponent == TemperatureStatus.BothExtruders
+        componentName: {
+            if(showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate) {
+                qsTr("BUILD PLATE")
+            } else {
+                qsTr("EXTRUDER 2")
+            }
+        }
+        customCurrentTemperature: {
+            if(showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate) {
+                bot.hbpCurrentTemp
+            } else {
+                bot.extruderBCurrentTemp
+            }
+        }
+        customTargetTemperature: {
+            if(showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate) {
+                bot.hbpTargetTemp
+            } else {
+                bot.extruderBTargetTemp
+            }
+        }
+        visible: showComponent == TemperatureStatus.BothExtruders ||
+                 showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate
     }
 }
