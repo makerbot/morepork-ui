@@ -56,7 +56,8 @@ ToolheadCalibrationForm {
 
             buttonSecondary1 {
                 onClicked: {
-                    if(toolheadCalibration.state == "clean_nozzles") {
+                    if(toolheadCalibration.state == "clean_nozzles" &&
+                            bot.process.stateType == ProcessStateType.CheckNozzleClean) {
                         bot.doNozzleCleaning(false)
                     } else if(toolheadCalibration.state == "clean_nozzles" &&
                               bot.process.stateType == ProcessStateType.FinishCleaning) {
