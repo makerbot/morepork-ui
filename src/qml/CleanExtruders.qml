@@ -33,7 +33,6 @@ CleanExtrudersForm {
             buttonSecondary1 {
                 onClicked: {
                     if(cleanExtrudersSequence.state == "finish_cleaning") {
-                        //cleanExtrudersSequence.state = "clean_nozzle"
                         bot.acknowledgeNozzleCleaned(false)
                     }
                 }
