@@ -315,6 +315,29 @@ ApplicationWindow {
         }
     }
 
+    property bool extruderAUnclearedJam: bot.extruderAUnclearedJam
+    property bool extruderBUnclearedJam: bot.extruderBUnclearedJam
+
+    onExtruderAUnclearedJamChanged: {
+        updateUnclearedJamNotification("1", extruderAUnclearedJam)
+    }
+
+    onExtruderBUnclearedJamChanged: {
+        updateUnclearedJamNotification("2", extruderBUnclearedJam)
+    }
+
+    function updateUnclearedJamNotification(ext_idx, add_to_list) {
+        var notif_id = ("extruder_%1_uncleared_jam").arg(ext_idx)
+        var notif_str = "Extruder %1 might be jammed".arg(ext_idx)
+        if(add_to_list) {
+            addToNotificationsList(
+                    notif_id, notif_str, MoreporkUI.NotificationPriority.Persistent,
+                    () => {})
+        } else {
+            removeFromNotificationsList(notif_id)
+        }
+    }
+
     // This holds the actual drawer object. The Notifications Drawer is
     // the default one when the UI starts up.
     property var activeDrawer: notificationsDrawer
