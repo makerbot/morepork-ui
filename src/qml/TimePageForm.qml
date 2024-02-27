@@ -16,7 +16,7 @@ LoggingItem {
         SetTime
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: timeSwipeView
         logName: "timeSwipeView"
         currentIndex: TimePage.BasePage

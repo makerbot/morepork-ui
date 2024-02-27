@@ -25,7 +25,7 @@ Item {
         RaiseLowerBuildPlatePage    //2
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: buildPlateSettingsSwipeView
         logName: "buildPlateSettingsSwipeView"
         currentIndex: BuildPlateSettingsPage.BasePage
@@ -40,12 +40,8 @@ Item {
 
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableBuildPlateSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnBuildPlateSettings.height
 
                 Column {

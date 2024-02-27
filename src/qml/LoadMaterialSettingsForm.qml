@@ -43,7 +43,7 @@ Item {
         SelectTemperaturePage
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: selectMaterialSwipeView
         logName: "selectMaterialSwipeView"
         currentIndex: 0

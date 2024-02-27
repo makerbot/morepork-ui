@@ -26,7 +26,7 @@ Item {
         PasswordPage
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: signInSwipeView
         logName: "signInSwipeView"
         currentIndex: SignInPage.BasePage

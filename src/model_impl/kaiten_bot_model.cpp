@@ -54,6 +54,7 @@ class KaitenBotModel : public BotModel {
     void done(QString acknowledge_result);
     void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void loadFilamentStop();
+    void loadFilamentCancel();
     void unloadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void assistedLevel();
     void continue_leveling();
@@ -705,13 +706,31 @@ void KaitenBotModel::loadFilament(const int kToolIndex, bool external, bool whil
     }
 }
 
-// Call to let load_filament() know the fliament is extruding
+// Call to let load_filament() know that loading was successful
 void KaitenBotModel::loadFilamentStop(){
     try{
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
         json_params["method"] = Json::Value("stop_filament");
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+
+// Call to cancel filament loading but not cancel any ongoing print
+void KaitenBotModel::loadFilamentCancel(){
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value proc_params(Json::objectValue);
+        proc_params["fail"] = Json::Value(true);
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("stop_filament");
+        json_params["params"] = proc_params;
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
@@ -1767,8 +1786,6 @@ void KaitenBotModel::filterHoursUpdate(const Json::Value &result) {
 
 void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
     dynamic_cast<KaitenNetModel*>(m_net.data())->sysInfoUpdate(info);
-    dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
-        info["current_process"]);
     UPDATE_STRING_PROP(name, info["machine_name"]);
     UPDATE_STRING_PROP(type, info["machine_type"]);
     const Json::Value &kMachinetype = info["machine_type"];
@@ -1974,19 +1991,23 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       const Json::Value &loaded_filaments = info["loaded_filaments"];
       if (loaded_filaments.isArray()) {
           QStringList materialsAPI, materialsDisplay;
+          QList<bool> materialLoaded;
           for (const Json::Value mat : loaded_filaments) {
               if (mat.empty()) {
                   materialsAPI.append("unknown");
                   materialsDisplay.append("UNKNOWN");
+                  materialLoaded.append(false);
               } else if (mat.isString()) {
                   QString matAPI(mat.asString().c_str());
                   if (matAPI == "generic") matAPI = "unknown";
                   materialsAPI.append(matAPI);
                   materialsDisplay.append(getMaterialName(matAPI));
+                  materialLoaded.append(true);
               }
           }
           loadedMaterialsSet(materialsAPI);
           loadedMaterialNamesSet(materialsDisplay);
+          materialLoadedSet(materialLoaded);
       }
 
       // TODO(chris): This bit is a mess...
@@ -2007,6 +2028,11 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
           versionReset();
       }
     }
+
+    // Update process info last so that data that is synced to process
+    // steps will be up to date when we fire the step change event
+    dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
+        info["current_process"]);
 }
 
 bool KaitenBotModel::checkError(const Json::Value error_list,

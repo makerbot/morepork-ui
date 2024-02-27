@@ -39,6 +39,7 @@ class ProcessModel : public BaseModel {
         Idle, // Load and Unload states
         WaitingForFilament,
         Preheating,
+        AwaitingEngagement,
         Extrusion,
         Stopping,
         UnloadingFilament,
