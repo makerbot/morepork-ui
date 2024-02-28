@@ -834,9 +834,7 @@ ApplicationWindow {
                 id: waitToSkipFreStep
                 interval: 200
                 onTriggered: {
-                    if (inFreStep) {
-                        currentItem.skipFreStepAction()
-                    }
+
                     fre.gotoNextStep(currentFreStep)
                 }
             }
@@ -846,6 +844,9 @@ ApplicationWindow {
             }
             right_button.onClicked: {
                 skipFreStepPopup.close()
+                if (inFreStep) {
+                    currentItem.skipFreStepAction()
+                }
                 waitToSkipFreStep.start()
             }
 
@@ -947,7 +948,7 @@ ApplicationWindow {
                         case FreStep.CalibrateExtruders:
                         case FreStep.MaterialCaseSetup:
                         default:
-                            qsTr("This may skip other set-up procedures as well. You can revisit all steps of the set-up in the settings.")
+                            qsTr("This is required for quality printing. You can revisit any steps from the set-up in the settings menu.")
                             break;
                         }
                     }
