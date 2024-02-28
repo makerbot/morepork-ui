@@ -834,7 +834,6 @@ ApplicationWindow {
                 id: waitToSkipFreStep
                 interval: 200
                 onTriggered: {
-                    console.log("Go to next step")
                     if (inFreStep) {
                         currentItem.skipFreStepAction()
                     }
