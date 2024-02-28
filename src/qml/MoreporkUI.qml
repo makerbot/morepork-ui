@@ -820,17 +820,6 @@ ApplicationWindow {
                 }
             }
         }
-        Timer {
-            id: waitToSkipFreStep
-            interval: 200
-            onTriggered: {
-
-                if (inFreStep) {
-                    currentItem.skipFreStepAction()
-                }
-                fre.gotoNextStep(currentFreStep)
-            }
-        }
 
         CustomPopup {
             popupName: "SkipFreStep"
@@ -839,6 +828,19 @@ ApplicationWindow {
             showTwoButtons: true
             left_button_text: qsTr("BACK")
             right_button_text: qsTr("CONFIRM")
+
+
+            Timer {
+                id: waitToSkipFreStep
+                interval: 200
+                onTriggered: {
+                    console.log("Go to next step")
+                    if (inFreStep) {
+                        currentItem.skipFreStepAction()
+                    }
+                    fre.gotoNextStep(currentFreStep)
+                }
+            }
 
             left_button.onClicked: {
                 skipFreStepPopup.close()
