@@ -41,7 +41,7 @@ Item {
         {code: "MIT", name: "MIDWAY ISLANDS TIME", GMTOffset: "GMT-11:00", path: "Etc/GMT-11"},
     ]
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         logName: "timeZoneSelector"
         Item {
             ListSelector {

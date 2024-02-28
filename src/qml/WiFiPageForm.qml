@@ -69,7 +69,7 @@ Item {
         EnterPassword
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: wifiSwipeView
         logName: "wifiSwipeView"
         currentIndex: WiFiPage.ChooseWifi

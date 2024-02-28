@@ -37,7 +37,7 @@ Item {
         AdjustZOffsetPage         // 4
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: extruderSettingsSwipeView
         logName: "extruderSettingsSwipeView"
         currentIndex: ExtruderSettingsPage.BasePage
@@ -51,12 +51,8 @@ Item {
             property string topBarTitle: qsTr("Extruder Settings")
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableExtruderSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnExtruderSettings.height
 
                 Column {
@@ -134,6 +130,8 @@ Item {
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
             property string topBarTitle: qsTr("Automatic Calibration")
             property bool hasAltBack: true
+            property bool backIsCancel: (bot.process.type === ProcessType.CalibrationProcess &&
+                                         bot.process.isProcessCancellable)
             smooth: false
             visible: false
 

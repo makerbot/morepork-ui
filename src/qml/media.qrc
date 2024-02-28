@@ -252,5 +252,7 @@
         <file alias="z_offset_build_plate.png">images/manual_z_offset/build_plate.png</file>
         <file alias="z_offset_nozzle.png">images/manual_z_offset/nozzle.png</file>
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
+        <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
+        <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
     </qresource>
 </RCC>

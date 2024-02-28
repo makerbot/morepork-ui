@@ -117,7 +117,7 @@ Item {
         KoreaDFSSecretPage      // 14
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: systemSettingsSwipeView
         logName: "systemSettingsSwipeView"
         currentIndex: SystemSettingsPage.BasePage
@@ -131,12 +131,8 @@ Item {
             property string topBarTitle: qsTr("System Settings")
             smooth: false
 
-            Flickable {
+            FlickableMenu {
                 id: flickableSystemSettings
-                smooth: false
-                flickableDirection: Flickable.VerticalFlick
-                interactive: true
-                anchors.fill: parent
                 contentHeight: columnSystemSettings.height
 
                 Column {
@@ -163,6 +159,7 @@ Item {
                         id: buttonWiFi
                         buttonImage.source: "qrc:/img/icon_wifi.png"
                         buttonText.text: qsTr("WIFI AND NETWORK")
+                        buttonAlertImage.visible: isOffline
                         slidingSwitch.checked: bot.net.wifiEnabled
                         slidingSwitch.visible: true
 
