@@ -2118,6 +2118,7 @@ ApplicationWindow {
                 printPage.startPrintGenuineSliceUnknownMaterial = false
                 printPage.startPrintMaterialMismatch = false
                 printPage.startPrintWithLabsExtruder = false
+                printPage.startPrintWithUnclearedJam = false
             }
 
             showOneButton: (printPage.startPrintBuildDoorOpen ||
@@ -2136,7 +2137,8 @@ ApplicationWindow {
                    printPage.startPrintGenuineSliceUnknownMaterial ||
                    printPage.startPrintWithLabsExtruder) {
                     qsTr("BACK")
-                } else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                } else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                          printPage.startPrintWithUnclearedJam) {
                     qsTr("START ANYWAY")
                 } else {
                     emptyString
@@ -2145,9 +2147,10 @@ ApplicationWindow {
 
             left_button.onClicked: {
                 startPrintErrorsPopup.close()
-                if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                   printPage.startPrintWithUnclearedJam) {
                     if(printPage.startPrintDoorLidCheck()) {
-                        printPage.confirm_build_plate_popup.open()
+                        printPage.startPrintPopup.open()
                     } else {
                         startPrintErrorsPopup.open()
                     }
@@ -2169,6 +2172,8 @@ ApplicationWindow {
                     qsTr("CHANGE MATERIAL")
                 } else if(printPage.startPrintWithLabsExtruder) {
                     qsTr("CONTINUE")
+                } else if(printPage.startPrintWithUnclearedJam) {
+                    qsTr("CLEAR EXTRUDER")
                 } else {
                     emptyString
                 }
@@ -2179,7 +2184,8 @@ ApplicationWindow {
                 if(printPage.startPrintNoFilament ||
                    printPage.startPrintMaterialMismatch ||
                    printPage.startPrintGenuineSliceUnknownMaterial ||
-                   printPage.startPrintUnknownSliceGenuineMaterial) {
+                   printPage.startPrintUnknownSliceGenuineMaterial ||
+                   printPage.startPrintWithUnclearedJam) {
                     resetDetailsAndGoToMaterialsPage()
                     if(isInManualCalibration) {
                         // Reset Manual Z Cal
@@ -2187,7 +2193,7 @@ ApplicationWindow {
                     }
                 } else if(printPage.startPrintWithLabsExtruder) {
                     if(printPage.startPrintDoorLidCheck()) {
-                        printPage.confirm_build_plate_popup.open()
+                        printPage.startPrintPopup.open()
                     } else {
                         startPrintErrorsPopup.open()
                     }
@@ -2392,6 +2398,28 @@ ApplicationWindow {
                                        "material. Printing with other materials is not recommended and could negatively " +
                                        "impact print quality. If you experience worse results with other materials " +
                                        "running automatic calibration might help.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "uncleared_jam_warning"
+                        when: printPage.startPrintWithUnclearedJam
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("EXTRUDER %1 JAMMED").arg(extruderAUnclearedJam ? "1" : "2")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: {
+                                qsTr("Ensure that the spool isn’t tangled and try purging the extruder. " +
+                                     "If the issue recurs, unload and reload the material.")
+                            }
                         }
 
                         PropertyChanges {
