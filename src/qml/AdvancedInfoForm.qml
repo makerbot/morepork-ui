@@ -15,12 +15,8 @@ Item {
         }
     }
 
-    Flickable {
+    FlickableMenu {
         id: flickableAdvancedInfo
-        smooth: false
-        flickableDirection: Flickable.VerticalFlick
-        interactive: true
-        anchors.fill: parent
         contentHeight: columnContents.height
 
         Column {
@@ -97,6 +93,14 @@ Item {
             AdvancedInfoCalibrationItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
+            }
+
+            // Empty item to not make the refresh button cover the contents
+            // of the page.
+            Item {
+                id: emptyItem
+                width: parent.width
+                height: 50
             }
         }
     }

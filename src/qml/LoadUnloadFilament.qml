@@ -24,6 +24,13 @@ LoadUnloadFilamentForm {
             } else if(state == "no_nfc_reader_feed_filament") {
                 // Do nothing. The button is disabled with the button style
                 // and only the help button is enabled in this screen.
+            } else if(state == "awaiting_engagement") {
+                // Normally the countdown timer gets reset to the initial value
+                // when we change the button style from a regular button to a button
+                // with a countdown.  But since we directly transition here between
+                // two different states with countdowns, we need to manually reset.
+                retryButton.delayedEnableCountdown = 30;
+                state = "extrusion";
             } else if(state == "extrusion") {
                 bot.loadFilamentStop()
             } else if(state == "loaded_filament") {
@@ -95,7 +102,12 @@ LoadUnloadFilamentForm {
                 }
             } else if(state == "unloaded_filament_1") {
                 processDone()
-            } else if(state == "error" || "error_not_extruding") {
+            } else if(state == "error" || state == "error_not_extruding") {
+                retryLoadUnload()
+            } else if (state == "error_not_engaging") {
+                state = "top_assist_load"
+            } else if (state == "top_assist_load") {
+                feedFromTop = true;
                 retryLoadUnload()
             }
         }
@@ -126,8 +138,11 @@ LoadUnloadFilamentForm {
     retryButton {
         onClicked: {
             if(state == "extrusion") {
-                bot.loadFilamentStop()
+                bot.loadFilamentCancel()
                 notExtruding = true
+            } else if(state == "awaiting_engagement") {
+                bot.loadFilamentCancel()
+                notEngaging = true
             } else if(state == "loaded_filament" || state == "unloaded_filament") {
                 state = "base state"
                 retryLoadUnload()
@@ -151,7 +166,7 @@ LoadUnloadFilamentForm {
             return;
         }
         if(isLoadFilament) {
-            bot.loadFilament(bayID - 1, false, while_printing,
+            bot.loadFilament(bayID - 1, retryExternal, while_printing,
                 temperature_list, retryMaterial);
         } else {
             bot.unloadFilament(bayID - 1, false, while_printing,

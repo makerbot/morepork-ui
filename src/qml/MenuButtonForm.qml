@@ -20,7 +20,6 @@ Button {
     enabled: true
 
     background: Rectangle {
-        opacity: menuButton.down ? 1 : 0
         color: menuButton.down ? buttonPressColor : buttonColor
         smooth: false
     }

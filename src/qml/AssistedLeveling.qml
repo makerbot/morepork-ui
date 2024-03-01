@@ -17,12 +17,13 @@ AssistedLevelingForm {
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                         fre.gotoNextStep(currentFreStep)
                     }
-                    else {
+                    else if(needsZCalFlag){
                         settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
                         settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
                         settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
                         bot.calibrateToolheads(["z"])
                     }
+                    needsZCalFlag = false
                 }
                 else if(state == "leveling_failed") {
                     state = "base state"

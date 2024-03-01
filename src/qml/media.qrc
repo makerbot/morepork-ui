@@ -205,7 +205,6 @@
         <file alias="case_tube_1_case.png">images/case_tube_1_case.png</file>
         <file alias="case_tube_1_printer.png">images/case_tube_1_printer.png</file>
         <file alias="case_tube_2.png">images/case_tube_2.png</file>
-        <file alias="case_divider.png">images/case_divider.png</file>
         <file alias="methodxl_locate_desiccant.png">images/load_unload/methodxl/methodxl_locate_desiccant.png</file>
         <file alias="qr_230_compatibility.png">images/qr_230_compatibility.png</file>
         <file alias="qr_230_fw_download.png">images/qr_230_fw_download.png</file>
@@ -254,5 +253,7 @@
         <file alias="z_offset_build_plate.png">images/manual_z_offset/build_plate.png</file>
         <file alias="z_offset_nozzle.png">images/manual_z_offset/nozzle.png</file>
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
+        <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
+        <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
     </qresource>
 </RCC>

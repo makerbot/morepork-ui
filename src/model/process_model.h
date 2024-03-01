@@ -39,6 +39,7 @@ class ProcessModel : public BaseModel {
         Idle, // Load and Unload states
         WaitingForFilament,
         Preheating,
+        AwaitingEngagement,
         Extrusion,
         Stopping,
         UnloadingFilament,
@@ -64,6 +65,7 @@ class ProcessModel : public BaseModel {
         CleanNozzle,
         FinishCleaning,
         CoolingNozzle,
+        HeatingForHotCal,
         CalibratingToolheads,
         InstallBuildPlate,
         RemoveBuildPlate,
@@ -130,6 +132,7 @@ class ProcessModel : public BaseModel {
     MODEL_PROP(int, targetHesLower, 3400)
     MODEL_PROP(int, currentHes, 3600)
     MODEL_PROP(int, levelState, 0)
+    MODEL_PROP(bool, needsZCal, false)
     // Only valid in a print process context
     MODEL_PROP(bool, extruderAOOF, false)
     MODEL_PROP(bool, extruderBOOF, false)

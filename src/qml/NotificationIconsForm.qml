@@ -34,7 +34,8 @@ Row {
                 "qrc:/img/ethernet_connected.png"
                 break;
             default:
-                "qrc:/img/no_ethernet.png"
+                bot.net.wifiEnabled ? "qrc:/img/no_wifi.png"
+                                    : "qrc:/img/no_ethernet.png"
                 break;
             }
         }
@@ -74,7 +75,19 @@ Row {
                 case MoreporkUI.NotificationsDrawer:
                     switch(notificationsState) {
                     case MoreporkUI.NotificationsState.NoNotifications:
-                        "#00000000"
+                        // All other notifications states have a single color icon
+                        // always when the drawer is both in the the open or closed
+                        // state but when there are no notifications the icon is black
+                        // when closed and white with an up arrow when the drawer is
+                        // open.
+                        switch(drawerState) {
+                        case MoreporkUI.DrawerState.Closed:
+                            "#00000000"
+                            break;
+                        case MoreporkUI.DrawerState.Open:
+                            "#ffffff"
+                            break;
+                        }
                         break;
                     case MoreporkUI.NotificationsState.ErrorNotificationsAvailable:
                         "#fca833"
@@ -126,7 +139,7 @@ Row {
                     drawerState == MoreporkUI.DrawerState.Closed
                 }
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: 3
+                anchors.verticalCenterOffset: 4
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.horizontalCenterOffset: 1
                 font.weight: Font.Bold

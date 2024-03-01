@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.12
 
-SwipeView {
-    id: swipeview
+StackLayout {
+    id: stackLayout
     // Enums in QML can only be defined in the root item of a
     // component/page. itemWithEnum should point to the item
     // that contains the enum used for this swipeview' swipe
@@ -14,7 +15,6 @@ SwipeView {
     property string logName: "defaultName"
     smooth: false
     anchors.fill: parent
-    interactive: false
 
     function swipeToItem(idx, setTargetAsCurrentItem=true) {
         logAction("Swipe requested to page", idx)
@@ -29,11 +29,12 @@ SwipeView {
         if(typeof customEntryCheck === "function") {
             customEntryCheck(idx)
         }
-        var prev = currentIndex
+        itemAt(currentIndex).opacity = 0
+        itemAt(currentIndex).visible = false
         itemAt(idx).visible = true
-        setCurrentIndex(idx)
+        currentIndex = idx
+        animation.restart()
         logAction("Swiped to page", currentIndex)
-        itemAt(prev).visible = false
         // Usually the page that is swiped to is set as the current
         // item. The current item determines what the back button
         // should do on that page. But due to having nested swipeviews,
@@ -57,4 +58,17 @@ SwipeView {
         console.info(logName, action, log.getEnumName(itemWithEnum, "SwipeIndex", idx))
     }
 
+    NumberAnimation {
+        id: animation
+        target: itemAt(currentIndex)
+        property: "opacity"
+        to: 1
+        duration: 125
+    }
+
+    Component.onCompleted: {
+        for(var i = 1; i < count; ++i) {
+            children[i].opacity = 0
+        }
+    }
 }

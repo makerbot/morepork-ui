@@ -6,22 +6,6 @@ import MachineTypeEnum 1.0
 
 MaterialPageForm {
 
-    // Flag to get the filament load/unload UI to end
-    // with the correct state. When filament load/unload
-    // is cancelled kaiten reports the final step as
-    // 'done' before killing the Load/Unload Process.
-    // But we have mapped the 'done' step to trigger
-    // the successful Load/Unload completion screen
-    // depending on the process. However since cancelling
-    // also ends with 'done' step,the UI closes with the
-    // wrong state i.e. load/unload successful. So the next
-    // time Load/Unload buttons are hit the UI shows the
-    // load/unload successful screen for sometime before
-    // moving into preheating/extrusion/unloading states
-    // depending on the process invoked(load or unload).
-    // This flag is used to prevent this UI behavior.
-    property bool materialChangeCancelled: false
-
     function enableMaterialDrawer() {
         setActiveDrawer(materialPage.materialPageDrawer)
     }
@@ -99,14 +83,6 @@ MaterialPageForm {
         }
     }
 
-    function resetStatesAfterLoadWhilePaused() {
-        loadUnloadFilamentProcess.state = "base state"
-        materialSwipeView.swipeToItem(MaterialPage.BasePage)
-        // If cancelled out of load/unload while in print process
-        // enable print drawer to set UI back to printing state.
-        setActiveDrawer(printPage.printingDrawer)
-    }
-
     function maybeShowMoistureWarningPopup(bayID) {
         var current_mat = (bayID == 1 ? bay1.filamentMaterial :
                                 bay2.filamentMaterial)
@@ -176,8 +152,10 @@ MaterialPageForm {
         }
         loadUnloadFilamentProcess.retryTemperature = temperature
         loadUnloadFilamentProcess.retryMaterial = material
+        loadUnloadFilamentProcess.retryExternal = external
         bot.loadFilament(tool_idx, external, while_printing, temp_list, material)
         loadUnloadFilamentProcess.state = "preheating"
+        materialChangeActive = true
         materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
@@ -196,6 +174,7 @@ MaterialPageForm {
         loadUnloadFilamentProcess.retryMaterial = material
         bot.unloadFilament(tool_idx, external, while_printing, temp_list, material)
         loadUnloadFilamentProcess.state = "preheating"
+        materialChangeActive = true
         materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
@@ -311,67 +290,21 @@ MaterialPageForm {
 
     cancelLoadUnloadButton.onClicked: {
         cancelLoadUnloadPopup.close()
-        // Call the appropriate cancel function depending on the
-        // the current process. While loading/unloading in the
-        // middle of a print, while the bot is still in 'PrintProcess'
-        // don't call cancel() which will end the print process.
-        if(printPage.isPrintProcess) {
-            // Preheating steps in both load and unload while print paused
-            // can be stopped. But once the unloading starts it can't be
-            // stopped.
-            if(bot.process.stateType == ProcessStateType.Extrusion) {
-                bot.loadFilamentStop()
-                // Bot goes into stopping step and then to paused step
-            }
-            else if(bot.process.stateType == ProcessStateType.Preheating) {
-                bot.loadFilamentStop()
-                // This results in the bot going into 'Stopping' step and
-                // then to 'Paused' step as part of the print process, which
-                // is the same as above, so to differentiate successful
-                // completion and cancellation we use a flag which will be
-                // monitered elsewhere.
-                materialChangeCancelled = true
-            }
-            else if(bot.process.stateType == ProcessStateType.UnloadingFilament) {
-                waitUntilUnloadedPopup.open()
-                closeWaitUntilUnloadedPopup.start()
-            }
-            // This is a special case when the user opens the cancel poup while
-            // the process was cancellable and left it open and then the process
-            // ended normally, so now the cancel button isn't even relevant to
-            // current state and it shouldn't actually try cancelling anything
-            // and just reset the page state and go back.
-            else if(bot.process.stateType == ProcessStateType.Paused) {
-                resetStatesAfterLoadWhilePaused()
-                // Goto the print page
-                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-            }
-        }
-        else if(bot.process.type == ProcessType.Load) {
-            bot.acknowledgeMaterial(false)
-            materialChangeCancelled = true
+        if (!isLoadUnloadProcess) {
+            // Nothing to cancel, just leave
+            leaveMaterialChange();
+        } else if (!bot.process.isProcessCancellable) {
+            // We are in the uninterruptible section of unloading
+            waitUntilUnloadedPopup.open();
+            closeWaitUntilUnloadedPopup.start();
+        } else if (printPage.isPrintProcess) {
+            // When printing we have to use a special cancel method
+            // to only cancel the material change, not the print
+            bot.loadFilamentCancel();
+            leaveMaterialChange();
+        } else {
             bot.cancel()
-            loadUnloadFilamentProcess.state = "base state"
-            materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setActiveDrawer(null)
-        }
-        else if(bot.process.type == ProcessType.Unload) {
-            if(bot.process.isProcessCancellable) {
-                materialChangeCancelled = true
-                bot.cancel()
-                loadUnloadFilamentProcess.state = "base state"
-                materialSwipeView.swipeToItem(MaterialPage.BasePage)
-                setActiveDrawer(null)
-            }
-            else {
-                waitUntilUnloadedPopup.open()
-                closeWaitUntilUnloadedPopup.start()
-            }
-        }
-        else if(bot.process.type == ProcessType.None) {
-            loadUnloadFilamentProcess.state = "base state"
-            materialSwipeView.swipeToItem(MaterialPage.BasePage)
-            setActiveDrawer(null)
+            leaveMaterialChange();
         }
     }
 
@@ -380,12 +313,8 @@ MaterialPageForm {
     }
 
     oKButtonMaterialWarningPopup.onClicked: {
-        bot.acknowledgeMaterial(false)
-        materialChangeCancelled = true
         bot.cancel()
-        loadUnloadFilamentProcess.state = "base state"
-        materialSwipeView.swipeToItem(MaterialPage.BasePage)
-        setActiveDrawer(null)
+        leaveMaterialChange();
         if(inFreStep) {
             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
             inFreStep = false

@@ -528,7 +528,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textBody
-                text: qsTr("Insert the build plate by first placing the rear edge down and sliding it back until it fits snug and looks aligned.")
+                text: qsTr("Insert the build plate by first placing the rear edge down and sliding it back until it fits snugly and looks aligned.")
                 visible: true
             }
 

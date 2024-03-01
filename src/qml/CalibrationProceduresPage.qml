@@ -28,7 +28,7 @@ Item {
         ManualZCalibrationPage     //2
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: calibrationProceduresSwipeView
         logName: "calibrationProceduresSwipeView"
         currentIndex: CalibrationProceduresPage.BasePage
@@ -118,6 +118,8 @@ Item {
             property var backSwiper: calibrationProceduresSwipeView
             property int backSwipeIndex: CalibrationProceduresPage.BasePage
             property string topBarTitle: qsTr("Automatic Calibration")
+            property bool backIsCancel: (bot.process.type === ProcessType.CalibrationProcess &&
+                                         bot.process.isProcessCancellable)
             property bool hasAltBack: true
             smooth: false
             visible: false

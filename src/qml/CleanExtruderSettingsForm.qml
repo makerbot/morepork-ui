@@ -33,7 +33,7 @@ Item {
         TemperatureSelector
     }
 
-    LoggingSwipeView {
+    LoggingStackLayout {
         id: cleanExtrudersSelectMaterialSwipeView
         logName: "cleanExtrudersSelectMaterialSwipeView"
         currentIndex: CleanExtruderSettings.MaterialSelector

@@ -10,6 +10,8 @@ ToolheadCalibrationForm {
                     bot.buildPlateState(false)
                     state = "calibrating"
                 } else if(state == "install_build_plate") {
+                    state = "secure_build_plate"
+                } else if (state == "secure_build_plate") {
                     bot.buildPlateState(true)
                     state = "calibrating"
                 } else if(state == "calibration_finished") {
