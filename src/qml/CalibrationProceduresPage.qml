@@ -38,7 +38,7 @@ Item {
             id: itemCalibrationProcedures
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: settingsPage.extruderSettingsPage.extruderSettingsSwipeView
-            property int backSwipeIndex: SettingsPage.ExtruderSettingsPage
+            property int backSwipeIndex: ExtruderSettingsPage.BasePage
             property string topBarTitle: qsTr("Calibration Procedures")
 
             smooth: false
