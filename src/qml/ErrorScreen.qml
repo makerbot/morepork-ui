@@ -57,6 +57,8 @@ ErrorScreenForm {
         } else {
             bot.loadFilament(1, false, true)
         }
+        materialPage.materialChangeActive = true
+        materialPage.loadUnloadFilamentProcess.state = "preheating"
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
 
@@ -79,6 +81,7 @@ ErrorScreenForm {
         } else {
             bot.unloadFilament(1, true, true)
         }
+        materialPage.materialChangeActive = true
         materialPage.loadUnloadFilamentProcess.state = "preheating"
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
     }
