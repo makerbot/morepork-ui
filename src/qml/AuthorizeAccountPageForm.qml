@@ -156,7 +156,7 @@ Item {
         showTwoButtons: state == "deauthorize_accounts" ||
                         state == "no_network_connection"
 
-        full_button_text: {
+        fullButtonText: {
             if(state == "no_account" ||
                     state == "reset_password" ||
                     state == "failed_to_get_otp") {
@@ -168,7 +168,7 @@ Item {
             }
         }
 
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(state == "no_account" ||
                     state == "reset_password" ||
                     state == "authorization_failed") {
@@ -178,7 +178,7 @@ Item {
             }
         }
 
-        left_button_text: {
+        leftButtonText: {
             if(state == "deauthorize_accounts") {
                 qsTr("BACK")
             } else if(state == "no_network_connection") {
@@ -188,7 +188,7 @@ Item {
             }
         }
 
-        left_button.onClicked: {
+        leftButton.onClicked: {
             if(state == "deauthorize_accounts") {
                 authorizeAccountPopup.close()
             } else if(state == "no_network_connection") {
@@ -196,7 +196,7 @@ Item {
             }
         }
 
-        right_button_text: {
+        rightButtonText: {
             if(state == "deauthorize_accounts") {
                 qsTr("CONFIRM")
             } else if(state == "no_network_connection") {
@@ -206,7 +206,7 @@ Item {
             }
         }
 
-        right_button.onClicked: {
+        rightButton.onClicked: {
             if(state == "deauthorize_accounts") {
                 bot.deauthorizeAllAccounts()
             } else if(state == "no_network_connection") {

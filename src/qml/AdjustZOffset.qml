@@ -227,11 +227,12 @@ LoggingItem {
 
         showTwoButtons: true
 
+        leftButtonText: qsTr("BACK")
         leftButton.onClicked: {
             zOffsetCompensationPopup.close()
         }
-        leftButtonText: qsTr("BACK")
 
+        rightButtonText: qsTr("CONFIRM")
         rightButton.onClicked: {
             if(popupState == "confirm_offset") {
                 bot.setBuildPlateZeroZOffset(adjustedAZOffset, adjustedBZOffset)
@@ -242,7 +243,6 @@ LoggingItem {
             }
             zOffsetCompensationPopup.close()
         }
-        rightButtonText: qsTr("CONFIRM")
 
         ColumnLayout {
             width: 625

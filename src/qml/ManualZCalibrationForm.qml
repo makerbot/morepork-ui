@@ -739,12 +739,12 @@ LoggingItem {
         popupHeight: manual_cal_column_layout.height +145
         showTwoButtons: true
 
-        left_button_text: qsTr("EXIT")
-        right_button_text: qsTr("START")
-        left_button.onClicked: {
+        leftButtonText: qsTr("EXIT")
+        leftButton.onClicked: {
             manual_calibration_issue_popup.close()
         }
-        right_button.onClicked: {
+        rightButtonText: qsTr("START")
+        rightButton.onClicked: {
             // Start Auto Cal/Clean extruders
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
@@ -792,10 +792,15 @@ LoggingItem {
         id: cancelManualZCalPopup
         popupWidth: 720
         popupHeight: 250
-
         showTwoButtons: true
-        left_button_text: qsTr("STOP PROCESS")
-        left_button.onClicked: {
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            // Continue
+            cancelManualZCalPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             // Return to Start Page
             resetProcess(false)
 
@@ -808,11 +813,6 @@ LoggingItem {
                 if (cancelWaitDone) completeCancelWait();
             }
 
-            cancelManualZCalPopup.close()
-        }
-        right_button_text: qsTr("CONTINUE")
-        right_button.onClicked: {
-            // Continue
             cancelManualZCalPopup.close()
         }
 

@@ -828,13 +828,12 @@ ApplicationWindow {
             popupWidth: 720
 
             showTwoButtons: true
-            left_button_text: qsTr("BACK")
-            right_button_text: qsTr("CONFIRM")
-
-            left_button.onClicked: {
+            leftButtonText: qsTr("BACK")
+            leftButton.onClicked: {
                 skipFreStepPopup.close()
             }
-            right_button.onClicked: {
+            rightButtonText: qsTr("CONFIRM")
+            rightButton.onClicked: {
                 skipFreStepPopup.close()
                 if (inFreStep) {
                     currentItem.skipFreStepAction()
@@ -1227,14 +1226,14 @@ ApplicationWindow {
             popupHeight: installUnsignedFwBasePopupLayout.height + 140
 
             showTwoButtons: true
-            right_button_text: qsTr("INSTALL")
-            right_button.onClicked: {
-                bot.respondInstallUnsignedFwRequest("allow")
+            leftButtonText: qsTr("CANCEL")
+            leftButton.onClicked: {
+                bot.respondInstallUnsignedFwRequest("rejected")
                 installUnsignedFwPopup.close()
             }
-            left_button_text: qsTr("CANCEL")
-            left_button.onClicked: {
-                bot.respondInstallUnsignedFwRequest("rejected")
+            rightButtonText: qsTr("INSTALL")
+            rightButton.onClicked: {
+                bot.respondInstallUnsignedFwRequest("allow")
                 installUnsignedFwPopup.close()
             }
 
@@ -1269,15 +1268,15 @@ ApplicationWindow {
             closePolicy: Popup.CloseOnPressOutside
 
             showTwoButtons: true
-            right_button_text: qsTr("UPDATE")
-            right_button.onClicked: {
+            rightButtonText: qsTr("UPDATE")
+            rightButton.onClicked: {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
                 firmwareUpdatePopup.close()
             }
-            left_button_text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
-            left_button.onClicked: {
+            leftButtonText: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
+            leftButton.onClicked: {
                 if(skipFirmwareUpdate) {
                     firmwareUpdatePopup.close()
                 }
@@ -1723,8 +1722,8 @@ ApplicationWindow {
             popupName: "PrinterNotIdleWarning"
 
             showOneButton: true
-            full_button_text: qsTr("CLOSE")
-            full_button.onClicked: {
+            fullButtonText: qsTr("CLOSE")
+            fullButton.onClicked: {
                 printerNotIdlePopup.close()
             }
 
@@ -1762,12 +1761,12 @@ ApplicationWindow {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
             showTwoButtons: true
-            left_button_text: qsTr("SKIP")
-            left_button.onClicked: {
+            leftButtonText: qsTr("SKIP")
+            leftButton.onClicked: {
                 extNotCalibratedPopup.close()
             }
-            right_button_text: qsTr("GO TO PAGE")
-            right_button.onClicked: {
+            rightButtonText: qsTr("GO TO PAGE")
+            rightButton.onClicked: {
                 extNotCalibratedPopup.close()
                 resetSettingsSwipeViewPages()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
@@ -1926,12 +1925,12 @@ ApplicationWindow {
             popupWidth: 720
             popupHeight: 275
             showTwoButtons: true
-            left_button_text: qsTr("BACK")
-            left_button.onClicked: {
+            leftButtonText: qsTr("BACK")
+            leftButton.onClicked: {
                 cancelPrintPopup.close()
             }
-            right_button_text: qsTr("CONFIRM")
-            right_button.onClicked: {
+            rightButtonText: qsTr("CONFIRM")
+            rightButton.onClicked: {
                 bot.cancel()
                 printPage.clearErrors()
                 cancelPrintPopup.close()
@@ -2101,13 +2100,13 @@ ApplicationWindow {
                             printPage.startPrintTopLidOpen)
             showTwoButtons: (!printPage.startPrintBuildDoorOpen &&
                              !printPage.startPrintTopLidOpen)
-            full_button_text: qsTr("OK")
+            fullButtonText: qsTr("CONFIRM")
 
-            full_button.onClicked: {
+            fullButton.onClicked: {
                 startPrintErrorsPopup.close()
             }
 
-            left_button_text: {
+            leftButtonText: {
                 if(printPage.startPrintNoFilament ||
                    printPage.startPrintMaterialMismatch ||
                    printPage.startPrintGenuineSliceUnknownMaterial ||
@@ -2120,7 +2119,7 @@ ApplicationWindow {
                 }
             }
 
-            left_button.onClicked: {
+            leftButton.onClicked: {
                 startPrintErrorsPopup.close()
                 if(printPage.startPrintUnknownSliceGenuineMaterial) {
                     if(printPage.startPrintDoorLidCheck()) {
@@ -2137,7 +2136,7 @@ ApplicationWindow {
                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }
 
-            right_button_text: {
+            rightButtonText: {
                 if(printPage.startPrintNoFilament) {
                     qsTr("LOAD MATERIAL")
                 } else if(printPage.startPrintMaterialMismatch ||
@@ -2151,7 +2150,7 @@ ApplicationWindow {
                 }
             }
 
-            right_button.onClicked: {
+            rightButton.onClicked: {
                 startPrintErrorsPopup.close()
                 if(printPage.startPrintNoFilament ||
                    printPage.startPrintMaterialMismatch ||
@@ -2389,8 +2388,8 @@ ApplicationWindow {
             visible: !experimentalExtruderAcknowledged &&
                      experimentalExtruderInstalled
             showOneButton: true
-            full_button_text: qsTr("CONTINUE")
-            full_button.onClicked: {
+            fullButtonText: qsTr("CONTINUE")
+            fullButton.onClicked: {
                 experimentalExtruderAcknowledged = true
                 experimentalExtruderPopup.close()
             }
@@ -2448,18 +2447,18 @@ ApplicationWindow {
             popupHeight: 280
             visible: (bot.hepaErrorCode > 0) && !hepaErrorAcknowledged
             showOneButton: true
-            full_button_text: qsTr("OK")
-            full_button.onClicked: {
+            fullButtonText: qsTr("OK")
+            fullButton.onClicked: {
                 hepaErrorAcknowledged = true
                 hepaFilterErrorPopup.close()
             }
-            left_button_text: qsTr("CONTINUE PRINTING")
-            right_button_text: qsTr("PAUSE PRINTING")
-            left_button.onClicked: {
+            leftButtonText: qsTr("CONTINUE PRINTING")
+            leftButton.onClicked: {
                 hepaErrorAcknowledged = true
                 hepaFilterErrorPopup.close()
             }
-            right_button.onClicked: {
+            rightButtonText: qsTr("PAUSE PRINTING")
+            rightButton.onClicked: {
                 bot.pauseResumePrint("suspend")
             }
 
@@ -2512,21 +2511,19 @@ ApplicationWindow {
             showTwoButtons: state === "reset_filter"
             showOneButton: state === "complete"
 
-            left_button_text: qsTr("BACK")
-            right_button_text: qsTr("CONFIRM")
-            full_button_text: qsTr("CLOSE")
-
-
-            right_button.onClicked: {
+            leftButtonText: qsTr("BACK")
+            leftButton.onClicked: {
+                hepaFilterResetPopup.close()
+            }
+            rightButtonText: qsTr("CONFIRM")
+            rightButton.onClicked: {
                 bot.resetFilterHours()
                 bot.hepaFilterPrintHours = 0
                 bot.hepaFilterChangeRequired = false
                 state = "complete"
             }
-            left_button.onClicked: {
-                hepaFilterResetPopup.close()
-            }
-            full_button.onClicked: {
+            fullButtonText: qsTr("CLOSE")
+            fullButton.onClicked: {
                 hepaFilterResetPopup.close()
             }
             onClosed: {
@@ -2574,16 +2571,16 @@ ApplicationWindow {
             popupHeight: 325
             visible: false
             showTwoButtons: true
-            left_button_text: qsTr("LATER")
-            right_button_text: qsTr("SEND FEEDBACK")
-            right_button.onClicked: {
+            leftButtonText: qsTr("LATER")
+            rightButtonText: qsTr("SEND FEEDBACK")
+            rightButton.onClicked: {
                 if (ratings_buttons.score >= 0) {
                     bot.submitNPSSurvey(ratings_buttons.score)
                     updateNPSSurveyDueDate()
                     npsSurveyPopup.close()
                 }
             }
-            left_button.onClicked: {
+            leftButton.onClicked: {
                 updateNPSSurveyDueDate()
                 npsSurveyPopup.close()
             }
@@ -2683,8 +2680,8 @@ ApplicationWindow {
             popupWidth: 720
             popupHeight: columnLayout_help_popup.height + 130
             showOneButton: true
-            full_button_text: qsTr("CLOSE")
-            full_button.onClicked: {
+            fullButtonText: qsTr("CLOSE")
+            fullButton.onClicked: {
                 helpPopup.close()
             }
             property alias state: columnLayout_help_popup.state

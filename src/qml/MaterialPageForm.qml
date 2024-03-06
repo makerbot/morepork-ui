@@ -18,8 +18,8 @@ Item {
     property alias loadUnloadFilamentProcess: loadUnloadFilamentProcess
 
     property alias cancelLoadUnloadPopup: cancelLoadUnloadPopup
-    property alias cancelLoadUnloadButton: cancelLoadUnloadPopup.leftButton
-    property alias continueLoadUnloadButton: cancelLoadUnloadPopup.rightButton
+    property alias cancelLoadUnloadButton: cancelLoadUnloadPopup.rightButton
+    property alias continueLoadUnloadButton: cancelLoadUnloadPopup.leftButton
 
     property alias materialWarningPopup: materialWarningPopup
     property alias oKButtonMaterialWarningPopup: materialWarningPopup.fullButton
@@ -758,10 +758,11 @@ Item {
         id: cancelLoadUnloadPopup
         popupHeight: columnLayout_cancel_load_unload_popup.height + 150
         showTwoButtons: true
+        visible: true
 
-        leftButtonText: isLoadFilament ? qsTr("CANCEL LOADING") : qsTr("CANCEL UNLOADING")
-        rightButtonText: isLoadFilament ? qsTr("CONTINUE LOADING") : qsTr("CONTINUE UNLOADING")
         // Button actions defined in MaterialPage.qml
+        leftButtonText: qsTr("BACK")
+        rightButtonText: qsTr("CONFIRM")
 
         ColumnLayout {
             id: columnLayout_cancel_load_unload_popup
@@ -888,19 +889,19 @@ Item {
         }
         property string popupState: "base state"
         showTwoButtons: true
-        left_button_text: {
+        leftButtonText: {
             if(popupState == "base state" || popupState == "reprogrammed") {
                 qsTr("BACK")
             }
         }
-        left_button.onClicked: {
+        leftButton.onClicked: {
             uncapped1CExtruderAlert.close()
             if(popupState == "reprogrammed") {
                 restartPendingAfterExtruderReprogram = true
             }
         }
 
-        right_button_text: {
+        rightButtonText: {
             if(popupState == "base state") {
                 qsTr("CONFIRM")
             } else if(popupState == "reprogrammed" || popupState == "restart_pending") {
@@ -908,7 +909,7 @@ Item {
             }
         }
 
-        right_button.onClicked: {
+        rightButton.onClicked: {
             if(popupState == "base state") {
                 // 0x00050002 = 327682 (mk14c, subtype 2)
                 bot.writeExtruderEeprom(0, 1, 327682)

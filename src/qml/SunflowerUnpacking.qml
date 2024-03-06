@@ -24,14 +24,14 @@ SunflowerUnpackingForm {
         }
     }
 
-    unpackingPopup.full_button.enabled: bot.chamberErrorCode != 48
+    unpackingPopup.fullButton.enabled: bot.chamberErrorCode != 48
 
-    unpackingPopup.full_button.onClicked: {
+    unpackingPopup.fullButton.onClicked: {
         state = "moving"
         doMove()
     }
 
-    unpackingPopup.left_button.onClicked: {
+    unpackingPopup.leftButton.onClicked: {
         unpackingPopup.close()
         if (lowering) {
             state = "remove_box_2"
@@ -40,7 +40,7 @@ SunflowerUnpackingForm {
         }
     }
 
-    unpackingPopup.right_button.onClicked: {
+    unpackingPopup.rightButton.onClicked: {
         if (bot.chamberErrorCode != 48 || bot.doorErrorDisabled) {
             state = "moving"
             doMove()
