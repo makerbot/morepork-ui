@@ -758,7 +758,6 @@ Item {
         id: cancelLoadUnloadPopup
         popupHeight: columnLayout_cancel_load_unload_popup.height + 150
         showTwoButtons: true
-        visible: true
 
         // Button actions defined in MaterialPage.qml
         leftButtonText: qsTr("BACK")
