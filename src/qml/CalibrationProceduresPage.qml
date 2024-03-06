@@ -33,7 +33,7 @@ Item {
         logName: "calibrationProceduresSwipeView"
         currentIndex: CalibrationProceduresPage.BasePage
 
-        // CalibrationProcedures.BasePage
+        // CalibrationProceduresPage.BasePage
         Item {
             id: itemCalibrationProcedures
             // backSwiper and backSwipeIndex are used by backClicked
@@ -112,7 +112,7 @@ Item {
             }
         }
 
-        // ExtruderSettingsPage.AutomaticCalibrationPage
+        // CalibrationProceduresPage.AutomaticCalibrationPage
         Item {
             id: calibrateToolheadsItem
             property var backSwiper: calibrationProceduresSwipeView
@@ -186,7 +186,7 @@ Item {
             }
         }
 
-        // ExtruderSettingsPage.ManualZCalibrationPage
+        // CalibrationProceduresPage.ManualZCalibrationPage
         Item {
             id: manualZCalibrationItem
             property var backSwiper: calibrationProceduresSwipeView

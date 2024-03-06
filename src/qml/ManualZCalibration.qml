@@ -26,7 +26,8 @@ ManualZCalibrationForm {
         printPage.clearErrors()
         mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
         settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+        calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
     }
 
     Timer {
