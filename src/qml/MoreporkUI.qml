@@ -770,16 +770,14 @@ ApplicationWindow {
 
                     function altBack() {
                         if(isInManualCalibration) {
-                            settingsPage.extruderSettingsPage.manualZCalibration.cancelManualZCalPopup.open()
-                        }
-                        else if(!inFreStep) {
+                            settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.cancelManualZCalPopup.open()
+                        } else if(!inFreStep) {
                             if(printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected) {
                                 printPage.printStatusView.acknowledgePrintFinished.failureFeedbackSelected = false
                                 return
                             }
                             mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                        }
-                        else {
+                        } else {
                             skipFreStepPopup.open()
                         }
                     }
@@ -789,6 +787,7 @@ ApplicationWindow {
                         bot.cancel()
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                     }
+
                     PrintPage {
                         id: printPage
                     }
@@ -801,6 +800,7 @@ ApplicationWindow {
                     property string topBarTitle: qsTr("Material")
                     smooth: false
                     visible: false
+
                     MaterialPage {
                         id: materialPage
                         anchors.fill: parent
@@ -814,6 +814,7 @@ ApplicationWindow {
                     property string topBarTitle: qsTr("Settings")
                     smooth: false
                     visible: false
+
                     SettingsPage {
                         id: settingsPage
                     }
@@ -2161,7 +2162,7 @@ ApplicationWindow {
                     resetDetailsAndGoToMaterialsPage()
                     if(isInManualCalibration) {
                         // Reset Manual Z Cal
-                        settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(true)
+                        settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.resetProcess(true)
                     }
                 } else if(printPage.startPrintWithLabsExtruder) {
                     if(printPage.startPrintDoorLidCheck()) {
