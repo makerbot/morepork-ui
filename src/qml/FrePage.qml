@@ -148,14 +148,6 @@ FrePageForm {
 
     skipButton {
         onClicked: {
-            /*if (state == "name_printer") {
-                // Skipping this step is the default
-                inFreStep = true
-                mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
-                settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ChangePrinterNamePage)
-                settingsPage.namePrinter.nameField.forceActiveFocus()
-            } else*/
             if(state == "base state" || state == "welcome") {
                 fre.setFreStep(FreStep.StartSetLanguage)
             }
