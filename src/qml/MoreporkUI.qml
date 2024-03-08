@@ -824,12 +824,20 @@ ApplicationWindow {
         CustomPopup {
             popupName: "SkipFreStep"
             id: skipFreStepPopup
-            popupHeight: 285
-            popupWidth: 720
-
+            popupHeight: skipFreStepColumnLayout.height + 140
             showTwoButtons: true
             left_button_text: qsTr("BACK")
             right_button_text: qsTr("CONFIRM")
+
+
+            Timer {
+                id: waitToSkipFreStep
+                interval: 200
+                onTriggered: {
+
+                    fre.gotoNextStep(currentFreStep)
+                }
+            }
 
             left_button.onClicked: {
                 skipFreStepPopup.close()
@@ -839,24 +847,17 @@ ApplicationWindow {
                 if (inFreStep) {
                     currentItem.skipFreStepAction()
                 }
-                if(currentFreStep == FreStep.AttachExtruders ||
-                   currentFreStep == FreStep.LevelBuildPlate ||
-                   currentFreStep == FreStep.CalibrateExtruders ||
-                   currentFreStep == FreStep.MaterialCaseSetup ||
-                   currentFreStep == FreStep.LoadMaterial ||
-                   currentFreStep == FreStep.TestPrint) {
-                    fre.setFreStep(FreStep.FreComplete)
-                }
-                else {
-                    fre.gotoNextStep(currentFreStep)
-                }
+                waitToSkipFreStep.start()
             }
 
             ColumnLayout {
-                width: 720
+                id: skipFreStepColumnLayout
+                height: children.height
+                width: 680
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.verticalCenterOffset: -40
+                anchors.top: skipFreStepPopup.popupContainer.top
+                anchors.topMargin: 35
+                spacing: 20
 
                 Image {
                     source: "qrc:/img/popup_error.png"
@@ -947,7 +948,7 @@ ApplicationWindow {
                         case FreStep.CalibrateExtruders:
                         case FreStep.MaterialCaseSetup:
                         default:
-                            qsTr("This may skip other set-up procedures as well. You can revisit all steps of the set-up in the settings.")
+                            qsTr("This is required for quality printing. You can revisit any steps from the set-up in the settings menu.")
                             break;
                         }
                     }

@@ -904,13 +904,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.buttonPrimary
-                text: qsTr("NEXT")
+                text: qsTr("CHANGE PRINTER NAME")
                 enabled: true
             }
 
             PropertyChanges {
                 target: freContentRight.buttonSecondary1
-                text: qsTr("CHANGE PRINTER NAME")
+                text: qsTr("SKIP")
                 visible: true
             }
 
