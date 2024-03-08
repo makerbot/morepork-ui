@@ -988,6 +988,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
 
