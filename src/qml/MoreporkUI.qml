@@ -121,7 +121,8 @@ ApplicationWindow {
 
 
     property bool isOffline: bot.net.interface != "wifi" &&
-                             bot.net.interface != "ethernet"
+                             bot.net.interface != "ethernet" &&
+                             isFreComplete
 
     onIsOfflineChanged: {
         if(isOffline) {
@@ -217,22 +218,11 @@ ApplicationWindow {
 
         if(extrudersCalibrated || !extrudersPresent) {
             extNotCalibratedPopup.close()
-            removeFromNotificationsList("extruders_not_calibrated")
         }
         // Do not open popup in FRE and both extruders must
         // be present for this popup to open
         if (!extrudersCalibrated && isFreComplete && extrudersPresent) {
             extNotCalibratedPopup.open()
-            addToNotificationsList("extruders_not_calibrated",
-                                   qsTr("Extruders not calibrated"),
-                                   MoreporkUI.NotificationPriority.Persistent,
-                                   () => {
-                                       if(isProcessRunning()) {
-                                           printerNotIdlePopup.open()
-                                           return
-                                       }
-                                       extNotCalibratedPopup.open()
-                                   })
         }
     }
 
