@@ -15,7 +15,7 @@ ManualZCalibrationForm {
     property bool cancelWaitDone: waitingForCancel && (
         bot.process.type != ProcessType.Print ||
         bot.process.stateType == ProcessStateType.Cancelled ||
-        bot.process.stateType == ProcessStateType.Complete ||
+        bot.process.stateType == ProcessStateType.Completed ||
         bot.process.stateType == ProcessStateType.Failed)
     onCancelWaitDoneChanged: {
         if (cancelWaitDone) completeCancelWait();
@@ -149,7 +149,7 @@ ManualZCalibrationForm {
         secondPass = false
         if(exit) {
             isInManualCalibration = false
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
         }
     }
 
