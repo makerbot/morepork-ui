@@ -121,7 +121,8 @@ ApplicationWindow {
 
 
     property bool isOffline: bot.net.interface != "wifi" &&
-                             bot.net.interface != "ethernet"
+                             bot.net.interface != "ethernet" &&
+                             isFreComplete
 
     onIsOfflineChanged: {
         if(isOffline) {
