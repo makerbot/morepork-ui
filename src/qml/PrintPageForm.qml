@@ -1300,7 +1300,7 @@ Item {
         popupWidth: 715
         popupHeight: 336
         showOneButton: true
-        fullButtonText: qsTr("CONFIRM")
+        fullButtonText: qsTr("OK")
         fullButton.onClicked: {
             printFeedbackAcknowledgementPopup.close()
             acknowledgePrint()
