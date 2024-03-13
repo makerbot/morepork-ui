@@ -1735,7 +1735,7 @@ ApplicationWindow {
             closePolicy: Popup.CloseOnPressOutside
             showOneButton: true
 
-            fullButtonText: qsTr("CONFIRM")
+            fullButtonText: qsTr("OK")
             fullButton.onClicked: {
                 bot.acknowledgeSafeToRemoveUsb()
                 safeToRemoveUsbPopup.close()
