@@ -900,7 +900,10 @@ void KaitenBotModel::acknowledgeNozzleCleaned(bool cleaned){
         qDebug() << FL_STRM << "called";
         auto conn = m_conn.data();
         Json::Value json_params(Json::objectValue);
-        json_params["method"] = cleaned ? Json::Value("nozzle_cleaned"): Json::Value("redo_nozzle_clean");
+        json_params["method"] = Json::Value("check_nozzle_cleaned");
+        Json::Value json_args(Json::objectValue);
+        json_args["cleaned"] = Json::Value(cleaned);
+        json_params["params"] = Json::Value(json_args);
         conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
