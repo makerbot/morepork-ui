@@ -283,6 +283,7 @@
         <file>ReplaceFilterXLPage.qml</file>
         <file>AdjustZOffset.qml</file>
         <file>PrintingNotificationButton.qml</file>
+        <file>CalibrationProceduresPage.qml</file>
         <file>FlickableMenu.qml</file>
         <file>HotChamberWarningScreen.qml</file>
     </qresource>

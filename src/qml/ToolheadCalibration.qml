@@ -24,6 +24,8 @@ ToolheadCalibrationForm {
                         resumeManualCalibrationPopup.open()
                     }
                     if(inFreStep) {
+                        settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
+                        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                         settingsSwipeView.swipeToItem(SettingsPage.BasePage)
                         mainSwipeView.swipeToItem(MoreporkUI.BasePage)
                         fre.gotoNextStep(currentFreStep)

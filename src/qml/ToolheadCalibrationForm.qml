@@ -629,8 +629,8 @@ LoggingItem {
 
         right_button_text: qsTr("START")
         right_button.onClicked: {
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
             resumeManualCalibrationPopup.close()
         }
 

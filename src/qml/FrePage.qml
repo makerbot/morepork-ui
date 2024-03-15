@@ -100,8 +100,9 @@ FrePageForm {
                 inFreStep = true
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
-                settingsPage.extruderSettingsPage.toolheadCalibration.state = "calibrating"
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+                settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
+                settingsPage.extruderSettingsPage.calibrationProcedures.toolheadCalibration.state = "calibrating"
                 bot.calibrateToolheads(["x","y"])
             } else if(state == "material_case_setup") {
                 inFreStep = true
