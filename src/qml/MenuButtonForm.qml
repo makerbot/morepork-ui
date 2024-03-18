@@ -11,8 +11,8 @@ Button {
     spacing: 0
     property alias buttonText: buttonText
     property alias buttonImage: buttonImage
+    property alias additionalInfo: additionalInfo
     property alias buttonAlertImage: buttonAlertImage
-    property alias wifiIcons: wifiIcons
     property alias slidingSwitch: slidingSwitch
     property alias openMenuItemArrow: openMenuItemArrow
     property color buttonColor: "#00000000"
@@ -69,6 +69,13 @@ Button {
             anchors.rightMargin: 32
             anchors.verticalCenter: parent.verticalCenter
 
+            // Currently used for showing estimated run time for a process
+            TextBody {
+                id: additionalInfo
+                color: "#666666"
+                visible: false
+            }
+
             Image {
                 id: buttonAlertImage
                 width: sourceSize.width
@@ -77,32 +84,6 @@ Button {
                 antialiasing: false
                 source: "qrc:/img/menu_button_alert.png"
                 visible: false
-            }
-
-            RowLayout {
-                id: wifiIcons
-                height: parent.height
-                width: children.width
-                spacing: 16
-                visible: false
-
-                Image {
-                    id: wifiSecuredImage
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    smooth: false
-                    antialiasing: false
-                    source: "qrc:/img/wifi_secured_menu_icon.png"
-                }
-
-                Image {
-                    id: wifiImage
-                    width: sourceSize.width
-                    height: sourceSize.height
-                    smooth: false
-                    antialiasing: false
-                    source: "qrc:/img/wifi_menu_icon.png"
-                }
             }
 
             SlidingSwitch {

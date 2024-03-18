@@ -15,7 +15,7 @@ ManualZCalibrationForm {
     property bool cancelWaitDone: waitingForCancel && (
         bot.process.type != ProcessType.Print ||
         bot.process.stateType == ProcessStateType.Cancelled ||
-        bot.process.stateType == ProcessStateType.Complete ||
+        bot.process.stateType == ProcessStateType.Completed ||
         bot.process.stateType == ProcessStateType.Failed)
     onCancelWaitDoneChanged: {
         if (cancelWaitDone) completeCancelWait();
@@ -26,7 +26,8 @@ ManualZCalibrationForm {
         printPage.clearErrors()
         mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
         settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+        calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
     }
 
     Timer {
@@ -148,7 +149,7 @@ ManualZCalibrationForm {
         secondPass = false
         if(exit) {
             isInManualCalibration = false
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
         }
     }
 
@@ -211,8 +212,7 @@ ManualZCalibrationForm {
 
         } else if (state == "cal_issue") {
             // Start Auto Cal/Clean extruders
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.AutomaticCalibrationPage)
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
             returnToManualCal = true
 
             // Button action in 'base state'
