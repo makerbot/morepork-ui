@@ -1361,194 +1361,45 @@ ApplicationWindow {
 
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "ClearBuildPlate"
             id: buildPlateClearPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
+            popupHeight: buildPlateClearColumnLayout.height+140
             closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim2
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            showTwoButtons: true
+
+            leftButtonText: qsTr("CANCEL")
+            leftButton.onClicked: {
+                bot.cancel()
+                buildPlateClearPopup.close()
             }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                start_print_text.color = "#000000"
-                start_print_rectangle.color = "#ffffff"
+            rightButtonText: qsTr("START PRINT")
+            rightButton.onClicked: {
+                bot.buildPlateCleared()
+                buildPlateClearPopup.close()
+                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
             }
 
-            Rectangle {
-                id: basePopupItem2
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 220
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: buildPlateClearColumnLayout
+                height: children.height
+                anchors.top: buildPlateClearPopup.popupContainer.top
+                anchors.topMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-                Rectangle {
-                    id: horizontal_divider2
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                }
-
-                Rectangle {
-                    id: vertical_divider2
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
+                TextHeadline {
+                    id: clear_build_plate_text
+                    text: qsTr("CLEAR BUILD PLATE")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                Item {
-                    id: buttonBar1
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: start_print_rectangle
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: start_print_text
-                            color: "#ffffff"
-                            text: qsTr("START PRINT")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "buildPlateClearPopup [_" + start_print_text.text + "|]"
-                            id: start_print_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                start_print_text.color = "#000000"
-                                start_print_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                start_print_text.color = "#ffffff"
-                                start_print_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.buildPlateCleared()
-                                buildPlateClearPopup.close()
-                                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: cancel_print_rectangle
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_print_text
-                            color: "#ffffff"
-                            text: qsTr("CANCEL")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "buildPlateClearPopup [|" + cancel_print_text.text + "_]"
-                            id: cancel_print_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                cancel_print_text.color = "#000000"
-                                cancel_print_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_print_text.color = "#ffffff"
-                                cancel_print_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.cancel()
-                                buildPlateClearPopup.close()
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout2
-                    width: 590
-                    height: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: clear_build_plate_text
-                        color: "#cbcbcb"
-                        text: qsTr("CLEAR BUILD PLATE")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
-
-                    Text {
-                        id: clear_build_plate_desc_text
-                        color: "#cbcbcb"
-                        text: qsTr("Please be sure your build plate is clear.")
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.3
-                    }
+                TextBody {
+                    id: clear_build_plate_desc_text
+                    text: qsTr("Please be sure your build plate is clear.")
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
@@ -1799,123 +1650,36 @@ ApplicationWindow {
                     horizontalAlignment: Text.AlignHCenter
                 }
             }
-
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "UpdatingExtruderFirmware"
             id: updatingExtruderFirmwarePopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
+            popupHeight: updatingExtruderFirmwareColumnLayout.height+100
             closePolicy: Popup.NoAutoClose
-            parent: overlay
-            background: Rectangle {
-                id: updatingExtruderFirmwareBackRect
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.7
-                anchors.fill: parent
-            }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
+
             onClosed: {
                 updatedExtruderFirmwareA = false
                 updatedExtruderFirmwareB = false
             }
-            Rectangle {
-                id: updatingExtruderFirmwarePopupRect
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 275
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+
+            ColumnLayout {
+                id: updatingExtruderFirmwareColumnLayout
+                height: children.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                ColumnLayout {
-                    id: columnLayout3
-                    width: 590
-                    height: 165
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 25
 
-                    BusyIndicator {
-                        id: extruderBusyIndicator
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        running: updatingExtruderFirmwarePopup.opened
+                BusySpinner {
+                    id: busy_spinner_img
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                    spinnerSize: 64
+                }
 
-                        contentItem: Item {
-                                implicitWidth: 64
-                                implicitHeight: 64
-
-                                Item {
-                                    id: itemExtruderBusy
-                                    x: parent.width / 2 - 32
-                                    y: parent.height / 2 - 32
-                                    width: 64
-                                    height: 64
-                                    opacity: extruderBusyIndicator.running ? 1 : 0
-
-                                    Behavior on opacity {
-                                        OpacityAnimator {
-                                            duration: 250
-                                        }
-                                    }
-
-                                    RotationAnimator {
-                                        target: itemExtruderBusy
-                                        running: extruderBusyIndicator.visible && extruderBusyIndicator.running
-                                        from: 0
-                                        to: 360
-                                        loops: Animation.Infinite
-                                        duration: 1500
-                                    }
-
-                                    Repeater {
-                                        id: repeater1
-                                        model: 6
-
-                                        Rectangle {
-                                            x: itemExtruderBusy.width / 2 - width / 2
-                                            y: itemExtruderBusy.height / 2 - height / 2
-                                            implicitWidth: 2
-                                            implicitHeight: 16
-                                            radius: 0
-                                            color: "#ffffff"
-                                            transform: [
-                                                Translate {
-                                                    y: -Math.min(itemExtruderBusy.width, itemExtruderBusy.height) * 0.5 + 5
-                                                },
-                                                Rotation {
-                                                    angle: index / repeater1.count * 360
-                                                    origin.x: 1
-                                                    origin.y: 8
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                    }
-
-                    Text {
-                        id: alert_text
-                        color: "#cbcbcb"
-                        text: qsTr("EXTRUDERS ARE BEING PROGRAMMED...")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
+                TextHeadline {
+                    id: alert_text
+                    text: qsTr("EXTRUDERS ARE BEING PROGRAMMED...")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
@@ -1963,120 +1727,30 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "SafeToRemoveUsb"
             id: safeToRemoveUsbPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
+            popupHeight: columnLayout_remove_usb_popup.height + 160
             closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim_remove_usb_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
-            }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            showOneButton: true
+
+            fullButtonText: qsTr("OK")
+            fullButton.onClicked: {
+                bot.acknowledgeSafeToRemoveUsb()
+                safeToRemoveUsbPopup.close()
             }
 
-            Rectangle {
-                id: basePopupItem_remove_usb_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 220
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: columnLayout_remove_usb_popup
+                height: children.height
+                anchors.top: safeToRemoveUsbPopup.popupContainer.top
+                anchors.topMargin: 40
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                Rectangle {
-                    id: horizontal_divider_remove_usb_popup
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                }
-
-                Item {
-                    id: buttonBar_remove_usb_popup
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: ok_rectangle_remove_usb_popup
-                        x: 0
-                        y: 0
-                        width: 720
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: ok_text_remove_usb_popup
-                            color: "#ffffff"
-                            text: qsTr("OK")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "safeToRemoveUsbPopup [" + ok_text_remove_usb_popup.text + "]"
-                            id: ok_mouseArea_remove_usb_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                ok_text_remove_usb_popup.color = "#000000"
-                                ok_rectangle_remove_usb_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                ok_text_remove_usb_popup.color = "#ffffff"
-                                ok_rectangle_remove_usb_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.acknowledgeSafeToRemoveUsb()
-                                safeToRemoveUsbPopup.close()
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout_remove_usb_popup
-                    width: 590
-                    height: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: remove_usb_text_remove_usb_popup
-                        color: "#cbcbcb"
-                        text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
+                TextHeadline {
+                    id: remove_usb_text_remove_usb_popup
+                    text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
