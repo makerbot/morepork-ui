@@ -151,8 +151,11 @@ ErrorScreenForm {
                     mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
                     // Check for Use of Assisted Motors
                     if(!bot.hasFilamentBays
-                            || (bot.extruderAJammed && materialPage.bay1.usingExperimentalExtruder)
-                            || (bot.extruderBJammed && materialPage.bay2.usingExperimentalExtruder)) {
+                            || (bot.extruderAJammed
+                                && (!materialPage.bay1.bayFilamentSwitch || shouldUserAssistPurging(0)))
+                            || (bot.extruderBJammed
+                                && (!materialPage.bay2.bayFilamentSwitch || shouldUserAssistPurging(1))))
+                    {
                         // Unload
                         unloadFromErrorScreen()
                     } else {
