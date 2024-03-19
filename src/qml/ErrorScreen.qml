@@ -146,10 +146,19 @@ ErrorScreenForm {
             }
             else if(state == "filament_jam_error") {
                 if(bot.process.stateType == ProcessStateType.Paused) {
-                    // Purge
+                    // Move to Material Page
                     resetSwipeViews()
                     mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                    loadPurgeFromErrorScreen()
+                    // Check for Use of Assisted Motors
+                    if(!bot.hasFilamentBays
+                            || (bot.extruderAJammed && materialPage.bay1.usingExperimentalExtruder)
+                            || (bot.extruderBJammed && materialPage.bay2.usingExperimentalExtruder)) {
+                        // Unload
+                        unloadFromErrorScreen()
+                    } else {
+                        // Purge
+                        loadPurgeFromErrorScreen()
+                    }
                 }
             }
             else if(state == "filament_bay_oof_error") {
@@ -196,28 +205,6 @@ ErrorScreenForm {
             else if(state == "toolhead_disconnect") {
                 // just clear the error
             }
-        }
-    }
-
-    button2 {
-        enabled: {
-            if (state == "filament_jam_error") {
-                bot.process.stateType == ProcessStateType.Paused
-            } else {
-                true
-            }
-        }
-
-        onClicked: {
-            if(state == "filament_jam_error") {
-                if(bot.process.stateType == ProcessStateType.Paused) {
-                    // Unload
-                    resetSwipeViews()
-                    mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                    unloadFromErrorScreen()
-                }
-            }
-            acknowledgeError()
         }
     }
 }
