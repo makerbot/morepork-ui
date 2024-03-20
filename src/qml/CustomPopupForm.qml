@@ -32,13 +32,6 @@ LoggingPopup {
     property bool showTwoButtons: false
     property int defaultButton: CustomPopup.Right
 
-    property alias full_button: full_button
-    property alias full_button_text: full_text.text
-    property alias left_button: left_button
-    property alias left_button_text: left_text.text
-    property alias right_button: right_button
-    property alias right_button_text: right_text.text
-
     background: Rectangle {
         id: popupBackgroundDim
         color: "#000000"

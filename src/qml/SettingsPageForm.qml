@@ -300,14 +300,14 @@ Item {
         popupHeight: 275
         visible: false
         showTwoButtons: true
-        left_button_text: qsTr("BACK")
-        right_button_text: qsTr("CONFIRM")
-        right_button.onClicked: {
-            bot.shutdown()
-        }
 
-        left_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             shutdownPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            bot.shutdown()
         }
 
         ColumnLayout {

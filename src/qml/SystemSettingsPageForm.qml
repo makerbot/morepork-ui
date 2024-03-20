@@ -598,7 +598,7 @@ Item {
 
         property string popupState: "no_usb_detected"
         showOneButton: showButton
-        full_button_text: {
+        fullButtonText: {
             if (popupState == "copy_logs_state") {
                 qsTr("CANCEL")
             }
@@ -606,7 +606,7 @@ Item {
                 qsTr("CLOSE")
             }
         }
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(popupState == "copy_logs_state") {
                 bot.cancel()
                 showButton = false
@@ -819,7 +819,7 @@ Item {
 
         property string popupState: "no_usb_detected"
         showOneButton: showButton
-        full_button_text: {
+        fullButtonText: {
             if (popupState == "copy_timelapse_images_state") {
                 qsTr("CANCEL")
             }
@@ -827,7 +827,7 @@ Item {
                 qsTr("CLOSE")
             }
         }
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(popupState == "copy_timelapse_images_state") {
                 bot.cancel()
                 showButton = false
@@ -1043,18 +1043,18 @@ Item {
         showTwoButtons: !isResetting && !isFactoryResetDone
         showOneButton: !isResetting && isFactoryResetDone && !hideButton
                        && isFinalResetProceduresDone
-        left_button_text: qsTr("BACK")
-        right_button_text: qsTr("CONFIRM")
-        right_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            resetToFactoryPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             isResetting = true
             bot.resetToFactory(true)
             doFinalResetProceduresTimer.start()
         }
-        left_button.onClicked: {
-            resetToFactoryPopup.close()
-        }
-        full_button_text: qsTr("CONFIRM")
-        full_button.onClicked: {
+        fullButtonText: qsTr("CONFIRM")
+        fullButton.onClicked: {
             hideButton = true
             // Wait before Reboot
             rebootPrinterTimer.start()
