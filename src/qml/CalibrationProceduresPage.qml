@@ -87,7 +87,7 @@ Item {
 
                         onClicked: {
                             calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
-                            bot.calibrateToolheads(["z"])
+                            toolheadCalibration.zOnlyCal=true
                         }
                     }
 
@@ -150,6 +150,8 @@ Item {
                         skipFreStepPopup.open()
                     }
                 }
+                // Reset Z-Only Variable
+                toolheadCalibration.zOnlyCal=false
             }
 
             function skipFreStepAction() {
@@ -173,6 +175,7 @@ Item {
                     if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
                         calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
                     }
+                    zOnlyCal = false
                 }
             }
 
