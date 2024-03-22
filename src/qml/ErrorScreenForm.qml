@@ -715,15 +715,7 @@ LoggingItem {
         },
         State {
             name: "no_build_plate_error"
-
-            PropertyChanges {
-                target: contentLeftSide
-
-                image {
-                    source: ("qrc:/img/%1.gif").arg(getImageForPrinter("insert_build_plate"))
-                    visible: true
-                }
-            }
+            extend: "generic_error"
 
             PropertyChanges {
                 target: contentRightSide
@@ -733,7 +725,7 @@ LoggingItem {
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Please ensure your build  plate is properly attached.")
+                    text: qsTr("Please ensure your build plate is properly attached.")
                     visible: true
                 }
                 buttonPrimary {
