@@ -32,11 +32,7 @@ ToolheadCalibrationForm {
                     }
                 } else {
                     // Button action in 'base state'
-                    if (zOnlyCal) {
-                        bot.calibrateToolheads(["z"])
-                    } else {
-                        bot.calibrateToolheads(["x","y"])
-                    }
+                    bot.calibrateToolheads(["x","y"])
                 }
             }
         }

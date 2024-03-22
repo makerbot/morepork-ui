@@ -86,8 +86,7 @@ Item {
                         }
 
                         onClicked: {
-                            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
-                            toolheadCalibration.zOnlyCal=true
+                            autoZCalPopup.open()
                         }
                     }
 
@@ -150,8 +149,6 @@ Item {
                         skipFreStepPopup.open()
                     }
                 }
-                // Reset Z-Only Variable
-                toolheadCalibration.zOnlyCal=false
             }
 
             function skipFreStepAction() {
@@ -175,7 +172,6 @@ Item {
                     if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
                         calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
                     }
-                    zOnlyCal = false
                 }
             }
 
@@ -212,6 +208,56 @@ Item {
 
             ManualZCalibration {
                 id: manualZCalibration
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "AutomaticZCalibration"
+        id: autoZCalPopup
+        popupHeight: autoZCalColumnLayout.height +145
+        visible: false
+        showTwoButtons: true
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            autoZCalPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
+            bot.calibrateToolheads(["z"])
+            autoZCalPopup.close()
+        }
+
+        ColumnLayout {
+            id: autoZCalColumnLayout
+            height: children.height
+            anchors.top: autoZCalPopup.popupContainer.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 35
+            spacing: 20
+
+            Image {
+                id: autoZCalImage
+                width: sourceSize.width
+                Layout.preferredWidth: sourceSize.width
+                Layout.preferredHeight: sourceSize.height
+                source: "qrc:/img/popup_error.png"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextHeadline {
+                id: alert_text
+                text: qsTr("AUTOMATIC Z-ONLY CALIBRATION")
+                horizontalAlignment: Text.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextBody {
+                id: descritpion_text
+                horizontalAlignment: Text.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                text: qsTr("Do you want to begin the automatic z-only calibration process?")
             }
         }
     }

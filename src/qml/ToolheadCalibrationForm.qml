@@ -16,7 +16,6 @@ LoggingItem {
     property alias cleanExtrudersSequence: cleanExtrudersSequence
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     property alias resumeManualCalibrationPopup: resumeManualCalibrationPopup
-    property bool zOnlyCal: false
     signal processDone
 
     property int currentState: bot.process.stateType
@@ -62,8 +61,7 @@ LoggingItem {
     ContentRightSide {
         id: contentRightSide
         textHeader {
-            text: zOnlyCal ? qsTr("AUTOMATIC Z-ONLY CALIBRATION") :
-                             qsTr("AUTOMATIC CALIBRATION")
+            text: qsTr("AUTOMATIC CALIBRATION")
             visible: true
         }
         textBody {
