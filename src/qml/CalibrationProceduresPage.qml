@@ -249,15 +249,13 @@ Item {
             TextHeadline {
                 id: alert_text
                 text: qsTr("AUTOMATIC Z-ONLY CALIBRATION")
-                horizontalAlignment: Text.AlignHCenter
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             TextBody {
                 id: descritpion_text
-                horizontalAlignment: Text.AlignHCenter
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 text: qsTr("Do you want to begin the automatic z-only calibration process?")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
         }
     }
