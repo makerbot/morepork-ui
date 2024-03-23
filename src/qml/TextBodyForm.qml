@@ -26,7 +26,7 @@ Text {
             15
         }
     }
-
+    verticalAlignment: Text.AlignVCenter
     lineHeightMode: Text.FixedHeight
     wrapMode: Text.WordWrap
     lineHeight: {
@@ -69,5 +69,4 @@ Text {
         }
         return spacing;
     }
-
 }

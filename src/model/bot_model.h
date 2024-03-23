@@ -49,6 +49,7 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void cancel();
     Q_INVOKABLE virtual void pauseResumePrint(QString action);
     Q_INVOKABLE virtual void print(QString file_name);
+    Q_INVOKABLE virtual void printAgain();
     Q_INVOKABLE virtual void done(QString acknowledge_result);
     Q_INVOKABLE virtual void loadFilament(const int kToolIndex, bool external,
             bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
@@ -119,6 +120,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void moveBuildPlate(const int distance, const int speed);
     Q_INVOKABLE virtual void getLastAutoCalOffsets();
     Q_INVOKABLE virtual void setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset);
+    Q_INVOKABLE virtual void setPrintAgainEnabled(bool enable);
+    Q_INVOKABLE virtual void getPrintAgainEnabled();
 
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
@@ -157,6 +160,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, timeZone, "Unknown")
     MODEL_PROP(bool, isAuthRequestPending, false)
     MODEL_PROP(bool, isInstallUnsignedFwRequestPending, false)
+    MODEL_PROP(bool, printAgainEnabled, false)
     // TODO(praveen): Would be good to move these extruder
     //                properties to it's own sub model.
     MODEL_PROP(ExtruderType, extruderAType, NONE)

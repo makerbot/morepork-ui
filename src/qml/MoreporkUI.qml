@@ -497,9 +497,13 @@ ApplicationWindow {
         bot.setNPSSurveyDueDate(due)
     }
 
+    // TODO - Rename this function and include other cases too the next time this
+    // comes up.
     //Reset settings swipe view pages (nested pages)
     function resetSettingsSwipeViewPages() {
         console.info("Resetting Settings Pages to their Base Pages...")
+        printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
+        printPage.startPrintSource = PrintPage.None
         settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.BasePage, false)
         settingsPage.systemSettingsPage.setupProceduresPage.setupProceduresSwipeView.swipeToItem(SetupProceduresPage.BasePage, false)
         settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage, false)

@@ -52,7 +52,6 @@
         <file alias="methodxl_rewind_spool_1.gif">images/load_unload/methodxl/rewind_spool_1.gif</file>
         <file alias="methodxl_rewind_spool_2.gif">images/load_unload/methodxl/rewind_spool_2.gif</file>
         <file alias="methodxl_store_material.png">images/load_unload/methodxl/store_material.png</file>
-        <file alias="icon_directory.png">images/icon_directory.png</file>
         <file alias="alert.png">images/alert.png</file>
         <file alias="check_mark_small.png">images/check_mark_small.png</file>
         <file alias="info_icon_small.png">images/info_icon_small.png</file>
@@ -62,8 +61,6 @@
         <file alias="firmware_update_available.png">images/firmware_update_available.png</file>
         <file alias="error.png">images/error.png</file>
         <file alias="process_successful.png">images/process_successful.png</file>
-        <file alias="icon_sombrero.png">images/icon_sombrero.png</file>
-        <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
         <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
         <file alias="method_adjust_left_to_move_up_plate.png">images/assisted_level/method/adjust_left_to_move_up_plate.png</file>
@@ -169,7 +166,6 @@
         <file alias="popup_complete.png">images/popup_complete.png</file>
         <file alias="popup_error.png">images/popup_error.png</file>
         <file alias="circle_alert_112px.png">images/circle_alert_112px.png</file>
-        <file alias="forward_arrow_42_80px.png">images/forward_arrow_42_80px.png</file>
         <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
         <file alias="icon_build_plate_settings.png">images/icon_build_plate_settings.png</file>
         <file alias="icon_extruder_settings.png">images/icon_extruder_settings.png</file>
@@ -255,5 +251,11 @@
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
         <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
         <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
+	<file alias="directory.png">images/start_print_source/directory.png</file>
+	<file alias="usb.png">images/start_print_source/usb.png</file>
+	<file alias="internal_storage.png">images/start_print_source/internal_storage.png</file>
+	<file alias="print_again.png">images/start_print_source/print_again.png</file>
+	<file alias="icon_print_again.png">images/icon_print_again.png</file>
+	<file alias="print_again_settings.png">images/print_again_settings/print_again_settings.png</file>
     </qresource>
 </RCC>

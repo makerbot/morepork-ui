@@ -78,6 +78,10 @@ void BotModel::print(QString file_name) {
     qDebug() << FL_STRM << "called with file name: " << file_name;
 }
 
+void BotModel::printAgain() {
+    qDebug() << FL_STRM << "called";
+}
+
 void BotModel::done(QString acknowledge_result) {
     qDebug() << FL_STRM << "called with acknowledge_result: " << acknowledge_result;
 }
@@ -368,6 +372,14 @@ void BotModel::getLastAutoCalOffsets() {
 
 void BotModel::setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset) {
     qDebug() << FL_STRM << "called with params:" << " tool_a_z_offset: " << tool_a_z_offset << " tool_b_z_offset: " << tool_b_z_offset;
+}
+
+void BotModel::setPrintAgainEnabled(bool enable) {
+    qDebug() << FL_STRM << "called with params:" << " enable: " << enable;
+}
+
+void BotModel::getPrintAgainEnabled() {
+    qDebug() << FL_STRM << "called";
 }
 
 class DummyBotModel : public BotModel {

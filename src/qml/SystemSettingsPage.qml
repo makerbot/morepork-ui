@@ -60,7 +60,6 @@ SystemSettingsPageForm {
     }
 
     buttonSetupProcedures.onClicked: {
-
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.SetupProceduresPage)
     }
 
@@ -156,6 +155,11 @@ SystemSettingsPageForm {
     buttonAnalytics.onClicked: {
         bot.getCloudServicesInfo()
         systemSettingsSwipeView.swipeToItem(SystemSettingsPage.ShareAnalyticsPage)
+    }
+
+    buttonEnablePrintAgain.onClicked: {
+        bot.getPrintAgainEnabled()
+        systemSettingsSwipeView.swipeToItem(SystemSettingsPage.EnablePrintAgainPage)
     }
 
     buttonChangePrinterName.onClicked: {

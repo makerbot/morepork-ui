@@ -20,6 +20,7 @@
 #define INTERNAL_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/things"
 #define USB_STORAGE_PATH QString("/home/")+qgetenv("USER")+"/usb_storage"
 #define CURRENT_THING_PATH QString("/home/")+qgetenv("USER")+"/current_thing"
+#define LAST_THING_PATH QString("/home/")+qgetenv("USER")+"/last_thing"
 #define TEST_PRINT_PATH QString("/home/")+qgetenv("USER")+"/test_prints/"
 #define CAL_PRINT_PATH QString("/home/")+qgetenv("USER")+"/calibration_prints/"
 #define FIRMWARE_FOLDER_PATH QString("/home/")+qgetenv("USER")+"/firmware"
@@ -35,6 +36,7 @@
 // embedded linux path
 #define INTERNAL_STORAGE_PATH QString("/home/things")
 #define USB_STORAGE_PATH QString("/home/usb_storage0")
+#define LAST_THING_PATH QString("/home/last_thing")
 #define CURRENT_THING_PATH QString("/home/current_thing")
 #define TEST_PRINT_PATH QString("/usr/test_prints/")
 #define CAL_PRINT_PATH QString("/usr/calibration_prints/")
@@ -323,7 +325,7 @@ class MoreporkStorage : public QObject {
     Q_ENUM(StorageFileType)
 
     QList<QObject*> print_file_list_;
-    PrintFileInfo* current_thing_;
+    PrintFileInfo* thing_;
     MoreporkStorage();
     Q_PROPERTY(const QString usbStoragePath CONSTANT MEMBER usbStoragePath);
     Q_INVOKABLE void updateFirmwareFileList(const QString directory_path);
@@ -340,14 +342,16 @@ class MoreporkStorage : public QObject {
     QList<QObject*> printFileList() const;
     void printFileListSet(const QList<QObject*> &print_file_list);
     void printFileListReset();
-    Q_INVOKABLE bool updateCurrentThing();
-    Q_PROPERTY(PrintFileInfo* currentThing
-      READ currentThing
-      WRITE currentThingSet
-      RESET currentThingReset)
-    PrintFileInfo* currentThing() const;
-    void currentThingSet(PrintFileInfo* current_thing);
-    Q_INVOKABLE void currentThingReset();
+    Q_INVOKABLE bool getLastThing();
+    Q_INVOKABLE bool getCurrentThing();
+    bool getThingAtPath(QString path);
+    Q_PROPERTY(PrintFileInfo* thing
+      READ thing
+      WRITE thingSet
+      RESET thingReset)
+    PrintFileInfo* thing() const;
+    void thingSet(PrintFileInfo* thing);
+    Q_INVOKABLE void thingReset();
     Q_INVOKABLE void backStackPush(const QString kDirPath);
     Q_INVOKABLE QString backStackPop();
     Q_INVOKABLE void backStackClear();
@@ -364,8 +368,7 @@ class MoreporkStorage : public QObject {
                                          const QString test_print_name);
 
   private:
-    QFileSystemWatcher *storage_watcher_;
-    QFileSystemWatcher *usb_storage_watcher_;
+    QFileSystemWatcher *storage_watcher_, *usb_storage_watcher_, *last_thing_watcher_;
     QStack<QString> back_dir_stack_;
     QString prev_thing_dir_;
     QPointer<ProgressCopy> prog_copy_;
@@ -381,12 +384,14 @@ class MoreporkStorage : public QObject {
                PrintFileInfo::StorageSortType::DateAdded)
     MODEL_PROP(MoreporkStorage::StorageFileType, storageFileType,
                MoreporkStorage::StorageFileType::Print)
+    MODEL_PROP(bool, doesPrintAgainFileExist, false)
 
   private slots:
     void updateUsbStorageConnected();
     void newSortType();
     void setFileCopyProgress(double progress);
     void setFileCopySucceeded(bool success);
+    void updatePrintAgainFileStatus();
 
   signals:
     void printFileListChanged();

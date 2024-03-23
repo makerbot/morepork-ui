@@ -66,7 +66,7 @@ ManualZCalibrationForm {
         printPage.printFromUI = true
         printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
-        printPage.getPrintFileDetails(storage.currentThing)
+        printPage.getPrintFileDetails(storage.thing)
         resetSettingsSwipeViewPages()
         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)

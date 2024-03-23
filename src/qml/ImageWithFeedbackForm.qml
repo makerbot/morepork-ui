@@ -14,7 +14,8 @@ Image {
             "image://async/" + print_url_prefix + "+" +
                                      print_job_id + "+" +
                                      print_token
-        } else if(startPrintSource == PrintPage.FromLocal) {
+        } else if(startPrintSource == PrintPage.FromLocal ||
+                  startPrintSource == PrintPage.FromPrintAgain) {
             "image://thumbnail/" + fileName
         } else {
             emptyString
