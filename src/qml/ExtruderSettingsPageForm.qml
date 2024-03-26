@@ -121,6 +121,7 @@ Item {
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
             property string topBarTitle: qsTr("Clean Extruders")
             property bool hasAltBack: true
+            property bool backIsCancel: bot.process.type == ProcessType.NozzleCleaningProcess
             smooth: false
             visible: false
 
