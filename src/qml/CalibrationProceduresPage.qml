@@ -248,13 +248,16 @@ Item {
 
             TextHeadline {
                 id: alert_text
-                text: qsTr("AUTOMATIC Z-ONLY CALIBRATION")
+                text: qsTr("CONFIRM BUILD PLATE CLEAR")
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
 
             TextBody {
                 id: descritpion_text
-                text: qsTr("Do you want to begin the automatic z-only calibration process?")
+                Layout.preferredWidth: autoZCalPopup.width-200
+                text: qsTr("Do you want to begin the automatic z-only calibration process?") +
+                      qsTr(" Build plate will move to begin process.")
+                horizontalAlignment: Text.AlignHCenter
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
         }
