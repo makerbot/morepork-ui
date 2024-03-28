@@ -571,7 +571,8 @@ ApplicationWindow {
             antialiasing: false
             visible: {
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.ChangePrinterNamePage ||
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage &&
+                 settingsPage.systemSettingsPage.koreaDFSScreen.koreaDFScreenSwipeView.currentIndex == KoreaDFSScreen.BasePage) ||
                 (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.AuthorizeAccountsPage &&
                  (settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
                   settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
