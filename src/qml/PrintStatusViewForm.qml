@@ -140,7 +140,6 @@ LoggingItem {
                 // subheaders showing additional details.
                 ColumnLayout {
                     id: printingStatusColumnLayout
-                    Layout.preferredHeight: children.height
                     Layout.preferredWidth: parent.width
                     spacing: 8
 
