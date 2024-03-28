@@ -634,17 +634,17 @@ LoggingItem {
         popupWidth: 720
         popupHeight: columnLayout_cancel_process_popup.height+145
         showTwoButtons: true
-        right_button_text: qsTr("STOP PROCESS")
-        right_button.onClicked: {
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            cancelDryingCyclePopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             bot.cancel()
             state = "cancelling"
             cancelDryingCyclePopup.close()
         }
-        left_button_text: qsTr("BACK")
-        left_button.onClicked: {
-            cancelDryingCyclePopup.close()
-        }
-
         ColumnLayout {
             id: columnLayout_cancel_process_popup
             width: 590
@@ -675,14 +675,16 @@ LoggingItem {
         id: dryConfirmBuildPlateClearPopup
         popupHeight: columnLayout_clear_build_plate_popup.height+145
         showTwoButtons: true
-        right_button_text: qsTr("CONFIRM")
-        right_button.onClicked: {
+
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            dryConfirmBuildPlateClearPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             dryConfirmBuildPlateClearPopup.close()
             bot.drySpool()
-        }
-        left_button_text: qsTr("BACK")
-        left_button.onClicked: {
-            dryConfirmBuildPlateClearPopup.close()
         }
 
         ColumnLayout {

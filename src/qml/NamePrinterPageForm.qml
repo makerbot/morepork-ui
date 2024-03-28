@@ -70,13 +70,13 @@ Item {
         id: confirmPrinterNamePopup
         popupHeight: 285
         showTwoButtons: true
-        left_button_text: qsTr("BACK")
-        right_button_text: qsTr("CONFIRM")
-        left_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        rightButtonText: qsTr("CONFIRM")
+        leftButton.onClicked: {
             nameField.forceActiveFocus()
             confirmPrinterNamePopup.close()
         }
-        right_button.onClicked: {
+        rightButton.onClicked: {
             if(nameField.text == "") {
                 bot.changeMachineName(nameField.placeholderText)
             } else {

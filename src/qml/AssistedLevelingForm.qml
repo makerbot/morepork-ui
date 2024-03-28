@@ -982,15 +982,16 @@ LoggingItem {
         popupWidth: 720
         popupHeight: 250
         showTwoButtons: true
-        left_button_text: qsTr("CANCEL LEVELING")
-        left_button.onClicked: {
-            bot.cancel()
-            state = "cancelling"
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             cancelAssistedLevelingPopup.close()
         }
 
-        right_button_text: qsTr("CONTINUE LEVELING")
-        right_button.onClicked: {
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            bot.cancel()
+            state = "cancelling"
             cancelAssistedLevelingPopup.close()
         }
 
