@@ -171,7 +171,7 @@ LoggingPopup {
                     }
 
                     LoggingMouseArea {
-                        logText: "CPFB [_" + full_button_text + "_]"
+                        logText: "CPFB [_" + full_text.text + "_]"
                         id: full_button
                         anchors.fill: parent
                         onPressed: {
@@ -228,7 +228,7 @@ LoggingPopup {
                     }
 
                     LoggingMouseArea {
-                        logText: "CPLB [_" + left_button_text + "|]"
+                        logText: "CPLB [_" + left_text.text + "|]"
                         id: left_button
                         anchors.fill: parent
                         onPressed: {
@@ -266,7 +266,7 @@ LoggingPopup {
                     }
 
                     LoggingMouseArea {
-                        logText:"CPRB [|" + right_button_text + "_]"
+                        logText:"CPRB [|" + right_text.text + "_]"
                         id: right_button
                         anchors.fill: parent
                         onPressed: {
