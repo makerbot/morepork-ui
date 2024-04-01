@@ -6,10 +6,10 @@ Menu {
     id: popupMenu
     x: 0
     y: 0
+    height: children.height
+    width: rootAppWindow.width/2
 
     background: Rectangle {
-        implicitWidth: rootAppWindow.width/2
-        implicitHeight: children.height
         color: "#000000"
         border.color: "#ffffff"
         border.width: 2

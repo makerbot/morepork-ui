@@ -571,7 +571,8 @@ ApplicationWindow {
             antialiasing: false
             visible: {
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.ChangePrinterNamePage ||
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage &&
+                 settingsPage.systemSettingsPage.koreaDFSScreen.koreaDFScreenSwipeView.currentIndex == KoreaDFSScreen.BasePage) ||
                 (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.AuthorizeAccountsPage &&
                  (settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
                   settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
@@ -2363,8 +2364,6 @@ ApplicationWindow {
 
                 RowLayout {
                     spacing: 100
-                    Layout.preferredHeight: children.height
-                    Layout.preferredWidth: children.width
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     Image {
@@ -2379,7 +2378,7 @@ ApplicationWindow {
                     ColumnLayout {
                         spacing: 16
                         Layout.preferredWidth: 340
-                        Layout.preferredHeight: children.height
+
                         TextHeadline {
                             id: help_title
                             text: qsTr("HELP")
