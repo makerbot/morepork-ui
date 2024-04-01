@@ -149,16 +149,20 @@ ErrorScreenForm {
                     // Move to Material Page
                     resetSwipeViews()
                     mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                    console.info(qsTr("Test: NOT Has Filament Bays: %1, NOT Bay Filament Switch %2, Extruder %3 Assist: %4").arg(
+                                  !bot.hasFilamentBay).arg(!materialPage.loadUnloadFilamentProcess.bayFilamentSwitch).arg(
+                                     materialPage.loadUnloadFilamentProcess.bayID).arg(
+                                     (materialPage.shouldUserAssistPurging(materialPage.loadUnloadFilamentProcess.bayID))))
                     // Check for Use of Assisted Motors
-                    if(!bot.hasFilamentBays
-                            || (bot.extruderAJammed
-                                && (!materialPage.bay1.bayFilamentSwitch || shouldUserAssistPurging(0)))
-                            || (bot.extruderBJammed
-                                && (!materialPage.bay2.bayFilamentSwitch || shouldUserAssistPurging(1))))
+                    if(!bot.hasFilamentBay
+                            || (!materialPage.loadUnloadFilamentProcess.bayFilamentSwitch)
+                            || (materialPage.shouldUserAssistPurging(materialPage.loadUnloadFilamentProcess.bayID)))
                     {
+                        console.info("Unload")
                         // Unload
                         unloadFromErrorScreen()
                     } else {
+                        console.info("Purge")
                         // Purge
                         loadPurgeFromErrorScreen()
                     }
