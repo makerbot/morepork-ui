@@ -149,7 +149,7 @@ ErrorScreenForm {
                     // Move to Material Page
                     resetSwipeViews()
                     mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
-                    // Check for Use of Assisted Motors
+                    // Check to Unload or Purge
                     if(!bot.hasFilamentBay
                             || (!materialPage.loadUnloadFilamentProcess.bayFilamentSwitch)
                             || (materialPage.shouldUserAssistPurging(materialPage.loadUnloadFilamentProcess.bayID)))
