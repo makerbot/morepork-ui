@@ -103,9 +103,6 @@ LoadUnloadFilamentForm {
             } else if(state == "unloaded_filament_1") {
                 processDone()
             } else if(state == "error" || state == "error_not_extruding") {
-                if(state == "error_not_extruding" && bot.process.type == ProcessType.Print) {
-                    isLoadFilament = false
-                }
                 retryLoadUnload()
             } else if (state == "error_not_engaging") {
                 state = "top_assist_load"
