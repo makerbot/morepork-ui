@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.3
 
 LoggingItem {
     id: processStatusIcon
-    itemName: "PrintIcon"
+    itemName: "ProcessStatusIcon"
     width: 230
     height: 230
 
@@ -33,6 +33,8 @@ LoggingItem {
         centerStatusIcon.rotation = 0
     }
 
+    property int progressPercentage: bot.process.printPercentage
+
     Rectangle {
         id: progressCircleBase
         anchors.fill: parent
@@ -60,7 +62,7 @@ LoggingItem {
                 target: centerStatusIcon
                 from: 360
                 to: 0
-                duration: 8000
+                duration: 10000
                 direction: RotationAnimator.Counterclockwise
                 loops: Animation.Infinite
                 running: false
@@ -75,7 +77,7 @@ LoggingItem {
             smooth: true
             visible: true
 
-            property int percent: bot.process.printPercentage
+            property int percent: progressPercentage
             onPercentChanged: requestPaint()
 
             property string progressRingColor: "#FFFFFF"
@@ -105,7 +107,7 @@ LoggingItem {
                 target: progressRingCanvas
                 from: 0
                 to: 360
-                duration: 8000
+                duration: 10000
                 direction: RotationAnimator.Clockwise
                 loops: Animation.Infinite
                 running: false
@@ -114,7 +116,7 @@ LoggingItem {
 
         TextHuge {
             id: progressPercentageText
-            text: bot.process.printPercentage
+            text: progressPercentage
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 8
             anchors.horizontalCenter: parent.horizontalCenter

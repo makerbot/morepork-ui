@@ -311,7 +311,7 @@ LoggingItem {
                     source: "qrc:/img/cut_filament_tip.gif"
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -356,7 +356,7 @@ LoggingItem {
                     source: ("qrc:/img/methodxl_place_desiccant_%1.gif").arg(bayID)
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -398,7 +398,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter("place_spool_%1".arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -480,7 +480,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -541,7 +541,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
                     visible: true
                 }
-                loadingIcon{
+                processStatusIcon{
                     visible: false
                 }
             }
@@ -599,8 +599,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -660,8 +660,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -715,7 +715,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
                     visible: !feedFromTop && !feedFromAux
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -770,7 +770,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -828,8 +828,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -891,7 +891,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -962,7 +962,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter("close_latch_%1".arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -1046,7 +1046,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter("rewind_spool_%1".arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -1117,7 +1117,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -1175,8 +1175,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Failure
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Failed
                     visible: true
                 }
             }
@@ -1274,7 +1274,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }

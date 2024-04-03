@@ -489,8 +489,8 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftSide
 
-                loadingIcon {
-                    icon_image: LoadingIcon.Failure
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Failed
                     visible: true
                 }
             }

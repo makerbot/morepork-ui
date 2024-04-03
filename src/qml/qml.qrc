@@ -44,8 +44,6 @@
         <file>MaterialIconForm.qml</file>
         <file>AssistedLeveling.qml</file>
         <file>AssistedLevelingForm.qml</file>
-        <file>LoadingIcon.qml</file>
-        <file>LoadingIconForm.qml</file>
         <file>ProcessStatusIcon.qml</file>
         <file>ToolheadCalibration.qml</file>
         <file>ToolheadCalibrationForm.qml</file>

@@ -103,7 +103,7 @@ LoggingItem {
             source: "qrc:/img/error.png"
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
         visible: true

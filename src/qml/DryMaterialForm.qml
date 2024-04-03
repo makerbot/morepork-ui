@@ -88,7 +88,7 @@ LoggingItem {
             source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
         visible: true
@@ -140,7 +140,7 @@ LoggingItem {
                     visible: true
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -189,9 +189,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
+                    processStatus: ProcessStatusIcon.Loading
                     loadingProgress: 0
                 }
             }
@@ -236,7 +236,7 @@ LoggingItem {
                     visible: true
                     source: "qrc:/img/replace_desiccant.png"
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -288,7 +288,7 @@ LoggingItem {
                     source: "qrc:/img/spool_bag.png"
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -335,7 +335,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -427,13 +427,13 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: {
+                    processStatus: {
                         if(bot.process.stateType == ProcessStateType.DryingSpool) {
-                            LoadingIcon.Progress
+                            ProcessStatusIcon.Progress
                         } else {
-                            LoadingIcon.Loading
+                            ProcessStatusIcon.Loading
                         }
                     }
                     loadingProgress: bot.process.printPercentage
@@ -499,9 +499,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Success
+                    processStatus: ProcessStatusIcon.Success
                 }
             }
 
@@ -545,9 +545,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Failure
+                    processStatus: ProcessStatusIcon.Failed
                 }
             }
 
@@ -589,9 +589,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
+                    processStatus: ProcessStatusIcon.Loading
                     loadingProgress: 0
                 }
             }

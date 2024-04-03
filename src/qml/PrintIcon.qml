@@ -9,6 +9,7 @@ ColumnLayout {
     property bool showActionButtons: true
 
     ProcessStatusIcon {
+        itemName: "PrintIcon"
         process: ProcessStatusIcon.PrintProcess
         Layout.alignment: Qt.AlignHCenter
 
