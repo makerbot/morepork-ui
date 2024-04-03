@@ -22,7 +22,6 @@
         <file>PreheatPage.qml</file>
         <file>PreheatPageForm.qml</file>
         <file>PrintIcon.qml</file>
-        <file>PrintIconForm.qml</file>
         <file>NotificationIcons.qml</file>
         <file>NotificationIconsForm.qml</file>
         <file>PrintStatusView.qml</file>
@@ -47,6 +46,7 @@
         <file>AssistedLevelingForm.qml</file>
         <file>LoadingIcon.qml</file>
         <file>LoadingIconForm.qml</file>
+        <file>ProcessStatusIcon.qml</file>
         <file>ToolheadCalibration.qml</file>
         <file>ToolheadCalibrationForm.qml</file>
         <file>AdvancedInfo.qml</file>

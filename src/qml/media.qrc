@@ -12,6 +12,10 @@
         <file alias="play.png">images/print/play.png</file>
         <file alias="pause.png">images/print/pause.png</file>
         <file alias="cancel.png">images/print/cancel.png</file>
+        <file alias="green_checkmark.png">images/print/green_checkmark.png</file>
+        <file alias="yellow_exclamation.png">images/print/yellow_exclamation.png</file>
+        <file alias="red_error.png">images/print/red_error.png</file>
+        <file alias="loading_gear.png">images/print/loading_gear.png</file>
         <file alias="thumbs_up_feedback.png">images/print/thumbs_up_feedback.png</file>
         <file alias="thumbs_down_feedback.png">images/print/thumbs_down_feedback.png</file>
         <file alias="wifi_connected.png">images/top_bar/wifi_connected.png</file>
