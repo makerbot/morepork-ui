@@ -332,7 +332,17 @@ ApplicationWindow {
         if(add_to_list) {
             addToNotificationsList(
                     notif_id, notif_str, MoreporkUI.NotificationPriority.Persistent,
-                    () => {})
+                    function() {
+                        if(isProcessRunning()) {
+                            printerNotIdlePopup.open()
+                            return
+                        }
+                        if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
+                            resetSettingsSwipeViewPages()
+                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                        }
+                    }
+                    )
         } else {
             removeFromNotificationsList(notif_id)
         }
@@ -530,9 +540,14 @@ ApplicationWindow {
         bot.setNPSSurveyDueDate(due)
     }
 
+    // TODO - Rename this function and include other cases too the next time this
+    // comes up. (Updated this while working on the print again ticket after noticing
+    // an issue, so just carrying this over.)
     //Reset settings swipe view pages (nested pages)
     function resetSettingsSwipeViewPages() {
         console.info("Resetting Settings Pages to their Base Pages...")
+        printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
+        printPage.startPrintSource = PrintPage.None
         settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.BasePage, false)
         settingsPage.systemSettingsPage.setupProceduresPage.setupProceduresSwipeView.swipeToItem(SetupProceduresPage.BasePage, false)
         settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage, false)
