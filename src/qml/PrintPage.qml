@@ -118,7 +118,9 @@ PrintPageForm {
     }
 
     function startPrintUnclearedJamCheck() {
-        startPrintWithUnclearedJam = extruderAUnclearedJam || extruderBUnclearedJam
+        startPrintWithUnclearedJam =
+                (model_extruder_used && extruderAUnclearedJam) ||
+                (support_extruder_used && extruderBUnclearedJam)
         return !startPrintWithUnclearedJam
     }
 
