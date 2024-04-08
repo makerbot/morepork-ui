@@ -53,7 +53,7 @@ LoggingItem {
     property bool updateFirmware: false
 
     function getUrlForMethod() {
-           return "makerbot.com/methodfw"
+        return "ultimaker.com/methodfw"
     }
 
     FirmwareFileListUsb {
