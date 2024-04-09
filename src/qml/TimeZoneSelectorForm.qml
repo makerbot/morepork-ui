@@ -30,7 +30,7 @@ Item {
         {code: "CHN", name: "CHINA STANDARD TIME", GMTOffset: "GMT+8:00", path: "Asia/Shanghai"},
         {code: "JST", name: "JAPAN STANDARD TIME", GMTOffset: "GMT+9:00", path: "Asia/Tokyo"},
         {name: "AUSTRALIA"},
-        {code: "ACT", name: "AUSTRALIA CENTRAL TIME", GMTOffset: "GMT+9:30", path: "Australia/ACT"},
+        {code: "ACT", name: "AUSTRALIA CENTRAL TIME", GMTOffset: "GMT+9:30", path: "Australia/Adelaide"},
         {code: "AET", name: "AUSTRALIA EASTERN TIME", GMTOffset: "GMT+10:00", path: "Australia/Sydney"},
         {code: "NST", name: "NEW ZEALAND STANDARD TIME", GMTOffset: "GMT+12:00", path: "Pacific/Auckland"},
     ]
