@@ -53,7 +53,7 @@ LoggingItem {
     property bool updateFirmware: false
 
     function getUrlForMethod() {
-           return "makerbot.com/methodfw"
+        return "ultimaker.com/methodfw"
     }
 
     FirmwareFileListUsb {
@@ -472,8 +472,8 @@ LoggingItem {
         visible: bot.process.type === ProcessType.FirmwareUpdate
                  && bot.process.stateType === ProcessStateType.DownloadingFirmware
 
-        full_button_text: qsTr("CANCEL")
-        full_button.onClicked: {
+        fullButtonText: qsTr("CANCEL")
+        fullButton.onClicked: {
             if(columnLayout_firmware_popup.state == "copying") {
                 updateFirmware = false
                 storage.cancelCopy()
@@ -569,8 +569,8 @@ LoggingItem {
         popupHeight: 350
 
         showOneButton: true
-        full_button_text: qsTr("CLOSE")
-        full_button.onClicked: {
+        fullButtonText: qsTr("CLOSE")
+        fullButton.onClicked: {
             if(isfirmwareUpdateAvailable) {
                 firmwareUpdatePage.state = "firmware_update_available"
             }

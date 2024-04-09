@@ -120,6 +120,9 @@ LoggingItem {
             case ErrorType.HomingError:
                 state = "homing_error"
                 break;
+            case ErrorType.NoBuildPlateError:
+                state = "no_build_plate_error"
+                break;
             case ErrorType.NoFilamentAtExtruder:
             case ErrorType.OtherError:
                 state = "generic_error"
@@ -709,6 +712,28 @@ LoggingItem {
                     visible: true
                 }
             }
+        },
+        State {
+            name: "no_build_plate_error"
+            extend: "generic_error"
+
+            PropertyChanges {
+                target: contentRightSide
+
+                textHeader {
+                    text: qsTr("PRINT FAILED") + "\n\n" + qsTr("NO BUILD PLATE DETECTED")
+                    visible: true
+                }
+                textBody {
+                    text: qsTr("Please ensure your build plate is properly attached.")
+                    visible: true
+                }
+                buttonPrimary {
+                    text: qsTr("EXIT")
+                    visible: true
+                }
+            }
         }
+
     ]
 }

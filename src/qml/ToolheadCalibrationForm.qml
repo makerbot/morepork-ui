@@ -585,15 +585,16 @@ LoggingItem {
         popupWidth: 720
         popupHeight: 250
         showTwoButtons: true
-        left_button_text: qsTr("CANCEL CALIBRATION")
-        left_button.onClicked: {
-            state = "cancelling"
-            bot.cancel()
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             cancelCalibrationPopup.close()
         }
 
-        right_button_text: qsTr("CONTINUE CALIBRATION")
-        right_button.onClicked: {
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            state = "cancelling"
+            bot.cancel()
             cancelCalibrationPopup.close()
         }
 
@@ -622,15 +623,15 @@ LoggingItem {
         id: resumeManualCalibrationPopup
         popupHeight: manualCalColumnLayout.height+145
         showTwoButtons: true
-        left_button_text: qsTr("EXIT")
-        left_button.onClicked: {
+        leftButtonText: qsTr("EXIT")
+        leftButton.onClicked: {
             resumeManualCalibrationPopup.close()
         }
 
-        right_button_text: qsTr("START")
-        right_button.onClicked: {
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+        rightButtonText: qsTr("START")
+        rightButton.onClicked: {
+            extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
             resumeManualCalibrationPopup.close()
         }
 

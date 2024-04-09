@@ -385,7 +385,7 @@ Item {
                         storageThumbnailSourceSize.height: 43
                         storageThumbnail.anchors.leftMargin: 71
                         storageName: qsTr("QUEUE")
-                        storageDescription: qsTr("FROM CLOUDPRINT")
+                        storageDescription: qsTr("FROM DIGITAL FACTORY")
                         onClicked: {
                             printSwipeView.swipeToItem(PrintPage.PrintQueueBrowser)
                         }
@@ -508,7 +508,7 @@ Item {
                 TextBody {
                     style: TextBody.Large
                     font.weight: Font.Light
-                    text: qsTr("Choose another folder or export a .MakerBot file from the MakerBot Print app.")
+                    text: qsTr("Choose another folder or export a .MakerBot file from Digital Factory.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
@@ -626,7 +626,7 @@ Item {
                 TextBody {
                     style: TextBody.Large
                     font.weight: Font.Light
-                    text: qsTr("Use MakerBot CloudPrint to add to your printer's queue.")
+                    text: qsTr("Use UltiMaker Digital Factory to add to your printer's queue.")
                     anchors.top: parent.bottom
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
@@ -791,7 +791,6 @@ Item {
             visible: false
 
             function altBack() {
-
                 if(isInManualCalibration) {
                     // Due to special calibration printing manual
                     // calibration is required on the print page.
@@ -801,7 +800,8 @@ Item {
                     printSwipeView.swipeToItem(PrintPage.BasePage)
                     mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                     settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                    settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                    settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+                    settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
                 }
                 else if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
@@ -845,13 +845,13 @@ Item {
         }
 
         showTwoButtons: internalStorageFull
-        left_button_text: qsTr("OK")
-        left_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             copyingFilePopup.close()
         }
 
-        right_button_text: qsTr("VIEW FILES")
-        right_button.onClicked: {
+        rightButtonText: qsTr("VIEW FILES")
+        rightButton.onClicked: {
             browsingUsbStorage = false
             storage.setStorageFileType(StorageFileType.Print)
             storage.updatePrintFileList("?root_internal?")
@@ -860,9 +860,9 @@ Item {
             copyingFilePopup.close()
         }
 
-        showOneButton: !showTwoButtons
-        full_button_text: (isFileCopySuccessful || fileDownloadFailed)? qsTr("CLOSE") : qsTr("CANCEL")
-        full_button.onClicked: {
+        showOneButton: !internalStorageFull
+        fullButtonText: (isFileCopySuccessful || fileDownloadFailed)? qsTr("CLOSE") : qsTr("CANCEL")
+        fullButton.onClicked: {
             storage.cancelCopy()
             print_queue.cancelDownload()
             copyingFilePopup.close()
@@ -988,6 +988,7 @@ Item {
 
                     PropertyChanges {
                         target: error_image
+                        source: "qrc:/img/process_error_small.png"
                         visible: true
                     }
 
@@ -1017,6 +1018,11 @@ Item {
                     }
 
                     PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
                         target: alert_text_copy_file_popup
                         text: qsTr("PRINTER STORAGE IS FULL")
                     }
@@ -1036,9 +1042,13 @@ Item {
         popupName: "StartPrintPopup"
         popupHeight: startPrintPopup_column_layout.height+145
         showTwoButtons: true
-        right_button_text: qsTr("CONFIRM")
-        left_button_text: qsTr("BACK")
-        right_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            // don't start print
+            startPrintPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             // start print
             startPrintPopup.close()
             if(startPrintSource == PrintPage.FromPrintQueue) {
@@ -1049,10 +1059,6 @@ Item {
             } else {
                 startPrint()
             }
-        }
-        left_button.onClicked: {
-            // don't start print
-            startPrintPopup.close()
         }
 
         ColumnLayout {
@@ -1087,13 +1093,13 @@ Item {
         popupWidth: 720
         popupHeight: 275
         showTwoButtons: true
-        left_button_text: qsTr("OK")
-        left_button.onClicked: {
+        leftButtonText: qsTr("OK")
+        leftButton.onClicked: {
             nylonCFPrintTipPopup.close()
         }
 
-        right_button_text: qsTr("DON'T REMIND ME AGAIN")
-        right_button.onClicked: {
+        rightButtonText: qsTr("DON'T REMIND ME AGAIN")
+        rightButton.onClicked: {
             settings.setShowNylonCFAnnealPrintTip(false)
             nylonCFPrintTipPopup.close()
         }
@@ -1156,17 +1162,17 @@ Item {
                 false
             }
         }
-        full_button_text: {
+        fullButtonText: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails) {
                 qsTr("CANCEL")
             } else if(printFromQueueState == PrintPage.FailedToStartPrint ||
                       printFromQueueState == PrintPage.FailedToGetPrintDetails) {
-                qsTr("OK")
+                qsTr("CLOSE")
             } else {
                 defaultString
             }
         }
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails) {
                 print_queue.cancelRequest(print_url_prefix, print_job_id)
             }
@@ -1293,8 +1299,8 @@ Item {
         popupWidth: 715
         popupHeight: 336
         showOneButton: true
-        full_button_text: qsTr("OK")
-        full_button.onClicked: {
+        fullButtonText: qsTr("OK")
+        fullButton.onClicked: {
             printFeedbackAcknowledgementPopup.close()
             acknowledgePrint()
         }
@@ -1350,7 +1356,7 @@ Item {
 
             TextBody {
                 id: support_link
-                text: "support.makerbot.com"
+                text: "support.ultimaker.com"
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter

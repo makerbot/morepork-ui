@@ -93,7 +93,7 @@
         <file alias="icon_printer_info.png">images/icon_printer_info.png</file>
         <file alias="icon_advanced_info.png">images/icon_advanced_info.png</file>
         <file alias="icon_assisted_leveling.png">images/icon_assisted_leveling.png</file>
-        <file alias="icon_calibrate_toolhead.png">images/icon_calibrate_toolhead.png</file>
+        <file alias="icon_calibrate_toolheads.png">images/icon_calibrate_toolheads.png</file>
         <file alias="icon_change_language.png">images/icon_change_language.png</file>
         <file alias="icon_choose_language.png">images/icon_choose_language.png</file>
         <file alias="icon_software_update.png">images/icon_software_update.png</file>
@@ -109,6 +109,7 @@
         <file alias="icon_wifi.png">images/icon_wifi.png</file>
         <file alias="lock_icon.png">images/lock_icon.png</file>
         <file alias="icon_authorize_account.png">images/icon_authorize_account.png</file>
+        <file alias="icon_calibration_procedures.png">images/icon_calibration_procedures.png</file>
         <file alias="loading.png">images/loading.png</file>
         <file alias="add_account_image.png">images/add_account_image.png</file>
         <file alias="pattern.png">images/pattern.png</file>
@@ -254,5 +255,9 @@
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
         <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
         <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
+        <file alias="wifi_poor.png">images/wifi_poor.png</file>
+        <file alias="wifi_low.png">images/wifi_low.png</file>
+        <file alias="wifi_medium.png">images/wifi_medium.png</file>
+        <file alias="wifi_strong.png">images/wifi_strong.png</file>
     </qresource>
 </RCC>

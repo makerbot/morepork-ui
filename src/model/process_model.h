@@ -93,6 +93,7 @@ class ProcessModel : public BaseModel {
         ToolMismatch,
         IncompatibleSlice,
         HomingError,
+        NoBuildPlateError,
         OtherError
     };
 

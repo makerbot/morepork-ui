@@ -13,28 +13,18 @@ Item {
     anchors.fill: parent
 
     property alias extruderSettingsSwipeView: extruderSettingsSwipeView
-
-    property alias buttonCalibrateToolhead: buttonCalibrateToolhead
-    property alias buttonCalibrateZAxisOnly: buttonCalibrateZAxisOnly
-    property alias calibrateErrorScreen: calibrateErrorScreen
-
+    property alias buttonCalibrationProcedures: buttonCalibrationProcedures
     property alias buttonCleanExtruders: buttonCleanExtruders
-    property alias toolheadCalibration: toolheadCalibration
-
-    property alias buttonManualZCalibration: buttonManualZCalibration
-    property alias manualZCalibration: manualZCalibration
-    property bool returnToManualCal: false
-
     property alias buttonAdjustZOffset: buttonAdjustZOffset
+    property alias calibrationProcedures: calibrationProcedures
     property alias adjustZOffset: adjustZOffset
 
 
     enum SwipeIndex {
-        BasePage,                 // 0
-        AutomaticCalibrationPage, // 1
-        CleanExtrudersPage,       // 2
-        ManualZCalibrationPage,   // 3
-        AdjustZOffsetPage         // 4
+        BasePage,                  // 0
+        CalibrationProceduresPage, // 1
+        CleanExtrudersPage,        // 2
+        AdjustZOffsetPage          // 3
     }
 
     LoggingStackLayout {
@@ -64,25 +54,11 @@ Item {
                     spacing: 0
 
                     MenuButton {
-                        id: buttonCalibrateToolhead
-                        buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
-                        buttonText.text: qsTr("AUTOMATIC CALIBRATION - X Y Z")
+                        id: buttonCalibrationProcedures
+                        buttonImage.source: "qrc:/img/icon_calibration_procedures.png"
+                        buttonText.text: qsTr("CALIBRATION PROCEDURES")
                         enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonCalibrateZAxisOnly
-                        buttonImage.source: "qrc:/img/icon_calibrate_toolhead.png"
-                        buttonText.text: qsTr("AUTOMATIC CALIBRATION - Z")
-                        enabled: !isProcessRunning()
-                    }
-
-                    MenuButton {
-                        id: buttonManualZCalibration
-                        buttonImage.source: "qrc:/img/icon_manual_zcal.png"
-                        buttonText.text: qsTr("MANUAL CALIBRATION - Z")
-                        visible: bot.machineType !=  MachineType.Fire
-                        enabled: !isProcessRunning()
+                        openMenuItemArrow.visible: true
                     }
 
                     MenuButton {
@@ -123,76 +99,18 @@ Item {
             }
         }
 
-        // ExtruderSettingsPage.AutomaticCalibrationPage
+        // ExtruderSettingsPage.CalibrationProceduresPage
         Item {
-            id: calibrateToolheadsItem
+            id: calibrationProceduresItem
             property var backSwiper: extruderSettingsSwipeView
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
-            property string topBarTitle: qsTr("Automatic Calibration")
-            property bool hasAltBack: true
-            property bool backIsCancel: (bot.process.type === ProcessType.CalibrationProcess &&
-                                         bot.process.isProcessCancellable)
+            property string topBarTitle: qsTr("Calibration Procedures")
+
             smooth: false
             visible: false
 
-            function altBack() {
-                if(toolheadCalibration.chooseMaterial) {
-                    toolheadCalibration.chooseMaterial = false
-                    return
-                }
-                if(!inFreStep) {
-                    if(bot.process.type === ProcessType.CalibrationProcess &&
-                       bot.process.isProcessCancellable) {
-                        toolheadCalibration.cancelCalibrationPopup.open()
-                    } else if(bot.process.type == ProcessType.None) {
-                        // If we are in the manual cal process
-                        // we want to prompt the user to resume
-                        // manual calibration
-                        if(returnToManualCal) {
-                            returnToManualCal = false
-                            toolheadCalibration.resumeManualCalibrationPopup.open()
-                        }
-                        toolheadCalibration.state = "base state"
-                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    }
-                }
-                else {
-                    if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
-                        skipFreStepPopup.open()
-                    }
-                }
-            }
-
-            function skipFreStepAction() {
-                if(toolheadCalibration.chooseMaterial) {
-                    toolheadCalibration.chooseMaterial = false
-                    return
-                }
-                bot.cancel()
-                toolheadCalibration.state = "base state"
-                extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-            }
-
-            ToolheadCalibration {
-                id: toolheadCalibration
-                visible: !calibrateErrorScreen.visible
-                onProcessDone: {
-                    toolheadCalibration.state = "base state"
-                    if(calibrateErrorScreen.lastReportedErrorType == ErrorType.NoError) {
-                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                    }
-                }
-            }
-
-            ErrorScreen {
-                id: calibrateErrorScreen
-                isActive: bot.process.type == ProcessType.CalibrationProcess
-                visible: {
-                    lastReportedProcessType == ProcessType.CalibrationProcess &&
-                    lastReportedErrorType != ErrorType.NoError
-                }
+            CalibrationProceduresPage {
+                id: calibrationProcedures
             }
         }
 
@@ -203,6 +121,7 @@ Item {
             property int backSwipeIndex: ExtruderSettingsPage.BasePage
             property string topBarTitle: qsTr("Clean Extruders")
             property bool hasAltBack: true
+            property bool backIsCancel: bot.process.type == ProcessType.NozzleCleaningProcess
             smooth: false
             visible: false
 
@@ -221,32 +140,6 @@ Item {
                     state = "base state"
                     extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
                 }
-            }
-        }
-
-        // ExtruderSettingsPage.ManualZCalibrationPage
-        Item {
-            id: manualZCalibrationItem
-            property var backSwiper: extruderSettingsSwipeView
-            property int backSwipeIndex: ExtruderSettingsPage.BasePage
-            property string topBarTitle: qsTr("Manual Z-Calibration")
-            property bool hasAltBack: true
-            property bool backIsCancel: (manualZCalibration.state == "return_print_page" ||
-                                         manualZCalibration.state == "updating_information" ||
-                                         manualZCalibration.state == "success" ||
-                                         manualZCalibration.state == "adjustments_complete" ||
-                                         (manualZCalibration.state == "cal_issue" &&
-                                          !manualZCalibration.allowReturn))
-
-            smooth: false
-            visible: false
-
-            function altBack() {
-                manualZCalibration.back()
-            }
-
-            ManualZCalibration {
-                id: manualZCalibration
             }
         }
 

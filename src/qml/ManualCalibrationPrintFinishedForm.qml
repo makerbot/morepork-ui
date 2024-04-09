@@ -17,8 +17,7 @@ LoggingItem {
         spacing: 10
 
         ButtonRectanglePrimary {
-            text:
-            {
+            text: {
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
                     qsTr("RETRY")
@@ -32,14 +31,15 @@ LoggingItem {
                 // GO BACK TO MANUAL CALIBRATION
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+                settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
-                    settingsPage.extruderSettingsPage.manualZCalibration.resetProcess(false)
+                    settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.printSuccess = false
+                    settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.resetProcess(false)
                 } else {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
-                    settingsPage.extruderSettingsPage.manualZCalibration.state = "remove_support"
+                    settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.printSuccess = true
+                    settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.state = "remove_support"
                 }
             }
         }
@@ -51,16 +51,17 @@ LoggingItem {
                 acknowledgePrint()
                 if(bot.process.stateType == ProcessStateType.Cancelled ||
                         bot.process.stateType == ProcessStateType.Failed) {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = false
+                    settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.printSuccess = false
                 } else {
-                    settingsPage.extruderSettingsPage.manualZCalibration.printSuccess = true
+                    settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.printSuccess = true
                 }
 
                 // PROMPT USER TO REDO AUTOCAL
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.ExtruderSettingsPage)
-                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.ManualZCalibrationPage)
-                settingsPage.extruderSettingsPage.manualZCalibration.state = "cal_issue"
+                settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
+                settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
+                settingsPage.extruderSettingsPage.calibrationProcedures.manualZCalibration.state = "cal_issue"
             }
         }
     }

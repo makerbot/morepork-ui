@@ -326,16 +326,16 @@ LoggingItem {
         id: cancelCleanExtrudersPopup
         popupWidth: 720
         popupHeight: 250
-
         showTwoButtons: true
-        left_button_text: qsTr("STOP PROCESS")
-        left_button.onClicked: {
-            bot.cancel()
-            state = "cancelling"
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             cancelCleanExtrudersPopup.close()
         }
-        right_button_text: qsTr("CONTINUE")
-        right_button.onClicked: {
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            bot.cancel()
+            state = "cancelling"
             cancelCleanExtrudersPopup.close()
         }
 
