@@ -27,6 +27,7 @@ Text {
         }
     }
 
+    verticalAlignment: Text.AlignVCenter
     lineHeightMode: Text.FixedHeight
     wrapMode: Text.WordWrap
     lineHeight: {
