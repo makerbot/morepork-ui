@@ -12,6 +12,7 @@ PrintPageForm {
     property bool startPrintGenuineSliceUnknownMaterial: false
     property bool startPrintUnknownSliceGenuineMaterial: false
     property bool startPrintWithLabsExtruder: false
+    property bool startPrintWithUnclearedJam: false
 
     function startPrintMaterialCheck() {
         // This function checks for and saves all possible failures
@@ -116,8 +117,16 @@ PrintPageForm {
         return true
     }
 
+    function startPrintUnclearedJamCheck() {
+        startPrintWithUnclearedJam =
+                (model_extruder_used && extruderAUnclearedJam) ||
+                (support_extruder_used && extruderBUnclearedJam)
+        return !startPrintWithUnclearedJam
+    }
+
     function startPrintCheck() {
-        if(startPrintDoorLidCheck() &&
+        if(startPrintUnclearedJamCheck() &&
+           startPrintDoorLidCheck() &&
            startPrintFilamentCheck() &&
            startPrintMaterialCheck() &&
            startPrintExtruderCheck()) {
