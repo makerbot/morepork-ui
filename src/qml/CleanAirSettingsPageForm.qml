@@ -37,12 +37,12 @@ LoggingItem {
             ContentLeftSide {
                 visible: true
                 processStatusIcon {
-                    progressPercentage: (hepaPrintHours *100)/ hepaMaxHours
+                    progressPercentage: (hepaPrintHours*100)/hepaMaxHours
                     processStatus: {
                         if(alert) {
                             ProcessStatusIcon.Failed
                         } else {
-                            ProcessStatusIcon.Progress
+                            ProcessStatusIcon.Running
                         }
                     }
                     visible: true

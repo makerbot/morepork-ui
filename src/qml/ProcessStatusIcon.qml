@@ -62,7 +62,7 @@ LoggingItem {
                 target: centerStatusIcon
                 from: 360
                 to: 0
-                duration: 10000
+                duration: 8000
                 direction: RotationAnimator.Counterclockwise
                 loops: Animation.Infinite
                 running: false
@@ -107,7 +107,7 @@ LoggingItem {
                 target: progressRingCanvas
                 from: 0
                 to: 360
-                duration: 10000
+                duration: 8000
                 direction: RotationAnimator.Clockwise
                 loops: Animation.Infinite
                 running: false

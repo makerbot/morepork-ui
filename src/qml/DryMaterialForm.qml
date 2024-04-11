@@ -431,7 +431,7 @@ LoggingItem {
                     visible: true
                     processStatus: {
                         if(bot.process.stateType == ProcessStateType.DryingSpool) {
-                            ProcessStatusIcon.Progress
+                            ProcessStatusIcon.Running
                         } else {
                             ProcessStatusIcon.Loading
                         }
