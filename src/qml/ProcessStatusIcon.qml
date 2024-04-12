@@ -28,9 +28,7 @@ LoggingItem {
     property int processState: bot.process.stateType
 
     onProcessStateChanged: {
-        progressRingCanvas.rotation = 0
         progressRingCanvas.requestPaint()
-        centerStatusIcon.rotation = 0
     }
 
     property int progressPercentage: bot.process.printPercentage
@@ -43,6 +41,7 @@ LoggingItem {
         border.width: 20
         border.color: "#282828"
 
+        // Center status only icon which does not rotate
         Image {
             id: centerStatusIcon
             width: sourceSize.width
@@ -51,15 +50,27 @@ LoggingItem {
             anchors.horizontalCenter: parent.horizontalCenter
             smooth: true
             antialiasing: true
+            source: "qrc:/img/green_checkmark.png"
+            visible: false
+        }
 
+        // The center gear which is used only in the loading state where it rotates.
+        Image {
+            id: centerGearSpinner
+            width: sourceSize.width
+            height: sourceSize.height
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            smooth: true
+            antialiasing: true
             source: "qrc:/img/loading_gear.png"
             visible: true
 
-            property alias rotationAnimator: rotationAnimatorCenterIcon
+            property alias rotationAnimator: rotationAnimatorCenterGearSpinner
 
             RotationAnimator {
-                id: rotationAnimatorCenterIcon
-                target: centerStatusIcon
+                id: rotationAnimatorCenterGearSpinner
+                target: centerGearSpinner
                 from: 360
                 to: 0
                 duration: 8000
@@ -69,6 +80,8 @@ LoggingItem {
             }
         }
 
+        // The canvas used to render the progress ring which is also used as a spinner
+        // in the loading state when the component rotates.
         Canvas {
             id: progressRingCanvas
             anchors.fill: parent
@@ -149,7 +162,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: centerStatusIcon
-                source: "qrc:/img/loading_gear.png"
+                visible: false
+            }
+
+            PropertyChanges {
+                target: centerGearSpinner
                 rotationAnimator.running: true
                 visible: true
             }
@@ -169,6 +186,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: centerStatusIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: centerGearSpinner
                 rotationAnimator.running: false
                 visible: false
             }
@@ -192,6 +214,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: centerStatusIcon
+                visible: false
+            }
+
+            PropertyChanges {
+                target: centerGearSpinner
                 rotationAnimator.running: false
                 visible: false
             }
@@ -216,9 +243,13 @@ LoggingItem {
             PropertyChanges {
                 target: centerStatusIcon
                 source: "qrc:/img/green_checkmark.png"
-                rotation: 0
-                rotationAnimator.running: false
                 visible: true
+            }
+
+            PropertyChanges {
+                target: centerGearSpinner
+                rotationAnimator.running: false
+                visible: false
             }
 
             PropertyChanges {
@@ -237,9 +268,13 @@ LoggingItem {
             PropertyChanges {
                 target: centerStatusIcon
                 source: "qrc:/img/yellow_exclamation.png"
-                rotation: 0
-                rotationAnimator.running: false
                 visible: true
+            }
+
+            PropertyChanges {
+                target: centerGearSpinner
+                rotationAnimator.running: false
+                visible: false
             }
 
             PropertyChanges {
@@ -258,9 +293,13 @@ LoggingItem {
             PropertyChanges {
                 target: centerStatusIcon
                 source: "qrc:/img/red_error.png"
-                rotation: 0
-                rotationAnimator.running: false
                 visible: true
+            }
+
+            PropertyChanges {
+                target: centerGearSpinner
+                rotationAnimator.running: false
+                visible: false
             }
 
             PropertyChanges {
