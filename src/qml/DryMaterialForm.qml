@@ -192,7 +192,6 @@ LoggingItem {
                 processStatusIcon {
                     visible: true
                     processStatus: ProcessStatusIcon.Loading
-                    loadingProgress: 0
                 }
             }
 
@@ -436,7 +435,7 @@ LoggingItem {
                             ProcessStatusIcon.Loading
                         }
                     }
-                    loadingProgress: bot.process.printPercentage
+                    progressPercentage: bot.process.printPercentage
                 }
             }
 
@@ -449,6 +448,8 @@ LoggingItem {
                             qsTr("PREPARING")
                         } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
                             qsTr("DRYING MATERIAL")
+                        } else if(bot.process.stateType == ProcessStateType.CleaningUp) {
+                            qsTr("FINISHING UP")
                         } else {
                             defaultString
                         }
@@ -592,7 +593,6 @@ LoggingItem {
                 processStatusIcon {
                     visible: true
                     processStatus: ProcessStatusIcon.Loading
-                    loadingProgress: 0
                 }
             }
 
