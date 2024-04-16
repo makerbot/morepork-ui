@@ -540,7 +540,7 @@ LoggingItem {
                     }
                     PropertyChanges {
                         target: description_text_firmware_popup
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                     }
                 },
                 State {

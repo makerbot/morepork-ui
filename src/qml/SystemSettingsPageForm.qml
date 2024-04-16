@@ -686,7 +686,7 @@ Item {
 
                     PropertyChanges {
                         target: description
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                         visible: true
                     }
                 },
@@ -905,7 +905,7 @@ Item {
                     }
                     PropertyChanges {
                         target: timelapse_description
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                         visible: true
                     }
                     PropertyChanges {

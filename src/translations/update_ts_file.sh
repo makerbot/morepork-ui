@@ -12,14 +12,14 @@
 # Edit this script to pass in the absolute 'lupdate' path for qt5 otherwise
 # the qt4 version will be used by default by 'qtchooser'
 
-lupdate ../qml/*.qml -ts \
+/home/praveen/Qt/5.12.5/gcc_64/bin/lupdate -no-obsolete ../qml/*.qml -ts \
 translation_ar_EG.ts \
 translation_zh_CN.ts \
+translation_nl_NL.ts \
 translation_en_GB.ts \
 translation_fr_FR.ts \
 translation_de_DE.ts \
 translation_it_IT.ts \
 translation_ja_JP.ts \
 translation_ko_KR.ts \
-translation_ru_RU.ts \
 translation_es_ES.ts \
