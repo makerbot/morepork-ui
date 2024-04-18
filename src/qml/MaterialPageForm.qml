@@ -329,10 +329,9 @@ Item {
                       " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName :
                       // The spool journal isnt updated until after the load process completes,
                       // so we cant use the filamentMaterialName from the filament bays object.
-                      (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName == "UNKNOWN" ?
+                      inFreStep || ((loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName == "UNKNOWN") ?
                           " - " + bot.getMaterialName(loadUnloadFilamentProcess.retryMaterial) :
                           " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName)
-
             }
             property bool hasAltBack: true
             property bool backIsCancel: true
