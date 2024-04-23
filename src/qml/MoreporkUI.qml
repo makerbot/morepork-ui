@@ -305,6 +305,39 @@ ApplicationWindow {
         }
     }
 
+    property bool extruderAUnclearedJam: bot.extruderAUnclearedJam
+    property bool extruderBUnclearedJam: bot.extruderBUnclearedJam
+
+    onExtruderAUnclearedJamChanged: {
+        updateUnclearedJamNotification("1", extruderAUnclearedJam)
+    }
+
+    onExtruderBUnclearedJamChanged: {
+        updateUnclearedJamNotification("2", extruderBUnclearedJam)
+    }
+
+    function updateUnclearedJamNotification(ext_idx, add_to_list) {
+        var notif_id = ("extruder_%1_uncleared_jam").arg(ext_idx)
+        var notif_str = "Extruder %1 might be jammed".arg(ext_idx)
+        if(add_to_list) {
+            addToNotificationsList(
+                    notif_id, notif_str, MoreporkUI.NotificationPriority.Persistent,
+                    function() {
+                        if(isProcessRunning()) {
+                            printerNotIdlePopup.open()
+                            return
+                        }
+                        if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
+                            resetSettingsSwipeViewPages()
+                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                        }
+                    }
+                    )
+        } else {
+            removeFromNotificationsList(notif_id)
+        }
+    }
+
     // This holds the actual drawer object. The Notifications Drawer is
     // the default one when the UI starts up.
     property var activeDrawer: notificationsDrawer
@@ -497,9 +530,14 @@ ApplicationWindow {
         bot.setNPSSurveyDueDate(due)
     }
 
+    // TODO - Rename this function and include other cases too the next time this
+    // comes up. (Updated this while working on the print again ticket after noticing
+    // an issue, so just carrying this over.)
     //Reset settings swipe view pages (nested pages)
     function resetSettingsSwipeViewPages() {
         console.info("Resetting Settings Pages to their Base Pages...")
+        printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
+        printPage.startPrintSource = PrintPage.None
         settingsPage.systemSettingsPage.timePage.timeSwipeView.swipeToItem(TimePage.BasePage, false)
         settingsPage.systemSettingsPage.setupProceduresPage.setupProceduresSwipeView.swipeToItem(SetupProceduresPage.BasePage, false)
         settingsPage.buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage, false)
@@ -571,7 +609,8 @@ ApplicationWindow {
             antialiasing: false
             visible: {
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.ChangePrinterNamePage ||
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage &&
+                 settingsPage.systemSettingsPage.koreaDFSScreen.koreaDFScreenSwipeView.currentIndex == KoreaDFSScreen.BasePage) ||
                 (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.AuthorizeAccountsPage &&
                  (settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
                   settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
@@ -1760,6 +1799,7 @@ ApplicationWindow {
                 printPage.startPrintGenuineSliceUnknownMaterial = false
                 printPage.startPrintMaterialMismatch = false
                 printPage.startPrintWithLabsExtruder = false
+                printPage.startPrintWithUnclearedJam = false
             }
 
             showOneButton: (printPage.startPrintBuildDoorOpen ||
@@ -1778,7 +1818,8 @@ ApplicationWindow {
                    printPage.startPrintGenuineSliceUnknownMaterial ||
                    printPage.startPrintWithLabsExtruder) {
                     qsTr("BACK")
-                } else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                } else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                          printPage.startPrintWithUnclearedJam) {
                     qsTr("START ANYWAY")
                 } else {
                     emptyString
@@ -1787,9 +1828,10 @@ ApplicationWindow {
 
             leftButton.onClicked: {
                 startPrintErrorsPopup.close()
-                if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                   printPage.startPrintWithUnclearedJam) {
                     if(printPage.startPrintDoorLidCheck()) {
-                        printPage.confirm_build_plate_popup.open()
+                        printPage.startPrintPopup.open()
                     } else {
                         startPrintErrorsPopup.open()
                     }
@@ -1811,6 +1853,8 @@ ApplicationWindow {
                     qsTr("CHANGE MATERIAL")
                 } else if(printPage.startPrintWithLabsExtruder) {
                     qsTr("CONTINUE")
+                } else if(printPage.startPrintWithUnclearedJam) {
+                    qsTr("CLEAR EXTRUDER")
                 } else {
                     emptyString
                 }
@@ -1821,7 +1865,8 @@ ApplicationWindow {
                 if(printPage.startPrintNoFilament ||
                    printPage.startPrintMaterialMismatch ||
                    printPage.startPrintGenuineSliceUnknownMaterial ||
-                   printPage.startPrintUnknownSliceGenuineMaterial) {
+                   printPage.startPrintUnknownSliceGenuineMaterial ||
+                   printPage.startPrintWithUnclearedJam) {
                     resetDetailsAndGoToMaterialsPage()
                     if(isInManualCalibration) {
                         // Reset Manual Z Cal
@@ -1829,7 +1874,7 @@ ApplicationWindow {
                     }
                 } else if(printPage.startPrintWithLabsExtruder) {
                     if(printPage.startPrintDoorLidCheck()) {
-                        printPage.confirm_build_plate_popup.open()
+                        printPage.startPrintPopup.open()
                     } else {
                         startPrintErrorsPopup.open()
                     }
@@ -2034,6 +2079,28 @@ ApplicationWindow {
                                        "material. Printing with other materials is not recommended and could negatively " +
                                        "impact print quality. If you experience worse results with other materials " +
                                        "running automatic calibration might help.")
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
+                    },
+                    State {
+                        name: "uncleared_jam_warning"
+                        when: printPage.startPrintWithUnclearedJam
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("EXTRUDER %1 JAMMED").arg(extruderAUnclearedJam ? "1" : "2")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: {
+                                qsTr("Ensure that the spool isn’t tangled and try purging the extruder. " +
+                                     "If the issue recurs, unload and reload the material.")
+                            }
                         }
 
                         PropertyChanges {
@@ -2363,8 +2430,6 @@ ApplicationWindow {
 
                 RowLayout {
                     spacing: 100
-                    Layout.preferredHeight: children.height
-                    Layout.preferredWidth: children.width
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     Image {
@@ -2379,7 +2444,7 @@ ApplicationWindow {
                     ColumnLayout {
                         spacing: 16
                         Layout.preferredWidth: 340
-                        Layout.preferredHeight: children.height
+
                         TextHeadline {
                             id: help_title
                             text: qsTr("HELP")

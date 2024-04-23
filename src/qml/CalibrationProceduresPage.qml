@@ -86,8 +86,7 @@ Item {
                         }
 
                         onClicked: {
-                            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
-                            bot.calibrateToolheads(["z"])
+                            autoZCalPopup.open()
                         }
                     }
 
@@ -209,6 +208,57 @@ Item {
 
             ManualZCalibration {
                 id: manualZCalibration
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "AutomaticZCalibration"
+        id: autoZCalPopup
+        popupHeight: autoZCalColumnLayout.height +145
+        visible: false
+        showTwoButtons: true
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            autoZCalPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
+            bot.calibrateToolheads(["z"])
+            autoZCalPopup.close()
+        }
+
+        ColumnLayout {
+            id: autoZCalColumnLayout
+            height: children.height
+            anchors.top: autoZCalPopup.popupContainer.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 35
+            spacing: 20
+
+            Image {
+                id: autoZCalImage
+                width: sourceSize.width
+                Layout.preferredWidth: sourceSize.width
+                Layout.preferredHeight: sourceSize.height
+                source: "qrc:/img/popup_error.png"
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextHeadline {
+                id: alert_text
+                text: qsTr("CONFIRM BUILD PLATE CLEAR")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            TextBody {
+                id: descritpion_text
+                Layout.preferredWidth: autoZCalPopup.width-200
+                text: qsTr("Do you want to begin the automatic z-only calibration process?") +
+                      qsTr(" Build plate will move to begin process.")
+                horizontalAlignment: Text.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
         }
     }

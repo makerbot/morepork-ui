@@ -109,6 +109,9 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             case 1016:
                 errorTypeSet(ErrorType::HomingError);
                 break;
+            case 1029:
+                errorTypeSet(ErrorType::NoBuildPlateError);
+                break;
             case 1032:
                 errorTypeSet(ErrorType::BadHESCalibrationFail);
                 break;

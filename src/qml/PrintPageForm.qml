@@ -52,7 +52,7 @@ Item {
     property bool isFileDownloading: print_queue.downloading
     property bool fileDownloadFailed: print_queue.downloadingFailed
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
-    property alias confirm_build_plate_popup: confirm_build_plate_popup
+    property alias startPrintPopup: startPrintPopup
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
@@ -1038,35 +1038,34 @@ Item {
     }
 
     CustomPopup {
-        id: confirm_build_plate_popup
-        popupName: "ConfirmBuildPlate"
-        popupHeight: confirm_build_column_layout.height+145
+        id: startPrintPopup
+        popupName: "StartPrintPopup"
+        popupHeight: startPrintPopup_column_layout.height+145
         showTwoButtons: true
         leftButtonText: qsTr("BACK")
         leftButton.onClicked: {
             // don't start print
-            confirm_build_plate_popup.close()
+            startPrintPopup.close()
         }
         rightButtonText: qsTr("CONFIRM")
         rightButton.onClicked: {
             // start print
-            confirm_build_plate_popup.close()
+            startPrintPopup.close()
             if(startPrintSource == PrintPage.FromPrintQueue) {
                 print_queue.startQueuedPrint(print_url_prefix,
                                              print_job_id,
                                              print_token)
                 printFromQueueState = PrintPage.WaitingToStartPrint
-            }
-            else {
+            } else {
                 startPrint()
             }
         }
 
         ColumnLayout {
-            id: confirm_build_column_layout
+            id: startPrintPopup_column_layout
             width: 650
             height: children.height
-            anchors.top: confirm_build_plate_popup.popupContainer.top
+            anchors.top: startPrintPopup.popupContainer.top
             anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20

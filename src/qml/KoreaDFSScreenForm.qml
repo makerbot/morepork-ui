@@ -3,12 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import DFSEnum 1.0
 
-Item {
-    width: 800
-    height: 440
-    smooth: false
-    antialiasing: false
-    property alias wifiSwipeView: koreaDFScreenSwipeView
+LoggingItem {
+    property alias koreaDFScreenSwipeView: koreaDFScreenSwipeView
     property alias passwordField: passwordField
 
     enum SwipeIndex {
@@ -39,10 +35,7 @@ Item {
 
             Item {
                 id: appContainer
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.right: parent.right
-                anchors.bottom: inputPanelContainer.top
+                anchors.fill: parent
                 smooth: false
                 antialiasing: false
 

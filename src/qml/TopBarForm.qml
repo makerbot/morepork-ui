@@ -211,7 +211,6 @@ Item {
                     font.pixelSize: 17
                     font.letterSpacing: 3
                     lineHeight: 22
-                    style: TextHeadline.TopBar
                     text: {
                         if(activeDrawer && activeDrawer.opened) {
                             activeDrawer.topBarTitle

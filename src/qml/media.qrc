@@ -255,5 +255,9 @@
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
         <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
         <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
+        <file alias="wifi_poor.png">images/wifi_poor.png</file>
+        <file alias="wifi_low.png">images/wifi_low.png</file>
+        <file alias="wifi_medium.png">images/wifi_medium.png</file>
+        <file alias="wifi_strong.png">images/wifi_strong.png</file>
     </qresource>
 </RCC>

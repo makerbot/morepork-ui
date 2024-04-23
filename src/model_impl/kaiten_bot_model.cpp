@@ -1867,6 +1867,7 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             } else { \
               extruder ## EXT_SYM ## ErrorCodeReset(); \
             } \
+            extruder ## EXT_SYM ## UnclearedJamSet(kExtruder ## EXT_SYM["jammed"].asBool()); \
           }
           EXTRUDER_VAR_UPDATE(A)
           EXTRUDER_VAR_UPDATE(B)

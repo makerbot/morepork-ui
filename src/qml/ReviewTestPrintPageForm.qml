@@ -39,7 +39,7 @@ Item {
         }
 
         textBody1 {
-            text: "makerbot.com/calibration"
+            text: "ultimaker.com/calibration"
             font.weight: Font.Bold
             visible: true
         }

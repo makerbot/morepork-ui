@@ -3,63 +3,49 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.9
 import FreStepEnum 1.0
 
-Item {
-    width: 800
-    height: 420
-    smooth: false
-    antialiasing: false
+LoggingItem {
     property alias nameField: nameField
 
-    Item {
-        id: itemNamePrinter
-        anchors.left: parent.left
+    ColumnLayout {
+        spacing: 20
         anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.bottom: inputPanelContainer.top
-        smooth: false
-        antialiasing: false
+        anchors.topMargin: 25
+        anchors.horizontalCenter: parent.horizontalCenter
 
-        ColumnLayout {
+        TextSubheader {
+            text: qsTr("ENTER A NAME FOR YOUR PRINTER")
+        }
+
+        RowLayout {
             spacing: 20
-            anchors.top: parent.top
-            anchors.topMargin: 50
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            TextSubheader {
-                text: qsTr("ENTER A NAME FOR YOUR PRINTER")
+            width: children.width
+            TextField {
+                id: nameField
+                Layout.preferredWidth: 564
+                Layout.preferredHeight: 52
+                smooth: false
+                antialiasing: false
+                background:
+                    Rectangle {
+                        radius: 2
+                        anchors.fill: parent
+                        color: "#f7f7f7"
+                    }
+                color: "#000000"
+                font.family: defaultFont.name
+                font.weight: Font.Light
+                font.pointSize: 14
+                placeholderText: "My Method Printer"
+                echoMode: TextField.Normal
+                focus: true
             }
 
-            RowLayout {
-                spacing: 20
-                width: children.width
-                TextField {
-                    id: nameField
-                    Layout.preferredWidth: 564
-                    Layout.preferredHeight: 52
-                    smooth: false
-                    antialiasing: false
-                    background:
-                        Rectangle {
-                            radius: 2
-                            anchors.fill: parent
-                            color: "#f7f7f7"
-                        }
-                    color: "#000000"
-                    font.family: defaultFont.name
-                    font.weight: Font.Light
-                    font.pointSize: 14
-                    placeholderText: "My Method Printer"
-                    echoMode: TextField.Normal
-                    focus: true
-                }
-
-                ButtonRectangleSecondary {
-                    id: enterButton
-                    Layout.preferredWidth: 120
-                    text: qsTr("ENTER")
-                    onClicked: {
-                        confirmPrinterNamePopup.open()
-                    }
+            ButtonRectangleSecondary {
+                id: enterButton
+                Layout.preferredWidth: 120
+                text: qsTr("ENTER")
+                onClicked: {
+                    confirmPrinterNamePopup.open()
                 }
             }
         }

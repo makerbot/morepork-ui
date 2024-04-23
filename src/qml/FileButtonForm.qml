@@ -41,7 +41,13 @@ Button {
 
     ThumbnailImage {
         id: fileThumbnail
+        // These are the dimensions of the small thumbnail in the .makerbots
+        // that are read by the libtinything library. The image provider API
+        // on the UI backend that utilizes libtinything to get the image uses
+        // the dimensions of this image to return the correct image while using
+        // same function call for all the image sizes.
         width: 140
+        height: 106
         antialiasing: false
         fillMode: Image.PreserveAspectFit
         anchors.verticalCenter: parent.verticalCenter
