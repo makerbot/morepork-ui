@@ -1050,6 +1050,9 @@ Item {
         rightButtonText: qsTr("CONFIRM")
         rightButton.onClicked: {
             isResetting = true
+            // Don't allow popups checking that we are not in FRE to
+            // display while we are doing the reset.
+            isFreComplete = false
             bot.resetToFactory(true)
             doFinalResetProceduresTimer.start()
         }
