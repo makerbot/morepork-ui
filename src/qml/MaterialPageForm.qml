@@ -323,7 +323,7 @@ Item {
             property int backSwipeIndex: MaterialPage.BasePage
             property string topBarTitle: {
                 qsTr("%1 Material %2%3").
-                  arg(isLoadFilament ? "Load" : "Unload").
+                  arg(isLoadFilament ? qsTr("Load") : qsTr("Unload")).
                   arg(loadUnloadFilamentProcess.bayID).
                   arg(bot.hasFilamentBay ?
                       " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName :
