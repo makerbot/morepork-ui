@@ -322,6 +322,8 @@ Item {
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
             property string topBarTitle: {
+                // TODO: Make this more readable.
+                // Load Material 2 - SR-30
                 qsTr("%1 Material %2%3").
                   arg(isLoadFilament ? qsTr("Load") : qsTr("Unload")).
                   arg(loadUnloadFilamentProcess.bayID).
