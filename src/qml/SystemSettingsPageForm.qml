@@ -1057,7 +1057,7 @@ Item {
             bot.resetToFactory(true)
             doFinalResetProceduresTimer.start()
         }
-        fullButtonText: qsTr("CONFIRM")
+        fullButtonText: qsTr("RESTART")
         fullButton.onClicked: {
             isRestarting = true
             // Wait before Reboot
