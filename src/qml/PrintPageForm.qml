@@ -1093,17 +1093,15 @@ Item {
         popupWidth: 720
         popupHeight: 275
         showTwoButtons: true
-        leftButtonText: qsTr("OK")
+        leftButtonText: qsTr("DON'T REMIND ME AGAIN")
         leftButton.onClicked: {
-            nylonCFPrintTipPopup.close()
-        }
-
-        rightButtonText: qsTr("DON'T REMIND ME AGAIN")
-        rightButton.onClicked: {
             settings.setShowNylonCFAnnealPrintTip(false)
             nylonCFPrintTipPopup.close()
         }
-
+        rightButtonText: qsTr("OK")
+        rightButton.onClicked: {
+            nylonCFPrintTipPopup.close()
+        }
         ColumnLayout {
             id: columnLayout_nylon_cf_print_tip_popup
             width: 650

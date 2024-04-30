@@ -833,7 +833,7 @@ Item {
         popupWidth: 715
         popupHeight: columnLayout_moisture_warning_popup.height + 150
         showOneButton: true
-        fullButtonText: qsTr("CLOSE")
+        fullButtonText: qsTr("OK")
         fullButton.onClicked: {
             moistureWarningPopup.close()
         }

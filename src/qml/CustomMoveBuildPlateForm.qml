@@ -135,7 +135,7 @@ Item {
         popupName: "CustomMoveAttention"
         popupHeight:customMoveColumnLayout.height+135
         showOneButton: true
-        fullButtonText: qsTr("CONFIRM")
+        fullButtonText: qsTr("OK")
         fullButton.onClicked: {
             customMoveAttentionPopup.close()
         }
