@@ -30,7 +30,7 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("SUBMITTED BY")
             dataText: ""
-            // Info not available at the moment TODO: BW-5817
+            // Info not available from cloudprint at the moment TODO: BW-5817
             visible: false // (startPrintSource == PrintPage.FromPrintQueue)
         }
 
@@ -85,7 +85,7 @@ Item {
             Layout.preferredHeight: dataElement.height
             labelText: qsTr("NOTES")
             dataText: ""
-            // Info not available at the moment TODO: BW-5817
+            // Info not available from cloudprint at the moment TODO: BW-5817
             visible: false // (startPrintSource == PrintPage.FromPrintQueue)
         }
 

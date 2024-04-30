@@ -28,13 +28,14 @@ FrePageForm {
         mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
         materialPage.isLoadFilament = true
         materialPage.toolIdx = tool_idx
+        materialPage.startLoadUnloadFromUI = true
+        materialPage.materialChangeActive = true
         // For Method XL the FRE additional steps screen will lead to the
         // loading flow.
         if(!bot.hasFilamentBay) {
             materialPage.materialSwipeView.swipeToItem(MaterialPage.FreAdditionalStepsPage)
             return
         }
-        materialPage.startLoadUnloadFromUI = true
         materialPage.enableMaterialDrawer()
         bot.loadFilament(tool_idx, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)

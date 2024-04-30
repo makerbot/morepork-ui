@@ -1066,13 +1066,13 @@ LoggingItem {
 
             PropertyChanges {
                 target: freContentRight.textBody
-                text: qsTr("Digital Factory is a browser-based app that enables you to prepare & send files directly to your printer.") +
-                      "\n\n" + qsTr("Create an UltiMaker account and connect your printer to Digital Factory at:")
+                text: qsTr("CloudPrint is a browser-based app that enables you to prepare & send files directly to your printer.") +
+                      "\n\n" + qsTr("Create a MakerBot account and connect your printer to CloudPrint at:")
             }
 
             PropertyChanges {
                 target: freContentRight.textBody1
-                text: "digitalfactory.ultimaker.com"
+                text: "cloudprint.makerbot.com"
 
             }
 
@@ -1147,7 +1147,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.textBody1
                 font.weight: Font.Bold
-                text: "digitalfactory.ultimaker.com"
+                text: qsTr("cloudprint.makerbot.com")
                 visible: true
             }
 
