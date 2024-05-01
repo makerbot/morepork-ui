@@ -63,15 +63,14 @@ LoggingItem {
         visible: false
     }
 
-    LoadingIcon {
-        id: loading_icon
+    ProcessStatusIcon {
+        id: processStatusIcon
         anchors.left: parent.left
         anchors.leftMargin: 80
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
-        icon_image: LoadingIcon.Loading
+        processStatus: ProcessStatusIcon.Loading
         visible: true
-        loading: true
     }
 
     ContentLeftSide {
@@ -151,8 +150,8 @@ LoggingItem {
             when: isfirmwareUpdateAvailable && bot.process.type != ProcessType.FirmwareUpdate
 
             PropertyChanges {
-                target: loading_icon
-                icon_image: LoadingIcon.Failure
+                target: processStatusIcon
+                processStatus: ProcessStatusIcon.Failed
                 visible: true
             }
 
@@ -224,8 +223,8 @@ LoggingItem {
             when: !isfirmwareUpdateAvailable && bot.process.type != ProcessType.FirmwareUpdate
 
             PropertyChanges {
-                target: loading_icon
-                icon_image: LoadingIcon.Success
+                target: processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -293,8 +292,8 @@ LoggingItem {
             when: bot.process.type == ProcessType.FirmwareUpdate
 
             PropertyChanges {
-                target: loading_icon
-                icon_image: LoadingIcon.Loading
+                target: processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -379,7 +378,7 @@ LoggingItem {
             name: "install_from_usb"
 
             PropertyChanges {
-                target: loading_icon
+                target: processStatusIcon
                 visible: false
             }
 
@@ -439,7 +438,7 @@ LoggingItem {
             name: "select_firmware_file"
 
             PropertyChanges {
-                target: loading_icon
+                target: processStatusIcon
                 visible: false
             }
 

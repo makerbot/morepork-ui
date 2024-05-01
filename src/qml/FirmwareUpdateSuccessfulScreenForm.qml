@@ -19,9 +19,9 @@ Item {
     ContentLeftSide {
         anchors.verticalCenter: parent.verticalCenter
         visible: true
-        loadingIcon {
+        processStatusIcon {
             id: update_successful_image
-            icon_image: LoadingIcon.Success
+            processStatus: ProcessStatusIcon.Success
             visible: true
         }
     }

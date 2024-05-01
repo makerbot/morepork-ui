@@ -29,8 +29,8 @@ LoggingItem {
             source: "qrc:/img/clean_air_start.png"
             visible: true
         }
-        loadingIcon {
-            icon_image: LoadingIcon.Loading
+        processStatusIcon {
+            processStatus: ProcessStatusIcon.Loading
             visible: false
         }
     }
@@ -124,7 +124,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: true
             }
 
@@ -159,7 +159,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -195,7 +195,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -231,7 +231,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
