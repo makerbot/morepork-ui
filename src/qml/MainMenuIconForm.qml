@@ -48,7 +48,7 @@ Item {
             style: TextBody.ExtraLarge
             font.weight: Font.Light
             id: textIconDesc
-            text: qsTr("Icon Name")
+            text: "Icon Name"
             antialiasing: false
             smooth: false
             anchors.horizontalCenter: parent.horizontalCenter

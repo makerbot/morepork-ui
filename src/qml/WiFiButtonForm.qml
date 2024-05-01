@@ -64,7 +64,7 @@ Button {
 
             TextHeadline {
                 id: wifiName
-                text: qsTr("WiFi Name")
+                text: "WiFi Name"
             }
         }
 

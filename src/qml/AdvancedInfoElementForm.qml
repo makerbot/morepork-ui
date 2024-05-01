@@ -15,7 +15,7 @@ Item {
         font.weight: Font.Light
         id: label
         width: 250
-        text: qsTr("LABEL")
+        text: "LABEL"
         anchors.verticalCenter: parent.verticalCenter
         font.letterSpacing: 2
     }
@@ -24,7 +24,7 @@ Item {
         style: TextBody.Base
         font.weight: Font.Bold
         id: value
-        text: qsTr("VALUE")
+        text: "VALUE"
         font.capitalization: Font.AllUppercase
         horizontalAlignment: Text.AlignRight
         anchors.right: parent.right

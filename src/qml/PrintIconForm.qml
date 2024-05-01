@@ -148,7 +148,7 @@ ColumnLayout {
                 Text {
                     id: percentage_symbol_text
                     color: "#ffffff"
-                    text: qsTr("%")
+                    text: "%"
                     antialiasing: false
                     smooth: false
                     anchors.top: parent.top

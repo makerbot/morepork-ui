@@ -211,7 +211,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textBody1
-                text: qsTr("ultimaker.com/method-calibration")
+                text: "ultimaker.com/method-calibration"
             }
 
             PropertyChanges {
