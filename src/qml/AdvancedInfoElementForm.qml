@@ -1,7 +1,7 @@
 import QtQuick 2.10
 
 Item {
-    width: 400
+    width: parent.width
 
     property alias label_element: label
     property alias label: label.text
@@ -18,11 +18,14 @@ Item {
         text: qsTr("LABEL")
         anchors.verticalCenter: parent.verticalCenter
         font.letterSpacing: 2
+
     }
 
     TextBody {
         style: TextBody.Base
         font.weight: Font.Bold
+        // We need to specify width to word wrap
+        width: parent.width - label.width
         id: value
         text: qsTr("VALUE")
         font.capitalization: Font.AllUppercase
@@ -30,5 +33,6 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 63
         anchors.verticalCenter: parent.verticalCenter
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 }
