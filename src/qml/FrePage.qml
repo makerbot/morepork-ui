@@ -43,8 +43,8 @@ FrePageForm {
 
     continueButton {
         enabled: {
-            if(state != "load_material" &&
-               state != "calibrate_extruders") {
+            if(state == "load_material" ||
+               state == "calibrate_extruders") {
                 !isProcessRunning()
             }
             else {

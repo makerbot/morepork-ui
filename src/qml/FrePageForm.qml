@@ -187,7 +187,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("BEGIN SETUP")
-
             }
 
             PropertyChanges {
@@ -262,7 +261,6 @@ LoggingItem {
                         qsTr("CONNECT TO NETWORK")
                     }
                 }
-                enabled: true
             }
 
             PropertyChanges {
@@ -331,7 +329,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
             }
 
             PropertyChanges {
@@ -396,7 +393,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
             }
 
             PropertyChanges {
@@ -462,7 +458,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -525,7 +520,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -608,7 +602,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -618,7 +611,6 @@ LoggingItem {
                 enabled: true
                 Layout.preferredWidth: freContentRight.buttonPrimary.width
             }
-
 
             PropertyChanges {
                 target: setupProgress
@@ -676,7 +668,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -754,7 +745,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -831,7 +821,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
             }
 
             PropertyChanges {
@@ -905,7 +894,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("NEXT")
-                enabled: true
             }
 
             PropertyChanges {
@@ -1061,7 +1049,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONNECT ACCOUNT")
-                enabled: true
             }
 
             PropertyChanges {
@@ -1154,7 +1141,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("FINISH")
-                enabled: true
             }
 
             PropertyChanges {
