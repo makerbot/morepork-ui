@@ -33,6 +33,5 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 63
         anchors.verticalCenter: parent.verticalCenter
-        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     }
 }
