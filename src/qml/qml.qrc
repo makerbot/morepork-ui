@@ -249,6 +249,9 @@
         <file>ButtonOptions.qml</file>
         <file>PrintFileInfoPageForm.qml</file>
         <file>PrintFileInfoPage.qml</file>
+        <file>PrintToolStatusPageForm.qml</file>
+        <file>PrintToolStatusPage.qml</file>
+        <file>PrintToolStatusItem.qml</file>
         <file>PowerButtonScreen.qml</file>
         <file>FreProgressItem.qml</file>
         <file>SunflowerUnpackingForm.qml</file>
