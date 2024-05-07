@@ -16,7 +16,7 @@
 translation_ar_EG.ts \
 translation_zh_CN.ts \
 translation_nl_NL.ts \
-translation_en_GB.ts \
+translation_en_US.ts \
 translation_fr_FR.ts \
 translation_de_DE.ts \
 translation_it_IT.ts \
