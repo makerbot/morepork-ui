@@ -155,7 +155,7 @@ LoggingItem {
                 textBody {
                     text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
                           qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
-                               "built-in heaters.") + "\n\n" + qsTr("Please sure the build plate is empty.")
+                               "built-in heaters.") + "\n\n" + qsTr("Please make sure the build plate is empty.")
                     font.weight: Font.Normal
                     visible: true
                 }

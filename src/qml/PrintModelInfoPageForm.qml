@@ -60,7 +60,7 @@ Item {
 
                 TextSubheader {
                     id: printTime
-                    text: qsTr("PRINT TIME | %1").arg(print_time)
+                    text: qsTr("PRINT TIME") + (" | %1").arg(print_time)
                     font.weight: Font.Light
                     opacity: 0.7
                 }

@@ -278,7 +278,7 @@ Item {
         var endTime = new Date()
         endTime.setTime(endMS)
         var daysLeft = endTime.getDate() - currentTime.getDate()
-        var doneByDayString = daysLeft > 1 ? daysLeft + qsTr(" DAYS LATER") : daysLeft == 1 ? qsTr("TOMMORROW") : qsTr("TODAY")
+        var doneByDayString = daysLeft > 1 ? daysLeft + qsTr(" DAYS LATER") : daysLeft == 1 ? qsTr("TOMORROW") : qsTr("TODAY")
         var doneByTimeString = endTime.getHours() % 12 == 0 ? endTime.getMinutes() < 10 ? "12" + ":0" + endTime.getMinutes() :
                                                                                           "12" + ":" + endTime.getMinutes() :
                                                               endTime.getMinutes() < 10 ? endTime.getHours() % 12 + ":0" + endTime.getMinutes() :
