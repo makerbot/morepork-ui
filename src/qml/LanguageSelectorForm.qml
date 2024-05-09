@@ -12,7 +12,6 @@ Item {
     property variant supportedLanguages: [
         {eng_name: "Arabic", name: "عربى", localeCode: "ar_EG"},
         {eng_name: "Chinese", name: "中文（简体）", localeCode: "zh_CN"},
-        {eng_name: "Dutch", name: "Nederlands", localeCode: "nl_NL"},
         {eng_name: "English", name: "ENGLISH", localeCode: "en_US"},
         {eng_name: "French", name: "FRANÇAIS", localeCode: "fr_FR"},
         {eng_name: "German", name: "DEUTSCHE", localeCode: "de_DE"},

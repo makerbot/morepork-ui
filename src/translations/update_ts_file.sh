@@ -15,7 +15,6 @@
 /home/praveen/Qt/5.12.5/gcc_64/bin/lupdate -no-obsolete ../qml/*.qml -ts \
 translation_ar_EG.ts \
 translation_zh_CN.ts \
-translation_nl_NL.ts \
 translation_en_US.ts \
 translation_fr_FR.ts \
 translation_de_DE.ts \
