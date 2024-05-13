@@ -17,6 +17,8 @@ Item {
         width: 250
         text: qsTr("LABEL")
         anchors.verticalCenter: parent.verticalCenter
+        anchors.right: value.left
+        anchors.left: parent.left
         font.letterSpacing: 2
     }
 

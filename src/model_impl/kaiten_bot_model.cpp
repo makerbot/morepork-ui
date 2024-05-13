@@ -2100,21 +2100,47 @@ void KaitenBotModel::wifiUpdate(const Json::Value &result) {
 void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index) {
     const Json::Value & res = result["result"];
 
-    // :(
+    #define UPDATE_EXTRUDER_STATS(EXT_SYM) \
+      UPDATE_INT_PROP(extruder ## EXT_SYM ## ShortRetractCount, res["short_retract_count"]); \
+      UPDATE_INT_PROP(extruder ## EXT_SYM ## LongRetractCount, res["long_retract_count"]); \
+      UPDATE_INT_PROP(extruder ## EXT_SYM ## ExtrusionTotalDistance, res["extrusion_total_distance_mm"]); \
+      UPDATE_INT_PROP(extruder ## EXT_SYM ## Serial, res["serial"]); \
+      const Json::Value & json_val = res["extrusion_distance_mm"]; \
+      if (json_val.isObject()) { \
+          QStringList matNamesList; \
+          QList<int> matUsageList; \
+          for (const std::string & key : json_val.getMemberNames()) { \
+              if (json_val[key].isInt()) { \
+                  matNamesList.append(key.c_str()); \
+                  matUsageList.push_back(json_val[key].asInt()); \
+              } \
+          } \
+          std::sort(matNamesList.begin(), matNamesList.end(), \
+              [&json_val] (const QString & a, const QString & b) -> bool { \
+                  return json_val[a.toStdString()].asInt() > json_val[b.toStdString()].asInt(); \
+              }); \
+          std::sort(matUsageList.begin(), matUsageList.end(), \
+              [&json_val] (int a, int b) -> bool { \
+                  return a > b; \
+              }); \
+          extruder ## EXT_SYM ## MaterialListSet(matNamesList); \
+          extruder ## EXT_SYM ## MaterialUsageListSet(matUsageList); \
+      } else { \
+          extruder ## EXT_SYM ## MaterialListReset(); \
+          extruder ## EXT_SYM ## MaterialUsageListReset(); \
+      } \
+
     switch(index) {
         case 0: {
-            UPDATE_INT_PROP(extruderAShortRetractCount, res["short_retract_count"]);
-            UPDATE_INT_PROP(extruderALongRetractCount, res["long_retract_count"]);
-            UPDATE_INT_PROP(extruderAExtrusionDistance, res["extrusion_distance_mm"]);
+            UPDATE_EXTRUDER_STATS(A)
             break;
         }
         case 1: {
-            UPDATE_INT_PROP(extruderBShortRetractCount, res["short_retract_count"]);
-            UPDATE_INT_PROP(extruderBLongRetractCount, res["long_retract_count"]);
-            UPDATE_INT_PROP(extruderBExtrusionDistance, res["extrusion_distance_mm"]);
+            UPDATE_EXTRUDER_STATS(B)
             break;
         }
     }
+    #undef UPDATE_EXTRUDER_STATS
 }
 
 void KaitenBotModel::resetSpoolProperties(const int bay_index) {
