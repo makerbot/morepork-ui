@@ -26,8 +26,6 @@ LoggingItem {
     property string timeLeftString: "99:99"
     property alias printStatusSwipeView: printStatusSwipeView
     property bool testPrintComplete: false
-    property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
-    property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
 
     property alias acknowledgePrintFinished: acknowledgePrintFinished
     onTimeLeftMinutesChanged: updateTime()

@@ -17,6 +17,8 @@ Item {
         width: 235
         text: "LABEL"
         anchors.verticalCenter: parent.verticalCenter
+        anchors.right: value.left
+        anchors.left: parent.left
         font.letterSpacing: 2
         anchors.left: parent.left
     }

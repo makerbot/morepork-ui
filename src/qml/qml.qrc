@@ -288,5 +288,9 @@
         <file>FlickableMenu.qml</file>
         <file>HotChamberWarningScreen.qml</file>
         <file>PrintAgainSettings.qml</file>
+        <file>ExtruderInfoPage.qml</file>
+        <file>ExtruderInfoPageForm.qml</file>
+        <file>ExtruderInfoContents.qml</file>
+        <file>ExtruderInfoContentsForm.qml</file>
     </qresource>
 </RCC>
