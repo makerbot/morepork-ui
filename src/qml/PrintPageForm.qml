@@ -314,7 +314,8 @@ Item {
     enum StartPrintSource {
         None,
         FromLocal,
-        FromPrintQueue
+        FromPrintQueue,
+        FromPrintAgain
     }
 
     property int printFromQueueState: PrintPage.None
@@ -379,11 +380,22 @@ Item {
                     spacing: 0
 
                     StorageTypeButton {
+                        id: buttonPrintAgain
+                        storageImage: "qrc:/img/print_again.png"
+                        storageName: qsTr("PRINT AGAIN")
+                        storageDescription: ""
+                        onClicked: {
+                            printPage.startPrintSource = PrintPage.FromPrintAgain
+                            updateLastThing()
+                            printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+                        }
+                        visible: bot.printAgainEnabled
+                        enabled: storage.doesPrintAgainFileExist
+                    }
+
+                    StorageTypeButton {
                         id: buttonQueuedPrints
-                        storageThumbnail.source: "qrc:/img/icon_directory.png"
-                        storageThumbnailSourceSize.width: 47
-                        storageThumbnailSourceSize.height: 43
-                        storageThumbnail.anchors.leftMargin: 71
+                        storageImage: "qrc:/img/directory.png"
                         storageName: qsTr("QUEUE")
                         storageDescription: qsTr("FROM CLOUDPRINT")
                         onClicked: {
@@ -393,10 +405,7 @@ Item {
 
                     StorageTypeButton {
                         id: buttonUsbStorage
-                        storageThumbnail.source: "qrc:/img/icon_usb.png"
-                        storageThumbnailSourceSize.width: 45
-                        storageThumbnailSourceSize.height: 53
-                        storageThumbnail.anchors.leftMargin: 72
+                        storageImage: "qrc:/img/usb.png"
                         storageName: qsTr("USB")
                         storageDescription: usbStorageConnected ? qsTr("EXTERNAL STORAGE") : qsTr("PLEASE INSERT A USB DRIVE")
                         enabled: usbStorageConnected
@@ -413,10 +422,7 @@ Item {
 
                     StorageTypeButton {
                         id: buttonInternalStorage
-                        storageThumbnail.source: "qrc:/img/icon_sombrero.png"
-                        storageThumbnailSourceSize.width: 34
-                        storageThumbnailSourceSize.height: 45
-                        storageThumbnail.anchors.leftMargin: 77
+                        storageImage: "qrc:/img/internal_storage.png"
                         storageName: qsTr("INTERNAL STORAGE")
                         storageDescription: qsTr("FILES SAVED ON PRINTER")
                         storageUsed: Math.min(diskman.internalUsed.toFixed(1), 100)
@@ -780,11 +786,26 @@ Item {
             id: itemStartPrint
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
-            property int backSwipeIndex: isPrintProcess ?
-                                             PrintPage.BasePage :
-                                             startPrintSource == PrintPage.FromPrintQueue ?
-                                                 PrintPage.PrintQueueBrowser :
-                                                 PrintPage.FileBrowser
+            property int backSwipeIndex: {
+                if(isPrintProcess) {
+                    PrintPage.BasePage
+                } else {
+                    switch(startPrintSource) {
+                    case PrintPage.FromPrintAgain:
+                        PrintPage.BasePage
+                        break;
+                    case PrintPage.FromPrintQueue:
+                        PrintPage.PrintQueueBrowser
+                        break;
+                    case PrintPage.FromLocal:
+                        PrintPage.FileBrowser
+                        break;
+                    default:
+                        PrintPage.BasePage
+                        break;
+                    }
+                }
+            }
             property string topBarTitle: qsTr("Start Print")
             property bool hasAltBack: true
             smooth: false
@@ -806,9 +827,9 @@ Item {
                 else if(!inFreStep) {
                     startPrintItem.startPrintSwipeView.setCurrentIndex(StartPrintPage.BasePage)
                     if(startPrintSource == PrintPage.FromLocal) {
-                        resetPrintFileDetails()
                         setActiveDrawer(printPage.sortingDrawer)
                     }
+                    resetPrintFileDetails()
                     currentItem.backSwiper.swipeToItem(currentItem.backSwipeIndex)
                     startPrintSource = PrintPage.None
                 }
@@ -1056,6 +1077,8 @@ Item {
                                              print_job_id,
                                              print_token)
                 printFromQueueState = PrintPage.WaitingToStartPrint
+            } else if(startPrintSource == PrintPage.FromPrintAgain) {
+                startPrint(printAgain=true)
             } else {
                 startPrint()
             }

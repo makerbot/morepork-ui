@@ -51,6 +51,7 @@ class KaitenBotModel : public BotModel {
     void cancel();
     void pauseResumePrint(QString action);
     void print(QString file_name);
+    void printAgain();
     void done(QString acknowledge_result);
     void loadFilament(const int kToolIndex, bool external, bool whilePrinting, QList<int> temperature = {0,0}, QString material="None");
     void loadFilamentStop();
@@ -125,6 +126,9 @@ class KaitenBotModel : public BotModel {
     QString getNPSSurveyDueDate();
     QString m_npsFilePath;
     void moveBuildPlate(const int distance, const int speed);
+    void setPrintAgainEnabled(bool enable);
+    void getPrintAgainEnabled();
+    void printAgainEnabledUdpdate(const Json::Value &result);
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -507,6 +511,28 @@ class KaitenBotModel : public BotModel {
         KaitenBotModel *m_bot;
     };
     std::shared_ptr<ExtrudersConfigsCallback> m_extrudersConfigsCb;
+
+    class GetPrintAgainEnabledCallback : public JsonRpcCallback {
+      public:
+        GetPrintAgainEnabledCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value &resp) override {
+            m_bot->printAgainEnabledUdpdate(MakerBot::SafeJson::get_leaf(resp, "result", false));
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<GetPrintAgainEnabledCallback> m_getPrintAgainEnabledCb;
+
+    class SetPrintAgainEnabledCallback : public JsonRpcCallback {
+      public:
+        SetPrintAgainEnabledCallback(KaitenBotModel * bot) : m_bot(bot) {}
+        void response(const Json::Value &resp) override {
+            m_bot->getPrintAgainEnabled();
+        }
+      private:
+        KaitenBotModel *m_bot;
+    };
+    std::shared_ptr<SetPrintAgainEnabledCallback> m_setPrintAgainEnabledCb;
 };
 
 void KaitenBotModel::authRequestUpdate(const Json::Value &request){
@@ -650,6 +676,18 @@ void KaitenBotModel::print(QString file_name){
         json_params["ensure_build_plate_clear"] = Json::Value(false);
         json_params["transfer_wait"] = Json::Value(false);
         conn->jsonrpc.invoke("print", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::printAgain(){
+    try{
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["client"] = Json::Value("lcd");
+        conn->jsonrpc.invoke("print_again", json_params, std::weak_ptr<JsonRpcCallback>());
     }
     catch(JsonRpcInvalidOutputStream &e){
         qWarning() << FFL_STRM << e.what();
@@ -1622,6 +1660,42 @@ void KaitenBotModel::moveBuildPlate(const int distance, const int speed) {
     }
 }
 
+void KaitenBotModel::printAgainEnabledUdpdate(const Json::Value &result) {
+    if(!result.empty() && result.isBool()) {
+        LOG(info) << "printAgainEnabled " << result.asBool();
+        printAgainEnabledSet(result.asBool());
+    } else {
+        printAgainEnabledReset();
+    }
+}
+
+void KaitenBotModel::setPrintAgainEnabled(bool enable) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        json_params["enable"] = Json::Value(enable);
+
+        conn->jsonrpc.invoke("set_print_again_enabled", json_params, m_setPrintAgainEnabledCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::getPrintAgainEnabled() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        conn->jsonrpc.invoke("get_print_again_enabled", Json::Value(), m_getPrintAgainEnabledCb);
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -1658,6 +1732,8 @@ KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_printQueueNot(new PrintQueueNotificatiion(this)),
         m_filterHoursCb(new FilterHoursCallback(this)),
         m_extrudersConfigsCb(new ExtrudersConfigsCallback(this)),
+        m_setPrintAgainEnabledCb(new SetPrintAgainEnabledCallback(this)),
+        m_getPrintAgainEnabledCb(new GetPrintAgainEnabledCallback(this)),
         m_npsFilePath("/var/nps_survey_due_date") {
     m_net.reset(new KaitenNetModel());
     m_process.reset(new KaitenProcessModel());
@@ -2399,6 +2475,7 @@ void KaitenBotModel::connected() {
     json_params["notify"] = Json::Value(true);
     m_conn->jsonrpc.invoke("check_notify_system_time", json_params, std::weak_ptr<JsonRpcCallback>());
     m_conn->jsonrpc.invoke("get_extruders_configs", Json::Value(), m_extrudersConfigsCb);
+    m_conn->jsonrpc.invoke("get_print_again_enabled", Json::Value(), m_getPrintAgainEnabledCb);
 
     stateSet(ConnectionState::Connected);
 }

@@ -135,11 +135,15 @@ PrintPageForm {
         return false
     }
 
-    function startPrint() {
+    function startPrint(printAgain=false) {
         clearErrors()
         storage.backStackClear()
         activeDrawer = printPage.printingDrawer
-        bot.print(fileName)
+        if (!printAgain) {
+            bot.print(fileName)
+        } else {
+            bot.printAgain()
+        }
         printFromUI = true
         printSwipeView.swipeToItem(PrintPage.BasePage)
     }
@@ -160,8 +164,14 @@ PrintPageForm {
     }
 
     function updateCurrentThing() {
-        if(storage.updateCurrentThing()) {
-            getPrintFileDetails(storage.currentThing)
+        if(storage.getCurrentThing()) {
+            getPrintFileDetails(storage.thing)
+        }
+    }
+
+    function updateLastThing() {
+        if(storage.getLastThing()) {
+            getPrintFileDetails(storage.thing)
         }
     }
 

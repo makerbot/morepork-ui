@@ -284,5 +284,6 @@
         <file>CalibrationProceduresPage.qml</file>
         <file>FlickableMenu.qml</file>
         <file>HotChamberWarningScreen.qml</file>
+        <file>PrintAgainSettings.qml</file>
     </qresource>
 </RCC>

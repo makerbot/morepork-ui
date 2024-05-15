@@ -531,8 +531,7 @@ ApplicationWindow {
     }
 
     // TODO - Rename this function and include other cases too the next time this
-    // comes up. (Updated this while working on the print again ticket after noticing
-    // an issue, so just carrying this over.)
+    // comes up.
     //Reset settings swipe view pages (nested pages)
     function resetSettingsSwipeViewPages() {
         console.info("Resetting Settings Pages to their Base Pages...")
