@@ -32,14 +32,16 @@ Item {
 
         TextBody {
             text: settingName
-            Layout.preferredWidth: 128
+            style: TextBody.Large
+            Layout.preferredWidth: 180
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
         TextBody {
             font.weight: Font.Bold
             text: settingText
-            Layout.preferredWidth: 408
+            style: TextBody.Large
+            Layout.preferredWidth: 360
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 

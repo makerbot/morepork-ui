@@ -400,9 +400,9 @@ Item {
         property string state: "detection_step"
 
         showOneButton: true
-        full_button_text: state == "detection_step" ?
+        fullButtonText: state == "detection_step" ?
                               qsTr("CONFIRM") : qsTr("CLOSE")
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(state == "detection_step") {
                 state = "success_step"
             } else {
@@ -456,7 +456,7 @@ Item {
                        bot.net.wifiError == WifiError.ConnectFailed ||
                        bot.net.wifiError == WifiError.InvalidPassword)
 
-        full_button_text: {
+        fullButtonText: {
             if(bot.net.wifiState == WifiState.Connecting) {
                 qsTr("CANCEL")
             }
@@ -475,7 +475,7 @@ Item {
             }
         }
 
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(bot.net.wifiState == WifiState.Connecting) {
                 wifiPopup.close()
             }
@@ -497,8 +497,15 @@ Item {
         showTwoButtons: bot.net.wifiState == WifiState.Disconnecting ||
                         isForgetEnabled
 
-        left_button_text: qsTr("YES")
-        left_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            if(isForgetEnabled || bot.net.wifiState == WifiState.Disconnecting) {
+                wifiPopup.close()
+            }
+        }
+
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             if(bot.net.wifiState == WifiState.Disconnecting) {
                 bot.disconnectWifi(selectedWifiPath)
             }
@@ -507,13 +514,6 @@ Item {
             }
             bot.scanWifi(true)
             wifiPopup.close()
-        }
-
-        right_button_text: qsTr("CANCEL")
-        right_button.onClicked: {
-            if(isForgetEnabled || bot.net.wifiState == WifiState.Disconnecting) {
-                wifiPopup.close()
-            }
         }
 
         onClosed: {

@@ -52,7 +52,7 @@ LoggingItem {
             source: "qrc:/img/calibrate_extruders.png"
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
         visible: true
@@ -106,7 +106,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -173,7 +173,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -242,7 +242,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -302,7 +302,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -359,7 +359,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -404,8 +404,8 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -457,8 +457,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -507,8 +507,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Success
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -545,8 +545,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -585,15 +585,16 @@ LoggingItem {
         popupWidth: 720
         popupHeight: 250
         showTwoButtons: true
-        left_button_text: qsTr("CANCEL CALIBRATION")
-        left_button.onClicked: {
-            state = "cancelling"
-            bot.cancel()
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             cancelCalibrationPopup.close()
         }
 
-        right_button_text: qsTr("CONTINUE CALIBRATION")
-        right_button.onClicked: {
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            state = "cancelling"
+            bot.cancel()
             cancelCalibrationPopup.close()
         }
 
@@ -622,13 +623,13 @@ LoggingItem {
         id: resumeManualCalibrationPopup
         popupHeight: manualCalColumnLayout.height+145
         showTwoButtons: true
-        left_button_text: qsTr("EXIT")
-        left_button.onClicked: {
+        leftButtonText: qsTr("EXIT")
+        leftButton.onClicked: {
             resumeManualCalibrationPopup.close()
         }
 
-        right_button_text: qsTr("START")
-        right_button.onClicked: {
+        rightButtonText: qsTr("START")
+        rightButton.onClicked: {
             extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.CalibrationProceduresPage)
             calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.ManualZCalibrationPage)
             resumeManualCalibrationPopup.close()

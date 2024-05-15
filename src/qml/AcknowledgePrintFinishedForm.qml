@@ -10,6 +10,7 @@ LoggingItem {
     width: 400
     height: 165
     property bool failureFeedbackSelected: false
+    property int skipButtonWidth: 100
 
     // Defects template dict. that will sent for all feedback. Even success.
     // Ideally we should be building a list of defects and just sending that.
@@ -122,19 +123,19 @@ LoggingItem {
         }
     }
 
-    RoundedButton {
+    ButtonRectangleSecondary {
         id: done_button
-        buttonHeight: 50
-        label: qsTr("SKIP")
-        visible: true
-        border.width: 0
-        anchors.right: parent.right
+        width: skipButtonWidth
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 40
-        anchors.rightMargin: 65
-        button_mouseArea.onClicked: {
+        border.width: 0
+        anchors.horizontalCenter: buttonContainerPrintCancelled.horizontalCenter
+        text: qsTr("SKIP")
+        visible: true
+        onClicked: {
             acknowledgePrint()
         }
+
     }
 
     states: [
@@ -163,9 +164,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: done_button
-                button_text.text: qsTr("SKIP")
+                width: skipButtonWidth
                 anchors.bottomMargin: 0
-                anchors.rightMargin: 170
+                color: "#000000"
+                text: qsTr("SKIP")
                 visible: true
             }
         },
@@ -196,10 +198,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: done_button
-                button_text.text: qsTr("DONE")
-                border.width: 2
-                anchors.rightMargin: 295
                 anchors.bottomMargin: 115
+                border.width: 2
+                width: 360
+                text: qsTr("DONE")
                 visible: true
             }
         },
@@ -226,9 +228,10 @@ LoggingItem {
 
             PropertyChanges {
                 target: done_button
-                button_text.text: qsTr("SKIP")
-                anchors.rightMargin: 170
+                width: skipButtonWidth
                 anchors.bottomMargin: -75
+                color: "#000000"
+                text: qsTr("SKIP")
                 visible: true
             }
         }

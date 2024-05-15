@@ -102,8 +102,8 @@ Item {
         popupName: "DoorOpenMoveBuildPlatePopup"
         id: doorOpenMoveBuildPlatePopup
         showOneButton: true
-        full_button.onClicked: doorOpenMoveBuildPlatePopup.close()
-        full_button_text: qsTr("CONFIRM")
+        fullButton.onClicked: doorOpenMoveBuildPlatePopup.close()
+        fullButtonText: qsTr("CONFIRM")
 
         ColumnLayout {
             spacing: 10

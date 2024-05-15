@@ -36,13 +36,13 @@ LoggingItem {
 
             ContentLeftSide {
                 visible: true
-                loadingIcon {
-                    loadingProgress: (hepaPrintHours *100)/ hepaMaxHours
-                    icon_image: {
+                processStatusIcon {
+                    progressPercentage: (hepaPrintHours*100)/hepaMaxHours
+                    processStatus: {
                         if(alert) {
-                            LoadingIcon.Failure
+                            ProcessStatusIcon.Failed
                         } else {
-                            LoadingIcon.Progress
+                            ProcessStatusIcon.Running
                         }
                     }
                     visible: true

@@ -108,8 +108,8 @@ LoggingItem {
     ContentLeftSide {
         id: freContentLeft
         anchors.verticalCenter: parent.verticalCenter
-        loadingIcon {
-            icon_image: LoadingIcon.Success
+        processStatusIcon {
+            processStatus: ProcessStatusIcon.Success
         }
         image {
             source: "qrc:/img/qr_230_xlsetup.png"
@@ -166,7 +166,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -187,7 +187,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("BEGIN SETUP")
-
             }
 
             PropertyChanges {
@@ -232,7 +231,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -262,7 +261,6 @@ LoggingItem {
                         qsTr("CONNECT TO NETWORK")
                     }
                 }
-                enabled: true
             }
 
             PropertyChanges {
@@ -308,7 +306,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -331,7 +329,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
             }
 
             PropertyChanges {
@@ -375,7 +372,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -396,7 +393,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
             }
 
             PropertyChanges {
@@ -441,7 +437,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -462,7 +458,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -525,7 +520,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -587,7 +581,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -608,7 +602,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -618,7 +611,6 @@ LoggingItem {
                 enabled: true
                 Layout.preferredWidth: freContentRight.buttonPrimary.width
             }
-
 
             PropertyChanges {
                 target: setupProgress
@@ -676,7 +668,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("START")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -732,7 +723,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -754,7 +745,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
                 style: (bot.machineType == MachineType.Magma) ? ButtonRectangleBaseForm.ButtonWithHelp : ButtonRectangleBaseForm.Button
             }
 
@@ -810,7 +800,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -831,7 +821,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONTINUE")
-                enabled: true
             }
 
             PropertyChanges {
@@ -884,7 +873,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -905,7 +894,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("NEXT")
-                enabled: true
             }
 
             PropertyChanges {
@@ -961,7 +949,7 @@ LoggingItem {
                 target: freContentLeft
                 image.source: "qrc:/img/qr_230_xlsetup.png"
                 image.visible: true
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
                 visible: true
             }
 
@@ -1004,7 +992,7 @@ LoggingItem {
                 target: freContentLeft
                 image.source: "qrc:/img/remove_upper_material.png"
                 image.visible: true
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
                 visible: true
             }
 
@@ -1050,7 +1038,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -1061,7 +1049,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("CONNECT ACCOUNT")
-                enabled: true
             }
 
             PropertyChanges {
@@ -1129,7 +1116,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: true
+                processStatusIcon.visible: true
                 visible: true
             }
 
@@ -1154,7 +1141,6 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.buttonPrimary
                 text: qsTr("FINISH")
-                enabled: true
             }
 
             PropertyChanges {

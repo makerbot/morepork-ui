@@ -7,10 +7,10 @@ LoggingItem {
     id: mainItem
     anchors.fill: parent
 
-    property alias nextButton: nextButton
-    property alias dontShowButton: dontShowButton
+    property alias nextButton: instructionsContainer.buttonPrimary
+    property alias dontShowButton: instructionsContainer.buttonSecondary1
     property bool acknowledged: false
-    visible: {
+    visible:  {
         if(acknowledged) {
             false
         } else {
@@ -28,38 +28,24 @@ LoggingItem {
         source: "qrc:/img/apply_glue_build_plate.png"
     }
 
-    ColumnLayout {
+    ContentRightSide {
         id: instructionsContainer
-        height: 330
-        width: 360
-        anchors.left: image.right
-        anchors.leftMargin: 20
-        anchors.verticalCenter: parent.verticalCenter
 
-        TextHeadline {
-            id: title_text
+        textHeader {
             text: "TITLE"
-            font.weight: Font.Bold
+            visible: true
         }
-
-        TextBody {
-            id: description_text
-            text: "Description"
-            font.weight: Font.Light
+        textBody {
+            text: "Descripton"
+            visible: true
         }
-
-        ColumnLayout {
-            spacing: 20
-
-            ButtonRectanglePrimary {
-                id: nextButton
-                text: qsTr("CONTINUE")
-            }
-
-            ButtonRectangleSecondary {
-                id: dontShowButton
-                text: qsTr("DON'T SHOW ME AGAIN")
-            }
+        buttonPrimary {
+            text: qsTr("CONTINUE")
+            visible: true
+        }
+        buttonSecondary1 {
+            text: qsTr("DON'T SHOW ME AGAIN")
+            visible: true
         }
     }
 
@@ -71,13 +57,9 @@ LoggingItem {
                   print_model_material == "pet"
 
             PropertyChanges {
-                target: title_text
-                text: qsTr("APPLY GLUE TO THE BUILD PLATE")
-            }
-
-            PropertyChanges {
-                target: description_text
-                text: qsTr("Apply a thin coat of glue using the stick included with the material. Reapply a small layer of glue after each print is complete for best results.")
+                target: instructionsContainer
+                textHeader.text: qsTr("APPLY GLUE TO THE BUILD PLATE")
+                textBody.text: qsTr("Apply a thin coat of glue using the stick included with the material. Reapply a small layer of glue after each print is complete for best results.")
             }
 
             PropertyChanges {

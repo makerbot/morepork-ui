@@ -50,8 +50,6 @@ Item {
             Layout.minimumHeight: listView.height
             labelText: qsTr("DNS")
             dataText: bot.net.gateway
-            labelElement.anchors.top: baseElement.top
-            labelElement.anchors.topMargin: 0
             dataElement.visible: false
             ListView {
                 id: listView
@@ -69,7 +67,6 @@ Item {
                 delegate:
                     TextBody {
                         style: TextBody.Base
-
                         text: model.modelData
                         font.weight: Font.Bold
                     }

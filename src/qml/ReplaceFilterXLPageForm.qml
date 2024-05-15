@@ -29,8 +29,8 @@ LoggingItem {
             source: "qrc:/img/clean_air_start.png"
             visible: true
         }
-        loadingIcon {
-            icon_image: LoadingIcon.Loading
+        processStatusIcon {
+            processStatus: ProcessStatusIcon.Loading
             visible: false
         }
     }
@@ -124,7 +124,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: true
             }
 
@@ -159,7 +159,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -195,7 +195,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -231,7 +231,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -266,17 +266,15 @@ LoggingItem {
         showTwoButtons: popupState == "start" ||
                         popupState == "cancel" ||
                         popupState == "end_process"
-        full_button_text: qsTr("CONFIRM")
-        left_button_text: qsTr("BACK")
-        right_button_text: popupState == "cancel" ?
-                               qsTr("STOP PROCESS") :
-                               qsTr("CONFIRM")
+        fullButtonText: qsTr("CONFIRM")
+        leftButtonText: qsTr("BACK")
+        rightButtonText: qsTr("CONFIRM")
 
         property string popupState: "start"
 
-        right_button.enabled: bot.chamberErrorCode != 48
-        full_button.enabled: bot.chamberErrorCode != 48
-        right_button.onClicked: {
+        rightButton.enabled: bot.chamberErrorCode != 48
+        fullButton.enabled: bot.chamberErrorCode != 48
+        rightButton.onClicked: {
             if(popupState == "cancel" &&
                     bot.process.type == ProcessType.MoveBuildPlateProcess) {
                 // Cancel
@@ -291,10 +289,10 @@ LoggingItem {
                 popupState = "close_door"
             }
         }
-        left_button.onClicked: {
+        leftButton.onClicked: {
             replaceFilterPopup.close()
         }
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if (bot.chamberErrorCode != 48 || bot.doorErrorDisabled) {
                 replaceFilterXLPage.state = "moving_build_plate"
                 doMove()

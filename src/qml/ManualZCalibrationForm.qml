@@ -24,7 +24,7 @@ LoggingItem {
             source: "qrc:/img/manual_z_cal_start.png"
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
 
@@ -118,7 +118,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -179,7 +179,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -409,8 +409,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -573,8 +573,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Success
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -632,8 +632,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Failure
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Failed
                 visible: true
             }
 
@@ -693,8 +693,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: printSuccess ? LoadingIcon.Success : LoadingIcon.Failure
+                target: contentLeftSide.processStatusIcon
+                processStatus: printSuccess ? ProcessStatusIcon.Success : ProcessStatusIcon.Failed
                 visible: true
             }
 
@@ -739,12 +739,12 @@ LoggingItem {
         popupHeight: manual_cal_column_layout.height +145
         showTwoButtons: true
 
-        left_button_text: qsTr("EXIT")
-        right_button_text: qsTr("START")
-        left_button.onClicked: {
+        leftButtonText: qsTr("EXIT")
+        leftButton.onClicked: {
             manual_calibration_issue_popup.close()
         }
-        right_button.onClicked: {
+        rightButtonText: qsTr("START")
+        rightButton.onClicked: {
             // Start Auto Cal/Clean extruders
             calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.AutomaticCalibrationPage)
             returnToManualCal = true
@@ -791,10 +791,15 @@ LoggingItem {
         id: cancelManualZCalPopup
         popupWidth: 720
         popupHeight: 250
-
         showTwoButtons: true
-        left_button_text: qsTr("STOP PROCESS")
-        left_button.onClicked: {
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            // Continue
+            cancelManualZCalPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             // Return to Start Page
             resetProcess(false)
 
@@ -807,11 +812,6 @@ LoggingItem {
                 if (cancelWaitDone) completeCancelWait();
             }
 
-            cancelManualZCalPopup.close()
-        }
-        right_button_text: qsTr("CONTINUE")
-        right_button.onClicked: {
-            // Continue
             cancelManualZCalPopup.close()
         }
 

@@ -80,7 +80,7 @@ LoggingItem {
             source: ("qrc:/img/%1.png").arg(getImageForPrinter("assisted_level"))
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
     }
@@ -260,7 +260,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -320,7 +320,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -388,7 +388,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -453,8 +453,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -763,7 +763,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -825,8 +825,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Success
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -885,8 +885,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Failure
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Failed
                 visible: true
             }
 
@@ -932,8 +932,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -982,15 +982,16 @@ LoggingItem {
         popupWidth: 720
         popupHeight: 250
         showTwoButtons: true
-        left_button_text: qsTr("CANCEL LEVELING")
-        left_button.onClicked: {
-            bot.cancel()
-            state = "cancelling"
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             cancelAssistedLevelingPopup.close()
         }
 
-        right_button_text: qsTr("CONTINUE LEVELING")
-        right_button.onClicked: {
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            bot.cancel()
+            state = "cancelling"
             cancelAssistedLevelingPopup.close()
         }
 

@@ -95,7 +95,7 @@ Item {
                         if(!startPrintCheck()) {
                             startPrintErrorsPopup.open()
                         } else {
-                            confirm_build_plate_popup.open()
+                            startPrintPopup.open()
                         }
                     }
                 }

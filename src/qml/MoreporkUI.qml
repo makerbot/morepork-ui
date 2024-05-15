@@ -305,6 +305,39 @@ ApplicationWindow {
         }
     }
 
+    property bool extruderAUnclearedJam: bot.extruderAUnclearedJam
+    property bool extruderBUnclearedJam: bot.extruderBUnclearedJam
+
+    onExtruderAUnclearedJamChanged: {
+        updateUnclearedJamNotification("1", extruderAUnclearedJam)
+    }
+
+    onExtruderBUnclearedJamChanged: {
+        updateUnclearedJamNotification("2", extruderBUnclearedJam)
+    }
+
+    function updateUnclearedJamNotification(ext_idx, add_to_list) {
+        var notif_id = ("extruder_%1_uncleared_jam").arg(ext_idx)
+        var notif_str = "Extruder %1 might be jammed".arg(ext_idx)
+        if(add_to_list) {
+            addToNotificationsList(
+                    notif_id, notif_str, MoreporkUI.NotificationPriority.Persistent,
+                    function() {
+                        if(isProcessRunning()) {
+                            printerNotIdlePopup.open()
+                            return
+                        }
+                        if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
+                            resetSettingsSwipeViewPages()
+                            mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+                        }
+                    }
+                    )
+        } else {
+            removeFromNotificationsList(notif_id)
+        }
+    }
+
     // This holds the actual drawer object. The Notifications Drawer is
     // the default one when the UI starts up.
     property var activeDrawer: notificationsDrawer
@@ -575,7 +608,8 @@ ApplicationWindow {
             antialiasing: false
             visible: {
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.ChangePrinterNamePage ||
-                settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage ||
+                (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.KoreaDFSSecretPage &&
+                 settingsPage.systemSettingsPage.koreaDFSScreen.koreaDFScreenSwipeView.currentIndex == KoreaDFSScreen.BasePage) ||
                 (settingsPage.systemSettingsPage.systemSettingsSwipeView.currentIndex == SystemSettingsPage.AuthorizeAccountsPage &&
                  (settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.UsernamePage ||
                   settingsPage.systemSettingsPage.authorizeAccountPage.signInPage.signInSwipeView.currentIndex == SignInPage.PasswordPage)) ||
@@ -823,13 +857,12 @@ ApplicationWindow {
             popupWidth: 720
 
             showTwoButtons: true
-            left_button_text: qsTr("BACK")
-            right_button_text: qsTr("CONFIRM")
-
-            left_button.onClicked: {
+            leftButtonText: qsTr("BACK")
+            leftButton.onClicked: {
                 skipFreStepPopup.close()
             }
-            right_button.onClicked: {
+            rightButtonText: qsTr("CONFIRM")
+            rightButton.onClicked: {
                 skipFreStepPopup.close()
                 if (inFreStep) {
                     currentItem.skipFreStepAction()
@@ -1222,14 +1255,14 @@ ApplicationWindow {
             popupHeight: installUnsignedFwBasePopupLayout.height + 140
 
             showTwoButtons: true
-            right_button_text: qsTr("INSTALL")
-            right_button.onClicked: {
-                bot.respondInstallUnsignedFwRequest("allow")
+            leftButtonText: qsTr("CANCEL")
+            leftButton.onClicked: {
+                bot.respondInstallUnsignedFwRequest("rejected")
                 installUnsignedFwPopup.close()
             }
-            left_button_text: qsTr("CANCEL")
-            left_button.onClicked: {
-                bot.respondInstallUnsignedFwRequest("rejected")
+            rightButtonText: qsTr("INSTALL")
+            rightButton.onClicked: {
+                bot.respondInstallUnsignedFwRequest("allow")
                 installUnsignedFwPopup.close()
             }
 
@@ -1264,15 +1297,15 @@ ApplicationWindow {
             closePolicy: Popup.CloseOnPressOutside
 
             showTwoButtons: true
-            right_button_text: qsTr("UPDATE")
-            right_button.onClicked: {
+            rightButtonText: qsTr("UPDATE")
+            rightButton.onClicked: {
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
                 settingsPage.settingsSwipeView.swipeToItem(SettingsPage.SystemSettingsPage)
                 settingsPage.systemSettingsPage.systemSettingsSwipeView.swipeToItem(SystemSettingsPage.FirmwareUpdatePage)
                 firmwareUpdatePopup.close()
             }
-            left_button_text: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
-            left_button.onClicked: {
+            leftButtonText: skipFirmwareUpdate ? qsTr("SKIP") : qsTr("NOT NOW")
+            leftButton.onClicked: {
                 if(skipFirmwareUpdate) {
                     firmwareUpdatePopup.close()
                 }
@@ -1357,194 +1390,45 @@ ApplicationWindow {
 
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "ClearBuildPlate"
             id: buildPlateClearPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
+            popupHeight: buildPlateClearColumnLayout.height+140
             closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim2
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
+            showTwoButtons: true
+
+            leftButtonText: qsTr("CANCEL")
+            leftButton.onClicked: {
+                bot.cancel()
+                buildPlateClearPopup.close()
             }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
-            onOpened: {
-                start_print_text.color = "#000000"
-                start_print_rectangle.color = "#ffffff"
+            rightButtonText: qsTr("START PRINT")
+            rightButton.onClicked: {
+                bot.buildPlateCleared()
+                buildPlateClearPopup.close()
+                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
+                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
             }
 
-            Rectangle {
-                id: basePopupItem2
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 220
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: buildPlateClearColumnLayout
+                height: children.height
+                anchors.top: buildPlateClearPopup.popupContainer.top
+                anchors.topMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
 
-                Rectangle {
-                    id: horizontal_divider2
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                }
-
-                Rectangle {
-                    id: vertical_divider2
-                    x: 359
-                    y: 328
-                    width: 2
-                    height: 72
-                    color: "#ffffff"
+                TextHeadline {
+                    id: clear_build_plate_text
+                    text: qsTr("CLEAR BUILD PLATE")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
-                Item {
-                    id: buttonBar1
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: start_print_rectangle
-                        x: 0
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: start_print_text
-                            color: "#ffffff"
-                            text: qsTr("START PRINT")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "buildPlateClearPopup [_" + start_print_text.text + "|]"
-                            id: start_print_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                start_print_text.color = "#000000"
-                                start_print_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                start_print_text.color = "#ffffff"
-                                start_print_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.buildPlateCleared()
-                                buildPlateClearPopup.close()
-                                mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
-                                printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
-                            }
-                        }
-                    }
-
-                    Rectangle {
-                        id: cancel_print_rectangle
-                        x: 360
-                        y: 0
-                        width: 360
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: cancel_print_text
-                            color: "#ffffff"
-                            text: qsTr("CANCEL")
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "buildPlateClearPopup [|" + cancel_print_text.text + "_]"
-                            id: cancel_print_mouseArea
-                            anchors.fill: parent
-                            onPressed: {
-                                cancel_print_text.color = "#000000"
-                                cancel_print_rectangle.color = "#ffffff"
-                            }
-                            onReleased: {
-                                cancel_print_text.color = "#ffffff"
-                                cancel_print_rectangle.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.cancel()
-                                buildPlateClearPopup.close()
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout2
-                    width: 590
-                    height: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: clear_build_plate_text
-                        color: "#cbcbcb"
-                        text: qsTr("CLEAR BUILD PLATE")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
-
-                    Text {
-                        id: clear_build_plate_desc_text
-                        color: "#cbcbcb"
-                        text: qsTr("Please be sure your build plate is clear.")
-                        horizontalAlignment: Text.AlignHCenter
-                        Layout.fillWidth: true
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.weight: Font.Light
-                        wrapMode: Text.WordWrap
-                        font.family: defaultFont.name
-                        font.pixelSize: 18
-                        lineHeight: 1.3
-                    }
+                TextBody {
+                    id: clear_build_plate_desc_text
+                    text: qsTr("Please be sure your build plate is clear.")
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
@@ -1718,8 +1602,8 @@ ApplicationWindow {
             popupName: "PrinterNotIdleWarning"
 
             showOneButton: true
-            full_button_text: qsTr("CLOSE")
-            full_button.onClicked: {
+            fullButtonText: qsTr("CLOSE")
+            fullButton.onClicked: {
                 printerNotIdlePopup.close()
             }
 
@@ -1757,12 +1641,12 @@ ApplicationWindow {
             popupName: "ExtrudersNotCalibrated"
             id: extNotCalibratedPopup
             showTwoButtons: true
-            left_button_text: qsTr("SKIP")
-            left_button.onClicked: {
+            leftButtonText: qsTr("SKIP")
+            leftButton.onClicked: {
                 extNotCalibratedPopup.close()
             }
-            right_button_text: qsTr("GO TO PAGE")
-            right_button.onClicked: {
+            rightButtonText: qsTr("GO TO PAGE")
+            rightButton.onClicked: {
                 extNotCalibratedPopup.close()
                 resetSettingsSwipeViewPages()
                 mainSwipeView.swipeToItem(MoreporkUI.SettingsPage)
@@ -1796,123 +1680,36 @@ ApplicationWindow {
                     horizontalAlignment: Text.AlignHCenter
                 }
             }
-
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "UpdatingExtruderFirmware"
             id: updatingExtruderFirmwarePopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
+            popupHeight: updatingExtruderFirmwareColumnLayout.height+100
             closePolicy: Popup.NoAutoClose
-            parent: overlay
-            background: Rectangle {
-                id: updatingExtruderFirmwareBackRect
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.7
-                anchors.fill: parent
-            }
-            enter: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
-            }
+
             onClosed: {
                 updatedExtruderFirmwareA = false
                 updatedExtruderFirmwareB = false
             }
-            Rectangle {
-                id: updatingExtruderFirmwarePopupRect
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 275
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+
+            ColumnLayout {
+                id: updatingExtruderFirmwareColumnLayout
+                height: children.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                ColumnLayout {
-                    id: columnLayout3
-                    width: 590
-                    height: 165
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 25
 
-                    BusyIndicator {
-                        id: extruderBusyIndicator
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        running: updatingExtruderFirmwarePopup.opened
+                BusySpinner {
+                    id: busy_spinner_img
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                    spinnerSize: 64
+                }
 
-                        contentItem: Item {
-                                implicitWidth: 64
-                                implicitHeight: 64
-
-                                Item {
-                                    id: itemExtruderBusy
-                                    x: parent.width / 2 - 32
-                                    y: parent.height / 2 - 32
-                                    width: 64
-                                    height: 64
-                                    opacity: extruderBusyIndicator.running ? 1 : 0
-
-                                    Behavior on opacity {
-                                        OpacityAnimator {
-                                            duration: 250
-                                        }
-                                    }
-
-                                    RotationAnimator {
-                                        target: itemExtruderBusy
-                                        running: extruderBusyIndicator.visible && extruderBusyIndicator.running
-                                        from: 0
-                                        to: 360
-                                        loops: Animation.Infinite
-                                        duration: 1500
-                                    }
-
-                                    Repeater {
-                                        id: repeater1
-                                        model: 6
-
-                                        Rectangle {
-                                            x: itemExtruderBusy.width / 2 - width / 2
-                                            y: itemExtruderBusy.height / 2 - height / 2
-                                            implicitWidth: 2
-                                            implicitHeight: 16
-                                            radius: 0
-                                            color: "#ffffff"
-                                            transform: [
-                                                Translate {
-                                                    y: -Math.min(itemExtruderBusy.width, itemExtruderBusy.height) * 0.5 + 5
-                                                },
-                                                Rotation {
-                                                    angle: index / repeater1.count * 360
-                                                    origin.x: 1
-                                                    origin.y: 8
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            }
-                    }
-
-                    Text {
-                        id: alert_text
-                        color: "#cbcbcb"
-                        text: qsTr("EXTRUDERS ARE BEING PROGRAMMED...")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
+                TextHeadline {
+                    id: alert_text
+                    text: qsTr("EXTRUDERS ARE BEING PROGRAMMED...")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
@@ -1922,12 +1719,12 @@ ApplicationWindow {
             popupWidth: 720
             popupHeight: 275
             showTwoButtons: true
-            left_button_text: qsTr("BACK")
-            left_button.onClicked: {
+            leftButtonText: qsTr("BACK")
+            leftButton.onClicked: {
                 cancelPrintPopup.close()
             }
-            right_button_text: qsTr("CONFIRM")
-            right_button.onClicked: {
+            rightButtonText: qsTr("CONFIRM")
+            rightButton.onClicked: {
                 bot.cancel()
                 printPage.clearErrors()
                 cancelPrintPopup.close()
@@ -1960,120 +1757,30 @@ ApplicationWindow {
             }
         }
 
-        LoggingPopup {
+        CustomPopup {
             popupName: "SafeToRemoveUsb"
             id: safeToRemoveUsbPopup
-            width: 800
-            height: 480
-            modal: true
-            dim: false
-            focus: true
-            parent: overlay
+            popupHeight: columnLayout_remove_usb_popup.height + 160
             closePolicy: Popup.CloseOnPressOutside
-            background: Rectangle {
-                id: popupBackgroundDim_remove_usb_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                opacity: 0.5
-                anchors.fill: parent
-            }
-            enter: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 0.0; to: 1.0 }
-            }
-            exit: Transition {
-                    NumberAnimation { property: "opacity"; duration: 200; easing.type: Easing.InQuad; from: 1.0; to: 0.0 }
+            showOneButton: true
+
+            fullButtonText: qsTr("OK")
+            fullButton.onClicked: {
+                bot.acknowledgeSafeToRemoveUsb()
+                safeToRemoveUsbPopup.close()
             }
 
-            Rectangle {
-                id: basePopupItem_remove_usb_popup
-                color: "#000000"
-                rotation: rootItem.rotation == 180 ? 180 : 0
-                width: 720
-                height: 220
-                radius: 10
-                border.width: 2
-                border.color: "#ffffff"
-                anchors.verticalCenter: parent.verticalCenter
+            ColumnLayout {
+                id: columnLayout_remove_usb_popup
+                height: children.height
+                anchors.top: safeToRemoveUsbPopup.popupContainer.top
+                anchors.topMargin: 40
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                Rectangle {
-                    id: horizontal_divider_remove_usb_popup
-                    width: 720
-                    height: 2
-                    color: "#ffffff"
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 72
-                }
-
-                Item {
-                    id: buttonBar_remove_usb_popup
-                    width: 720
-                    height: 72
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
-
-                    Rectangle {
-                        id: ok_rectangle_remove_usb_popup
-                        x: 0
-                        y: 0
-                        width: 720
-                        height: 72
-                        color: "#00000000"
-                        radius: 10
-
-                        Text {
-                            id: ok_text_remove_usb_popup
-                            color: "#ffffff"
-                            text: qsTr("OK")
-                            Layout.fillHeight: false
-                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                            Layout.fillWidth: false
-                            font.letterSpacing: 3
-                            font.weight: Font.Bold
-                            font.family: defaultFont.name
-                            font.pixelSize: 18
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.horizontalCenter: parent.horizontalCenter
-                        }
-
-                        LoggingMouseArea {
-                            logText: "safeToRemoveUsbPopup [" + ok_text_remove_usb_popup.text + "]"
-                            id: ok_mouseArea_remove_usb_popup
-                            anchors.fill: parent
-                            onPressed: {
-                                ok_text_remove_usb_popup.color = "#000000"
-                                ok_rectangle_remove_usb_popup.color = "#ffffff"
-                            }
-                            onReleased: {
-                                ok_text_remove_usb_popup.color = "#ffffff"
-                                ok_rectangle_remove_usb_popup.color = "#00000000"
-                            }
-                            onClicked: {
-                                bot.acknowledgeSafeToRemoveUsb()
-                                safeToRemoveUsbPopup.close()
-                            }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: columnLayout_remove_usb_popup
-                    width: 590
-                    height: 100
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    anchors.horizontalCenter: parent.horizontalCenter
-
-                    Text {
-                        id: remove_usb_text_remove_usb_popup
-                        color: "#cbcbcb"
-                        text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
-                        font.letterSpacing: 3
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        font.family: defaultFont.name
-                        font.weight: Font.Bold
-                        font.pixelSize: 20
-                    }
+                TextHeadline {
+                    id: remove_usb_text_remove_usb_popup
+                    text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
             }
         }
@@ -2091,36 +1798,39 @@ ApplicationWindow {
                 printPage.startPrintGenuineSliceUnknownMaterial = false
                 printPage.startPrintMaterialMismatch = false
                 printPage.startPrintWithLabsExtruder = false
+                printPage.startPrintWithUnclearedJam = false
             }
 
             showOneButton: (printPage.startPrintBuildDoorOpen ||
                             printPage.startPrintTopLidOpen)
             showTwoButtons: (!printPage.startPrintBuildDoorOpen &&
                              !printPage.startPrintTopLidOpen)
-            full_button_text: qsTr("OK")
+            fullButtonText: qsTr("CONFIRM")
 
-            full_button.onClicked: {
+            fullButton.onClicked: {
                 startPrintErrorsPopup.close()
             }
 
-            left_button_text: {
+            leftButtonText: {
                 if(printPage.startPrintNoFilament ||
                    printPage.startPrintMaterialMismatch ||
                    printPage.startPrintGenuineSliceUnknownMaterial ||
                    printPage.startPrintWithLabsExtruder) {
                     qsTr("BACK")
-                } else if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                } else if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                          printPage.startPrintWithUnclearedJam) {
                     qsTr("START ANYWAY")
                 } else {
                     emptyString
                 }
             }
 
-            left_button.onClicked: {
+            leftButton.onClicked: {
                 startPrintErrorsPopup.close()
-                if(printPage.startPrintUnknownSliceGenuineMaterial) {
+                if(printPage.startPrintUnknownSliceGenuineMaterial ||
+                   printPage.startPrintWithUnclearedJam) {
                     if(printPage.startPrintDoorLidCheck()) {
-                        printPage.confirm_build_plate_popup.open()
+                        printPage.startPrintPopup.open()
                     } else {
                         startPrintErrorsPopup.open()
                     }
@@ -2133,7 +1843,7 @@ ApplicationWindow {
                 mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
             }
 
-            right_button_text: {
+            rightButtonText: {
                 if(printPage.startPrintNoFilament) {
                     qsTr("LOAD MATERIAL")
                 } else if(printPage.startPrintMaterialMismatch ||
@@ -2142,17 +1852,20 @@ ApplicationWindow {
                     qsTr("CHANGE MATERIAL")
                 } else if(printPage.startPrintWithLabsExtruder) {
                     qsTr("CONTINUE")
+                } else if(printPage.startPrintWithUnclearedJam) {
+                    qsTr("CLEAR EXTRUDER")
                 } else {
                     emptyString
                 }
             }
 
-            right_button.onClicked: {
+            rightButton.onClicked: {
                 startPrintErrorsPopup.close()
                 if(printPage.startPrintNoFilament ||
                    printPage.startPrintMaterialMismatch ||
                    printPage.startPrintGenuineSliceUnknownMaterial ||
-                   printPage.startPrintUnknownSliceGenuineMaterial) {
+                   printPage.startPrintUnknownSliceGenuineMaterial ||
+                   printPage.startPrintWithUnclearedJam) {
                     resetDetailsAndGoToMaterialsPage()
                     if(isInManualCalibration) {
                         // Reset Manual Z Cal
@@ -2160,7 +1873,7 @@ ApplicationWindow {
                     }
                 } else if(printPage.startPrintWithLabsExtruder) {
                     if(printPage.startPrintDoorLidCheck()) {
-                        printPage.confirm_build_plate_popup.open()
+                        printPage.startPrintPopup.open()
                     } else {
                         startPrintErrorsPopup.open()
                     }
@@ -2371,6 +2084,28 @@ ApplicationWindow {
                             target: mb_compatibility_link_error_popup
                             visible: false
                         }
+                    },
+                    State {
+                        name: "uncleared_jam_warning"
+                        when: printPage.startPrintWithUnclearedJam
+
+                        PropertyChanges {
+                            target: main_text_start_print_errors_popup
+                            text: qsTr("EXTRUDER %1 JAMMED").arg(extruderAUnclearedJam ? "1" : "2")
+                        }
+
+                        PropertyChanges {
+                            target: sub_text_start_print_errors_popup
+                            text: {
+                                qsTr("Ensure that the spool isn’t tangled and try purging the extruder. " +
+                                     "If the issue recurs, unload and reload the material.")
+                            }
+                        }
+
+                        PropertyChanges {
+                            target: mb_compatibility_link_error_popup
+                            visible: false
+                        }
                     }
                 ]
             }
@@ -2385,8 +2120,8 @@ ApplicationWindow {
             visible: !experimentalExtruderAcknowledged &&
                      experimentalExtruderInstalled
             showOneButton: true
-            full_button_text: qsTr("CONTINUE")
-            full_button.onClicked: {
+            fullButtonText: qsTr("CONTINUE")
+            fullButton.onClicked: {
                 experimentalExtruderAcknowledged = true
                 experimentalExtruderPopup.close()
             }
@@ -2444,18 +2179,18 @@ ApplicationWindow {
             popupHeight: 280
             visible: (bot.hepaErrorCode > 0) && !hepaErrorAcknowledged
             showOneButton: true
-            full_button_text: qsTr("OK")
-            full_button.onClicked: {
+            fullButtonText: qsTr("OK")
+            fullButton.onClicked: {
                 hepaErrorAcknowledged = true
                 hepaFilterErrorPopup.close()
             }
-            left_button_text: qsTr("CONTINUE PRINTING")
-            right_button_text: qsTr("PAUSE PRINTING")
-            left_button.onClicked: {
+            leftButtonText: qsTr("CONTINUE PRINTING")
+            leftButton.onClicked: {
                 hepaErrorAcknowledged = true
                 hepaFilterErrorPopup.close()
             }
-            right_button.onClicked: {
+            rightButtonText: qsTr("PAUSE PRINTING")
+            rightButton.onClicked: {
                 bot.pauseResumePrint("suspend")
             }
 
@@ -2508,21 +2243,19 @@ ApplicationWindow {
             showTwoButtons: state === "reset_filter"
             showOneButton: state === "complete"
 
-            left_button_text: qsTr("BACK")
-            right_button_text: qsTr("CONFIRM")
-            full_button_text: qsTr("CLOSE")
-
-
-            right_button.onClicked: {
+            leftButtonText: qsTr("BACK")
+            leftButton.onClicked: {
+                hepaFilterResetPopup.close()
+            }
+            rightButtonText: qsTr("CONFIRM")
+            rightButton.onClicked: {
                 bot.resetFilterHours()
                 bot.hepaFilterPrintHours = 0
                 bot.hepaFilterChangeRequired = false
                 state = "complete"
             }
-            left_button.onClicked: {
-                hepaFilterResetPopup.close()
-            }
-            full_button.onClicked: {
+            fullButtonText: qsTr("CLOSE")
+            fullButton.onClicked: {
                 hepaFilterResetPopup.close()
             }
             onClosed: {
@@ -2570,16 +2303,16 @@ ApplicationWindow {
             popupHeight: 325
             visible: false
             showTwoButtons: true
-            left_button_text: qsTr("LATER")
-            right_button_text: qsTr("SEND FEEDBACK")
-            right_button.onClicked: {
+            leftButtonText: qsTr("LATER")
+            rightButtonText: qsTr("SEND FEEDBACK")
+            rightButton.onClicked: {
                 if (ratings_buttons.score >= 0) {
                     bot.submitNPSSurvey(ratings_buttons.score)
                     updateNPSSurveyDueDate()
                     npsSurveyPopup.close()
                 }
             }
-            left_button.onClicked: {
+            leftButton.onClicked: {
                 updateNPSSurveyDueDate()
                 npsSurveyPopup.close()
             }
@@ -2679,8 +2412,8 @@ ApplicationWindow {
             popupWidth: 720
             popupHeight: columnLayout_help_popup.height + 130
             showOneButton: true
-            full_button_text: qsTr("CLOSE")
-            full_button.onClicked: {
+            fullButtonText: qsTr("CLOSE")
+            fullButton.onClicked: {
                 helpPopup.close()
             }
             property alias state: columnLayout_help_popup.state
@@ -2696,8 +2429,6 @@ ApplicationWindow {
 
                 RowLayout {
                     spacing: 100
-                    Layout.preferredHeight: children.height
-                    Layout.preferredWidth: children.width
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                     Image {
@@ -2712,7 +2443,7 @@ ApplicationWindow {
                     ColumnLayout {
                         spacing: 16
                         Layout.preferredWidth: 340
-                        Layout.preferredHeight: children.height
+
                         TextHeadline {
                             id: help_title
                             text: qsTr("HELP")

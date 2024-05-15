@@ -32,13 +32,6 @@ LoggingPopup {
     property bool showTwoButtons: false
     property int defaultButton: CustomPopup.Right
 
-    property alias full_button: full_button
-    property alias full_button_text: full_text.text
-    property alias left_button: left_button
-    property alias left_button_text: left_text.text
-    property alias right_button: right_button
-    property alias right_button_text: right_text.text
-
     background: Rectangle {
         id: popupBackgroundDim
         color: "#000000"
@@ -178,7 +171,7 @@ LoggingPopup {
                     }
 
                     LoggingMouseArea {
-                        logText: "CPFB [_" + full_button_text + "_]"
+                        logText: "CPFB [_" + fullButtonText + "_]"
                         id: full_button
                         anchors.fill: parent
                         onPressed: {
@@ -235,7 +228,7 @@ LoggingPopup {
                     }
 
                     LoggingMouseArea {
-                        logText: "CPLB [_" + left_button_text + "|]"
+                        logText: "CPLB [_" + leftButtonText + "|]"
                         id: left_button
                         anchors.fill: parent
                         onPressed: {
@@ -273,7 +266,7 @@ LoggingPopup {
                     }
 
                     LoggingMouseArea {
-                        logText:"CPRB [|" + right_button_text + "_]"
+                        logText:"CPRB [|" + rightButtonText + "_]"
                         id: right_button
                         anchors.fill: parent
                         onPressed: {

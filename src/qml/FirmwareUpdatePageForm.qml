@@ -53,7 +53,7 @@ LoggingItem {
     property bool updateFirmware: false
 
     function getUrlForMethod() {
-           return "makerbot.com/methodfw"
+        return "ultimaker.com/methodfw"
     }
 
     FirmwareFileListUsb {
@@ -63,15 +63,14 @@ LoggingItem {
         visible: false
     }
 
-    LoadingIcon {
-        id: loading_icon
+    ProcessStatusIcon {
+        id: processStatusIcon
         anchors.left: parent.left
         anchors.leftMargin: 80
         anchors.verticalCenterOffset: -20
         anchors.verticalCenter: parent.verticalCenter
-        icon_image: LoadingIcon.Loading
+        processStatus: ProcessStatusIcon.Loading
         visible: true
-        loading: true
     }
 
     ContentLeftSide {
@@ -151,8 +150,8 @@ LoggingItem {
             when: isfirmwareUpdateAvailable && bot.process.type != ProcessType.FirmwareUpdate
 
             PropertyChanges {
-                target: loading_icon
-                icon_image: LoadingIcon.Failure
+                target: processStatusIcon
+                processStatus: ProcessStatusIcon.Failed
                 visible: true
             }
 
@@ -224,8 +223,8 @@ LoggingItem {
             when: !isfirmwareUpdateAvailable && bot.process.type != ProcessType.FirmwareUpdate
 
             PropertyChanges {
-                target: loading_icon
-                icon_image: LoadingIcon.Success
+                target: processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -293,8 +292,8 @@ LoggingItem {
             when: bot.process.type == ProcessType.FirmwareUpdate
 
             PropertyChanges {
-                target: loading_icon
-                icon_image: LoadingIcon.Loading
+                target: processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -379,7 +378,7 @@ LoggingItem {
             name: "install_from_usb"
 
             PropertyChanges {
-                target: loading_icon
+                target: processStatusIcon
                 visible: false
             }
 
@@ -439,7 +438,7 @@ LoggingItem {
             name: "select_firmware_file"
 
             PropertyChanges {
-                target: loading_icon
+                target: processStatusIcon
                 visible: false
             }
 
@@ -472,8 +471,8 @@ LoggingItem {
         visible: bot.process.type === ProcessType.FirmwareUpdate
                  && bot.process.stateType === ProcessStateType.DownloadingFirmware
 
-        full_button_text: qsTr("CANCEL")
-        full_button.onClicked: {
+        fullButtonText: qsTr("CANCEL")
+        fullButton.onClicked: {
             if(columnLayout_firmware_popup.state == "copying") {
                 updateFirmware = false
                 storage.cancelCopy()
@@ -569,8 +568,8 @@ LoggingItem {
         popupHeight: 350
 
         showOneButton: true
-        full_button_text: qsTr("CLOSE")
-        full_button.onClicked: {
+        fullButtonText: qsTr("CLOSE")
+        fullButton.onClicked: {
             if(isfirmwareUpdateAvailable) {
                 firmwareUpdatePage.state = "firmware_update_available"
             }

@@ -25,11 +25,11 @@ LoggingItem {
 
     CustomPopup {
         id: unpackingPopup
-        popupName: "unpackingPopup"
+        popupName: "UnpackingPopup"
 
-        full_button_text: qsTr("CONFIRM")
-        left_button_text: qsTr("CLOSE")
-        right_button_text: qsTr("CONFIRM")
+        fullButtonText: qsTr("CONFIRM")
+        leftButtonText: qsTr("CLOSE")
+        rightButtonText: qsTr("CONFIRM")
 
         ColumnLayout {
             width: parent.width
@@ -129,7 +129,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: false
             }
         },
@@ -216,7 +216,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: true
             }
         },
@@ -248,7 +248,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: false
             }
         },
@@ -296,7 +296,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: false
             }
         }

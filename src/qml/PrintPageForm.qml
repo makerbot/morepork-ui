@@ -52,7 +52,7 @@ Item {
     property bool isFileDownloading: print_queue.downloading
     property bool fileDownloadFailed: print_queue.downloadingFailed
     property alias nylonCFPrintTipPopup: nylonCFPrintTipPopup
-    property alias confirm_build_plate_popup: confirm_build_plate_popup
+    property alias startPrintPopup: startPrintPopup
 
     onIsFileCopyingChanged: {
         if(isFileCopying &&
@@ -866,13 +866,13 @@ Item {
         }
 
         showTwoButtons: internalStorageFull
-        left_button_text: qsTr("OK")
-        left_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             copyingFilePopup.close()
         }
 
-        right_button_text: qsTr("VIEW FILES")
-        right_button.onClicked: {
+        rightButtonText: qsTr("VIEW FILES")
+        rightButton.onClicked: {
             browsingUsbStorage = false
             storage.setStorageFileType(StorageFileType.Print)
             storage.updatePrintFileList("?root_internal?")
@@ -881,9 +881,9 @@ Item {
             copyingFilePopup.close()
         }
 
-        showOneButton: !showTwoButtons
-        full_button_text: (isFileCopySuccessful || fileDownloadFailed)? qsTr("CLOSE") : qsTr("CANCEL")
-        full_button.onClicked: {
+        showOneButton: !internalStorageFull
+        fullButtonText: (isFileCopySuccessful || fileDownloadFailed)? qsTr("CLOSE") : qsTr("CANCEL")
+        fullButton.onClicked: {
             storage.cancelCopy()
             print_queue.cancelDownload()
             copyingFilePopup.close()
@@ -1039,6 +1039,11 @@ Item {
                     }
 
                     PropertyChanges {
+                        target: busy_spinner_img
+                        visible: false
+                    }
+
+                    PropertyChanges {
                         target: alert_text_copy_file_popup
                         text: qsTr("PRINTER STORAGE IS FULL")
                     }
@@ -1054,15 +1059,19 @@ Item {
     }
 
     CustomPopup {
-        id: confirm_build_plate_popup
-        popupName: "ConfirmBuildPlate"
-        popupHeight: confirm_build_column_layout.height+145
+        id: startPrintPopup
+        popupName: "StartPrintPopup"
+        popupHeight: startPrintPopup_column_layout.height+145
         showTwoButtons: true
-        right_button_text: qsTr("CONFIRM")
-        left_button_text: qsTr("BACK")
-        right_button.onClicked: {
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            // don't start print
+            startPrintPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             // start print
-            confirm_build_plate_popup.close()
+            startPrintPopup.close()
             if(startPrintSource == PrintPage.FromPrintQueue) {
                 print_queue.startQueuedPrint(print_url_prefix,
                                              print_job_id,
@@ -1074,16 +1083,12 @@ Item {
                 startPrint()
             }
         }
-        left_button.onClicked: {
-            // don't start print
-            confirm_build_plate_popup.close()
-        }
 
         ColumnLayout {
-            id: confirm_build_column_layout
+            id: startPrintPopup_column_layout
             width: 650
             height: children.height
-            anchors.top: confirm_build_plate_popup.popupContainer.top
+            anchors.top: startPrintPopup.popupContainer.top
             anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20
@@ -1111,13 +1116,13 @@ Item {
         popupWidth: 720
         popupHeight: 275
         showTwoButtons: true
-        left_button_text: qsTr("OK")
-        left_button.onClicked: {
+        leftButtonText: qsTr("OK")
+        leftButton.onClicked: {
             nylonCFPrintTipPopup.close()
         }
 
-        right_button_text: qsTr("DON'T REMIND ME AGAIN")
-        right_button.onClicked: {
+        rightButtonText: qsTr("DON'T REMIND ME AGAIN")
+        rightButton.onClicked: {
             settings.setShowNylonCFAnnealPrintTip(false)
             nylonCFPrintTipPopup.close()
         }
@@ -1180,17 +1185,17 @@ Item {
                 false
             }
         }
-        full_button_text: {
+        fullButtonText: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails) {
                 qsTr("CANCEL")
             } else if(printFromQueueState == PrintPage.FailedToStartPrint ||
                       printFromQueueState == PrintPage.FailedToGetPrintDetails) {
-                qsTr("OK")
+                qsTr("CLOSE")
             } else {
                 defaultString
             }
         }
-        full_button.onClicked: {
+        fullButton.onClicked: {
             if(printFromQueueState == PrintPage.FetchingPrintDetails) {
                 print_queue.cancelRequest(print_url_prefix, print_job_id)
             }
@@ -1317,8 +1322,8 @@ Item {
         popupWidth: 715
         popupHeight: 336
         showOneButton: true
-        full_button_text: qsTr("OK")
-        full_button.onClicked: {
+        fullButtonText: qsTr("OK")
+        fullButton.onClicked: {
             printFeedbackAcknowledgementPopup.close()
             acknowledgePrint()
         }

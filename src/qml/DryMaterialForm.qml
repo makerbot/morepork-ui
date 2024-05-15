@@ -88,7 +88,7 @@ LoggingItem {
             source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
         visible: true
@@ -140,7 +140,7 @@ LoggingItem {
                     visible: true
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -189,10 +189,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
-                    loadingProgress: 0
+                    processStatus: ProcessStatusIcon.Loading
                 }
             }
 
@@ -236,7 +235,7 @@ LoggingItem {
                     visible: true
                     source: "qrc:/img/replace_desiccant.png"
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -288,7 +287,7 @@ LoggingItem {
                     source: "qrc:/img/spool_bag.png"
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -335,7 +334,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -427,16 +426,16 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: {
+                    processStatus: {
                         if(bot.process.stateType == ProcessStateType.DryingSpool) {
-                            LoadingIcon.Progress
+                            ProcessStatusIcon.Running
                         } else {
-                            LoadingIcon.Loading
+                            ProcessStatusIcon.Loading
                         }
                     }
-                    loadingProgress: bot.process.printPercentage
+                    progressPercentage: bot.process.printPercentage
                 }
             }
 
@@ -449,6 +448,8 @@ LoggingItem {
                             qsTr("PREPARING")
                         } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
                             qsTr("DRYING MATERIAL")
+                        } else if(bot.process.stateType == ProcessStateType.CleaningUp) {
+                            qsTr("FINISHING UP")
                         } else {
                             defaultString
                         }
@@ -499,9 +500,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Success
+                    processStatus: ProcessStatusIcon.Success
                 }
             }
 
@@ -545,9 +546,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Failure
+                    processStatus: ProcessStatusIcon.Failed
                 }
             }
 
@@ -589,10 +590,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
-                    loadingProgress: 0
+                    processStatus: ProcessStatusIcon.Loading
                 }
             }
 
@@ -634,17 +634,17 @@ LoggingItem {
         popupWidth: 720
         popupHeight: columnLayout_cancel_process_popup.height+145
         showTwoButtons: true
-        right_button_text: qsTr("STOP PROCESS")
-        right_button.onClicked: {
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            cancelDryingCyclePopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             bot.cancel()
             state = "cancelling"
             cancelDryingCyclePopup.close()
         }
-        left_button_text: qsTr("BACK")
-        left_button.onClicked: {
-            cancelDryingCyclePopup.close()
-        }
-
         ColumnLayout {
             id: columnLayout_cancel_process_popup
             width: 590
@@ -675,14 +675,16 @@ LoggingItem {
         id: dryConfirmBuildPlateClearPopup
         popupHeight: columnLayout_clear_build_plate_popup.height+145
         showTwoButtons: true
-        right_button_text: qsTr("CONFIRM")
-        right_button.onClicked: {
+
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            dryConfirmBuildPlateClearPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
             dryConfirmBuildPlateClearPopup.close()
             bot.drySpool()
-        }
-        left_button_text: qsTr("BACK")
-        left_button.onClicked: {
-            dryConfirmBuildPlateClearPopup.close()
         }
 
         ColumnLayout {

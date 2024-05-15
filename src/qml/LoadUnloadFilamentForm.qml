@@ -311,7 +311,7 @@ LoggingItem {
                     source: "qrc:/img/cut_filament_tip.gif"
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -356,7 +356,7 @@ LoggingItem {
                     source: ("qrc:/img/methodxl_place_desiccant_%1.gif").arg(bayID)
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -398,7 +398,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter("place_spool_%1".arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -480,7 +480,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -541,7 +541,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
                     visible: true
                 }
-                loadingIcon{
+                processStatusIcon{
                     visible: false
                 }
             }
@@ -599,8 +599,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -660,8 +660,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -715,7 +715,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter(("feed_material_%1").arg(bayID)))
                     visible: !feedFromTop && !feedFromAux
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -770,7 +770,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -828,8 +828,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Loading
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Loading
                     visible: true
                 }
             }
@@ -891,7 +891,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -910,12 +910,29 @@ LoggingItem {
                 }
                 buttonPrimary {
                     style: ButtonRectanglePrimary.Button
-                    // We go through this page during FRE,
-                    // it is worth noting that when we reach
-                    // this page and are at Bay 1 we used to
-                    // check and explain the next step is to
-                    // Load Support Material to the user.
-                    text: qsTr("NEXT")
+                    text: {
+                        if(inFreStep) {
+                            // During material loading in FRE for printers without
+                            // a filament bay (Method XL) we directly start the
+                            // support extruder loading from this state and only go
+                            // to the loaded_filament_1 state after support material
+                            // loading is complete, to tell the use to close the material
+                            // case.
+                            if(bayID == 1 && !bot.hasFilamentBay) {
+                                qsTr("NEXT: LOAD MATERIAL 2")
+                            } else {
+                                // Text during support material loading in FRE or during
+                                // mid-print-loading in FRE where the user is taken to the
+                                // next screen which asks them to close the material case.
+                                qsTr("NEXT")
+                            }
+                        } else {
+                            // During regular loading the user is always asked to close
+                            // the material case in the next screen at the end of every
+                            // loading.
+                            qsTr("NEXT")
+                        }
+                    }
                     visible: true
                 }
                 buttonSecondary1 {
@@ -962,7 +979,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter("close_latch_%1".arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -1000,10 +1017,10 @@ LoggingItem {
                     text: {
                         if(inFreStep) {
                             if(bot.process.type == ProcessType.Print) {
-                                qsTr("NEXT")
+                                qsTr("DONE")
                             } else if(bot.process.type == ProcessType.None) {
                                 if(bayID == 1 && bot.hasFilamentBay) {
-                                    qsTr("NEXT")
+                                    qsTr("NEXT: LOAD MATERIAL 2")
                                 } else if(bayID == 2) {
                                     qsTr("DONE")
                                 }
@@ -1046,7 +1063,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.gif").arg(getImageForPrinter("rewind_spool_%1".arg(bayID)))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -1117,7 +1134,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -1175,8 +1192,8 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
-                    icon_image: LoadingIcon.Failure
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Failed
                     visible: true
                 }
             }
@@ -1274,7 +1291,7 @@ LoggingItem {
                 animatedImage {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }

@@ -51,7 +51,7 @@ LoggingItem {
             source: "qrc:/img/check_nozzles_clean.png"
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
         visible: true
@@ -105,7 +105,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -185,8 +185,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -260,8 +260,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Success
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -304,8 +304,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Failure
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Failed
                 visible: true
             }
         },
@@ -326,16 +326,16 @@ LoggingItem {
         id: cancelCleanExtrudersPopup
         popupWidth: 720
         popupHeight: 250
-
         showTwoButtons: true
-        left_button_text: qsTr("STOP PROCESS")
-        left_button.onClicked: {
-            bot.cancel()
-            state = "cancelling"
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
             cancelCleanExtrudersPopup.close()
         }
-        right_button_text: qsTr("CONTINUE")
-        right_button.onClicked: {
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            bot.cancel()
+            state = "cancelling"
             cancelCleanExtrudersPopup.close()
         }
 
