@@ -3,7 +3,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 
 Item {
-    height: 90
+    height: 92
     width: 118
 
     property alias buttonImage: button_image.source
@@ -24,6 +24,8 @@ Item {
 
         TextSubheader {
             id: button_text
+            font.letterSpacing: 3
+            font.weight: Font.Medium
             Layout.preferredWidth: parent.width
             Layout.alignment: Qt.AlignHCenter
         }

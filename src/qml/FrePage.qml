@@ -19,7 +19,7 @@ FrePageForm {
         printPage.printFromUI = true
         printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
-        printPage.getPrintFileDetails(storage.currentThing)
+        printPage.getPrintFileDetails(storage.thing)
         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
@@ -43,8 +43,8 @@ FrePageForm {
 
     continueButton {
         enabled: {
-            if(state != "load_material" &&
-               state != "calibrate_extruders") {
+            if(state == "load_material" ||
+               state == "calibrate_extruders") {
                 !isProcessRunning()
             }
             else {

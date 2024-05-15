@@ -140,13 +140,13 @@ Button {
     }
 
     Image {
-        id: image
-        height: 20
-        width: 10
+        id: openMenuItemImage
+        width: sourceSize.width
+        height: sourceSize.height
         anchors.right: parent.right
         anchors.rightMargin: 21
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/forward_arrow_42_80px.png"
+        source: "qrc:/img/open_menu_item_arrow.png"
     }
 
     Component.onCompleted: {

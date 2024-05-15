@@ -38,6 +38,8 @@ Item {
 
     property alias buttonAnalytics: buttonAnalytics
 
+    property alias buttonEnablePrintAgain: buttonEnablePrintAgain
+
     property alias buttonChangePrinterName: buttonChangePrinterName
     property alias namePrinter: namePrinter
 
@@ -108,13 +110,14 @@ Item {
         FirmwareUpdatePage,     // 5
         SetupProceduresPage,    // 6
         ShareAnalyticsPage,     // 7
-        ChangePrinterNamePage,  // 8
-        TimePage,               // 9
-        ChangeLanguagePage,     // 10
-        SpoolInfoPage,          // 11
-        ColorSwatchPage,        // 12
-        TouchTestPage,          // 13
-        KoreaDFSSecretPage      // 14
+        EnablePrintAgainPage,   // 8
+        ChangePrinterNamePage,  // 9
+        TimePage,               // 10
+        ChangeLanguagePage,     // 11
+        SpoolInfoPage,          // 12
+        ColorSwatchPage,        // 13
+        TouchTestPage,          // 14
+        KoreaDFSSecretPage      // 15
     }
 
     LoggingStackLayout {
@@ -213,6 +216,12 @@ Item {
                         id: buttonAnalytics
                         buttonImage.source: "qrc:/img/icon_analytics.png"
                         buttonText.text: qsTr("ANALYTICS")
+                    }
+
+                    MenuButton {
+                        id: buttonEnablePrintAgain
+                        buttonImage.source: "qrc:/img/icon_print_again.png"
+                        buttonText.text: qsTr("ENABLE PRINT AGAIN")
                     }
 
                     MenuButton {
@@ -429,6 +438,20 @@ Item {
 
             AnalyticsScreen {
                 id: analyticsScreen
+            }
+        }
+
+        // SystemSettingsPage.EnablePrintAgainPage
+        Item {
+            id: enablePrintAgainItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Print Again Settings")
+            smooth: false
+            visible: false
+
+            PrintAgainSettings {
+                id: printAgainSettingsScreen
             }
         }
 
