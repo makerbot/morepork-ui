@@ -12,13 +12,12 @@ Item {
     property variant supportedLanguages: [
         {eng_name: "Arabic", name: "عربى", localeCode: "ar_EG"},
         {eng_name: "Chinese", name: "中文（简体）", localeCode: "zh_CN"},
-        {eng_name: "English", name: "ENGLISH", localeCode: "en_GB"},
+        {eng_name: "English", name: "ENGLISH", localeCode: "en_US"},
         {eng_name: "French", name: "FRANÇAIS", localeCode: "fr_FR"},
         {eng_name: "German", name: "DEUTSCHE", localeCode: "de_DE"},
         {eng_name: "Italian", name: "ITALIANO", localeCode: "it_IT"},
         {eng_name: "Japanese", name: "日本語", localeCode: "ja_JP"},
         {eng_name: "Korean", name: "한국어", localeCode: "ko_KR"},
-        {eng_name: "Russian", name: "РУССКИЙ", localeCode: "ru_RU"},
         {eng_name: "Spanish", name: "ESPAÑOL", localeCode: "es_ES"}
     ]
 

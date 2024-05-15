@@ -308,13 +308,9 @@ LoggingItem {
                     switch(bot.process.stateType)
                     {
                     case ProcessStateType.TransferringFirmware:
-                        qsTr("UPDATING FIRMWARE [1/3]")
-                        break;
                     case ProcessStateType.VerifyingFirmware:
-                        qsTr("UPDATING FIRMWARE [2/3]")
-                        break;
                     case ProcessStateType.InstallingFirmware:
-                        qsTr("UPDATING FIRMWARE [3/3]")
+                        qsTr("UPDATING FIRMWARE")
                         break;
                     default:
                         qsTr("CHECKING FOR UPDATES")
@@ -539,7 +535,7 @@ LoggingItem {
                     }
                     PropertyChanges {
                         target: description_text_firmware_popup
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                     }
                 },
                 State {

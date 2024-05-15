@@ -158,7 +158,7 @@ LoggingPopup {
                     Text {
                         id: full_text
                         color: "#ffffff"
-                        text: qsTr("CANCEL")
+                        text: qsTr("OK")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -199,7 +199,6 @@ LoggingPopup {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-
                 }
 
                 Rectangle {
@@ -215,7 +214,7 @@ LoggingPopup {
                     Text {
                         id: left_text
                         color: (defaultButton === CustomPopup.Left ? "#000000" : "#ffffff")
-                        text: qsTr("LEFT TEXT")
+                        text: qsTr("BACK")
                         Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         Layout.fillWidth: false
@@ -255,7 +254,7 @@ LoggingPopup {
                     Text {
                         id: right_text
                         color: (defaultButton === CustomPopup.Right ? "#000000" : "#ffffff")
-                        text: qsTr("RIGHT TEXT")
+                        text: qsTr("CONFIRM")
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         font.letterSpacing: 3
                         font.weight: Font.Bold

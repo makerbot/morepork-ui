@@ -1602,7 +1602,7 @@ ApplicationWindow {
             popupName: "PrinterNotIdleWarning"
 
             showOneButton: true
-            fullButtonText: qsTr("CLOSE")
+            fullButtonText: qsTr("OK")
             fullButton.onClicked: {
                 printerNotIdlePopup.close()
             }
@@ -1805,7 +1805,7 @@ ApplicationWindow {
                             printPage.startPrintTopLidOpen)
             showTwoButtons: (!printPage.startPrintBuildDoorOpen &&
                              !printPage.startPrintTopLidOpen)
-            fullButtonText: qsTr("CONFIRM")
+            fullButtonText: qsTr("OK")
 
             fullButton.onClicked: {
                 startPrintErrorsPopup.close()
@@ -2156,8 +2156,7 @@ ApplicationWindow {
                              "on the top left of the printer. Make sure that the extruders " +
                              "are calibrated before printing. The Experimental Extruder is " +
                              "an experimental product and is not covered under warranty " +
-                             "or MakerCare."
-                            )
+                             "or MakerCare.")
                     }
                     horizontalAlignment: Text.AlignHCenter
                     Layout.fillWidth: true

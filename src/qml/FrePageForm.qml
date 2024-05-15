@@ -1134,7 +1134,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.textBody1
                 font.weight: Font.Bold
-                text: qsTr("cloudprint.makerbot.com")
+                text: "cloudprint.makerbot.com"
                 visible: true
             }
 

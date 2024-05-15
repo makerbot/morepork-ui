@@ -709,7 +709,7 @@ Item {
 
                     PropertyChanges {
                         target: description
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                         visible: true
                     }
                 },
@@ -928,7 +928,7 @@ Item {
                     }
                     PropertyChanges {
                         target: timelapse_description
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                         visible: true
                     }
                     PropertyChanges {
@@ -1080,7 +1080,7 @@ Item {
             bot.resetToFactory(true)
             doFinalResetProceduresTimer.start()
         }
-        fullButtonText: qsTr("CONFIRM")
+        fullButtonText: qsTr("RESTART")
         fullButton.onClicked: {
             isRestarting = true
             // Wait before Reboot

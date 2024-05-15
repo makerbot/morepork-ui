@@ -24,7 +24,7 @@ Item {
         TextHeadline {
             style: TextHeadline.Base
             id: filamentBayLabelProperty
-            text: qsTr("FILAMENT BAY LABEL")
+            text: "FILAMENT BAY LABEL"
         }
 
         AdvancedInfoElement {

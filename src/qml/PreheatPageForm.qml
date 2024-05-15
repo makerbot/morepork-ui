@@ -30,10 +30,10 @@ Item {
                     color: "#ffffff"
                     text: {
                         if(bot.chamberTargetTemp > 0) {
-                            bot.chamberCurrentTemp + "|" + bot.chamberTargetTemp + qsTr("\u00b0C")
+                            bot.chamberCurrentTemp + "|" + bot.chamberTargetTemp + "\u00b0C"
                         }
                         else {
-                            bot.chamberCurrentTemp + qsTr("\u00b0C")
+                            bot.chamberCurrentTemp + "\u00b0C"
                         }
                     }
                     font.letterSpacing: 3
