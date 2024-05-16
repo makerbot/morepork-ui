@@ -16,6 +16,7 @@ FlickableMenu {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.leftMargin: 32
+        spacing: 35
 
         ExtruderInfoContents {
             id: extAInfo
@@ -28,6 +29,7 @@ FlickableMenu {
             shortRetractCount: bot.extruderAShortRetractCount
             longRetractCount: bot.extruderALongRetractCount
             lifetimeDistance: bot.extruderAExtrusionTotalDistance
+            extruderPresent: bot.extruderAPresent
         }
 
         ExtruderInfoContents {
@@ -41,6 +43,7 @@ FlickableMenu {
             shortRetractCount: bot.extruderBShortRetractCount
             longRetractCount: bot.extruderBLongRetractCount
             lifetimeDistance: bot.extruderBExtrusionTotalDistance
+            extruderPresent: bot.extruderBPresent
         }
     }
 }

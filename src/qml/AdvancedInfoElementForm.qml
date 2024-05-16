@@ -1,7 +1,7 @@
 import QtQuick 2.10
 
 Item {
-    width: 400
+    width: 340
 
     property alias label_element: label
     property alias label: label.text
@@ -30,7 +30,6 @@ Item {
         font.capitalization: Font.AllUppercase
         horizontalAlignment: Text.AlignRight
         anchors.right: parent.right
-        anchors.rightMargin: 63
         anchors.verticalCenter: parent.verticalCenter
     }
 }
