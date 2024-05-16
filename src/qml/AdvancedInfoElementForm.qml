@@ -33,6 +33,8 @@ Item {
         font.capitalization: Font.AllUppercase
         anchors.left: label.right
         anchors.leftMargin: 5
+        horizontalAlignment: Text.AlignRight
+        anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
     }
 }
