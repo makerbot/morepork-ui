@@ -52,13 +52,13 @@ Item {
             spacing: 10
             TextBody {
                 style: TextBody.Large
-                text: qsTr("Log into CloudPrint and enter the code below")
+                text: qsTr("Log into Digital Factory and enter the code below")
                 font.weight: Font.Medium
             }
 
             TextBody {
                 style: TextBody.Large
-                text: "<b>cloudprint.makerbot.com</b>  |  <b>" + qsTr("Add Printer > Method Series") + "</b>"
+                text: "<b>digitalfactory.ultimaker.com</b>  |  <b>" + qsTr("Add Printer > Method Series") + "</b>"
                 font.weight: Font.Bold
             }
         }
