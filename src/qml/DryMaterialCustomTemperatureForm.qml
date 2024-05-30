@@ -42,7 +42,7 @@ Item {
             id: temperatureText
             style: TextBody.ExtraLarge
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            text: qsTr("Temperature (°C)")
+            text: qsTr("Temperature") + " (°C)"
         }
 
         ColumnLayout {

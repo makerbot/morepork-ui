@@ -32,7 +32,7 @@ Item {
             Layout.preferredWidth: width
 
             horizontalAlignment: Text.AlignHCenter
-            text: qsTr("%1").arg(value)
+            text: value
             font.pixelSize: 42
             //font.family: "Antenna"
             lineHeight: 49.22

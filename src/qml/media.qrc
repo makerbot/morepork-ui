@@ -5,13 +5,13 @@
         <file alias="info_icon.png">images/info_icon.png</file>
         <file alias="material_icon.png">images/material_icon.png</file>
         <file alias="advanced_icon.png">images/advanced_icon.png</file>
-        <file alias="check_mark.png">images/check_mark.png</file>
-        <file alias="loading_rings.png">images/loading_rings.png</file>
-        <file alias="loading_gears.png">images/loading_gear.png</file>
-        <file alias="paused_rings.png">images/paused_rings.png</file>
         <file alias="play.png">images/print/play.png</file>
         <file alias="pause.png">images/print/pause.png</file>
         <file alias="cancel.png">images/print/cancel.png</file>
+        <file alias="green_checkmark.png">images/print/green_checkmark.png</file>
+        <file alias="yellow_exclamation.png">images/print/yellow_exclamation.png</file>
+        <file alias="red_error.png">images/print/red_error.png</file>
+        <file alias="loading_gear.png">images/print/loading_gear.png</file>
         <file alias="thumbs_up_feedback.png">images/print/thumbs_up_feedback.png</file>
         <file alias="thumbs_down_feedback.png">images/print/thumbs_down_feedback.png</file>
         <file alias="wifi_connected.png">images/top_bar/wifi_connected.png</file>
@@ -22,7 +22,6 @@
         <file alias="front_build_volume.png">images/front_build_volume.png</file>
         <file alias="back_build_volume.png">images/back_build_volume.png</file>
         <file alias="model.png">images/model.png</file>
-        <file alias="exc_mark.png">images/exc_mark.png</file>
         <file alias="makerbot_logo_55x40.png">images/makerbot_logo_55x40.png</file>
         <file alias="makerbot_logo_110x80.png">images/makerbot_logo_110x80.png</file>
         <file alias="makerbot_logo_320x200.png">images/makerbot_logo_320x200.png</file>
@@ -52,7 +51,6 @@
         <file alias="methodxl_rewind_spool_1.gif">images/load_unload/methodxl/rewind_spool_1.gif</file>
         <file alias="methodxl_rewind_spool_2.gif">images/load_unload/methodxl/rewind_spool_2.gif</file>
         <file alias="methodxl_store_material.png">images/load_unload/methodxl/store_material.png</file>
-        <file alias="icon_directory.png">images/icon_directory.png</file>
         <file alias="alert.png">images/alert.png</file>
         <file alias="check_mark_small.png">images/check_mark_small.png</file>
         <file alias="info_icon_small.png">images/info_icon_small.png</file>
@@ -62,8 +60,6 @@
         <file alias="firmware_update_available.png">images/firmware_update_available.png</file>
         <file alias="error.png">images/error.png</file>
         <file alias="process_successful.png">images/process_successful.png</file>
-        <file alias="icon_sombrero.png">images/icon_sombrero.png</file>
-        <file alias="icon_usb.png">images/icon_usb.png</file>
         <file alias="method_assisted_level.png">images/assisted_level/method/assisted_level.png</file>
         <file alias="method_locate_screws.png">images/assisted_level/method/locate_screws.png</file>
         <file alias="method_adjust_left_to_move_up_plate.png">images/assisted_level/method/adjust_left_to_move_up_plate.png</file>
@@ -169,7 +165,6 @@
         <file alias="popup_complete.png">images/popup_complete.png</file>
         <file alias="popup_error.png">images/popup_error.png</file>
         <file alias="circle_alert_112px.png">images/circle_alert_112px.png</file>
-        <file alias="forward_arrow_42_80px.png">images/forward_arrow_42_80px.png</file>
         <file alias="icon_copy_logs.png">images/icon_copy_logs.png</file>
         <file alias="icon_build_plate_settings.png">images/icon_build_plate_settings.png</file>
         <file alias="icon_extruder_settings.png">images/icon_extruder_settings.png</file>
@@ -255,6 +250,12 @@
         <file alias="start_circle.png">images/dry_material/start_circle.png</file>
         <file alias="secure_build_plate.png">images/calibration/secure_build_plate.png</file>
         <file alias="feed_from_top.png">images/load_unload/feed_from_top.png</file>
+        <file alias="directory.png">images/start_print_source/directory.png</file>
+        <file alias="usb.png">images/start_print_source/usb.png</file>
+        <file alias="internal_storage.png">images/start_print_source/internal_storage.png</file>
+        <file alias="print_again.png">images/start_print_source/print_again.png</file>
+        <file alias="icon_print_again.png">images/icon_print_again.png</file>
+        <file alias="print_again_settings.png">images/print_again_settings/print_again_settings.png</file>
         <file alias="wifi_poor.png">images/wifi_poor.png</file>
         <file alias="wifi_low.png">images/wifi_low.png</file>
         <file alias="wifi_medium.png">images/wifi_medium.png</file>

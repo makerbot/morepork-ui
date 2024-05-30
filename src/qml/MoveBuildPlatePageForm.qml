@@ -103,7 +103,7 @@ Item {
         id: doorOpenMoveBuildPlatePopup
         showOneButton: true
         fullButton.onClicked: doorOpenMoveBuildPlatePopup.close()
-        fullButtonText: qsTr("CONFIRM")
+        fullButtonText: qsTr("OK")
 
         ColumnLayout {
             spacing: 10

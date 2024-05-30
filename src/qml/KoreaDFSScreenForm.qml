@@ -161,7 +161,7 @@ LoggingItem {
 
             Text {
                 id: koreaDFSModeLabel
-                text: qsTr("KOREA DFS MODE")
+                text: "KOREA DFS MODE"
                 anchors.topMargin: 100
                 anchors.leftMargin: 50
                 font.capitalization: Font.AllUppercase

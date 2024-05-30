@@ -66,7 +66,7 @@ Button {
         Text {
             id: filenameText
             width: 525
-            text: qsTr("Filename Text")
+            text: "Filename Text"
             font.family: defaultFont.name
             font.letterSpacing: 3
             font.weight: Font.Bold
@@ -89,7 +89,7 @@ Button {
 
             Text {
                 id: filePrintTime
-                text: qsTr("File Print Time")
+                text: "File Print Time"
                 font.family: defaultFont.name
                 font.letterSpacing: 3
                 font.weight: Font.Light
@@ -111,7 +111,7 @@ Button {
 
             Text {
                 id: fileMaterial
-                text: qsTr("File Material")
+                text: "File Material"
                 font.capitalization: Font.AllUppercase
                 font.family: defaultFont.name
                 font.letterSpacing: 3
@@ -140,13 +140,13 @@ Button {
     }
 
     Image {
-        id: image
-        height: 20
-        width: 10
+        id: openMenuItemImage
+        width: sourceSize.width
+        height: sourceSize.height
         anchors.right: parent.right
         anchors.rightMargin: 21
         anchors.verticalCenter: parent.verticalCenter
-        source: "qrc:/img/forward_arrow_42_80px.png"
+        source: "qrc:/img/open_menu_item_arrow.png"
     }
 
     Component.onCompleted: {

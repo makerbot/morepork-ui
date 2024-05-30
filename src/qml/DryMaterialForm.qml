@@ -88,7 +88,7 @@ LoggingItem {
             source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
         visible: true
@@ -140,7 +140,7 @@ LoggingItem {
                     visible: true
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -155,7 +155,7 @@ LoggingItem {
                 textBody {
                     text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
                           qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
-                               "built-in heaters.") + "\n\n" + qsTr("Please sure the build plate is empty.")
+                               "built-in heaters.") + "\n\n" + qsTr("Please make sure the build plate is empty.")
                     font.weight: Font.Normal
                     visible: true
                 }
@@ -189,10 +189,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
-                    loadingProgress: 0
+                    processStatus: ProcessStatusIcon.Loading
                 }
             }
 
@@ -236,7 +235,7 @@ LoggingItem {
                     visible: true
                     source: "qrc:/img/replace_desiccant.png"
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -288,7 +287,7 @@ LoggingItem {
                     source: "qrc:/img/spool_bag.png"
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -335,7 +334,7 @@ LoggingItem {
                     source: ("qrc:/img/%1.png").arg(getImageForPrinter("dry_material"))
                     visible: true
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: false
                 }
             }
@@ -427,16 +426,16 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: {
+                    processStatus: {
                         if(bot.process.stateType == ProcessStateType.DryingSpool) {
-                            LoadingIcon.Progress
+                            ProcessStatusIcon.Running
                         } else {
-                            LoadingIcon.Loading
+                            ProcessStatusIcon.Loading
                         }
                     }
-                    loadingProgress: bot.process.printPercentage
+                    progressPercentage: bot.process.printPercentage
                 }
             }
 
@@ -449,6 +448,8 @@ LoggingItem {
                             qsTr("PREPARING")
                         } else if(bot.process.stateType == ProcessStateType.DryingSpool) {
                             qsTr("DRYING MATERIAL")
+                        } else if(bot.process.stateType == ProcessStateType.CleaningUp) {
+                            qsTr("FINISHING UP")
                         } else {
                             defaultString
                         }
@@ -499,9 +500,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Success
+                    processStatus: ProcessStatusIcon.Success
                 }
             }
 
@@ -545,9 +546,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Failure
+                    processStatus: ProcessStatusIcon.Failed
                 }
             }
 
@@ -589,10 +590,9 @@ LoggingItem {
                 image {
                     visible: false
                 }
-                loadingIcon {
+                processStatusIcon {
                     visible: true
-                    icon_image: LoadingIcon.Loading
-                    loadingProgress: 0
+                    processStatus: ProcessStatusIcon.Loading
                 }
             }
 

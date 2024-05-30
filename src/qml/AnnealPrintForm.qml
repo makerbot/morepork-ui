@@ -168,8 +168,8 @@ LoggingItem {
         }
     }
 
-    LoadingIcon {
-        id: loadingIcon
+    ProcessStatusIcon {
+        id: processStatusIcon
         anchors.verticalCenterOffset: -30
         anchors.left: parent.left
         anchors.leftMargin: 80
@@ -220,7 +220,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: loadingIcon
+                target: processStatusIcon
                 visible: false
             }
 
@@ -295,9 +295,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: loadingIcon
+                target: processStatusIcon
                 visible: true
-                loadingProgress: bot.process.printPercentage
             }
 
             PropertyChanges {
@@ -340,7 +339,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: loadingIcon
+                target: processStatusIcon
                 visible: false
             }
 
@@ -388,7 +387,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: loadingIcon
+                target: processStatusIcon
                 visible: false
             }
 
@@ -434,8 +433,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: loadingIcon
-                loadingProgress: 0
+                target: processStatusIcon
                 visible: true
             }
 

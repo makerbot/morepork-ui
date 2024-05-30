@@ -108,8 +108,8 @@ LoggingItem {
     ContentLeftSide {
         id: freContentLeft
         anchors.verticalCenter: parent.verticalCenter
-        loadingIcon {
-            icon_image: LoadingIcon.Success
+        processStatusIcon {
+            processStatus: ProcessStatusIcon.Success
         }
         image {
             source: "qrc:/img/qr_230_xlsetup.png"
@@ -166,7 +166,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -231,7 +231,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -306,7 +306,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -372,7 +372,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -437,7 +437,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -581,7 +581,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -723,7 +723,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -800,7 +800,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -873,7 +873,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -949,7 +949,7 @@ LoggingItem {
                 target: freContentLeft
                 image.source: "qrc:/img/qr_230_xlsetup.png"
                 image.visible: true
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
                 visible: true
             }
 
@@ -992,7 +992,7 @@ LoggingItem {
                 target: freContentLeft
                 image.source: "qrc:/img/remove_upper_material.png"
                 image.visible: true
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
                 visible: true
             }
 
@@ -1038,7 +1038,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: false
+                processStatusIcon.visible: false
             }
 
             PropertyChanges {
@@ -1116,7 +1116,7 @@ LoggingItem {
             PropertyChanges {
                 target: freContentLeft
                 image.visible: false
-                loadingIcon.visible: true
+                processStatusIcon.visible: true
                 visible: true
             }
 
