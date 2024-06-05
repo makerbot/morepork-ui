@@ -39,7 +39,7 @@ Item {
 
     Text {
         id: bulletText
-        text: qsTr("default text")
+        text: "default text"
         anchors.top: parent.top
         anchors.topMargin: 7
         anchors.left: parent.left

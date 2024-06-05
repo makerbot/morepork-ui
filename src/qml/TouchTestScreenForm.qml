@@ -111,16 +111,16 @@ Item {
                    spacing: 10
                    TextHeadline {
                        id: textHeaderDist
-                       text: qsTr("D:")
+                       text: "D:"
                    }
 
                    TextHeadline {
                        id: textHeaderX
-                       text: qsTr("X:")
+                       text: "X:"
                    }
                    TextHeadline {
                        id: textHeaderY
-                       text: qsTr("Y:")
+                       text: "Y:"
                    }
                }
                ColumnLayout {
@@ -128,19 +128,18 @@ Item {
 
                    TextSubheader {
                        id: textDistance
-                       text: qsTr("%1").arg(Math.round(distance))
+                       text: Math.round(distance)
                    }
 
                    TextSubheader {
                        id: textAvgOffX
-                       text: qsTr("%1").arg(Math.round(avgOffsetX))
+                       text: Math.round(avgOffsetX)
                    }
 
                    TextSubheader {
                        id: textAvgOffY
-                       text: qsTr("%1").arg(Math.round(avgOffsetY))
+                       text: Math.round(avgOffsetY)
                    }
-
                }
            }
        }
@@ -159,7 +158,7 @@ Item {
            anchors.verticalCenterOffset: 50
            visible: finished
 
-           label: qsTr("FINISHED")
+           label: qsTr("DONE")
         }
     }
 }

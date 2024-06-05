@@ -29,7 +29,7 @@ Item {
         TextHeadline {
             style: TextHeadline.Base
             id: toolheadLabelProperty
-            text: qsTr("TOOLHEAD LABEL")
+            text: ("TOOLHEAD LABEL")
         }
 
         AdvancedInfoElement {
@@ -84,7 +84,7 @@ Item {
 
         AdvancedInfoElement {
             id: hesValueProperty
-            label: qsTr("HES VALUE")
+            label: "HES " + qsTr("VALUE")
         }
 
         AdvancedInfoElement {

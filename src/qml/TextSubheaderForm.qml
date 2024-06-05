@@ -47,6 +47,7 @@ Text {
             Font.AllUppercase
         }
     }
+    verticalAlignment: Text.AlignVCenter
     horizontalAlignment: Text.AlignHCenter
     lineHeightMode: Text.FixedHeight
     lineHeight: 19.2

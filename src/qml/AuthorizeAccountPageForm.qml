@@ -160,7 +160,7 @@ Item {
             if(state == "no_account" ||
                     state == "reset_password" ||
                     state == "failed_to_get_otp") {
-                qsTr("DONE")
+                qsTr("OK")
             } else if(state == "authorization_failed") {
                 qsTr("TRY AGAIN")
             } else {

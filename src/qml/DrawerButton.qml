@@ -55,7 +55,7 @@ Button {
             TextBody {
                 id: buttonText
                 style: TextBody.ExtraLarge
-                text: qsTr("Drawer Button Text")
+                text: "Drawer Button Text"
                 color: drawerButton.down ? buttonPressContentColor : buttonContentColor
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignHCenter

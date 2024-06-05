@@ -20,7 +20,7 @@ Item {
 
     property alias animatedImage: animatedImage
     property alias image: image
-    property alias loadingIcon: loadingIcon
+    property alias processStatusIcon: processStatusIcon
 
     anchors.left: parent.left
     anchors.bottom: parent.bottom
@@ -64,11 +64,11 @@ Item {
         visible: false || showAllElements
     }
 
-    LoadingIcon {
-        id: loadingIcon
+    ProcessStatusIcon {
+        id: processStatusIcon
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         visible: false || showAllElements
-        icon_image: LoadingIcon.Loading
+        processStatus: ProcessStatusIcon.Loading
     }
 }

@@ -19,7 +19,7 @@ FrePageForm {
         printPage.printFromUI = true
         printPage.startPrintSource = PrintPage.FromLocal
         getTestPrint()
-        printPage.getPrintFileDetails(storage.currentThing)
+        printPage.getPrintFileDetails(storage.thing)
         mainSwipeView.swipeToItem(MoreporkUI.PrintPage)
         printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
     }
@@ -28,13 +28,14 @@ FrePageForm {
         mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
         materialPage.isLoadFilament = true
         materialPage.toolIdx = tool_idx
+        materialPage.startLoadUnloadFromUI = true
+        materialPage.materialChangeActive = true
         // For Method XL the FRE additional steps screen will lead to the
         // loading flow.
         if(!bot.hasFilamentBay) {
             materialPage.materialSwipeView.swipeToItem(MaterialPage.FreAdditionalStepsPage)
             return
         }
-        materialPage.startLoadUnloadFromUI = true
         materialPage.enableMaterialDrawer()
         bot.loadFilament(tool_idx, false, false)
         materialPage.materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
@@ -42,8 +43,8 @@ FrePageForm {
 
     continueButton {
         enabled: {
-            if(state != "load_material" &&
-               state != "calibrate_extruders") {
+            if(state == "load_material" ||
+               state == "calibrate_extruders") {
                 !isProcessRunning()
             }
             else {

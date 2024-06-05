@@ -342,7 +342,7 @@ LoggingItem {
 
                 textHeader {
                     text: qsTr("PRINT PAUSED") + "\n\n" + qsTr("EXTRUDER %1 JAM DETECTED").arg(
-                              (bot.process.extruderAJammed ? qsTr("1") : qsTr("2")))
+                              (bot.process.extruderAJammed ? ("1") : ("2")))
                     visible: true
                 }
                 textBody {
@@ -377,7 +377,7 @@ LoggingItem {
                         qsTr("PRINT PAUSED") + "<br><br>" +
                         qsTr("MATERIAL %1 OUT OF FILAMENT").arg(
                                            (bot.process.filamentBayAOOF ?
-                                             qsTr("1") : qsTr("2")))
+                                             ("1") : ("2")))
                     }
                     visible: true
                 }
@@ -396,7 +396,7 @@ LoggingItem {
                 buttonPrimary {
                     text: qsTr("LOAD MATERIAL %1").arg(
                               (bot.process.filamentBayAOOF ?
-                                   qsTr("1") : qsTr("2")))
+                                   ("1") : ("2")))
                     visible: true
                 }
             }
@@ -423,7 +423,7 @@ LoggingItem {
                         qsTr("PRINT PAUSED") + "<br><br>" +
                         qsTr("MATERIAL %1 OUT OF FILAMENT").arg(
                                            (bot.process.extruderAOOF ?
-                                             qsTr("1") : qsTr("2")))
+                                             ("1") : ("2")))
                     }
                     visible: true
                 }
@@ -439,7 +439,7 @@ LoggingItem {
                     // in the paused step.
                     text: qsTr("LOAD MATERIAL %1").arg(
                                 bot.process.extruderAOOF ?
-                                     qsTr("1") : qsTr("2"))
+                                     ("1") : ("2"))
                     visible: true
                 }
             }
@@ -485,8 +485,8 @@ LoggingItem {
             PropertyChanges {
                 target: contentLeftSide
 
-                loadingIcon {
-                    icon_image: LoadingIcon.Failure
+                processStatusIcon {
+                    processStatus: ProcessStatusIcon.Failed
                     visible: true
                 }
             }

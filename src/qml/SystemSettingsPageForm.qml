@@ -38,6 +38,8 @@ Item {
 
     property alias buttonAnalytics: buttonAnalytics
 
+    property alias buttonEnablePrintAgain: buttonEnablePrintAgain
+
     property alias buttonChangePrinterName: buttonChangePrinterName
     property alias namePrinter: namePrinter
 
@@ -108,13 +110,14 @@ Item {
         FirmwareUpdatePage,     // 5
         SetupProceduresPage,    // 6
         ShareAnalyticsPage,     // 7
-        ChangePrinterNamePage,  // 8
-        TimePage,               // 9
-        ChangeLanguagePage,     // 10
-        SpoolInfoPage,          // 11
-        ColorSwatchPage,        // 12
-        TouchTestPage,          // 13
-        KoreaDFSSecretPage      // 14
+        EnablePrintAgainPage,   // 8
+        ChangePrinterNamePage,  // 9
+        TimePage,               // 10
+        ChangeLanguagePage,     // 11
+        SpoolInfoPage,          // 12
+        ColorSwatchPage,        // 13
+        TouchTestPage,          // 14
+        KoreaDFSSecretPage      // 15
     }
 
     LoggingStackLayout {
@@ -213,6 +216,12 @@ Item {
                         id: buttonAnalytics
                         buttonImage.source: "qrc:/img/icon_analytics.png"
                         buttonText.text: qsTr("ANALYTICS")
+                    }
+
+                    MenuButton {
+                        id: buttonEnablePrintAgain
+                        buttonImage.source: "qrc:/img/icon_print_again.png"
+                        buttonText.text: qsTr("ENABLE PRINT AGAIN")
                     }
 
                     MenuButton {
@@ -429,6 +438,20 @@ Item {
 
             AnalyticsScreen {
                 id: analyticsScreen
+            }
+        }
+
+        // SystemSettingsPage.EnablePrintAgainPage
+        Item {
+            id: enablePrintAgainItem
+            property var backSwiper: systemSettingsSwipeView
+            property int backSwipeIndex: SystemSettingsPage.BasePage
+            property string topBarTitle: qsTr("Print Again Settings")
+            smooth: false
+            visible: false
+
+            PrintAgainSettings {
+                id: printAgainSettingsScreen
             }
         }
 
@@ -686,7 +709,7 @@ Item {
 
                     PropertyChanges {
                         target: description
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                         visible: true
                     }
                 },
@@ -905,7 +928,7 @@ Item {
                     }
                     PropertyChanges {
                         target: timelapse_description
-                        text: qsTr("%1").arg(bot.process.printPercentage) + "%"
+                        text: bot.process.printPercentage + "%"
                         visible: true
                     }
                     PropertyChanges {
@@ -1036,12 +1059,13 @@ Item {
     CustomPopup {
         popupName: "ResetToFactory"
         id: resetToFactoryPopup
-        property bool hideButton: false
+        property bool isRestarting: false
+        property bool isInProcess: isResetting || isRestarting
         popupHeight: factoryResetColumnLayout.height
-                     + ((isResetting || hideButton) ? 90 : 145)
+                     + (isInProcess ? 90 : 145)
         visible: false
-        showTwoButtons: !isResetting && !isFactoryResetDone
-        showOneButton: !isResetting && isFactoryResetDone && !hideButton
+        showTwoButtons: !isInProcess && !isFactoryResetDone
+        showOneButton: !isInProcess && isFactoryResetDone
                        && isFinalResetProceduresDone
         leftButtonText: qsTr("BACK")
         leftButton.onClicked: {
@@ -1050,18 +1074,21 @@ Item {
         rightButtonText: qsTr("CONFIRM")
         rightButton.onClicked: {
             isResetting = true
+            // Don't allow popups checking that we are not in FRE to
+            // display while we are doing the reset.
+            isFreComplete = false
             bot.resetToFactory(true)
             doFinalResetProceduresTimer.start()
         }
-        fullButtonText: qsTr("CONFIRM")
+        fullButtonText: qsTr("RESTART")
         fullButton.onClicked: {
-            hideButton = true
+            isRestarting = true
             // Wait before Reboot
             rebootPrinterTimer.start()
         }
 
         onClosed: {
-            hideButton = false
+            isRestarting = false
             isResetting = false
             isFactoryResetDone = false
             isFinalResetProceduresDone = false
@@ -1083,46 +1110,122 @@ Item {
                 Layout.preferredHeight: sourceSize.height
                 source: "qrc:/img/popup_error.png"
                 Layout.alignment: Qt.AlignHCenter
-                visible: !isResetting
+                visible: true
             }
 
             BusySpinner {
                 id: factory_reset_busy
                 Layout.alignment: Qt.AlignHCenter
-                visible: isResetting
+                visible: false
             }
 
             TextHeadline {
-                id: alert_text
+                id: factory_reset_headline
                 width: parent.width
                 Layout.preferredWidth: parent.width
-                text: {
-                    if(isResetting) {
-                        qsTr("RESTORING FACTORY SETTINGS")
-                    } else {
-                        (isFactoryResetDone && isFinalResetProceduresDone)
-                                ? qsTr("RESTART PRINTER")
-                                : qsTr("RESTORE FACTORY SETTINGS?")
-                    }
-                }
+                text: qsTr("RESTORE FACTORY SETTINGS?")
                 horizontalAlignment: Text.AlignHCenter
+                visible: true
             }
 
             TextBody {
-                id: descritpion_text
+                id: factory_reset_desc
                 width: parent.width
                 Layout.preferredWidth: parent.width
                 horizontalAlignment: Text.AlignHCenter
-                text: {
-                    if(isResetting) {
-                        qsTr("Please wait...")
-                    } else {
-                        (isFactoryResetDone && isFinalResetProceduresDone)
-                                ? qsTr("Restart the printer to complete factory reset procedure.")
-                                : qsTr("This will erase all history, preferences, account information and calibration settings.")
+                text: qsTr("This will erase all history, preferences, account information and calibration settings.")
+                visible: true
+            }
+
+            states: [
+                State {
+                    name: "factory_reset"
+                    when: !resetToFactoryPopup.isInProcess &&
+                          !(isFactoryResetDone && isFinalResetProceduresDone)
+
+                    PropertyChanges {
+                        target: factory_reset_error_image
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: factory_reset_busy
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: factory_reset_headline
+                        text: qsTr("RESTORE FACTORY SETTINGS?")
+                    }
+                    PropertyChanges {
+                        target: factory_reset_desc
+                        text: qsTr("This will erase all history, preferences, account information and calibration settings.")
+                    }
+                },
+                State {
+                    name: "restore_please_wait"
+                    when: isResetting
+
+                    PropertyChanges {
+                        target: factory_reset_error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: factory_reset_busy
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: factory_reset_headline
+                        text: qsTr("RESTORING FACTORY SETTINGS")
+                    }
+                    PropertyChanges {
+                        target: factory_reset_desc
+                        text: qsTr("Please wait...")
+                    }
+                },
+
+                State {
+                    name: "restart_printer"
+                    when: !resetToFactoryPopup.isInProcess &&
+                          (isFactoryResetDone && isFinalResetProceduresDone)
+
+                    PropertyChanges {
+                        target: factory_reset_error_image
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: factory_reset_busy
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: factory_reset_headline
+                        text: qsTr("RESTART PRINTER")
+                    }
+                    PropertyChanges {
+                        target: factory_reset_desc
+                        text: qsTr("Restart the printer to complete factory reset procedure.")
+                    }
+                },
+                State {
+                    name: "restart_please_wait"
+                    when: resetToFactoryPopup.isRestarting
+
+                    PropertyChanges {
+                        target: factory_reset_error_image
+                        visible: false
+                    }
+                    PropertyChanges {
+                        target: factory_reset_busy
+                        visible: true
+                    }
+                    PropertyChanges {
+                        target: factory_reset_headline
+                        text: qsTr("RESTARTING PRINTER")
+                    }
+                    PropertyChanges {
+                        target: factory_reset_desc
+                        text: qsTr("Please wait...")
                     }
                 }
-            }
+            ]
         }
     }
 }

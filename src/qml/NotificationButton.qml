@@ -59,7 +59,7 @@ DrawerButton {
             TextBody {
                 id: buttonText
                 style: TextBody.ExtraLarge
-                text: qsTr("Notification Button Text")
+                text: "Notification Button Text"
                 color: notificationButton.down ? buttonPressContentColor : buttonContentColor
                 horizontalAlignment: Text.AlignLeft
                 verticalAlignment: Text.AlignHCenter

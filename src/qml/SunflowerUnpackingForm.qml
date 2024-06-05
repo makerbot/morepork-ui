@@ -129,7 +129,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: false
             }
         },
@@ -216,7 +216,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: true
             }
         },
@@ -248,7 +248,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: false
             }
         },
@@ -296,7 +296,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingContentLeftSide.loadingIcon
+                target: unpackingContentLeftSide.processStatusIcon
                 visible: false
             }
         }

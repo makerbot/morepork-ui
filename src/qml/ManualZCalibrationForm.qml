@@ -24,7 +24,7 @@ LoggingItem {
             source: "qrc:/img/manual_z_cal_start.png"
             visible: true
         }
-        loadingIcon {
+        processStatusIcon {
             visible: false
         }
 
@@ -118,7 +118,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -179,7 +179,7 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
+                target: contentLeftSide.processStatusIcon
                 visible: false
             }
 
@@ -211,7 +211,7 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.textBody1
-                text: qsTr("ultimaker.com/method-calibration")
+                text: "ultimaker.com/method-calibration"
             }
 
             PropertyChanges {
@@ -409,8 +409,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Loading
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Loading
                 visible: true
             }
 
@@ -573,8 +573,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Success
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Success
                 visible: true
             }
 
@@ -632,8 +632,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: LoadingIcon.Failure
+                target: contentLeftSide.processStatusIcon
+                processStatus: ProcessStatusIcon.Failed
                 visible: true
             }
 
@@ -693,8 +693,8 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: contentLeftSide.loadingIcon
-                icon_image: printSuccess ? LoadingIcon.Success : LoadingIcon.Failure
+                target: contentLeftSide.processStatusIcon
+                processStatus: printSuccess ? ProcessStatusIcon.Success : ProcessStatusIcon.Failed
                 visible: true
             }
 

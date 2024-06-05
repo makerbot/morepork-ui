@@ -16,7 +16,7 @@ QPixmap ThumbnailPixmapProvider::requestPixmap(const QString &kAbsoluteFilePath,
   const QFileInfo kFileInfo(kAbsoluteFilePath);
   if(kFileInfo.exists()) {
       if(kFileInfo.isDir()) {
-          return QPixmap::fromImage(QImage(":/img/icon_directory.png"));
+          return QPixmap::fromImage(QImage(":/img/directory.png"));
       } else {
           MakerbotFileMetaReader file_meta_reader(kFileInfo);
           QImage thumbnail;
@@ -51,6 +51,7 @@ MoreporkStorage::MoreporkStorage()
   storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_ = new QFileSystemWatcher();
   usb_storage_watcher_->addPath("/dev/disk/by-path");
+  last_thing_watcher_= new QFileSystemWatcher(QStringList(LAST_THING_PATH));
   prev_thing_dir_ = "";
   m_sortType = PrintFileInfo::StorageSortType::DateAdded;
   connect(storage_watcher_, SIGNAL(directoryChanged(const QString)),
@@ -60,7 +61,8 @@ MoreporkStorage::MoreporkStorage()
   connect(usb_storage_watcher_, SIGNAL(directoryChanged(const QString)),
           this, SLOT(updateUsbStorageConnected()));
   connect(this, SIGNAL(sortTypeChanged()), this, SLOT(newSortType()));
-
+  connect(last_thing_watcher_, SIGNAL(directoryChanged(const QString)),
+          this, SLOT(updatePrintAgainFileStatus()));
   prog_copy_ = new ProgressCopy();
   connect(prog_copy_, SIGNAL(progressChanged(double)),
            this, SLOT(setFileCopyProgress(double)));
@@ -81,8 +83,8 @@ MoreporkStorage::MoreporkStorage()
   setMachinePid();
 
   updateUsbStorageConnected();
+  updatePrintAgainFileStatus();
 }
-
 
 void MoreporkStorage::setMachinePid() {
     std::ifstream file_strm(MACHINE_PID_PATH);
@@ -242,12 +244,12 @@ void MoreporkStorage::getTestPrint(const QString test_print_dir,
     const QString path = TEST_PRINT_PATH + test_print_dir + test_print;
     const QFileInfo kFileInfo = QFileInfo(path);
 
-    PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
+    PrintFileInfo* test_print_thing = createPrintFileObject(kFileInfo);
 
-    if (current_thing != nullptr) {
-        currentThingSet(current_thing);
+    if (test_print_thing != nullptr) {
+        thingSet(test_print_thing);
     } else {
-        currentThingReset();
+        thingReset();
     }
 }
 
@@ -269,12 +271,12 @@ void MoreporkStorage::getCalibrationPrint(const QString test_print_dir,
         return;
     }
 
-    PrintFileInfo* current_thing = createPrintFileObject(kFileInfo);
+    PrintFileInfo* cal_test_print_thing = createPrintFileObject(kFileInfo);
 
-    if (current_thing != nullptr) {
-        currentThingSet(current_thing);
+    if (cal_test_print_thing != nullptr) {
+        thingSet(cal_test_print_thing);
     } else {
-        currentThingReset();
+        thingReset();
     }
 }
 
@@ -332,42 +334,64 @@ PrintFileInfo* MoreporkStorage::createPrintFileObject(const QFileInfo kFileInfo)
 #endif
 }
 
-bool MoreporkStorage::updateCurrentThing() {
-    const QString dir_path = CURRENT_THING_PATH;
-    if(QDir(dir_path).exists()) {
-        QDirIterator current_thing_dir(dir_path, QDir::Files |
-                                QDir::NoDotAndDotDot | QDir::Readable);
-        PrintFileInfo* current_thing = nullptr;
-        if(current_thing_dir.hasNext()) {
-            const QFileInfo kFileInfo = QFileInfo(current_thing_dir.next());
+void MoreporkStorage::updatePrintAgainFileStatus() {
+    doesPrintAgainFileExistSet(
+       (QDir(LAST_THING_PATH).exists() && !QDir(LAST_THING_PATH).isEmpty()));
+}
+
+bool MoreporkStorage::getLastThing() {
+    return getThingAtPath(LAST_THING_PATH);
+}
+
+bool MoreporkStorage::getCurrentThing() {
+    return getThingAtPath(CURRENT_THING_PATH);
+}
+
+// This assumes that there is only one file at this path. If there
+// are multiple files it will return the first one it finds.
+bool MoreporkStorage::getThingAtPath(QString path) {
+    if(QDir(path).exists()) {
+        if(QDir(path).entryInfoList(QDir::AllEntries | QDir::System |
+                            QDir::NoDotAndDotDot | QDir::Hidden).count() > 1) {
+            LOG(warning) << "Expecting one file only at" << path.toStdString().c_str()
+                         << ". Found multiple files.";
+        }
+        QDirIterator dir(path, QDir::Files | QDir::NoDotAndDotDot | QDir::Readable);
+        PrintFileInfo* thing = nullptr;
+        if(dir.hasNext()) {
+            const QFileInfo kFileInfo = QFileInfo(dir.next());
             if(kFileInfo.suffix() == "makerbot") {
-                current_thing = createPrintFileObject(kFileInfo);
+                thing = createPrintFileObject(kFileInfo);
             }
-            if(current_thing != nullptr) {
-                currentThingSet(current_thing);
+            if(thing != nullptr) {
+                thingSet(thing);
                 return true;
             } else {
-                currentThingReset();
+                thingReset();
             }
+        } else {
+            LOG(error) << path.toStdString().c_str() << " is empty.";
         }
+    } else {
+        LOG(error) << path.toStdString().c_str() << " doesn't exist.";
     }
     return false;
 }
 
 
-PrintFileInfo* MoreporkStorage::currentThing() const{
-  return current_thing_;
+PrintFileInfo* MoreporkStorage::thing() const{
+  return thing_;
 }
 
 
-void MoreporkStorage::currentThingSet(PrintFileInfo* current_thing){
-  current_thing_ = current_thing;
+void MoreporkStorage::thingSet(PrintFileInfo* thing){
+  thing_ = thing;
 }
 
 
-void MoreporkStorage::currentThingReset() {
+void MoreporkStorage::thingReset() {
     PrintFileInfo* temp = new PrintFileInfo("/null/path", "null", "null", QDateTime(), false);
-    currentThingSet(temp);
+    thingSet(temp);
 }
 
 

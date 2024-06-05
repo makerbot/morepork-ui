@@ -103,8 +103,8 @@ LoggingItem {
                 smooth: false
                 antialiasing: false
                 fileThumbnail.source: model.modelData.isDir ?
-                                          "qrc:/img/icon_directory.png" :
-                                          "qrc:/img/icon_sombrero.png"
+                                          "qrc:/img/directory.png" :
+                                          "qrc:/img/internal_storage.png"
                 fileThumbnail.width: model.modelData.isDir ? 47 : 34
                 fileThumbnail.height: model.modelData.isDir ? 43 : 45
                 fileThumbnail.anchors.leftMargin: model.modelData.isDir ? 71 : 77
