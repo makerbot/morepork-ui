@@ -19,7 +19,6 @@ LoggingItem {
     // isActive flag is used because of this.
     property bool isActive: false
     property alias button1: contentRightSide.buttonPrimary
-    property alias button2: contentRightSide.buttonSecondary1
     property int processType: bot.process.type
     property int errorType: bot.process.errorType
     property int errorCode: bot.process.errorCode
@@ -352,13 +351,7 @@ LoggingItem {
                     visible: true
                 }
                 buttonPrimary {
-                    text: qsTr("PURGE MATERIAL %1").arg((bot.process.extruderAJammed ?
-                                                                   ("1") : ("2")))
-                    visible: true
-                }
-                buttonSecondary1 {
-                    text: qsTr("UNLOAD MATERIAL %1").arg((bot.process.extruderAJammed ?
-                                                                   ("1") : ("2")))
+                    text: qsTr("CLEAR EXTRUDER")
                     visible: true
                 }
             }
