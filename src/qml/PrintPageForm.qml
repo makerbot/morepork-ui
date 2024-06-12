@@ -484,7 +484,10 @@ Item {
             // backSwiper and backSwipeIndex are used by backClicked
             property var backSwiper: printSwipeView
             property int backSwipeIndex: PrintPage.BasePage
-            property string topBarTitle: qsTr("Internal Storage - Select File")
+            property string topBarTitle: browsingUsbStorage ?
+                                       qsTr("USB - Select File") :
+                                       qsTr("Internal Storage - Select File")
+
             property bool hasAltBack: true
             smooth: false
             visible: false
