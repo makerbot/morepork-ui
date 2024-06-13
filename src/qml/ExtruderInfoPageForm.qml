@@ -17,6 +17,7 @@ FlickableMenu {
         anchors.top: parent.top
         anchors.leftMargin: 32
         spacing: 35
+        height: extAInfo.height > extBInfo.height ? extAInfo.height : extBInfo.height
 
         ExtruderInfoContents {
             id: extAInfo
@@ -30,6 +31,7 @@ FlickableMenu {
             longRetractCount: bot.extruderALongRetractCount
             lifetimeDistance: bot.extruderAExtrusionTotalDistance
             extruderPresent: bot.extruderAPresent
+            statsReady: bot.extruderAStatsReady
         }
 
         ExtruderInfoContents {
@@ -44,6 +46,7 @@ FlickableMenu {
             longRetractCount: bot.extruderBLongRetractCount
             lifetimeDistance: bot.extruderBExtrusionTotalDistance
             extruderPresent: bot.extruderBPresent
+            statsReady: bot.extruderBStatsReady
         }
     }
 }

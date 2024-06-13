@@ -11,9 +11,12 @@ Item {
     property int longRetractCount: 0
     property int toolIdx: 0
     property bool extruderPresent: false
+    property bool statsReady: false
+
+    property bool showStats: extruderPresent && statsReady
 
     width: extruderStats.width
-    height: extruderPresent ? extruderStats.height : parent.height
+    height: extruderStats.height
 
     ColumnLayout {
         id: extruderStats
@@ -26,8 +29,8 @@ Item {
         }
 
         Item {
-            id: extruderNotAttached
-            visible: !extruderPresent
+            id: statsNotReady
+            visible: !showStats
 
             width: 340
             TextBody {
@@ -37,50 +40,58 @@ Item {
                 font.capitalization: Font.AllUppercase
                 anchors.verticalCenter: parent.verticalCenter
 
-                text: qsTr("EXTRUDER NOT DETECTED")
+                text: {
+                    extruderPresent ?
+                        qsTr("LOADING EXTRUDER STATS...") :
+                        qsTr("EXTRUDER NOT DETECTED")
+                }
             }
         }
 
         AdvancedInfoElement {
-            visible: extruderPresent
+            visible: showStats
             label: qsTr("TYPE")
             value: extType
         }
 
         AdvancedInfoElement {
-            visible: extruderPresent
+            visible: showStats
             label: qsTr("SERIAL")
             value: serial
         }
 
         AdvancedInfoElement {
-            visible: extruderPresent
+            visible: showStats
             label: qsTr("SHORT RETRACT COUNT")
             value: shortRetractCount
         }
 
         AdvancedInfoElement {
-            visible: extruderPresent
+            visible: showStats
             label: qsTr("LONG RETRACT COUNT")
             value: longRetractCount
         }
 
         AdvancedInfoElement {
-            visible: extruderPresent
+            visible: showStats
             label: qsTr("TOTAL DISTANCE EXTRUDED")
             value: lifetimeDistance + " MM"
         }
 
-        ColumnLayout {
-            visible: extruderPresent
+        Column {
+            id: matLifetimeInfo
+            visible: showStats
             spacing: 20
 
             TextSubheader {
-                text: qsTr("LIFETIME MATERIAL USAGE:")
+                width: 360
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.WordWrap
+                text: qsTr("MATERIAL USAGE BREAKDOWN:")
             }
 
             Repeater {
-                id: materialLifetimeInfo
+                id: matUsage
                 layer.smooth: false
 
                 model: {
@@ -99,15 +110,30 @@ Item {
                             });
                         }
                     }
+                    if (modelContents.length == 0) {
+                        modelContents.push({
+                            matName: "",
+                            usedAmount: 0
+                        });
+                    }
                     return modelContents;
                 }
                 delegate: AdvancedInfoElement {
+                    // this seems to just want some height value and doesnt
+                    // especially care what that value is, or else everything
+                    // just stacks on top of each other...
+                    height: 1
                     label: {
-                        var mat = model.modelData.matName;
-                        mat.toLowerCase() != 'unknown' ?
-                            bot.getMaterialName(mat) : qsTr("Other")
+                        if (model.modelData.usedAmount > 0) {
+                            var mat = model.modelData.matName;
+                            return mat.toLowerCase() != 'unknown' ?
+                                bot.getMaterialName(mat) : qsTr("Other")
+                        } else {
+                            return qsTr("NO MATERIALS USED");
+                        }
                     }
-                    value: model.modelData.usedAmount + " MM"
+                    value: model.modelData.usedAmount > 0 ?
+                        model.modelData.usedAmount + " MM" : ""
                 }
             }
         }

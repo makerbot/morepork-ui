@@ -1829,6 +1829,9 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
             UPDATE_INT_PROP(extruderFirmwareUpdateProgress ## EXT_SYM, \
                             kExtruder ## EXT_SYM["extruder_firmware_update_progress"]) \
  \
+            if (!kExtruder ## EXT_SYM["tool_present"].asBool()) { \
+                extruder ## EXT_SYM ## StatsReadyReset(); \
+            } \
             const Json::Value &kExtruderType = kExtruder ## EXT_SYM["tool_name"]; \
             if (kExtruderType.isString()) { \
                 const QString kExtruderTypeStr = kExtruderType.asString().c_str(); \
@@ -2101,6 +2104,7 @@ void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index)
     const Json::Value & res = result["result"];
 
     #define UPDATE_EXTRUDER_STATS(EXT_SYM) \
+      extruder ## EXT_SYM ## StatsReadySet(true); \
       UPDATE_INT_PROP(extruder ## EXT_SYM ## ShortRetractCount, res["short_retract_count"]); \
       UPDATE_INT_PROP(extruder ## EXT_SYM ## LongRetractCount, res["long_retract_count"]); \
       UPDATE_INT_PROP(extruder ## EXT_SYM ## ExtrusionTotalDistance, res["extrusion_total_distance_mm"]); \
