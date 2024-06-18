@@ -285,5 +285,6 @@
         <file>FlickableMenu.qml</file>
         <file>HotChamberWarningScreen.qml</file>
         <file>PrintAgainSettings.qml</file>
+        <file>FpsItem.qml</file>
     </qresource>
 </RCC>
