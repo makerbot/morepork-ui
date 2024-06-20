@@ -210,9 +210,9 @@ Item {
             if(state == "deauthorize_accounts") {
                 bot.deauthorizeAllAccounts()
             } else if(state == "no_network_connection") {
-                authorizeAccountPopup.close()
                 backToSettings()
             }
+            authorizeAccountPopup.close()
         }
 
         ColumnLayout {
