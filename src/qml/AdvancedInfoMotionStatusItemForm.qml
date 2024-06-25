@@ -20,6 +20,22 @@ Item {
 
         AdvancedInfoMotionStatusElement {
             id: headingLabelProperty
+            axis {
+                style: TextBody.Large
+                font.weight: Font.Bold
+            }
+            enabled {
+                style: TextBody.Large
+                font.weight: Font.Bold
+            }
+            endstop {
+                style: TextBody.Large
+                font.weight: Font.Bold
+            }
+            position {
+                style: TextBody.Large
+                font.weight: Font.Bold
+            }
         }
 
         AdvancedInfoMotionStatusElement {

@@ -25,7 +25,7 @@ Item {
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.top: parent.top
-            anchors.topMargin: 52
+            anchors.topMargin: 25
             spacing: 50
 
             AdvancedInfoToolheadsItem {
