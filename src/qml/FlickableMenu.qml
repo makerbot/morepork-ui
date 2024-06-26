@@ -10,5 +10,4 @@ Flickable {
     flickableDirection: Flickable.VerticalFlick
     interactive: true
     ScrollBar.vertical: ScrollBar {}
-    flickDeceleration: 150
 }
