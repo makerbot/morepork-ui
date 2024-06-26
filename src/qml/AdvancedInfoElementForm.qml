@@ -14,7 +14,7 @@ Item {
         id: label
         style: TextBody.Base
         font.weight: Font.Light
-        width: 200
+        width: 235
         text: "LABEL"
         anchors.verticalCenter: parent.verticalCenter
         font.letterSpacing: 2
@@ -30,7 +30,7 @@ Item {
         text: "VALUE"
         font.capitalization: Font.AllUppercase
         anchors.left: label.right
-        anchors.leftMargin: 25
+        anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
     }
 }
