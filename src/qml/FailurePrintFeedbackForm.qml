@@ -2,9 +2,8 @@ import QtQuick 2.10
 import QtQuick.Controls 2.3
 import QtQuick.Layouts 1.3
 
-Item {
+LoggingItem {
     id: failurePrintFeedback
-    anchors.fill: parent
 
     ListModel {
         // These elements can be found in a dictionary in AcknowledgePrintFinishedForm.qml
@@ -26,6 +25,7 @@ Item {
         ListElement { name: qsTr("OTHER")
                       key: "other"}
     }
+
     Rectangle {
         anchors.fill: parent
         color: "#000000"
@@ -35,10 +35,10 @@ Item {
         id: colums
         width: parent.width
         anchors.top: parent.top
-        anchors.topMargin: 20
+        anchors.topMargin: 15
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 15
+        spacing: 10
 
         TextBody {
             id: instructionText
@@ -62,23 +62,24 @@ Item {
 
     ListView {
         id: options_list
-        smooth: false
-        antialiasing: false
-        highlightRangeMode: ListView.ApplyRange
-        spacing: 32
+        spacing: 28
         anchors.top : colums.bottom
         anchors.topMargin: 10
-        anchors.left: parent.left
-        anchors.leftMargin: 34
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 30
         anchors.right: parent.right
-        anchors.rightMargin: 34
+        anchors.rightMargin: 5
         boundsBehavior: Flickable.StopAtBounds
         clip: true
         model: options
         orientation: ListView.Vertical
         flickableDirection: Flickable.VerticalFlick
+
+        ScrollBar.vertical: ScrollBar {
+            policy: ScrollBar.AlwaysOn
+        }
         delegate:
             RadioButton {
                 id: control
@@ -106,7 +107,6 @@ Item {
                     color: "#ffffff"
                     anchors.left: indicator.left
                     anchors.leftMargin: 50
-
                 }
                 onClicked: {
                     if(selected) { selected = false }
@@ -116,6 +116,4 @@ Item {
                 }
             }
     }
-
-
 }
