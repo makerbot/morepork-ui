@@ -121,6 +121,10 @@ bool SettingsInterface::getCaptureTimelapseImages() {
     return cached_settings_["capture_timelapse_images"].asBool();
 }
 
+bool SettingsInterface::getShowFrameRate() {
+    return cached_settings_["show_frame_rate"].asBool();
+}
+
 void SettingsInterface::resetPreferences() {
     cached_settings_["show_nylon_cf_anneal_print_tip"] = true;
     Json::Value &val = cached_settings_["show_apply_glue_on_build_plate_tip"];

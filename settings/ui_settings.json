@@ -9,5 +9,6 @@
         "nylon-cf": true,
         "nylon-12-cf": true,
         "petg": true
-    }
+    },
+    "show_frame_rate": false
 }

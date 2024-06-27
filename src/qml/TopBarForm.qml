@@ -23,26 +23,6 @@ Item {
         color: "#000000"
     }
 
-    LinearGradient {
-        id: fade
-        height: 30
-        width: parent.width
-        smooth: false
-        z: 1
-        anchors.top: parent.bottom
-        gradient: Gradient {
-            GradientStop {
-                position: 0
-                color: "#FF000000"
-            }
-            GradientStop {
-                position: 1.0
-                color: "#00000000"
-            }
-        }
-        cached: true
-    }
-
     property string printerStatus: {
         switch(bot.process.type) {
             case ProcessType.Print:

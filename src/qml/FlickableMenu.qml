@@ -8,9 +8,6 @@ Flickable {
     smooth: false
     antialiasing: false
     flickableDirection: Flickable.VerticalFlick
-    boundsBehavior: Flickable.StopAtBounds
-    boundsMovement: Flickable.StopAtBounds
     interactive: true
     ScrollBar.vertical: ScrollBar {}
-    flickDeceleration: 0.5
 }

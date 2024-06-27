@@ -600,6 +600,11 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        FpsItem {
+            id: fpsItem
+            z: 5
+            visible: settings.getShowFrameRate()
+        }
 
         Item {
             id: inputPanelContainer
