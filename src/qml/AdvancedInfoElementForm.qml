@@ -11,27 +11,26 @@ Item {
     property alias value_anchors: value.anchors
 
     TextBody {
+        id: label
         style: TextBody.Base
         font.weight: Font.Light
-        id: label
-        width: 250
+        width: 235
         text: "LABEL"
         anchors.verticalCenter: parent.verticalCenter
         font.letterSpacing: 2
-
+        anchors.left: parent.left
     }
 
     TextBody {
+        id: value
         style: TextBody.Base
         font.weight: Font.Bold
         // We need to specify width to word wrap
-        width: parent.width - label.width
-        id: value
+        width: parent.width - label.width - anchors.leftMargin
         text: "VALUE"
         font.capitalization: Font.AllUppercase
-        horizontalAlignment: Text.AlignRight
-        anchors.right: parent.right
-        anchors.rightMargin: 63
+        anchors.left: label.right
+        anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
     }
 }

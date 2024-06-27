@@ -24,17 +24,17 @@ Item {
             AdvancedInfoCalibrationElement {
                 id: toolheadA
                 calibrationLabelProperty.text: qsTr("TOOLHEAD A")
-                xOffset.value: bot.offsetAX.toFixed(10)
-                yOffset.value: bot.offsetAY.toFixed(10)
-                zOffset.value: bot.offsetAZ.toFixed(10)
+                xOffset.value: bot.offsetAX.toFixed(6)
+                yOffset.value: bot.offsetAY.toFixed(6)
+                zOffset.value: bot.offsetAZ.toFixed(6)
             }
 
             AdvancedInfoCalibrationElement {
                 id: toolheadB
                 calibrationLabelProperty.text: qsTr("TOOLHEAD B")
-                xOffset.value: bot.offsetBX.toFixed(10)
-                yOffset.value: bot.offsetBY.toFixed(10)
-                zOffset.value: bot.offsetBZ.toFixed(10)
+                xOffset.value: bot.offsetBX.toFixed(6)
+                yOffset.value: bot.offsetBY.toFixed(6)
+                zOffset.value: bot.offsetBZ.toFixed(6)
             }
         }
     }
