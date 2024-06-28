@@ -13,7 +13,6 @@ StackLayout {
     // the UI.
     property var itemWithEnum: parent
     property string logName: "defaultName"
-    property int prevIndex
     smooth: false
     anchors.fill: parent
 
@@ -30,7 +29,7 @@ StackLayout {
         if(typeof customEntryCheck === "function") {
             customEntryCheck(idx)
         }
-        prevIndex = currentIndex
+        itemAt(currentIndex).opacity = 0
         itemAt(currentIndex).visible = false
         itemAt(idx).visible = true
         currentIndex = idx
@@ -62,10 +61,14 @@ StackLayout {
     NumberAnimation {
         id: animation
         target: itemAt(currentIndex)
-        property: "x"
-        from: prevIndex > currentIndex ? -800 : 800
-        to: prevIndex > currentIndex ? 0 : 0
-        duration: 200
-        easing.type: Easing.OutCubic
+        property: "opacity"
+        to: 1
+        duration: 125
+    }
+
+    Component.onCompleted: {
+       for(var i = 1; i < count; ++i) {
+           children[i].opacity = 0
+       }
     }
 }
