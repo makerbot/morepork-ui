@@ -8,6 +8,6 @@ Flickable {
     smooth: false
     antialiasing: false
     flickableDirection: Flickable.VerticalFlick
-    interactive: true
+    interactive: contentHeight > height
     ScrollBar.vertical: ScrollBar {}
 }
