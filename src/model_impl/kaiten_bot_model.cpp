@@ -2104,7 +2104,6 @@ void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index)
     const Json::Value & res = result["result"];
 
     #define UPDATE_EXTRUDER_STATS(EXT_SYM) \
-      extruder ## EXT_SYM ## StatsReadySet(true); \
       UPDATE_INT_PROP(extruder ## EXT_SYM ## ShortRetractCount, res["short_retract_count"]); \
       UPDATE_INT_PROP(extruder ## EXT_SYM ## LongRetractCount, res["long_retract_count"]); \
       UPDATE_INT_PROP(extruder ## EXT_SYM ## ExtrusionTotalDistance, res["extrusion_total_distance_mm"]); \
@@ -2133,6 +2132,7 @@ void KaitenBotModel::toolStatsUpdate(const Json::Value &result, const int index)
           extruder ## EXT_SYM ## MaterialListReset(); \
           extruder ## EXT_SYM ## MaterialUsageListReset(); \
       } \
+      extruder ## EXT_SYM ## StatsReadySet(true); \
 
     switch(index) {
         case 0: {

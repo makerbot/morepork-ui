@@ -45,6 +45,15 @@ Item {
                         qsTr("LOADING EXTRUDER STATS...") :
                         qsTr("EXTRUDER NOT DETECTED")
                 }
+
+                BusySpinner {
+                    id: extruderStatsLoadingSpinner
+                    visible: extruderPresent
+                    anchors.left: parent.right
+                    anchors.leftMargin: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    spinnerSize: 24
+                }
             }
         }
 
