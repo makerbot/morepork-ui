@@ -135,8 +135,6 @@ class KaitenBotModel : public BotModel {
     void disconnected();
     void timeout();
 
-    std::shared_ptr<JsonRpcMethod::Response> m_unsignedFwResp;
-
     class SystemNotification : public JsonRpcNotification {
       public:
         SystemNotification(KaitenBotModel * bot) : m_bot(bot) {}
