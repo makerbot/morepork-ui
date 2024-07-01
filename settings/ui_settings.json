@@ -10,5 +10,6 @@
         "nylon-12-cf": true,
         "petg": true
     },
-    "show_frame_rate": false
+    "show_frame_rate": false,
+    "use_sliding_screen_transitions": false
 }

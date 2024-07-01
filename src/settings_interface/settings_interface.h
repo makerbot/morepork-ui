@@ -43,6 +43,7 @@ class SettingsInterface : public QObject {
       Q_INVOKABLE void setShowTimeInTopBar(bool enable);
       Q_INVOKABLE bool getCaptureTimelapseImages();
       Q_INVOKABLE bool getShowFrameRate();
+      Q_INVOKABLE bool getUseSlidingScreenTransitions();
       Q_INVOKABLE void resetPreferences();
   private:
       std::string default_file_, override_file_;
