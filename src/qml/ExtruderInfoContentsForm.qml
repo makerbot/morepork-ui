@@ -15,12 +15,13 @@ Item {
 
     property bool showStats: extruderPresent && statsReady
 
-    width: extruderStats.width
+    width: 350
     height: extruderStats.height
 
     ColumnLayout {
         id: extruderStats
         spacing: 34
+        width: parent.width
 
         TextHeadline {
             style: TextHeadline.Base

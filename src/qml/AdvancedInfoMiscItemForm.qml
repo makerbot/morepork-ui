@@ -5,7 +5,7 @@ import MachineTypeEnum 1.0
 
 Item {
     width: 400
-    height: bot.machineType == MachineType.Magma ? (257 + 86) : 257
+    height: columnLayout.height
 
     ColumnLayout {
         id: columnLayout

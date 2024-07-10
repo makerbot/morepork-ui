@@ -3,8 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 400
-    height: 364
+    width: 360
+    height: columnLayout.height
 
     property alias filamentBayLabelProperty: filamentBayLabelProperty
     property alias temperatureProperty: temperatureProperty
@@ -16,7 +16,7 @@ Item {
     property alias verificationDoneProperty: verificationDoneProperty
     property alias errorCodeProperty: errorCodeProperty
 
-    ColumnLayout {
+    Column {
         id: columnLayout
         width: parent.width
         spacing: 40
@@ -62,7 +62,6 @@ Item {
             BusySpinner {
                 id: waitingSpinner
                 anchors.right: parent.right
-                anchors.rightMargin: 135
                 anchors.verticalCenter: parent.verticalCenter
                 spinnerActive: {
                     tagPresentProperty.value == "true" &&

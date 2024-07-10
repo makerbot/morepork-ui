@@ -31,6 +31,8 @@ Item {
             AdvancedInfoToolheadsItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
+                anchors.right: parent.right
+                anchors.rightMargin: 40
             }
 
             Rectangle {
@@ -70,6 +72,8 @@ Item {
             AdvancedInfoFilamentBaysItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
+                anchors.right: parent.right
+                anchors.rightMargin: 40
                 visible: bot.hasFilamentBay
             }
 
@@ -82,6 +86,8 @@ Item {
             AdvancedInfoMotionStatusItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
+                anchors.right: parent.right
+                anchors.rightMargin: 40
             }
 
             Rectangle {
@@ -93,6 +99,8 @@ Item {
             AdvancedInfoCalibrationItem {
                 anchors.left: parent.left
                 anchors.leftMargin: 32
+                anchors.right: parent.right
+                anchors.rightMargin: 40
             }
 
             // Empty item to not make the refresh button cover the contents

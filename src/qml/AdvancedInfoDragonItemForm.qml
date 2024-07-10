@@ -3,10 +3,10 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 800
-    height: 128
+    width: 400
+    height: columnLayout.height
 
-    ColumnLayout {
+    Column {
         id: columnLayout
         width: parent.width
         spacing: 50

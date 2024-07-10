@@ -3,15 +3,15 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 400
-    height: 159
+    width: parent.width
+    height: columnLayout.height
 
     property alias calibrationLabelProperty: calibrationLabelProperty
     property alias xOffset: xOffset
     property alias yOffset: yOffset
     property alias zOffset: zOffset
 
-    ColumnLayout {
+    Column {
         id: columnLayout
         width: parent.width
         spacing: 40

@@ -4,9 +4,9 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: 314
+    height: columnLayout.height
 
-    ColumnLayout {
+    Column {
         width: parent.width
         spacing: 40
 
@@ -19,10 +19,13 @@ Item {
 
         RowLayout {
             id: calibration_rowLayout
-            spacing: 0
+            width: parent.width
+            spacing: 32
 
             AdvancedInfoCalibrationElement {
                 id: toolheadA
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
                 calibrationLabelProperty.text: qsTr("TOOLHEAD A")
                 xOffset.value: bot.offsetAX.toFixed(6)
                 yOffset.value: bot.offsetAY.toFixed(6)
@@ -31,6 +34,8 @@ Item {
 
             AdvancedInfoCalibrationElement {
                 id: toolheadB
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
                 calibrationLabelProperty.text: qsTr("TOOLHEAD B")
                 xOffset.value: bot.offsetBX.toFixed(6)
                 yOffset.value: bot.offsetBY.toFixed(6)

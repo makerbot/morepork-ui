@@ -2,6 +2,7 @@ import QtQuick 2.10
 
 Item {
     width: parent.width
+    height: label.height
 
     property alias label_element: label
     property alias label: label.text
@@ -12,29 +13,35 @@ Item {
 
     TextBody {
         id: label
+        text: "LABEL"
+
         style: TextBody.Base
         font.weight: Font.Light
-        width: 235
-        text: "LABEL"
+        lineHeight: 19.2
+        lineHeightMode: Text.FixedHeight
+        wrapMode: Text.WordWrap
+        font.letterSpacing: 2
+
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: value.left
+        anchors.rightMargin: 20
         anchors.left: parent.left
-        font.letterSpacing: 2
-        anchors.left: parent.left
-    }
+  }
 
     TextBody {
         id: value
-        style: TextBody.Base
-        font.weight: Font.Bold
-        // We need to specify width to word wrap
-        width: parent.width - label.width - anchors.leftMargin
         text: "VALUE"
+
+        style: TextBody.Base
         font.capitalization: Font.AllUppercase
-        anchors.left: label.right
-        anchors.leftMargin: 5
+        font.weight: Font.Bold
+        lineHeight: 19.2
+        lineHeightMode: Text.FixedHeight
+
         horizontalAlignment: Text.AlignRight
+
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
+
     }
 }

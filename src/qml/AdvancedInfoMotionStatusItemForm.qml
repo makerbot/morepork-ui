@@ -4,9 +4,9 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: 396
+    height: columnLayout.height
 
-    ColumnLayout {
+    Column {
         id: columnLayout
         width: parent.width
         spacing: 40

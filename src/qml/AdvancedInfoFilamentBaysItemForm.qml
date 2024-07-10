@@ -4,9 +4,10 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: 455
+    height: columnLayout.height
 
-    ColumnLayout {
+    Column {
+        id: columnLayout
         width: parent.width
         spacing: 40
 
@@ -19,10 +20,13 @@ Item {
 
         RowLayout {
             id: filamentBays_rowLayout
-            spacing: 0
+            width: parent.width
+            spacing: 32
 
             AdvancedInfoFilamentBayElement {
                 id: filamentBayA
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
                 filamentBayLabelProperty.text: qsTr("BAY 1")
                 temperatureProperty.value: bot.infoBay1Temp
                 humidityProperty.value: bot.infoBay1Humidity
@@ -36,6 +40,8 @@ Item {
 
             AdvancedInfoFilamentBayElement {
                 id: filamentBayB
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
                 filamentBayLabelProperty.text: qsTr("BAY 2")
                 temperatureProperty.value: bot.infoBay2Temp
                 humidityProperty.value: bot.infoBay2Humidity

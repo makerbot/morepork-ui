@@ -33,7 +33,7 @@ FlickableMenu {
     ExtruderInfoContents {
         id: extBInfo
         anchors.left: extAInfo.right
-        anchors.leftMargin: 35
+        anchors.leftMargin: 32
         anchors.top: parent.top
 
         toolIdx: 1
