@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 400
+    width: parent.width
     height: columnLayout.height
 
     Column {
@@ -14,20 +14,23 @@ Item {
         TextHeadline {
             style: TextHeadline.Large
             id: heading
-            text: qsTr("HEATING SYSTEM")
+            text: qsTr("HEATING")
             font.letterSpacing: 10
+            width: parent.width
         }
 
         AdvancedInfoElement {
             id: stateStrProperty
             label: qsTr("STATE")
             value: bot.infoHeatSysStateStr
+            width: 400
         }
 
         AdvancedInfoElement {
             id: errorStrProperty
             label: qsTr("ERROR")
             value: bot.infoHeatSysErrorStr
+            width: 400
         }
     }
 }

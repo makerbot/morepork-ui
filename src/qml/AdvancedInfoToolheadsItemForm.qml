@@ -16,6 +16,7 @@ Item {
             id: heading
             text: qsTr("TOOLHEADS")
             font.letterSpacing: 10
+            width: parent.width
         }
 
         RowLayout {

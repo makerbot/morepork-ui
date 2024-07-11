@@ -4,9 +4,10 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: columnLayout.height
+    height: calibration_columnLayout.height
 
     Column {
+        id: calibration_columnLayout
         width: parent.width
         spacing: 40
 
@@ -15,6 +16,7 @@ Item {
             id: heading
             text: qsTr("CALIBRATION OFFSETS")
             font.letterSpacing: 10
+            width: parent.width
         }
 
         RowLayout {

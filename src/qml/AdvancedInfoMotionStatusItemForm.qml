@@ -16,6 +16,7 @@ Item {
             id: heading
             text: qsTr("MOTION STATUS")
             font.letterSpacing: 10
+            width: parent.width
         }
 
         AdvancedInfoMotionStatusElement {

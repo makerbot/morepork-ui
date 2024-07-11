@@ -4,11 +4,11 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: advancedInfo
-    width: 800
-    height: 440
+    anchors.fill: parent
     smooth: false
 
     RefreshButton {
+        anchors.bottomMargin: 10
         button_mouseArea.onClicked: {
             bot.query_status()
             bot.get_calibration_offsets()
@@ -18,14 +18,13 @@ Item {
     FlickableMenu {
         id: flickableAdvancedInfo
         contentHeight: columnContents.height
+        anchors.topMargin: 35
 
         Column {
             id: columnContents
             smooth: false
             anchors.right: parent.right
             anchors.left: parent.left
-            anchors.top: parent.top
-            anchors.topMargin: 25
             spacing: 50
 
             AdvancedInfoToolheadsItem {
@@ -102,7 +101,6 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: 40
             }
-
             // Empty item to not make the refresh button cover the contents
             // of the page.
             Item {
