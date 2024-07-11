@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: calibration_columnLayout.height
+    implicitHeight: calibration_columnLayout.height
 
     Column {
         id: calibration_columnLayout

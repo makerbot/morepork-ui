@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: toolheadsItemLayout.height
+    implicitHeight: toolheadsItemLayout.height
 
     Column {
         id: toolheadsItemLayout

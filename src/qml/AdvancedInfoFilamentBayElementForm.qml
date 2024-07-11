@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 360
-    height: columnLayout.height
+    implicitHeight: columnLayout.height
 
     property alias filamentBayLabelProperty: filamentBayLabelProperty
     property alias temperatureProperty: temperatureProperty

@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: columnLayout.height
     implicitHeight: columnLayout.height
 
     property alias calibrationLabelProperty: calibrationLabelProperty

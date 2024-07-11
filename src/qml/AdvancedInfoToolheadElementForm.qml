@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: columnLayout.height
+    implicitHeight: columnLayout.height
 
     property alias toolheadLabelProperty: toolheadLabelProperty
     property alias attachedProperty: attachedProperty
