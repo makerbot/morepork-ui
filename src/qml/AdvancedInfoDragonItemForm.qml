@@ -9,7 +9,7 @@ Item {
     Column {
         id: columnLayout
         width: parent.width
-        spacing: 50
+        spacing: 25
 
         TextHeadline {
             style: TextHeadline.Large

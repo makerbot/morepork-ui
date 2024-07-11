@@ -20,7 +20,7 @@ Item {
 
     ColumnLayout {
         id: extruderStats
-        spacing: 34
+        spacing: 25
         width: parent.width
 
         TextHeadline {

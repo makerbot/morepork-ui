@@ -21,7 +21,7 @@ Item {
 
         Column {
             width: 400
-            spacing: 40
+            spacing: 25
 
             AdvancedInfoElement {
                 id: currentTempProperty

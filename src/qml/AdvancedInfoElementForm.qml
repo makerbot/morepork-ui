@@ -17,8 +17,8 @@ Item {
 
         style: TextBody.Base
         font.weight: Font.Light
-        lineHeight: 19.2
-        lineHeightMode: Text.FixedHeight
+        lineHeight: 1.1
+        lineHeightMode: Text.ProportionalHeight
         wrapMode: Text.WordWrap
         font.letterSpacing: 2
 
@@ -35,8 +35,8 @@ Item {
         style: TextBody.Base
         font.capitalization: Font.AllUppercase
         font.weight: Font.Bold
-        lineHeight: 19.2
-        lineHeightMode: Text.FixedHeight
+        lineHeight: 1.2
+        lineHeightMode: Text.ProportionalHeight
 
         horizontalAlignment: Text.AlignRight
 
