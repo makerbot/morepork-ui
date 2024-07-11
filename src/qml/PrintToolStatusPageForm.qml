@@ -30,30 +30,26 @@ GridLayout {
     columnSpacing: 50
 
         PrintToolStatusItem {
-            Layout.preferredWidth: parent.width * 0.5
-            //Layout.preferredHeight: parent.height * 0.5
+            Layout.preferredWidth: 1
             toolName: qsTr("EXTRUDER 1")
             currentTemp: extACurrentTemp
             targetTemp: extATargetTemp
         }
         PrintToolStatusItem {
-            Layout.preferredWidth: parent.width * 0.5
-            //Layout.preferredHeight: parent.height * 0.5
+            Layout.preferredWidth: 1
             toolName: qsTr("EXTRUDER 2")
             currentTemp: extBCurrentTemp
             targetTemp: extBTargetTemp
         }
 
         PrintToolStatusItem {
-            Layout.preferredWidth: parent.width * 0.5
-            //Layout.preferredHeight: parent.height * 0.5
+            Layout.preferredWidth: 1
             toolName: qsTr("CHAMBER")
             currentTemp: chamberCurrentTemp
             targetTemp: chamberTargetTemp
         }
         PrintToolStatusItem {
-            Layout.preferredWidth: parent.width * 0.5
-            //Layout.preferredHeight: parent.height * 0.5
+            Layout.preferredWidth: 1
             visible: hasHbp
             toolName: qsTr("BUILD PLATE")
             currentTemp: hbpCurrentTemp
