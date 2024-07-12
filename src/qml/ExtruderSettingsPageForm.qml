@@ -13,7 +13,7 @@ Item {
     anchors.fill: parent
 
     property alias extruderSettingsSwipeView: extruderSettingsSwipeView
-    property alias buttonExtruderInfo: buttonExtruderInfo
+    //property alias buttonExtruderInfo: buttonExtruderInfo
     property alias buttonCalibrationProcedures: buttonCalibrationProcedures
     property alias buttonCleanExtruders: buttonCleanExtruders
     property alias buttonAdjustZOffset: buttonAdjustZOffset
@@ -23,7 +23,7 @@ Item {
 
     enum SwipeIndex {
         BasePage,                  // 0
-        ExtruderInfoPage,          // 1
+        //ExtruderInfoPage,          // 1
         CalibrationProceduresPage, // 2
         CleanExtrudersPage,        // 3
         AdjustZOffsetPage          // 4
@@ -55,13 +55,13 @@ Item {
                     anchors.top: parent.top
                     spacing: 0
 
-                    MenuButton {
-                        id: buttonExtruderInfo
-                        buttonImage.source: "qrc:/img/icon_clean_extruders.png"
-                        buttonText.text: qsTr("EXTRUDER INFO")
-                        enabled: true
-                        openMenuItemArrow.visible: false
-                    }
+                    // MenuButton {
+                    //     id: buttonExtruderInfo
+                    //     buttonImage.source: "qrc:/img/icon_clean_extruders.png"
+                    //     buttonText.text: qsTr("EXTRUDER INFO")
+                    //     enabled: true
+                    //     openMenuItemArrow.visible: false
+                    // }
 
                     MenuButton {
                         id: buttonCalibrationProcedures
@@ -110,19 +110,19 @@ Item {
         }
 
         // ExtruderSettingsPage.ExtruderInfoPage
-        Item {
-            id: extruderInfoItem
-            property var backSwiper: extruderSettingsSwipeView
-            property int backSwipeIndex: ExtruderSettingsPage.BasePage
-            property string topBarTitle: qsTr("Extruder Info")
+        //Item {
+        //    id: extruderInfoItem
+        //    property var backSwiper: extruderSettingsSwipeView
+        //    property int backSwipeIndex: ExtruderSettingsPage.BasePage
+        //    property string topBarTitle: qsTr("Extruder Info")
 
-            smooth: false
-            visible: false
+        //    smooth: false
+        //    visible: false
 
-            ExtruderInfoPage {
-                id: extruderInfo
-            }
-        }
+        //    ExtruderInfoPage {
+        //        id: extruderInfo
+        //    }
+        //}
 
         // ExtruderSettingsPage.CalibrationProceduresPage
         Item {
