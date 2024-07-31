@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 400
-    height: 560
+    implicitHeight: columnLayout.height
 
     property alias toolheadLabelProperty: toolheadLabelProperty
     property alias attachedProperty: attachedProperty
@@ -21,10 +21,10 @@ Item {
     property alias jamEnabledProperty: jamEnabledProperty
     property alias errorCodeProperty: errorCodeProperty
 
-    ColumnLayout {
+    Column {
         id: columnLayout
         width: parent.width
-        spacing: 40
+        spacing: 25
 
         TextHeadline {
             style: TextHeadline.Base

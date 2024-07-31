@@ -4,18 +4,19 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: 396
+    implicitHeight: columnLayout.height
 
-    ColumnLayout {
+    Column {
         id: columnLayout
         width: parent.width
-        spacing: 40
+        spacing: 25
 
         TextHeadline {
             style: TextHeadline.Large
             id: heading
             text: qsTr("MOTION STATUS")
             font.letterSpacing: 10
+            width: parent.width
         }
 
         AdvancedInfoMotionStatusElement {
