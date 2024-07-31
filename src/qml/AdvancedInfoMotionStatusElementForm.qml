@@ -2,7 +2,8 @@ import QtQuick 2.10
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 800
+    width: parent.width
+    height: motion_status_rowLayout.height
     property alias axis: axis_label
     property alias enabled: enabled_value
     property alias endstop: endstop_value

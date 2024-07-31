@@ -26,8 +26,6 @@ LoggingItem {
     property string timeLeftString: "99:99"
     property alias printStatusSwipeView: printStatusSwipeView
     property bool testPrintComplete: false
-    property string extruderAExtrusionDistance: bot.extruderAExtrusionDistance
-    property string extruderBExtrusionDistance: bot.extruderBExtrusionDistance
 
     property alias acknowledgePrintFinished: acknowledgePrintFinished
     onTimeLeftMinutesChanged: updateTime()
@@ -293,6 +291,7 @@ LoggingItem {
                 // Loading ProcessStateType we look for the step string to determine what
                 // to display.
                 TemperatureStatus {
+                    id: tempStatus
                     visible: bot.process.stateType == ProcessStateType.Loading &&
                              bot.process.stepStr != "waiting_for_file" &&
                              bot.process.stepStr != "transfer" &&
@@ -309,6 +308,7 @@ LoggingItem {
                         }
                     }
                 }
+
 
                 // Acknowledge Print Regular Process
                 AcknowledgePrintFinished {
@@ -346,21 +346,32 @@ LoggingItem {
             }
         }
 
+        //Item {
+        //    id: page1
+
+        //    PrintToolStatusPage {
+        //        extACurrentTemp: bot.extruderACurrentTemp
+        //        extATargetTemp: bot.extruderATargetTemp
+
+        //        extBCurrentTemp: bot.extruderBCurrentTemp
+        //        extBTargetTemp: bot.extruderBTargetTemp
+
+        //        chamberCurrentTemp: bot.buildplaneCurrentTemp
+        //        chamberTargetTemp: bot.buildplaneTargetTemp
+
+        //        hasHbp: bot.machineType == MachineType.Magma
+        //        hbpCurrentTemp: bot.hbpCurrentTemp
+        //        hbpTargetTemp: bot.hbpTargetTemp
+        //    }
+        //}
+
         Item {
-            id: page1
+            id: page2
 
             PrintModelInfoPage {
                 anchors.fill: parent.fill
                 startPrintButtonVisible: false
                 customModelSource: "image://thumbnail/" + filePathName
-            }
-        }
-
-        Item {
-            id: page2
-
-            PrintFileInfoPage {
-
             }
         }
 

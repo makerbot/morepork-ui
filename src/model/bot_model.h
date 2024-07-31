@@ -367,14 +367,22 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, infoToolheadBError, "0")
 
     // Extruder A Stats
+    MODEL_PROP(bool, extruderAStatsReady, false)
     MODEL_PROP(int, extruderAShortRetractCount, 0)
     MODEL_PROP(int, extruderALongRetractCount, 0)
-    MODEL_PROP(int, extruderAExtrusionDistance, 0)
+    MODEL_PROP(int, extruderAExtrusionTotalDistance, 0)
+    MODEL_PROP(int, extruderASerial, 0)
+    MODEL_PROP(QStringList, extruderAMaterialList, {""})
+    MODEL_PROP(QList<int>, extruderAMaterialUsageList, {0})
 
     // Extruder B Stats
+    MODEL_PROP(bool, extruderBStatsReady, false)
     MODEL_PROP(int, extruderBShortRetractCount, 0)
     MODEL_PROP(int, extruderBLongRetractCount, 0)
-    MODEL_PROP(int, extruderBExtrusionDistance, 0)
+    MODEL_PROP(int, extruderBExtrusionTotalDistance, 0)
+    MODEL_PROP(int, extruderBSerial, 0)
+    MODEL_PROP(QStringList, extruderBMaterialList, {""})
+    MODEL_PROP(QList<int>, extruderBMaterialUsageList, {0})
 
     // Misc.
     MODEL_PROP(bool, infoDoorActivated, false)
