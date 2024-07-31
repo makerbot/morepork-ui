@@ -4,9 +4,10 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: parent.width
-    height: 667
+    implicitHeight: toolheadsItemLayout.height
 
-    ColumnLayout {
+    Column {
+        id: toolheadsItemLayout
         width: parent.width
         spacing: 40
 
@@ -15,14 +16,18 @@ Item {
             id: heading
             text: qsTr("TOOLHEADS")
             font.letterSpacing: 10
+            width: parent.width
         }
 
         RowLayout {
             id: toolheads_rowLayout
-            spacing: 0
+            width: parent.width
+            spacing: 32
 
             AdvancedInfoToolheadElement {
                 id: toolheadA
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
                 toolheadLabelProperty.text: "A/1"
                 attachedProperty.value: bot.infoToolheadAAttached
                 filamentPresentProperty.value: bot.infoToolheadAFilamentPresent
@@ -41,6 +46,8 @@ Item {
 
             AdvancedInfoToolheadElement {
                 id: toolheadB
+                Layout.fillWidth: true
+                Layout.preferredWidth: 1
                 toolheadLabelProperty.text: "B/2"
                 attachedProperty.value: bot.infoToolheadBAttached
                 filamentPresentProperty.value: bot.infoToolheadBFilamentPresent

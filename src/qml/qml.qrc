@@ -247,6 +247,9 @@
         <file>ButtonOptions.qml</file>
         <file>PrintFileInfoPageForm.qml</file>
         <file>PrintFileInfoPage.qml</file>
+        <file>PrintToolStatusPageForm.qml</file>
+        <file>PrintToolStatusPage.qml</file>
+        <file>PrintToolStatusItem.qml</file>
         <file>PowerButtonScreen.qml</file>
         <file>FreProgressItem.qml</file>
         <file>SunflowerUnpackingForm.qml</file>
@@ -285,5 +288,9 @@
         <file>FlickableMenu.qml</file>
         <file>HotChamberWarningScreen.qml</file>
         <file>PrintAgainSettings.qml</file>
+        <file>ExtruderInfoPage.qml</file>
+        <file>ExtruderInfoPageForm.qml</file>
+        <file>ExtruderInfoContents.qml</file>
+        <file>ExtruderInfoContentsForm.qml</file>
     </qresource>
 </RCC>
