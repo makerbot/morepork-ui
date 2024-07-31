@@ -74,4 +74,3 @@
     }
 
 #endif  // _SRC_IMPL_UTIL_H
-
