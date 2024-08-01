@@ -102,6 +102,9 @@ ApplicationWindow {
         case FreStep.MaterialCaseSetup:
             freScreen.state = "material_case_setup"
             break;
+        case FreStep.EnablePrintAgain:
+            freScreen.state = "enable_print_again"
+            break;
         case FreStep.TestPrint:
             freScreen.state = "test_print"
             break;

@@ -75,6 +75,8 @@ void FreTracker::initialize() {
                     currentFreStepSet(FreStep::MaterialCaseSetup);
                 } else if (step == "load_material") {
                     currentFreStepSet(FreStep::LoadMaterial);
+                } else if (step == "enable_print_again") {
+                    currentFreStepSet(FreStep::EnablePrintAgain);
                 } else if (step == "test_print") {
                     currentFreStepSet(FreStep::TestPrint);
                 } else if (step == "login_mb_account") {

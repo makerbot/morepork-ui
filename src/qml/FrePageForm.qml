@@ -242,8 +242,8 @@ LoggingItem {
             PropertyChanges {
                 target: freContentRight.textBody
                 text: qsTr("For the best experience using METHOD printers, "+
-                           "it is recommended that you connect to a wi-fi network "+
-                           "or plug in an ethernet cable.")
+                           "it is recommended that you connect to a Wi-Fi network "+
+                           "or plug in an Ethernet cable.")
             }
 
             PropertyChanges {
@@ -791,6 +791,91 @@ LoggingItem {
             PropertyChanges {
                 target: endStep
                 position: 0.637
+            }
+        },
+        State {
+            name: "enable_print_again"
+
+            PropertyChanges {
+                target: freContentLeft
+                image.visible: false
+                processStatusIcon.visible: false
+            }
+
+            PropertyChanges {
+                target: freContentRight.textHeader
+                text: qsTr("ENABLE \"PRINT AGAIN\"")
+            }
+
+            PropertyChanges {
+                target: freContentRight.textBody
+                text: qsTr("The “Print Again” option allows you to conveniently reprint the last job you started by saving the latest file on the printer.")
+            }
+
+            PropertyChanges {
+                target: freContentRight.slidingSwitch
+                checked: bot.printAgainEnabled
+                switchText: freContentRight.slidingSwitch.checked ?
+                        qsTr("Yes, please save the last print") :
+                        qsTr("No, do not save the last print")
+                onClicked: {
+                    if(bot.printAgainEnabled) {
+                        bot.setPrintAgainEnabled(false)
+                    } else {
+                        bot.setPrintAgainEnabled(true)
+                    }
+                }
+                visible: true
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonPrimary
+                text: qsTr("CONTINUE")
+            }
+
+            PropertyChanges {
+                target: freContentRight.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
+                target: setupProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: extrudersProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: materialProgress
+                state: FreProgressItem.Enabled
+            }
+
+            PropertyChanges {
+                target: printProgress
+                state: FreProgressItem.Active
+            }
+
+            PropertyChanges {
+                target: connectProgress
+                state: FreProgressItem.Disabled
+            }
+
+            PropertyChanges {
+                target: progress_item
+                visible: true
+            }
+
+            PropertyChanges {
+                target: midStep
+                position: 0.667
+            }
+
+            PropertyChanges {
+                target: endStep
+                position: 0.8
             }
         },
         State {

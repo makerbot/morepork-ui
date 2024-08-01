@@ -122,6 +122,13 @@ Item {
         ColumnLayout {
             spacing: 24
 
+            SlidingSwitch {
+                id: slidingSwitch
+                showText: true
+                switchText: "label"
+                visible: false || showAllElements
+            }
+
             ButtonRectanglePrimary {
                 id: buttonPrimary
                 text: "label"
@@ -137,13 +144,6 @@ Item {
             ButtonRectangleSecondary {
                 id: buttonSecondary2
                 text: "label"
-                visible: false || showAllElements
-            }
-
-            SlidingSwitch {
-                id: slidingSwitch
-                showText: true
-                switchText: "label"
                 visible: false || showAllElements
             }
         }
