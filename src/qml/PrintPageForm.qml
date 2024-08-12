@@ -513,6 +513,7 @@ Item {
                 anchors.verticalCenterOffset: -40
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible: storage.storageIsEmpty
+                width: parent.width
 
                 TextBody {
                     style: TextBody.Large
@@ -522,6 +523,7 @@ Item {
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
+                    width: parent.width
                 }
             }
 
@@ -640,6 +642,7 @@ Item {
                     anchors.topMargin: 15
                     horizontalAlignment: Text.AlignHCenter
                     anchors.horizontalCenter: parent.horizontalCenter
+                    width: parent.width
                 }
             }
 
@@ -926,7 +929,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: 600
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                wrapMode: Text.WordWrap
+                width: parent.width
             }
 
             states: [
@@ -1376,6 +1379,7 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
+                width: parent.width
             }
 
             TextBody {
@@ -1385,6 +1389,7 @@ Item {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
                 font.weight: Font.DemiBold
+                width: parent.width
             }
         }
     }
