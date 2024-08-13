@@ -57,7 +57,9 @@ Button {
         id: textElement
         text: buttonRectangle.text
         font.family: "Antenna"
+        fontSizeMode: Text.HorizontalFit
         font.pixelSize: 17
+        minimumPixelSize: 10
         font.weight: Font.Bold
         font.letterSpacing: 3.2
         font.capitalization: Font.AllUppercase
