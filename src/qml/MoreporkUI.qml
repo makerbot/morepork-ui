@@ -2341,10 +2341,9 @@ ApplicationWindow {
                     Layout.preferredWidth: parent.width
                     spacing: 20
 
-                    RowLayout {
+                    Row {
                         id: legend_text_nps_survey_popup
                         Layout.preferredWidth: parent.width
-                        spacing: 350
 
                         TextSubheader {
                             text: qsTr("Not at all likely")
@@ -2356,6 +2355,8 @@ ApplicationWindow {
                             text: qsTr("Extremely likely")
                             style: TextSubheader.Bold
                             color: "#ffffff"
+                            anchors.right: parent.right
+                            horizontalAlignment: Text.AlignRight
                         }
                     }
 
@@ -2371,7 +2372,6 @@ ApplicationWindow {
                     RowLayout {
                         id: button_row
                         Layout.preferredWidth: parent.width
-                        spacing: -4
                         Layout.alignment: Layout.Center
 
                         Repeater {
