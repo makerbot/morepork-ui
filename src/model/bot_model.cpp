@@ -36,7 +36,7 @@ QString BotModel::getExtruderName(QString apiName) {
     } else if(apiName == "mk14_s") {
         return "Support 2A";
     } else if(apiName == "mk14_hot_s") {
-        return "Suport 2XA";
+        return "Support 2XA";
     } else {
         return apiName.toUpper();
     }
