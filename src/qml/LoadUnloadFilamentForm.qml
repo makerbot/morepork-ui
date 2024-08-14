@@ -1082,8 +1082,8 @@ LoggingItem {
                     visible: bot.hasFilamentBay
                 }
                 numberedSteps {
-                    steps: ["Hold the material at the entry port to maintain tension and prevent unspooling as you rewind.",
-                            "Rewind material using the rollers until material has exited."]
+                    steps: [qsTr("Hold the material at the entry port to maintain tension and prevent unspooling as you rewind."),
+                            qsTr("Rewind material using the rollers until material has exited.")]
                     visible: !bot.hasFilamentBay
                 }
                 buttonPrimary {
