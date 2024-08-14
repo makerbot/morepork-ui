@@ -12,5 +12,5 @@ Flickable {
     boundsMovement: Flickable.StopAtBounds
     interactive: true
     ScrollBar.vertical: ScrollBar {}
-    flickDeceleration: 0.5
+    flickDeceleration: 1000
 }
