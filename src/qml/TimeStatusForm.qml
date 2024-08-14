@@ -21,7 +21,7 @@ RowLayout {
             color: exceededLifetimeValue ? "#FCA833" : "#FFFFFF"
         }
         TextBody {
-            text: "Current"
+            text: qsTr("Current")
             font.weight: Font.Bold
             color: exceededLifetimeValue ? "#FCA833" : "#FFFFFF"
         }

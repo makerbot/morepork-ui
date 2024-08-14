@@ -55,18 +55,21 @@ Button {
             }
         }
 
-        ColumnLayout {
+        Column {
             id: storageNameDescriptionColumnLayout
-            width: children.width
             height: children.height
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: storageTypeImageContainer.right
+            anchors.right: storageUsedRowLayout.left
+            anchors.rightMargin: 5
 
             TextBody {
                 id: storageNameText
                 style: TextBody.Large
                 text: "Storage Name Text"
                 verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                width: parent.width
             }
 
             TextSubheader {
@@ -74,6 +77,10 @@ Button {
                 text: "Storage Description"
                 visible: text == "" ? false : true
                 verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                width: parent.width
+                topPadding: 5
+                wrapMode: Text.WordWrap
             }
         }
 

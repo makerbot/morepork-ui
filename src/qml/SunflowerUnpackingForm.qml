@@ -31,29 +31,26 @@ LoggingItem {
         leftButtonText: qsTr("CLOSE")
         rightButtonText: qsTr("CONFIRM")
 
-        ColumnLayout {
-            width: parent.width
+        Column {
+            width: parent.popupWidth
             height: children.height
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenterOffset: -25
 
-            Image{
-                id: unpackingPopupImage
-                source: "qrc:/img/popup_error.png"
-                Layout.alignment: Qt.AlignHCenter
-                Layout.bottomMargin: 10
-            }
-
             TextHeadline {
                 id: unpackingPopupHeader
+                width: unpackingPopup.popupWidth
                 style: TextHeadline.Base
+                horizontalAlignment: Text.AlignHCenter
                 Layout.alignment: Qt.AlignHCenter
                 Layout.bottomMargin: 7
             }
 
             TextBody {
                 id: unpackingPopupBody
+                width: unpackingPopup.popupWidth
+                horizontalAlignment: Text.AlignHCenter
                 Layout.alignment: Qt.AlignHCenter
                 Layout.bottomMargin: 30
             }
@@ -95,11 +92,6 @@ LoggingItem {
             PropertyChanges {
                 target: unpackingPopupHeader
                 text: ""
-            }
-
-            PropertyChanges {
-                target: unpackingPopupImage
-                visible: false
             }
 
             PropertyChanges {
@@ -188,11 +180,6 @@ LoggingItem {
             }
 
             PropertyChanges {
-                target: unpackingPopupImage
-                visible: false
-            }
-
-            PropertyChanges {
                 target: unpackingContentRightSide.textHeader
                 text: lowering? qsTr("LOWERING BUILD PLATE")
                               : qsTr("RAISING BUILD PLATE")
@@ -263,11 +250,6 @@ LoggingItem {
             PropertyChanges {
                 target: unpackingPopupHeader
                 text: ""
-            }
-
-            PropertyChanges {
-                target: unpackingPopupImage
-                visible: false
             }
 
             PropertyChanges {
