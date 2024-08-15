@@ -84,7 +84,7 @@ Item {
             font.pixelSize: {
                 if(Tumbler.tumbler.currentItem.text === text &&
                    Tumbler.tumbler.count > 2) {
-                    100
+                    90
                 } else {
                     64
                 }
@@ -110,7 +110,7 @@ Item {
 
         VerticalTumbler {
             id: hoursTumbler
-            width: 140
+            width: 120
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             visibleItemCount: 3
@@ -128,12 +128,12 @@ Item {
             anchors.leftMargin: 40
             anchors.verticalCenter: parent.verticalCenter
             font.family: defaultFont.name
-            font.pixelSize: 100
+            font.pixelSize: 90
         }
 
         VerticalTumbler {
             id: minutesTumbler
-            width: 140
+            width: 130
             height: parent.height
             anchors.left: timeSeparator.right
             anchors.leftMargin: 40
@@ -157,7 +157,7 @@ Item {
 
     ButtonRectanglePrimary {
         id: setTimeButton
-        width: 120
+        width: 150
         anchors.right: parent.right
         anchors.rightMargin: 40
         anchors.verticalCenter: parent.verticalCenter

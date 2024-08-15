@@ -1410,9 +1410,10 @@ ApplicationWindow {
                 printPage.printSwipeView.swipeToItem(PrintPage.BasePage)
             }
 
-            ColumnLayout {
+            Column {
                 id: buildPlateClearColumnLayout
                 height: children.height
+                width: parent.popupWidth
                 anchors.top: buildPlateClearPopup.popupContainer.top
                 anchors.topMargin: 30
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -1422,6 +1423,8 @@ ApplicationWindow {
                     id: clear_build_plate_text
                     text: qsTr("CLEAR BUILD PLATE")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    width: buildPlateClearPopup.popupWidth
+                    horizontalAlignment: Text.AlignHCenter
                 }
 
                 TextBody {
@@ -1429,6 +1432,7 @@ ApplicationWindow {
                     text: qsTr("Please be sure your build plate is clear.")
                     horizontalAlignment: Text.AlignHCenter
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    width: buildPlateClearPopup.popupWidth
                 }
             }
         }

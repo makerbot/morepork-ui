@@ -1090,9 +1090,9 @@ Item {
             }
         }
 
-        ColumnLayout {
+        Column {
             id: startPrintPopup_column_layout
-            width: 650
+            width: parent.popupWidth
             height: children.height
             anchors.top: startPrintPopup.popupContainer.top
             anchors.topMargin: 35
@@ -1104,6 +1104,7 @@ Item {
                 width: sourceSize.width - 10
                 height: sourceSize.height -10
                 Layout.alignment: Qt.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
                 source: "qrc:/img/process_error_small.png"
                 visible: !inFreStep
             }
@@ -1112,6 +1113,9 @@ Item {
                 id: title
                 text: qsTr("CONFIRM BUILD PLATE IS CLEAR")
                 Layout.alignment: Qt.AlignHCenter
+                width: startPrintPopup.popupWidth
+                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }
