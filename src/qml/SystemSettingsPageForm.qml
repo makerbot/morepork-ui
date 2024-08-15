@@ -874,9 +874,9 @@ Item {
             showButton = true
         }
 
-        ColumnLayout {
+        Column {
             id: columnLayout_copy_timelapse_images
-            width: 650
+            width: copyingTimelapseImagesPopup.popupWidth
             height: parent.height
             anchors.top: parent.top
             anchors.topMargin: 30
@@ -887,25 +887,28 @@ Item {
                 id: timelapse_error_image
                 width: sourceSize.width - 10
                 height: sourceSize.height -10
-                Layout.alignment: Qt.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             BusySpinner {
                 id: timelapse_busy_spinner_img
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                anchors.horizontalCenter: parent.horizontalCenter
                 spinnerSize: 64
             }
 
             TextHeadline {
                 id: timelapse_title
-                Layout.alignment: Qt.AlignHCenter
+                width: copyingTimelapseImagesPopup.popupWidth
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
             }
 
             TextBody {
                 id: timelapse_description
-                Layout.preferredWidth: parent.width
-                Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
+                width: copyingTimelapseImagesPopup.popupWidth
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             states: [
