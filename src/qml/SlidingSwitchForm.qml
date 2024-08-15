@@ -38,5 +38,6 @@ Switch {
         anchors.left: switchElement.right
         anchors.leftMargin: 16
         visible: showText
+        width: 245
     }
 }

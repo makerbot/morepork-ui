@@ -140,32 +140,37 @@ Item {
             customMoveAttentionPopup.close()
         }
 
-        ColumnLayout {
+        Column {
             id: customMoveColumnLayout
             height: children.height
             anchors.top: customMoveAttentionPopup.popupContainer.top
             anchors.topMargin: 35
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20
+            width: customMoveAttentionPopup.popupWidth
 
             Image {
                 id: attentionImage
                 width: sourceSize.width -10
                 height: sourceSize.height -10
-                Layout.alignment: Qt.AlignHCenter
                 source: "qrc:/img/process_error_small.png"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             TextHeadline {
                 id: attentionHeadline
                 text: qsTr("ATTENTION")
-                Layout.alignment: Qt.AlignHCenter
+                width: customMoveAttentionPopup.popupWidth
+                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             TextBody {
                 id: attentionText
                 text: qsTr("Select a distance and direction to move the build platform.")
-                Layout.alignment: Qt.AlignHCenter
+                width: customMoveAttentionPopup.popupWidth
+                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }

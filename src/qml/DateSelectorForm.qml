@@ -72,7 +72,7 @@ Item {
             text: formatText(Tumbler.tumbler.count, modelData)
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? 100 : 64
+            font.pixelSize: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? 90 : 64
             font.weight: Font.Light
             font.family: defaultFont.name
             color: (Tumbler.tumbler.currentItem && Tumbler.tumbler.currentItem.text == text) ? "#ffffff" : "#B2B2B2"
@@ -95,7 +95,7 @@ Item {
         VerticalTumbler {
             id: monthTumbler
             anchors.verticalCenter: parent.verticalCenter
-            width: 130
+            width: 120
             height: parent.height
             visibleItemCount: 3
             model: 12
@@ -108,7 +108,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: monthTumbler.right
             anchors.leftMargin: 24
-            width: 130
+            width: 120
             height: parent.height
             visibleItemCount: 3
 
@@ -144,7 +144,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: dateTumbler.right
             anchors.leftMargin: 24
-            width: 265
+            width: 255
             height: parent.height*1.65
             model: 50
             delegate: delegateComponent
@@ -154,7 +154,7 @@ Item {
 
     ButtonRectanglePrimary {
         id: setDateButton
-        width: 120
+        width: 150
         anchors.right: parent.right
         anchors.rightMargin: 40
         anchors.verticalCenter: parent.verticalCenter

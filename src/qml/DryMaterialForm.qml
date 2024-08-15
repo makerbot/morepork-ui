@@ -687,9 +687,9 @@ LoggingItem {
             bot.drySpool()
         }
 
-        ColumnLayout {
+        Column {
             id: columnLayout_clear_build_plate_popup
-            width: 590
+            width: dryConfirmBuildPlateClearPopup.popupWidth
             height: children.height
             anchors.top: dryConfirmBuildPlateClearPopup.popupContainer.top
             anchors.topMargin: 35
@@ -700,6 +700,7 @@ LoggingItem {
                 id: build_plate_error_image
                 width: sourceSize.width - 10
                 height: sourceSize.height -10
+                anchors.horizontalCenter: parent.horizontalCenter
                 Layout.alignment: Qt.AlignHCenter
                 source: "qrc:/img/process_error_small.png"
             }
@@ -708,6 +709,9 @@ LoggingItem {
                 id: title
                 text: qsTr("CONFIRM BUILD PLATE IS CLEAR")
                 Layout.alignment: Qt.AlignHCenter
+                width: startPrintPopup.popupWidth
+                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }
