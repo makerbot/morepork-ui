@@ -215,15 +215,16 @@ LoggingPopup {
                         id: left_text
                         color: (defaultButton === CustomPopup.Left ? "#000000" : "#ffffff")
                         text: qsTr("BACK")
-                        Layout.fillHeight: false
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                        Layout.fillWidth: false
                         font.letterSpacing: 3
                         font.weight: Font.Bold
                         font.family: "Antennae"
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
+                        wrapMode: Text.WordWrap
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
                     }
 
                     LoggingMouseArea {
@@ -262,6 +263,9 @@ LoggingPopup {
                         font.pixelSize: 18
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.horizontalCenter: parent.horizontalCenter
+                        wrapMode: Text.WordWrap
+                        width: parent.width
+                        horizontalAlignment: Text.AlignHCenter
                     }
 
                     LoggingMouseArea {

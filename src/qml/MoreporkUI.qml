@@ -2343,7 +2343,7 @@ ApplicationWindow {
                 ColumnLayout {
                     id: ratingBar_nps_survey_popup
                     Layout.preferredWidth: parent.width
-                    spacing: 20
+                    spacing: 30
 
                     Row {
                         id: legend_text_nps_survey_popup
@@ -2373,10 +2373,11 @@ ApplicationWindow {
                         }
                     }
 
-                    RowLayout {
+                    Row {
                         id: button_row
                         Layout.preferredWidth: parent.width
                         Layout.alignment: Layout.Center
+                        spacing: 41
 
                         Repeater {
                             model: 10
@@ -2392,6 +2393,7 @@ ApplicationWindow {
                                     color: control.checked ? "#ffffff" : "#000000"
                                     border.width: 2
                                     border.color: "#ffffff"
+                                    Layout.preferredWidth: 1
                                 }
                                 contentItem: TextBody {
                                         style: TextBody.Large
