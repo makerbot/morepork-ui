@@ -1329,17 +1329,39 @@ Item {
         id: printFeedbackAcknowledgementPopup
         popupWidth: 715
         popupHeight: 336
-        showOneButton: true
+        showOneButton: !bot.printAgainEnabled
+        showTwoButtons: bot.printAgainEnabled
+        leftButtonText: qsTr("CLOSE")
+        rightButtonText: qsTr("PRINT AGAIN")
         fullButtonText: qsTr("OK")
+
         fullButton.onClicked: {
             printFeedbackAcknowledgementPopup.close()
             acknowledgePrint()
         }
+
+        leftButton.onClicked: {
+            printFeedbackAcknowledgementPopup.close()
+            acknowledgePrint()
+        }
+
+        rightButton.onClicked: {
+            printFeedbackAcknowledgementPopup.close()
+            acknowledgePrint()
+            printPage.startPrintSource = PrintPage.FromPrintAgain
+            updateLastThing()
+            printPage.printSwipeView.swipeToItem(PrintPage.StartPrintConfirm)
+        }
+
         onOpened: {
-            autoClosePopup.start()
+            if (!bot.printAgainEnabled) {
+                autoClosePopup.start()
+            }
         }
         onClosed: {
-            autoClosePopup.stop()
+            if (!bot.printAgainEnabled) {
+                autoClosePopup.stop()
+            }
         }
 
         property bool feedbackGood: true
