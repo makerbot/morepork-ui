@@ -292,5 +292,7 @@
         <file>ExtruderInfoPageForm.qml</file>
         <file>ExtruderInfoContents.qml</file>
         <file>ExtruderInfoContentsForm.qml</file>
+        <file>AnnealMenu.qml</file>
+        <file>AnnealMenuForm.qml</file>
     </qresource>
 </RCC>

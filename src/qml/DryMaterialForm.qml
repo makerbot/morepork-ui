@@ -19,6 +19,8 @@ LoggingItem {
     property bool hasFailed: bot.process.errorCode !== 0
     property bool doChooseMaterial: false
     property bool hasFinished: false
+    property bool doAnnealMaterial: false
+    state: 'base state'
 
     onCurrentStepChanged: {
         if(bot.process.type == ProcessType.DryingCycleProcess) {
@@ -59,6 +61,10 @@ LoggingItem {
         }
     }
 
+    property variant annealMaterialsList : [
+        {label: "pva", temperature : 50, time : 2},
+    ]
+
     property variant dryingMaterialsListMethod : [
         {label: "pva", temperature : 60, time : 24},
         {label: "nylon || nylon cf || nylon 12 cf || petg", temperature : 60, time : 24},
@@ -97,13 +103,11 @@ LoggingItem {
     ContentRightSide {
         id: contentRightSide
         textHeader {
-            text: qsTr("DRY MATERIAL")
+            text: "BASE TEXT"
             visible: true
         }
         textBody {
-            text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
-                  qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
-                       "built-in heaters.") + "\n\n" + qsTr("Please make sure the build plate is empty.")
+            text: "BASE INSTRUCTIONS"
             font.weight: Font.Normal
             visible: true
             opacity: 0.7
@@ -121,6 +125,7 @@ LoggingItem {
 
     DryMaterialSelector {
         id: materialSelector
+        annealMaterial: doAnnealMaterial
         visible: false
     }
 
@@ -149,13 +154,18 @@ LoggingItem {
                 target: contentRightSide
                 visible: true
                 textHeader {
-                    text: qsTr("DRY MATERIAL")
+                    text: doAnnealMaterial ? qsTr("ANNEAL MATERIAL") : qsTr("DRY MATERIAL")
                     visible: true
                 }
                 textBody {
-                    text: qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
-                          qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
-                               "built-in heaters.") + "\n\n" + qsTr("Please make sure the build plate is empty.")
+                    text: (doAnnealMaterial ?
+                              qsTr("Material brittleness may be caused by moisture absorption by the filament.") +"\n\n" +
+                              qsTr("This procedure will allow you to anneal materials for improved print quality, using METHOD’s "+
+                                   "built-in heaters.") :
+                              qsTr("Material extrusion issues may be caused by moisture absorption by the filament.") +"\n\n" +
+                              qsTr("This procedure will allow you to dry materials for improved print quality, using METHOD’s "+
+                                   "built-in heaters.")) +
+                              "\n\n" + qsTr("Please make sure the build plate is empty.")
                     font.weight: Font.Normal
                     visible: true
                 }
