@@ -238,6 +238,14 @@ void MoreporkStorage::updateFirmwareFileList(const QString directory_path) {
   }
 }
 
+QStringList MoreporkStorage::getAvailableTestPrints(const QString test_print_dir) {
+    const QDir path(TEST_PRINT_PATH + test_print_dir);
+    QStringList filters;
+    filters << "*.makerbot";
+    QStringList files(path.entryList(filters));
+    return files;
+}
+
 void MoreporkStorage::getTestPrint(const QString test_print_dir,
                                    const QString test_print_name) {
     const QString test_print = TEST_PRINT_FILE_PREFIX + test_print_name + ".makerbot";
