@@ -60,6 +60,7 @@ ApplicationWindow {
             if(isNetworkConnectionAvailable) {
                 bot.firmwareUpdateCheck(false)
             }
+            maybeNotifyExtruderNotDetected()
         }
     }
 
@@ -116,6 +117,12 @@ ApplicationWindow {
         default:
             freScreen.state = "base state"
             break;
+        }
+    }
+
+    onIsFreCompleteChanged: {
+        if (isFreComplete) {
+            maybeNotifyExtruderNotDetected()
         }
     }
 
@@ -236,6 +243,54 @@ ApplicationWindow {
         // well as whether they need to be calibrated.
         bot.getExtrudersConfigs()
         calibratePopupDeterminant()
+   }
+
+    function maybeNotifyExtruderNotDetected() {
+        function extruderDetachedFunc() {
+            if(isProcessRunning()) {
+                printerNotIdlePopup.open()
+                return
+            }
+            if(mainSwipeView.currentIndex != MoreporkUI.MaterialPage) {
+                resetSettingsSwipeViewPages()
+                mainSwipeView.swipeToItem(MoreporkUI.MaterialPage)
+            }
+        }
+
+        if (!extruderAPresent || !extruderBPresent) {
+            if (!extruderAPresent && !extruderBPresent) {
+                removeFromNotificationsList("extruder_detached")
+                addToNotificationsList(
+                    "both_extruders_detached",
+                    qsTr("No Extruders Detected"),
+                    MoreporkUI.NotificationPriority.Persistent,
+                    extruderDetachedFunc)
+            } else {
+                removeFromNotificationsList("both_extruders_detached")
+                addToNotificationsList(
+                    "extruder_detached",
+                    !extruderAPresent ?
+                        qsTr("No Extruder Detected In Slot 1") :
+                        qsTr("No Extruder Detected In Slot 2"),
+                    MoreporkUI.NotificationPriority.Persistent,
+                    extruderDetachedFunc)
+            }
+        } else {
+            removeFromNotificationsList("both_extruders_detached")
+            removeFromNotificationsList("extruder_detached")
+        }
+    }
+
+    onExtruderAPresentChanged: {
+        if (isFreComplete) {
+            maybeNotifyExtruderNotDetected()
+        }
+    }
+
+    onExtruderBPresentChanged: {
+        if (isFreComplete) {
+            maybeNotifyExtruderNotDetected()
+        }
     }
 
     // When firmware is finished updating for an extruder, the progress doesn't
