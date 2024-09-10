@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 
 Item {
     id: item_root
-    width: Math.max(textIconDesc.width + 20, 200)
+    width: 200
     height: 200
     smooth: false
     property alias mouseArea: mouseArea
@@ -55,6 +55,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.verticalCenterOffset: 61
             horizontalAlignment: Text.AlignHCenter
+            width: parent.width
         }
 
         LoggingMouseArea {
