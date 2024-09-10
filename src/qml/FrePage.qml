@@ -114,6 +114,9 @@ FrePageForm {
             } else if(state == "load_material") {
                 inFreStep = true
                 startFreMaterialLoad(0)
+            } else if(state == "enable_print_again") {
+                inFreStep = true
+                fre.gotoNextStep(currentFreStep)
             } else if(state == "test_print") {
                 inFreStep = true
                 startTestPrint()
