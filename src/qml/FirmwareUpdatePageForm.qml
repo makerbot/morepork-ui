@@ -88,7 +88,7 @@ LoggingItem {
         anchors.verticalCenter: parent.verticalCenter
         spacing: 32
 
-        ColumnLayout {
+        Column {
             spacing: 24
             width: parent.width
             height: parent.height
@@ -122,10 +122,10 @@ LoggingItem {
                 text: qsTr("PLEASE WAIT A MOMENT")
                 font.weight: Font.Light
                 width: parent.width
-                Layout.fillWidth: true
                 visible: true
             }
         }
+
         ColumnLayout {
             spacing: 24
             width: parent.width
