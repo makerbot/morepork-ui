@@ -8,10 +8,16 @@ Rectangle {
     TabBar {
         id: bar
         width: parent.width
-        TabButton { text: "/" }
-        TabButton { text: "/net" }
-        TabButton { text: "/process" }
-        TabButton { text: "language" }
+        Repeater {
+            model: ["/", "/net", "/process", "language"]
+
+            TabButton {
+                text: modelData
+                onClicked: {
+                    filter_input.text = ''
+                }
+            }
+        }
     }
 
     TextField {
