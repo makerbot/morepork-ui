@@ -27,6 +27,13 @@ Rectangle {
         height: 50
     }
 
+    TextField {
+        id: filter_input
+        y: bar.height
+        width: parent.width
+        height: 50
+    }
+
     SwipeView {
         y: bar.height + filter_input.height
         width: parent.width
