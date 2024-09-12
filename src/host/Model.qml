@@ -14,13 +14,35 @@ Rectangle {
         TabButton { text: "language" }
     }
 
-    SwipeView {
+    TextField {
+        id: filter_input
         y: bar.height
         width: parent.width
+        height: 50
+    }
+
+    SwipeView {
+        y: bar.height + filter_input.height
+        width: parent.width
         currentIndex: bar.currentIndex
-        Item { PropsView { bot_model: bot } }
-        Item { PropsView { bot_model: bot.net } }
-        Item { PropsView { bot_model: bot.process } }
+        Item {
+            PropsView {
+                bot_model: bot
+                filter: filter_input.text
+            }
+        }
+        Item {
+            PropsView {
+                bot_model: bot.net
+                filter: filter_input.text
+            }
+        }
+        Item {
+            PropsView {
+                bot_model: bot.process
+                filter: filter_input.text
+            }
+        }
         Item {
             Row {
                 spacing: 10
