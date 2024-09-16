@@ -8,19 +8,47 @@ Rectangle {
     TabBar {
         id: bar
         width: parent.width
-        TabButton { text: "/" }
-        TabButton { text: "/net" }
-        TabButton { text: "/process" }
-        TabButton { text: "language" }
+        Repeater {
+            model: ["/", "/net", "/process", "language"]
+
+            TabButton {
+                text: modelData
+                onClicked: {
+                    filter_input.text = ''
+                }
+            }
+        }
+    }
+
+    TextField {
+        id: filter_input
+        y: bar.height
+        width: parent.width
+        height: 50
     }
 
     SwipeView {
-        y: bar.height
+        y: bar.height + filter_input.height
         width: parent.width
         currentIndex: bar.currentIndex
-        Item { PropsView { bot_model: bot } }
-        Item { PropsView { bot_model: bot.net } }
-        Item { PropsView { bot_model: bot.process } }
+        Item {
+            PropsView {
+                bot_model: bot
+                filter: filter_input.text
+            }
+        }
+        Item {
+            PropsView {
+                bot_model: bot.net
+                filter: filter_input.text
+            }
+        }
+        Item {
+            PropsView {
+                bot_model: bot.process
+                filter: filter_input.text
+            }
+        }
         Item {
             Row {
                 spacing: 10

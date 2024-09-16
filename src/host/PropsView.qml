@@ -15,7 +15,12 @@ ListView {
     width: 424
     height: 700
     property var bot_model: null
-    model: bot_model.metaInfo
+    property string filter: ''
+    model: {
+        bot_model.metaInfo.filter((data) => {
+            return filter == '' || data.prop.includes(filter)
+        })
+    }
     delegate: Item {
         x: 5
         height: 40
