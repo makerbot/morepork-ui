@@ -49,11 +49,12 @@ Item {
     property alias uncapped1CExtruderAlert: uncapped1CExtruderAlert
     property bool restartPendingAfterExtruderReprogram: false
 
+    property bool manualSelectMaterialType: false
+
     property variant extruderBPairableTypes: bot.extruderBPairableTypes
     property bool canDualModel: false
 
     onExtruderBPairableTypesChanged: {
-        console.info(extruderBPairableTypes);
         if (extruderBPairableTypes.length > 1) {
             // canDualModel if extruders allowed in slot 2 with the current model
             // contain any model extruders
@@ -87,8 +88,7 @@ Item {
                 isLoadFilament = bot.process.isLoad
                 break;
             }
-        }
-        else {
+        } else {
             startLoadUnloadFromUI = false
             materialWarningPopup.close()
             cancelLoadUnloadPopup.close()
@@ -111,7 +111,7 @@ Item {
         id: respondTopLoadingWarning
         interval: 100
         onTriggered: {
-            bot.acknowledgeMaterial(true)
+            bot.acknowledgeMaterial()
         }
     }
 
@@ -158,14 +158,34 @@ Item {
         if(bot.process.type == ProcessType.Load) {
             // if material is valid immediately acknowledge and
             // continue with loading material
-            if(loadUnloadFilamentProcess.materialValidityCheck()) {
-                bot.acknowledgeMaterial(true)
-                if(materialWarningPopup.opened) {
+            if(manualSelectMaterialType ||
+                    loadUnloadFilamentProcess.materialValidityCheck()) {
+                // If there's a spool detected, let the load process figure
+                // the material out from the spool tag
+                if (bot['spool%1Material'.arg(
+                            loadUnloadFilamentProcess.bayID == 1 ?
+                                'A' : 'B')] != 'unknown') {
+                    bot.acknowledgeMaterial()
+                // Otherwise, tell it what material to load as
+                } else {
+                    var temp_list = [0,0]
+                    var material = (loadUnloadFilamentProcess.bayID == 1 ?
+                                        bay1 : bay2).filamentMaterial
+                    bot.acknowledgeMaterial(temp_list, material)
+                }
+                if (materialWarningPopup.opened) {
                     materialWarningPopup.close()
                 }
             }
-            // if material not valid open popup
-            else {
+            // if material not valid and trying to bay load, ask user to select
+            // filament type
+            else if ((loadUnloadFilamentProcess.bayID == 1 &&
+                          !bot.filamentBayATagPresent) ||
+                     (loadUnloadFilamentProcess.bayID == 2 &&
+                          !bot.filamentBayBTagPresent)) {
+                manualMaterialSelectPopup.open()
+            // else, warn material not valid
+            } else {
                 materialWarningPopup.open()
             }
         }
@@ -336,19 +356,22 @@ Item {
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
             property string topBarTitle: {
-                // TODO: Make this more readable.
                 // Load Material 2 - SR-30
-                qsTr("%1 Material %2%3").
-                  arg(isLoadFilament ? qsTr("Load") : qsTr("Unload")).
-                  arg(loadUnloadFilamentProcess.bayID).
-                  arg(bot.hasFilamentBay ?
-                      " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName :
-                      // The spool journal isnt updated until after the load process completes,
-                      // so we cant use the filamentMaterialName from the filament bays object.
-                      inFreStep || ((loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName == "UNKNOWN") ?
-                          " - " + bot.getMaterialName(loadUnloadFilamentProcess.retryMaterial) :
-                          " - " + (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName)
+                var mat_name = (loadUnloadFilamentProcess.bayID == 2 ? bay2 : bay1).filamentMaterialName
+
+                // The spool journal isnt updated until after the load process completes,
+                // so we cant use the filamentMaterialName from the filament bays object.
+                if ((manualSelectMaterialType || !bot.hasFilamentBay) &&
+                        (inFreStep || mat_name == "UNKNOWN")) {
+                    mat_name = bot.getMaterialName(loadUnloadFilamentProcess.retryMaterial)
+                }
+
+                qsTr("%1 MATERIAL %2 - %3")
+                    .arg(isLoadFilament ? qsTr("Load") : qsTr("Unload"))
+                    .arg(loadUnloadFilamentProcess.bayID)
+                    .arg(mat_name)
             }
+
             property bool hasAltBack: true
             property bool backIsCancel: true
             visible: false
@@ -382,19 +405,6 @@ Item {
                 bayFilamentSwitch: bayID == 1 ?
                                     bot.filamentBayAFilamentPresent :
                                     bot.filamentBayBFilamentPresent
-
-                // Check if user feeds filament into bay slot while
-                // kaiten is waiting for 'acknowledge_material' process
-                // method to proceed and display material warning popup
-                // in that case.
-                onBayFilamentSwitchChanged: {
-                    if(bot.process.type == ProcessType.Load &&
-                       bayFilamentSwitch &&
-                       isSpoolValidityCheckPending &&
-                       !isMaterialMismatch) {
-                        materialWarningPopup.open()
-                    }
-                }
 
                 extruderFilamentSwitch: bayID == 1 ?
                                     bot.extruderAFilamentPresent :
@@ -775,6 +785,60 @@ Item {
                 wrapMode: Text.WordWrap
                 Layout.alignment: Qt.AlignHCenter
                 horizontalAlignment: Text.AlignHCenter
+                visible: true
+            }
+        }
+    }
+
+    CustomPopup {
+        popupName: "ManualMaterialSelect"
+        id: manualMaterialSelectPopup
+        showOneButton: false
+        showTwoButtons: true
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            manualMaterialSelectPopup.close()
+        }
+        rightButtonText: qsTr("CONTINUE")
+        rightButton.onClicked: {
+            isLoadFilament = true
+            manualSelectMaterialType = true
+            materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+            manualMaterialSelectPopup.close()
+        }
+
+        Column {
+            id: column_manualMaterialSelect_popup
+            width: parent.popupWidth
+            height: children.height
+            spacing: 20
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -35
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Image {
+                width: 63
+                height: 63
+                source: "qrc:/img/extruder_material_error.png"
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            TextHeadline {
+                text: qsTr("COULD NOT DETERMINE MATERIAL")
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                visible: true
+            }
+
+            TextBody {
+                text: {
+                    qsTr("Could not determine material type. Proceed with loading through filament bay?")
+                }
+                Layout.preferredWidth: parent.width
+                wrapMode: Text.WordWrap
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
+                width: manualMaterialSelectPopup.popupWidth
                 visible: true
             }
         }

@@ -84,7 +84,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void zipTimelapseImages(QString path);
     Q_INVOKABLE virtual void forceSyncFile(QString path);
     Q_INVOKABLE virtual void changeMachineName(QString new_name);
-    Q_INVOKABLE virtual void acknowledgeMaterial(bool response);
+    Q_INVOKABLE virtual void acknowledgeMaterial(
+            QList<int> temperature = {0,0}, QString material="None");
     Q_INVOKABLE virtual void acknowledgeSafeToRemoveUsb();
     Q_INVOKABLE virtual void getSystemTime();
     Q_INVOKABLE virtual void setSystemTime(QString new_time);

@@ -87,7 +87,7 @@ class KaitenBotModel : public BotModel {
     void forceSyncFile(QString path);
     void zipTimelapseImages(QString path);
     void changeMachineName(QString new_name);
-    void acknowledgeMaterial(bool response);
+    void acknowledgeMaterial(QList<int> temperature = {0,0}, QString material="None");
     void acknowledgeSafeToRemoveUsb();
     void getSystemTime();
     void setSystemTime(QString new_time);
@@ -578,20 +578,30 @@ void KaitenBotModel::unknownMatWarningUpdate(const Json::Value &request){
         }
 }
 
-void KaitenBotModel::acknowledgeMaterial(bool response){
+void KaitenBotModel::acknowledgeMaterial(QList<int> temperature, QString material) {
     topLoadingWarningReset();
     spoolValidityCheckPendingReset();
-    if(response) {
-        try{
-            qDebug() << FL_STRM << "called";
-            auto conn = m_conn.data();
-            Json::Value json_params(Json::objectValue);
-            json_params["method"] = Json::Value("acknowledge_material");
-            conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+        Json::Value json_params(Json::objectValue);
+        json_params["method"] = Json::Value("acknowledge_material");
+
+        Json::Value process_method_params(Json::objectValue);
+        Json::Value temperature_list(Json::arrayValue);
+        for(int i = 0; i < temperature.size(); i++) {
+            temperature_list[i] = (temperature.value(i));
         }
-        catch(JsonRpcInvalidOutputStream &e){
-            qWarning() << FFL_STRM << e.what();
+        process_method_params["temperature_settings"] = Json::Value(temperature_list);
+
+        if(material != "None") {
+            process_method_params["material"] = Json::Value(material.toStdString());
         }
+        json_params["params"] = process_method_params;
+        conn->jsonrpc.invoke("process_method", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
     }
 }
 
