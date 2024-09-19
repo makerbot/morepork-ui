@@ -24,6 +24,8 @@ LoggingItem {
     property bool retryExternal: false
     property int bayID: 0
     property int currentActiveTool: bot.process.currentToolIndex + 1
+
+
     // Hold onto the current bay ID even after the process completes
     onCurrentActiveToolChanged: {
         if(currentActiveTool > 0) {
@@ -75,7 +77,8 @@ LoggingItem {
         if(bot.process.type == ProcessType.Load) {
             if(isSpoolDetailsReady) {
                 if(materialValidityCheck()) {
-                    bot.acknowledgeMaterial(true)
+                    console.info("ack here")
+                    bot.acknowledgeMaterial()
                     // Check for moisture alert anytime a valid
                     // material is placed on the bay when loading.
                     maybeShowMoistureWarningPopup(bayID)

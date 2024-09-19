@@ -74,18 +74,18 @@ Item {
     }
 
     property string filamentMaterialName: {
-        if (bot.hasFilamentBay) {
-            bot["spool%1MaterialName".arg(idxAsAxis)]
-        } else {
+        if (!bot.hasFilamentBay || bot.loadedMaterialNames[filamentBayID - 1] != 'UNKNOWN') {
             bot.loadedMaterialNames[filamentBayID - 1]
+        } else {
+            bot['spool%1MaterialName'.arg(idxAsAxis)]
         }
     }
 
     property string filamentMaterial: {
-        if (bot.hasFilamentBay) {
-            bot["spool%1Material".arg(idxAsAxis)]
-        } else {
+        if (!bot.hasFilamentBay || bot.loadedMaterials[filamentBayID - 1] != 'unknown') {
             bot.loadedMaterials[filamentBayID - 1]
+        } else {
+            bot['spool%1Material'.arg(idxAsAxis)]
         }
     }
 
@@ -164,6 +164,7 @@ Item {
     property bool spoolDetailsReady: bot["spool%1DetailsReady".arg(idxAsAxis)]
     property bool spoolPresent: bot["filamentBay%1TagPresent".arg(idxAsAxis)]
     property bool extruderFilamentPresent: bot["extruder%1FilamentPresent".arg(idxAsAxis)]
+    property bool bayFilamentPresent: bot["filamentBay%1FilamentPresent".arg(idxAsAxis)]
     property string filamentColorName: bot["spool%1ColorName".arg(idxAsAxis)]
     property real filamentLength: bot["spool%1AmountRemaining".arg(idxAsAxis)]/10
     // convert length from cm to mm, convert linear density from g/mm to kg/mm, multiply to yield mass in kg
