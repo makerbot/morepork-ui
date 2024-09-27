@@ -292,5 +292,6 @@
         <file>ExtruderInfoPageForm.qml</file>
         <file>ExtruderInfoContents.qml</file>
         <file>ExtruderInfoContentsForm.qml</file>
+        <file>FpsItem.qml</file>
     </qresource>
 </RCC>

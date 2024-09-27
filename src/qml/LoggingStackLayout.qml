@@ -13,6 +13,8 @@ StackLayout {
     // the UI.
     property var itemWithEnum: parent
     property string logName: "defaultName"
+    property int prevIndex
+    property bool useSlidingAnimation: settings.getUseSlidingScreenTransitions()
     smooth: false
     anchors.fill: parent
 
@@ -29,11 +31,19 @@ StackLayout {
         if(typeof customEntryCheck === "function") {
             customEntryCheck(idx)
         }
-        itemAt(currentIndex).opacity = 0
+        if(useSlidingAnimation) {
+            prevIndex = currentIndex
+        } else {
+            itemAt(currentIndex).opacity = 0
+        }
         itemAt(currentIndex).visible = false
         itemAt(idx).visible = true
         currentIndex = idx
-        animation.restart()
+        if(useSlidingAnimation) {
+            slidingAnimation.restart()
+        } else {
+            fadeAnimation.restart()
+        }
         logAction("Swiped to page", currentIndex)
         // Usually the page that is swiped to is set as the current
         // item. The current item determines what the back button
@@ -59,16 +69,28 @@ StackLayout {
     }
 
     NumberAnimation {
-        id: animation
+        id: fadeAnimation
         target: itemAt(currentIndex)
         property: "opacity"
         to: 1
         duration: 125
     }
 
+    NumberAnimation {
+        id: slidingAnimation
+        target: itemAt(currentIndex)
+        property: "x"
+        from: prevIndex > currentIndex ? -800 : 800
+        to: prevIndex > currentIndex ? 0 : 0
+        duration: 200
+        easing.type: Easing.OutCubic
+    }
+
     Component.onCompleted: {
-        for(var i = 1; i < count; ++i) {
-            children[i].opacity = 0
+        if(!useSlidingAnimation) {
+            for(var i = 1; i < count; ++i) {
+               children[i].opacity = 0
+            }
         }
     }
 }

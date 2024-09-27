@@ -6,6 +6,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QLocale>
+#include <QSurfaceFormat>
 
 #include "ui_translator.h"
 #include "logger.h"
@@ -62,10 +63,36 @@ void msgHandler(QtMsgType type,
 #include "print_queue/asyncimageprovider.h"
 
 int main(int argc, char ** argv) {
+    /******************************************************************************/
+    /***These settings must be configured before creating the application object***/
+    /******************************************************************************/
+    // The QML scene graph rendering can run in two modes -- threaded or basic.
+    // The default mode is threaded where a separate thread named QMLSceneGraph
+    // provides better performance on multicore processors. Basic mode renders
+    // the scene graph within the main program thread. Running the UI in basic
+    // mode reduces the frame rate to around 60fps (slightly oveshooting to 62
+    // at times) from 67fps in threaded mode. But more importantly this also
+    // reduced the CPU usage by 30% along with the frame rate becoming more
+    // consistent.
+    // https://doc.qt.io/qt-5/qtquick-visualcanvas-scenegraph.html#scene-graph-and-rendering
+    qputenv("QSG_RENDER_LOOP", "basic");
+    // QSurfaceFormat -- https://doc.qt.io/qt-5/qsurfaceformat.html
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+    // This should enable vsync but will be silently ignored if the underlying
+    // platform isn't configured to support it which is the case here I think.
+    // But it doesnt hurt to leave it on, whenever vsync is enabled at the OS
+    // level this should pick it up.
+    format.setSwapInterval(1);
+    format.setSwapBehavior(QSurfaceFormat::TripleBuffer);
+    format.setRenderableType(QSurfaceFormat::OpenGLES);
+    QSurfaceFormat::setDefaultFormat(format);
+    /******************************************************************************/
+
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 #ifndef MOREPORK_UI_QT_CREATOR_BUILD
     qInstallMessageHandler(msgHandler);
 #endif
+
     QGuiApplication qapp(argc, argv);
     // This includes objects of classes defined in parsed_qml_enums.h
     // so QML can use cpp defined enumerations with namespaces
