@@ -50,14 +50,14 @@ Item {
 
                     MenuButton {
                         id: annealPrintButton
-                        buttonImage.source: "qrc:/img/icon_assisted_leveling.png"
+                        buttonImage.source: "qrc:/img/icon_anneal_print.png"
                         buttonText.text: qsTr("ANNEAL PRINT")
                         enabled: !isProcessRunning()
                     }
 
                     MenuButton {
                         id: annealMaterialButton
-                        buttonImage.source: "qrc:/img/icon_raise_lower_bp.png"
+                        buttonImage.source: "qrc:/img/icon_material.png"
                         buttonText.text: qsTr("ANNEAL MATERIAL")
                         enabled: !isProcessRunning()
                     }
