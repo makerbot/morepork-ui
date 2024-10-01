@@ -184,7 +184,13 @@ MaterialPageForm {
         if(itemAttachExtruder.extruder == 1) {
             output = qsTr("Load Model Extruder into Slot 1")
         } else if(itemAttachExtruder.extruder == 2) {
-            output = qsTr("Load Support Extruder into Slot 2")
+            if (inFreStep || bot.extruderAType != ExtruderType.MK14) {
+                output = qsTr("Load Support Extruder into Slot 2")
+            } else {
+                output = qsTr("Load %1 OR %2 Extruder into Slot 2")
+                    .arg(bot.getExtruderName('mk14'))
+                    .arg(bot.getExtruderName('mk14_s'))
+            }
         } else {
             output = defaultString
         }

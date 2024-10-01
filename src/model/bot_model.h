@@ -175,6 +175,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, extruderACurrentTemp, -999)
     MODEL_PROP(int, extruderATargetTemp, -999)
     MODEL_PROP(bool, extruderAToolTypeCorrect, false)
+    MODEL_PROP(bool, extruderAIsSupportExtruder, false)
     MODEL_PROP(bool, extruderACanPairTools, true)
     MODEL_PROP(bool, extruderAPresent, false)
     MODEL_PROP(bool, extruderAFilamentPresent, false)
@@ -188,6 +189,7 @@ class BotModel : public BaseModel {
     MODEL_PROP(int, extruderBCurrentTemp, -999)
     MODEL_PROP(int, extruderBTargetTemp, -999)
     MODEL_PROP(bool, extruderBToolTypeCorrect, false)
+    MODEL_PROP(bool, extruderBIsSupportExtruder, true)
     MODEL_PROP(bool, extruderBCanPairTools, true)
     MODEL_PROP(bool, extruderBPresent, false)
     MODEL_PROP(bool, extruderBFilamentPresent, false)
@@ -244,12 +246,9 @@ class BotModel : public BaseModel {
     MODEL_PROP(QString, spoolBSupplierCode, "Unknown")
     MODEL_PROP(QList<int>, spoolAColorRGB, QList<int>({0,0,0}))
     MODEL_PROP(QList<int>, spoolBColorRGB, QList<int>({0,0,0}))
-    // TODO(shirley): (duplicate with filament1/2Color)
     MODEL_PROP(QString, spoolAColorName, "Reading Spool...")
     MODEL_PROP(QString, spoolBColorName, "Reading Spool...")
 
-    // TODO(shirley) Should probably convert to string when mapping of codes to
-    // filament type names is available
     MODEL_PROP(QString, spoolAMaterial, "unknown")
     MODEL_PROP(QString, spoolBMaterial, "unknown")
     MODEL_PROP(QString, spoolAMaterialName, "UNKNOWN")

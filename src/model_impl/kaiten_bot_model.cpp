@@ -1915,17 +1915,23 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
                 if (kExtruderTypeStr == "mk14" || \
                     kExtruderTypeStr == "mk14_s") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14); \
+                    extruder ## EXT_SYM ## IsSupportExtruderSet(kExtruderTypeStr == "mk14_s"); \
                 } else if (kExtruderTypeStr == "mk14_hot" || \
                            kExtruderTypeStr == "mk14_hot_s") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_HOT); \
+                    extruder ## EXT_SYM ## IsSupportExtruderSet(kExtruderTypeStr == "mk14_hot_s"); \
                 } else if (kExtruderTypeStr == "mk14_e") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_EXP); \
+                    extruder ## EXT_SYM ## IsSupportExtruderSet(false); \
                 } else if (kExtruderTypeStr == "mk14_c") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_COMP); \
+                    extruder ## EXT_SYM ## IsSupportExtruderSet(false); \
                 } else if (kExtruderTypeStr == "mk14_hot_e") { \
                     extruder ## EXT_SYM ## TypeSet(ExtruderType::MK14_HOT_E); \
+                    extruder ## EXT_SYM ## IsSupportExtruderSet(false); \
                 } else { \
                     extruder ## EXT_SYM ## TypeReset(); \
+                    extruder ## EXT_SYM ## IsSupportExtruderReset(); \
                 } \
                 UPDATE_INT_PROP(extruder ## EXT_SYM ## Subtype, kExtruder ## EXT_SYM["tool_subtype"]) \
             } else { \

@@ -385,6 +385,11 @@ Item {
                 extruderFilamentSwitch: bayID == 1 ?
                                     bot.extruderAFilamentPresent :
                                     bot.extruderBFilamentPresent
+
+                isSupportExtruder: bayID == 1 ?
+                                    bot.extruderAIsSupportExtruder :
+                                    bot.extruderBIsSupportExtruder
+
                 onProcessDone: {
                     state = "base state"
                     materialSwipeView.swipeToItem(MaterialPage.BasePage)
@@ -513,7 +518,9 @@ Item {
                         textHeader.text: {
                            itemAttachExtruder.extruder == 1 ?
                                qsTr("LOAD MODEL EXTRUDER") :
-                               qsTr("LOAD SUPPORT EXTRUDER")
+                               (inFreStep || bot.extruderAType != ExtruderType.MK14) ?
+                                   qsTr("LOAD SUPPORT EXTRUDER") :
+                                   qsTr("LOAD SLOT 2 EXTRUDER")
                         }
                         textBody.visible: false
                         textHeaderWaitingForUser.text: {
@@ -731,11 +738,16 @@ Item {
                     if(isMaterialMismatch) {
                         // User puts an unsupported spool on the bay
                         if(loadUnloadFilamentProcess.currentActiveTool == 1) {
-                            qsTr("Only %1 model materials are compatible in material bay 1. Insert MakerBot model material in material bay 1 to continue.")
+                            qsTr("Only %1 model materials are compatible in Material Bay 1. Insert MakerBot model material in Material Bay 1 to continue.")
                                 .arg("<b>"+materialPage.bay1.supportedMaterials.map(bot.getMaterialName).join(", ")+"</b>")
                         } else if(loadUnloadFilamentProcess.currentActiveTool == 2) {
-                            qsTr("Only %1 model materials are compatible in material bay 2. Insert MakerBot model material in material bay 2 to continue.")
-                                .arg("<b>"+materialPage.bay2.supportedMaterials.map(bot.getMaterialName).join(", ")+"</b>")
+                            if (bot.extruderBIsSupportExtruder) {
+                                qsTr("Only %1 support materials are compatible in Material Bay 2. Insert MakerBot support material in Material Bay 2 to continue.")
+                                    .arg("<b>"+materialPage.bay2.supportedMaterials.map(bot.getMaterialName).join(", ")+"</b>")
+                            } else {
+                                qsTr("Only %1 model materials are compatible in Material Bay 1. Insert MakerBot model material in Material Bay 1 to continue.")
+                                    .arg("<b>"+materialPage.bay2.supportedMaterials.map(bot.getMaterialName).join(", ")+"</b>")
+                            }
                         } else {
                             defaultString
                         }
