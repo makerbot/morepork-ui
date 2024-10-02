@@ -82,9 +82,10 @@ Item {
             alertVisible: extruderMaterialAlert || materialNotPresent
 
             property bool extruderMaterialAlert: !bot["extruderAPresent"] || !bot["extruderAFilamentPresent"]
-            property bool materialNotPresent: (bot.loadedMaterials[0] == "unknown" ||
-                                              bot.loadedMaterials[1] == "unknown") &&
-                                              isFreComplete
+            property bool materialNotPresent: isFreComplete &&
+                                              ((bot.extruderAPresent && bot.loadedMaterials[0] == "unknown") ||
+                                               (bot.extruderBPresent && bot.loadedMaterials[1] == "unknown"))
+
             onMaterialNotPresentChanged: {
                 if(materialNotPresent) {
                     addToNotificationsList("material_not_detected",
