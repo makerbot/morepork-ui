@@ -49,6 +49,20 @@ Item {
     property alias uncapped1CExtruderAlert: uncapped1CExtruderAlert
     property bool restartPendingAfterExtruderReprogram: false
 
+    property variant extruderBPairableTypes: bot.extruderBPairableTypes
+    property bool canDualModel: false
+
+    onExtruderBPairableTypesChanged: {
+        console.info(extruderBPairableTypes);
+        if (extruderBPairableTypes.length > 1) {
+            // canDualModel if extruders allowed in slot 2 with the current model
+            // contain any model extruders
+            canDualModel = extruderBPairableTypes.some((ext) => {
+                    return !ext.includes('_s')
+                })
+        }
+    }
+
     onIsLoadUnloadProcessChanged: {
         if(isLoadUnloadProcess &&
            !startLoadUnloadFromUI &&
@@ -518,7 +532,7 @@ Item {
                         textHeader.text: {
                            itemAttachExtruder.extruder == 1 ?
                                qsTr("LOAD MODEL EXTRUDER") :
-                               (inFreStep || bot.extruderAType != ExtruderType.MK14) ?
+                               !canDualModel ?
                                    qsTr("LOAD SUPPORT EXTRUDER") :
                                    qsTr("LOAD SLOT 2 EXTRUDER")
                         }

@@ -633,6 +633,15 @@ void KaitenBotModel::extrudersConfigsUpdate(const Json::Value &result) {
       } \
       extruder ## EXT_SYM ## SupportedTypesSet(extruders); \
     } \
+    const Json::Value &pairable_extruders = result[IDX]["supported_tool_types"]; \
+    if(pairable_extruders.isArray()) { \
+      QStringList extruders = {}; \
+      for(const Json::Value ext : pairable_extruders) { \
+        if(ext.asString() == "mk14_hot_e") continue; \
+        extruders.append(ext.asString().c_str()); \
+      } \
+      extruder ## EXT_SYM ## PairableTypesSet(extruders); \
+    } \
     const Json::Value &can_pair_tools = result[IDX]["can_pair_tools"]; \
     extruder ## EXT_SYM ## CanPairToolsSet(can_pair_tools.asBool()); \
   } \
