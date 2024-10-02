@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.3
 import MachineTypeEnum 1.0
 
 ListView {
+    property bool annealMaterial: false
+
     id: materialsList
     smooth: false
     anchors.fill: parent
@@ -16,7 +18,9 @@ ListView {
     ScrollBar.vertical: ScrollBar {}
 
     model: {
-        if(bot.machineType == MachineType.Fire) {
+        if (annealMaterial) {
+            annealMaterialsList
+        } else if(bot.machineType == MachineType.Fire) {
             dryingMaterialsListMethod
         } else if(bot.machineType == MachineType.Lava) {
             dryingMaterialsListMethodX
@@ -33,7 +37,7 @@ ListView {
             property int time: bot.machineType == MachineType.Magma ? 16 : 24
             materialNameText: qsTr("ENTER CUSTOM TEMPERATURE")
             temperatureAndTimeText: qsTr("Chamber will heat for %1 hours").arg(time)
-            enabled: true
+            enabled: !annealMaterial
             opacity: 1
             onClicked: {
                 customMaterialTemperature.customTime = time
@@ -41,6 +45,14 @@ ListView {
             }
             smooth: false
             antialiasing: false
+            visible: !annealMaterial
+            height: {
+                if (annealMaterial) {
+                    0
+                } else {
+                    80
+                }
+            }
         }
 
     delegate:

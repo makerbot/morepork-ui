@@ -28,7 +28,7 @@ Item {
 
     property alias buttonDryMaterial: buttonDryMaterial
 
-    property alias buttonAnnealPrint: buttonAnnealPrint
+    property alias buttonAnneal: buttonAnneal
 
     property alias buttonShutdown: buttonShutdown
     property alias shutdownPopup: shutdownPopup
@@ -47,7 +47,7 @@ Item {
         CleanAirSettingsPage,   // 4
         PreheatPage,            // 5
         DryMaterialPage,        // 6
-        AnnealPrintPage         // 7
+        AnnealPage              // 7
     }
 
     LoggingStackLayout {
@@ -131,9 +131,9 @@ Item {
                     }
 
                     MenuButton {
-                        id: buttonAnnealPrint
+                        id: buttonAnneal
                         buttonImage.source: "qrc:/img/icon_anneal_print.png"
-                        buttonText.text: qsTr("ANNEAL PRINT")
+                        buttonText.text: qsTr("ANNEAL")
                         enabled: !isProcessRunning()
                         visible: bot.machineType != MachineType.Magma
                     }
@@ -254,6 +254,7 @@ Item {
 
             DryMaterial {
                 id: dryMaterial
+                doAnnealMaterial: false
                 onProcessDone: {
                     state = "base state"
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
@@ -261,33 +262,17 @@ Item {
             }
         }
 
-        // SettingsPage.AnnealPrintPage
+        // SettingsPage.AnnealPage
         Item {
             id: annealPrintItem
             property var backSwiper: settingsSwipeView
             property int backSwipeIndex: SettingsPage.BasePage
-            property string topBarTitle: qsTr("Anneal Print")
-            property bool hasAltBack: true
-            property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
+            property string topBarTitle: qsTr("Anneal")
             smooth: false
             visible: false
 
-            function altBack() {
-                if(bot.process.type == ProcessType.AnnealPrintProcess) {
-                    bot.cancel()
-                    annealPrint.state = "cancelling"
-                } else {
-                    annealPrint.state = "base state"
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                }
-            }
-
-            AnnealPrint {
-                id: annealPrint
-                onProcessDone: {
-                    state = "base state"
-                    settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                }
+            AnnealMenu {
+                id: annealMenu
             }
         }
     }

@@ -30,8 +30,8 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(SettingsPage.DryMaterialPage)
     }
 
-    buttonAnnealPrint.onClicked: {
-        settingsSwipeView.swipeToItem(SettingsPage.AnnealPrintPage)
+    buttonAnneal.onClicked: {
+        settingsSwipeView.swipeToItem(SettingsPage.AnnealPage)
     }
 
     buttonShutdown.onClicked: {
