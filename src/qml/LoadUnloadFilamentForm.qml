@@ -16,6 +16,7 @@ LoggingItem {
     property alias retryButton: contentRightSide.buttonSecondary1
     property bool bayFilamentSwitch: false
     property bool extruderFilamentSwitch: false
+    property bool isSupportExtruder: false
     property bool feedFromTop: false
     property bool feedFromAux: false
     property int retryTemperature: 0
@@ -425,7 +426,7 @@ LoggingItem {
                         if (bot.hasFilamentBay) {
                             [qsTr("Press side latch to unlock and open bay %1").arg(bayID),
                              qsTr("Place a %1 material spool in the bay").arg(
-                                            bayID == 1 ? qsTr("Model") : qsTr("Support")),
+                                            isSupportExtruder ? qsTr("Support") : qsTr("Model")),
                              qsTr("Insert the material into the slot until you feel it being pulled in.")]
                         } else {
                             [qsTr("Ensure the spool is oriented correctly with cap on right side."),

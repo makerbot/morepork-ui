@@ -46,9 +46,14 @@ Item {
                         break;
                         case 2:
                         switch(bot.extruderBType) {
-                            case ExtruderType.MK14:
-                                "qrc:/img/extruder_2a.png"
+                            case ExtruderType.MK14: {
+                                if (bot.extruderBIsSupportExtruder) {
+                                    "qrc:/img/extruder_2a.png"
+                                } else {
+                                    "qrc:/img/extruder_1a.png"
+                                }
                                 break;
+                            }
                             case ExtruderType.MK14_HOT:
                                 "qrc:/img/extruder_2xa.png"
                                 break;

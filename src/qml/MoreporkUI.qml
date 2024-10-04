@@ -1552,13 +1552,13 @@ ApplicationWindow {
                                 qsTr("The Composites extruder cannot be used with a Support 2A extruder. Please use the Labs extruder in the model slot to support this configuration.")
                             } else {
                                 // Normal + Hot Extruders combo
-                                 qsTr("A Model 1XA Extruder can only be used with a Support 2XA Extruder. A Model 1A Extruder can only be used with a Support 2A Extruder.")
+                                 qsTr("A Model 1XA Extruder can only be used with a Support 2XA Extruder. A Model 1A Extruder can only be used with a Support 2A Extruder or Model 1A Extruder.")
                             }
                         } else {
                             if (wrongExtruderPopup.modelExtWrong) {
                                 qsTr("Please insert a %1 extruder into slot 1.").arg(bot.extruderASupportedTypes.join("/"))
                             } else if (wrongExtruderPopup.supportExtWrong) {
-                                qsTr("Please insert a %1 extruder into slot 2. Currently only model and support printing is supported.").arg(bot.extruderBSupportedTypes.join("/"))
+                                qsTr("Please insert a %1 extruder into slot 2. Currently only model and support printing is supported for this model extruder.").arg(bot.extruderBSupportedTypes.join("/"))
                             } else {
                                 emptyString
                             }
@@ -2068,15 +2068,27 @@ ApplicationWindow {
                                 if(isInManualCalibration) {
                                     qsTr("Manual Z-Calibration print is only supported for ABS-R, ABS-CF, and RapidRinse.")
                                 } else {
-                                    (materialPage.bay1.usingExperimentalExtruder ?
-                                            qsTr("This print requires <b>%1</b> in <b>Support Extruder 2</b>.").arg(
-                                                        printPage.print_support_material_name) :
-                                      (printPage.support_extruder_used?
-                                            qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>Support Extruder 2</b>.").arg(
-                                                        printPage.print_model_material_name).arg(printPage.print_support_material_name) :
-                                            qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.").arg(
-                                                        printPage.print_model_material_name))) + "\n"
-                                    qsTr("Load the correct materials to start the print or export the file again with these material settings.")
+                                    var output
+                                    if (materialPage.bay1.usingExperimentalExtruder) {
+                                        output = qsTr("This print requires <b>%1</b> in <b>%2 Extruder 2</b>.")
+                                                .arg(printPage.print_support_material_name)
+                                                .arg(bot.extruderBIsSupportExtruder ?
+                                                    qsTr("Support") :
+                                                    qsTr("Model"))
+                                    } else if (printPage.support_extruder_used) {
+                                        output = qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b> and <b>%2</b> in <b>%3 Extruder 2</b>.")
+                                                .arg(printPage.print_model_material_name)
+                                                .arg(printPage.print_support_material_name)
+                                                .arg(bot.extruderBIsSupportExtruder ?
+                                                    qsTr("Support") :
+                                                    qsTr("Model"))
+                                    } else {
+                                        output = qsTr("This print requires <b>%1</b> in <b>Model Extruder 1</b>.")
+                                                .arg(printPage.print_model_material_name)
+                                    }
+
+                                    output+= qsTr("\nLoad the correct materials to start the print or export the file again with these material settings.")
+                                    output
                                 }
                             }
                         }
