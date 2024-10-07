@@ -346,24 +346,24 @@ LoggingItem {
             }
         }
 
-        //Item {
-        //    id: page1
+        Item {
+            id: page1
 
-        //    PrintToolStatusPage {
-        //        extACurrentTemp: bot.extruderACurrentTemp
-        //        extATargetTemp: bot.extruderATargetTemp
+            PrintToolStatusPage {
+                extACurrentTemp: bot.extruderACurrentTemp
+                extATargetTemp: bot.extruderATargetTemp
 
-        //        extBCurrentTemp: bot.extruderBCurrentTemp
-        //        extBTargetTemp: bot.extruderBTargetTemp
+                extBCurrentTemp: bot.extruderBCurrentTemp
+                extBTargetTemp: bot.extruderBTargetTemp
 
-        //        chamberCurrentTemp: bot.buildplaneCurrentTemp
-        //        chamberTargetTemp: bot.buildplaneTargetTemp
+                chamberCurrentTemp: bot.buildplaneCurrentTemp
+                chamberTargetTemp: bot.buildplaneTargetTemp
 
-        //        hasHbp: bot.machineType == MachineType.Magma
-        //        hbpCurrentTemp: bot.hbpCurrentTemp
-        //        hbpTargetTemp: bot.hbpTargetTemp
-        //    }
-        //}
+                hasHbp: bot.machineType == MachineType.Magma
+                hbpCurrentTemp: bot.hbpCurrentTemp
+                hbpTargetTemp: bot.hbpTargetTemp
+            }
+        }
 
         Item {
             id: page2
