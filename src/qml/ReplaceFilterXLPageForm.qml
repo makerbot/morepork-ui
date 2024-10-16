@@ -9,9 +9,6 @@ import MachineTypeEnum 1.0
 LoggingItem {
     itemName: "ReplaceFilterXL"
     id: replaceFilterXLPage
-   // width: parent.width
-    //height: parent.height
-    //anchors.fill: parent.fill
     smooth: false
 
     property alias contentLeftSide: contentLeftSide
@@ -300,9 +297,10 @@ LoggingItem {
             }
         }
 
-        ColumnLayout {
+        Column {
             id: replaceFilterPopupColumnLayout
             height: children.height
+            width: replaceFilterPopup.popupWidth
             anchors.top: replaceFilterPopup.popupContainer.top
             anchors.topMargin: 30
             anchors.horizontalCenter: parent.horizontalCenter
@@ -313,19 +311,26 @@ LoggingItem {
                 source: "qrc:/img/popup_error.png"
                 Layout.alignment: Qt.AlignHCenter
                 Layout.bottomMargin: 10
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             TextHeadline {
                 id: replaceFilterPopupHeader
                 style: TextHeadline.Base
                 text: qsTr("Clear Build Plate + Close Door")
+                width: parent.width
                 Layout.alignment: Qt.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
             }
 
             TextBody {
                 id: replaceFilterPopupBody
                 text: qsTr("Confirm the build plate is clear and the door is closed to proceed.")
+                width: parent.width
                 Layout.alignment: Qt.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
             }
 
             states: [

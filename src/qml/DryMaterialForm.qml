@@ -705,7 +705,7 @@ LoggingItem {
                 id: title
                 text: qsTr("CONFIRM BUILD PLATE IS CLEAR")
                 Layout.alignment: Qt.AlignHCenter
-                width: startPrintPopup.popupWidth
+                width: dryConfirmBuildPlateClearPopup.popupWidth
                 horizontalAlignment: Text.AlignHCenter
                 anchors.horizontalCenter: parent.horizontalCenter
             }
