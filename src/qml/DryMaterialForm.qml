@@ -11,7 +11,6 @@ LoggingItem {
     antialiasing: false
     property alias contentLeftSide: contentLeftSide
     property alias contentRightSide: contentRightSide
-    property alias cancelDryingCyclePopup: cancelDryingCyclePopup
     property alias dryConfirmBuildPlateClearPopup: dryConfirmBuildPlateClearPopup
     property real timeLeftMinutes: bot.process.timeRemaining/60
     property int currentStep: bot.process.stateType
@@ -22,31 +21,54 @@ LoggingItem {
     property bool doAnnealMaterial: false
     state: 'base state'
 
-    onCurrentStepChanged: {
-        if(bot.process.type == ProcessType.DryingCycleProcess) {
-            switch(currentStep) {
-                case ProcessStateType.WaitingForSpool:
-                    state = "dry_kit_instructions_1"
-                    break;
-                case ProcessStateType.Loading:
-                case ProcessStateType.DryingSpool:
-                    doChooseMaterial = false
-                    state = "drying_spool"
-                    break;
-                case ProcessStateType.Done:
-                    if(state != "cancelling" &&
-                       state != "drying_failed" &&
-                       state != "base state") {
-                        state = "drying_complete"
-                        hasFinished = true
-                    }
-                    break;
-                case ProcessStateType.Cancelling:
-                    state = "cancelling"
-                    doChooseMaterial = false
-                    hasFinished = false
-                    break;
+    onVisibleChanged: {
+        // Sortof hack: Forcibly set state of this item when it changes to
+        // visible, because when the process for the other DryMaterial finishes,
+        // somehow the state of this one gets set to '' and the contents shown
+        // on screen are blank
+        if (visible) {
+            if (bot.process.type == ProcessType.None) {
+                state = 'base state'
+            } else if (bot.process.type == ProcessType.DryingCycleProcess) {
+                determineState()
             }
+        }
+    }
+
+    function determineState() {
+        switch(currentStep) {
+            case ProcessStateType.WaitingForSpool:
+                state = "dry_kit_instructions_1"
+                break;
+            case ProcessStateType.Loading:
+            case ProcessStateType.DryingSpool:
+                doChooseMaterial = false
+                state = "drying_spool"
+                break;
+            case ProcessStateType.Done:
+                if(state != "cancelling" &&
+                   state != "drying_failed" &&
+                   state != "base state") {
+                    state = "drying_complete"
+                    hasFinished = true
+                }
+                break;
+            case ProcessStateType.Cancelling:
+                state = "cancelling"
+                doChooseMaterial = false
+                hasFinished = false
+                break;
+        }
+    }
+
+    onCurrentStepChanged: {
+        // We use two of these-- one for Dry Material and one for Anneal Material
+        // Ignore everything if this instance is not currently visible.
+        if (!visible) {
+            return
+        }
+        if(bot.process.type == ProcessType.DryingCycleProcess) {
+            determineState()
         } else if(bot.process.type == ProcessType.None) {
             if(state == "cancelling") {
                 processDone()
@@ -55,6 +77,12 @@ LoggingItem {
     }
 
     onHasFailedChanged: {
+        // We use two of these-- one for Dry Material and one for Anneal Material
+        // Ignore everything if this instance is not currently visible.
+        if (!visible) {
+            return
+        }
+
         if(bot.process.type == ProcessType.DryingCycleProcess) {
             state = "drying_failed"
             hasFinished = true
@@ -637,48 +665,6 @@ LoggingItem {
             }
         }
     ]
-
-    CustomPopup {
-        popupName: "CancelDryingCycle"
-        id: cancelDryingCyclePopup
-        popupWidth: 720
-        popupHeight: columnLayout_cancel_process_popup.height+145
-        showTwoButtons: true
-
-        leftButtonText: qsTr("BACK")
-        leftButton.onClicked: {
-            cancelDryingCyclePopup.close()
-        }
-        rightButtonText: qsTr("CONFIRM")
-        rightButton.onClicked: {
-            bot.cancel()
-            state = "cancelling"
-            cancelDryingCyclePopup.close()
-        }
-        ColumnLayout {
-            id: columnLayout_cancel_process_popup
-            width: 590
-            height: children.height
-            anchors.top: cancelDryingCyclePopup.popupContainer.top
-            anchors.topMargin: 35
-            anchors.horizontalCenter: parent.horizontalCenter
-            spacing: 20
-
-            TextHeadline {
-                id: alert_text_copy_file_popup
-                text: qsTr("EXIT PROCEDURE")
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            TextBody {
-                id: description_text_copy_file_popup
-                text: qsTr("Are you sure you want to cancel and exit the procedure?")
-                horizontalAlignment: Text.AlignHCenter
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                font.weight: Font.Light
-            }
-        }
-    }
 
     CustomPopup {
         popupName: "DryingCycleClearBuildPlate"
