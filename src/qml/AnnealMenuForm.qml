@@ -71,15 +71,19 @@ Item {
             property var backSwiper: annealSwipeView
             property int backSwipeIndex: AnnealMenu.BasePage
             property string topBarTitle: qsTr("Anneal Print")
-            property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess
+            property bool backIsCancel: bot.process.type == ProcessType.AnnealPrintProcess &&
+                                        bot.process.isProcessCancellable
             property bool hasAltBack: true
             smooth: false
             visible: false
 
             function altBack() {
-                if(bot.process.type == ProcessType.AnnealPrintProcess) {
-                    bot.cancel()
-                    annealPrint.state = "cancelling"
+                if(bot.process.type == ProcessType.AnnealPrintProcess &&
+                        bot.process.isProcessCancellable) {
+                    cancelPopup.openPopup(()=> {
+                        annealPrint.state = 'cancelling'
+                        bot.cancel()
+                    })
                 } else {
                     annealPrint.state = "base state"
                     annealSwipeView.swipeToItem(AnnealMenu.BasePage)
@@ -88,6 +92,11 @@ Item {
 
             AnnealPrint {
                 id: annealPrint
+
+                onProcessDone: {
+                    state = "base state"
+                    annealSwipeView.swipeToItem(AnnealMenu.BasePage)
+                }
             }
         }
 
@@ -100,30 +109,33 @@ Item {
             property bool hasAltBack: true
             // (copypasted from SettingsPageForm)
             property bool backIsCancel: bot.process.type == ProcessType.DryingCycleProcess &&
-                                        dryMaterial.state != "choose_material" &&
-                                        dryMaterial.state != "custom_material" &&
-                                        dryMaterial.state != "waiting_for_spool" &&
-                                        dryMaterial.state != "dry_kit_instructions_2"
+                                        annealMaterial.state != "choose_material" &&
+                                        annealMaterial.state != "custom_material" &&
+                                        annealMaterial.state != "waiting_for_spool" &&
+                                        annealMaterial.state != "dry_kit_instructions_2"
             smooth: false
             visible: false
 
             function altBack() {
                 // (copypasted from SettingsPageForm)
                 if(bot.process.type == ProcessType.DryingCycleProcess) {
-                    if(dryMaterial.state == "choose_material") {
-                        dryMaterial.state = "waiting_for_spool"
-                        dryMaterial.doChooseMaterial = false
+                    if(annealMaterial.state == "choose_material") {
+                        annealMaterial.state = "waiting_for_spool"
+                        annealMaterial.doChooseMaterial = false
                     }
-                    else if(dryMaterial.state == "custom_material")
-                        dryMaterial.state = "choose_material"
-                    else if(dryMaterial.state == "waiting_for_spool")
-                        dryMaterial.state = "dry_kit_instructions_2"
-                    else if(dryMaterial.state == "dry_kit_instructions_2")
-                        dryMaterial.state = "dry_kit_instructions_1"
+                    else if(annealMaterial.state == "custom_material")
+                        annealMaterial.state = "choose_material"
+                    else if(annealMaterial.state == "waiting_for_spool")
+                        annealMaterial.state = "dry_kit_instructions_2"
+                    else if(annealMaterial.state == "dry_kit_instructions_2")
+                        annealMaterial.state = "dry_kit_instructions_1"
                     else
-                        dryMaterial.cancelDryingCyclePopup.open()
+                        cancelPopup.openPopup(()=> {
+                            annealMaterial.state = 'cancelling'
+                            bot.cancel()
+                        })
                 } else {
-                    dryMaterial.state = "base state"
+                    annealMaterial.state = "base state"
                     annealSwipeView.swipeToItem(AnnealMenu.BasePage)
                 }
             }

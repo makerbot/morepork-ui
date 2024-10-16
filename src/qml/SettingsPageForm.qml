@@ -50,6 +50,62 @@ Item {
         AnnealPage              // 7
     }
 
+    CustomPopup {
+        popupName: "CancelPopup"
+        id: cancelPopup
+        popupWidth: 720
+        popupHeight: columnLayout_cancel_process_popup.height+145
+        showTwoButtons: true
+
+        property var cancelFunc: null
+
+        function openPopup(openerCancelFunc) {
+            if (!opened) {
+                cancelFunc = openerCancelFunc
+                open()
+            }
+        }
+
+        leftButtonText: qsTr("BACK")
+        leftButton.onClicked: {
+            cancelPopup.close()
+        }
+        rightButtonText: qsTr("CONFIRM")
+        rightButton.onClicked: {
+            try {
+                cancelFunc()
+            } catch (e) {
+                console.error("Could not call cancel function: ", e.message)
+            }
+            cancelFunc = null
+            cancelPopup.close()
+        }
+
+        ColumnLayout {
+            id: columnLayout_cancel_process_popup
+            width: 590
+            height: children.height
+            anchors.top: cancelPopup.popupContainer.top
+            anchors.topMargin: 35
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 20
+
+            TextHeadline {
+                id: alert_text_copy_file_popup
+                text: qsTr("EXIT PROCEDURE")
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            TextBody {
+                id: description_text_copy_file_popup
+                text: qsTr("Are you sure you want to cancel and exit the procedure?")
+                horizontalAlignment: Text.AlignHCenter
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                font.weight: Font.Light
+            }
+        }
+    }
+
     LoggingStackLayout {
         id: settingsSwipeView
         logName: "settingsSwipeView"
@@ -135,7 +191,6 @@ Item {
                         buttonImage.source: "qrc:/img/icon_anneal_print.png"
                         buttonText.text: qsTr("ANNEAL")
                         enabled: !isProcessRunning()
-                        visible: bot.machineType != MachineType.Magma
                     }
 
                     MenuButton {
@@ -245,7 +300,10 @@ Item {
                     else if(dryMaterial.state == "dry_kit_instructions_2")
                         dryMaterial.state = "dry_kit_instructions_1"
                     else
-                        dryMaterial.cancelDryingCyclePopup.open()
+                        cancelPopup.openPopup(()=> {
+                            dryMaterial.state = 'cancelling'
+                            bot.cancel()
+                        })
                 } else {
                     dryMaterial.state = "base state"
                     settingsSwipeView.swipeToItem(SettingsPage.BasePage)
