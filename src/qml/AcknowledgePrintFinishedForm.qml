@@ -10,7 +10,6 @@ LoggingItem {
     width: 400
     height: 165
     property bool failureFeedbackSelected: false
-    property int skipButtonWidth: 100
 
     // Defects template dict. that will sent for all feedback. Even success.
     // Ideally we should be building a list of defects and just sending that.
@@ -51,13 +50,17 @@ LoggingItem {
         text: qsTr("DID THE PRINT SUCCEED?")
         anchors.top: parent.top
         anchors.topMargin: 15
+        width: parent.width
+        wrapMode: Text.WordWrap
+        horizontalAlignment: Text.AlignLeft
     }
 
     ColumnLayout {
         id: buttonContainerPrintCancelled
         anchors.top: titleText.bottom
         anchors.topMargin: 20
-        spacing: 20
+        anchors.bottom: done_button.top
+        anchors.bottomMargin: spacing
 
         ButtonRectangleSecondary {
             text: qsTr("PRINT FAILURE")
@@ -125,7 +128,6 @@ LoggingItem {
 
     ButtonRectangleSecondary {
         id: done_button
-        width: skipButtonWidth
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 40
         border.width: 0
@@ -135,7 +137,6 @@ LoggingItem {
         onClicked: {
             acknowledgePrint()
         }
-
     }
 
     states: [
@@ -164,7 +165,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: done_button
-                width: skipButtonWidth
                 anchors.bottomMargin: 0
                 color: "#000000"
                 text: qsTr("SKIP")
@@ -200,7 +200,6 @@ LoggingItem {
                 target: done_button
                 anchors.bottomMargin: 115
                 border.width: 2
-                width: 360
                 text: qsTr("DONE")
                 visible: true
             }
@@ -228,7 +227,6 @@ LoggingItem {
 
             PropertyChanges {
                 target: done_button
-                width: skipButtonWidth
                 anchors.bottomMargin: -75
                 color: "#000000"
                 text: qsTr("SKIP")
