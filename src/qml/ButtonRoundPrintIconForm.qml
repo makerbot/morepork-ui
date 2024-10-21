@@ -28,6 +28,10 @@ Item {
             font.weight: Font.Medium
             Layout.preferredWidth: parent.width
             Layout.alignment: Qt.AlignHCenter
+            fontSizeMode: Text.HorizontalFit
+            minimumPixelSize: 10
+            leftPadding: 3
+            rightPadding: 3
         }
     }
 

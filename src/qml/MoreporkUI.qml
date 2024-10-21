@@ -1837,9 +1837,10 @@ ApplicationWindow {
                 safeToRemoveUsbPopup.close()
             }
 
-            ColumnLayout {
+            Column {
                 id: columnLayout_remove_usb_popup
                 height: children.height
+                width: safeToRemoveUsbPopup.popupWidth
                 anchors.top: safeToRemoveUsbPopup.popupContainer.top
                 anchors.topMargin: 40
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -1848,6 +1849,10 @@ ApplicationWindow {
                     id: remove_usb_text_remove_usb_popup
                     text: qsTr("YOU CAN NOW SAFELY REMOVE THE USB")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    width: parent.width
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    padding: 10
                 }
             }
         }
