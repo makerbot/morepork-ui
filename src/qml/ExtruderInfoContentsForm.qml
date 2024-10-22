@@ -13,6 +13,7 @@ Item {
     property bool extruderPresent: false
     property bool statsReady: false
 
+    property bool extPresentAndVisible: extruderPresent && visible
     property bool showStats: extruderPresent && statsReady
 
     width: 350
