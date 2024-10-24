@@ -7,15 +7,14 @@ LoggingItem {
     // Select Language before FRE
     ColumnLayout {
         id: chooseLanguagePage
-        anchors.top: parent.top
-        anchors.topMargin: 30
-        anchors.left: parent.left
-        anchors.leftMargin: 40
-        spacing: 10
+        spacing: 20
 
         Item {
             height: 40
             width: 720
+            anchors.top: parent.top
+            anchors.topMargin: 30
+            anchors.horizontalCenter: parent.horizontalCenter
 
             TextSubheader {
                 id: titleText
@@ -30,6 +29,7 @@ LoggingItem {
             text: qsTr("NEXT")
             width: 720
             Layout.preferredWidth: width
+            anchors.horizontalCenter: parent.horizontalCenter
 
             onClicked: {
                 fre.gotoNextStep(currentFreStep)
@@ -39,7 +39,7 @@ LoggingItem {
         Item {
             id: changeLanguageItem
             width: 800
-            height: 400
+            height: 340
             Layout.preferredHeight: height
 
             LanguageSelector {
