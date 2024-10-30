@@ -152,8 +152,12 @@ Item {
     onIsPrintFinishedChanged: {
         if(isPrintFinished) {
             print_time = getTimeInDaysHoursMins(bot.process.elapsedTime)
+            if (inFreStep) {
+                printStatusView.testPrintComplete = true
+            }
         }
     }
+
 
     function getTimeInDaysHoursMins(seconds) {
         var time = new Date("", "", "", "", "", seconds)
@@ -442,7 +446,7 @@ Item {
                 smooth: false
                 // The error scrren visibility controls the
                 // normal print status view screen visibility.
-                visible: isPrintProcess && !errorScreen.visible
+                visible: isPrintProcess && !errorScreen.visible && !printStatusView.testPrintComplete
                 fileName_: file_name
                 filePathName: fileName
                 support_mass_: support_mass

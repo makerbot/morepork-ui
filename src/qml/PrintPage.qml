@@ -186,7 +186,14 @@ PrintPageForm {
             bot.done("acknowledge_failure")
         }
         if(inFreStep) {
-            printStatusView.testPrintComplete = true
+            // Go to login to makerbot account step
+            // only if network connection is available
+            if (isNetworkConnectionAvailable) {
+                fre.gotoNextStep(currentFreStep)
+            } else {
+                fre.setFreStep(FreStep.SetupComplete)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
         }
         resetPrintFileDetails()
         if (isNPSSurveyDue()) { npsSurveyPopup.open() }
@@ -269,15 +276,6 @@ PrintPageForm {
     }
 
     reviewTestPrint.continueButton.onClicked: {
-        if(isNetworkConnectionAvailable) {
-            // Go to login to makerbot account step
-            // only if network connection is available
-            fre.gotoNextStep(currentFreStep)
-        }
-        else {
-            fre.setFreStep(FreStep.SetupComplete)
-        }
-        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
         printStatusView.testPrintComplete = false
     }
 
