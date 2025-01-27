@@ -173,4 +173,10 @@ LoadUnloadFilamentForm {
                 temperature_list, retryMaterial);
         }
     }
+
+    function reset() {
+        retryTemperature = 0
+        retryMaterial = "None"
+        retryExternal = false
+    }
 }

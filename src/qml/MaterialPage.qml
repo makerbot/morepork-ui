@@ -5,7 +5,6 @@ import ExtruderTypeEnum 1.0
 import MachineTypeEnum 1.0
 
 MaterialPageForm {
-
     function enableMaterialDrawer() {
         setActiveDrawer(materialPage.materialPageDrawer)
     }
@@ -132,11 +131,23 @@ MaterialPageForm {
         }
     }
 
-    function load(tool_idx, external, temperature=0, material="None") {
+    function loadSetup(tool_idx) {
         toolIdx = tool_idx
         isLoadFilament = true
         startLoadUnloadFromUI = true
+        manualSelectMaterialType = false
         enableMaterialDrawer()
+
+        loadUnloadFilamentProcess.reset()
+
+        materialChangeActive = true
+        materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+    }
+
+    function load(tool_idx, external, temperature=0, material="None") {
+        loadUnloadFilamentProcess.state = "preheating"
+        loadSetup(tool_idx)
+
         var while_printing = (printPage.isPrintProcess &&
                 bot.process.stateType == ProcessStateType.Paused)
         if(while_printing && isUsingExpExtruder(tool_idx+1)) {
@@ -150,13 +161,16 @@ MaterialPageForm {
             temp_list[tool_idx] = temperature
             loadMaterialSettingsPage.selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
         }
+
         loadUnloadFilamentProcess.retryTemperature = temperature
         loadUnloadFilamentProcess.retryMaterial = material
         loadUnloadFilamentProcess.retryExternal = external
-        bot.loadFilament(tool_idx, external, while_printing, temp_list, material)
-        loadUnloadFilamentProcess.state = "preheating"
-        materialChangeActive = true
-        materialSwipeView.swipeToItem(MaterialPage.LoadUnloadPage)
+
+        if (bot.process.type == ProcessType.Load) {
+            bot.acknowledgeMaterial(temp_list, material)
+        } else {
+            bot.loadFilament(tool_idx, external, while_printing, temp_list, material)
+        }
     }
 
     function unload(tool_idx, external, temperature=0, material="None") {
@@ -210,13 +224,13 @@ MaterialPageForm {
             onClicked: {
                 // Load Material
                 toolIdx = 0
+                manualSelectMaterialType = false
                 if(restartPendingCheck(toolIdx)) { return }
                 var while_printing = (printPage.isPrintProcess &&
                         bot.process.stateType == ProcessStateType.Paused)
                 if(shouldSelectMaterial(toolIdx) && !while_printing) {
                     isLoadFilament = true
                     materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                    return
                 }
                 load(toolIdx, false)
             }
@@ -242,7 +256,6 @@ MaterialPageForm {
                 if(isUsingExpExtruder(toolIdx+1)) {
                     isLoadFilament = false
                     materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
-                    return
                 }
                 unload(toolIdx, true)
             }
@@ -264,6 +277,7 @@ MaterialPageForm {
             onClicked: {
                 // Load Material
                 toolIdx = 1
+                manualSelectMaterialType = false
                 var while_printing = (printPage.isPrintProcess &&
                         bot.process.stateType == ProcessStateType.Paused)
                 if(shouldSelectMaterial(toolIdx) && !while_printing) {

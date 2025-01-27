@@ -29,11 +29,10 @@ Item {
             materialSwipeView.swipeToItem(MaterialPage.BasePage)
             return;
         }
-        var external = isLoadFilament ? false : true
         if(isLoadFilament) {
-            load(tool_idx, external, temperature)
+            load(tool_idx, false, temperature)
         } else {
-            unload(tool_idx, external, temperature)
+            unload(tool_idx, true, temperature)
         }
         selectMaterialSwipeView.swipeToItem(LoadMaterialSettings.SelectMaterialPage)
     }

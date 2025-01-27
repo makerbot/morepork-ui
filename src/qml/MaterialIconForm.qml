@@ -21,6 +21,15 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
     }
 
+    TextBody {
+        id: warning
+        text: qsTr("!")
+        style: TextBody.Large
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+        horizontalAlignment: Text.AlignHCenter
+    }
+
     Item {
         id: material_status_icon
         anchors.fill: parent
@@ -114,6 +123,11 @@ Item {
             }
 
             PropertyChanges {
+                target: warning
+                visible: false
+            }
+
+            PropertyChanges {
                 target: material_status_icon
                 visible: false
             }
@@ -134,6 +148,11 @@ Item {
 
             PropertyChanges {
                 target: error_image
+                visible: false
+            }
+
+            PropertyChanges {
+                target: warning
                 visible: false
             }
 
@@ -159,6 +178,11 @@ Item {
             PropertyChanges {
                 target: error_image
                 visible: false
+            }
+
+            PropertyChanges {
+                target: warning
+                visible: bayFilamentPresent && !usingExperimentalExtruder
             }
 
             PropertyChanges {

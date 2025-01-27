@@ -219,8 +219,12 @@ void BotModel::changeMachineName(QString new_name) {
     qDebug() << FL_STRM << "called with parameters: " << new_name;
 }
 
-void BotModel::acknowledgeMaterial(bool response) {
-    qDebug() << FL_STRM << "called with parameters: " << response;
+void BotModel::acknowledgeMaterial(QList<int> temperature, QString material) {
+    qDebug() << FL_STRM << "called with  material: " << material;
+    qDebug() << "temperatures: ";
+    for(int i = 0; i < temperature.size(); i++) {
+        qDebug() << temperature.value(i);
+    }
 }
 
 void BotModel::acknowledgeSafeToRemoveUsb() {
