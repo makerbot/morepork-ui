@@ -55,7 +55,17 @@ Item {
                                 break;
                             }
                             case ExtruderType.MK14_HOT:
-                                "qrc:/img/extruder_2xa.png"
+                                if (bot.extruderBIsSupportExtruder) {
+                                    "qrc:/img/extruder_2xa.png"
+                                } else {
+                                    "qrc:/img/extruder_1xa.png"
+                                }
+                                break;
+                            case ExtruderType.MK14_EXP:
+                                "qrc:/img/extruder_labs.png"
+                                break;
+                            case ExtruderType.MK14_COMP:
+                                "qrc:/img/extruder_1c.png"
                                 break;
                             default:
                                 "qrc:/img/broken.png"
