@@ -149,7 +149,8 @@ Item {
             bot.extruderAType == ExtruderType.MK14_HOT_E
             break;
         case 2:
-            false
+            bot.extruderBType == ExtruderType.MK14_EXP ||
+            bot.extruderBType == ExtruderType.MK14_HOT_E
             break;
         default:
             false

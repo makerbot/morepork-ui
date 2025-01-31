@@ -231,6 +231,7 @@ MaterialPageForm {
                 if(shouldSelectMaterial(toolIdx) && !while_printing) {
                     isLoadFilament = true
                     materialSwipeView.swipeToItem(MaterialPage.LoadMaterialSettingsPage)
+                    return;
                 }
                 load(toolIdx, false)
             }
