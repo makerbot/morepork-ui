@@ -266,7 +266,7 @@ LoggingItem {
             //     they are using approved materials on Labs extruder
             //     on Method. Technically kaiten cannot be in this
             //     waiting for filament step if any of the filament
-            //     switches are triggered and will mvoe to preheating
+            //     switches are triggered and will move to preheating
             //     but this check is still here to accomodate
             //     the kaiten delay to go to preheating step when
             //     trying to purge filament (i.e. extruder switch
