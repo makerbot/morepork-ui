@@ -366,6 +366,7 @@ class MoreporkStorage : public QObject {
                                   const QString test_print_name);
     Q_INVOKABLE void getCalibrationPrint(const QString test_print_dir,
                                          const QString test_print_name);
+    Q_INVOKABLE QStringList getAvailableTestPrints(const QString test_print_dir);
 
   private:
     QFileSystemWatcher *storage_watcher_, *usb_storage_watcher_, *last_thing_watcher_;

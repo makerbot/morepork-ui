@@ -342,8 +342,22 @@ Item {
             property var backSwiper: materialSwipeView
             property int backSwipeIndex: MaterialPage.BasePage
             property string topBarTitle: qsTr("Select Material")
+            property bool hasAltBack: true
             visible: false
 
+            function altBack() {
+                if(!inFreStep) {
+                    leaveMaterialChange()
+                }
+                else {
+                    skipFreStepPopup.open()
+                }
+            }
+
+            function skipFreStepAction() {
+                materialSwipeView.swipeToItem(MaterialPage.BasePage)
+                mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            }
 
             LoadMaterialSettings {
                 id: loadMaterialSettingsPage

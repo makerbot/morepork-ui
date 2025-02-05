@@ -6,11 +6,39 @@ import ExtruderTypeEnum 1.0
 ListSelector {
     id: materialsList
     property string process: isLoadFilament ? "load" : "unload"
+
     model: {
         if(toolIdx == 0) {
             bot.extruderASupportedMaterials
         } else if(toolIdx == 1) {
-            bot.extruderBSupportedMaterials
+            if (inFreStep) {
+                // If we're in FRE, only allow the user to load material pairs for
+                // which we have test prints
+                // get the test prints for this extruder combo
+                var test_prints =
+                    storage.getAvailableTestPrints(bot.extruderATypeStr + "/" +
+                                                   bot.extruderBTypeStr + "/");
+                var compatible_mats = test_prints.map((filename) => {
+                    // get the material combo part of test print names
+                    return filename.split('.')[0].replace('test_print_', '').split('_');
+                }).filter((mat_pair) => {
+                    // get only the ones using the mat currently loaded into ext A
+                    return mat_pair[0] == bot.loadedMaterials[0]
+                });
+                // get only the ext B supported mats that have test prints with
+                // the mat currently loaded into ext a
+                var supported_mats = bot.extruderBSupportedMaterials.filter((mat) => {
+                    for (var mat_pair of compatible_mats) {
+                        if (mat == mat_pair[1]) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                supported_mats
+            } else {
+                bot.extruderBSupportedMaterials
+            }
         }
     }
     header:
