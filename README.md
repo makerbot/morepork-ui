@@ -1,6 +1,15 @@
 ## Morepork UI
 
-The brand new GUI for sombrero!
+The brand new GUI for method printers (codenamed morepork/sombrero)!
+
+This GUI application may be used, modified and redistributed only under the terms of
+the GNU General Public License, found in the file COPYING in this
+distribution, or at [the Free Software Foundation][https://www.fsf.org/licenses/gpl.html].
+
+Note that the build scripts here are really only set up to build the GUI application
+for use in the firmware when building via https://github.com/makerbot/Toolchain-Release.
+See https://github.com/makerbot/Toolchain-Release/morepork-ui.md for examples of how
+to build modified versions of this application and install them on method printers.
 
 ### Developing with Qt Creator
 
@@ -22,10 +31,11 @@ New QML files are automatically handled by the CMakeLists.txt, but new C++ files
 
 (6) A Terminal window then should open up to download the artifacts. Click Return on the resulting Terminal window to close it. 
 
-(7) Verify that the following files were downloaded under morepork-ui/morepork-ui-artifactory/artifacts:
-	json-cpp-develop-3.8.2.122-release-stable.tar.bz2
-	libtinything-develop-3.8.0.230-release-stable.tar.bz2
-	MBCoreUtils-develop-4.0.0.257-release-stable.tar.bz2
+(7) Verify that artifacts for these dependencied are present under morepork-ui/morepork-ui-artifactory/artifacts:
+	json-cpp
+	libtinything
+	MBCoreUtils
+    (See https://github.com/makerbot/Toolchain-Release for information on building these artifacts)
 
 
 (8) Once the artifacts have been downloaded, click File > Close All Projects and Editors
@@ -42,6 +52,6 @@ The translation files and the scripts to generate them are located in /src//tran
 
 2.) Hand over the .ts files to the translators who will add the actual translations to them and send back the updated files.
 
-3.) Replace the old .ts files with the received files and run 'generate_qm_files.sh' to generate the .qm files. The qm files are runtime translation files in binary format which are used by qt internally for loading translations quickly. Qt cannot directly use the .ts files and requires the .qm files for translations support.
+3.) Replace the old .ts files with the received files
 
 See https://doc.qt.io/qt-5/qtlinguist-index.html
