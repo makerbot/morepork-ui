@@ -34,6 +34,10 @@ SettingsPageForm {
         settingsSwipeView.swipeToItem(SettingsPage.AnnealPage)
     }
 
+    buttonAbout.onClicked: {
+        settingsSwipeView.swipeToItem(SettingsPage.AboutPage)
+    }
+
     buttonShutdown.onClicked: {
         shutdownPopup.open()
     }

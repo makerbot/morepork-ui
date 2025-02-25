@@ -30,6 +30,8 @@ Item {
 
     property alias buttonAnneal: buttonAnneal
 
+    property alias buttonAbout: buttonAbout
+
     property alias buttonShutdown: buttonShutdown
     property alias shutdownPopup: shutdownPopup
 
@@ -47,7 +49,8 @@ Item {
         CleanAirSettingsPage,   // 4
         PreheatPage,            // 5
         DryMaterialPage,        // 6
-        AnnealPage              // 7
+        AnnealPage,             // 7
+        AboutPage               // 8
     }
 
     CustomPopup {
@@ -194,6 +197,12 @@ Item {
                     }
 
                     MenuButton {
+                        id: buttonAbout
+                        buttonImage.source: "qrc:/img/icon_printer_info.png"
+                        buttonText.text: qsTr("ABOUT THIS PRINTER")
+                    }
+
+                    MenuButton {
                         id: buttonShutdown
                         buttonImage.source: "qrc:/img/icon_power.png"
                         buttonText.text: qsTr("SHUT DOWN")
@@ -331,6 +340,20 @@ Item {
 
             AnnealMenu {
                 id: annealMenu
+            }
+        }
+
+        // SettingsPage.AboutPage
+        Item {
+            id: aboutPageItem
+            property var backSwiper: settingsSwipeView
+            property int backSwipeIndex: SettingsPage.BasePage
+            property string topBarTitle: qsTr("About")
+            smooth: false
+            visible: false
+
+            AboutPage {
+                id: aboutPage
             }
         }
     }

@@ -295,5 +295,7 @@
         <file>FpsItem.qml</file>
         <file>AnnealMenu.qml</file>
         <file>AnnealMenuForm.qml</file>
+        <file>AboutPage.qml</file>
+        <file>AboutPageForm.qml</file>
     </qresource>
 </RCC>
