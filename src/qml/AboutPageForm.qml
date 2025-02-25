@@ -65,7 +65,7 @@ Item {
         {name:"u-boot", licenses:"GPL-2", url:"https://github.com/makerbot/u-boot"},
         {name:"uemacs", url:"https://git.kernel.org/pub/scm/editors/uemacs/uemacs.git"},
         {name:"usb_modeswitch_data", version:"20191128"},
-        {name:"usb_modeswitch", version:"2.6.0", licenses:"GPL-2", url:"https://www.draisberghof.de/usb_modeswitch/usb-modeswitch-2.6.0.tar.bz2"},
+        {name:"usb_modeswitch", version:"2.6.0", licenses:"GPL-2", url:"https://www.draisberghof.de/usb_modeswitch/"},
         {name:"usbmount", version:"0.0.22", licenses:"BSD", url:"https://github.com/rbrito/usbmount"},
         {name:"util-linux", version:"2.35.1", licenses:"GPL-2", url:"https://github.com/util-linux/util-linux"},
         {name:"vim", version:"8.1.1929", url:"https://github.com/vim/vim"},
