@@ -8,8 +8,8 @@ distribution, or at [the Free Software Foundation][https://www.fsf.org/licenses/
 
 Note that the build scripts here are really only set up to build the GUI application
 for use in the firmware when building via https://github.com/makerbot/Toolchain-Release.
-See https://github.com/makerbot/Toolchain-Release/morepork-ui.md for examples of how
-to build modified versions of this application and install them on method printers.
+See https://github.com/makerbot/Toolchain-Release/blob/develop/morepork-ui.md for examples
+of how to build modified versions of this application and install them on method printers.
 
 ### Developing with Qt Creator
 
