@@ -2139,8 +2139,11 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
 
     // Update process info last so that data that is synced to process
     // steps will be up to date when we fire the step change event
-    dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(
-        info["current_process"]);
+    const Json::Value & process = info["current_process"];
+    if (!process.isObject()) {
+        spoolValidityCheckPendingReset();
+    }
+    dynamic_cast<KaitenProcessModel*>(m_process.data())->procUpdate(process);
 }
 
 bool KaitenBotModel::checkError(const Json::Value error_list,
