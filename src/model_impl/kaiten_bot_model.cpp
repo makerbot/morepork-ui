@@ -129,6 +129,8 @@ class KaitenBotModel : public BotModel {
     void setPrintAgainEnabled(bool enable);
     void getPrintAgainEnabled();
     void printAgainEnabledUdpdate(const Json::Value &result);
+    void enableMesh(bool enable);
+    void calibrateMesh();
 
     QScopedPointer<LocalJsonRpc, QScopedPointerDeleteLater> m_conn;
     void connected();
@@ -1715,6 +1717,33 @@ void KaitenBotModel::getPrintAgainEnabled() {
     }
 }
 
+void KaitenBotModel::enableMesh(bool enable) {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        Json::Value json_params(Json::objectValue);
+        json_params["enable"] = Json::Value(enable);
+
+        conn->jsonrpc.invoke("enable_mesh", json_params, std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
+void KaitenBotModel::calibrateMesh() {
+    try{
+        qDebug() << FL_STRM << "called";
+        auto conn = m_conn.data();
+
+        conn->jsonrpc.invoke("calibrate_mesh", Json::Value(), std::weak_ptr<JsonRpcCallback>());
+    }
+    catch(JsonRpcInvalidOutputStream &e){
+        qWarning() << FFL_STRM << e.what();
+    }
+}
+
 KaitenBotModel::KaitenBotModel(const char * socketpath) :
         m_conn(new LocalJsonRpc(socketpath)),
         m_sysNot(new SystemNotification(this)),
@@ -2135,6 +2164,15 @@ void KaitenBotModel::sysInfoUpdate(const Json::Value &info) {
       } else {
           versionReset();
       }
+    }
+
+    const Json::Value & mesh_enabled = info["mesh_enabled"];
+    if (!mesh_enabled.isBool()) {
+        meshCalEnabledSet(false);
+        meshCalAvailableSet(false);
+    } else {
+        meshCalAvailableSet(true);
+        meshCalEnabledSet(mesh_enabled.asBool());
     }
 
     // Update process info last so that data that is synced to process

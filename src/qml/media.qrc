@@ -260,5 +260,8 @@
         <file alias="wifi_low.png">images/wifi_low.png</file>
         <file alias="wifi_medium.png">images/wifi_medium.png</file>
         <file alias="wifi_strong.png">images/wifi_strong.png</file>
+        <file alias="method_mesh_cal.png">images/method_mesh_cal.png</file>
+        <file alias="methodxl_mesh_cal.png">images/methodxl_mesh_cal.png</file>
+        <file alias="icon_mesh.png">images/icon_mesh.png</file>
     </qresource>
 </RCC>

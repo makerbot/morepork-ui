@@ -11,4 +11,8 @@ BuildPlateSettingsPageForm {
     buttonMoveBuildPlatePage.onClicked: {
         buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.RaiseLowerBuildPlatePage)
     }
+
+    buttonMeshCalibration.onClicked: {
+        buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.MeshCalibrationPage)
+    }
 }

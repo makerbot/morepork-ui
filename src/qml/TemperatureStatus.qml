@@ -106,6 +106,7 @@ ColumnLayout {
             }
         }
         visible: showComponent == TemperatureStatus.BothExtruders ||
-                 showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate
+                 (showComponent == TemperatureStatus.ChamberAndHeatedBuildPlate &&
+                  bot.machineType == MachineType.Magma)
     }
 }

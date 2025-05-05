@@ -123,6 +123,8 @@ class BotModel : public BaseModel {
     Q_INVOKABLE virtual void setBuildPlateZeroZOffset(float tool_a_z_offset, float tool_b_z_offset);
     Q_INVOKABLE virtual void setPrintAgainEnabled(bool enable);
     Q_INVOKABLE virtual void getPrintAgainEnabled();
+    Q_INVOKABLE virtual void enableMesh(bool enable);
+    Q_INVOKABLE virtual void calibrateMesh();
 
     QStringList firmwareReleaseNotesList();
     void firmwareReleaseNotesListSet(QStringList &releaseNotesList);
@@ -408,6 +410,10 @@ class BotModel : public BaseModel {
     MODEL_PROP(float, lastAutoCalOffsetBX, -999.999)
     MODEL_PROP(float, lastAutoCalOffsetBY, -999.999)
     MODEL_PROP(float, lastAutoCalOffsetBZ, -999.999)
+
+    // Mesh Calibration
+    MODEL_PROP(bool, meshCalAvailable, false);
+    MODEL_PROP(bool, meshCalEnabled, false);
 
     // Accessories
     // Oyster - HEPA Filter Lid

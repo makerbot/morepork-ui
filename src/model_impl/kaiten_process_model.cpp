@@ -16,6 +16,12 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         kStepStr = kStep.asString().c_str();
     }
 
+    const Json::Value &kName = proc["name"];
+    QString kNameStr;
+    if (kName.isString()) {
+        kNameStr = kName.asString().c_str();
+    }
+
     if(kStepStr == "clear_build_plate") {
         isBuildPlateClearSet(true);
     } else {
@@ -195,7 +201,6 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     // see morepork-kaiten/kaiten/src/kaiten/processes/printprocess.py
     if (kStepStr == "initializing" ||
         kStepStr == "initial_heating" ||
-        kStepStr == "heating_chamber" ||
         kStepStr == "heating_build_platform" ||
         kStepStr == "final_heating" ||
         kStepStr == "cooling" ||
@@ -206,6 +211,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
         kStepStr == "waiting_for_file" ||
         kStepStr == "transfer" ||
         kStepStr == "downloadingext")
+        stateTypeSet(ProcessStateType::Loading);
+    else if (kStepStr == "heating_chamber" && kNameStr == "PrintProcess")
         stateTypeSet(ProcessStateType::Loading);
     else if (kStepStr == "suspending")
         stateTypeSet(ProcessStateType::Pausing);
@@ -324,15 +331,17 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
     // 'heating_chamber' step maps to 'Loading' ProcessStateType on the UI.
     else if (kStepStr == "annealing_print")
         stateTypeSet(ProcessStateType::AnnealingPrint);
+    else if (kStepStr == "calibrating_mesh")
+        stateTypeSet(ProcessStateType::CalibratingMesh);
+    else if (kStepStr == "heating_chamber")
+        stateTypeSet(ProcessStateType::HeatingChamber);
     else
         stateTypeReset();
 
     // Set the process type last so that any listeners on this property
     // that are waiting for a new process to start will see up to date
     // properties for that process when they fire.
-    const Json::Value &kName = proc["name"];
     if (kName.isString()) {
-        const QString kNameStr = kName.asString().c_str();
         nameStrSet(kNameStr);
         if (kNameStr == "PrintProcess")
             typeSet(ProcessType::Print);
@@ -358,6 +367,8 @@ void KaitenProcessModel::procUpdate(const Json::Value &proc) {
             typeSet(ProcessType::AnnealPrintProcess);
         else if (kNameStr == "MoveBuildPlateProcess")
             typeSet(ProcessType::MoveBuildPlateProcess);
+        else if (kNameStr == "MeshCalibrationProcess")
+            typeSet(ProcessType::MeshCalibrationProcess);
         else
             typeSet(ProcessType::None);
     }
