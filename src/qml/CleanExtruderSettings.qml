@@ -7,7 +7,7 @@ import ProcessTypeEnum 1.0
 
 CleanExtruderSettingsForm {
     function startCleaning(temp_list) {
-        if(bot.process.type == ProcessType.CalibrationProcess) {
+        if(bot.process.type !== ProcessType.None) {
             // Calls process method to perform nozzle cleaning in
             // 'Nozzle Calibration' Kaiten Process
             bot.doNozzleCleaning(true, temp_list)

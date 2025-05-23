@@ -19,10 +19,15 @@ Item {
     property alias moveBuildPlatePage: moveBuildPlatePage
     property alias buttonMoveBuildPlatePage: buttonMoveBuildPlatePage
 
+    property alias meshCalibration: meshCalibration
+    property alias meshErrorScreen: meshErrorScreen
+    property alias buttonMeshCalibration: buttonMeshCalibration
+
     enum SwipeIndex {
         BasePage,                   //0
         AssistedLevelingPage,       //1
-        RaiseLowerBuildPlatePage    //2
+        RaiseLowerBuildPlatePage,   //2
+        MeshCalibrationPage         //3
     }
 
     LoggingStackLayout {
@@ -64,6 +69,27 @@ Item {
                         buttonImage.source: "qrc:/img/icon_raise_lower_bp.png"
                         buttonText.text: qsTr("RAISE/LOWER BUILD PLATE")
                         enabled: !isProcessRunning()
+                    }
+
+                    MenuButton {
+                        id: buttonMeshCalibration
+                        buttonImage.source: "qrc:/img/icon_mesh.png"
+                        buttonText.text: qsTr("MESH BED LEVELING")
+                        enabled: !isProcessRunning()
+                        slidingSwitch.checked: bot.meshCalEnabled
+                        slidingSwitch.checkable: bot.meshCalAvailable
+                        slidingSwitch.visible: true
+
+                        slidingSwitch.onClicked: {
+                            if (!bot.meshCalAvailable) {
+                                buildPlateSettingsSwipeView.swipeToItem(
+                                    BuildPlateSettingsPage.MeshCalibrationPage);
+                            } else if (!slidingSwitch.checked) {
+                                bot.enableMesh(false);
+                            } else {
+                                bot.enableMesh(true);
+                            }
+                        }
                     }
                 }
             }
@@ -117,7 +143,7 @@ Item {
             }
         }
 
-        // BuildPlateSettingsPage.MoveBuildPlatePage
+        // BuildPlateSettingsPage.RaiseLowerBuildPlatePage
         Item {
             id: moveBuildPlatePageItem
             property var backSwiper: buildPlateSettingsSwipeView
@@ -128,6 +154,53 @@ Item {
 
             MoveBuildPlatePage {
                 id: moveBuildPlatePage
+            }
+        }
+
+        // BuildPlateSettingsPage.MeshCalibrationPage
+        Item {
+            id: meshCalibrationPageItem
+            property var backSwiper: buildPlateSettingsSwipeView
+            property int backSwipeIndex: BuildPlateSettingsPage.BasePage
+            property string topBarTitle: qsTr("Calibrate Bed Mesh")
+            property bool hasAltBack: true
+            smooth: false
+            visible: false
+
+            function altBack() {
+                if (meshCalibration.chooseMaterial) {
+                    meshCalibration.chooseMaterial = false;
+                } else if (bot.process.type == ProcessType.MeshCalibrationProcess) {
+                    meshCalibration.cancelCalibrationPopup.open()
+                } else if (meshCalibration.state == "install_build_plate") {
+                    meshCalibration.state = "base state"
+                } else if (meshCalibration.state == "secure_build_plate") {
+                    meshCalibration.state = "install_build_plate"
+                } else {
+                    meshCalibration.state = "base state"
+                    meshErrorScreen.acknowledgeError()
+                    buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                }
+            }
+
+            MeshCalibration {
+                id: meshCalibration
+                visible: !meshErrorScreen.visible
+                onProcessDone: {
+                    state = "base state"
+                    if (meshErrorScreen.lastReportedErrorType == ErrorType.NoError) {
+                        buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.BasePage)
+                    }
+                }
+            }
+
+            ErrorScreen {
+                id: meshErrorScreen
+                isActive: bot.process.type == ProcessType.MeshCalibrationProcess
+                visible: {
+                    lastReportedProcessType == ProcessType.MeshCalibrationProcess &&
+                    lastReportedErrorType != ErrorType.NoError
+                }
             }
         }
     }

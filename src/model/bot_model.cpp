@@ -386,6 +386,14 @@ void BotModel::getPrintAgainEnabled() {
     qDebug() << FL_STRM << "called";
 }
 
+void BotModel::enableMesh(bool enable) {
+    qDebug() << FL_STRM << "called with params:" << " enable: " << enable;
+}
+
+void BotModel::calibrateMesh() {
+    qDebug() << FL_STRM << "called";
+}
+
 class DummyBotModel : public BotModel {
   public:
     DummyBotModel() {

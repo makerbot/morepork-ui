@@ -23,6 +23,7 @@ class ProcessModel : public BaseModel {
         NozzleCleaningProcess,
         AnnealPrintProcess,
         MoveBuildPlateProcess,
+        MeshCalibrationProcess,
         Other
     };
     //MOREPORK_QML_ENUM
@@ -73,7 +74,9 @@ class ProcessModel : public BaseModel {
         WaitingForSpool,
         DryingSpool,
         WaitingForPart, // Anneal print process states
-        AnnealingPrint
+        AnnealingPrint,
+        CalibratingMesh, // Mesh calibration
+        HeatingChamber
     };
     //MOREPORK_QML_ENUM
     enum ErrorType {

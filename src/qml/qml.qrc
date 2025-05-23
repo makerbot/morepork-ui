@@ -297,5 +297,7 @@
         <file>AnnealMenuForm.qml</file>
         <file>AboutPage.qml</file>
         <file>AboutPageForm.qml</file>
+        <file>MeshCalibration.qml</file>
+        <file>MeshCalibrationForm.qml</file>
     </qresource>
 </RCC>
