@@ -20,7 +20,6 @@ LoggingItem {
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
         if (bot.process.type == ProcessType.MeshCalibrationProcess) {
-            console.info(currentState);
             switch (currentState) {
             case ProcessStateType.Cancelling:
                 state = "cancelling"

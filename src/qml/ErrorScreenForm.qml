@@ -86,11 +86,7 @@ LoggingItem {
                 state = "no_tool_connected"
                 break;
             case ErrorType.BadHESCalibrationFail:
-                if(lastReportedProcessType == ProcessType.CalibrationProcess) {
-                    state = "calibration_failed"
-                } else if(lastReportedProcessType == ProcessType.AssistedLeveling) {
-                    // Add screen
-                }
+                state = "calibration_failed"
                 break;
             case ErrorType.HeaterNotReachingTemp:
                 state = "heater_not_reaching_temp"
