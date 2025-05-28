@@ -20,11 +20,15 @@ LoggingItem {
     property int targetHESLower
     property bool needsZCal: bot.process.needsZCal
     property bool needsZCalFlag: false
+    property bool hadMeshCal: false
     signal processDone
 
     onNeedsZCalChanged: {
         if(needsZCal) {
-            needsZCalFlag = true
+            needsZCalFlag = true;
+            if (hadMeshCal) {
+                extruderSettingsPage.calibrationProcedures.toolheadCalibration.promptForMeshCal = true;
+            }
         }
     }
 
@@ -33,6 +37,7 @@ LoggingItem {
     onCurrentStateChanged: {
         // Conditions to move to appropriate UI states
         if(bot.process.type == ProcessType.AssistedLeveling) {
+            hadMeshCal = hadMeshCal || bot.meshCalEnabled;
             switch(currentState) {
                 case ProcessStateType.LevelingLeft:
                 case ProcessStateType.LevelingRight:
@@ -60,6 +65,7 @@ LoggingItem {
             }
         }
         else if(bot.process.type == ProcessType.None) {
+            hadMeshCal = false;
             if(state == "cancelling") {
                 processDone()
                 needsZCalFlag = false

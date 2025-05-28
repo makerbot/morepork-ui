@@ -15,25 +15,24 @@ ToolheadCalibrationForm {
                     bot.buildPlateState(true)
                     state = "calibrating"
                 } else if(state == "calibration_finished") {
-                    toolheadCalibration.processDone()
-                    // If we are in the manual cal process
-                    // we want to prompt the user to resume
-                    // manual calibration
-                    if(returnToManualCal) {
-                        returnToManualCal=false
-                        resumeManualCalibrationPopup.open()
-                    }
-                    if(inFreStep) {
-                        settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
-                        settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
-                        settingsSwipeView.swipeToItem(SettingsPage.BasePage)
-                        mainSwipeView.swipeToItem(MoreporkUI.BasePage)
-                        fre.gotoNextStep(currentFreStep)
+                    calibrationDone();
+                    if (promptForMeshCal) {
+                        calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
+                        extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+                        settingsSwipeView.swipeToItem(SettingsPage.BuildPlateSettingsPage)
+                        buildPlateSettingsPage.buildPlateSettingsSwipeView.swipeToItem(BuildPlateSettingsPage.MeshCalibrationPage);
+                        promptForMeshCal = false;
                     }
                 } else {
                     // Button action in 'base state'
                     bot.calibrateToolheads(["x","y"])
                 }
+            }
+        }
+        buttonSecondary1 {
+            onClicked: {
+                calibrationDone();
+                promptForMeshCal = false;
             }
         }
     }

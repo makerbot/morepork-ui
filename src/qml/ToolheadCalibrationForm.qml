@@ -16,7 +16,25 @@ LoggingItem {
     property alias cleanExtrudersSequence: cleanExtrudersSequence
     property alias cancelCalibrationPopup: cancelCalibrationPopup
     property alias resumeManualCalibrationPopup: resumeManualCalibrationPopup
+    property bool promptForMeshCal: false
     signal processDone
+
+    function calibrationDone() {
+        processDone()
+        // If we are in the manual cal process we want to prompt
+        // the user to resume manual calibration
+        if (returnToManualCal) {
+            returnToManualCal=false
+            resumeManualCalibrationPopup.open()
+        }
+        if (inFreStep) {
+            settingsPage.extruderSettingsPage.calibrationProcedures.calibrationProceduresSwipeView.swipeToItem(CalibrationProceduresPage.BasePage)
+            settingsPage.extruderSettingsPage.extruderSettingsSwipeView.swipeToItem(ExtruderSettingsPage.BasePage)
+            settingsSwipeView.swipeToItem(SettingsPage.BasePage)
+            mainSwipeView.swipeToItem(MoreporkUI.BasePage)
+            fre.gotoNextStep(currentFreStep)
+        }
+    }
 
     property int currentState: bot.process.stateType
     onCurrentStateChanged: {
@@ -129,6 +147,11 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
 
             PropertyChanges {
@@ -265,6 +288,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: cleanExtrudersSequence
                 visible: false
             }
@@ -322,6 +350,11 @@ LoggingItem {
                 target: contentRightSide.buttonPrimary
                 text: qsTr("NEXT")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
             }
 
             PropertyChanges {
@@ -384,6 +417,11 @@ LoggingItem {
             }
 
             PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
+
+            PropertyChanges {
                 target: cleanExtrudersSequence
                 visible: false
             }
@@ -426,6 +464,9 @@ LoggingItem {
                     visible: false
                 }
                 buttonPrimary {
+                    visible: false
+                }
+                buttonSecondary1 {
                     visible: false
                 }
             }
@@ -478,6 +519,11 @@ LoggingItem {
                 target: contentRightSide.buttonPrimary
                 visible: false
             }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                visible: false
+            }
         },
 
         State {
@@ -521,13 +567,20 @@ LoggingItem {
             PropertyChanges {
                 target: contentRightSide.textBody
                 text: qsTr("This pair of extruders is now calibrated and can be used for printing.")
+                      + (promptForMeshCal? '\n\n' + qsTr("Mesh bed leveling has been deactived, rescan now?") : "")
                 visible: true
             }
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
-                text: qsTr("DONE")
+                text: promptForMeshCal? qsTr("MESH BED LEVELING") : qsTr("DONE")
                 visible: true
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
+                text: qsTr("SKIP")
+                visible: promptForMeshCal
             }
         },
 
@@ -574,6 +627,11 @@ LoggingItem {
 
             PropertyChanges {
                 target: contentRightSide.buttonPrimary
+                visible: false
+            }
+
+            PropertyChanges {
+                target: contentRightSide.buttonSecondary1
                 visible: false
             }
         }
